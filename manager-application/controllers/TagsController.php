@@ -133,7 +133,7 @@ class TagsController extends ListingBaseController
         $frm = new Form('frmTag');
         $frm->addHiddenField('', 'tag_id');
         $frm->addHiddenField('', 'tag_lang_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_TAG_NAME', $this->siteLangId), 'tag_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_TAG_NAME', $this->siteLangId), 'tag_name');
         return $frm;
     }
 

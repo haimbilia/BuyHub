@@ -5,8 +5,8 @@ class RazorpaySettingsController extends PaymentMethodSettingsController
     public static function form($langId)
     {
         $frm = new Form('frmPaymentMethods');
-        $frm->addRequiredField(Labels::getLabel('LBL_Key_Id', $langId), 'merchant_key_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Key_Secret', $langId), 'merchant_key_secret');
+        $frm->addRequiredField(Labels::getLabel('FRM_KEY_ID', $langId), 'merchant_key_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_KEY_SECRET', $langId), 'merchant_key_secret');
         return $frm;
     }
 }

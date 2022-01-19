@@ -277,7 +277,7 @@ class UrlRewritingController extends ListingBaseController
 
         $frm = new Form('frmUrlRewrite');
         $frm->addHiddenField('', 'urlrewrite_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Original_URL', $this->siteLangId), 'urlrewrite_original');
+        $frm->addRequiredField(Labels::getLabel('FRM_ORIGINAL_URL', $this->siteLangId), 'urlrewrite_original');
 
         $langArr = Language::getAllNames();
         foreach ($langArr as $langId => $langName) {
@@ -285,15 +285,15 @@ class UrlRewritingController extends ListingBaseController
                 continue;
             }
 
-            $fieldName = Labels::getLabel('LBL_Custom_URL', $this->siteLangId);
+            $fieldName = Labels::getLabel('FRM_CUSTOM_URL', $this->siteLangId);
             if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
                 $fieldName .=  '(' . $langName . ')';
             }
             $frm->addRequiredField($fieldName, 'urlrewrite_custom[' . $langId . ']');
         }
         $fld =  $frm->addHTML('', '', '');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</small>';
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_EXAMPLE:_CUSTOM_URL_EXAMPLE', $this->siteLangId) . '</small>';
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

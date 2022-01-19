@@ -237,7 +237,7 @@ class BlogContributionsController extends ListingBaseController
         $frm = new Form('frmBlogContribution', array('id' => 'frmBlogContribution'));
         $frm->addHiddenField('', 'bcontributions_id', $recordId);
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), '');
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }

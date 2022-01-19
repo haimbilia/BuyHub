@@ -35,8 +35,10 @@ class ProductTempImagesController extends ListingBaseController
         $srch = new ProductTempImageSearch();
         $srch->joinProduct();
         $srch->addMultipleFields(
-            array('afile_id', 'afile_downloaded', 'afile_record_id', 'afile_physical_path',
-            'afile_name', 'IFNULL(tp.product_identifier,tp_l.product_name) as product_name')
+            array(
+                'afile_id', 'afile_downloaded', 'afile_record_id', 'afile_physical_path',
+                'afile_name', 'IFNULL(tp.product_identifier,tp_l.product_name) as product_name'
+            )
         );
 
         $srch->addOrder('af.' . ProductTempImage::DB_TBL_PREFIX . 'id', 'DESC');
@@ -79,14 +81,14 @@ class ProductTempImagesController extends ListingBaseController
     {
         $frm = new Form('frmProductTempImages');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
 
         $options = applicationConstants::getYesNoArr($this->siteLangId);
-        $is_downloaded = array( -1 => Labels::getLabel('LBL_Does_not_matter', $this->siteLangId)) + $options;
+        $is_downloaded = array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $options;
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Is_Downloaded', $this->siteLangId), 'is_downloaded', $is_downloaded, -1, array(), '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addSelectBox(Labels::getLabel('FRM_IS_DOWNLOADED', $this->siteLangId), 'is_downloaded', $is_downloaded, -1, array(), '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
@@ -125,9 +127,9 @@ class ProductTempImagesController extends ListingBaseController
     private function getForm()
     {
         $frm = new Form('frmImage');
-        $frm->addRequiredField(Labels::getLabel('LBL_File_Name', $this->siteLangId), 'afile_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_File_Path', $this->siteLangId), 'afile_physical_path');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel('FRM_FILE_NAME', $this->siteLangId), 'afile_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_FILE_PATH', $this->siteLangId), 'afile_physical_path');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

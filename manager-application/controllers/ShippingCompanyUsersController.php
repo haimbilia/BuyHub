@@ -256,25 +256,25 @@ class ShippingCompanyUsersController extends ListingBaseController
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
         $frm->addHiddenField('', 'user_type');
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $frm->addEmailField(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
+        $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         switch ($userType) {
             case User::USER_TYPE_SHIPPING_COMPANY:
-                $frm->addTextBox(Labels::getLabel('LBL_Tracking_Site_Url', $this->siteLangId), 'user_order_tracking_url');
+                $frm->addTextBox(Labels::getLabel('FRM_TRACKING_SITE_URL', $this->siteLangId), 'user_order_tracking_url');
                 break;
         }
         return $frm;

@@ -95,11 +95,14 @@
                     <div class="card-body">
                         <ul class="list-stats">
                             <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_PAYMENT_STATUS', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo Orders::getPaymentStatusHtml($siteLangId, $order['order_payment_status']);; ?></span>
+                            </li>
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_PAYMENT_MODE', $siteLangId); ?>:</span>
                                 <span class="value"><?php echo $paymentMethodName; ?></span>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </div>

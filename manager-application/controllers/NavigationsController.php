@@ -513,7 +513,7 @@ class NavigationsController extends ListingBaseController
         $frm->addHiddenField('', 'nav_id');
         $frm->addHiddenField('', 'nlink_id');
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Caption', $this->siteLangId), 'nlink_caption');
+        $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $this->siteLangId), 'nlink_caption');
         return $frm;
     }
 

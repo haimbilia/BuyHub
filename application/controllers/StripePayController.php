@@ -173,7 +173,7 @@ class StripePayController extends PaymentController
 
     private function getPaymentForm($orderId)
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('StripePay', 'charge', array($orderId)), 'class' => "form form--normal"));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('StripePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
         $frm->addRequiredField(Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
         $frm->addRequiredField(Labels::getLabel('LBL_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);

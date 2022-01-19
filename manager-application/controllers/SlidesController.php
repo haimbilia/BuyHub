@@ -530,7 +530,7 @@ class SlidesController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_HOME_PAGE_BANNER);
         $frm->addHiddenField('', 'min_width', 1350);
         $frm->addHiddenField('', 'min_height', 405);

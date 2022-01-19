@@ -381,20 +381,20 @@ class PluginsController extends ListingBaseController
         $frm = new Form('frmPlugin');
         $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addHiddenField('', 'plugin_type', $pluginType);
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $this->siteLangId), 'plugin_name');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
 
         if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
-            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
             $fld = $frm->addButton(
                 'Icon',
                 'plugin_icon',
-                Labels::getLabel('LBL_Upload_File', $this->siteLangId),
+                Labels::getLabel('FRM_UPLOAD_FILE', $this->siteLangId),
                 array('class' => 'btn btn-outline-brand btn-sm uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
             );
             if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
@@ -413,15 +413,15 @@ class PluginsController extends ListingBaseController
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $langId), 'plugin_name');
-        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $langId), 'plugin_description');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $langId), 'plugin_name');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_EXTRA_INFO', $langId), 'plugin_description');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

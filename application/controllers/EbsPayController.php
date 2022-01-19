@@ -103,7 +103,7 @@ class EbsPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : self::PRODUCTION_URL;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : self::PRODUCTION_URL;
 
         $frm = new Form('payment', array('id' => 'frmPaymentForm', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');

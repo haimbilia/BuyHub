@@ -259,7 +259,7 @@ class TwocheckoutPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         $actionUrl = $this->plugin::PRODUCTION_URL . '/checkout/purchase';
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('TwocheckoutPay', 'charge', array($orderId)) : $actionUrl;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('TwocheckoutPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
 
         $frm = new Form('frmTwoCheckout', array('id' => 'frmTwoCheckout', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');

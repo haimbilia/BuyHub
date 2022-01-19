@@ -315,11 +315,11 @@ class AffiliateCommissionController extends ListingBaseController
         }
 
         if (!$isMandatory) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'afcommsetting_prodcat_id', $catArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Affiliate_Name', $this->siteLangId), 'afcommsetting_user_id', $userArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'afcommsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_AFFILIATE_NAME', $this->siteLangId), 'afcommsetting_user_id', $userArr, '', [], '');
         }
 
-        $frm->addFloatField(Labels::getLabel('LBL_Affiliate_Commission_fees', $this->siteLangId), 'afcommsetting_fees');
+        $frm->addFloatField(Labels::getLabel('FRM_AFFILIATE_COMMISSION_FEES', $this->siteLangId), 'afcommsetting_fees');
         return $frm;
     }
 

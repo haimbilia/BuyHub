@@ -140,7 +140,7 @@ class FaqCategoriesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $langId), 'faqcat_type', $faqCatTypeArr, '', array(), '');
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         if (!empty($translatorSubscriptionKey)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }

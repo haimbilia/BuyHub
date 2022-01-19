@@ -576,10 +576,11 @@ $(document).on("shown.bs.modal", "#search-main", function () {
     }
 });
 
+
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
         if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
-            $(".quickSearchMain").trigger("click");
+            $(".quickSearchMainJs").get(0).click();
             e.preventDefault();
         }
     }

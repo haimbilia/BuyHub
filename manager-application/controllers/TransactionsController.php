@@ -145,9 +145,9 @@ class TransactionsController extends ListingBaseController {
         }
 
         $typeArr = Transactions::getCreditDebitTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
-        $frm->addTextArea(Labels::getLabel('FRM_Description', $this->siteLangId), 'description')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'description')->requirements()->setRequired();
         return $frm;
     }
 

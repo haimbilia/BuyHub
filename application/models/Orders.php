@@ -1313,8 +1313,8 @@ class Orders extends MyAppModel
                         'commsetting_by_package' => applicationConstants::YES,
                     );
                     if (!$record->addUpdateData($dataToSave)) {
-                        Message::addErrorMessage($record->getError());
-                        FatUtility::dieJsonError(Message::getHtml());
+                        $this->error = $record->getError();
+                        return false;
                     }
                     $insertId = $record->getMainTableRecordId();
                     if (!$insertId) {
@@ -1325,8 +1325,8 @@ class Orders extends MyAppModel
                     } */
                     if ($insertId) {
                         if (!$record->addCommissionHistory($insertId)) {
-                            Message::addErrorMessage($record->getError());
-                            FatUtility::dieJsonError(Message::getHtml());
+                            $this->error = $record->getError();
+                            return false;
                         }
                     }
 

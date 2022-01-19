@@ -1214,7 +1214,7 @@ class AccountController extends LoggedUserController
     }
 
     public function updateSettingsInfo()
-    {      
+    {
         $frm = $this->getSettingsForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -1307,13 +1307,13 @@ class AccountController extends LoggedUserController
 
     public function moveToWishList($selProdId)
     {
-        $wishList = new UserWishList();       
+        $wishList = new UserWishList();
         $defaultWishListId = $wishList->getWishListId($this->userId, UserWishList::TYPE_DEFAULT_WISHLIST);
         $this->addRemoveWishListProduct($selProdId, $defaultWishListId);
     }
 
     public function moveToSaveForLater($selProdId)
-    {       
+    {
         $wishList = new UserWishList();
         $wishListId = $wishList->getWishListId($this->userId, UserWishList::TYPE_SAVE_FOR_LATER);
         if (!$wishList->addUpdateListProducts($wishListId, $selProdId)) {
@@ -1344,7 +1344,7 @@ class AccountController extends LoggedUserController
     /* called from products listing page */
     public function viewWishList($selprod_id, $excludeWishList = 0)
     {
-        $excludeWishList = FatUtility::int($excludeWishList);        
+        $excludeWishList = FatUtility::int($excludeWishList);
         $wishLists = UserWishList::getUserWishLists($this->userId, true, $excludeWishList);
         $frm = $this->getCreateWishListForm();
         $frm->fill(array('selprod_id' => $selprod_id));
@@ -1366,7 +1366,7 @@ class AccountController extends LoggedUserController
             }
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
-        }      
+        }
         $wListObj = new UserWishList();
         $data_to_save_arr = $post;
         $data_to_save_arr['uwlist_added_on'] = date('Y-m-d H:i:s');
@@ -1526,7 +1526,7 @@ class AccountController extends LoggedUserController
             }
         }
 
-        $this->updateFavConfTime(); 
+        $this->updateFavConfTime();
 
         $this->set('productIsInAnyList', $productIsInAnyList);
         $this->set('action', $action);
@@ -1541,7 +1541,7 @@ class AccountController extends LoggedUserController
     }
 
     private function updateWishList($selprod_id, $wish_list_id, $rowAction = -1)
-    {      
+    {
         $row = false;
 
         $db = FatApp::getDb();
@@ -1628,7 +1628,7 @@ class AccountController extends LoggedUserController
     }
 
     public function wishListSearch()
-    {       
+    {
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $wishLists[] = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
         } else {
@@ -1676,7 +1676,7 @@ class AccountController extends LoggedUserController
     }
 
     public function viewFavouriteItems()
-    {        
+    {
         $favouriteListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
 
         if (!$favouriteListRow) {
@@ -1695,7 +1695,7 @@ class AccountController extends LoggedUserController
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $uwlist_id = empty($post['uwlist_id']) ? 0 : FatUtility::int($post['uwlist_id']);
-        
+
         if (false === MOBILE_APP_API_CALL) {
             $wishListRow = UserWishList::getAttributesById($uwlist_id, array('uwlist_id'));
             if (!$wishListRow) {
@@ -1776,7 +1776,7 @@ class AccountController extends LoggedUserController
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 $selprodIdsArr[] = $arr['selprod_id'];
             }
-            
+
             $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selprodIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selprodIdsArr);
         }
@@ -1823,7 +1823,7 @@ class AccountController extends LoggedUserController
         $db = FatApp::getDb();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-       
+
         $wishListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
 
         if (!$wishListRow) {
@@ -1973,7 +1973,7 @@ class AccountController extends LoggedUserController
         $uwlist_id = FatUtility::int($post['uwlist_id']);
 
         $db = FatApp::getDb();
-      
+
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->addMultipleFields(array('uwlist_id', 'uwlist_title', 'uwlist_type'));
         $srch->doNotCalculateRecords();
@@ -2017,7 +2017,7 @@ class AccountController extends LoggedUserController
 
     public function toggleShopFavorite()
     {
-        $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);       
+        $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         $db = FatApp::getDb();
 
         $srch = new ShopSearch($this->siteLangId);
@@ -2085,7 +2085,7 @@ class AccountController extends LoggedUserController
     }
 
     public function favoriteShopSearch()
-    {        
+    {
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
@@ -2180,7 +2180,7 @@ class AccountController extends LoggedUserController
 
     public function markAsFavorite($selprodId, $renderView = true)
     {
-        $this->isValidSelProd($selprodId);        
+        $this->isValidSelProd($selprodId);
         $prodObj = new Product();
         if (!$prodObj->addUpdateUserFavoriteProduct($this->userId, $selprodId)) {
             $message = Labels::getLabel('LBL_Some_problem_occurred,_Please_contact_webmaster', $this->siteLangId);
@@ -2209,7 +2209,7 @@ class AccountController extends LoggedUserController
     public function removeFromFavorite($selprodId, $renderView = true)
     {
         $this->isValidSelProd($selprodId);
-        $db = FatApp::getDb();       
+        $db = FatApp::getDb();
         if (!$db->deleteRecords(Product::DB_TBL_PRODUCT_FAVORITE, array('smt' => 'ufp_user_id = ? AND ufp_selprod_id = ?', 'vals' => array($this->userId, $selprodId)))) {
             $message = Labels::getLabel('LBL_Some_problem_occurred,_Please_contact_webmaster', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -2602,8 +2602,8 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmMessageSrch');
         $frm->addTextBox('', 'keyword');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
+        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
@@ -2611,20 +2611,20 @@ class AccountController extends LoggedUserController
     private function getWithdrawalForm($langId)
     {
         $frm = new Form('frmWithdrawal');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Amount_to_be_Withdrawn', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT_TO_BE_WITHDRAWN', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
         $fld->requirement->setFloat(true);
         $walletBalance = User::getUserBalance($this->userId);
-        $fld->htmlAfterField = Labels::getLabel("LBL_Current_Wallet_Balance", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true);
+        $fld->htmlAfterField = Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true);
 
         if (User::isAffiliate()) {
-            $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));
+            $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Cheque_Payee_Name', $langId), 'uextra_cheque_payee_name');
-            $chequePayeeNameUnReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('LBL_Cheque_Payee_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId), 'uextra_cheque_payee_name');
+            $chequePayeeNameUnReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId));
             $chequePayeeNameUnReqFld->setRequired(false);
 
-            $chequePayeeNameReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('LBL_Cheque_Payee_Name', $langId));
+            $chequePayeeNameReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId));
             $chequePayeeNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'uextra_cheque_payee_name', $chequePayeeNameReqFld);
@@ -2633,11 +2633,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Bank_Name', $langId), 'ub_bank_name');
-            $bankNameUnReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('LBL_Bank_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_BANK_NAME', $langId), 'ub_bank_name');
+            $bankNameUnReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('FRM_BANK_NAME', $langId));
             $bankNameUnReqFld->setRequired(false);
 
-            $bankNameReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('LBL_Bank_Name', $langId));
+            $bankNameReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('FRM_BANK_NAME', $langId));
             $bankNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_bank_name', $bankNameUnReqFld);
@@ -2646,11 +2646,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Account_Holder_Name', $langId), 'ub_account_holder_name');
-            $bankAccHolderNameUnReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('LBL_Account_Holder_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId), 'ub_account_holder_name');
+            $bankAccHolderNameUnReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId));
             $bankAccHolderNameUnReqFld->setRequired(false);
 
-            $bankAccHolderNameReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('LBL_Account_Holder_Name', $langId));
+            $bankAccHolderNameReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId));
             $bankAccHolderNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_account_holder_name', $bankAccHolderNameUnReqFld);
@@ -2659,11 +2659,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Bank_Account_Number', $langId), 'ub_account_number');
-            $bankAccNumberUnReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('LBL_Bank_Account_Number', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId), 'ub_account_number');
+            $bankAccNumberUnReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId));
             $bankAccNumberUnReqFld->setRequired(false);
 
-            $bankAccNumberReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('LBL_Bank_Account_Number', $langId));
+            $bankAccNumberReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId));
             $bankAccNumberReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_account_number', $bankAccNumberUnReqFld);
@@ -2672,11 +2672,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Swift_Code', $langId), 'ub_ifsc_swift_code');
-            $bankIfscUnReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('LBL_Swift_Code', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_SWIFT_CODE', $langId), 'ub_ifsc_swift_code');
+            $bankIfscUnReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('FRM_SWIFT_CODE', $langId));
             $bankIfscUnReqFld->setRequired(false);
 
-            $bankIfscReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('LBL_Swift_Code', $langId));
+            $bankIfscReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('FRM_SWIFT_CODE', $langId));
             $bankIfscReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_ifsc_swift_code', $bankIfscUnReqFld);
@@ -2685,11 +2685,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $langId), 'ub_bank_address');
-            $bankBankAddressUnReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('LBL_Bank_Address', $langId));
+            $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
+            $bankBankAddressUnReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('FRM_BANK_ADDRESS', $langId));
             $bankBankAddressUnReqFld->setRequired(false);
 
-            $bankBankAddressReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('LBL_Bank_Address', $langId));
+            $bankBankAddressReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('FRM_BANK_ADDRESS', $langId));
             $bankBankAddressReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_bank_address', $bankBankAddressUnReqFld);
@@ -2698,11 +2698,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_PayPal_Email_Account', $langId), 'uextra_paypal_email_id');
-            $PPEmailIdUnReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('LBL_PayPal_Email_Account', $langId));
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId), 'uextra_paypal_email_id');
+            $PPEmailIdUnReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId));
             $PPEmailIdUnReqFld->setRequired(false);
 
-            $PPEmailIdReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('LBL_PayPal_Email_Account', $langId));
+            $PPEmailIdReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId));
             $PPEmailIdReqFld->setRequired(true);
             $PPEmailIdReqFld->setEmail();
 
@@ -2711,15 +2711,15 @@ class AccountController extends LoggedUserController
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_PAYPAL, 'eq', 'uextra_paypal_email_id', $PPEmailIdReqFld);
             /* ] */
         } else {
-            $frm->addRequiredField(Labels::getLabel('LBL_Bank_Name', $langId), 'ub_bank_name');
-            $frm->addRequiredField(Labels::getLabel('LBL_Account_Holder_Name', $langId), 'ub_account_holder_name');
-            $frm->addRequiredField(Labels::getLabel('LBL_Account_Number', $langId), 'ub_account_number');
-            $ifsc = $frm->addRequiredField(Labels::getLabel('LBL_IFSC_Swift_Code', $langId), 'ub_ifsc_swift_code');
+            $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $langId), 'ub_bank_name');
+            $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId), 'ub_account_holder_name');
+            $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $langId), 'ub_account_number');
+            $ifsc = $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $langId), 'ub_ifsc_swift_code');
             $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
-            $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $langId), 'ub_bank_address');
+            $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
-        $frm->addTextArea(Labels::getLabel('LBL_Other_Info_Instructions', $langId), 'withdrawal_instructions');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Request', $langId));
+        $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
         $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId));
         return $frm;
     }
@@ -2730,7 +2730,7 @@ class AccountController extends LoggedUserController
         $frm->setRequiredStarWith('NONE');
         $frm->addRequiredField('', 'uwlist_title');
         $frm->addHiddenField('', 'selprod_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Add', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_ADD', $this->siteLangId));
         $frm->setJsErrorDisplay('afterfield');
         return $frm;
     }
@@ -2738,51 +2738,51 @@ class AccountController extends LoggedUserController
     private function getProfileInfoForm()
     {
         $frm = new Form('frmProfileInfo');
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
-        $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $frm->addTextBox(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phoneFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phoneFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
+        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
 
         if (User::isAffiliate()) {
-            $frm->addTextBox(Labels::getLabel('LBL_Company', $this->siteLangId), 'uextra_company_name');
-            $frm->addTextBox(Labels::getLabel('LBL_Website', $this->siteLangId), 'uextra_website');
-            $frm->addTextBox(Labels::getLabel('LBL_Address_Line1', $this->siteLangId), 'user_address1')->requirements()->setRequired();
-            $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'user_address2');
+            $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'uextra_company_name');
+            $frm->addTextBox(Labels::getLabel('FRM_WEBSITE', $this->siteLangId), 'uextra_website');
+            $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE1', $this->siteLangId), 'user_address1')->requirements()->setRequired();
+            $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $this->siteLangId), 'user_address2');
         }
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         if (User::isAffiliate()) {
-            $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'user_zip');
+            $zipFld = $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'user_zip');
             /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-            $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
+            $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId)); */
         }
         $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
         if (User::isAdvertiser() && $parent == 0) {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_COMPANY', $this->siteLangId), 'user_company');
-            $fld = $frm->addTextArea(Labels::getLabel('LBL_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info');
-            $fld->html_after_field = '<small>' . Labels::getLabel('LBL_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
-            $frm->addTextArea(Labels::getLabel('LBL_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'user_company');
+            $fld = $frm->addTextArea(Labels::getLabel('FRM_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info');
+            $fld->html_after_field = '<small>' . Labels::getLabel('FRM_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
+            $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
     private function getProfileImageForm()
     {
         $frm = new Form('frmProfile', array('id' => 'frmProfile'));
-        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onClick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
+        $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onClick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
         return $frm;
     }
 
@@ -3022,7 +3022,7 @@ class AccountController extends LoggedUserController
         $post = $frm->getFormDataFromArray($postedData);
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-       
+
         $orrequest_id = isset($post['orrequest_id']) ? FatUtility::int($post['orrequest_id']) : 0;
         $isSeller = isset($postedData['isSeller']) ? FatUtility::int($postedData['isSeller']) : 0;
 
@@ -3446,7 +3446,7 @@ class AccountController extends LoggedUserController
 
     //Valid for 10 Minutes only
     public function getTempToken()
-    {        
+    {
         $uObj = new User($this->userId);
         $tempToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
 
@@ -3478,7 +3478,7 @@ class AccountController extends LoggedUserController
     }
 
     public function readAllNotifications()
-    {     
+    {
         $smt = array(
             'smt' => Notifications::DB_TBL_PREFIX . 'is_read = ? AND ' . Notifications::DB_TBL_PREFIX . 'user_id = ?',
             'vals' => array(applicationConstants::NO, (int) $this->userId)
@@ -3497,7 +3497,7 @@ class AccountController extends LoggedUserController
         if (1 > $notificationId) {
             FatUtility::dieJSONError(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
         }
-        
+
         $srch = Notifications::getSearchObject();
         $srch->addCondition('unt.unotification_user_id', '=', $this->userId);
         $srch->addCondition('unt.unotification_id', '=', $notificationId);
@@ -3516,7 +3516,7 @@ class AccountController extends LoggedUserController
     }
 
     public function changePhoneForm($updatePhnFrm = 0)
-    {       
+    {
         $phData = User::getAttributesById($this->userId, ['user_phone_dcode', 'user_phone', 'user_country_id']);
         $updatePhnFrm = empty($updatePhnFrm) ? (empty($phData['user_phone']) ? 1 : 0) : $updatePhnFrm;
 
@@ -3568,7 +3568,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER_FORMAT", $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
-        
+
         if (1 > $updatePhnFrm && false === UserAuthentication::validateUserPhone($this->userId, $phoneNumber)) {
             LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_PHONE_NUMBER', $this->siteLangId));
         }
@@ -3613,7 +3613,7 @@ class AccountController extends LoggedUserController
     }
 
     public function resendOtp()
-    {       
+    {
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
 
@@ -3634,7 +3634,7 @@ class AccountController extends LoggedUserController
     }
 
     public function pushNotifications()
-    {       
+    {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $defaultPageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
@@ -3677,7 +3677,7 @@ class AccountController extends LoggedUserController
     }
 
     public function cookiesPreferencesForm()
-    {       
+    {
         $user = new User($this->userId);
         $data = $user->getUserSelectedCookies();
 
@@ -3723,7 +3723,7 @@ class AccountController extends LoggedUserController
             'ucp_statistical' => FatApp::getPostedData('ucp_statistical', FatUtility::VAR_INT, 0),
             'ucp_personalized' => FatApp::getPostedData('ucp_personalized', FatUtility::VAR_INT, 0)
         ];
-       
+
         $user = new User($this->userId);
         if (!$user->updateCookiesPreferences($data)) {
             $message = Labels::getLabel($user->getError(), $this->siteLangId);
@@ -3749,7 +3749,7 @@ class AccountController extends LoggedUserController
         }
 
         $opId = FatUtility::int($opId);
-       
+
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();

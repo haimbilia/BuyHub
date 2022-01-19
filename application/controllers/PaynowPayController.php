@@ -180,7 +180,7 @@ class PaynowPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaynowPay', 'charge', array($orderId)) : $this->authorize->getRedirectUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaynowPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->authorize->getRedirectUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {

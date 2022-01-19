@@ -371,14 +371,14 @@ class SubscriptionCheckoutController extends LoggedUserController
         $userWalletBalance = User::getUserBalance($userId);
 
         if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected']) {
-            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
+            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $WalletPaymentForm->fill(array('order_id' => $order_id));
             $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
-            $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
+            $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $confirmPaymentFrm->fill(array('order_id' => $order_id));
             $confirmPaymentFrm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm', $this->siteLangId));
@@ -456,7 +456,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $frm->setFormTagAttribute('data-method', $methodCode);
         $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries', [], CONF_WEBROOT_FRONTEND));
 
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'], [], CONF_WEBROOT_FRONTEND)));
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id']), CONF_WEBROOT_FRONTEND));
         $frm->fill(
             array(
                 'order_id' => $order_id,
