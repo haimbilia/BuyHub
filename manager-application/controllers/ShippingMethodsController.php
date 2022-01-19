@@ -276,13 +276,13 @@ class ShippingMethodsController extends ListingBaseController
 
         $frm = new Form('frmShippingMethod');
         $frm->addHiddenField('', 'shippingapi_id', $shippingapi_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Identifier', $this->siteLangId), 'shippingapi_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_SHIPPING_IDENTIFIER', $this->siteLangId), 'shippingapi_identifier');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shippingapi_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shippingapi_active', $activeInactiveArr, '', array(), '');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

@@ -823,25 +823,25 @@ class PromotionsController extends ListingBaseController
             $this->addSortingElements($frm, 'promotion_name');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addDateField(Labels::getLabel('FRM_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Active', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
 
         $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Approved', $this->siteLangId), 'approve', array(-1 => 'Does not Matter') + $yesNoArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_APPROVED', $this->siteLangId), 'approve', array(-1 => 'Does not Matter') + $yesNoArr, '', array(), '');
 
-        $frm->addTextBox(Labels::getLabel('FRM_Impression_from_(number)', $this->siteLangId), 'impression_from');
-        $frm->addTextBox(Labels::getLabel('FRM_Impression_to_(number)', $this->siteLangId), 'impression_to');
+        $frm->addTextBox(Labels::getLabel('FRM_IMPRESSION_FROM_(NUMBER)', $this->siteLangId), 'impression_from');
+        $frm->addTextBox(Labels::getLabel('FRM_IMPRESSION_TO_(NUMBER)', $this->siteLangId), 'impression_to');
 
-        $frm->addTextBox(Labels::getLabel('FRM_Clicks_from_(number)', $this->siteLangId), 'click_from');
-        $frm->addTextBox(Labels::getLabel('FRM_Clicks_to_(number)', $this->siteLangId), 'click_to');
+        $frm->addTextBox(Labels::getLabel('FRM_CLICKS_FROM_(NUMBER)', $this->siteLangId), 'click_from');
+        $frm->addTextBox(Labels::getLabel('FRM_CLICKS_TO_(NUMBER)', $this->siteLangId), 'click_to');
         $frm->addHiddenField('', 'promotion_id');
-        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_All_Type', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_ALL_TYPE', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');

@@ -168,10 +168,10 @@ class LanguagesController extends ListingBaseController
 
         $frm = new Form('frmLanguage');
         $frm->addHiddenField('', 'language_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $siteLangId), 'language_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $siteLangId), 'language_code');
+        $frm->addRequiredField(Labels::getLabel('FRM_LANGUAGE_NAME', $siteLangId), 'language_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_LANGUAGE_CODE', $siteLangId), 'language_code');
         $fld = $frm->addRadioButtons(
-            Labels::getLabel("LBL_Language_Layout_Direction", $siteLangId),
+            Labels::getLabel("FRM_LANGUAGE_LAYOUT_DIRECTION", $siteLangId),
             'language_layout_direction',
             applicationConstants::getLayoutDirections($siteLangId),
             '',
@@ -180,7 +180,7 @@ class LanguagesController extends ListingBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($siteLangId, true, 'country_code');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'language_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);

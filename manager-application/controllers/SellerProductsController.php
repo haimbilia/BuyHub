@@ -167,11 +167,11 @@ class SellerProductsController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addMultipleFields(
-                array(
-                    'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
-                    'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name',
-                    'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
-                )
+            array(
+                'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
+                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
+            )
         );
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -495,16 +495,16 @@ class SellerProductsController extends ListingBaseController
 
         $frm = new Form('frmLinks', array('id' => 'frmLinks'));
 
-        $frm->addTextBox(Labels::getLabel('LBL_Buy_Together_Products', $this->siteLangId), 'products_buy_together');
+        $frm->addTextBox(Labels::getLabel('FRM_BUY_TOGETHER_PRODUCTS', $this->siteLangId), 'products_buy_together');
 
         $frm->addHtml('', 'buy_together', '<div id="buy-together-products" class="box--scroller"><ul class="links--vertical"></ul></div>');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Related_Products', $this->siteLangId), 'products_related');
+        $frm->addTextBox(Labels::getLabel('FRM_RELATED_PRODUCTS', $this->siteLangId), 'products_related');
 
         $frm->addHtml('', 'related_products', '<div id="related-products" class="box--scroller"><ul class="links_vertical"></ul></div>');
 
         $frm->addHiddenField('', 'selprod_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -1051,9 +1051,9 @@ class SellerProductsController extends ListingBaseController
         $frm->addHiddenField('', 'selprod_id');
         $taxCatArr = Tax::getSaleTaxCatArr($langId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $langId), 'ptt_taxcat_id', $taxCatArr, '', array(), Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', $taxCatArr, '', array(), Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired(true);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 
@@ -1230,15 +1230,15 @@ class SellerProductsController extends ListingBaseController
         $cRequestObj = new User();
         $srch = $cRequestObj->getUserCatalogRequestsObj();
         $srch->addMultipleFields(
-                array(
-                    'scatrequest_id',
-                    'scatrequest_user_id',
-                    'scatrequest_reference',
-                    'scatrequest_title',
-                    'scatrequest_comments',
-                    'scatrequest_status',
-                    'scatrequest_date'
-                )
+            array(
+                'scatrequest_id',
+                'scatrequest_user_id',
+                'scatrequest_reference',
+                'scatrequest_title',
+                'scatrequest_comments',
+                'scatrequest_status',
+                'scatrequest_date'
+            )
         );
         $srch->addOrder('scatrequest_date', 'DESC');
         $srch->setPageNumber($page);
@@ -1419,13 +1419,13 @@ class SellerProductsController extends ListingBaseController
         $srch->setPageSize($pageSize);
         $srch->addOrder('scatrequestmsg_id', 'DESC');
         $srch->addMultipleFields(
-                array(
-                    'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                    'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                    'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
-                    'msg_user_cred.credential_email as msg_user_email',
-                    'scatrequest_status'
-                )
+            array(
+                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
+                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
+                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
+                'msg_user_cred.credential_email as msg_user_email',
+                'scatrequest_status'
+            )
         );
 
         $rs = $srch->getResultSet();
@@ -1573,15 +1573,15 @@ class SellerProductsController extends ListingBaseController
         }
 
         $srch->addMultipleFields(
-                array(
-                    'product_id',
-                    'product_identifier',
-                    'product_name',
-                    'product_added_on',
-                    'product_model',
-                    'product_attrgrp_id',
-                    'attrgrp_name'
-                )
+            array(
+                'product_id',
+                'product_identifier',
+                'product_name',
+                'product_added_on',
+                'product_model',
+                'product_attrgrp_id',
+                'attrgrp_name'
+            )
         );
         $srch->addOrder('product_added_on', 'DESC');
         $srch->setPageNumber($page);
@@ -1617,9 +1617,9 @@ class SellerProductsController extends ListingBaseController
     private function getCatalogProductSearchForm()
     {
         $frm = new Form('frmSearchCatalogProduct');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         $frm->addHiddenField('', 'page');
         return $frm;
@@ -1630,8 +1630,8 @@ class SellerProductsController extends ListingBaseController
         $frm = new Form('catalogRequestMsgForm');
 
         $frm->addHiddenField('', 'requestId', $requestId);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'message');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId));
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'message');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $this->siteLangId));
         return $frm;
     }
 
@@ -1654,14 +1654,14 @@ class SellerProductsController extends ListingBaseController
     private function addNewCatalogRequestForm()
     {
         $frm = new Form('frmAddCatalogRequest', array('enctype' => "multipart/form-data"));
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'scatrequest_title');
-        /* $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Content',$this->siteLangId),'scatrequest_content');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'scatrequest_title');
+        /* $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_CONTENT',$this->siteLangId),'scatrequest_content');
           $fld->htmlBeforeField = '<div class="editor-bar">';
           $fld->htmlAfterField = '</div>'; */
-        $frm->addTextArea(Labels::getLabel('LBL_Content', $this->siteLangId), 'scatrequest_content');
-        $fileFld = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $this->siteLangId), 'file', array('accept' => 'image/*,.zip', 'enctype' => "multipart/form-data"));
-        $fileFld->htmlAfterField = '<span class="text--small">' . Labels::getLabel('MSG_Only_Image_extensions_and_zip_is_allowed', $this->siteLangId) . '</span>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'scatrequest_content');
+        $fileFld = $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $this->siteLangId), 'file', array('accept' => 'image/*,.zip', 'enctype' => "multipart/form-data"));
+        $fileFld->htmlAfterField = '<span class="text--small">' . Labels::getLabel('MSG_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId) . '</span>';
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -1761,19 +1761,19 @@ class SellerProductsController extends ListingBaseController
         $frm->addHiddenField('', 'user_id', $user_id);
         $frm->addHiddenField('', 'selprod_id', $selprod_id);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_SUBJECT', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId), array('id' => 'btn_submit'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 
     private function getThresholdLevelProductsSearchForm()
     {
         $frm = new Form('frmProductSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('FRM_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -2026,8 +2026,8 @@ class SellerProductsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
 
-        $this->set("arrListing", $arrListing); 
-        $this->set('postedData', $post);  
+        $this->set("arrListing", $arrListing);
+        $this->set('postedData', $post);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -2036,11 +2036,11 @@ class SellerProductsController extends ListingBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'product_seller', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'product_seller', '');
         $frm->addHiddenField('', 'product_seller_id');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -2049,11 +2049,11 @@ class SellerProductsController extends ListingBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'product_seller', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'product_seller', '');
         $frm->addHiddenField('', 'product_seller_id');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -2244,13 +2244,13 @@ class SellerProductsController extends ListingBaseController
         $frm = new Form('frmRelatedSellerProduct');
 
         $frm->addHiddenField('', 'selprod_id', 0);
-        $prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $this->siteLangId)));
-        //$prodName = $frm->addTextBox('', 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $this->siteLangId)));
+        $prodName = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
+        //$prodName = $frm->addTextBox('', 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
         $prodName->requirements()->setRequired();
         //$fld1 = $frm->addTextBox('', 'products_related');        
-        $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'products_related', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'products_related', [], '');
         // $fld1->htmlAfterField= '<div class="row"><div class="col-md-12"><ul class="list-vertical" id="related-products"></ul></div></div>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -2356,9 +2356,9 @@ class SellerProductsController extends ListingBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
@@ -2427,13 +2427,13 @@ class SellerProductsController extends ListingBaseController
         $frm = new Form('frmUpsellSellerProduct');
 
         $frm->addHiddenField('', 'selprod_id', 0);
-        $prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $this->siteLangId)));
-        //$prodName = $frm->addTextBox('', 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $this->siteLangId)));
+        $prodName = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
+        //$prodName = $frm->addTextBox('', 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
         $prodName->requirements()->setRequired();
         //$fld1 = $frm->addTextBox('', 'products_upsell');
-        $fld1 = $frm->addSelectBox(Labels::getLabel('LBL_Buy_Together_Products', $this->siteLangId), 'products_upsell', [], '');
+        $fld1 = $frm->addSelectBox(Labels::getLabel('FRM_BUY_TOGETHER_PRODUCTS', $this->siteLangId), 'products_upsell', [], '');
         // $fld1->htmlAfterField= '<div class="row"><div class="col-md-12"><ul class="list-vertical" id="upsell-products"></ul></div></div>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -2541,9 +2541,9 @@ class SellerProductsController extends ListingBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
@@ -2654,5 +2654,4 @@ class SellerProductsController extends ListingBaseController
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }
-
 }

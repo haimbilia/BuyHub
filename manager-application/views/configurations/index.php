@@ -54,9 +54,10 @@
                     <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
                 </div>
             </div>
-        <?php } else { ?>
+        <?php } else { ?>            
+            <?php require_once(CONF_THEME_PATH . 'getting-started/top-nav.php'); ?>
             <div class="onboarding">
-                <?php require_once(CONF_THEME_PATH . 'configurations/getting-started-left-nav.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
                 <div class="onboarding-main">
                     <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
                 </div>

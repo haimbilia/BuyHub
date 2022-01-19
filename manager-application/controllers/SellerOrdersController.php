@@ -895,10 +895,10 @@ class SellerOrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAllAssoc($rs);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_User', $this->siteLangId), 'optsu_user_id', $records, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_USER', $this->siteLangId), 'optsu_user_id', $records, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', 0);
         if ($displayShippingUserForm) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         }
         return $frm;
     }
@@ -906,41 +906,41 @@ class SellerOrdersController extends ListingBaseController
     private function getOrderCommentsForm($orderData = array(), $processingOrderStatus = [])
     {
         $frm = new Form('frmOrderComments');
-        $frm->addTextArea(Labels::getLabel('LBL_Your_Comments', $this->siteLangId), 'comments');
+        $frm->addTextArea(Labels::getLabel('FRM_YOUR_COMMENTS', $this->siteLangId), 'comments');
 
         $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_NOTIFY_CUSTOMER', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
-            $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
+            $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId));
             $manualShipUnReqObj->setRequired(false);
-            $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
+            $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId));
             $manualShipReqObj->setRequired(true);
 
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'eq', 'manual_shipping', $manualShipReqObj);
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'ne', 'manual_shipping', $manualShipUnReqObj);
 
-            $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
+            $frm->addTextBox(Labels::getLabel('FRM_TRACKING_NUMBER', $this->siteLangId), 'tracking_number');
 
-            $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
+            $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('FRM_TRACKING_NUMBER', $this->siteLangId));
             $trackingUnReqObj->setRequired(false);
 
-            $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
+            $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('FRM_TRACKING_NUMBER', $this->siteLangId));
             $trackingReqObj->setRequired(true);
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'tracking_number', $trackingReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
-            $frm->addTextBox(Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
+            $frm->addTextBox(Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
 
-            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingUrlUnReqObj->setRequired(false);
 
-            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingurlReqObj->setRequired(true);
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
@@ -949,12 +949,12 @@ class SellerOrdersController extends ListingBaseController
             $shipmentTracking = new ShipmentTracking();
             if (false !== $shipmentTracking->init($this->siteLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
                 $trackCarriers = $shipmentTracking->getResponse();
-                $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+                $frm->addSelectBox(Labels::getLabel('FRM_TRACKING_COURIER', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
 
-                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
+                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('FRM_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldUnReqObj->setRequired(false);
 
-                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
+                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('FRM_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldReqObj->setRequired(true);
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
@@ -963,7 +963,7 @@ class SellerOrdersController extends ListingBaseController
         }
 
         $frm->addHiddenField('', 'op_id', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -971,10 +971,10 @@ class SellerOrdersController extends ListingBaseController
     {
         $frm = new Form('frmOrderCancel');
         $frm->addHiddenField('', 'op_id');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Comments', $langId), 'comments');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $langId), 'comments');
         $fld->requirements()->setRequired(true);
         $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_Reason_cancellation', $langId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 
@@ -985,27 +985,27 @@ class SellerOrdersController extends ListingBaseController
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
 
         $frm = new Form('frmVendorOrderSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $langId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
         if (is_array($vendors) && !empty($vendors)) {
-            $frm->addSelectBox(Labels::getLabel('LBL_SHIPPPED_BY', $langId), 'opshipping_by_seller_user_id', $vendors, '', array(), Labels::getLabel('LBL_All', $langId));
+            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPPED_BY', $langId), 'opshipping_by_seller_user_id', $vendors, '', array(), Labels::getLabel('FRM_ALL', $langId));
         }
 
-        $frm->addTextBox(Labels::getLabel('LBL_Buyer', $langId), 'buyer', '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $langId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('LBL_All', $langId));
-        $frm->addTextBox(Labels::getLabel('LBL_Seller_Shop', $langId), 'shop_name');
-        /* $frm->addTextBox(Labels::getLabel('LBL_Customer',$langId),'customer_name'); */
+        $frm->addTextBox(Labels::getLabel('FRM_BUYER', $langId), 'buyer', '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $langId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('FRM_ALL', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_SELLER_SHOP', $langId), 'shop_name');
+        /* $frm->addTextBox(Labels::getLabel('FRM_CUSTOMER',$langId),'customer_name'); */
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        // $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $langId) . ' [' . $currencySymbol . ']'));
-        // $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_to', $langId) . ' [' . $currencySymbol . ']'));
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        // $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('FRM_ORDER_FROM', $langId) . ' [' . $currencySymbol . ']'));
+        // $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('FRM_ORDER_TO', $langId) . ' [' . $currencySymbol . ']'));
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'user_id');
         $frm->addHiddenField('', 'order_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $langId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $langId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -1037,7 +1037,7 @@ class SellerOrdersController extends ListingBaseController
     {
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId) , true);
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         $opSrch = OrderProduct::getSearchObject();

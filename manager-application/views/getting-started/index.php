@@ -42,7 +42,7 @@
 
             </div>
         </div>
-        <?php ?>
+        <?php /* ?>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="onboarding">
@@ -283,4 +283,4 @@
         </div>
     </div>
 </main>
- <?php ?>
+ <?php  */?>

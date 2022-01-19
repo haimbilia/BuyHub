@@ -252,22 +252,22 @@ class UsersAddressesController extends ListingBaseController
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'addr_record_id', []);
             $fld->requirements()->setRequired(true);
         }
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Address_Label', $this->siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $this->siteLangId), 'addr_title');
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $this->siteLangId));
-        $frm->addRequiredField(Labels::getLabel('FRM_Contact_Person_Name', $this->siteLangId), 'addr_name');
-        $frm->addRequiredField(Labels::getLabel('FRM_Address_Line1', $this->siteLangId), 'addr_address1');
-        $frm->addTextBox(Labels::getLabel('FRM_Address_Line2', $this->siteLangId), 'addr_address2');
+        $frm->addRequiredField(Labels::getLabel('FRM_CONTACT_PERSON_NAME', $this->siteLangId), 'addr_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $this->siteLangId), 'addr_address1');
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $this->siteLangId), 'addr_address2');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Country', $this->siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('FRM_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_State', $this->siteLangId), 'addr_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_City', $this->siteLangId), 'addr_city');
-        $frm->addTextBox(Labels::getLabel('FRM_Postal_Code', $this->siteLangId), 'addr_zip');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'addr_state_id', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_CITY', $this->siteLangId), 'addr_city');
+        $frm->addTextBox(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'addr_zip');
         $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
         return $frm;
@@ -281,7 +281,7 @@ class UsersAddressesController extends ListingBaseController
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'addr_record_id', []);
-        $frm->addTextBox(Labels::getLabel('FRM_Address_Label', $this->siteLangId), 'addr_title');
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $this->siteLangId), 'addr_title');
 
 
         HtmlHelper::addSearchButton($frm);

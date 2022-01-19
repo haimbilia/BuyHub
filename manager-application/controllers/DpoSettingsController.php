@@ -7,32 +7,32 @@ class DpoSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmDpo');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_COMPANY_TOKEN', $langId), 'company_token');
-        $fld1 = new FormFieldRequirement('company_token', Labels::getLabel('LBL_COMPANY_TOKEN', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_COMPANY_TOKEN', $langId), 'company_token');
+        $fld1 = new FormFieldRequirement('company_token', Labels::getLabel('FRM_COMPANY_TOKEN', $langId));
         $fld1->setRequired(false);
-        $reqFld1 = new FormFieldRequirement('company_token', Labels::getLabel('LBL_COMPANY_TOKEN', $langId));
+        $reqFld1 = new FormFieldRequirement('company_token', Labels::getLabel('FRM_COMPANY_TOKEN', $langId));
         $reqFld1->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_SERVICE_TYPE', $langId), 'service_type');
-        $fld2 = new FormFieldRequirement('service_type', Labels::getLabel('LBL_SERVICE_TYPE', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_SERVICE_TYPE', $langId), 'service_type');
+        $fld2 = new FormFieldRequirement('service_type', Labels::getLabel('FRM_SERVICE_TYPE', $langId));
         $fld2->setRequired(false);
-        $reqFld2 = new FormFieldRequirement('service_type', Labels::getLabel('LBL_SERVICE_TYPE', $langId));
+        $reqFld2 = new FormFieldRequirement('service_type', Labels::getLabel('FRM_SERVICE_TYPE', $langId));
         $reqFld2->setRequired(true);
 
 
-        $frm->addTextBox(Labels::getLabel('LBL_COMPANY_TOKEN', $langId), 'live_company_token');
-        $liveFld1 = new FormFieldRequirement('live_company_token', Labels::getLabel('LBL_COMPANY_TOKEN', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_COMPANY_TOKEN', $langId), 'live_company_token');
+        $liveFld1 = new FormFieldRequirement('live_company_token', Labels::getLabel('FRM_COMPANY_TOKEN', $langId));
         $liveFld1->setRequired(false);
-        $reqLiveFld1 = new FormFieldRequirement('live_company_token', Labels::getLabel('LBL_COMPANY_TOKEN', $langId));
+        $reqLiveFld1 = new FormFieldRequirement('live_company_token', Labels::getLabel('FRM_COMPANY_TOKEN', $langId));
         $reqLiveFld1->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_SERVICE_TYPE', $langId), 'live_service_type');
-        $liveFld2 = new FormFieldRequirement('live_service_type', Labels::getLabel('LBL_SERVICE_TYPE', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_SERVICE_TYPE', $langId), 'live_service_type');
+        $liveFld2 = new FormFieldRequirement('live_service_type', Labels::getLabel('FRM_SERVICE_TYPE', $langId));
         $liveFld2->setRequired(false);
-        $reqLiveFld2 = new FormFieldRequirement('live_service_type', Labels::getLabel('LBL_SERVICE_TYPE', $langId));
+        $reqLiveFld2 = new FormFieldRequirement('live_service_type', Labels::getLabel('FRM_SERVICE_TYPE', $langId));
         $reqLiveFld2->setRequired(true);
 
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', 'company_token', $reqFld1);

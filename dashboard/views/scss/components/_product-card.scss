@@ -168,7 +168,7 @@
             --aspect-ratio: 1/1;
             display: block;
             margin: 0 0 15px;
-            padding-bottom: calc(100%/(var(--aspect-ratio)));
+            padding-bottom: calc(100% / (var(--aspect-ratio)));
             position: relative;
             width: 100%;
             overflow: hidden;
@@ -290,7 +290,7 @@
 }
 
 .not-available {
-    background-color: rgba(255, 255, 255, 0.80);
+    background-color: rgba(255, 255, 255, 0.8);
     color: $danger-color;
     border-radius: $radius3;
     border: none;
@@ -326,16 +326,16 @@
     transition-delay: 500ms;
     &.static--collection {
         #{$end-direction}: 0;
-        >ul>li {
+        > ul > li {
             display: inline-block;
             vertical-align: top;
             margin: 0 4px;
             position: relative;
         }
     }
-    >ul {
-        >li {
-            >span {
+    > ul {
+        > li {
+            > span {
                 display: block;
                 width: 2.5rem;
                 background: $brand-color;
@@ -364,7 +364,7 @@
         max-width: 100%;
         height: auto;
     }
-    >ul>li.is-active>span {
+    > ul > li.is-active > span {
         background: $secondary-color;
         color: $secondary-color-inverse;
     }
@@ -512,9 +512,9 @@
             word-break: break-all;
             word-break: break-word;
             hyphens: auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            // white-space: nowrap;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
             a {
                 opacity: 1;
                 color: inherit;
@@ -544,8 +544,10 @@
         .item__specification {
             color: lighten($body-color, 20%);
         }
-        .item__sold_by {}
-        .item__shipping {}
+        .item__sold_by {
+        }
+        .item__shipping {
+        }
         .item__date {
             display: block;
             opacity: 0.6;
@@ -582,11 +584,11 @@
     @include media-breakpoint-down(sm) {
         flex-wrap: wrap;
     }
-    >li {
+    > li {
         display: inline-block;
         vertical-align: top;
         margin: 0 4px 4px 0;
-        >a {
+        > a {
             display: block;
             background: none;
             padding: 5px;

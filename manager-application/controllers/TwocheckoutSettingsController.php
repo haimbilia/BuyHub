@@ -8,18 +8,18 @@ class TwocheckoutSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmPaymentMethods');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', [], Labels::getLabel('LBL_Select', $langId));
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', [], Labels::getLabel('FRM_SELECT', $langId));
         $envFld->requirement->setRequired(true);
 
         /* $paymentTypesArr = array(
             'HOSTED' => 'Hosted Checkout',
             'API' => 'Payment API'
         );
-        $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Type', $langId), 'payment_type', $paymentTypesArr, 'HOSTED', array('class' => 'list-inline')); */
-        $frm->addRequiredField(Labels::getLabel('LBL_MERCHANT_CODE', $langId), 'sellerId');
-        $frm->addRequiredField(Labels::getLabel('LBL_Publishable_Key', $langId), 'publishableKey');
-        $frm->addRequiredField(Labels::getLabel('LBL_Private_Key', $langId), 'privateKey');
-        $frm->addRequiredField(Labels::getLabel('LBL_Secret_Word', $langId), 'hashSecretWord');
+        $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_TYPE', $langId), 'payment_type', $paymentTypesArr, 'HOSTED', array('class' => 'list-inline')); */
+        $frm->addRequiredField(Labels::getLabel('FRM_MERCHANT_CODE', $langId), 'sellerId');
+        $frm->addRequiredField(Labels::getLabel('FRM_PUBLISHABLE_KEY', $langId), 'publishableKey');
+        $frm->addRequiredField(Labels::getLabel('FRM_PRIVATE_KEY', $langId), 'privateKey');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECRET_WORD', $langId), 'hashSecretWord');
 
         $frm->addHTML(
             'Remember',

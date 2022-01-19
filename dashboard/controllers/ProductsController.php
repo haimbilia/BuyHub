@@ -1,11 +1,11 @@
 <?php
 class ProductsController extends SellerBaseController
-{   
+{
 
     use CatalogProduct;
 
     public function __construct($action)
-    {        
+    {
         parent::__construct($action);
         $this->userPrivilege->canViewProducts();
     }
@@ -27,28 +27,30 @@ class ProductsController extends SellerBaseController
 
     public function form($recordId = 0, $productType = 0)
     {
-        $this->checkEditPrivilege(); 
+        $this->checkEditPrivilege();
 
         $userId = $this->userParentId;
-        
-        if (0 == $recordId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
-            Product::getActiveCount($userId) >= SellerPackages::getAllowedLimit($userId, $this->siteLangId, 'ossubs_products_allowed')) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId),false,true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));            
+
+        if (
+            0 == $recordId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($userId) >= SellerPackages::getAllowedLimit($userId, $this->siteLangId, 'ossubs_products_allowed')
+        ) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 
-        if (!$this->isShopActive($userId, 0, true)) {          
-            LibHelper::exitWithError($this->str_invalid_request, false ,true);         
+        if (!$this->isShopActive($userId, 0, true)) {
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
         if (!User::canAddCustomProduct()) {
-            LibHelper::exitWithError($this->str_invalid_request, false ,true);           
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Products'));
         }
 
         if (!UserPrivilege::isUserHasValidSubsription($userId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BUY_SUBSCRIPTION', $this->siteLangId),false,true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BUY_SUBSCRIPTION', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 
@@ -59,13 +61,13 @@ class ProductsController extends SellerBaseController
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
         }
-        
+
         $frm = $this->getForm($langId, $productType, $recordId);
-          
-        $imgFrm = $this->getImageFrm();   
+
+        $imgFrm = $this->getImageFrm();
         $productOptions = [];
 
-        if (1 < $recordId) {           
+        if (1 < $recordId) {
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $updateLangDataobj = new TranslateLangData(Product::DB_TBL_LANG);
                 $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
@@ -76,10 +78,10 @@ class ProductsController extends SellerBaseController
                 $productData += Product::getAttributesById($recordId);
             } else {
                 $productData = Product::getAttributesByLangId($langId, $recordId, null, true);
-            }  
+            }
             if (empty($productData)) {
-                LibHelper::exitWithError($this->str_invalid_request, false ,true);        
-                FatApp::redirectUser(UrlHelper::generateUrl('Products'));                
+                LibHelper::exitWithError($this->str_invalid_request, false, true);
+                FatApp::redirectUser(UrlHelper::generateUrl('Products'));
             }
 
             $productData['record_id'] = $recordId;
@@ -168,7 +170,7 @@ class ProductsController extends SellerBaseController
             if (!empty($profileData)) {
                 $productData['shipping_profile'] = $profileData['profile_id'];
             }
-            /* ] */ 
+            /* ] */
             $productOptions = Product::getProductOptions($recordId, $langId, true);
 
             $srch = new SearchBase(UpcCode::DB_TBL);
@@ -196,7 +198,7 @@ class ProductsController extends SellerBaseController
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
         } else {
-            $tempProductId = time() .$userId;
+            $tempProductId = time() . $userId;
             $frm->fill(['temp_product_id' => $tempProductId]);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
@@ -213,7 +215,7 @@ class ProductsController extends SellerBaseController
         $this->set("canEditTags", true);
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
- 
+
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
@@ -221,9 +223,9 @@ class ProductsController extends SellerBaseController
             $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
-        $this->_template->addJs(array('seller-requests/page-js/index.js','js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));     
-        $this->_template->addCss(array('css/select2.min.css'));        
-        $this->set("includeEditor", true);  
+        $this->_template->addJs(array('seller-requests/page-js/index.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->set("includeEditor", true);
         $this->_template->render();
     }
 
@@ -240,7 +242,7 @@ class ProductsController extends SellerBaseController
                 LibHelper::exitWithError($this->str_invalid_request_id);
             }
             $prod = new Product($recordId);
-            $productSpecifications = $prod->getProdSpecificationsByLangId($langId);            
+            $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
         }
         $this->set('productSpecifications', $productSpecifications);
         $this->set('langId', $langId);
@@ -254,51 +256,51 @@ class ProductsController extends SellerBaseController
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
         }
-       
+
         if (!User::canAddCustomProduct()) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access11', $this->siteLangId));
         }
 
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 1);      
-        if (1 > $langId || !array_key_exists($productType, Product::getProductTypes($langId))) {            
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 1);
+        if (1 > $langId || !array_key_exists($productType, Product::getProductTypes($langId))) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-       
-        if (false === $post) {        
+
+        if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
-        $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);       
+        $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
         /* select2 data ] */
-        
+
         $this->validateGetForm($post);
 
         $recordId = $post['record_id'];
         $langId = $post['lang_id'];
-        
+
         $isNewProduct = true;
-        if (0 < $recordId) {         
+        if (0 < $recordId) {
             $prodSellerId = Product::getAttributesById($recordId, 'product_seller_id');
-            if ($prodSellerId != $this->userParentId) {                
+            if ($prodSellerId != $this->userParentId) {
                 FatUtility::dieWithError($this->str_invalid_request);
-            } 
-            $isNewProduct = false; 
-        }        
-        
-        $post['product_seller_id'] = $this->userParentId;        
+            }
+            $isNewProduct = false;
+        }
+
+        $post['product_seller_id'] = $this->userParentId;
 
         $prodObj = new Product($recordId);
         $db = FatApp::getDb();
         $db->startTransaction();
-        
+
         if (!$prodObj->saveProductData($post)) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodObj->getError(), true);
@@ -309,7 +311,7 @@ class ProductsController extends SellerBaseController
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
-                ], $langId);
+        ], $langId);
 
         if (!$prodObj->saveProductCategory($post['ptc_prodcat_id'])) {
             $db->rollbackTransaction();
@@ -336,7 +338,7 @@ class ProductsController extends SellerBaseController
             LibHelper::exitWithError($prodObj->getError(), true);
         }
 
-        if (isset($post['shipping_profile'])) {            
+        if (isset($post['shipping_profile'])) {
             $shipProProdData = array(
                 'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
                 'shippro_product_id' => $recordId,
@@ -402,7 +404,7 @@ class ProductsController extends SellerBaseController
             }
         }
 
-        
+
         Tag::updateProductTagString($recordId);
         Product::updateMinPrices($recordId);
         if ($isNewProduct) {
@@ -661,7 +663,7 @@ class ProductsController extends SellerBaseController
         $this->set("langId", $data['afile_lang_id']);
         $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
-    }  
+    }
 
     public function upcListing()
     {
@@ -685,7 +687,7 @@ class ProductsController extends SellerBaseController
         $optionCombinations = [];
         if ($type == applicationConstants::NO && is_array($productOptions)) {
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues');
-        }        
+        }
 
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
@@ -700,16 +702,16 @@ class ProductsController extends SellerBaseController
         $frm = $this->getCatalogForm($langId, $productType, $recordId);
         $shippingObj = new Shipping($this->userParentId);
         $profileFld = $frm->getField('shipping_profile');
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates') )) {                           
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates'))) {
             $frm->removeField($profileFld);
-        }else{
-            $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);  
-        } 
+        } else {
+            $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);
+        }
 
         $fld = $frm->getField('product_approved');
-        if(null != $fld){
-            $frm->removeField($fld);        
-        }        
+        if (null != $fld) {
+            $frm->removeField($fld);
+        }
 
         return $frm;
     }
@@ -729,8 +731,8 @@ class ProductsController extends SellerBaseController
                     break;
                 }
             }
-        }                  
-           
+        }
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData && 0 < $langId) {
             $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
@@ -738,8 +740,7 @@ class ProductsController extends SellerBaseController
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
-             
-    }    
+    }
 
     private function isShopActive($userId, $shopId = 0, $returnResult = false)
     {
@@ -752,6 +753,6 @@ class ProductsController extends SellerBaseController
             return $shop->getData();
         }
 
-        return false;        
-    }    
+        return false;
+    }
 }

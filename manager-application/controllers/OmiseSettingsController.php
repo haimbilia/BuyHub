@@ -5,8 +5,8 @@ class OmiseSettingsController extends PaymentMethodSettingsController
     public static function form($langId)
     {
         $frm = new Form('frmPaymentMethods');
-        $frm->addRequiredField(Labels::getLabel('LBL_Public_Key', $langId), 'public_key');
-        $frm->addRequiredField(Labels::getLabel('LBL_Secret_Key', $langId), 'secret_key');
+        $frm->addRequiredField(Labels::getLabel('FRM_PUBLIC_KEY', $langId), 'public_key');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECRET_KEY', $langId), 'secret_key');
         return $frm;
     }
 }

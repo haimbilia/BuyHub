@@ -141,7 +141,7 @@ class TopProductsReportController extends ListingBaseController
             $this->set('topPerformed', $topPerformed);
             $this->set('postedData', $post);
             $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
+            $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
 
@@ -153,13 +153,13 @@ class TopProductsReportController extends ListingBaseController
     public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmTopProductsReportSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_OverAll', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('FRM_OVERALL', $this->siteLangId));
         $frm->addHiddenField('', 'page', 1);
-        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->siteLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_RECORD_PER_PAGE', $this->siteLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
         $frm->addHiddenField('', 'top_perfomed', 1);
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

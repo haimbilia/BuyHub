@@ -95,19 +95,19 @@ class DatabaseBackupRestoreController extends ListingBaseController
     protected function getBackupForm()
     {
         $frm = new Form('frmdatabaseBackup', array('id' => 'frmdatabaseBackup'));
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_File_Name', $this->siteLangId), 'name');
-        $fld = $frm->addSubmitButton('', 'submit_backup', Labels::getLabel('LBL_Backup_on_Server', $this->siteLangId));
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_FILE_NAME', $this->siteLangId), 'name');
+        $fld = $frm->addSubmitButton('', 'submit_backup', Labels::getLabel('BTN_BACKUP_ON_SERVER', $this->siteLangId));
         return $frm;
     }
 
     protected function getUploadForm()
     {
         $frm = new Form('frmdatabaseUpload', array('id' => 'frmdatabaseUpload'));
-        $fld = $frm->addFileUpload(Labels::getLabel('LBL_DB_upload', $this->siteLangId), 'file', array('autocomplete' => 'off'));
+        $fld = $frm->addFileUpload(Labels::getLabel('FRM_DB_UPLOAD', $this->siteLangId), 'file', array('autocomplete' => 'off'));
         $fld->html_before_field = '<div class="filefield"><span class="filename"></span>';
-        $fld->html_after_field = '<label class="filelabel">' . Labels::getLabel('LBL_Download_File', $this->siteLangId) . '</label></div>';
+        $fld->html_after_field = '<label class="filelabel">' . Labels::getLabel('FRM_DOWNLOAD_FILE', $this->siteLangId) . '</label></div>';
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'submit_upload', Labels::getLabel('LBL_Upload_on_server', $this->siteLangId));
+        $frm->addSubmitButton('', 'submit_upload', Labels::getLabel('FRM_UPLOAD_ON_SERVER', $this->siteLangId));
         return $frm;
     }
 

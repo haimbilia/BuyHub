@@ -180,12 +180,12 @@ class ShopReportReasonsController extends ListingBaseController
         $frm = new Form('frmShopReportReason');
         $frm->addHiddenField('', 'reportreason_id');
         /*$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'reportreason_identifier');*/
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'reportreason_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $this->siteLangId), 'reportreason_title');
         $languageArr = Language::getDropDownList();
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -196,8 +196,8 @@ class ShopReportReasonsController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmShopReportReasonLang');
         $frm->addHiddenField('', 'reportreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $langId), 'reportreason_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $langId), 'reportreason_title');
         return $frm;
     }
 

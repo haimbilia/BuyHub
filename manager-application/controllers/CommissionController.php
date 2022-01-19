@@ -350,12 +350,12 @@ class CommissionController extends ListingBaseController
         $frm->addHiddenField('', 'commsetting_id', $recordId);
 
         if (!$isMandatory) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'commsetting_prodcat_id', $catArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Seller', $this->siteLangId), 'commsetting_user_id', $userArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'commsetting_product_id', $prodArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'commsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'commsetting_user_id', $userArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'commsetting_product_id', $prodArr, '', [], '');
         }
 
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Commission_fees_(%)', $this->siteLangId), 'commsetting_fees');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_COMMISSION_FEES_(%)', $this->siteLangId), 'commsetting_fees');
         $fld->requirements()->setRange('0', '100');
         return $frm;
     }
