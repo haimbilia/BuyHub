@@ -190,6 +190,7 @@ class SalesReportController extends ListingBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
+        $this->set('postedData', $post);
         $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
