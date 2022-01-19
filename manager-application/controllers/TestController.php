@@ -10,10 +10,10 @@ class TestController extends ListingBaseController
     public function loadForm()
     {
         $frm = new Form('frmWithEditor');
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $this->siteLangId), 'name');
-        $frm->addHtmlEditor(Labels::getLabel('LBL_HTML', $this->siteLangId), 'html');
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $this->siteLangId), 'name');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_HTML', $this->siteLangId), 'html');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
 
         $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, NULL, true));

@@ -240,14 +240,14 @@ class TestimonialsController extends ListingBaseController
         $frm = new Form('frmTestimonialLang');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Title', $langId), 'testimonial_title');
-        $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $langId), 'testimonial_text');
+        $frm->addRequiredField(Labels::getLabel('FRM_TESTIMONIAL_TITLE', $langId), 'testimonial_title');
+        $fld = $frm->addTextarea(Labels::getLabel('FRM_TESTIMONIAL_TEXT', $langId), 'testimonial_text');
         $fld->requirements()->setRequired();
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }

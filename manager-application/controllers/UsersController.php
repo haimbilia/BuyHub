@@ -817,7 +817,7 @@ class UsersController extends ListingBaseController
         $frm->addHiddenField('', 'user_id', $recordId);
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_New_Password', $this->siteLangId),
+            Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
             'new_password',
             '',
             array('id' => 'new_password')
@@ -827,7 +827,7 @@ class UsersController extends ListingBaseController
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
 
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),
+            Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId),
             'conf_new_password',
             '',
             array('id' => 'conf_new_password')
@@ -844,8 +844,8 @@ class UsersController extends ListingBaseController
         $frm = new Form('sendMailFrm');
         $frm->addHiddenField('', 'user_id', $recordId);
 
-        $frm->addTextBox(Labels::getLabel('FRM_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('FRM_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_SUBJECT', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
 
         return $frm;
     }
@@ -855,11 +855,11 @@ class UsersController extends ListingBaseController
     {
         $frm = new Form('frmBankInfo');
         $frm->addHiddenField('', 'user_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Account_Number', $this->siteLangId), 'ub_account_number', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
-        $frm->addTextArea(Labels::getLabel('FRM_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $this->siteLangId), 'ub_account_holder_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
         return $frm;
     }
 

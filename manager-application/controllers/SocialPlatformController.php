@@ -394,21 +394,21 @@ class SocialPlatformController extends ListingBaseController
 
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'splatform_id', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'splatform_identifier');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'splatform_identifier');
         $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
 
-        $urlFld = $frm->addTextBox(Labels::getLabel('LBL_URL', $this->siteLangId), 'splatform_url');
+        $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
 		$urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
-        $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_This_must_be_an_absolute_URL', $this->siteLangId));
+        $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
 		$urlFld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Icon_Type_From_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_If_you_have_to_add_a_platform_icon_except_this_select_list', $this->siteLangId) . '</small>';
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_IF_YOU_HAVE_TO_ADD_A_PLATFORM_ICON_EXCEPT_THIS_SELECT_LIST', $this->siteLangId) . '</small>';
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'splatform_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', $activeInactiveArr, '', array(), '');
 
     
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -419,22 +419,22 @@ class SocialPlatformController extends ListingBaseController
 
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
         
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'splatform_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
         return $frm;
     }
 
@@ -442,7 +442,7 @@ class SocialPlatformController extends ListingBaseController
     {
         $frm = new Form('frmSocialPlatformMedia');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmSocialPlatformMedia'));
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmSocialPlatformMedia'));
         return $frm;
     }
 }
