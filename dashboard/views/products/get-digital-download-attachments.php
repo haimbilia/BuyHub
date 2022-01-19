@@ -2,19 +2,12 @@
 if (1 > count($attachments)) {
     return;
 }
-$arr_flds = array(
-    /*'listSerial' => Labels::getLabel('LBL_#', $siteLangId),*/
+$arr_flds = array(   
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
-    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
-    /*
-    'pddr_options_code' => Labels::getLabel('LBL_DD_OPTION', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_DD_LANGUAGE', $siteLangId),
-    */
+    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),   
+    'action'  =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
 );
 
-if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
-}
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
@@ -38,38 +31,38 @@ foreach ($attachments as $sn => $row) {
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['afile_id']) {
-                    if (0 == $product['product_seller_id']) {
-                        $ul = new HtmlElement("ul", array("class" => "actions"));     
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                        $li->appendElement(
-                            "a",
-                            array(                                
-                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
-                                'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
-                                'target' => '_blank'
-                            ),
-                            '<svg class="svg" width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                                </use>
-                            </svg>',
-                            true
-                        );
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                        $li->appendElement(
-                            "a",
-                            array(                              
-                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
-                            ),
-                            '<svg class="svg" width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                                </use>
-                            </svg>',
-                            true
-                        );
-                    }
+                  
+                    $ul = new HtmlElement("ul", array("class" => "actions"));     
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                    $li->appendElement(
+                        "a",
+                        array(                                
+                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
+                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
+                            'target' => '_blank'
+                        ),
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            </use>
+                        </svg>',
+                        true
+                    );
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                    $li->appendElement(
+                        "a",
+                        array(                              
+                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                            'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        ),
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>',
+                        true
+                    );
+                    
                     $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
@@ -94,23 +87,23 @@ foreach ($attachments as $sn => $row) {
                         </svg>',
                         true
                     );
-                    if (0 == $product['product_seller_id']) {
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                        $li->appendElement(
-                            'a',
-                            array(
-                                'href' => 'javascript:void(0)',
-                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
-                            ),
-                            '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                            </use>
-                            </svg>',
-                            true
-                        );
-                    }
+                
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
+                        'a',
+                        array(
+                            'href' => 'javascript:void(0)',
+                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
+                        ),
+                        '<svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                        </use>
+                        </svg>',
+                        true
+                    );
+                  
                 } else {
                     $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
@@ -148,7 +141,7 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $lang_name, true);
                 break;
             case 'action':
-                if ((1 < $row['afile_id'] || 1 < $row['prev_afile_id']) && 0 == $product['product_seller_id']) {
+                if ((1 < $row['afile_id'] || 1 < $row['prev_afile_id'])) {
                     $fileId = $row['afile_id'];
                     $isPreview = 0;
                     if (1 > $row['afile_id']) {

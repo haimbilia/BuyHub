@@ -3,6 +3,7 @@ class ProductsController extends SellerBaseController
 {
 
     use CatalogProduct;
+    use ProductDigitalDownloads1;
 
     public function __construct($action)
     {
@@ -695,7 +696,9 @@ class ProductsController extends SellerBaseController
         $this->set('langId', $langId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }
+    }    
+
+    
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
@@ -704,10 +707,11 @@ class ProductsController extends SellerBaseController
         $profileFld = $frm->getField('shipping_profile');
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates'))) {
             $frm->removeField($profileFld);
-        } else {
-            $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);
+        }else{
+            if(null != $profileFld){
+                $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);  
+            }           
         }
-
         $fld = $frm->getField('product_approved');
         if (null != $fld) {
             $frm->removeField($fld);
@@ -739,7 +743,12 @@ class ProductsController extends SellerBaseController
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-        }
+        }             
+    }
+
+    protected function getCatalogType(): int
+    {
+        return Product::CATALOG_TYPE_PRIMARY;
     }
 
     private function isShopActive($userId, $shopId = 0, $returnResult = false)
