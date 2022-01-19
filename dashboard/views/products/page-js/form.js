@@ -31,7 +31,7 @@
         $('.mainJs').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
             $('.mainJs').replaceWith(res.html);
-            /* fcom.removeLoader(); */
+            fcom.closeAlertMessage();  
         });
     };
 
@@ -42,7 +42,7 @@
         $('.mainJs').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res.html);
-            /* fcom.removeLoader(); */
+            fcom.closeAlertMessage();  
         });
     };
 
@@ -246,14 +246,13 @@
         }
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function (t) {
-            $.ykmodal(t.html);  
-            /* $.ykmsg.close(); */                   
+            $.ykmodal(t.html); 
+                         
             loadImageOptions();
             var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();
-            productImages(recordId, fileType);
-          
-            /* fcom.removeLoader(); */
+            productImages(recordId, fileType);          
+            fcom.closeAlertMessage();  
         });
     };
     loadImageOptions = function () {
@@ -291,8 +290,7 @@
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
-            /* fcom.removeLoader(); */
-            /* $.ykmsg.close(); */    
+            fcom.closeAlertMessage();     
             $('#productImagesJs').html(t.html);
         });
     };
@@ -481,7 +479,7 @@
             contentType: false,
             processData: false,
             success: function (ans) {
-                /* fcom.removeLoader(); */
+                fcom.closeAlertMessage();  
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;
@@ -491,8 +489,7 @@
                 fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
-                }
-                /* fcom.removeLoader(); */
+                }               
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 fcom.displayErrorMessage(
@@ -527,7 +524,7 @@
             }else{                
                 getDigitalDownloads(type,recordId); 
             }            
-            /* fcom.removeLoader(); */
+            fcom.closeAlertMessage();  
         });
     };
 
@@ -551,7 +548,7 @@
             processData: false,
             contentType: false,
             success: function (t) {
-                /* fcom.removeLoader(); */
+                fcom.closeAlertMessage();  
                 t = $.parseJSON(t);
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
@@ -573,8 +570,7 @@
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
-                /* $.ykmsg.close(); */
-                /* fcom.removeLoader(); */
+                fcom.closeAlertMessage();  
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
                 }
@@ -582,8 +578,7 @@
             });
         } else {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
-                /* $.ykmsg.close(); */
-                /* fcom.removeLoader(); */
+                fcom.closeAlertMessage();  
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
                 }
@@ -719,7 +714,7 @@
                 $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
             success: function (ans) {
-               /* fcom.removeLoader();*/
+                fcom.closeAlertMessage();  
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;

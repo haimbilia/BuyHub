@@ -91,6 +91,30 @@ checkEmpty = function (element) {
         element.addClass("is-invalid");
     }
 };
+
+copyText = function (obj, applyToolTipInfo = true) {
+    var title = $(obj).data("title");
+    /*
+      document.addEventListener('copy', function(e) {
+          e.clipboardData.setData('text/plain', copyText);
+          e.preventDefault();
+      }, true);
+      */
+
+    if (!navigator.clipboard) {
+        console.warn('clipboard API only works on localhost and https');
+        // Clipboard API  only works on localhost anf https as per doc
+        return;
+    }
+    try {
+        navigator.clipboard.writeText(copyText);
+        if (applyToolTipInfo) {
+            tooltipCopyHelper(obj, title);
+        }
+    } catch (err) {
+        console.error("Failed to copy!", err);
+    }
+};
 var otpIntervalObj;
 startOtpInterval = function (parent = "", callback = "", params = []) {
     if ("undefined" != typeof otpIntervalObj) {

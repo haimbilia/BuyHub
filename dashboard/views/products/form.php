@@ -19,7 +19,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 <h2>Add Product</h2>
                 <span class="text-muted"> <span class="required"></span> required
                     information</span>
-                <?php
+            </div>
+            <?php
                 $langFld =  $frm->getField('lang_id');
                 if (0 < $recordId) {
                     $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
@@ -30,7 +31,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
                                                                 </svg>
                                                             </a>
@@ -38,7 +39,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     }
 
                 ?>
-                    <div class="add-stock-column-head-action">
+                    <div class="content-header-toolbar">
                         <div class="input-group">
                             <?php
                             echo $langFld->getHtml();
@@ -49,7 +50,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     echo $langFld->getHtml();
                 } ?>
 
-            </div>
+
+
             <!-- <div class="content-header-toolbar">
                 <div class="input-group">
                     <select class="form-control form-select select-language">

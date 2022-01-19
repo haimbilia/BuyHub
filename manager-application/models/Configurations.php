@@ -56,8 +56,8 @@ class Configurations extends FatModel
         }
 
         $arr =   array(
-            Configurations::FORM_LOCAL => Labels::getLabel('NAV_LOCALIZATION', $langId),
-            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_ACCOUNT', $langId),
+            Configurations::FORM_LOCAL => Labels::getLabel('NAV_BUSINESS_INFO', $langId),
+            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_USER_ACCOUNT', $langId),
             Configurations::FORM_MEDIA => Labels::getLabel('NAV_MEDIA', $langId),
             Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $langId),
             Configurations::FORM_PRODUCT => Labels::getLabel('NAV_PRODUCT', $langId),
