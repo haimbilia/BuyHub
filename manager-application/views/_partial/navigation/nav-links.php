@@ -1052,7 +1052,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="salesReportNav" <?php } ?> class="panel-collapse collapse collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="salesReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
@@ -1116,7 +1116,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="usersReportNav" <?php } ?> class="panel-collapse collapse collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="usersReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
@@ -1172,7 +1172,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="financialReportNav" <?php } ?> class="panel-collapse collapse collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="financialReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>" class="nav_link navLinkJs ">
@@ -1216,7 +1216,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="subscriptionReportNav" <?php } ?> class="panel-collapse collapse collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="subscriptionReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>" class="nav_link navLinkJs ">

@@ -12,6 +12,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             UserAuthentication::checkLogin();
         }
+        
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Cart'));
         }

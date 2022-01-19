@@ -118,21 +118,25 @@ $(function () {
 
     resetQuickSearchResults = function () {
         var ul = '.quickMenujs';
-        var li = ul + ' li';
+        var li = ul + ' li.navItemJs';
         var searchResult = li + ' .navLinkJs';
 
+        $(ul + " mark").contents().unwrap();
         $(li + ', ' + searchResult).show();
+        $(ul + ' li.dropdownJs').show();
+        $(ul + ' li.hasNestedChildJs').show();
         $('.noResultsFoundJs').hide();
     };
 
     quickMenuItemSearch = function (ele, event) {
         event.stopPropagation();
+        var ul = '.quickMenujs';
         var value = ele.val().toLowerCase();
         if (value.length < 1) {
+            $(ul + " mark").contents().unwrap();
             return;
         }
         var noResults = '.noResultsFoundJs';
-        var ul = '.quickMenujs';
         var li = ul + ' li.navItemJs';
         var searchResult = li + ' .navLinkJs';
         $(noResults + ', ' + searchResult).hide();
@@ -141,18 +145,47 @@ $(function () {
             $(liObj).hide();
             $(".navLinkJs", liObj).each(function () {
                 var resultObj = $(this);
-                var text = resultObj.find('.nav_text').text().toLowerCase();
-                var parentText = resultObj.closest('.dropdownJs').find('.menu-title').text().toLowerCase();
+                var textEle = resultObj.find('.nav_text');
+                var orignalText = textEle.text();
+                var text = orignalText.toLowerCase();
+                var textPos = text.indexOf(value.toLowerCase());
+
+                var parentTextEle = resultObj.closest('.dropdownJs').find('.menu-title');
+                var orignalParentText = parentTextEle.text();
+                var parentText = orignalParentText.toLowerCase();
+                var parentTextPos = parentText.indexOf(value.toLowerCase());
+
                 var search = text.search(value);
                 var parentSearch = parentText.search(value);
                 if (-1 < search || -1 < parentSearch) {
                     resultObj.show();
                     $(liObj).show();
+
+                    var endAt = value.length;
+                    if (textPos >= 0) {
+                        var filter_text = orignalText.substr(textPos, endAt);
+                        var replaceWith = "<mark>" + filter_text + "</mark>";
+                        textEle.html(orignalText.replace(filter_text, replaceWith));
+                    }
+
+                    if (parentTextPos >= 0) {
+                        var filter_text = orignalParentText.substr(parentTextPos, endAt);
+                        var replaceWith = "<mark>" + filter_text + "</mark>";
+                        parentTextEle.html(orignalParentText.replace(filter_text, replaceWith));
+                    }
                 }
             });
         });
         
         $(ul + ' li.dropdownJs').each(function () {
+            var liObj = this;
+            $(liObj).show();
+            if (1 > $('.navItemJs:visible', liObj).length) {
+                $(liObj).hide();
+            }
+        });
+        
+        $(ul + ' li.hasNestedChildJs').each(function () {
             var liObj = this;
             $(liObj).show();
             if (1 > $('.navItemJs:visible', liObj).length) {
