@@ -373,14 +373,18 @@ class ConfigurationsController extends ListingBaseController
                 break;
 
             case Configurations::FORM_LOCAL:
-                $frm->addTextBox(Labels::getLabel("FRM_SITE_NAME", $langId), 'CONF_WEBSITE_NAME_' . $langId);
-                $frm->addTextBox(Labels::getLabel("FRM_SITE_OWNER", $langId), 'CONF_SITE_OWNER_' . $langId);
-                $frm->addEmailField(Labels::getLabel('FRM_STORE_OWNER_EMAIL', $langId), 'CONF_SITE_OWNER_EMAIL');
+                $frm->addTextBox(Labels::getLabel("FRM_BUSINESS_NAME", $langId), 'CONF_WEBSITE_NAME_' . $langId);
+                /* $frm->addTextBox(Labels::getLabel("FRM_SITE_OWNER", $langId), 'CONF_SITE_OWNER_' . $langId); */
+                $frm->addEmailField(Labels::getLabel('FRM_BUSINESS_EMAIL', $langId), 'CONF_SITE_OWNER_EMAIL');
                 $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
                 $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
 
+                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');
+                $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+                $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
 
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId);
@@ -393,10 +397,7 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addTextarea(Labels::getLabel("FRM_ADDRESS", $langId), 'CONF_ADDRESS_' . $langId);
                 $frm->addTextarea(Labels::getLabel("FRM_ADDRESS_LINE_2", $langId), 'CONF_ADDRESS_LINE_2_' . $langId);
 
-                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-                $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');
-                $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
+
                 break;
 
             case Configurations::FORM_SEO:
