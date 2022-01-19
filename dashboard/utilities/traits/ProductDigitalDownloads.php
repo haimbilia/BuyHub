@@ -7,10 +7,20 @@ trait ProductDigitalDownloads
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
         $productId = FatUtility::int($productId);
+
+        if (1 > $productId) {
+            LibHelper::exitWithError($this->str_invalid_request_id);
+        }
+
+        $productType = Product::getAttributesById($productId, 'product_type');
+        if ($productType == false || $productType != Product::PRODUCT_TYPE_DIGITAL) {
+            LibHelper::exitWithError($this->str_invalid_request_id);
+        }
+
         $selProdId = FatUtility::int($selProdId);
         
         $ddpObj = new DigitalDownloadPrivilages();

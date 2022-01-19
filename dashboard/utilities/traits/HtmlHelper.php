@@ -1,6 +1,13 @@
 <?php
 class HtmlHelper
 {   
+    public static function addButtonHtml(string $lbl, string $type = 'button', $name = '', $class = '', $onclick = ''): string
+    {
+        $name = (!empty($name) ? 'name="' . $name . '"' : '');
+        $onclick = (!empty($onclick) ? 'onclick="' . $onclick . ';"' : '');
+        $class = !empty($class) ? $class : 'btn btn-brand btn-wide btn-search submitBtnJs';
+        return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
+    }
 
     public static function formatFormFields(Form &$frm, $col = 12)
     {

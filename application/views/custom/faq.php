@@ -71,15 +71,9 @@
             // Get user input from search box
             var filter_text = $(this).val();
 
-            <
-            !--
-            var re = new RegExp(filter_text, 'g');
-            -- >
-
             $('.faqlist h3').each(function() {
                 if ('' !== filter_text) {
-                    var startAt = $(this).text().toLowerCase().indexOf(filter_text
-                    .toLowerCase());
+                    var startAt = $(this).text().toLowerCase().indexOf(filter_text.toLowerCase());
                     if (startAt >= 0) {
                         var endAt = filter_text.length;
                         var content = $(this).text();

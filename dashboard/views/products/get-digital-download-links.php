@@ -4,18 +4,9 @@ if(1 > count($links)){
     return;
 }
 $arr_flds = [];
-if (0 == $product['product_seller_id']) {
-    $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
-}
+$arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId);
-/*
-$arr_flds['pddr_options_code'] = Labels::getLabel('LBL_LINK_OPTION', $siteLangId);
-$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_LINK_LANGUAGE', $siteLangId);
-*/
-
-if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
-}
+$arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
@@ -53,7 +44,7 @@ foreach ($links as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $val, true);
                 break;
             case 'pdl_download_link':
-                if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
+                if ('' != $row['pdl_download_link']) {
                     $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input" value="'.$row[$key].'" readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
@@ -67,8 +58,7 @@ foreach ($links as $sn => $row) {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
-            case 'action':
-                if (0 == $product['product_seller_id']) {
+            case 'action':           
                     $data = [
                         'siteLangId' => $siteLangId,
                         'recordId' => $row['pdl_id']
@@ -80,8 +70,6 @@ foreach ($links as $sn => $row) {
                     $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                     $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                     
-                }
-
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);

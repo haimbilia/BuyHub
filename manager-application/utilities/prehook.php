@@ -15,5 +15,5 @@ $innova_settings  =  array(/* 'width'=>'100%', */ 'height'=>'400','arrStyle'=>'[
     /* 'css'=>'"' . UrlHelper::generateFullUrl ( 'JsCss', 'cssCommon', array (), '', false ) . '&f=' . rawurlencode ( 'style.css' ) */ );
     /*["group5", "", ["Undo", "Redo", "FullScreen", "SourceDialog"]]]', */
     /* $innova_settings  =  array('width'=>'650', 'height'=>'400','arrStyle'=>'[["body",false,"","min-height:250px;"]]','fileBrowser'=> '"'.CONF_WEBROOT_URL.'innova/assetmanager/asset.php"', 'css'=> '"'.CONF_WEBROOT_URL.'innovas/styles/default.css"' ); */
-FatApp::setViewDataProvider('_partial/header/left-navigation.php', array('Navigation', 'setLeftNavigationVals'));
+FatApp::setViewDataProvider('_partial/navigation/left-navigation.php', array('Navigation', 'setLeftNavigationVals'));
 FatApp::setViewDataProvider('_partial/header/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
