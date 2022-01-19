@@ -5,25 +5,32 @@ class SiteTourHelper
     public const TOUR_STEP = 'tour-step';
 
     public const STEP_CONFIGURATION = 1;
-    public const STEP_EMAIL_CONF = 2;
-    public const STEP_PAYMENT_METHOD = 3;
-    public const STEP_TAX_SERVICE = 4;
-    public const STEP_SHIPPING_SERVICE = 5;
-
-    public const STEP_ADD_PRODUCT = 6;
+    public const STEP_MEDIA = 2;
+    public const STEP_COMMISION = 3;
+    public const STEP_EMAIL_CONF = 4;
+    public const STEP_PAYMENT_METHOD = 5;
+    public const STEP_TAX_SERVICE = 6;
+    public const STEP_SHIPPING_SERVICE = 7;
+    public const STEP_SOCIAL_LOGIN = 8;
+    public const STEP_ADD_PRODUCT = 9;
+    /*  
     public const STEP_SLIDES = 7;
     public const STEP_NAVIGATION = 8;
-    public const STEP_TAX = 9;
+    public const STEP_TAX = 9; */
 
     public static function getStepsArr()
     {
         return [
             self::STEP_CONFIGURATION,
+            self::STEP_MEDIA,
+            self::STEP_COMMISION,
             self::STEP_EMAIL_CONF,
             self::STEP_PAYMENT_METHOD,
             self::STEP_TAX_SERVICE,
             self::STEP_SHIPPING_SERVICE,
-            /*  self::STEP_ADD_PRODUCT,
+            self::STEP_SOCIAL_LOGIN,
+            self::STEP_ADD_PRODUCT
+            /* 
             self::STEP_SLIDES,
             self::STEP_NAVIGATION,
             self::STEP_TAX */
@@ -49,8 +56,11 @@ class SiteTourHelper
             case self::STEP_CONFIGURATION:
                 $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_LOCAL]);
                 break;
-            case self::STEP_ADD_PRODUCT:
-                $url = UrlHelper::generateUrl('Products', 'form');
+            case self::STEP_MEDIA:
+                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_MEDIA]);
+                break;
+            case self::STEP_COMMISION:
+                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_COMMISSION]);
                 break;
             case self::STEP_EMAIL_CONF:
                 $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_EMAIL]);
@@ -64,6 +74,15 @@ class SiteTourHelper
             case self::STEP_SHIPPING_SERVICE:
                 $url = UrlHelper::generateUrl('Plugins', 'Index', [PluginCommon::TYPE_SHIPPING_SERVICES]);
                 break;
+            case self::STEP_SOCIAL_LOGIN:
+                $url = UrlHelper::generateUrl('Plugins', 'Index', [PluginCommon::TYPE_SOCIAL_LOGIN]);
+                break;
+            case self::STEP_ADD_PRODUCT:
+                return $url = UrlHelper::generateUrl('Products', 'form');
+                break;
+                /* case self::STEP_ADD_PRODUCT:
+                $url = UrlHelper::generateUrl('Products', 'form');
+                break;    
             case self::STEP_SLIDES:
                 $url = UrlHelper::generateUrl('Slides');
                 break;
@@ -72,7 +91,7 @@ class SiteTourHelper
                 break;
             case self::STEP_TAX:
                 $url = UrlHelper::generateUrl('TaxStructure');
-                break;
+                break; */
             default:
                 $url = UrlHelper::generateUrl('GettingStarted');
                 $stepNumber = 0;
@@ -105,37 +124,51 @@ class SiteTourHelper
     {
         return [
             self::STEP_CONFIGURATION => [
-                'title' => 'Configure General Settings',
+                'title' => 'Localization Settings',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
-           /*  self::STEP_ADD_PRODUCT => [
-                'title' => 'Add Product',
+            self::STEP_MEDIA => [
+                'title' => 'Media Settings',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
-            ], */
+            ],
+            self::STEP_COMMISION => [
+                'title' => 'System Commision',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
             self::STEP_EMAIL_CONF => [
-                'title' => 'Configure Email Settings',
+                'title' => 'Email Configuration',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_PAYMENT_METHOD => [
-                'title' => 'Configure Payment Methods',
+                'title' => 'Payment Methods',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_TAX_SERVICE => [
-                'title' => 'Configure Tax Services',
+                'title' => 'Tax Services',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_SHIPPING_SERVICE => [
-                'title' => 'Configure Shipping Services',
+                'title' => 'Shipping Services',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
-            
-           /*  self::STEP_SLIDES => [
+            self::STEP_SOCIAL_LOGIN => [
+                'title' => 'Social Login',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_ADD_PRODUCT => [
+                'title' => 'Add Product',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            /*  self::STEP_SLIDES => [
                 'title' => 'Configure Home page slides',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
