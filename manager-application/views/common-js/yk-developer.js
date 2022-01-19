@@ -117,38 +117,45 @@ $(function () {
     };
 
     resetQuickSearchResults = function () {
-        var ul = '.navMenuItems';
+        var ul = '.quickMenujs';
         var li = ul + ' li';
-        var searchResult = li + ' .search-result';
+        var searchResult = li + ' .navLinkJs';
 
         $(li + ', ' + searchResult).show();
         $('.noResultsFoundJs').hide();
     };
 
-    quickMenuItemSearch = function (e) {
-        var value = e.val().toLowerCase();
+    quickMenuItemSearch = function (ele, event) {
+        event.stopPropagation();
+        var value = ele.val().toLowerCase();
         if (value.length < 1) {
             return;
         }
         var noResults = '.noResultsFoundJs';
-        var ul = '.navMenuItems';
-        var li = ul + ' li';
-        var searchResult = li + ' .search-result';
-
+        var ul = '.quickMenujs';
+        var li = ul + ' li.navItemJs';
+        var searchResult = li + ' .navLinkJs';
         $(noResults + ', ' + searchResult).hide();
         $(li).each(function () {
             var liObj = this;
-            $(".search-result", liObj).each(function () {
+            $(liObj).hide();
+            $(".navLinkJs", liObj).each(function () {
                 var resultObj = $(this);
-                var text = resultObj.find('a').text().toLowerCase();
+                var text = resultObj.find('.nav_text').text().toLowerCase();
+                var parentText = resultObj.closest('.dropdownJs').find('.menu-title').text().toLowerCase();
                 var search = text.search(value);
-                if (-1 < search) {
-                    $(resultObj).show();
+                var parentSearch = parentText.search(value);
+                if (-1 < search || -1 < parentSearch) {
+                    resultObj.show();
+                    $(liObj).show();
                 }
             });
-
+        });
+        
+        $(ul + ' li.dropdownJs').each(function () {
+            var liObj = this;
             $(liObj).show();
-            if (1 > $(".search-result:visible", liObj).length) {
+            if (1 > $('.navItemJs:visible', liObj).length) {
                 $(liObj).hide();
             }
         });
@@ -567,7 +574,7 @@ $(document).on("keyup", "#quickSearchJs", function (e) {
         return;
     }
 
-    quickMenuItemSearch($(this));
+    quickMenuItemSearch($(this), e);
 });
 
 $(document).on("shown.bs.modal", "#search-main", function () {
