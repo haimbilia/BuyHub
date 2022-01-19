@@ -1493,11 +1493,9 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         </li>
     <?php } ?>
 
-    <?php if (!$quickSearch) { ?>
+    <?php if ($quickSearch) { ?>
         <li class="noResultsFoundJs" style="display: none;">
-            <h6 class="title">
-                <?php echo Labels::getLabel('NAV_NO_RESULTS_FOUND', $siteLangId); ?>
-            </h6>
+            <?php $this->includeTemplate('_partial/no-record-found.php', [], false) ?>
         </li>
     <?php } ?>
 </ul>
