@@ -51,6 +51,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     $(document).ready(function() {
         $("#prodcat_parent").select2({
             dropdownParent: $('.' + $.ykmodal.element)
+        }).on('select2:open', function (e) {
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
         $("select[name='prodcat_parent']").data("select2").$container.addClass("w-100 custom-select2-single");

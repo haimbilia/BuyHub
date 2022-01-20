@@ -258,6 +258,10 @@ select2 = function (
             if ("function" == typeof callbackOnUnSelect) {
                 callbackOnUnSelect(e);
             }
+        }).on('select2:open', function (e) {
+            if (ele.attr('multiple') == undefined) {
+                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+            }
         });
 
     var select2Selector = ele.data("select2");
@@ -275,19 +279,15 @@ select2 = function (
 
     if (0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("w-100");
-    }   
-    
-    if(ele.attr('multiple') != undefined){
-        select2Selector.$container.addClass("custom-select2-multiple");
-    }else{
-        select2Selector.$container.addClass("custom-select2-single");
     }
-   
+    if (ele.attr('multiple') != undefined) {
+        select2Selector.$container.addClass("custom-select2-multiple");
+    }
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
 
 $(document).on('select2:open', () => {
-    document.querySelector('.select2-search__field').focus();
+    document.querySelector('.select2-search__field').focus(); 
 });
 /**
  * hiddenfields object = { fieldname : fieldValue}
