@@ -39,7 +39,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 <div class="col-lg-12">
                     <div class="card">
                         <?php if (!empty($actionButtons)) { ?>
-                            <div class="card-header">
+                            <div class="card-head">
                                 <div class="card-title"><?php echo $listingLabel; ?></div>
                                 <?php $this->includeTemplate('_partial/action-buttons.php', $actionButtons, false); ?>
                             </div>

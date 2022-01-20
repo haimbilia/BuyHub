@@ -134,7 +134,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
             <div class="row mb-4">
                 <div class="col-md-12 mb-4">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
                             </h5>
                             <div class="action">

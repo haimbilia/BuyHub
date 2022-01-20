@@ -4,7 +4,7 @@
 </div>
 <div class="card">
     <?php if (count($arrListing) > 0) { ?>
-        <div class="card-header">
+        <div class="card-head">
             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Special_price', $siteLangId); ?>
             </h5>
             <div class="action">
@@ -12,7 +12,7 @@
                     <?php echo Labels::getLabel('LBL_Add_New_Special_Price', $siteLangId); ?>
                 </a>
                 <!-- <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice', array($selprod_id)); ?>">
-                    <?php echo Labels::getLabel('LBL_MANAGE_SPECIAL_PRICES', $siteLangId)?>
+                    <?php echo Labels::getLabel('LBL_MANAGE_SPECIAL_PRICES', $siteLangId) ?>
                 </a> -->
             </div>
         </div>
@@ -29,11 +29,11 @@
                         'splprice_end_date' => Labels::getLabel('LBL_End_Date', $siteLangId),
                         'action' => '',
                     );
-					$tableClass = '';
-					if (0 < count($arrListing)) {
-						$tableClass = "table-justified";
-					}
-                    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '.$tableClass));
+                    $tableClass = '';
+                    if (0 < count($arrListing)) {
+                        $tableClass = "table-justified";
+                    }
+                    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
                     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
                     foreach ($arr_flds as $val) {
                         $e = $th->appendElement('th', array(), $val);

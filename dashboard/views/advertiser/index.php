@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?>
                             </h5>
                             <?php if (count($activePromotions) > 0) { ?>
@@ -87,7 +87,7 @@
                     </div>
                     <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title ">
                                     <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5>
                                 <?php if (count($transactions) > 0) { ?>
@@ -171,7 +171,7 @@
                             <div class="widget widget-stats">
                                 <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                                     <div class="card">
-                                        <div class="card-header">
+                                        <div class="card-head">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
                                             <i class="icn"><svg class="svg">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#Credits">
@@ -202,7 +202,7 @@
                         <div class="widget widget-stats">
                             <a href="javascript:void(0)" onClick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title">
                                             <?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?></h5>
                                         <i class="icn"><svg class="svg">
@@ -233,7 +233,7 @@
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('advertiser', 'promotionCharges'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Promotions', $siteLangId); ?>
                                         </h5>
                                         <i class="icn">

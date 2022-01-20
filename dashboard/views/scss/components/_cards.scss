@@ -1,6 +1,6 @@
 .card {
     box-shadow: 0 0 10px 0 rgba(76, 87, 125, 0.1);
-    background: #fff;
+    background-color: #fff;
     //border: $border;
     border: none;
     position: relative;
@@ -13,7 +13,7 @@
     @include media-breakpoint-down(md) {
         word-break: normal;
     }
-    &-header {
+    &-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -44,7 +44,7 @@
         flex: 1 1 0;
         padding: 1rem;
     }
-    &-footer {
+    &-foot {
         padding: 1rem;
         background: none;
         border-top: $border;

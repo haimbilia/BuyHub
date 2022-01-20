@@ -39,7 +39,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 <div class="row mb-4">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header"></div>
+            <div class="card-head"></div>
             <div class="card-body">
                 <div class="sectionbody space">
                     <div class="row justify-content-center">

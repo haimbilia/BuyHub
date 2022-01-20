@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 ?>
 
-<div class="card-header">
+<div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Pickup_Addresses', $siteLangId); ?></h5>
     <?php if ($canEdit) { ?>
         <div class="btn-group">
@@ -19,7 +19,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
             }
             foreach ($addresses as $address) {
                 $address['addr_title'] = ($address['addr_title'] == '') ? '&nbsp;' : $address['addr_title'];
-                ?>
+            ?>
                 <li class="<?php echo ($address['addr_is_default'] == 1) ? 'is-active' : ''; ?>">
                     <div class="my-addresses__body">
                         <address class="delivery-address">
@@ -45,14 +45,14 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                     </div>
                     <div class="my-addresses__footer">
                         <div class="actions">
-                            <a href="javascript:void(0)" onClick="pickupAddressForm(<?php echo $address['addr_id']; ?>)" >
+                            <a href="javascript:void(0)" onClick="pickupAddressForm(<?php echo $address['addr_id']; ?>)">
                                 <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                             </a>
                             <a href="javascript:void(0)" onClick="removeAddress(<?php echo $address['addr_id']; ?>, <?php echo Address::TYPE_SHOP_PICKUP; ?>)">
                                 <?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
                             </a>
                         </div>
-                    </div> 
+                    </div>
                 </li>
             <?php } ?>
         </ul>
@@ -62,4 +62,3 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
     }
     ?>
 </div>
-

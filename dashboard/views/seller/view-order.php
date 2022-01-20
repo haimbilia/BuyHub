@@ -57,7 +57,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         } ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title">
                         <div class="order-number">
                             <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>

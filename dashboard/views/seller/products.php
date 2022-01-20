@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frmSearch->setFormTagAttribute('onSubmit', 'sellerProducts(0,1); return(false);');
 
 $frmSearch->setFormTagAttribute('class', 'form');
@@ -24,12 +24,12 @@ $frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
         $data = [
-            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions('.  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
+            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
             'siteLangId' => $siteLangId,
             'controllerName' => $controllerName,
             'action' => $action,
@@ -52,7 +52,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <div class="card-title"></div>
                             <div class="btn-group">
                                 <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
@@ -87,7 +87,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         });
     });
     var TYPE_BADGE = <?php echo Badge::TYPE_BADGE; ?>;
-	var TYPE_RIBBON = <?php echo Badge::TYPE_RIBBON; ?>;
+    var TYPE_RIBBON = <?php echo Badge::TYPE_RIBBON; ?>;
 
     var RECORD_TYPE_SELLER_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT; ?>;
 </script>

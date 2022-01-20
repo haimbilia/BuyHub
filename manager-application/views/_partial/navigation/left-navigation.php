@@ -1,5 +1,8 @@
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
+        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (isset($_COOKIE['adminSidebar'])) { ?>active<?php } ?>" type="button">
+            <span class="sidebar-toggle-icon"><span class="toggle-line"></span></span>
+        </button>
         <a href="<?php echo UrlHelper::generateUrl(); ?>" class="logo">
             <?php
             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
@@ -8,12 +11,7 @@
             ?>
             <img <?php if ($fileData['afile_aspect_ratio'] > 0 && $fileData['afile_aspect_ratio'] == 2) { ?> width="89" height="50" <?php } else { ?> width="50" height="50" <?php } ?> <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
-        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (isset($_COOKIE['adminSidebar'])) { ?>active<?php } ?>" type="button">
-            <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#chevron-double-left">
-                </use>
-            </svg>
-        </button>
+
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <?php require CONF_THEME_PATH . '_partial/navigation/nav-links.php'; ?>
