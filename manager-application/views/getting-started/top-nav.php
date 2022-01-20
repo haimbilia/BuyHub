@@ -14,7 +14,6 @@
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icn-next">
                     </use>
                 </svg>
-
             </button>
         </div>
 
