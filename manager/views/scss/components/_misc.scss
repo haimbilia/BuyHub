@@ -2053,7 +2053,7 @@ strong {
         border-top: $border;
         position: sticky;
         bottom: 0;
-        z-index: 1;
+        z-index: 3;
         background-color: $bg-white;
         padding: 1.5rem 2rem;
     }
@@ -2269,7 +2269,7 @@ strong {
 
 .shipping-zone {
     border-bottom: $border;
-    padding: 3rem;
+    // padding: 3rem;
     //margin-bottom: 3rem;
     &:last-child {
         border: none;
@@ -2392,26 +2392,47 @@ strong {
 .list-zones {
     &-search {
         top: 0;
+        margin-bottom: 2rem;
     }
     &-head {
-        margin: 1rem 0;
+        display: flex;
+        //background-color: $bg-gray;
+        margin: 0;
+        padding: 1rem 0;
         font-weight: 500;
+        position: relative;
+        //border: $border;
+        border-radius: $radius-common;
+        &-arrow {
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            margin-#{$start-direction}: auto;
+            position: relative;
+        }
     }
     .list-states {
         background: $bg-gray;
-        padding: 1.5rem;
+        //padding: 1.5rem;
         border-radius: $radius-common;
         padding-#{$start-direction}: 2rem;
         list-style: none;
-        li {
-            margin: 0.7rem 0;
+        &-item {
+            // display: flex;
+            // align-items: center;
+            //padding: 0.5rem 0;
             &:last-child {
-                margin-bottom: 0;
+                padding-bottom: 0;
             }
         }
     }
 
     .out-of-state {
+        position: relative;
+        background-color: transparent;
+        border: none;
+        margin-#{$start-direction}: auto;
+        margin-#{$end-direction}: 1rem;
         padding-#{$end-direction}: 1.2rem;
         display: block;
         font-size: 0.8rem;
@@ -2975,6 +2996,7 @@ $header-height: 65px;
 }
 
 .dropdown-toggle-custom {
+    cursor: pointer;
     border: none;
     position: relative;
     &-arrow {
@@ -3147,4 +3169,9 @@ $header-height: 65px;
         filter: none;
         opacity: 1;
     }
+}
+
+//plugin
+.iti {
+    width: 100%;
 }

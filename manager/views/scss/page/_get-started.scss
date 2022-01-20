@@ -183,7 +183,7 @@
 
     &-main {
         .card-foot {
-            z-index: 1;
+            z-index: 3;
             background-color: $bg-white;
             position: sticky;
             bottom: 0;
@@ -191,6 +191,7 @@
     }
 
     .card {
+        min-height: 100%;
         margin-bottom: 0;
     }
     .rocket {
