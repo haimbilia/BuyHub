@@ -73,6 +73,7 @@ class PromotionsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['advSearchRowItemCount'] = 4;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

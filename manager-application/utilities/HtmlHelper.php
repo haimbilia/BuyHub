@@ -33,6 +33,7 @@ class HtmlHelper
             'siteLangId' => $langId,
             'otherButtons' => [],
             'htmlContent'  => NULL,
+            'advSearchRowItemCount' => 3,
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];

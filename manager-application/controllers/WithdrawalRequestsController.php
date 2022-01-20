@@ -32,6 +32,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['advSearchRowItemCount'] = 4;
+        
         $this->set('actionItemsData', $actionItemsData);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
