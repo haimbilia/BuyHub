@@ -20,7 +20,7 @@ class OrderReturnRequestsController extends ListingBaseController {
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtn'] = false;
-        $actionItemsData['advSearchRowItemCount'] = 4;
+        $actionItemsData['advSearchRowItemCount'] = 3;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

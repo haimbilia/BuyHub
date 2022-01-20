@@ -26,7 +26,6 @@ class UserGdprRequestsController extends ListingBaseController
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
             'newRecordBtn' => false,
             'searchFrmTemplate' => 'users/search-form.php',
-            'advSearchRowItemCount' => 4,
         ]);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData();
