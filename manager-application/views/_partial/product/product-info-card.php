@@ -18,7 +18,9 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>
     <div class="product-profile__data">
-        <div class="title"><?php echo CommonHelper::subStringByWords($productTitle, 35); ?></div>
+        <div class="title" title="<?php echo $productTitle; ?>" data-bs-toggle='tooltip' data-bs-placement='top'>
+            <?php echo CommonHelper::subStringByWords($productTitle, 35); ?>
+        </div>
 
         <?php if ($canViewProducts || $displayProductName) {
             if ($canViewProducts == true) { ?>

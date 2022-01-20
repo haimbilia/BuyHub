@@ -11,18 +11,15 @@ $btn->developerTags['colWidthValues'] = [null, '3', null, null];
 $btn->addFieldTagAttribute('class', 'btn btn-brand');
 ?>
 
-
-<div class="card-body">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-solid-brand " role="alert">
-                <div class="alert-icon"><i class="flaticon-warning"></i>
-                </div>
-                <div class="alert-text text-xs"> <?php echo Labels::getLabel("LBL_Product_will_automatically_remove_from_other_profile", $siteLangId); ?>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-solid-brand " role="alert">
+            <div class="alert-icon"><i class="flaticon-warning"></i>
             </div>
-            <?php echo $frm->getFormHtml(); ?></form>
+            <div class="alert-text text-xs"> <?php echo Labels::getLabel("LBL_Product_will_automatically_remove_from_other_profile", $siteLangId); ?>
+            </div>
         </div>
+        <?php echo $frm->getFormHtml(); ?></form>
     </div>
-    <div id="product-listing--js"></div>
 </div>
+<div id="product-listing--js"></div>

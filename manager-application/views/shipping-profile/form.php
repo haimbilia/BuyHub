@@ -56,7 +56,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
 
                         </div>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body">
                         <input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>">
                         <div id="listing-zones"></div>
                     </div>

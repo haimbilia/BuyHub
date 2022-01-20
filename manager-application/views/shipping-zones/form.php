@@ -54,7 +54,6 @@ if (!empty($excludeLocations)) {
             <div class="row">
                 <div class="col-lg-12">
                     <div class="list-zones">
-
                         <div class="list-zones-search sticky-top">
                             <input type="search" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
                         </div>
@@ -81,13 +80,15 @@ if (!empty($excludeLocations)) {
                                     <div class="list-zones-head">
                                         <label class="checkbox zone--js" data-zoneid="<?php echo $zone['zone_id']; ?>">
                                             <input type="checkbox" name="shiploc_zone_ids[]" value="<?php echo $zone['zone_id']; ?>" class="countries-js checkbox_zone_<?php echo $zone['zone_id']; ?>" <?php echo ($countCounties == $totalCountries && $countCounties != 0) ? 'checked' : ''; ?>>
-                                            <i class="input-helper"></i>
+
                                             <?php echo $zone['zone_name']; ?>
                                         </label>
-
+                                        <button class="out-of-state dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">
+                                            <i class="dropdown-toggle-custom-arrow"></i>
+                                        </button>
                                     </div>
                                     <?php if (!empty($countries)) { ?>
-                                        <ul class="list-states zone_<?php echo $zone['zone_id']; ?>">
+                                        <ul class="list-states collapse  zone_<?php echo $zone['zone_id']; ?>" id="zone_<?php echo $zone['zone_id']; ?>">
                                             <?php
                                             foreach ($countries as $country) {
                                                 $statesCount = count($country['states']);
@@ -106,68 +107,58 @@ if (!empty($excludeLocations)) {
                                                     $disabled = 'disabled';
                                                 }
                                             ?>
-                                                <li>
-                                                    <div class="row no-gutters">
-                                                        <div class="col">
-                                                            <div class="form-groupx">
-                                                                <label class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
-                                                                    <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>>
-                                                                    <i class="input-helper"></i>
-                                                                    <?php echo $country['country_name']; ?>
-                                                                </label>
+                                                <li class="list-states-item">
+                                                    <div class="list-zones-head">
+                                                        <label class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
+                                                            <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>>
+                                                            <?php echo $country['country_name']; ?>
+                                                        </label>
+                                                        <?php if ($statesCount > 0) { ?>
+                                                            <button class="out-of-state dropdown-toggle-custom collapsed link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" data-bs-target="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
+                                                                <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
 
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-auto">
-                                                            <?php if ($statesCount > 0) { ?>
-                                                                <a class="out-of-state dropdown-toggle-custom collapsed link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
-                                                                    <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
-
-                                                                    <?php echo Labels::getLabel("LBL_of", $siteLangId); ?>
-
-                                                                    <span class="totalStates "><?php echo $statesCount; ?>
-                                                                    </span>
-                                                                    <i class="dropdown-toggle-custom-arrow"></i>
-                                                                </a>
-                                                            <?php } ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="collapse" id="state_list_<?php echo $countryId; ?>">
-                                                        <?php if (!empty($country['states'])) { ?>
-                                                            <ul class="list-states country_<?php echo $countryId; ?>">
-                                                                <?php
-                                                                foreach ($country['states'] as $state) {
-                                                                    $stateChecked = '';
-                                                                    $countryStates = [];
-                                                                    $exCountryStates = [];
-
-                                                                    if (!empty($countryStatesArr) && isset($countryStatesArr[$countryId])) {
-                                                                        $countryStates = $countryStatesArr[$countryId];
-                                                                    }
-                                                                    if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
-                                                                        $stateChecked = 'checked';
-                                                                    }
-                                                                    $stateDisabled = '';
-                                                                    if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'], $excludeCountryStates[$countryId])) {
-                                                                        $stateDisabled = ' disabled';
-                                                                    }
-                                                                ?>
-                                                                    <li>
-                                                                        <div class="form-groupx">
-                                                                            <label class="checkbox " data-stateid="<?php echo $state['state_id']; ?>">
-                                                                                <span>
-                                                                                    <input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $stateChecked; ?> <?php echo $stateDisabled; ?>>
-                                                                                    <i class="input-helper"> </i>
-                                                                                </span><?php echo $state['state_name']; ?>
-                                                                            </label>
-
-                                                                        </div>
-                                                                    </li>
-                                                                <?php } ?>
-                                                            </ul>
+                                                                <?php echo Labels::getLabel("LBL_of", $siteLangId); ?>
+                                                                <span class="totalStates "><?php echo $statesCount; ?>
+                                                                </span>
+                                                                <i class="dropdown-toggle-custom-arrow"></i>
+                                                            </button>
                                                         <?php } ?>
                                                     </div>
+
+
+
+                                                    <?php if (!empty($country['states'])) { ?>
+                                                        <ul class="list-states collapse country_<?php echo $countryId; ?>" class="" id="state_list_<?php echo $countryId; ?>">
+                                                            <?php
+                                                            foreach ($country['states'] as $state) {
+                                                                $stateChecked = '';
+                                                                $countryStates = [];
+                                                                $exCountryStates = [];
+
+                                                                if (!empty($countryStatesArr) && isset($countryStatesArr[$countryId])) {
+                                                                    $countryStates = $countryStatesArr[$countryId];
+                                                                }
+                                                                if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
+                                                                    $stateChecked = 'checked';
+                                                                }
+                                                                $stateDisabled = '';
+                                                                if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'], $excludeCountryStates[$countryId])) {
+                                                                    $stateDisabled = ' disabled';
+                                                                }
+                                                            ?>
+                                                                <li class="list-states-item">
+                                                                    <div class="list-zones-head">
+                                                                        <label class="checkbox" data-stateid="<?php echo $state['state_id']; ?>">
+                                                                            <input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $stateChecked; ?> <?php echo $stateDisabled; ?>>
+                                                                            <?php echo $state['state_name']; ?>
+                                                                        </label>
+                                                                    </div>
+
+                                                                </li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    <?php } ?>
+
                                                 </li>
                                             <?php }
                                             ?>

@@ -17,8 +17,8 @@ if ($languages && count($languages) > 1) { ?>
         </button>
         <ul class="menu-sub menu-sub-accordion collapse" id="nav-language" aria-labelledby="" data-parent="#dashboard-menu">
             <?php foreach ($languages as $langId => $language) { ?>
-                <li class="menu-sub-item <?php echo ($siteLangId == $langId) ? 'is-active' : ''; ?>">
-                    <a class="menu-sub-link" href="javascript:void(0);" onClick="setSiteDefaultLang(<?php echo $langId; ?>)">
+                <li class="menu-sub-item">
+                    <a class="menu-sub-link <?php echo ($siteLangId == $langId) ? 'active' : ''; ?>" href="javascript:void(0);" onClick="setSiteDefaultLang(<?php echo $langId; ?>)">
                         <span class="menu-sub-title">
                             <?php echo $language['language_name']; ?>
                         </span>
@@ -46,8 +46,8 @@ if ($currencies && count($currencies) > 1) { ?>
         </button>
         <ul class="menu-sub menu-sub-accordion collapse" id="nav-currency" aria-labelledby="" data-parent="#dashboard-menu">
             <?php foreach ($currencies as $currencyId => $currency) { ?>
-                <li class="menu-sub-item <?php echo ($siteCurrencyId == $currencyId) ? 'is-active' : ''; ?>">
-                    <a class="menu-sub-link" href="javascript:void(0);" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)">
+                <li class="menu-sub-item">
+                    <a class="menu-sub-link <?php echo ($siteCurrencyId == $currencyId) ? 'active' : ''; ?>" href="javascript:void(0);" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)">
                         <span class="menu-sub-title">
                             <?php echo $currency; ?>
                         </span>

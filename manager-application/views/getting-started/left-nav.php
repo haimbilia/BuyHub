@@ -27,7 +27,7 @@
     </div>
     <div class="onboarding-foot">
         <div class="rocket">
-            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/rocket-launch.jpg" width="292" height="217" alt="">
+            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/rocket-launch.svg" width="292" alt="">
         </div>
 
     </div>

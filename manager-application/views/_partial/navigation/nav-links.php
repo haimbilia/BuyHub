@@ -42,6 +42,18 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             </button>
             <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PRODUCT_CATALOG" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
                 <ul class="nav nav-level">
+                    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Products"]' href="<?php echo UrlHelper::generateUrl('Products'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Brands"]' href="<?php echo UrlHelper::generateUrl('Brands'); ?>">
@@ -76,18 +88,6 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Products"]' href="<?php echo UrlHelper::generateUrl('Products'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
