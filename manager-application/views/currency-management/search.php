@@ -26,6 +26,12 @@ foreach ($arrListing as $sn => $row) {
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
                 break;
+            case 'currency_name':
+                $default = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_DEFAULT', $siteLangId));
+                $name = $row[$key];
+                $name .= ($row['currency_code'] == $siteDefaultCurrencyCode ? ' ' . $default : '');
+                $td->appendElement('plaintext', $tdAttr, $name, true);
+                break;
             case 'currency_symbol_left':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                 break;

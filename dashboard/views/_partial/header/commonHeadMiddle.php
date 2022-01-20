@@ -64,7 +64,6 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
 </style>
 <script>
     <?php
-
     $isUserDashboard = ($isUserDashboard) ? 1 : 0;
     echo $str = 'var langLbl = ' . FatUtility::convertToJson($jsVariables, JSON_UNESCAPED_UNICODE) . ';
     var CONF_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 0) . ';
@@ -75,11 +74,13 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var currencySymbolLeft = "' . $currencySymbolLeft . '";
     var currencySymbolRight = "' . $currencySymbolRight . '";
     var isUserDashboard = "' . $isUserDashboard . '";
+    var controllerName = "' . LibHelper::getControllerName() . '";
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";
     if( CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES <= 0  ){
         CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = 3;
     }';
+    
     if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '')) {
         echo FatApp::getConfig("CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE", FatUtility::VAR_STRING, '');
         if (UserAuthentication::getLoggedUserId(true) > 0) { ?>

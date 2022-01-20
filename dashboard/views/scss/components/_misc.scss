@@ -378,6 +378,7 @@ a:hover {
 }
 
 .dropdown-toggle-custom {
+    cursor: pointer;
     position: relative;
     &-arrow {
         position: absolute;
