@@ -1568,3 +1568,4 @@ ALTER TABLE `tbl_order_payments` DROP INDEX `op_gateway_txn_id`;
 ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
 
 ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);
+-- --------------------TV-9.4.0.20220120-----------------

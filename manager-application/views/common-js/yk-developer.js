@@ -131,9 +131,9 @@ $(function () {
     quickMenuItemSearch = function (ele, event) {
         event.stopPropagation();
         var ul = '.quickMenujs';
+        $(ul + " mark").contents().unwrap();
         var value = ele.val().toLowerCase();
         if (value.length < 1) {
-            $(ul + " mark").contents().unwrap();
             return;
         }
         var noResults = '.noResultsFoundJs';

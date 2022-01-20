@@ -48,7 +48,7 @@ class AdminBaseController extends FatController
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
-        $curdLangLabelCache = FatCache::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $curdLangLabelCache = CacheHelper::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$curdLangLabelCache) {
             $arr = [
                 'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId),
@@ -58,7 +58,7 @@ class AdminBaseController extends FatController
                 'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
                 'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
             ];
-            FatCache::set('curdLangLabelCache' . $this->siteLangId, serialize($arr), '.txt');
+            CacheHelper::create('curdLangLabelCache' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($curdLangLabelCache);
         }
@@ -212,6 +212,10 @@ class AdminBaseController extends FatController
 
     public function getBreadcrumbNodes($action)
     {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);

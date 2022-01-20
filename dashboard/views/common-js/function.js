@@ -58,6 +58,16 @@ $('[ripple]').on('click', function (e) {
     }, 1500);
 });
 
+markNavActive = function (ele) {
+    if (!ele.hasClass("active")) {
+        ele.addClass("active");
+    }
+    var menuLink = ele.parents("li").find(".menuLinkJs");
+    menuLink.addClass("active").removeClass('collapsed');
+    var target = menuLink.data('bsTarget');
+    $(target).addClass('show');
+};
+
 /*Tabs*/
 $(document).ready(function () {
     $(".tabs-content-js").hide();
@@ -76,6 +86,22 @@ $(document).ready(function () {
     if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 && (getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController')) {
         accessLocation();
     }
+
+    /* Active Sidebar Link. */
+    var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+
+    $(".sidebarMenuJs .navLinkJs").each(function () {
+        var attr = $(this).attr("href");
+        var href = '';
+        if (typeof attr !== 'undefined' && attr !== false) {
+            var href = attr.replace(/^\/|\/$/g, "");
+        }
+
+        if (uri == href) {
+            markNavActive($(this));
+        }
+    });
+    /* Active Sidebar Link. */
 });
 
 $(document).on('afterClose.facebox', $('.location-permission').closest("#facebox"), function () {

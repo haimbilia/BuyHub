@@ -55,7 +55,6 @@ class PushNotificationsController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $actionItemsData['advSearchRowItemCount'] = 4;
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);

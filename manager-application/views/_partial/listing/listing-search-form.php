@@ -1,10 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $keywordPlaceholder = $keywordPlaceholder ?? Labels::getLabel('FRM_SEARCH', $siteLangId);
-$advSearchRowItemCount = $actionItemsData['advSearchRowItemCount'] ?? 3;
-if (0 != (12 % $advSearchRowItemCount)) {
-    trigger_error('Wrong Advance search form row item count value. It can be 1, 2, 3, 4, 6, 12', E_USER_ERROR);
-}
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 
@@ -56,7 +52,7 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
             ];
 
             $i++;
-            if ($advSearchRowItemCount == $i) {
+            if (3 == $i) {
                 $x++;
                 $i = 0;
             }
@@ -188,7 +184,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
 
                         $fld->setFieldTagAttribute('class', $class);
                     ?>
-                        <div class="col-md-<?php echo (12 / $advSearchRowItemCount); ?>">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="label"><?php echo $fld->getCaption(); ?></label>
                                 <?php echo $fld->getHTML(); ?>
