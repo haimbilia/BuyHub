@@ -44,14 +44,9 @@
         }).on('select2:unselecting', function (e) {
             var parentForm = $(this).closest('form').attr('id');
             $("#" + parentForm + " input[name='selprod_id']").val('');
-        });
-
-        var select2Selector = ele.data("select2");
-        if(ele.attr('multiple') != undefined){
-            select2Selector.$container.addClass("custom-select2-multiple");
-        }else{
-            select2Selector.$container.addClass("custom-select2-single");
-        }
+        }).on('select2:open', function (e) {
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+        }).data("select2").$container.addClass("w-100");;     
         $("." + $.ykmodal.element).removeAttr('tabindex');
     };
 
@@ -108,13 +103,8 @@
             templateSelection: function (result) {
                 return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
             }
-        });
-        var select2Selector = ele.data("select2");
-        if(element.attr('multiple') != undefined){
-            select2Selector.$container.addClass("custom-select2-multiple");
-        }else{
-            select2Selector.$container.addClass("custom-select2-single");
-        }
+        }).data("select2").$container.addClass("w-100 custom-select2-multiple");;
+       
         setTimeout(() => {
             element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');
         }, 200);
