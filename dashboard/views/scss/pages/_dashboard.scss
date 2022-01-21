@@ -567,41 +567,6 @@
     }
 }
 
-.credits-number {
-    ul {
-        display: flex;
-        width: 100%;
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        li {
-            color: $body-color;
-            flex: auto;
-            .total {
-                font-size: 0.9em;
-            }
-            .total-numbers {
-                display: block;
-                font-size: 1.4rem;
-                line-height: 1;
-                margin: 10px 0;
-            }
-        }
-    }
-}
-
-.balancebox {
-    h2 {
-        margin-top: 10px;
-    }
-    p {
-        margin-bottom: 0;
-        font-size: 0.9em;
-    }
-    small {
-        margin-bottom: 10px;
-    }
-}
-
 .messages-list {
     li {
         display: flex;

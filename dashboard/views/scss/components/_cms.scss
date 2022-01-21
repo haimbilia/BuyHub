@@ -101,7 +101,7 @@
         h1,
         h2 {
             font-size: 2rem;
-            >span {
+            > span {
                 display: block;
                 font-size: 0.875rem;
                 text-align: center;
@@ -221,7 +221,7 @@
         display: block;
         position: relative;
         border: none !important;
-        >label {
+        > label {
             display: block;
         }
         .divider {
@@ -269,7 +269,7 @@
         margin-#{$end-direction}: 10px;
         cursor: pointer;
         &:hover {
-            color: $brand-color
+            color: $brand-color;
         }
     }
     a {
@@ -342,7 +342,7 @@
                     height: 12px;
                     width: 7px;
                     position: absolute;
-                    content: '';
+                    content: "";
                     display: inline-block;
                     font-size: 16px;
                     text-align: center;
@@ -443,7 +443,7 @@
         display: flex;
         .fa {
             font-size: 2.5em;
-            opacity: 0.60;
+            opacity: 0.6;
             margin: 0 20px 0 0;
             width: 2.5rem;
         }

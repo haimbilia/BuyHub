@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('LBL_Messages', $siteLangId),
             'siteLangId' => $siteLangId,
@@ -9,7 +9,7 @@
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?></h5>
                     <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Account', 'messages'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId); ?></a></div>
                 </div>

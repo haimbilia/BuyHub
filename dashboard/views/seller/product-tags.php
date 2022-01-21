@@ -20,11 +20,15 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header  row justify-content-between mb-3">
-            <div class="col-md-auto">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?><i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Tags_can_only_be_added_for_private_products', $siteLangId); ?>"></i></h2>
+        <div class="content-header">
+            <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
+            <div class="content-header-title">
+                <h2>
+                    <?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?>
+                    <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Tags_can_only_be_added_for_private_products', $siteLangId); ?>"></i>
+                </h2>
             </div>
+            <div class="content-header-toolbar"></div>
         </div>
         <div class="content-body">
             <div class="row  mb-4">

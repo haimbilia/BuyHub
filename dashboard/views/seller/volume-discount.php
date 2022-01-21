@@ -29,9 +29,9 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId),
             'siteLangId' => $siteLangId,
@@ -64,7 +64,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                             }
                         }
                         ?>
-                        <div class="card-header">
+                        <div class="card-head">
                             <div class="card-title"></div>
                             <div class="btn-group">
                                 <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Remove_Volume_Discount', $siteLangId); ?>" onclick="deleteVolumeDiscountRows()" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></a>

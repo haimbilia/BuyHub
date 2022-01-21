@@ -3175,3 +3175,7 @@ $header-height: 65px;
 .iti {
     width: 100%;
 }
+
+.ui-datepicker {
+    z-index: $zindex-dropdown !important;
+}

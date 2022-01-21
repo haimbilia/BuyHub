@@ -31,7 +31,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
                             </h5>
                             <div class="action">
@@ -111,7 +111,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Latest_Offers', $siteLangId); ?>
                             </h5>
                             <div class="action"> <?php if (count($offers) > 0) { ?> <a href="<?php echo UrlHelper::generateUrl('buyer', 'offers'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
@@ -173,7 +173,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Return_requests', $siteLangId); ?>
                             </h5> <?php if (count($returnRequests) > 0) { ?> <div class="action">
                                     <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderReturnRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
@@ -257,7 +257,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         ?>
                         </div> -->
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title">
                                 <?php echo Labels::getLabel('LBL_Cancellation_requests', $siteLangId); ?></h5>
                             <?php if (count($cancellationRequests) > 0) { ?> <div class="action">
@@ -337,7 +337,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
                                         <i class="icn">
                                             <svg class="svg">
@@ -367,7 +367,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('buyer', 'orders'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></h5>
                                         <i class="icn">
                                             <svg class="svg">
@@ -396,7 +396,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('buyer', 'rewardPoints'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
                                         </h5>
                                         <i class="icn">

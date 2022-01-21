@@ -9,7 +9,7 @@ if (null != $btn) {
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
             'siteLangId' => $siteLangId,
@@ -26,7 +26,7 @@ if (null != $btn) {
         $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
                     <?php if ($canEdit) { ?>
                         <div class="btn-group">

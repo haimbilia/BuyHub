@@ -33,11 +33,10 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
 
 ?>
 
-<div class="card-header">
+<div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Pickup_Addresses', $siteLangId); ?></h5>
     <div class="btn-group">
-        <a href="javascript:void(0)" onClick="pickupAddress()"
-           class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
+        <a href="javascript:void(0)" onClick="pickupAddress()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
     </div>
 </div>
 
@@ -245,9 +244,9 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                     $dayFld->setFieldTagAttribute('class', 'slotDaysJs');
                     if (isset($slotData['tslot_day'][$i])) {
                         $dayFld->setFieldTagAttribute('checked', 'true');
-                    }                     
-                    ?> 
-                    <div class="col-md-6 dayJs-<?php echo $i;?>">
+                    }
+                ?>
+                    <div class="col-md-6 dayJs-<?php echo $i; ?>">
                         <div class="row ">
                             <div class="col-md-12 weekDayParentRowJs">
                                 <div class="field-set weekDayJs">
@@ -262,13 +261,13 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                                         </div>
                                     </div>
                                 </div>
-                                <?php                                    
-                                $fromTimeWeekDayArr = $slotData['tslot_from_time'][$i] ?? ['']; 
-                                $toTimeWeekDayArr = $slotData['tslot_to_time'][$i] ?? [''];                                    
+                                <?php
+                                $fromTimeWeekDayArr = $slotData['tslot_from_time'][$i] ?? [''];
+                                $toTimeWeekDayArr = $slotData['tslot_to_time'][$i] ?? [''];
                                 foreach ($fromTimeWeekDayArr as $key => $time) {
 
-                                    $fromTime = !empty($time) ? date('H:i', strtotime($time)) :'';
-                                    $toTime = !empty($toTimeWeekDayArr[$key]) ? date('H:i', strtotime($toTimeWeekDayArr[$key])):'';
+                                    $fromTime = !empty($time) ? date('H:i', strtotime($time)) : '';
+                                    $toTime = !empty($toTimeWeekDayArr[$key]) ? date('H:i', strtotime($toTimeWeekDayArr[$key])) : '';
 
                                     $fromFld = $frm->getField('tslot_from_time[' . $i . '][]');
                                     $fromFld->setFieldTagAttribute('class', 'fromTimeJs');
@@ -281,7 +280,7 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                                     $toFld->setFieldTagAttribute('data-row', $row);
                                     $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(this)');
                                     $toFld->value = $toTime;
-                                    ?>              
+                                ?>
                                     <div class="row weekDayRowJs">
                                         <div class="col-md-4">
                                             <div class="field-set">
@@ -304,7 +303,7 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                                                 </div>
                                                 <div class="field-wraper">
                                                     <div class="field_cover">
-                                                        <?php echo $frm->getFieldHtml('tslot_to_time[' . $i . '][]'); ?> 
+                                                        <?php echo $frm->getFieldHtml('tslot_to_time[' . $i . '][]'); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -317,21 +316,21 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                                                     </label>
                                                 </div>
                                                 <div class="field-wraper">
-                                                    <div class="field_cover btn-group">                                                    
-                                                        <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none': ''?>" onClick="removeTimeSlotRow(this)"  type="button" >
+                                                    <div class="field_cover btn-group">
+                                                        <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none' : '' ?>" onClick="removeTimeSlotRow(this)" type="button">
                                                             <i class="icn"><svg class="svg" width="16px" height="16px">
-                                                                <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use>
+                                                                </svg>
                                                             </i>
-                                                        </button>                                                    
-                                                        <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button"
-                                                            onClick="addTimeSlotRow(this)" >
+                                                        </button>
+                                                        <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button" onClick="addTimeSlotRow(this)">
                                                             <i class="icn">
                                                                 <svg class="svg" width="16px" height="16px">
                                                                     <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
                                                                     </use>
                                                                 </svg>
                                                             </i>
-                                                        </button>                                                        
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -368,135 +367,134 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
 </div>
 <script language="javascript">
     var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
-    $(document).ready(function () {
+    $(document).ready(function() {
         getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#addr_state_id');
 
-        addTimeSlotRow = function (ele) {
+        addTimeSlotRow = function(ele) {
             let mainParent = $(ele).closest(".weekDayParentRowJs");
-            var clonedRow = $('.weekDayRowJs:last', mainParent).clone();            
+            var clonedRow = $('.weekDayRowJs:last', mainParent).clone();
             var toTime = $(ele).closest('.weekDayRowJs').find('.toTimeJs').val();
             $(clonedRow).find('.toTimeJs').val('');
-            $(clonedRow).find('.fromTimeJs').val('');            
-            $(clonedRow).find('.fromTimeJs option').each(function () {
-                var toVal = $(this).val();  
-                $(this).removeClass('d-none');                
+            $(clonedRow).find('.fromTimeJs').val('');
+            $(clonedRow).find('.fromTimeJs option').each(function() {
+                var toVal = $(this).val();
+                $(this).removeClass('d-none');
                 if (toVal != '' && toVal <= toTime) {
                     $(this).addClass('d-none');
-                }                
+                }
             });
             $(clonedRow).find('.removeButtonJs').removeClass('d-none');
             $(clonedRow).find('.addButtonJs').addClass('d-none');
-            mainParent.append(clonedRow);            
-           
+            mainParent.append(clonedRow);
+
             $(ele).addClass('d-none');
-            if(1 > $(mainParent).find('.weekDayRowJs').lenth){
-               $(ele).sibling('.removeButtonJs').removeClass('d-none');  
-            }            
-        }
-        
-        removeTimeSlotRow = function (ele) {
-            let mainParent = $(ele).closest(".weekDayParentRowJs");        
-            let row = $(ele).closest(".weekDayRowJs");
-           
-            
-            if($(row).index() <  $(row).siblings().length){        
-                let toTimeOfParentSibling =  $('.weekDayRowJs:eq('+($(row).index() - 2)+')',mainParent).find('.toTimeJs').val();        
-                /* downSiblingTimeOption show hide*/            
-                $('.weekDayRowJs:eq('+($(row).index())+')',mainParent).find('.fromTimeJs option').each(function () {
-                    var toVal = $(this).val();  
-                    $(this).removeClass('d-none');                
-                    if (toVal != '' && toVal <= toTimeOfParentSibling) {
-                        $(this).addClass('d-none');
-                    }                
-                });
-            }            
-            $(ele).closest('.weekDayRowJs').remove();
-            $(mainParent).find('.weekDayRowJs:last .addButtonJs').removeClass('d-none'); 
+            if (1 > $(mainParent).find('.weekDayRowJs').lenth) {
+                $(ele).sibling('.removeButtonJs').removeClass('d-none');
+            }
         }
 
-        displayFields = function (ele) {
+        removeTimeSlotRow = function(ele) {
             let mainParent = $(ele).closest(".weekDayParentRowJs");
-            if ($(ele).prop("checked") == true) {                
-               $('.weekDayRowJs:first',mainParent).find('select').removeAttr('disabled');
-               $('.weekDayRowJs:first .toTimeJs',mainParent).trigger('change');
+            let row = $(ele).closest(".weekDayRowJs");
+
+
+            if ($(row).index() < $(row).siblings().length) {
+                let toTimeOfParentSibling = $('.weekDayRowJs:eq(' + ($(row).index() - 2) + ')', mainParent).find('.toTimeJs').val();
+                /* downSiblingTimeOption show hide*/
+                $('.weekDayRowJs:eq(' + ($(row).index()) + ')', mainParent).find('.fromTimeJs option').each(function() {
+                    var toVal = $(this).val();
+                    $(this).removeClass('d-none');
+                    if (toVal != '' && toVal <= toTimeOfParentSibling) {
+                        $(this).addClass('d-none');
+                    }
+                });
+            }
+            $(ele).closest('.weekDayRowJs').remove();
+            $(mainParent).find('.weekDayRowJs:last .addButtonJs').removeClass('d-none');
+        }
+
+        displayFields = function(ele) {
+            let mainParent = $(ele).closest(".weekDayParentRowJs");
+            if ($(ele).prop("checked") == true) {
+                $('.weekDayRowJs:first', mainParent).find('select').removeAttr('disabled');
+                $('.weekDayRowJs:first .toTimeJs', mainParent).trigger('change');
             } else {
-                $('.weekDayRowJs:first',mainParent).find('select').attr('disabled', 'true');
+                $('.weekDayRowJs:first', mainParent).find('select').attr('disabled', 'true');
                 $('.weekDayRowJs:not(:first)', mainParent).remove();
                 $('.weekDayRowJs .addButtonJs', mainParent).addClass('d-none');
             }
         }
-        
-        displayAddRowField = function(ele){
+
+        displayAddRowField = function(ele) {
             let mainParent = $(ele).closest(".weekDayParentRowJs");
             let row = $(ele).closest('.weekDayRowJs');
             let formEle = $(row).find('.fromTimeJs');
             let toEle = $(row).find('.toTimeJs');
-    
-            
+
+
             var fromTime = $(formEle).val();
-            var toTime = $(toEle).val(); 
+            var toTime = $(toEle).val();
             if (fromTime == '' && toTime != '') {
                 $(toEle).val('');
                 $.mbsmessage(langLbl.invalidFromTime, true, 'alert--danger');
                 return false;
-            }            
-            $(toEle).find('option').each(function () {
-                var toOptionVal = $(this).val();  
-                $(this).removeClass('d-none');                
+            }
+            $(toEle).find('option').each(function() {
+                var toOptionVal = $(this).val();
+                $(this).removeClass('d-none');
                 if (toOptionVal != '' && toOptionVal <= fromTime) {
                     $(this).addClass('d-none');
-                }                
-            });            
-            if(fromTime!= '' & toTime!=''){
-                if(fromTime > toTime){
+                }
+            });
+            if (fromTime != '' & toTime != '') {
+                if (fromTime > toTime) {
                     $(toEle).val('');
-                }else{
-                    if(toTime < $(toEle).find('option:last').val()){ 
-                        if($(row).index() >=  $(row).siblings().length){
-                           $(row).find('.addButtonJs').removeClass('d-none');  
-                        }                                                                    
-                    }else{
-                        $(row).find('.addButtonJs').addClass('d-none'); 
-                    }                        
-                }                
+                } else {
+                    if (toTime < $(toEle).find('option:last').val()) {
+                        if ($(row).index() >= $(row).siblings().length) {
+                            $(row).find('.addButtonJs').removeClass('d-none');
+                        }
+                    } else {
+                        $(row).find('.addButtonJs').addClass('d-none');
+                    }
+                }
             }
-            
-            
-            if($(row).index() <  $(row).siblings().length){              
-                     /* downSiblingTimeOption */       
-                let downRowSibling  = $('.weekDayRowJs:eq('+($(row).index())+')',mainParent);
-                let downFromTimeSibling = $(downRowSibling).find('.fromTimeJs');               
-                if($(downFromTimeSibling).val() < toTime){    
+
+
+            if ($(row).index() < $(row).siblings().length) {
+                /* downSiblingTimeOption */
+                let downRowSibling = $('.weekDayRowJs:eq(' + ($(row).index()) + ')', mainParent);
+                let downFromTimeSibling = $(downRowSibling).find('.fromTimeJs');
+                if ($(downFromTimeSibling).val() < toTime) {
                     console.log('vvv');
                     $(row).nextAll().find('.toTimeJs').val('');
-                    $(row).nextAll().find('.fromTimeJs').val('');                    
+                    $(row).nextAll().find('.fromTimeJs').val('');
                 }
-                $(downFromTimeSibling).find('option').each(function () {
-                    var toVal = $(this).val();  
+                $(downFromTimeSibling).find('option').each(function() {
+                    var toVal = $(this).val();
                     $(this).removeClass('d-none');
                     if (toVal != '' && toVal <= toTime) {
-                        $(this).addClass('d-none');                        
-                    }                
+                        $(this).addClass('d-none');
+                    }
                 });
-            } 
-            
-            
+            }
+
+
         }
-               
-        displaySlotTimings = function (ele) {
+
+        displaySlotTimings = function(ele) {
             var selectedVal = $(ele).val();
             if (selectedVal == 2) {
                 $('.weekDayParentRowJs:not(:first)').addClass('d-none');
                 $('.weekDayParentRowJs:first .weekDayJs').addClass('d-none');
-                $('.weekDayParentRowJs:first .slotDaysJs').prop("checked",true).trigger('change');                
+                $('.weekDayParentRowJs:first .slotDaysJs').prop("checked", true).trigger('change');
             } else {
                 $('.weekDayParentRowJs').removeClass('d-none');
                 $('.weekDayParentRowJs .weekDayJs').removeClass('d-none');
             }
         }
-        
+
         $('.availabilityTypeJs:checked').trigger('change');
         $('.slotDaysJs').trigger('change');
     });
-
 </script>

@@ -27,14 +27,14 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_Seller_Products_Special_Price_List', $siteLangId),
-                'siteLangId' => $siteLangId,
-            ];
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        <?php
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Seller_Products_Special_Price_List', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
         ?>
         <div class="content-body">
             <div class="row mb-4">
@@ -62,10 +62,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                             }
                         }
                         ?>
-                        <div class="card-header">
+                        <div class="card-head">
                             <div class="card-title"></div>
                             <div class="btn-group">
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete_Special_Price', $siteLangId); ?>" onclick="deleteSpecialPriceRows()" href="javascript:void(0)">							
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete_Special_Price', $siteLangId); ?>" onclick="deleteSpecialPriceRows()" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>
                                 </a>
                             </div>

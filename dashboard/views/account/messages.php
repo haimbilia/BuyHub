@@ -23,9 +23,9 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('LBL_MY_MESSAGES', $siteLangId),
             'siteLangId' => $siteLangId
@@ -59,7 +59,6 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-
                         <div class="card-body">
                             <div id="messageListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                         </div>

@@ -5,16 +5,16 @@
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
-            <?php 
+            <?php
             $data = [
-                'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request',$siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
-                'siteLangId' => $siteLangId,         
+                'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
+                'siteLangId' => $siteLangId,
             ];
             $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-            <?php } ?>
+        <?php } ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
                     <?php if (!$print) { ?>
                         <div class="">
@@ -83,7 +83,7 @@
                                         <td><?php echo $request['op_invoice_number']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request ,'siteLangId'=> $siteLangId], false, true);?>                                          
+                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?>
                                         </td>
                                         <td><?php echo $request['orrequest_qty']; ?></td>
                                         <td> <?php echo $returnRequestTypeArr[$request['orrequest_type']]; ?></td>
