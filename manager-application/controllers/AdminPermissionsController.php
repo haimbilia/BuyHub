@@ -44,7 +44,7 @@ class AdminPermissionsController extends ListingBaseController
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_NONE . ")",
                     'title' => Labels::getLabel('LBL_NO_PERMISSION', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
                                 </use>
@@ -57,7 +57,7 @@ class AdminPermissionsController extends ListingBaseController
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_READ . ")",
                     'title' => Labels::getLabel('LBL_READ_PERMISSION', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
                                 </use>
@@ -70,7 +70,7 @@ class AdminPermissionsController extends ListingBaseController
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_WRITE . ")",
                     'title' => Labels::getLabel('LBL_READ_AND_WRITE_PERMISSION', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                                 </use>

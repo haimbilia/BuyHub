@@ -702,6 +702,7 @@ class ProductCategoriesController extends ListingBaseController
             $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
+        $srch->addCondition('ratingtype_id', 'NOT IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $srch->addCondition('ratingtype_active', '=', applicationConstants::YES);
         $rs = $srch->getResultSet();
         $options = FatApp::getDb()->fetchAll($rs, 'ratingtype_id');
