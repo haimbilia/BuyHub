@@ -1469,7 +1469,8 @@ class ProductsController extends ListingBaseController
                 $pageData = PageLanguageData::getAttributesByKey('ADD_PRODUCT', $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => $pageTitle]
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('Products')],
+                    ['title' => Labels::getLabel('LBL_FORM', $this->siteLangId)]
                 ];
                 break;
             default:
