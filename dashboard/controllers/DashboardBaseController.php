@@ -942,4 +942,37 @@ class DashboardBaseController extends FatController
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_CONFIRM_ORDER', $langId));
         return $frm;
     }
+
+    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false)
+    {
+        if ($pageSize < 1) {
+            return;
+        }
+
+        if ($page > 1 && !empty($post['total_record_count'])) {
+            $this->setPageRecord($post['total_record_count'], $pageSize, $page);
+            return;
+        }
+
+        $recordCountSrch->doNotLimitRecords();
+        if ($isGroupSearch == false) {
+            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->doNotCalculateRecords();
+            $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
+            $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        } else {
+            $recordCountSrch->getResultSet();
+            $defaultRecordCount = $recordCountSrch->recordCount();
+        }
+        $this->setPageRecord($defaultRecordCount, $pageSize, $page);
+        $post['total_record_count'] = $defaultRecordCount;
+    }
+
+    private function setPageRecord($recordCount, $pageSize, $page)
+    {
+        $this->set('pageCount', ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0);
+        $this->set('recordCount', $recordCount);
+        $this->set('pageSize', $pageSize);
+        $this->set('page', $page);
+    }
 }
