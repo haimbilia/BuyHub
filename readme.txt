@@ -459,7 +459,8 @@ Updates/Fixes :
     => 061818 - Admin UI: Category's media is not clickable, brands' uploaded media is not showing and getting an 'invalid request' error while removing the rating types while adding the category & brands on the product's page
     => 062159 - Undefined index: order_id in case of Wallet pay from mobile
     => 061649 - Admin UI: Validation is showing for the 'Self shipping' fields while updating the order's status on the order's details page
-
+    => 061801 - Coupen not displaying to other user once put on pending order by other user
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

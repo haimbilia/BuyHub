@@ -955,6 +955,20 @@ class SellerController extends SellerBaseController {
                     FatUtility::dieJsonError(Message::getHtml());
                 }
             }
+
+            if (!empty($orderDetail['order_discount_coupon_code'])) {
+                $srch = DiscountCoupons::getSearchObject();
+                $srch->addFld('coupon_id');
+                $srch->addCondition('coupon_code', '=', $orderDetail['order_discount_coupon_code']);                 
+                $couponData = FatApp::getDb()->fetch($srch->getResultSet());
+                if (!empty($couponData)) {                            
+                    if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $couponData['coupon_id'], 'couponhistory_order_id' => $orderDetail['order_id'], 'couponhistory_user_id' => $orderDetail['order_user_id'], 'couponhistory_amount' => $orderDetail['order_discount_total'], 'couponhistory_added_on' => $orderDetail['order_date_added'] ))) {
+                        $this->error = FatApp::getDb()->getError();
+                        return false;
+                    }                           
+                }
+                FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, array('smt' => 'ochold_order_id = ?', 'vals' => array($orderDetail['order_id'])));
+            }
         }
 
         $db->commitTransaction();
