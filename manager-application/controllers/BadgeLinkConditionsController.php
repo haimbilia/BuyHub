@@ -2,6 +2,7 @@
 
 class BadgeLinkConditionsController extends ListingBaseController
 {
+    protected string $modelClass = 'OrderStatus';
     protected string $pageKey = 'MANAGE_LINK_CONDITIONS';
     protected string $objectType;
     protected string $objectTypeName;

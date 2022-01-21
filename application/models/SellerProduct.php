@@ -56,7 +56,7 @@ class SellerProduct extends MyAppModel
         if ($langId) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
+                'LEFT JOIN',
                 'sp_l.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = sp.' . static::tblFld('id') . ' and
 			sp_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
                 'sp_l'
@@ -66,7 +66,7 @@ class SellerProduct extends MyAppModel
         if (true === $joinSpecifics) {
             $srch->joinTable(
                 SellerProductSpecifics::DB_TBL,
-                'LEFT OUTER JOIN',
+                'LEFT JOIN',
                 'sps.' . SellerProductSpecifics::DB_TBL_PREFIX . 'selprod_id = sp.' . static::tblFld('id'),
                 'sps'
             );
@@ -249,16 +249,18 @@ class SellerProduct extends MyAppModel
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public function addUpdateSellerUpsellProducts($selprod_id, $upsellProds = array())
+    public function addUpdateSellerUpsellProducts($selprod_id, $upsellProds = array(), $deletePreviousRecords = true)
     {
         if (!$selprod_id) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
-        FatApp::getDb()->deleteRecords(static::DB_TBL_UPSELL_PRODUCTS, array('smt' => static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id = ?', 'vals' => array($selprod_id)));
-        if (empty($upsellProds)) {
-            return true;
+        if (true === $deletePreviousRecords) {
+            FatApp::getDb()->deleteRecords(static::DB_TBL_UPSELL_PRODUCTS, array('smt' => static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id = ?', 'vals' => array($selprod_id)));
+            if (empty($upsellProds)) {
+                return true;
+            }
         }
 
         $record = new TableRecord(static::DB_TBL_UPSELL_PRODUCTS);
@@ -275,16 +277,18 @@ class SellerProduct extends MyAppModel
         return true;
     }
 
-    public function addUpdateSellerRelatedProdcts($selprod_id, $relatedProds = array())
+    public function addUpdateSellerRelatedProdcts($selprod_id, $relatedProds = array(), $deletePreviousRecords = true)
     {
         if (!$selprod_id) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
-        FatApp::getDb()->deleteRecords(static::DB_TBL_RELATED_PRODUCTS, array('smt' => static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id = ?', 'vals' => array($selprod_id)));
-        if (empty($relatedProds)) {
-            return true;
+        if (true === $deletePreviousRecords) {
+            FatApp::getDb()->deleteRecords(static::DB_TBL_RELATED_PRODUCTS, array('smt' => static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id = ?', 'vals' => array($selprod_id)));
+            if (empty($relatedProds)) {
+                return true;
+            }
         }
 
         $record = new TableRecord(static::DB_TBL_RELATED_PRODUCTS);
@@ -345,7 +349,7 @@ class SellerProduct extends MyAppModel
             }
         } else {
             $srch->addMultipleFields(array(
-                'upsell_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
                 'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
             ));
         }
