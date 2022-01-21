@@ -15,7 +15,12 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
+                $disabled = $class = "";
+                if ($row['ratingtype_id'] == RatingType::TYPE_PRODUCT) {
+                    $class = 'disabled';
+                    $disabled = "disabled='disabled'";
+                }
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $class . '" type="checkbox" ' . $disabled . ' name="record_ids[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);

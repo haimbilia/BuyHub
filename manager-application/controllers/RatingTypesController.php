@@ -239,6 +239,24 @@ class RatingTypesController extends ListingBaseController
         return $frm;
     }
 
+    protected function changeStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        
+        if (RatingType::TYPE_PRODUCT == $recordId) {
+            $status = applicationConstants::ACTIVE;
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+    }
+
     private function getFormColumns(): array
     {
         $shopsTblHeadingCols = CacheHelper::get('ratingTypeTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
