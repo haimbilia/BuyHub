@@ -51,7 +51,11 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
                         <div class="input-group">
                             <?php echo $passwordFld->getHTML('password'); ?>
-                            <div class="input-group-append"><span class="input-group-text show-password" id="showPass"><?php echo Labels::getlabel('FRM_SHOW', $siteLangId); ?></span></div>
+                            <div class="input-group-append">
+                                <span class="input-group-text field-password field-password-show" id="showPassX">
+
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

@@ -10,7 +10,7 @@ class SellerBaseController extends LoggedUserController
             LibHelper::exitWithError($msg, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
-        
+      
         if (!User::canAccessSupplierDashboard() || !User::isSellerVerified($this->userParentId)) {
             $adminLoggedIn = isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) ? true : false;
             $userObj = new User(UserAuthentication::getLoggedUserId());

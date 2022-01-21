@@ -1569,3 +1569,5 @@ ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
 
 ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);
 -- --------------------TV-9.4.0.20220120-----------------
+
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'RATING_TYPES', '-1', 'Manage Shops', 'View and manage sellers’ registered shops information.', 'Buyers look over shop details on the Shop detail page.', '', '');

@@ -30,7 +30,6 @@ class SettingsController extends ListingBaseController
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $nodes[] = array('title' => $pageTitle);
                 break;
-                break;
             default:
                 parent::getBreadcrumbNodes($action);
                 break;
