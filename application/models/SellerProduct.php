@@ -489,10 +489,14 @@ class SellerProduct extends MyAppModel
 
             $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
             $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $lang_id, 'o_lang');
-            $srch->addMultipleFields(array('o.option_id', 'ov.optionvalue_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name'));
+            $srch->addMultipleFields(array('selprodoption_selprod_id', 'o.option_id', 'ov.optionvalue_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name'));
         }
 
-        $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'selprod_id', '=', $selprod_id);
+        if(is_array($selprod_id)){
+            $srch->addDirectCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'selprod_id IN ('. implode(',', $selprod_id).')');
+        }else{
+            $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'selprod_id', '=', $selprod_id);            
+        }
 
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
