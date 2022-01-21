@@ -133,7 +133,7 @@ class ShippingPackagesController extends ListingBaseController
         $frm = new Form('frmShippingPackages');
         $frm->addHiddenField('', 'shippack_id');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_NAME', $this->siteLangId), 'shippack_name');
-        $frm->addSelectBox(Labels::getLabel('FRM_UNIT', $this->siteLangId), 'shippack_units', ShippingPackage::getUnitTypes($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_UNIT', $this->siteLangId), 'shippack_units', ShippingPackage::getUnitTypes($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId))->requirements()->setRequired(true);
         $frm->addFloatField(Labels::getLabel('FRM_LENGTH', $this->siteLangId), 'shippack_length');
         $frm->addFloatField(Labels::getLabel('FRM_WIDTH', $this->siteLangId), 'shippack_width');
         $frm->addFloatField(Labels::getLabel('FRM_HEIGHT', $this->siteLangId), 'shippack_height');

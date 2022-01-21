@@ -47,7 +47,13 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'editRecord(' . $row['shippro_product_id'] . ',' . $row['shippro_shipprofile_id'] . ')',
                             'title' => Labels::getLabel('LBL_Update_Shipping_Profile', $siteLangId)
                         ],
-                        'label' => '<i class="fas fa-toggle-off"></i>'
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
+                                            </use>
+                                        </svg>
+                                    </i>'
                     ]
                 ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
@@ -61,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

@@ -1,7 +1,9 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 ?>
-<script> var placeholder = '<?php echo Labels::getLabel('FRM_TAX_COMPONENT_NAME', $siteLangId) ?>';</script>
+<script>
+    var placeholder = '<?php echo Labels::getLabel('FRM_TITLE', $siteLangId) ?>';
+</script>
 <?php
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form');
@@ -32,15 +34,15 @@ $formTitle = Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.component_link').closest('.col-md-12').addClass('hide');
         if ($("input[name=taxstr_is_combined]").prop('checked') == true) {
             $('.component_link').closest('.col-md-12').removeClass('hide');
         }
-<?php
-if (!empty($combinedTaxes)) {
-    $count = 2;
-    foreach ($combinedTaxes as $key => $tax) {
+        <?php
+        if (!empty($combinedTaxes)) {
+            $count = 2;
+            foreach ($combinedTaxes as $key => $tax) {
         ?>
                 $('.component_link').find('.component-row--js').last().after($('.component_link').find('.component-row--js').last().clone());
                 $('.component_link').find('.component-row--js').last().find('input[type=text]').val('<?php echo $tax; ?>');
@@ -49,10 +51,9 @@ if (!empty($combinedTaxes)) {
                 $('.component_link').find('.component-row--js').last().find('.remove-combined-form--js').attr('data-id', '<?php echo $key; ?>');
                 $('.component_link').find('.component-row--js').last().find('.remove-combined-form--js').removeClass('invisible');
         <?php
-    }
-}
-?>
+            }
+        }
+        ?>
         setVisibliltyForAddBtn();
     });
-
 </script>
