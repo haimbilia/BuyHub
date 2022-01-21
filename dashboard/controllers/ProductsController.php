@@ -183,7 +183,7 @@ class ProductsController extends SellerBaseController
             }
 
             $frm->fill($productData);
-            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $recordId]);
         } else {
             $tempProductId = time() . $userId;
             $frm->fill(['temp_product_id' => $tempProductId]);

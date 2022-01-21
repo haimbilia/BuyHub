@@ -29,8 +29,10 @@ class CustomProductsController extends SellerBaseController
 
     public function form($recordId = 0, $productType = 0)
     {
+
+       
         $this->checkEditPrivilege();
-        
+       
         $userId = $this->userParentId;
 
         $recordId = FatUtility::int($recordId);        
@@ -44,132 +46,137 @@ class CustomProductsController extends SellerBaseController
         $frm = $this->getForm($langId, $productType, $recordId);
         $imgFrm = $this->getImageFrm($recordId);
         $productOptions = [];
-
-        if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
-            $productData = Product::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
-            if (!empty($productData['preq_lang_data'])) {
-                $preqLangData = json_decode($productData['preq_lang_data'], true);
-                $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
-                $translatedData = $updateLangDataobj->directTranslate($preqLangData, $langId);
-                if (false === $translatedData) {
-                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
+        if (1 < $recordId) {
+            if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
+                $productData = ProductRequest::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+                if (!empty($productData['preq_lang_data'])) {
+                    $preqLangData = json_decode($productData['preq_lang_data'], true);
+                    $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
+                    $translatedData = $updateLangDataobj->directTranslate($preqLangData, $langId);
+                    if (false === $translatedData) {
+                        LibHelper::exitWithError($updateLangDataobj->getError(), true);
+                    }
+                    $productData = array_merge($productData, current($translatedData));
                 }
-                $productData = array_merge($productData, current($translatedData));
-            }
-        } else {
-            $productData = Product::getAttributesByLangId($langId, $recordId, null, true);
-            if (!empty($productData['preq_lang_data'])) {
-                $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
-            }
-        }
-        unset($productData['preq_lang_data']);
-
-        if (empty($productData)) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
-        }
-
-        if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $productData = array_merge(
-            $productData,
-            json_decode($productData['preq_content'], true)
-        );
-        unset($productData['preq_content']);
-
-        if (1 > $productType) {
-            $frm = $this->getForm($langId, $productData['product_type'], $recordId);
-        }
-
-        $tagData = [];
-        if (!empty($productData['product_tags'])) {
-            $srch = Tag::getSearchObject($langId);
-            $srch->addCondition('tag_id', 'IN', $productData['product_tags']);
-            $srch->addMultipleFields(['tag_id', 'tag_name']);
-            $productTags = FatApp::getDb()->fetchAll($srch->getResultSet());
-            foreach ($productTags as $key => $data) {
-                $tagData[$key]['id'] = $data['tag_id'];
-                $tagData[$key]['value'] = htmlspecialchars($data['tag_name'], ENT_QUOTES, 'UTF-8');
-            }
-        }
-        $productData['product_tags'] = json_encode($tagData);
-        if (1 < $productData['preq_brand_id']) {
-            $productData['product_brand_id'] = $productData['preq_brand_id'];
-            $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
-            if (false != $brandData) {
-                $fld = $frm->getField('product_brand_id');
-                $fld->options = [$productData['preq_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
-            }
-            unset($productData['preq_brand_id']);
-        }
-
-        if (!empty($productData['preq_prodcat_id'])) {
-            $productData['ptc_prodcat_id'] = $productData['preq_prodcat_id'];
-            $catData = ProductCategory::getAttributesByLangId($langId, $productData['preq_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
-            if (false != $catData) {
-                $fld = $frm->getField('ptc_prodcat_id');
-                $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
-            }
-            unset($productData['preq_prodcat_id']);
-        }
-
-        if (Tax::getActivatedServiceId()) {
-            $taxCatMultiFields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
-        } else {
-            $taxCatMultiFields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
-        }
-
-        //ptt_taxcat_id        
-        if (!empty($productData['ptt_taxcat_id'])  && 0 < $productData['ptt_taxcat_id']) {
-            $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, true, applicationConstants::YES, applicationConstants::NO);
-            if ($catData) {
-                $fld = $frm->getField('ptt_taxcat_id');
-                $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            }
-        }
-
-        if (!empty($productData['ps_from_country_id'])  && 0 < $productData['ps_from_country_id']) {
-            $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
-            if ($countryData) {
-                $fld = $frm->getField('ps_from_country_id');
-                $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            }
-        }
-
-        if (is_array($productData['product_option'])) {
-            $srch = Option::getSearchObject($langId);
-            $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
-            $srch->addCondition('option_id', 'IN', $productData['product_option']);
-            $prodOptions = FatApp::getDb()->fetchAll($srch->getResultSet(), 'option_id');
-            foreach ($productData['product_option'] as $index => $optionId) {
-                if ($prodOptions[$optionId]) {
-                    $productOptions[$index] = $prodOptions[$optionId];
-                    $productOptions[$index]['optionValues'] = product::getOptionValues($optionId, $langId, ($productData['product_option_values'][$index] ?? []));
+            } else {
+                $productData = ProductRequest::getAttributesByLangId($langId, $recordId, null, true);
+                if (!empty($productData['preq_lang_data'])) {
+                    $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
                 }
             }
+            unset($productData['preq_lang_data']);
+        
+            if (!empty($productData)) {            
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
+                FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
+            }        
+    
+            if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+
+            $productData = array_merge(
+                $productData,
+                json_decode($productData['preq_content'], true)
+            );
+            unset($productData['preq_content']);
+
+            if (1 > $productType) {
+                $frm = $this->getForm($langId, $productData['product_type'], $recordId);
+            }
+
+            $tagData = [];
+            if (!empty($productData['product_tags'])) {
+                $srch = Tag::getSearchObject($langId);
+                $srch->addCondition('tag_id', 'IN', $productData['product_tags']);
+                $srch->addMultipleFields(['tag_id', 'tag_name']);
+                $productTags = FatApp::getDb()->fetchAll($srch->getResultSet());
+                foreach ($productTags as $key => $data) {
+                    $tagData[$key]['id'] = $data['tag_id'];
+                    $tagData[$key]['value'] = htmlspecialchars($data['tag_name'], ENT_QUOTES, 'UTF-8');
+                }
+            }
+            $productData['product_tags'] = json_encode($tagData);
+            if (1 < $productData['preq_brand_id']) {
+                $productData['product_brand_id'] = $productData['preq_brand_id'];
+                $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                if (false != $brandData) {
+                    $fld = $frm->getField('product_brand_id');
+                    $fld->options = [$productData['preq_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
+                }
+                unset($productData['preq_brand_id']);
+            }
+
+            if (!empty($productData['preq_prodcat_id'])) {
+                $productData['ptc_prodcat_id'] = $productData['preq_prodcat_id'];
+                $catData = ProductCategory::getAttributesByLangId($langId, $productData['preq_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                if (false != $catData) {
+                    $fld = $frm->getField('ptc_prodcat_id');
+                    $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
+                }
+                unset($productData['preq_prodcat_id']);
+            }
+
+            if (Tax::getActivatedServiceId()) {
+                $taxCatMultiFields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
+            } else {
+                $taxCatMultiFields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
+            }
+
+            //ptt_taxcat_id        
+            if (!empty($productData['ptt_taxcat_id'])  && 0 < $productData['ptt_taxcat_id']) {
+                $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, true, applicationConstants::YES, applicationConstants::NO);
+                if ($catData) {
+                    $fld = $frm->getField('ptt_taxcat_id');
+                    $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                }
+            }
+
+            if (!empty($productData['ps_from_country_id'])  && 0 < $productData['ps_from_country_id']) {
+                $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
+                if ($countryData) {
+                    $fld = $frm->getField('ps_from_country_id');
+                    $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                }
+            }
+
+            if (is_array($productData['product_option'])) {
+                $srch = Option::getSearchObject($langId);
+                $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
+                $srch->addCondition('option_id', 'IN', $productData['product_option']);
+                $prodOptions = FatApp::getDb()->fetchAll($srch->getResultSet(), 'option_id');
+                foreach ($productData['product_option'] as $index => $optionId) {
+                    if ($prodOptions[$optionId]) {
+                        $productOptions[$index] = $prodOptions[$optionId];
+                        $productOptions[$index]['optionValues'] = product::getOptionValues($optionId, $langId, ($productData['product_option_values'][$index] ?? []));
+                    }
+                }
+            }
+            $productData['upc_type'] = applicationConstants::YES;
+            $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);
+            if (!empty($productData['preq_ean_upc_code']) && count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
+                $productData['upc_type'] = applicationConstants::NO;
+            }
+
+            $this->set("productData", [
+                'product_type' => $productData['product_type'],
+                'product_seller_id' => 0,
+                'product_attachements_with_inventory' => ($productData['product_attachements_with_inventory'] ?? 0),
+            ]);
+
+            /* to select product type in get */
+            if (0 < $productType) {
+                $productData['product_type'] = $productType;
+            }
+
+            $productData['record_id'] = $recordId;
+            $frm->fill($productData);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
+        } else {
+            $tempProductId = time() . $userId;
+            $frm->fill(['temp_product_id' => $tempProductId]);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
-        $productData['upc_type'] = applicationConstants::YES;
-        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);
-        if (!empty($productData['preq_ean_upc_code']) && count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
-            $productData['upc_type'] = applicationConstants::NO;
-        }
-
-        $this->set("productData", [
-            'product_type' => $productData['product_type'],
-            'product_seller_id' => 0,
-            'product_attachements_with_inventory' => ($productData['product_attachements_with_inventory'] ?? 0),
-        ]);
-
-        /* to select product type in get */
-        if (0 < $productType) {
-            $productData['product_type'] = $productType;
-        }
-
-        $productData['record_id'] = $recordId;
-
-        $frm->fill($productData);
 
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
