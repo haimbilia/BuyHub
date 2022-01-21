@@ -119,7 +119,7 @@ class TaxStructureController extends ListingBaseController {
         $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $this->siteLangId), 'taxstr_is_combined', 1,[],false,0);
         HtmlHelper::configureCheckboxLabel($frm, 'taxstr_is_combined');
 
-        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['placeholder' => Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId).' 1']);
+        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['placeholder' => Labels::getLabel('FRM_TITLE', $this->siteLangId).' 1']);
         $htmlFld = $frm->addHTML('', 'component_link', '');
         $componentFld->attachField($htmlFld);
         $componentFld->fieldWrapper = ['<div class="component_link"><div class="input-group mb-2 component-row--js">', '</div></div>'];
