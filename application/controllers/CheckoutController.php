@@ -651,7 +651,18 @@ class CheckoutController extends MyAppController
         $productToShippingMethods = array();
         $sn = 0;
         $json = array();
-        $prodSrchObj = new ProductSearch();
+        $prodSrch = new ProductSearch();
+        $prodSrch->setDefinedCriteria();
+        $prodSrch->joinProductToCategory();
+        $prodSrch->joinProductShippedBy();
+        $prodSrch->joinProductFreeShipping();
+        $prodSrch->joinSellerSubscription();
+        $prodSrch->addSubscriptionValidCondition();
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $prodSrch->addDirectCondition('selprod_id IN ('. implode(',', array_column($cartProducts, 'selprod_id')).')');        
+        $prodSrch->addMultipleFields(array('selprod_id', 'product_seller_id', 'psbs_user_id as shippedBySellerId'));
+        $prodsData = FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
 
         foreach ($cartProducts as $cartkey => $cartval) {
             $sn++;
@@ -664,24 +675,6 @@ class CheckoutController extends MyAppController
                 continue;
             }
 
-            /* get Product Data[ */
-            $prodSrch = clone $prodSrchObj;
-            $prodSrch->setDefinedCriteria();
-            $prodSrch->joinProductToCategory();
-            $prodSrch->joinProductShippedBy();
-            $prodSrch->joinProductFreeShipping();
-            $prodSrch->joinSellerSubscription();
-            $prodSrch->addSubscriptionValidCondition();
-            $prodSrch->doNotCalculateRecords();
-            $prodSrch->setPageSize(1);
-            $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-            $prodSrch->addCondition('selprod_id', '=', $cartval['selprod_id']);
-            /* $prodSrch->addDirectCondition( "( isnull(psbs.psbs_user_id) or psbs.psbs_user_id = '".$cartval['selprod_user_id']."')" ); */
-            $prodSrch->addMultipleFields(array('selprod_id', 'product_seller_id', 'psbs_user_id as shippedBySellerId'));
-            $productRs = $prodSrch->getResultSet();
-            $product = FatApp::getDb()->fetch($productRs);
-            /* ] */
-
             $shipInfo =  $shipProducts[$cartval['selprod_id']]['info'];
             $productToShippingMethods['product'][$cartval['selprod_id']] = array(
                 'selprod_id' => $cartval['selprod_id'],
@@ -692,7 +685,7 @@ class CheckoutController extends MyAppController
                 'mshipapi_type' => $shipInfo['shipping_type'],
                 'mshipapi_is_seller_plugin' => $shipInfo['is_seller_plugin'],
                 'mshipapi_cost' => $shipProducts[$cartval['selprod_id']]['cost'],
-                'shipped_by_seller' => Product::isShippedBySeller($cartval['selprod_user_id'], $product['product_seller_id'], $product['shippedBySellerId']),
+                'shipped_by_seller' => Product::isShippedBySeller($cartval['selprod_user_id'], $prodsData[$cartval['selprod_id']]['product_seller_id'], $prodsData[$cartval['selprod_id']]['shippedBySellerId']),
                 'mshipapi_level' => $shipInfo['shipping_level']
             );
         }
@@ -820,9 +813,8 @@ class CheckoutController extends MyAppController
         $this->_template->render();
     }
 
-    private function getCartProductInfo($selprod_id)
+    private function getCartProductsInfo($selprodIds)
     {
-        $selprod_id = FatUtility::int($selprod_id);
         $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setDefinedCriteria();
         $prodSrch->joinShopSpecifics();
@@ -833,9 +825,8 @@ class CheckoutController extends MyAppController
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
-        $prodSrch->setPageSize(1);
-        $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $prodSrch->addDirectCondition('selprod_id IN ('.implode(',', $selprodIds).')');
         $fields = array(
             'product_id', 'product_type', 'product_length', 'product_width', 'product_height',
             'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
@@ -847,11 +838,10 @@ class CheckoutController extends MyAppController
             'prodcat_id', 'product_attachements_with_inventory', 'selprod_product_id'
         );
         $prodSrch->addMultipleFields($fields);
-        $rs = $prodSrch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+        return FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
     }
 
-    private function getCartProductLangData($selprod_id, $lang_id)
+    private function getCartProductsLangData($selprodIds, $lang_id)
     {
         $langProdSrch = new ProductSearch($lang_id);
         $langProdSrch->setDefinedCriteria();
@@ -861,12 +851,11 @@ class CheckoutController extends MyAppController
         $langProdSrch->addSubscriptionValidCondition();
         $langProdSrch->doNotCalculateRecords();
         $langProdSrch->doNotLimitRecords();
-        $langProdSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $langProdSrch->addCondition('selprod_id', '=', $selprod_id);
-        $fields = array('IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(shop_name, shop_identifier) as shop_name');
+        $langProdSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $langProdSrch->addDirectCondition('selprod_id IN ('.implode(',', $selprodIds).')');
+        $fields = array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(shop_name, shop_identifier) as shop_name');
         $langProdSrch->addMultipleFields($fields);
-        $langProdRs = $langProdSrch->getResultSet();
-        return FatApp::getDb()->fetch($langProdRs);
+        return FatApp::getDb()->fetchAll($langProdSrch->getResultSet(), 'selprod_id');
     }
 
     public function paymentSummary()
@@ -1075,9 +1064,9 @@ class CheckoutController extends MyAppController
         $srchOrder = new OrderSearch();
         $srchOrder->doNotCalculateRecords();
         $srchOrder->setPageSize(1);
-        $srchOrder->addCondition('order_user_id', '=', $userId);
-        $srchOrder->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $srchOrder->addCondition('order_referrer_user_id', '!=', 0);
+        $srchOrder->addCondition('order_user_id', '=',  'mysql_func_' . $userId, 'AND', true);
+        $srchOrder->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+        $srchOrder->addCondition('order_referrer_user_id', '!=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srchOrder->addMultipleFields(array('count(o.order_id) as totalOrders'));
         $rs = $srchOrder->getResultSet();
         $existingReferrerOrderRow = FatApp::getDb()->fetch($rs);
@@ -1095,7 +1084,7 @@ class CheckoutController extends MyAppController
             $userSrchObj->doNotCalculateRecords();
             $userSrchObj->setPageSize(1);
             $userSrchObj->addCondition('user_referral_code', '=', $userReferrerCode);
-            $userSrchObj->addCondition('user_id', '!=', $userId);
+            $userSrchObj->addCondition('user_id', '!=', 'mysql_func_' . $userId, 'AND', true);
             $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code', 'user_name'));
             $rs = $userSrchObj->getResultSet();
             $referrerUserRow = FatApp::getDb()->fetch($rs);
@@ -1142,6 +1131,17 @@ class CheckoutController extends MyAppController
         $order_affiliate_user_id = 0;
         $order_affiliate_total_commission = 0;
         $totalRoundingOff = 0;
+        
+        $productOptionsData = [];
+        $cartProductData = $this->getCartProductsInfo(array_column($cartProducts, 'selprod_id'));  
+        foreach ($allLanguages as $lang_id => $language_name) {
+            $cartProductsLangData[$lang_id] = $this->getCartProductsLangData(array_column($cartProducts, 'selprod_id'), $lang_id);
+            $prodOptionsData = SellerProduct::getSellerProductOptions(array_column($cartProducts, 'selprod_id'), true, $lang_id);            
+            foreach($prodOptionsData as $data){
+                $productOptionsData[$data['selprodoption_selprod_id']][$lang_id][] = $data;
+            }
+        }
+        
         if ($cartProducts) {
             foreach ($cartProducts as $cartProduct) {
                 $codEnabled = $cartProduct['isProductShippedBySeller'] ? $cartProduct['selprod_cod_enabled'] : $cartProduct['product_cod_enabled'];
@@ -1152,7 +1152,7 @@ class CheckoutController extends MyAppController
 
                 $productShippingData = array();
                 $productTaxChargesData = array();
-                $productInfo = $this->getCartProductInfo($cartProduct['selprod_id']);
+                $productInfo = $cartProductData[$cartProduct['selprod_id']];
                 if (!$productInfo) {
                     continue;
                 }
@@ -1241,7 +1241,7 @@ class CheckoutController extends MyAppController
                     if (0 == $lang_id) {
                         continue;
                     }
-                    $langSpecificProductInfo = $this->getCartProductLangData($productInfo['selprod_id'], $lang_id);
+                    $langSpecificProductInfo = $cartProductsLangData[$lang_id][$productInfo['selprod_id']];
                     if (!$langSpecificProductInfo) {
                         continue;
                     }
@@ -1262,8 +1262,8 @@ class CheckoutController extends MyAppController
                     $op_selprod_title = ($langSpecificProductInfo['selprod_title'] != '') ? $langSpecificProductInfo['selprod_title'] : '';
 
                     /* stamping/locking of product options language based [ */
-                    $op_selprod_options = '';
-                    $productOptionsRows = SellerProduct::getSellerProductOptions($productInfo['selprod_id'], true, $lang_id);
+                    $op_selprod_options = '';                    
+                    $productOptionsRows = !empty($productOptionsData[$productInfo['selprod_id']][$lang_id]) ? $productOptionsData[$productInfo['selprod_id']][$lang_id] : [];
                     if (!empty($productOptionsRows)) {
                         $optionCounter = 1;
                         foreach ($productOptionsRows as $poLang) {
@@ -1543,7 +1543,7 @@ class CheckoutController extends MyAppController
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         // CommonHelper::printArray($orderInfo);
@@ -1824,9 +1824,9 @@ class CheckoutController extends MyAppController
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addCondition('order_id', '=', $order_id);
-            $srch->addCondition('order_user_id', '=', $user_id);
-            $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
-            $srch->addCondition('order_type', '=', Orders::ORDER_WALLET_RECHARGE);
+            $srch->addCondition('order_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
+            $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
+            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_WALLET_RECHARGE, 'AND', true);
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
             if (!$orderInfo) {
@@ -1903,8 +1903,8 @@ class CheckoutController extends MyAppController
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_user_id', '=', $user_id);
-        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
+        $srch->addCondition('order_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
 
@@ -2204,8 +2204,8 @@ class CheckoutController extends MyAppController
                     $prodSrch->addSubscriptionValidCondition();
                     $prodSrch->doNotCalculateRecords();
                     $prodSrch->setPageSize(1);
-                    $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                    $prodSrch->addCondition('selprod_id', '=', $cartval['selprod_id']);
+                    $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+                    $prodSrch->addCondition('selprod_id', '=', 'mysql_func_' . $cartval['selprod_id'], 'AND', true);
                     $prodSrch->addMultipleFields(array('selprod_id', 'product_seller_id', 'psbs_user_id as shippedBySellerId'));
                     $productRs = $prodSrch->getResultSet();
                     $productInfo = FatApp::getDb()->fetch($productRs);

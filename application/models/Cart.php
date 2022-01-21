@@ -2,6 +2,7 @@
 class Cart extends FatModel
 {
     private $products = array();
+    private $basketProducts = [];
     private $SYSTEM_ARR = array();
     private $warning;
     private $shippingService;
@@ -64,8 +65,9 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('usercart_user_id', '=', $this->cart_user_id);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $rs = $srch->getResultSet();
         $this->cartSameSessionUser = true;
         if ($row = FatApp::getDb()->fetch($rs)) {
@@ -126,7 +128,7 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $userId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -139,8 +141,9 @@ class Cart extends FatModel
     }
 
     public function add($selprod_id, $qty = 1, $prodgroup_id = 0, $returnUserId = false)
-    {
+    {   
         $this->products = array();
+        $this->basketProducts = [];
         $selprod_id = FatUtility::int($selprod_id);
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $qty = FatUtility::int($qty);
@@ -184,7 +187,7 @@ class Cart extends FatModel
 
         if ($returnUserId) {
             return $this->cart_user_id;
-        }
+        }   
         return true;
     }
 
@@ -240,6 +243,7 @@ class Cart extends FatModel
         }
 
         $this->products = [];
+        $this->basketProducts = [];
         return false;
     }
 
@@ -267,12 +271,13 @@ class Cart extends FatModel
             }
         }
         $this->products = [];
+        $this->basketProducts = [];
         return false;
     }
 
     public function getBasketProducts($siteLangId = 0)
     {
-        if (!$this->products) {
+        if (!$this->basketProducts) {
             $this->isAnyOutOfStock = true;
             $this->hasDigitalProduct = false;
             $this->hasPhysicalProduct = false;
@@ -280,6 +285,20 @@ class Cart extends FatModel
             $loggedUserId = 0;
             if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
                 $loggedUserId = UserAuthentication::getLoggedUserId();
+            }
+            
+            $cartData = [];
+            $cartProdsData = [];
+            
+            foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
+                $keyDecoded = json_decode(base64_decode($key), true);
+                if (strpos($keyDecoded, static::CART_KEY_PREFIX_PRODUCT) !== false) {
+                    $selProdId = FatUtility::int(str_replace(static::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
+                    $cartData[$selProdId] = $quantity;
+                }
+            }
+            if (!empty($cartData)) {
+                $cartProdsData = $this->getSellerProductsData($cartData, $siteLangId, $loggedUserId);
             }
 
             foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
@@ -295,8 +314,9 @@ class Cart extends FatModel
                     continue;
                 }
 
-                $sellerProductRow = $this->getSellerProductData($selprod_id, $quantity, $siteLangId, $loggedUserId);
+                $sellerProductRow = $cartProdsData[$selprod_id];
                 if (!$sellerProductRow) {
+                    Message::addErrorMessage(Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $siteLangId));
                     $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
                 }
@@ -307,11 +327,11 @@ class Cart extends FatModel
                 }
 
                 if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
-                    unset($this->products[$key]);
+                    unset($this->basketProducts[$key]);
                     continue;
                 }
 
-                $this->products[$key] = [
+                $this->basketProducts[$key] = [
                     'shipping_cost' => 0,
                     'opshipping_rate_id' => 0,
                     'commission_percentage' => '',
@@ -355,22 +375,21 @@ class Cart extends FatModel
                     }
                 }
 
-                $this->products[$key] = $sellerProductRow;
-                $this->products[$key]['key'] = $key;
-                $this->products[$key]['is_batch'] = 0;
-                $this->products[$key]['selprod_id'] = $selprod_id;
-                $this->products[$key]['quantity'] = $quantity;
-                $this->products[$key]['has_physical_product'] = 0;
-                $this->products[$key]['has_digital_product'] = 0;
-                $this->products[$key]['is_cod_enabled'] = 0;
-                /* $this->products[$key]['shop_eligible_for_free_shipping'] = 0; */
+                $this->basketProducts[$key] = $sellerProductRow;
+                $this->basketProducts[$key]['key'] = $key;
+                $this->basketProducts[$key]['is_batch'] = 0;
+                $this->basketProducts[$key]['selprod_id'] = $selprod_id;
+                $this->basketProducts[$key]['quantity'] = $quantity;
+                $this->basketProducts[$key]['has_physical_product'] = 0;
+                $this->basketProducts[$key]['has_digital_product'] = 0;
+                $this->basketProducts[$key]['is_cod_enabled'] = 0;
             }
         }
 
-        uasort($this->products, function ($a, $b) {
+        uasort($this->basketProducts, function ($a, $b) {
             return $a['shop_id'] - $b['shop_id'];
         });
-        return $this->products;
+        return $this->basketProducts;
     }
 
     /**
@@ -415,6 +434,19 @@ class Cart extends FatModel
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0)) {
                 $cartDiscounts = $this->getCouponDiscounts();
             }
+ 
+            $cartData = [];
+            $cartProdsData = [];
+            foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
+                $keyDecoded = json_decode(base64_decode($key), true);
+                if (strpos($keyDecoded, static::CART_KEY_PREFIX_PRODUCT) !== false) {
+                    $selProdId = FatUtility::int(str_replace(static::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
+                    $cartData[$selProdId] = $quantity;
+                }
+            }  
+            if (!empty($cartData)) {
+                $cartProdsData = $this->getSellerProductsData($cartData, $siteLangId, $loggedUserId);
+            }
 
             foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
                 $selprod_id = 0;
@@ -434,12 +466,7 @@ class Cart extends FatModel
                     unset($this->SYSTEM_ARR['cart'][$key]);
                     continue;
                 }
-
-                /* CommonHelper::printArray($keyDecoded); die ; */
-                // if( strpos($keyDecoded, static::CART_KEY_PREFIX_BATCH ) !== FALSE ){
-                // $prodgroup_id = FatUtility::int(str_replace( static::CART_KEY_PREFIX_BATCH, '', $keyDecoded ));
-                // }
-
+                
                 $this->products[$key]['shipping_cost'] = 0;
                 $this->products[$key]['opshipping_rate_id'] = 0;
                 $this->products[$key]['commission_percentage'] = '';
@@ -453,8 +480,9 @@ class Cart extends FatModel
                 $selProdCost = $shopId = '';
                 /* seller products[ */
                 if ($selprod_id > 0) {
-                    $sellerProductRow = $this->getSellerProductData($selprod_id, $quantity, $siteLangId, $loggedUserId);
+                    $sellerProductRow =  $cartProdsData[$selprod_id];
                     if (!$sellerProductRow) {
+                        Message::addErrorMessage(Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $siteLangId));
                         $this->removeCartKey($key, $selprod_id, $quantity);
                         continue;
                     }
@@ -643,8 +671,6 @@ class Cart extends FatModel
                 $this->products[$key]['quantity'] = $quantity;
                 $this->products[$key]['has_physical_product'] = 0;
                 $this->products[$key]['has_digital_product'] = 0;
-
-                /* $this->products[$key]['product_ship_free'] = $sellerProductRow['product_ship_free']; */
                 $this->products[$key]['selprod_cost'] = $selProdCost;
                 $this->products[$key]['affiliate_commission_percentage'] = $affiliateCommissionPercentage;
                 $this->products[$key]['affiliate_commission'] = $affiliateCommission;
@@ -657,23 +683,11 @@ class Cart extends FatModel
 
                 $this->shipmentItemsCount += ($sellerProductRow['fulfillment_type'] != Shipping::FULFILMENT_PICKUP) ? 1 : 0;
             }
-
-            /* $sellerPrice = $this->getSellersProductItemsPrice($this->products);
-            foreach ($this->products as $cartkey => $cartval) {
-                $this->products[$cartkey]['shop_eligible_for_free_shipping'] = 0;
-
-                if (!empty($cartval['selprod_user_id']) && array_key_exists($cartval['selprod_user_id'], $sellerPrice)) {
-                    $this->products[$cartkey]['totalPrice'] = $sellerPrice[$cartval['selprod_user_id']]['totalPrice'];
-                    if ($cartval['shop_free_ship_upto'] > 0 && $cartval['shop_free_ship_upto'] < $sellerPrice[$cartval['selprod_user_id']]['totalPrice']) {
-                        $this->products[$cartkey]['shop_eligible_for_free_shipping'] = 1;
-                    }
-                }
-            } */
         }
         return $this->products;
     }
 
-    public function getSellerProductData($selprod_id, &$quantity, $siteLangId, $loggedUserId = 0)
+    public function getSellerProductsData($cartData, $siteLangId, $loggedUserId = 0)
     {
         $prodSrch = new ProductSearch($siteLangId);
         $prodSrch->setDefinedCriteria();
@@ -686,7 +700,7 @@ class Cart extends FatModel
         $prodSrch->joinShops();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
-        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', array_keys($cartData)) . ')');
         $prodSrch->addMultipleFields(array(
             'product_id', 'product_type', 'product_length', 'product_width', 'product_height', 'product_ship_free',
             'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
@@ -711,208 +725,205 @@ class Cart extends FatModel
             }
         }
 
-        $rs = $prodSrch->getResultSet();
-        $sellerProductRow = FatApp::getDb()->fetch($rs);
-        if (!$sellerProductRow || $sellerProductRow['selprod_stock'] <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $siteLangId));
-            return false;
+        $sellerProductRows = FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
+        if (empty($sellerProductRows)) {
+            return $sellerProductRows;
         }
 
         $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
-        if (($quantity > $sellerProductRow['selprod_stock'])) {
-            /* requested quantity cannot more than stock available */
-            $quantity = $sellerProductRow['selprod_stock'];
-        }
-
-        $sellerProductRow['actualPrice'] =  $sellerProductRow['theprice'];
-        $extraData = [];
-        if ($this->includeTax == true) {
-            $shipFromStateId = $sellerProductRow['shop_state_id'];
-            $shipFromCountryId = $sellerProductRow['shop_country_id'];
-            $shipToStateId = 0;
-            $shipToCountryId = 0;
-            if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-                $shippingAddressId = $this->getCartBillingAddress();
-            } else {
-                $shippingAddressId = $this->getCartShippingAddress();
-            }
-
-            $shippingAddressDetail = [];
-            if (0 < $shippingAddressId) {
-                $address = new Address($shippingAddressId, $this->cart_lang_id);
-                $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
-
-                if (isset($shippingAddressDetail['addr_country_id'])) {
-                    $shipToCountryId = FatUtility::int($shippingAddressDetail['addr_country_id']);
+        foreach ($sellerProductRows as $key => $sellerProductRow) {
+            $quantity = ($cartData[$key] > $sellerProductRow['selprod_stock']) ? $sellerProductRow['selprod_stock'] : $cartData[$key];
+            $sellerProductRows[$key]['actualPrice'] = $sellerProductRow['theprice'];
+            
+            $extraData = [];
+            if ($this->includeTax == true) {
+                $shipFromStateId = $sellerProductRow['shop_state_id'];
+                $shipFromCountryId = $sellerProductRow['shop_country_id'];
+                $shipToStateId = 0;
+                $shipToCountryId = 0;
+                if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    $shippingAddressId = $this->getCartBillingAddress();
+                } else {
+                    $shippingAddressId = $this->getCartShippingAddress();
                 }
 
-                if (isset($shippingAddressDetail['addr_state_id'])) {
-                    $shipToStateId = FatUtility::int($shippingAddressDetail['addr_state_id']);
+                $shippingAddressDetail = [];
+                if (0 < $shippingAddressId) {
+                    $address = new Address($shippingAddressId, $this->cart_lang_id);
+                    $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
+
+                    if (isset($shippingAddressDetail['addr_country_id'])) {
+                        $shipToCountryId = FatUtility::int($shippingAddressDetail['addr_country_id']);
+                    }
+
+                    if (isset($shippingAddressDetail['addr_state_id'])) {
+                        $shipToStateId = FatUtility::int($shippingAddressDetail['addr_state_id']);
+                    }
+                }
+
+                $shippingCost = 0;
+                if (!empty($productSelectedShippingMethodsArr['product']) && isset($productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']])) {
+                    $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']];
+                    $shippingCost = ROUND(($shippingDurationRow['mshipapi_cost']), 2);
+                }
+
+                $isProductShippedBySeller = Product::isProductShippedBySeller($sellerProductRow['product_id'], $sellerProductRow['product_seller_id'], $sellerProductRow['selprod_user_id']);
+
+                if (!$isProductShippedBySeller) {
+                    $shipFromCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+                    $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
+                }
+
+                $extraData = array(
+                    'billingAddress' => isset($sellerProductRow['billing_address']) ? $sellerProductRow['billing_address'] : '',
+                    'shippingAddress' => $shippingAddressDetail,
+                    'shippedBySeller' => $isProductShippedBySeller,
+                    'shippingCost' => $shippingCost,
+                    'buyerId' => $this->cart_user_id
+                );
+            }
+
+            if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && $this->includeTax == true) {
+                $tax = new Tax();
+                $tax->setFromCountryId($shipFromCountryId);
+                $tax->setFromStateId($shipFromStateId);
+                $tax->setToCountryId($shipToCountryId);
+                $tax->setToStateId($shipToStateId);
+                $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId);
+                if (array_key_exists('trr_rate', $taxCategoryRow) && 0 == Tax::getActivatedServiceId()) {
+                    $sellerProductRows[$key]['theprice'] = round($sellerProductRow['theprice'] / (1 + ($taxCategoryRow['trr_rate'] / 100)), 2);
+                } else {
+                    $taxObj = new Tax();
+                    $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $sellerProductRow['theprice'], $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData, $this->cartCache);
+                    if (isset($taxData['rate'])) {
+                        $ruleRate = ($taxData['tax'] * 100) / ($sellerProductRow['theprice'] * $quantity);
+                        $sellerProductRows[$key]['theprice'] = round((($sellerProductRow['theprice'] * $quantity) / (1 + ($ruleRate / 100))) / $quantity, 2);
+                    }
                 }
             }
 
-            $shippingCost = 0;
-            if (!empty($productSelectedShippingMethodsArr['product']) && isset($productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']])) {
+            /* update/fetch/apply theprice, according to volume discount module[ */
+            $sellerProductRows[$key]['volume_discount'] = 0;
+            $sellerProductRows[$key]['volume_discount_percentage'] = 0;
+            $sellerProductRows[$key]['volume_discount_total'] = 0;
+            $srch = new SellerProductVolumeDiscountSearch();
+            $srch->doNotCalculateRecords();
+            $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $sellerProductRow['selprod_id'], 'AND', true);
+            $srch->addCondition('voldiscount_min_qty', '<=', 'mysql_func_' . $quantity, 'AND', true);
+            $srch->addOrder('voldiscount_min_qty', 'DESC');
+            $srch->setPageSize(1);
+            $srch->addMultipleFields(array('voldiscount_percentage'));
+            $rs = $srch->getResultSet();
+            $volumeDiscountRow = FatApp::getDb()->fetch($rs);
+            if ($volumeDiscountRow) {
+                $volumeDiscount = $sellerProductRow['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
+                $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
+                $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
+            }
+            /* ] */
+
+            /* set variable of shipping cost of the product, if shipping already selected[ */
+            $sellerProductRows[$key]['shipping_cost'] = 0;
+            $sellerProductRows[$key]['opshipping_rate_id'] = 0;
+            if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']])) {
                 $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$sellerProductRow['selprod_id']];
-                $shippingCost = ROUND(($shippingDurationRow['mshipapi_cost']), 2);
+                $sellerProductRows[$key]['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
+                $sellerProductRows[$key]['shipping_cost'] = ROUND(($shippingDurationRow['mshipapi_cost'] * $quantity), 2);
+            }
+            /* ] */
+
+            /* calculation of commission and tax against each product[ */
+            $commission = 0;
+            $tax = 0;
+            $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION");
+
+            $commissionPercentage = SellerProduct::getProductCommission($sellerProductRow['selprod_id']);
+            $commission = MIN(ROUND($sellerProductRow['theprice'] * $commissionPercentage / 100, 2), $maxConfiguredCommissionVal);
+            $sellerProductRows[$key]['commission_percentage'] = $commissionPercentage;
+            $sellerProductRows[$key]['commission'] = ROUND($commission * $quantity, 2);
+
+            $totalPrice = $sellerProductRow['theprice'] * $quantity;
+            $taxableProdPrice = $sellerProductRow['theprice'] - $sellerProductRows[$key]['volume_discount'];
+            $discountedPrice = 0;
+            if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+                if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {
+                    $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']];
+                    $taxableProdPrice = $taxableProdPrice - $discountedPrice;
+                }
+            }
+            $taxObj = new Tax();
+            $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $taxableProdPrice, $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData);
+            // CommonHelper::printArray($taxData);
+            if (false == $taxData['status'] && $taxData['msg'] != '') {
+                //$this->error = $taxData['msg'];
+            }
+
+            $tax = $taxData['tax'];
+            $roundingOff = 0;
+            if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+                $originalTotalPrice = ($sellerProductRow['theprice'] * $quantity);
+                $thePriceincludingTax = $taxData['tax'] + $totalPrice;
+                if (0 < $sellerProductRows[$key]['volume_discount_total'] && array_key_exists('rate', $taxData)) {
+                    $thePriceincludingTax = $thePriceincludingTax + (($sellerProductRows[$key]['volume_discount_total'] * $taxData['rate']) / 100);
+                }
+
+                if (0 < $discountedPrice) {
+                    $thePriceincludingTax = $thePriceincludingTax + (($discountedPrice * $taxData['rate']) / 100);
+                }
+
+                if ($originalTotalPrice != $thePriceincludingTax && 0 < $taxableProdPrice && 0 < $taxData['rate']) {
+                    $roundingOff = round($originalTotalPrice - $thePriceincludingTax, 2);
+                }
+            } else {
+                if (array_key_exists('optionsSum', $taxData) && $taxData['tax'] != $taxData['optionsSum']) {
+                    $roundingOff = round($taxData['tax'] - $taxData['optionsSum'], 2);
+                }
+            }
+            $sellerProductRows[$key]['rounding_off'] = $roundingOff;
+
+            $sellerProductRows[$key]['tax'] = $tax;
+            $sellerProductRows[$key]['optionsTaxSum'] = isset($taxData['optionsSum']) ? $taxData['optionsSum'] : 0;
+            $sellerProductRows[$key]['taxCode'] = $taxData['taxCode'];
+            /* ] */
+
+            $sellerProductRows[$key]['total'] = $totalPrice;
+            $sellerProductRows[$key]['netTotal'] = $totalPrice + $sellerProductRows[$key]['shipping_cost'] + $roundingOff;
+
+            $sellerProductRows[$key]['is_digital_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) ? 1 : 0;
+            $sellerProductRows[$key]['is_physical_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) ? 1 : 0;
+
+
+            if ($siteLangId) {
+                $sellerProductRows[$key]['options'] = SellerProduct::getSellerProductOptions($sellerProductRow['selprod_id'], true, $siteLangId);
+            } else {
+                $sellerProductRows[$key]['options'] = SellerProduct::getSellerProductOptions($sellerProductRow['selprod_id'], false);
             }
 
             $isProductShippedBySeller = Product::isProductShippedBySeller($sellerProductRow['product_id'], $sellerProductRow['product_seller_id'], $sellerProductRow['selprod_user_id']);
+            $sellerProductRows[$key]['isProductShippedBySeller'] = $isProductShippedBySeller;
 
-            if (!$isProductShippedBySeller) {
-                $shipFromCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
-                $shipFromStateId = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 0);
-            }
-
-            $extraData = array(
-                'billingAddress' => isset($sellerProductRow['billing_address']) ? $sellerProductRow['billing_address'] : '',
-                'shippingAddress' => $shippingAddressDetail,
-                'shippedBySeller' => $isProductShippedBySeller,
-                'shippingCost' => $shippingCost,
-                'buyerId' => $this->cart_user_id
-            );
-        }
-
-        if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && $this->includeTax == true) {
-            $tax = new Tax();
-            $tax->setFromCountryId($shipFromCountryId);
-            $tax->setFromStateId($shipFromStateId);
-            $tax->setToCountryId($shipToCountryId);
-            $tax->setToStateId($shipToStateId);
-            $taxCategoryRow = $tax->getTaxRates($sellerProductRow['product_id'], $sellerProductRow['selprod_user_id'], $siteLangId);
-            if (array_key_exists('trr_rate', $taxCategoryRow) && 0 == Tax::getActivatedServiceId()) {
-                $sellerProductRow['theprice'] = round($sellerProductRow['theprice'] / (1 + ($taxCategoryRow['trr_rate'] / 100)), 2);
+            $fulfillmentType = $sellerProductRow['selprod_fulfillment_type'];
+            if (true == $isProductShippedBySeller) {
+                if ($sellerProductRow['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
+                    $fulfillmentType = $sellerProductRow['shop_fulfillment_type'];
+                    $sellerProductRows[$key]['selprod_fulfillment_type'] = $fulfillmentType;
+                }
             } else {
-                $taxObj = new Tax();
-                $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $sellerProductRow['theprice'], $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData, $this->cartCache);
-                if (isset($taxData['rate'])) {
-                    $ruleRate = ($taxData['tax'] * 100) / ($sellerProductRow['theprice'] * $quantity);
-                    $sellerProductRow['theprice'] = round((($sellerProductRow['theprice'] * $quantity) / (1 + ($ruleRate / 100))) / $quantity, 2);
+                $fulfillmentType = isset($sellerProductRow['product_fulfillment_type']) ? $sellerProductRow['product_fulfillment_type'] : Shipping::FULFILMENT_SHIP;
+                $sellerProductRows[$key]['selprod_fulfillment_type'] = $fulfillmentType;
+                if (FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1) != Shipping::FULFILMENT_ALL) {
+                    $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+                    $sellerProductRows[$key]['selprod_fulfillment_type'] = $fulfillmentType;
                 }
             }
-        }
 
-        /* update/fetch/apply theprice, according to volume discount module[ */
-        $sellerProductRow['volume_discount'] = 0;
-        $sellerProductRow['volume_discount_percentage'] = 0;
-        $sellerProductRow['volume_discount_total'] = 0;
-        $srch = new SellerProductVolumeDiscountSearch();
-        $srch->doNotCalculateRecords();
-        $srch->addCondition('voldiscount_selprod_id', '=', $sellerProductRow['selprod_id']);
-        $srch->addCondition('voldiscount_min_qty', '<=', $quantity);
-        $srch->addOrder('voldiscount_min_qty', 'DESC');
-        $srch->setPageSize(1);
-        $srch->addMultipleFields(array('voldiscount_percentage'));
-        $rs = $srch->getResultSet();
-        $volumeDiscountRow = FatApp::getDb()->fetch($rs);
-        if ($volumeDiscountRow) {
-            $volumeDiscount = $sellerProductRow['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-            $sellerProductRow['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
-            $sellerProductRow['volume_discount'] = $volumeDiscount;
-            $sellerProductRow['volume_discount_total'] = $volumeDiscount * $quantity;
-        }
-        /* ] */
-
-        /* set variable of shipping cost of the product, if shipping already selected[ */
-        $sellerProductRow['shipping_cost'] = 0;
-        $sellerProductRow['opshipping_rate_id'] = 0;
-        if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr['product'][$selprod_id])) {
-            $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$selprod_id];
-            $sellerProductRow['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
-            $sellerProductRow['shipping_cost'] = ROUND(($shippingDurationRow['mshipapi_cost'] * $quantity), 2);
-        }
-        /* ] */
-
-        /* calculation of commission and tax against each product[ */
-        $commission = 0;
-        $tax = 0;
-        $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION");
-
-        $commissionPercentage = SellerProduct::getProductCommission($selprod_id);
-        $commission = MIN(ROUND($sellerProductRow['theprice'] * $commissionPercentage / 100, 2), $maxConfiguredCommissionVal);
-        $sellerProductRow['commission_percentage'] = $commissionPercentage;
-        $sellerProductRow['commission'] = ROUND($commission * $quantity, 2);
-
-        $totalPrice = $sellerProductRow['theprice'] * $quantity;
-        $taxableProdPrice = $sellerProductRow['theprice'] - $sellerProductRow['volume_discount'];
-        $discountedPrice = 0;
-        if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
-            if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {
-                $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']];
-                $taxableProdPrice = $taxableProdPrice - $discountedPrice;
+            if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                $fulfillmentType = Shipping::FULFILMENT_ALL;
             }
+            $sellerProductRows[$key]['fulfillment_type'] = $fulfillmentType;
         }
-        $taxObj = new Tax();
-        $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $taxableProdPrice, $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData);
-        // CommonHelper::printArray($taxData);
-        if (false == $taxData['status'] && $taxData['msg'] != '') {
-            //$this->error = $taxData['msg'];
-        }
-
-        $tax = $taxData['tax'];
-        $roundingOff = 0;
-        if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
-            $originalTotalPrice = ($sellerProductRow['actualPrice'] * $quantity);
-            $thePriceincludingTax = $taxData['tax'] + $totalPrice;
-            if (0 < $sellerProductRow['volume_discount_total'] && array_key_exists('rate', $taxData)) {
-                $thePriceincludingTax = $thePriceincludingTax + (($sellerProductRow['volume_discount_total'] * $taxData['rate']) / 100);
-            }
-
-            if (0 < $discountedPrice) {
-                $thePriceincludingTax = $thePriceincludingTax + (($discountedPrice * $taxData['rate']) / 100);
-            }
-
-            if ($originalTotalPrice != $thePriceincludingTax && 0 < $taxableProdPrice && 0 < $taxData['rate']) {
-                $roundingOff = round($originalTotalPrice - $thePriceincludingTax, 2);
-            }
-        } else {
-            if (array_key_exists('optionsSum', $taxData) && $taxData['tax'] != $taxData['optionsSum']) {
-                $roundingOff = round($taxData['tax'] - $taxData['optionsSum'], 2);
-            }
-        }
-        $sellerProductRow['rounding_off'] = $roundingOff;
-
-        $sellerProductRow['tax'] = $tax;
-        $sellerProductRow['optionsTaxSum'] = isset($taxData['optionsSum']) ? $taxData['optionsSum'] : 0;
-        $sellerProductRow['taxCode'] = $taxData['taxCode'];
-        /* ] */
-
-        $sellerProductRow['total'] = $totalPrice;
-        $sellerProductRow['netTotal'] = $sellerProductRow['total'] + $sellerProductRow['shipping_cost'] + $roundingOff;
-
-        $sellerProductRow['is_digital_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) ? 1 : 0;
-        $sellerProductRow['is_physical_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) ? 1 : 0;
-
-
-        if ($siteLangId) {
-            $sellerProductRow['options'] = SellerProduct::getSellerProductOptions($selprod_id, true, $siteLangId);
-        } else {
-            $sellerProductRow['options'] = SellerProduct::getSellerProductOptions($selprod_id, false);
-        }
-
-        $isProductShippedBySeller = Product::isProductShippedBySeller($sellerProductRow['product_id'], $sellerProductRow['product_seller_id'], $sellerProductRow['selprod_user_id']);
-        $sellerProductRow['isProductShippedBySeller'] = $isProductShippedBySeller;
-
-        $fulfillmentType = $sellerProductRow['selprod_fulfillment_type'];
-        if (true == $isProductShippedBySeller) {
-            if ($sellerProductRow['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
-                $fulfillmentType = $sellerProductRow['shop_fulfillment_type'];
-                $sellerProductRow['selprod_fulfillment_type'] = $fulfillmentType;
-            }
-        } else {
-            $fulfillmentType = isset($sellerProductRow['product_fulfillment_type']) ? $sellerProductRow['product_fulfillment_type'] : Shipping::FULFILMENT_SHIP;
-            $sellerProductRow['selprod_fulfillment_type'] = $fulfillmentType;
-            if (FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1) != Shipping::FULFILMENT_ALL) {
-                $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
-                $sellerProductRow['selprod_fulfillment_type'] = $fulfillmentType;
-            }
-        }
-
-        if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $fulfillmentType = Shipping::FULFILMENT_ALL;
-        }
-        $sellerProductRow['fulfillment_type'] = $fulfillmentType;
-        return $sellerProductRow;
+        return $sellerProductRows;
     }
 
     public function removeCartKey($key, $selProdId, $quantity)
@@ -921,6 +932,7 @@ class Cart extends FatModel
             AbandonedCart::saveAbandonedCart($this->cart_user_id, $selProdId, $quantity, AbandonedCart::ACTION_DELETED);
         }
         unset($this->products[$key]);
+        unset($this->basketProducts[$key]);
         unset($this->SYSTEM_ARR['cart'][$key]);
         $this->updateUserCart();
         return true;
@@ -929,6 +941,7 @@ class Cart extends FatModel
     public function remove($key)
     {
         $this->products = array();
+        $this->basketProducts = [];
         $this->invalidateCheckoutType();
         $cartProducts = $this->getProducts($this->cart_lang_id);
         $found = false;
@@ -965,6 +978,7 @@ class Cart extends FatModel
     {
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $this->products = array();
+        $this->basketProducts = [];
         $cartProducts = $this->getProducts($this->cart_lang_id);
         if (is_array($cartProducts)) {
             foreach ($cartProducts as $cartKey => $product) {
@@ -1786,6 +1800,7 @@ class Cart extends FatModel
         }
 
         $this->products = array();
+        $this->basketProducts = [];
         $this->SYSTEM_ARR['cart'] = array();
         $this->SYSTEM_ARR['shopping_cart'] = array();
         unset($_SESSION['shopping_cart']["order_id"]);
@@ -1818,8 +1833,9 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $tempUserId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
 
         if (!$row = FatApp::getDb()->fetch($rs)) {

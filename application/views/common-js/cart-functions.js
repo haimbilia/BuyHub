@@ -73,12 +73,11 @@ var cart = {
                     if (1 > $("#hasAddress").length || ($("#hasAddress").length > 0 && 0 < $("#hasAddress").val())) {
                         resetCheckoutDiv();
                     }
+                }else if (0 < fulfilmentType) {
+                    listCartProducts(fulfilmentType);
                 } else {
                     listCartProducts();
                 }
-            }
-            if (0 < fulfilmentType) {
-                listCartProducts(fulfilmentType);
             }
             /* $.mbsmessage.close(); */
         });

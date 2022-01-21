@@ -75,16 +75,17 @@ class CartController extends MyAppController
         $srch->joinSellerSubscription($this->siteLangId, true);
         $srch->addSubscriptionValidCondition();
         $srch->joinSellerProductSpecialPrice();
-        $srch->addCondition('uwlist_user_id', '=', $loggedUserId);
-        $srch->addCondition('uwlist_type', '=', UserWishList::TYPE_SAVE_FOR_LATER);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+        $srch->addCondition('uwlist_user_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true); 
+        $srch->addCondition('uwlist_type', '=', 'mysql_func_' . UserWishList::TYPE_SAVE_FOR_LATER, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
 
         /* groupby added, beacause if same product is linked with multiple categories, then showing in repeat for each category[ */
         $srch->addGroupBy('selprod_id');
         /* ] */
 
         $srch->addMultipleFields(array('uwlp_uwlist_id', 'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'IFNULL(splprice_price, selprod_price) AS theprice', 'selprod_price', 'IFNULL(shop_name, shop_identifier) as shop_name', 'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found'));
+        $srch->doNotCalculateRecords();
         $srch->addOrder('uwlp_added_on', 'DESC');
         $rs = $srch->getResultSet();
         $saveForLaterProducts = FatApp::getDb()->fetchAll($rs);
@@ -270,7 +271,7 @@ class CartController extends MyAppController
             $srch->addMultipleFields(array('uwlist_id'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
-            $srch->addCondition('uwlist_id', '=', $wishlistId);
+            $srch->addCondition('uwlist_id', '=', 'mysql_func_' . $wishlistId, 'AND', true);
             $rs = $srch->getResultSet();
             $row = $db->fetch($rs);
             if (!is_array($row) || empty($row)) {
@@ -344,7 +345,7 @@ class CartController extends MyAppController
             $successCount = 0;
             foreach ($selprod_id_arr as $selprod_id) {
                 $srch = SellerProduct::getSearchObject();
-                $srch->addCondition('selprod_id', '=', $selprod_id);
+                $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
                 $srch->addMultipleFields(
                     array('selprod_min_order_qty')
                 );
@@ -418,13 +419,13 @@ class CartController extends MyAppController
             $srch->joinSellerSubscription();
             $srch->addSubscriptionValidCondition();
             $srch->joinProductToCategory();
-            $srch->addCondition('pricetbl.selprod_id', '=', $productId);
-            $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('pricetbl.selprod_id', '=', 'mysql_func_' . $productId, 'AND', true);
+            $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name','prodcat_name','brand_name','selprod_title','selprod_price'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
-            $db = FatApp::getDb();
+            $db = FatApp::getDb();  
             $sellerProductRow = $db->fetch($rs);
             if (!$sellerProductRow || $sellerProductRow['selprod_id'] != $productId) {
                 $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
@@ -486,7 +487,7 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
-            if ($productAdd) {
+            if ($productAdd) {      
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
                 $cartUserId = $cartObj->add($productId, $quantity, 0, $returnUserId);
                 $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
@@ -505,7 +506,7 @@ class CartController extends MyAppController
             }
         }
 
-        if (isset($productErr)) {
+        if (isset($productErr)) {   
             Message::addInfo($productErr);
             $this->set('msg', CommonHelper::renderHtml(Message::getHtml($productErr)));
             if (!$ProductAdded) {
@@ -516,14 +517,14 @@ class CartController extends MyAppController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $this->set('alertType', 'alert--info');
-        } else {
+        } else {    
             $strProduct = '<a href="' . UrlHelper::generateUrl('Products', 'view', array($selprod_id)) . '">' . strip_tags(html_entity_decode($sellerProductRow['product_name'], ENT_QUOTES, 'UTF-8')) . '</a>';
             $strCart = '<a href="' . UrlHelper::generateUrl('Cart') . '">' . Labels::getLabel('Lbl_Shopping_Cart', $this->siteLangId) . '</a>';
             if ($logMessage) {
                 Message::addMessage(sprintf(Labels::getLabel('MSG_Success_cart_add', $this->siteLangId), $strProduct, $strCart));
             }
             $this->set('msg', Labels::getLabel("MSG_Added_to_cart", $this->siteLangId));
-        }
+        }   
         $this->set('total', $cartObj->countProducts());
     }
 
