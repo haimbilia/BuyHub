@@ -1,14 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "closeForm"); return(false);');
 
-$fld = $frm->getField('product_name');
-$fld = $frm->getField('product_name');
+$fld = $frm->getField('selprod_user_id');
+$fld->addFieldTagAttribute('id', 'sellerIdJs');
+
+$fld = $frm->getField('selprod_id');
+$fld->addFieldTagAttribute('id', 'productNameJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_PRODUCT', $siteLangId));
 
 $fld = $frm->getField('selected_products[]');
-$fld->addFieldTagAttribute('class', 'relatedProductsJs');
-$fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_RELATED_PRODUCTS', $siteLangId));
+$fld->addFieldTagAttribute('id', 'relatedProductsJs');
+$fld->addFieldTagAttribute('disabled', 'disabled');
 $fld->addFieldTagAttribute('multiple', 'multiple');
+$fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_RELATED_PRODUCTS', $siteLangId));
 
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>

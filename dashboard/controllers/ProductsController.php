@@ -9,6 +9,7 @@ class ProductsController extends SellerBaseController
     {
         parent::__construct($action);
         $this->userPrivilege->canViewProducts();
+        $this->canAddProduct();
     }
 
     /**
@@ -38,22 +39,7 @@ class ProductsController extends SellerBaseController
         ) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
-        }
-
-        if (!$this->isShopActive($userId, 0, true)) {
-            LibHelper::exitWithError($this->str_invalid_request, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
-        }
-
-        if (!User::canAddCustomProduct()) {
-            LibHelper::exitWithError($this->str_invalid_request, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Products'));
-        }
-
-        if (!UserPrivilege::isUserHasValidSubsription($userId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BUY_SUBSCRIPTION', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
-        }
+        }        
 
         $recordId = FatUtility::int($recordId);
         $productType = FatUtility::int($productType);
@@ -197,7 +183,7 @@ class ProductsController extends SellerBaseController
             }
 
             $frm->fill($productData);
-            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $recordId]);
         } else {
             $tempProductId = time() . $userId;
             $frm->fill(['temp_product_id' => $tempProductId]);
@@ -213,7 +199,7 @@ class ProductsController extends SellerBaseController
             $codEnabled = false;
         }
         $this->set("codEnabled", $codEnabled);
-        $this->set("canEditTags", true);
+        $this->set("canEditTags", $this->userPrivilege->canEditProductTags(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
 
@@ -253,14 +239,7 @@ class ProductsController extends SellerBaseController
 
     public function setup()
     {
-        $this->checkEditPrivilege();
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
-
-        if (!User::canAddCustomProduct()) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access11', $this->siteLangId));
-        }
+        $this->checkEditPrivilege();              
 
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
@@ -711,9 +690,7 @@ class ProductsController extends SellerBaseController
         $this->set('langId', $langId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }    
-
-    
+    } 
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
@@ -811,6 +788,26 @@ class ProductsController extends SellerBaseController
     protected function getCatalogType(): int
     {
         return Product::CATALOG_TYPE_PRIMARY;
+    }
+
+
+    private function canAddProduct()
+    {
+        if (!$this->isShopActive($this->userParentId, 0, true)) {
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
+        }
+
+        if (!User::canAddCustomProduct()) {
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Products'));
+        }
+
+        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BUY_SUBSCRIPTION', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+        }
+        
     }
 
     private function isShopActive($userId, $shopId = 0, $returnResult = false)

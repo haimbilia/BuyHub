@@ -16,7 +16,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         echo $frm->getFormTag(); ?>
         <div class="content-header">
             <div class="content-header-title">
-                <h2>Add Product</h2>
+                <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
                 <span class="text-muted"> <span class="required"></span> required
                     information</span>
             </div>
@@ -45,30 +45,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         echo $langFld->getHtml();
                         ?>
                     </div>
-                </div>
-            <?php } else {
-                echo $langFld->getHtml();
-            } ?>
-
-
-
-            <!-- <div class="content-header-toolbar">
-                <div class="input-group">
-                    <select class="form-control form-select select-language">
-                        <option value="1" selected="selected">English
-                        </option>
-                        <option value="2">Arabic</option>
-                    </select>
-                    <div class="input-group-append">
-                        <a href="javascript:void(0)" class="btn btn-brand">
-                            <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icon-translate">
-                                </use>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div> -->
+                </div> 
+                <?php } else {
+                    echo $langFld->getHtml();
+                } ?>
         </div>
         <div class="content-body">
             <div class="add-stock">
