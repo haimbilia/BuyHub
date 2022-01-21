@@ -38,7 +38,7 @@
         $href = "javascript:void(0)";
         $onclick = "addNew()";
         $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
-        $icon = '<svg class="svg" width="18" height="18">
+        $icon = '<svg class="svg btn-icon-start" width="18" height="18">
                         <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
                         </use>
                     </svg>';

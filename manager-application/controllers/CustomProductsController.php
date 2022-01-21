@@ -192,16 +192,16 @@ class CustomProductsController extends ListingBaseController
             }
         } else {
             $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, true);
-            if (!empty($productData['preq_lang_data'])) {
+            if ($productData && !empty($productData['preq_lang_data'])) {
                 $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
             }
-        }
-        unset($productData['preq_lang_data']);
+        }     
 
         if (empty($productData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
             FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
         }
+        unset($productData['preq_lang_data']);
 
         if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
             LibHelper::exitWithError($this->str_invalid_request, true);

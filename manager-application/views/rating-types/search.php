@@ -1,6 +1,4 @@
-<?php
-
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $printData = false;
 if (!isset($tbody)) {
     $printData = true;
@@ -26,10 +24,9 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $types[$row[$key]], true);
                 break;
             case 'ratingtype_name':
-                $name = array_key_exists('ratingtype_name', $row) && !empty($row[$key]) ? $row[$key] . ' (' . $row['ratingtype_identifier'] . ')' : $row['ratingtype_identifier'];
-
+                $name = $row[$key];
                 if (array_key_exists('ratingtype_active', $row) && applicationConstants::YES == $row['ratingtype_default']) {
-                    $name .= ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>';
+                    $name .= HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_DEFAULT', $siteLangId));
                 }
                 $infoLabel = '';
                 switch ($row['ratingtype_id']) {
@@ -49,16 +46,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
             case 'ratingtype_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['ratingtype_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<span class="switch switch-sm switch-icon">
-                                    <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['ratingtype_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    </label>
-                                </span>';
+                $title = ($row['ratingtype_id'] == RatingType::TYPE_PRODUCT) ? Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $siteLangId) : '';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['ratingtype_id'], $row[$key], (!$canEdit || $row['ratingtype_id'] == RatingType::TYPE_PRODUCT), $title);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':
