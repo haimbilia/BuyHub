@@ -199,7 +199,7 @@ class ProductsController extends SellerBaseController
             $codEnabled = false;
         }
         $this->set("codEnabled", $codEnabled);
-        $this->set("canEditTags", true);
+        $this->set("canEditTags", $this->userPrivilege->canEditProductTags(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
 
@@ -690,9 +690,7 @@ class ProductsController extends SellerBaseController
         $this->set('langId', $langId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }    
-
-    
+    } 
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {

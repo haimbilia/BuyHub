@@ -28,9 +28,7 @@ class CustomProductsController extends SellerBaseController
     }
 
     public function form($recordId = 0, $productType = 0)
-    {
-
-       
+    {       
         $this->checkEditPrivilege();
        
         $userId = $this->userParentId;
@@ -60,16 +58,21 @@ class CustomProductsController extends SellerBaseController
                 }
             } else {
                 $productData = ProductRequest::getAttributesByLangId($langId, $recordId, null, true);
-                if (!empty($productData['preq_lang_data'])) {
+                if ($productData && !empty($productData['preq_lang_data'])) {
                     $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
                 }
-            }
-            unset($productData['preq_lang_data']);
-        
-            if (!empty($productData)) {            
+            } 
+           
+            if (empty($productData)) {            
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
-            }        
+            }  
+
+            unset($productData['preq_lang_data']);                
+          
+            if ($productData['preq_user_id'] != $userId) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
     
             if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -187,7 +190,7 @@ class CustomProductsController extends SellerBaseController
             $codEnabled = false;
         }
         $this->set("codEnabled", $codEnabled);
-        $this->set("canEditTags",  $this->objPrivilege->canEditTags($this->admin_id, true));
+        $this->set("canEditTags",  $this->userPrivilege->canEditProductTags(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
         $this->set('productOptions', $productOptions);
@@ -198,8 +201,8 @@ class CustomProductsController extends SellerBaseController
             return;
         }
 
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js'));
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
+        $this->_template->addJs(array('seller-requests/page-js/index.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->set("includeEditor", true);
         $this->_template->render();
     }
@@ -491,7 +494,7 @@ class CustomProductsController extends SellerBaseController
         }
         $specifications =  [];
         if (0 < $recordId) {
-            $langData = $this->modelClass::getAttributesByLangId($langId, $recordId, 'preq_lang_data');
+            $langData = ProductRequest::getAttributesByLangId($langId, $recordId, 'preq_lang_data');
             if (!empty($langData)) {
                 $langData = json_decode($langData, true);
                 if (isset($langData['specifications']) && !empty($langData['specifications'])) {
@@ -521,7 +524,7 @@ class CustomProductsController extends SellerBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $productOptions = FatApp::getPostedData('productOptions');
         $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
-        $upcCodes = $this->modelClass::getAttributesById($recordId, 'preq_ean_upc_code');
+        $upcCodes = ProductRequest::getAttributesById($recordId, 'preq_ean_upc_code');
         $upcCodeData = [];
         if (!empty($upcCodes)) {
             $upcCodes = json_decode($upcCodes, true);
@@ -546,19 +549,30 @@ class CustomProductsController extends SellerBaseController
     public function setup()
     {
         $this->checkEditPrivilege();
+        $userId = $this->userParentId;
 
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
 
-        $reqStatus = $this->modelClass::getAttributesById($recordId, 'preq_status');
-        if (false === $reqStatus ||  $reqStatus != ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
+        if(0 < $recordId){
+            $productData = ProductRequest::getAttributesById($recordId,['preq_user_id','preq_status']);
+            if (!empty($productData)) {            
+                LibHelper::exitWithError($this->str_invalid_request_id);             
+            }  
+            
+            if ($productData['preq_user_id'] != $userId) {
+                LibHelper::exitWithError($this->str_invalid_request_id);               
+            } 
+
+            if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
+                LibHelper::exitWithError($this->str_invalid_request_id);               
+            }          
+        } 
 
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (1 > $langId ||  !array_key_exists($productType, Product::getProductTypes($langId))) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
+        }    
 
         $frm = $this->getForm($langId, $productType, $recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
