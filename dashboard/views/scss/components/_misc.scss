@@ -437,3 +437,16 @@ a:hover {
         }
     }
 }
+
+.card-commerce {
+    &-bg {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: right center;
+    }
+
+    h6 {
+        font-size: 0.85rem;
+        color: $txt-gray;
+    }
+}

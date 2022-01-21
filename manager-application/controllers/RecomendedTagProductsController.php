@@ -101,20 +101,25 @@ class RecomendedTagProductsController extends ListingBaseController
         $tag_id = FatUtility::int($post['tag_id']);
 
         $data = array();
+        $value = '';
         if (isset($post['tpr_custom_weightage'])) {
-            $data['tpr_custom_weightage'] = $post['tpr_custom_weightage'];
+            $value = $data['tpr_custom_weightage'] = $post['tpr_custom_weightage'];
         }
 
         if (isset($post['tpr_custom_weightage_valid_till'])) {
-            $data['tpr_custom_weightage_valid_till'] = $post['tpr_custom_weightage_valid_till'];
+            $value = $data['tpr_custom_weightage_valid_till'] = $post['tpr_custom_weightage_valid_till'];
         }
 
         if (!FatApp::getDb()->updateFromArray('tbl_tag_product_recommendation', $data, array('smt' => 'tpr_product_id = ? and tpr_tag_id = ?', 'vals' => array($product_id, $tag_id)))) {
             LibHelper::exitWithError(FatApp::getDb()->getError(), true);
         }
 
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
+        $json = array(
+            'status' => true,
+            'msg' => $this->str_setup_successful,
+            'data' => ['value' => $value]
+        );
+        FatUtility::dieJsonSuccess($json);
     }
 
     protected function getFormColumns(): array

@@ -4,7 +4,7 @@
         <?php foreach ($arrListing as $key => $arrList) { ?>
             <div class="col-xl-6 col-md-12 mb-4">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-head">
                         <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
                     </div>
                     <div class="card-body">

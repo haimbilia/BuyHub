@@ -541,6 +541,16 @@ Bugs :
     => 061577 - Admin UI: Options text of the "Transfer refund" field is larger than the sub-titles and comments are also not showing on the orders details page
     => 061651 - Admin: 'Subscription period' and 'payment status' are not showing on the subscription order details page and the Seller's phone number is also missing
 
+New Features :
+ => Getting Started
+
+Enhancement:
+=> left Navigations
+=> Quick Search
+=> Updated System Labels    
+
+====================TV-9.4.0.20220120==================
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

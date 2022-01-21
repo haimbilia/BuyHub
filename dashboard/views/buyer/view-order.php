@@ -48,10 +48,10 @@ if (!$print) { ?>
 <?php } ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php if (!$print) {    
+        <?php if (!$print) {
             $data = [
-                'headingLabel' => Labels::getLabel('LBL_Order_Details',$siteLangId),
-                'siteLangId' => $siteLangId,         
+                'headingLabel' => Labels::getLabel('LBL_Order_Details', $siteLangId),
+                'siteLangId' => $siteLangId,
                 'otherButtons' => [
                     [
                         'attr' => [
@@ -60,7 +60,7 @@ if (!$print) { ?>
                         ],
                         'label' => '<i class="fas fa-arrow-left"></i>'
                     ]
-                ],         
+                ],
             ];
 
             if (true == $primaryOrder && !$print) {
@@ -98,14 +98,14 @@ if (!$print) { ?>
         } ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title">
                         <div class="order-number">
                             <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
-                            <span class="numbers"> 
+                            <span class="numbers">
                                 <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']; ?>
-                                <?php 
-                                if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) { 
+                                <?php
+                                if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
                                     $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
                                     <span class="notice">
                                         <?php echo $statusName; ?>
@@ -121,14 +121,14 @@ if (!$print) { ?>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <?php 
-                            $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false); 
+                        <?php
+                        $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
 
-                            $data = $this->variables + [
-                                'canViewShippingCharges' => true,
-                                'canViewTaxCharges' => true,
-                            ];
-                            $this->includeTemplate('_partial/order/left-side-block.php', $data, false); 
+                        $data = $this->variables + [
+                            'canViewShippingCharges' => true,
+                            'canViewTaxCharges' => true,
+                        ];
+                        $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
                         ?>
                     </div>
 

@@ -1,4 +1,12 @@
 <div class="logo-wrapper">
+    <?php $isOpened = '';
+    if (array_key_exists('openSidebar', $_COOKIE) && !empty(FatUtility::int($_COOKIE['openSidebar'])) && array_key_exists('screenWidth', $_COOKIE) && applicationConstants::MOBILE_SCREEN_WIDTH < FatUtility::int($_COOKIE['screenWidth'])) {
+        $isOpened = 'is-opened';
+    } ?>
+    <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span>
+        <span class="bar-bot">
+        </span>
+    </div>
     <?php
     $logoUrl = UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND);
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
@@ -17,12 +25,5 @@
         </a>
     </div>
 
-    <?php $isOpened = '';
-    if (array_key_exists('openSidebar', $_COOKIE) && !empty(FatUtility::int($_COOKIE['openSidebar'])) && array_key_exists('screenWidth', $_COOKIE) && applicationConstants::MOBILE_SCREEN_WIDTH < FatUtility::int($_COOKIE['screenWidth'])) {
-        $isOpened = 'is-opened';
-    } ?>
-    <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span>
-        <span class="bar-bot">
-        </span>
-    </div>
+
 </div>

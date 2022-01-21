@@ -37,14 +37,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 <div class="col-md-8">
                     <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title "><?php echo Labels::getLabel('LBL_Sales_Graph', $siteLangId); ?></h5>
                             </div>
                             <div class="card-body  graph">
                                 <?php $this->includeTemplate('_partial/seller/sellerSalesGraph.php'); ?> </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title "><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
                                 </h5>
                                 <?php if (count($orders) > 0) { ?>
@@ -109,7 +109,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     <?php } ?>
                     <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title ">
                                     <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5>
                                 <?php if (count($transactions) > 0) { ?>
@@ -184,7 +184,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     <?php } ?>
                     <?php if ($userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title "><?php echo Labels::getLabel('LBL_Return_requests', $siteLangId); ?>
                                 </h5>
                                 <?php if (count($returnRequests) > 0) { ?>
@@ -276,7 +276,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     ?>
                 </div> -->
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-head">
                                 <h5 class="card-title ">
                                     <?php echo Labels::getLabel('LBL_Cancellation_requests', $siteLangId); ?></h5>
                                 <?php if (count($cancellationRequests) > 0) { ?>
@@ -371,7 +371,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="widget widget-stats">
                                     <a href="<?php echo UrlHelper::generateUrl('Seller', 'sales'); ?>">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-head">
                                                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Sales', $siteLangId); ?></h5>
                                                 <i class="icn"><svg class="svg">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#my-sales" href="
@@ -413,7 +413,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="widget widget-stats">
                                     <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-head">
                                                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
                                                 <i class="icn"><svg class="svg">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#Credits">
@@ -445,7 +445,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="widget widget-stats">
                                     <a onClick="redirectfunc('<?php echo UrlHelper::generateUrl('Seller', 'Sales'); ?>', <?php echo FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", null, ''); ?>)" href="javaScript:void(0)">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-head">
                                                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?></h5>
                                                 <i class="icn"><svg class="svg">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order">
@@ -486,7 +486,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="widget widget-stats">
                                         <a href="<?php echo UrlHelper::generateUrl('Seller', 'subscriptions'); ?>">
                                             <div class="card">
-                                                <div class="card-header">
+                                                <div class="card-head">
                                                     <h5 class="card-title">
                                                         <?php echo Labels::getLabel('LBL_Active_Subscription', $siteLangId); ?></h5>
                                                     <i class="icn"><svg class="svg">
@@ -532,7 +532,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="widget widget-stats">
                                     <a href="<?php echo UrlHelper::generateUrl('Seller', 'orderReturnRequests'); ?>">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-head">
                                                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?></h5>
                                                 <i class="icn"><svg class="svg">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#refund" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#refund">
@@ -569,7 +569,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="widget widget-stats">
                                     <a onClick="redirectfunc('<?php echo UrlHelper::generateUrl('Seller', 'Sales'); ?>', <?php echo FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", null, ''); ?>)" href="javaScript:void(0)">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-head">
                                                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_Cancellation', $siteLangId); ?>
                                                 </h5>
                                                 <i class="icn"><svg class="svg">

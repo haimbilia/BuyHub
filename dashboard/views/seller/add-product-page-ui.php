@@ -33,9 +33,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <div class="add-stock">
                 <div class="add-stock-column column-main">
                     <div class="card" id="basic-details">
-                        <div class="card-header">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Basic Details </h3>
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Basic Details </h3>
                                 <span class="text-muted">Add basic details about your product</span>
                             </div>
                         </div>
@@ -142,9 +142,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     </div>
                     <div class="card" id="variants-options">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Variants and options
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Variants and options
                                 </h3>
                                 <span class="text-muted">Add options like Color, size
                                     etc for your product</span>
@@ -396,9 +396,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     </div>
                     <div class="card" id="media">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Media
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Media
                                 </h3>
                                 <span class="text-muted">Attach media files for the product </span>
                             </div> <i class="dropdown-toggle-custom-arrow"></i>
@@ -567,9 +567,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card" id="specifications">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Specifications
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Specifications
                                 </h3>
                                 <span class="text-muted">Product Specifications are added in this
 
@@ -634,9 +634,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card" id="tax-shipping">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Tax and Shipping
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Tax and Shipping
                                 </h3>
                                 <span class="text-muted">Add Tax and Shipping details from
                                     this
@@ -731,9 +731,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">
-                                <div class="card-header-label">
-                                    <h3 class="card-header-title">Tags</h3>
+                            <div class="card-head">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Tags</h3>
                                     <span class="text-muted">
                                         This will be used by Buyer to search
                                         the product. Type the tag and click

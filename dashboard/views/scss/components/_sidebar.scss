@@ -17,6 +17,7 @@
             position: fixed;
         }
         .sidebar__content {
+            padding-top: 1rem;
             height: 100%;
             max-height: none;
             width: auto;
@@ -25,9 +26,9 @@
         }
         .logo-wrapper {
             display: flex;
-            justify-content: flex-end;
+            // justify-content: flex-end;
             align-items: center;
-            padding: 10px;
+            padding: 1rem;
             height: 71px;
             border-bottom: $border;
             position: absolute;
@@ -36,10 +37,9 @@
             background: #fff;
             width: 100%;
             .logo-dashboard {
-                -webkit-transition: all 0.5s ease-in-out;
                 transition: all 0.5s ease-in-out;
-                position: absolute;
-                #{$start-direction}: 24px;
+                // position: absolute;
+                // #{$start-direction}: 24px;
                 opacity: 1;
                 img {
                     max-width: 100px;
@@ -53,7 +53,8 @@
             background: transparent;
             border: 1px solid transparent;
             cursor: pointer;
-            width: 2.5rem;
+            margin-#{$end-direction}: 10px;
+            //width: 2.5rem;
             & [class*="bar-"] {
                 display: block;
                 background: #102c58;
@@ -126,12 +127,22 @@
             opacity: 0 !important;
             visibility: hidden !important;
         }
+        .dashboard-menu-icon {
+            margin: 0 auto;
+        }
+        .dashboard-menu-head {
+            display: none;
+        }
+        .dashboard-menu-arrow {
+            display: none;
+        }
+
         @include media-breakpoint-down(lg) {
             .sidebar {
                 width: 0;
             }
             .hamburger-toggle {
-                #{$start-direction}: 35px;
+                //#{$start-direction}: 35px;
             }
             .header-dashboard {
                 padding-#{$start-direction}: 70px;
@@ -200,7 +211,7 @@
                 display: block;
                 position: absolute;
                 #{$start-direction}: 22px;
-                top: 13px;
+                top: 15px;
                 border-radius: 50%;
             }
         }
@@ -208,9 +219,28 @@
             flex: 0 0 100%;
             padding: 0.5rem 2rem;
             padding-#{$start-direction}: 44px;
+            &::before {
+                background: rgba(0, 0, 0, 0.08);
+                content: "";
+                height: 100%;
+                width: 100%;
+                //border-radius: $radius4;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                transform: scale(0.75);
+                opacity: 0;
+                transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
+            }
 
-            &:hover {
-                background-color: $bg-gray;
+            &:hover,
+            &:focus,
+            &.active {
+                color: $txt-body;
+                &::before {
+                    opacity: 1;
+                    transform: scale(1);
+                }
             }
         }
     }

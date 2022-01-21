@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="card" style="display:none;">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h4>
                                 <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h4>
                         </div>
@@ -26,7 +26,7 @@
 
                     </div>
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
                             </h5> <?php if (count($user_listing) > 0) {
                                     ?> <div class="action">
@@ -95,7 +95,7 @@
 
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title ">
                                 <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5> <?php if (count($transactions) > 0) {
                                                                                                                 ?> <div class="action">
@@ -169,7 +169,7 @@
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
                                         <i class="icn"><svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#Credits"></use>
@@ -198,7 +198,7 @@
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Revenue', $siteLangId); ?></h5>
                                         <i class="icn">
                                             <svg class="svg">
@@ -227,7 +227,7 @@
                         </div>
                         <div class="widget widget-stats">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-head">
                                     <h5 class="card-title">
                                         <?php echo Labels::getLabel('LBL_Share_and_earn_commission_on_every_purchase', $siteLangId) ?>
                                     </h5>
@@ -285,7 +285,7 @@
             <!-- <div class="row">
             <div class="col-lg-6 col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-head">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Information', $siteLangId); ?></h5>
                         <div class="action">
                             <a href="<?php echo UrlHelper::generateUrl('account', 'profileInfo'); ?>" class="link"><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>  <i class="fa fa-pencil"></i></a>

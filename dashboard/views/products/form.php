@@ -21,14 +21,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     information</span>
             </div>
             <?php
-                $langFld =  $frm->getField('lang_id');
-                if (0 < $recordId) {
-                    $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
-                    $langFld->setfieldTagAttribute('onchange', 'langForm()');
-                    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                    if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
-                        $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
-                        $langFld->htmlAfterField = '<div class="input-group-append">
+            $langFld =  $frm->getField('lang_id');
+            if (0 < $recordId) {
+                $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
+                $langFld->setfieldTagAttribute('onchange', 'langForm()');
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+                    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+                    $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
@@ -36,16 +36,16 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                 </svg>
                                                             </a>
                                                         </div>';
-                    }
+                }
 
-                ?>
-                    <div class="content-header-toolbar">
-                        <div class="input-group">
-                            <?php
-                            echo $langFld->getHtml();
-                            ?>
-                        </div>
+            ?>
+                <div class="content-header-toolbar">
+                    <div class="input-group">
+                        <?php
+                        echo $langFld->getHtml();
+                        ?>
                     </div>
+                </div> 
                 <?php } else {
                     echo $langFld->getHtml();
                 } ?>
@@ -54,9 +54,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <div class="add-stock">
                 <div class="add-stock-column column-main">
                     <div class="card" id="basic-details">
-                        <div class="card-header">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Basic Details </h3>
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Basic Details </h3>
                                 <span class="text-muted">Add basic details about your product</span>
                             </div>
                         </div>
@@ -107,9 +107,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="variants-options">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Variants and options
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Variants and options
                                 </h3>
                                 <span class="text-muted">Add options like Color, size
                                     etc for your product</span>
@@ -153,9 +153,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="media">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Media </h3>
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Media </h3>
                                 <span class="text-muted">Attach media files for the product </span>
                             </div>
                             <div class="card-toolbar">
@@ -182,9 +182,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="specifications">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Specifications
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Specifications
                                 </h3>
                                 <span class="text-muted">Product Specifications are added in this
 
@@ -239,9 +239,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="tax-shipping">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Tax and Shipping
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Tax and Shipping
                                 </h3>
                                 <span class="text-muted">Add Tax and Shipping details from
                                     this
@@ -265,9 +265,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     <?php if ($displayDigitalDownloadList) { ?>
                         <div class="card card-toggle" id="digital-files">
-                            <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
-                                <div class="card-header-label">
-                                    <h3 class="card-header-title">Digital Files</h3>
+                            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Digital Files</h3>
                                     <span class="text-muted">Digital Files are added in this section </span>
                                 </div>
                                 <?php if ($displayDigitalDownloadAddBtn) { ?>
@@ -285,9 +285,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             </div>
                         </div>
                         <div class="card card-toggle" id="digital-links">
-                            <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
-                                <div class="card-header-label">
-                                    <h3 class="card-header-title">Digital Links</h3>
+                            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Digital Links</h3>
                                     <span class="text-muted">Digital Links are added in this section </span>
                                 </div>
                                 <?php if ($displayDigitalDownloadAddBtn) { ?>
@@ -360,9 +360,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             $fld->addFieldTagAttribute('id', 'product_tags');
                         ?>
                             <div class="card">
-                                <div class="card-header">
-                                    <div class="card-header-label">
-                                        <h3 class="card-header-title">Tags</h3>
+                                <div class="card-head">
+                                    <div class="card-head-label">
+                                        <h3 class="card-head-title">Tags</h3>
                                         <span class="text-muted">
                                             <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
                                         </span>

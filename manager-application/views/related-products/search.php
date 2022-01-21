@@ -12,22 +12,24 @@ foreach ($arrListing as $selProdId => $row) {
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute('id', $selProdId);
     foreach ($fields as $key => $val) {
-        $td = $tr->appendElement('td');
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
+            case 'select_all':
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['related_sellerproduct_id'] . '><i class="input-helper"></i></label>', true);
+                break;
             case 'listSerial':
-                $td->appendElement('plaintext', [], $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                $product = $productsList[$selProdId];
-                $product['sellerName'] = $product['credential_username']; 
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $product, 'siteLangId' => $siteLangId], false, true);
-                $td->appendElement('plaintext', array(), $str, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $row, 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'related_products':
                 $userName = $row['credential_username'];
                 unset($row['credential_username']);
                 $data = [];
-                foreach ($row as $relatedProd) {
+                foreach ($row['products'] as $relatedProd) {
                     $options = SellerProduct::getSellerProductOptions($relatedProd['selprod_id'], true, $siteLangId);
                     $variantsStr = '';
                     array_walk($options, function ($item, $key) use (&$variantsStr) {
@@ -41,7 +43,19 @@ foreach ($arrListing as $selProdId => $row) {
                         'mainRecord' => $selProdId,
                     ];
                 }
-                $td->appendElement('plaintext', array(), "<input class='tagifyJs' data-mainrecord='" . $selProdId . "' value='" . json_encode($data) . "'>", true);
+                $td->appendElement('plaintext', $tdAttr, "<input class='form-control tagifyJs' data-mainrecord='" . $selProdId . "' value='" . json_encode($data) . "'>", true);
+                break;
+            case 'action':
+                $data = [
+                    'siteLangId' => $siteLangId,
+                    'recordId' => $row['related_sellerproduct_id']
+                ];
+
+                if ($canEdit) {
+                    $data['deleteButton'] = [];
+                }
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
                 break;
@@ -49,7 +63,7 @@ foreach ($arrListing as $selProdId => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
@@ -58,7 +72,6 @@ if ($printData) {
 <script>
     bindProduct = function(e) {
         var mainRecordId = e.detail.data.mainRecord;
-        console.log( e);
         if ('undefined' == typeof mainRecordId) {
             return;
         }
@@ -82,8 +95,7 @@ if ($printData) {
             e.detail.tag.remove();
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {            
-        });
+        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {});
     }
 
     getProducts = function(e) {
@@ -110,20 +122,20 @@ if ($printData) {
     var isDeletedConfirmed = false;
     bindTagify = function() {
         var input = document.querySelectorAll('.tagifyJs');
-      
+
         input.forEach(function(element) {
             tagify = new Tagify(element, {
                 whitelist: JSON.parse(element.value),
                 dropdown: {
                     position: 'text',
                     enabled: 1 // show suggestions dropdown after 1 typed character
-                },  
+                },
                 enforceWhitelist: true,
-                skipInvalid: true,            
+                skipInvalid: true,
                 hooks: {
                     beforeRemoveTag: function(tags) {
                         return new Promise((resolve, reject) => {
-                            if (isDeletedConfirmed == false &&  !confirm(langLbl.confirmRemove)) {
+                            if (isDeletedConfirmed == false && !confirm(langLbl.confirmRemove)) {
                                 return false;
                             }
                             isDeletedConfirmed = true;

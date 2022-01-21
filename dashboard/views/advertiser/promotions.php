@@ -2,10 +2,10 @@
 <?php $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
-            'headingLabel' => Labels::getLabel('LBL_Promotions',$siteLangId),
-            'siteLangId' => $siteLangId,         
+            'headingLabel' => Labels::getLabel('LBL_Promotions', $siteLangId),
+            'siteLangId' => $siteLangId,
         ];
         if ($canEdit) {
             $data['otherButtons'][] = [
@@ -28,7 +28,7 @@
             <div class="row mb-4">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <!-- <h5 class="card-title "><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></h5> -->
                             <p class="note"><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')); ?></p>
                         </div>
