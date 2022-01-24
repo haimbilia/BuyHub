@@ -1,8 +1,4 @@
-$card-space: 1.5rem;
-$card-radius: 4px;
-$card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
-$card-bg: #fff;
-$sidebar-width: 230px;
+$sidebar-width: 250px;
 
 .my-dashboard {
     .sidebar {
@@ -16,6 +12,8 @@ $sidebar-width: 230px;
         transition: width 0.5s ease-in-out;
         display: flex;
         flex-direction: column;
+        background-color: $bg-white;
+        box-shadow: $shadow-theme;
         //border-#{$end-direction}: $border;
         @include media-breakpoint-down(lg) {
             //position: fixed;
@@ -27,9 +25,6 @@ $sidebar-width: 230px;
             width: auto;
             overflow-y: auto;
             width: 100% !important;
-            box-shadow: $card-shadow;
-            border-radius: $card-radius;
-            background-color: $card-bg;
         }
         .logo-wrapper {
             display: flex;
@@ -55,6 +50,7 @@ $sidebar-width: 230px;
             }
         }
         .hamburger-toggle {
+            display: none;
             position: relative;
             padding: 0;
             background: transparent;
@@ -185,6 +181,7 @@ $sidebar-width: 230px;
         text-align: #{$start-direction};
         width: 100%;
         margin: 0;
+        margin-bottom: 1rem;
         padding: 0;
     }
     &-icon {
@@ -229,7 +226,7 @@ $sidebar-width: 230px;
             flex: 0 0 100%;
             padding: 0.5rem 0;
             font-size: 0.8rem;
-            padding-#{$start-direction}: 30px;
+            padding-#{$start-direction}: 26px;
             &::before {
                 background: rgba(0, 0, 0, 0.08);
                 //content: "";

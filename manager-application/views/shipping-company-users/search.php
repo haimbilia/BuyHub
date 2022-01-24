@@ -53,7 +53,12 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'addUserTransaction(' . $row['user_id'] . ')',
                             'title' => Labels::getLabel('LBL_ADD_TRANSACTIONS', $siteLangId)
                         ],
-                        'label' => "<i class='far fa-eye icon'></i>"
+                        'label' => '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#eye">
+                            </use>
+                        </svg>
+                    </i>'
                     ],
                     [
                         'attr' => [
@@ -63,7 +68,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#history">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#history">
                                                 </use>
                                             </svg>
                                         </i>'

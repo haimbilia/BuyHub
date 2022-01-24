@@ -589,24 +589,46 @@
         vertical-align: top;
         margin: 0 4px 4px 0;
         > a {
-            display: block;
             background: none;
             padding: 5px;
             width: 30px;
             height: 30px;
             line-height: 1.4;
             text-align: center;
-            color: currentColor;
             font-size: 0.7rem !important;
             // border: $border;
             border-radius: $radius2;
             //border-radius: 50%;
-            background: $bg-brand-light;
-            color: $brand-color;
+            //background: $bg-brand-light;
+            color: $txt-gray;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
+            position: relative;
+            &:before {
+                background: $bg-brand-light;
+                content: "";
+                height: 100%;
+                width: 100%;
+                // border-radius: $radius4;
+                border-radius: $radius-common;
+                position: absolute;
+                //z-index: -1;
+                left: 0px;
+                top: 0px;
+                transform: scale(0.75);
+                opacity: 0;
+                transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
+            }
+            &:hover {
+                color: $brand-color;
+                &:before {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
             &.icn-highlighted {
                 border: none;
                 color: $brand-color;
@@ -624,9 +646,6 @@
             }
             &.is-active,
             &:hover {
-                background: $brand-color;
-                color: $brand-color-inverse;
-                border-color: $brand-color;
                 text-decoration: none;
             }
         }
