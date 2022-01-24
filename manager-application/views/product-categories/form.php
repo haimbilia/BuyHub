@@ -19,6 +19,11 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Category', 'view', [$recordId], CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
 
+$fld = $frm->getField('rating_type');
+$fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SELECT_RATING_TYPES', $siteLangId));
+$url = UrlHelper::generateFullUrl('RatingTypes');
+$fld->htmlAfterField = '<span class="form-text text-muted"><a href="' . $url . '" target="_blank">' . $url . '</a></span>';
+
 $fld = $frm->getField('prodcat_active');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
@@ -51,7 +56,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     $(document).ready(function() {
         $("#prodcat_parent").select2({
             dropdownParent: $('.' + $.ykmodal.element)
-        }).on('select2:open', function (e) {
+        }).on('select2:open', function(e) {
             $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
@@ -112,6 +117,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 whitelist: [],
                 delimiters: "#",
                 editTags: false,
+                closeOnSelect: false,
             }).on('add', addRatingType).on('remove', removeRatingType).on('focus',
                 getRatingTypeAutoComplete);
         };

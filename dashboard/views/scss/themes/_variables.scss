@@ -21,6 +21,7 @@ $border: solid 1px $border-color;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //backgrounds colors
+$bg-body: #edf2f9;
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);

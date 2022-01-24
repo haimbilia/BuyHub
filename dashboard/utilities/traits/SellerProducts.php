@@ -9,10 +9,11 @@ trait SellerProducts
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));        
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'product_id', $product_id);
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'page', 1);
         return $frm;
     }
@@ -62,10 +63,20 @@ trait SellerProducts
                 FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             }
         }
-        $keyword = FatApp::getPostedData('keyword');
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $userId = $this->userParentId;
 
         $srch = SellerProduct::searchSellerProducts($this->siteLangId, $userId, $keyword);
+
+        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $post = FatApp::getPostedData();
+
+        $srch->addGroupBy('selprod_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+
         $srch->addMultipleFields(
             array(
                 'selprod_id',
@@ -82,7 +93,12 @@ trait SellerProducts
                 'product_updated_on'
             )
         );
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         if ($product_id) {
+            $srch->addCondition('selprod_product_id', '=', $product_id);
+        }
+        /* if ($product_id) {
             $srch->addCondition('selprod_product_id', '=', $product_id);
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -92,13 +108,11 @@ trait SellerProducts
             $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
             $page = (empty($page) || $page <= 0) ? 1 : $page;
             $page = FatUtility::int($page);
-
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
-        }
+        } */
 
-        $srch->addOrder('selprod_id', 'DESC');
-        $srch->addGroupBy('selprod_id');
+        $srch->addOrder('selprod_id', 'DESC');       
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($arrListing)) {
             foreach ($arrListing as &$arr) {
@@ -110,21 +124,21 @@ trait SellerProducts
         $this->set('product_id', $product_id);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
-        if (!$product_id) {
+        /* if (!$product_id) {
             $this->set('page', $page);
             $this->set('pageCount', $srch->pages());
-            $this->set('pageSize', $pageSize);
-            $this->set('postedData', $post);
+            $this->set('pageSize', $pageSize);            
             $this->set('recordCount', $srch->recordCount());
-        }
+        } */
+        $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
     public function sellerProductForm($product_id, $selprod_id = 0)
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        
-        if(0 == $selprod_id && !Product::availableForAddToStore($product_id, $this->userParentId)){
+
+        if (0 == $selprod_id && !Product::availableForAddToStore($product_id, $this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
 
@@ -219,7 +233,7 @@ trait SellerProducts
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Please_buy_subscription', $this->siteLangId));
         }
-        
+
         if ($selprod_id == 0 && !UserPrivilege::canSellerAddProductInCatalog($product_id, $this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('LBL_Please_Upgrade_your_package_to_add_new_products', $this->siteLangId), false);
         }
@@ -518,7 +532,7 @@ trait SellerProducts
         $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
         $srch->addFld('splprice_price');
         $srch->addOrder('splprice_price', 'DESC');
-        $srch->doNotCalculateRecords();        
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
@@ -1624,17 +1638,17 @@ trait SellerProducts
         $frm->addHiddenField('', 'meta_id', $metaId);
         $frm->addHiddenField('', 'meta_type', $metaType);
         $frm->addHiddenField('', 'meta_record_id', $recordId);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
-		
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+
+
         $frm->addRequiredField(Labels::getLabel("LBL_Meta_Title", $this->siteLangId), 'meta_title');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Keywords", $this->siteLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Description", $this->siteLangId), 'meta_description');
@@ -1648,7 +1662,7 @@ trait SellerProducts
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         $frm->addButton('', 'btn_exit', Labels::getLabel("LBL_Save_&_Exit", $this->siteLangId));
-        $frm->addButton('', 'btn_next', Labels::getLabel("LBL_Save_&_Next", $this->siteLangId));        
+        $frm->addButton('', 'btn_next', Labels::getLabel("LBL_Save_&_Next", $this->siteLangId));
         return $frm;
     }
 
@@ -1656,17 +1670,17 @@ trait SellerProducts
     {
         $this->userPrivilege->canEditMetaTags(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id']= $lang_id;
-		}
-       
-		
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
+
+
+
         if ($lang_id == 0) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
@@ -2916,11 +2930,11 @@ trait SellerProducts
         foreach ($relatedProds as $key => $relatedProd) {
             $arrListing[$relatedProd['related_sellerproduct_id']][$key] = $relatedProd;
         }
-        if(count($arrListing)){
+        if (count($arrListing)) {
             $prodSrch = new ProductSearch($this->siteLangId, null, null, false, false);
-            $prodSrch->joinSellerProducts(0, '', array(), false, false);          
+            $prodSrch->joinSellerProducts(0, '', array(), false, false);
             $prodSrch->addCondition('selprod_id', 'IN', array_keys($arrListing));
-            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','selprod_product_id'));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'selprod_product_id'));
             $prodSrch->addGroupBy('selprod_id');
             $productRs = $prodSrch->getResultSet();
             $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
@@ -2928,10 +2942,10 @@ trait SellerProducts
                 foreach ($products as &$arr) {
                     $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 }
-            }            
+            }
             $this->set("linkedToProducts", $products);
         }
-        
+
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditRelatedProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);
@@ -3104,7 +3118,7 @@ trait SellerProducts
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
         }
         $srch->addCondition('selprod_user_id', '=', $this->userParentId);
-        $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority'); 
+        $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority');
         $srch->addGroupBy('selprod_id');
         $srch->addGroupBy('upsell_sellerproduct_id');
         $srch->addOrder('priority', 'DESC');
@@ -3116,12 +3130,12 @@ trait SellerProducts
         // CommonHelper::printArray($upsellProds); die;
         foreach ($upsellProds as $key => $upsellProd) {
             $arrListing[$upsellProd['upsell_sellerproduct_id']][$key] = $upsellProd;
-        }        
-        if(count($arrListing)){
+        }
+        if (count($arrListing)) {
             $prodSrch = new ProductSearch($this->siteLangId, null, null, false, false);
-            $prodSrch->joinSellerProducts(0, '', array(), false, false);          
+            $prodSrch->joinSellerProducts(0, '', array(), false, false);
             $prodSrch->addCondition('selprod_id', 'IN', array_keys($arrListing));
-            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','selprod_product_id'));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'selprod_product_id'));
             $prodSrch->addGroupBy('selprod_id');
             $productRs = $prodSrch->getResultSet();
             $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
@@ -3129,10 +3143,10 @@ trait SellerProducts
                 foreach ($products as &$arr) {
                     $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 }
-            }            
+            }
             $this->set("linkedToProducts", $products);
         }
-        
+
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditBuyTogetherProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);

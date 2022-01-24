@@ -1197,15 +1197,22 @@ class ProductCategory extends MyAppModel
             $ratingTypeArr = json_decode($post['rating_type'], true);
             foreach ($ratingTypeArr as $rating) {
                 if (!isset($rating['id'])) {
-                    $ratingObj = new RatingType();
-                    $ratingObj->assignValues(['ratingtype_active' => 1, 'ratingtype_identifier' => $rating['value'], 'ratingtype_type' => RatingType::TYPE_OTHER]);
-                    if (!$ratingObj->save()) {
-                        LibHelper::exitWithError($ratingObj->getError(), true);
+                    $ratingId = RatingType::getAttributesByIdentifier($rating['value'], 'ratingtype_id');
+                    if (empty($ratingId)) {
+                        $ratingObj = new RatingType();
+                        $ratingObj->assignValues([
+                            'ratingtype_active' => 1,
+                            'ratingtype_identifier' => $rating['value'],
+                            'ratingtype_type' => RatingType::TYPE_OTHER
+                        ]);
+                        if (!$ratingObj->save()) {
+                            LibHelper::exitWithError($ratingObj->getError(), true);
+                        }
+                        $ratingId = $ratingObj->getMainTableRecordId();
+                        if (!$ratingObj->updateLangData(CommonHelper::getLangId(), ['ratingtype_name' => $rating['value']])) {
+                            FatUtility::dieJsonError($ratingObj->getError());
+                        }
                     }
-                    if (!$ratingObj->updateLangData(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), ['ratingtype_name' => $rating['value']])) {
-                        FatUtility::dieJsonError($ratingObj->getError());
-                    }
-                    $ratingId = $ratingObj->getMainTableRecordId();
                 } else {
                     $ratingId = $rating['id'];
                 }

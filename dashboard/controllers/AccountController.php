@@ -575,13 +575,13 @@ class AccountController extends LoggedUserController
         if ($debit_credit_type > 0) {
             switch ($debit_credit_type) {
                 case Transactions::CREDIT_TYPE:
-                    $srch->addCondition('utxn.utxn_credit', '>', '0');
-                    $srch->addCondition('utxn.utxn_debit', '=', '0');
+                    $srch->addCondition('utxn.utxn_credit', '>', 'mysql_func_0', 'AND', true);
+                    $srch->addCondition('utxn.utxn_debit', '=', 'mysql_func_0', 'AND', true);
                     break;
 
                 case Transactions::DEBIT_TYPE:
-                    $srch->addCondition('utxn.utxn_debit', '>', '0');
-                    $srch->addCondition('utxn.utxn_credit', '=', '0');
+                    $srch->addCondition('utxn.utxn_debit', '>', 'mysql_func_0', 'AND', true);
+                    $srch->addCondition('utxn.utxn_credit', '=', 'mysql_func_0', 'AND', true);
                     break;
             }
         }
@@ -847,7 +847,7 @@ class AccountController extends LoggedUserController
 
             $srch = Product::getSearchObject();
             $srch->addMultipleFields(['product_id']);
-            $srch->addCondition('product_type', '=', Product::PRODUCT_TYPE_DIGITAL);
+            $srch->addCondition('product_type', '=', 'mysql_func_' . Product::PRODUCT_TYPE_DIGITAL, 'AND', true);
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = $this->db->fetch($rs);
@@ -1404,7 +1404,7 @@ class AccountController extends LoggedUserController
         //UserWishList
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->joinTable(UserWishList::DB_TBL_LIST_PRODUCTS, 'LEFT OUTER JOIN', 'uwlist_id = uwlp_uwlist_id');
-        $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+        $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('uwlist_id'));
@@ -1496,7 +1496,7 @@ class AccountController extends LoggedUserController
         //UserWishList
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->joinTable(UserWishList::DB_TBL_LIST_PRODUCTS, 'LEFT OUTER JOIN', 'uwlist_id = uwlp_uwlist_id');
-        $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+        $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('uwlist_id'));
@@ -1543,7 +1543,7 @@ class AccountController extends LoggedUserController
     private function updateWishList($selprod_id, $wish_list_id, $rowAction = -1)
     {
         $row = false;
-
+        $selprod_id = FatUtility::int($selprod_id);
         $db = FatApp::getDb();
         $wListObj = new UserWishList();
         if (0 > $rowAction) {
@@ -1552,7 +1552,7 @@ class AccountController extends LoggedUserController
             $srch->addMultipleFields(array('uwlist_id'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+            $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
             // $srch->addCondition('uwlp_uwlist_id', '=', $wish_list_id);
 
             $rs = $srch->getResultSet();
@@ -1649,8 +1649,8 @@ class AccountController extends LoggedUserController
                     $srch->joinSellerProductSpecialPrice();
                     $srch->joinFavouriteProducts($this->userId);
                     $srch->addCondition('uwlp_uwlist_id', '=', $wishlist['uwlist_id']);
-                    $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                    $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+                    $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+                    $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     $srch->setPageNumber(1);
                     $srch->setPageSize(4);
                     $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'product_updated_on'));
@@ -1723,20 +1723,20 @@ class AccountController extends LoggedUserController
         $srch->joinFavouriteProducts($this->userId);
         if (true === MOBILE_APP_API_CALL && 0 >= $uwlist_id) {
             $srch->joinWishLists();
-            $srch->addCondition('uwlist_user_id', '=', $this->userId);
+            $srch->addCondition('uwlist_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         } else {
-            $srch->addCondition('uwlp_uwlist_id', '=', $uwlist_id);
+            $srch->addCondition('uwlp_uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
         }
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
         $selProdRviewSubQuery = $selProdReviewObj->getQuery();
         $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
@@ -1844,11 +1844,11 @@ class AccountController extends LoggedUserController
         $srch->joinSellerProductSpecialPrice();
         $srch->joinSellerSubscription($this->siteLangId, true);
         $srch->addSubscriptionValidCondition();
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $wislistPSrchObj = new UserWishListProductSearch();
         $wislistPSrchObj->joinWishLists();
         $wislistPSrchObj->doNotCalculateRecords();
-        $wislistPSrchObj->addCondition('uwlist_user_id', '=', $this->userId);
+        $wislistPSrchObj->addCondition('uwlist_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $wishListSubQuery = $wislistPSrchObj->getQuery();
         $srch->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
 
@@ -1856,11 +1856,11 @@ class AccountController extends LoggedUserController
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
         $selProdRviewSubQuery = $selProdReviewObj->getQuery();
         $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
@@ -1884,7 +1884,7 @@ class AccountController extends LoggedUserController
         );
 
         $srch->addOrder('ufp_id', 'desc');
-        $srch->addCondition('ufp_user_id', '=', $this->userId);
+        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $rs = $srch->getResultSet();
 
         $products = $db->fetchAll($rs);
@@ -1944,8 +1944,8 @@ class AccountController extends LoggedUserController
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('uwlist_id', '=', $uwlist_id);
-        $srch->addCondition('uwlist_type', '!=', UserWishList::TYPE_DEFAULT_WISHLIST);
+        $srch->addCondition('uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
+        $srch->addCondition('uwlist_type', '!=', 'mysql_func_' . UserWishList::TYPE_DEFAULT_WISHLIST, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
@@ -1978,7 +1978,7 @@ class AccountController extends LoggedUserController
         $srch->addMultipleFields(array('uwlist_id', 'uwlist_title', 'uwlist_type'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('uwlist_id', '=', $uwlist_id);
+        $srch->addCondition('uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
         $rs = $srch->getResultSet();
         $wishListRow = $db->fetch($rs);
         if (!$wishListRow) {
@@ -1995,7 +1995,7 @@ class AccountController extends LoggedUserController
         $pssearch_id = FatUtility::int($post['pssearch_id']);
 
         $srch = new SearchBase(SavedSearchProduct::DB_TBL);
-        $srch->addCondition('pssearch_id', '=', $pssearch_id);
+        $srch->addCondition('pssearch_id', '=', 'mysql_func_' . $pssearch_id, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
@@ -2030,7 +2030,7 @@ class AccountController extends LoggedUserController
                 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'
             )
         );
-        $srch->addCondition('shop_id', '=', $shop_id);
+        $srch->addCondition('shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
         //echo $srch->getQuery();
         $shopRs = $srch->getResultSet();
         $shop = $db->fetch($shopRs);
@@ -2048,8 +2048,8 @@ class AccountController extends LoggedUserController
         $srch = new UserFavoriteShopSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('ufs_user_id', '=', $this->userId);
-        $srch->addCondition('ufs_shop_id', '=', $shop_id);
+        $srch->addCondition('ufs_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ufs_shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs)) {
             $shopObj = new Shop($shop_id);
@@ -2097,7 +2097,7 @@ class AccountController extends LoggedUserController
         $srch->setDefinedCriteria();
         $srch->joinSellerOrder();
         $srch->joinSellerOrderSubscription($this->siteLangId);
-        $srch->addCondition('ufs_user_id', '=', $this->userId);
+        $srch->addCondition('ufs_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->addMultipleFields(
             array(
                 's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
@@ -2131,17 +2131,17 @@ class AccountController extends LoggedUserController
     private function isValidSelProd($selprodId)
     {
         $db = FatApp::getDb();
-
+        $selprodId = FatUtility::int($selprodId);
         $srch = new ProductSearch($this->siteLangId);
         $srch->setDefinedCriteria(0, 0, array(), false);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['selprod_id']);
-        $srch->addCondition('selprod_id', '=', $selprodId);
+        $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
         $srch->joinProductToCategory();
         $srch->joinShops();
         $srch->joinSellerSubscription();
         $srch->addSubscriptionValidCondition();
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $productRs = $srch->getResultSet();
         $product = $db->fetch($productRs);
@@ -2387,10 +2387,10 @@ class AccountController extends LoggedUserController
         $srch->joinOrderProducts();
         $srch->joinOrderProductStatus();
         $srch->addMultipleFields(array('tth.*', 'top.op_invoice_number'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
         if ($messageId) {
-            $srch->addCondition('ttm.message_id', '=', $messageId);
+            $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
         }
 
         $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndThierChildIds);
@@ -2472,8 +2472,8 @@ class AccountController extends LoggedUserController
             'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name', 'tfrs.shop_id as message_from_shop_id',
             'tftos.shop_id as message_to_shop_id', 'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
         ));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
         $cnd = $srch->addCondition('ttm.message_from', 'in', $allowedUserIds);
         $cnd->attachCondition('ttm.message_to', 'in', $allowedUserIds, 'OR');
         $srch->addOrder('message_id', 'DESC');
@@ -2544,9 +2544,9 @@ class AccountController extends LoggedUserController
         $srch->joinMessagePostedToUser();
         $srch->joinThreadStartedByUser();
         $srch->addMultipleFields(array('tth.*'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
-        $srch->addCondition('ttm.message_id', '=', $messageId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
+        $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
         $cnd = $srch->addCondition('ttm.message_from', 'in', $allowedUserIds);
         $cnd->attachCondition('ttm.message_to', 'in', $allowedUserIds, 'OR');
         $rs = $srch->getResultSet();
@@ -2971,7 +2971,7 @@ class AccountController extends LoggedUserController
         }
         $srch = new OrderReturnRequestSearch();
         $srch->joinOrderProducts();
-        $srch->addCondition('orrequest_id', '=', $orrequest_id);
+        $srch->addCondition('orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $srch->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
 
         /* $cnd = $srch->addCondition( 'orrequest_user_id', '=', $this->userId );
@@ -3032,7 +3032,7 @@ class AccountController extends LoggedUserController
         $srch->joinMessageUser($this->siteLangId);
         $srch->joinMessageAdmin();
         $srch->joinOrderProducts();
-        $srch->addCondition('orrmsg_orrequest_id', '=', $orrequest_id);
+        $srch->addCondition('orrmsg_orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         if (0 < $isSeller) {
             $srch->addCondition('op_selprod_user_id', 'in', $parentAndTheirChildIds);
         } else {
@@ -3103,7 +3103,7 @@ class AccountController extends LoggedUserController
         $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->doNotLimitRecords();
-        $prodSrchObj->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrchObj->addCondition('selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $prodSrchObj->addMultipleFields(array('selprod_id'));
         $rs = $prodSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -3327,10 +3327,10 @@ class AccountController extends LoggedUserController
     public function sendTruncateRequest()
     {
         $srch = new UserGdprRequestSearch();
-        $srch->addCondition('ureq_user_id', '=', $this->userId);
-        $srch->addCondition('ureq_type', '=', UserGdprRequest::TYPE_TRUNCATE);
-        $srch->addCondition('ureq_status', '=', UserGdprRequest::STATUS_PENDING);
-        $srch->addCondition('ureq_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('ureq_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ureq_type', '=', 'mysql_func_' . UserGdprRequest::TYPE_TRUNCATE, 'AND', true);
+        $srch->addCondition('ureq_status', '=', 'mysql_func_' . UserGdprRequest::STATUS_PENDING, 'AND', true);
+        $srch->addCondition('ureq_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
@@ -3383,7 +3383,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
-        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->addCondition('cpage_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0), 'AND', true);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         $gdprPolicyLinkHref = '';
         if (!empty($cpage) && is_array($cpage)) {
@@ -3408,10 +3408,10 @@ class AccountController extends LoggedUserController
         }
 
         $srch = new UserGdprRequestSearch();
-        $srch->addCondition('ureq_user_id', '=', $this->userId);
-        $srch->addCondition('ureq_type', '=', UserGdprRequest::TYPE_DATA_REQUEST);
-        $srch->addCondition('ureq_status', '=', UserGdprRequest::STATUS_PENDING);
-        $srch->addCondition('ureq_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('ureq_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ureq_type', '=', 'mysql_func_' . UserGdprRequest::TYPE_DATA_REQUEST, 'AND', true);
+        $srch->addCondition('ureq_status', '=', 'mysql_func_' . UserGdprRequest::STATUS_PENDING, 'AND', true);
+        $srch->addCondition('ureq_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
@@ -3463,7 +3463,7 @@ class AccountController extends LoggedUserController
         $defaultPageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
         $srch = Notifications::getSearchObject();
-        $srch->addCondition('unt.unotification_user_id', '=', $this->userId);
+        $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->addOrder('unt.unotification_id', 'DESC');
         $srch->addMultipleFields(array('unt.*'));
         $srch->setPageNumber($page);
@@ -3499,8 +3499,8 @@ class AccountController extends LoggedUserController
         }
 
         $srch = Notifications::getSearchObject();
-        $srch->addCondition('unt.unotification_user_id', '=', $this->userId);
-        $srch->addCondition('unt.unotification_id', '=', $notificationId);
+        $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('unt.unotification_id', '=', 'mysql_func_' . $notificationId, 'AND', true);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $notification = FatApp::getDb()->fetch($rs);
@@ -3576,8 +3576,8 @@ class AccountController extends LoggedUserController
         if (0 < $updatePhnFrm) {
             $db = FatApp::getDb();
             $srch = User::getSearchObject(false, 0, false);
-            $srch->addCondition('user_phone', '=', $phoneNumber);
-            $srch->addCondition('user_id', '!=', $this->userId);
+            $srch->addCondition('user_phone', '=', 'mysql_func_' . $phoneNumber, 'AND', true);
+            $srch->addCondition('user_id', '!=', 'mysql_func_' . $this->userId, 'AND', true);
             $rs = $srch->getResultSet();
             $row = $db->fetch($rs);
             if (!empty($row)) {
@@ -3642,7 +3642,7 @@ class AccountController extends LoggedUserController
         $srch = User::getSearchObject();
         $srch->joinTable(UserAuthentication::DB_TBL_USER_AUTH, 'INNER JOIN', 'ua.uauth_user_id = u.user_id', 'ua');
         $srch->addMultipleFields(['uauth_device_os', 'user_regdate']);
-        $srch->addCondition('uauth_user_id', '=', $this->userId);
+        $srch->addCondition('uauth_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $uData = FatApp::getDb()->fetch($rs);
@@ -3655,13 +3655,13 @@ class AccountController extends LoggedUserController
             'pnotification_url',
             'pntu_user_id'
         ]);
-        $cond = $srch->addCondition('pnotification_status', '=', PushNotification::STATUS_COMPLETED, 'AND');
-        $cond->attachCondition('pnotification_status', '=', PushNotification::STATUS_PROCESSING, 'OR');
-        $srch->addCondition('pnotification_user_auth_type', '=', User::AUTH_TYPE_REGISTERED);
+        $cond = $srch->addCondition('pnotification_status', '=', 'mysql_func_' . PushNotification::STATUS_COMPLETED, 'AND', true);
+        $cond->attachCondition('pnotification_status', '=', 'mysql_func_' . PushNotification::STATUS_PROCESSING, 'OR', true);
+        $srch->addCondition('pnotification_user_auth_type', '=', 'mysql_func_' . User::AUTH_TYPE_REGISTERED, 'AND', true);
         $srch->addCondition('pnotification_added_on', '>=', $uData['user_regdate']);
         $cond = $srch->addCondition('pntu_user_id', 'IS', 'mysql_func_NULL', 'AND', true);
-        $cond->attachCondition('pntu_user_id', '=', $this->userId, 'OR');
-        $cond = $srch->addCondition('pnotification_device_os', '=', User::DEVICE_OS_BOTH, 'AND');
+        $cond->attachCondition('pntu_user_id', '=', 'mysql_func_' . $this->userId, 'OR', true);
+        $cond = $srch->addCondition('pnotification_device_os', '=', 'mysql_func_' . User::DEVICE_OS_BOTH, 'AND', true);
         $cond->attachCondition('pnotification_device_os', '=', $uData['uauth_device_os'], 'OR');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -3762,7 +3762,7 @@ class AccountController extends LoggedUserController
         $srch->joinShippingCharges();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
-            $srch->addCondition('op_id', '=', $opId);
+            $srch->addCondition('op_id', '=', 'mysql_func_' . $opId, 'AND', true);
         }
         $srch->addDirectCondition("((op_selprod_user_id = $this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))) . ")) or (order_user_id=$this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))) . ") ) )");
 

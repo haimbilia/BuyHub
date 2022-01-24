@@ -15,55 +15,52 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                 </div>
                 <div class="step_body">
                     <?php if (count($subscriptions)) { ?>
-                    <ul class="list-cart list-cart-page list-shippings">
-                        <?php foreach ($subscriptions as $subscription) { ?>
-                        <li>
-                            <div class="cell cell_product">
-                                <div class="product-profile">
-                                    <div class="product-profile__data">
-                                        <div class="title">
-                                            <?php
-                                            $spackageName = isset($subscription['spackage_name']) ? $subscription['spackage_name'] : '';
-                                            $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
-                                            $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
-                                            echo  $spackageName; ?>
-                                        </div>
-                                        <div class="options">
-                                            <p class="">
-                                                <?php echo SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
-                                            </p>
-                                        </div>
+                        <ul class="list-cart list-cart-page list-shippings">
+                            <?php foreach ($subscriptions as $subscription) { ?>
+                                <li>
+                                    <div class="cell cell_product">
+                                        <div class="product-profile">
+                                            <div class="product-profile__data">
+                                                <div class="title">
+                                                    <?php
+                                                    $spackageName = isset($subscription['spackage_name']) ? $subscription['spackage_name'] : '';
+                                                    $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
+                                                    $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
+                                                    echo  $spackageName; ?>
+                                                </div>
+                                                <div class="options">
+                                                    <p class="">
+                                                        <?php echo SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
+                                                    </p>
+                                                </div>
 
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="cell cell_qty">
-                                <div class="wrap-qty-price">
-                                    <div class="product-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($spackagePrice); ?>
+                                    <div class="cell cell_qty">
+                                        <div class="wrap-qty-price">
+                                            <div class="product-price">
+                                                <?php echo CommonHelper::displayMoneyFormat($spackagePrice); ?>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="cell cell_action">
-                                <div class="product-action">
-                                    <ul class="actions">
-                                        <li>
-                                            <a href="javascript::void(0)"
-                                                onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')"
-                                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                <svg class="svg" width="24px" height="24px">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#bin">
-                                                    </use>
-                                                </svg>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <?php } ?>
-                    </ul>
+                                    <div class="cell cell_action">
+                                        <div class="product-action">
+                                            <ul class="actions">
+                                                <li>
+                                                    <a href="javascript::void(0)" onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                        <svg class="svg" width="24px" height="24px">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                        </ul>
                 </div>
                 <div class="step_foot">
                     <?php
@@ -74,16 +71,17 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                             $paymentText = Labels::getLabel('LBL_Proceed_To_Confirm', $siteLangId);
                         } ?>
                     <a href="javascript:void(0)" class="btn btn-brand confirmReview"><?php echo $paymentText; ?></a>
-                    <?php } ?>
+                <?php } ?>
                 </div>
             </div>
         </div>
     </main>
 
     <aside class="sidebar" data-close-on-click-outside=" ">
-        <div class="sidebar__content">
+        <div class="sidebar-content">
             <div id="order-summary" class="order-summary summary-listing-js"></div>
-            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
+            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); 
+            ?>
         </div>
     </aside>
 </div>

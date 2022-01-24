@@ -51,7 +51,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                                     </use>
                                 </svg>
-                                <span>New</span>
+                                <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>
                             </a>
 
                         </div>

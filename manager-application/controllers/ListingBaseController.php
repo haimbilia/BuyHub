@@ -34,14 +34,15 @@ class ListingBaseController extends AdminBaseController {
             $this->setPageRecord($post['total_record_count'], $pageSize, $page);
             return;
         }
-
-        $recordCountSrch->addFld('count(*) as totalRecords');
+        
         $recordCountSrch->doNotLimitRecords();
         if ($isGroupSearch == false) {
+            $recordCountSrch->addFld('count(*) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
         } else {
+            $recordCountSrch->addFld('1');
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }

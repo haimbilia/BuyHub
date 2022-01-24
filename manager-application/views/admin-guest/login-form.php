@@ -51,15 +51,16 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
                         <div class="input-group">
                             <?php echo $passwordFld->getHTML('password'); ?>
-                            <div class="input-group-append"><span class="input-group-text show-password" id="showPass"><?php echo Labels::getlabel('FRM_SHOW', $siteLangId); ?></span></div>
+                            <div class="input-group-append">
+                                <span class="input-group-text field-password"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="switch switch-sm remember-me">
+                        <label class="switch switch-sm switch-icon remember-me">
                             <?php echo $frm->getFieldHTML('rememberme'); ?>
                             <span class="input-helper"></span><?php echo Labels::getlabel('FRM_REMEMBER_ME', $siteLangId); ?>
                         </label>
-
                     </div>
                     <div class="form-group">
                         <?php echo $frm->getFieldHTML('btn_submit'); ?>
