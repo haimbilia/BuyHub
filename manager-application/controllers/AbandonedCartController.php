@@ -33,7 +33,6 @@ class AbandonedCartController extends ListingBaseController {
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js'));
@@ -132,7 +131,7 @@ class AbandonedCartController extends ListingBaseController {
             $this->addSortingElements($frm, 'abandonedcart_id', applicationConstants::SORT_DESC);
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME_OR_EMAIL', $this->siteLangId), 'abandonedcart_user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId), 'abandonedcart_user_id', []);
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCT', $this->siteLangId), 'abandonedcart_selprod_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELECT', $this->siteLangId)]);
 
         $frm->addSelectBox(Labels::getLabel('FRM_CART_ACTION', $this->siteLangId), 'abandonedcart_action', AbandonedCart::getActionArr($this->siteLangId));
