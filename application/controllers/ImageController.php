@@ -157,9 +157,9 @@ class ImageController extends FatController
         }
         /* ] */
         $objectName = 'AttachedFile';
-        if($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP){
+        if ($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $objectName = 'AttachedFileTemp';
-        }else{
+        } else {
             $fileType =  $objectName::FILETYPE_PRODUCT_IMAGE;
         }
 
@@ -178,8 +178,8 @@ class ImageController extends FatController
         }
 
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-        /* CommonHelper::printArray($image_name); die();  */      
-       
+        /* CommonHelper::printArray($image_name); die();  */
+
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
 
         switch (strtoupper($sizeType)) {
@@ -476,7 +476,7 @@ class ImageController extends FatController
                 $w = 61;
                 $h = 61;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;    
+                break;
             case 'COLLECTION_PAGE':
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
@@ -635,12 +635,12 @@ class ImageController extends FatController
             case 'THUMB':
                 $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
                 $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 68);
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
                 break;
             default:
                 $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 120);
                 $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 68);
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
                 // AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
@@ -659,16 +659,16 @@ class ImageController extends FatController
             case 'THUMB':
                 $w = 100;
                 $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
                 break;
             default:
                 $w = 100;
                 $h = 100;
                 if ($image_name == '' || empty($image_name)) {
-                    AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                    AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
                 } else {
                     /* echo $image_name; die; */
-                    AttachedFile::displayOriginalImage($image_name, $default_image);
+                    AttachedFile::displayOriginalImage($image_name, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
                 }
                 break;
         }
@@ -1468,7 +1468,7 @@ class ImageController extends FatController
                 AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
                 break;
             default:
-            AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                AttachedFile::displayOriginalImage($image_name, '', $filePath);
                 if (is_numeric($sizeType)) {
                     AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
                 } else {
