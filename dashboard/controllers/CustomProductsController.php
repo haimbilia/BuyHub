@@ -190,7 +190,7 @@ class CustomProductsController extends SellerBaseController
             $codEnabled = false;
         }
         $this->set("codEnabled", $codEnabled);
-        $this->set("canEditTags",  $this->userPrivilege->canEditProductTags(0, true));
+        $this->set("canEditTags",  $this->userPrivilege->canEditProducts(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
         $this->set('productOptions', $productOptions);
@@ -263,7 +263,7 @@ class CustomProductsController extends SellerBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -283,7 +283,7 @@ class CustomProductsController extends SellerBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -553,11 +553,11 @@ class CustomProductsController extends SellerBaseController
 
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
 
-        if(0 < $recordId){
+        if(0 < $recordId){           
             $productData = ProductRequest::getAttributesById($recordId,['preq_user_id','preq_status']);
-            if (!empty($productData)) {            
+            if (empty($productData)) {                          
                 LibHelper::exitWithError($this->str_invalid_request_id);             
-            }  
+            } 
             
             if ($productData['preq_user_id'] != $userId) {
                 LibHelper::exitWithError($this->str_invalid_request_id);               
@@ -567,6 +567,7 @@ class CustomProductsController extends SellerBaseController
                 LibHelper::exitWithError($this->str_invalid_request_id);               
             }          
         } 
+       
 
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -644,6 +645,7 @@ class CustomProductsController extends SellerBaseController
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
         $data['preq_status'] = $requestStatus;
+        $data['preq_user_id'] = $userId;        
 
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
@@ -740,7 +742,54 @@ class CustomProductsController extends SellerBaseController
             LibHelper::exitWithError(Labels::getLabel("ERR_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId), false, true);              
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));          
         }
-    }    
+    }  
+    
+    private function validateImageSubscriptionLimit($recordId, $productOptionId, $langId, $fileType)
+    {
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array('ossubs_images_allowed'));
+            $allowed_images = $currentPlanData['ossubs_images_allowed'];   
+
+            if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {           
+                $srch = new SearchBase(AttachedFile::DB_TBL);
+            } else {
+                $srch = new SearchBase(AttachedFile::DB_TBL);
+                $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);
+                $srch->addCondition('afile_record_subid', 'IN', array_keys($optionValues));
+            }
+
+            $srch->doNotCalculateRecords();
+            $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
+            $srch->addCondition('afile_record_id', '=', $recordId);
+            $srch->addCondition('afile_lang_id', 'IN', [$langId, 0]);
+            if (0 < $productOptionId) {
+                $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet());
+                $allReadyAddedCount = count($images);
+            } else {
+               
+                $srch->addGroupBy('afile_record_subid');
+                $srch->addOrder('image_count', 'desc');
+                $srch->addMultipleFields(['count(afile_id) as image_count', 'afile_record_subid']);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_record_subid');
+                $allReadyAddedCount = 0;
+                if ($images) {
+                    if (isset($images[0])) {
+                        $allReadyAddedCount += $images[0]['image_count'];
+                        unset($images[0]);
+                    }
+                    if (count($images)) {
+                        /* adding all option  + max count of other option */
+                        $allReadyAddedCount += current($images)['image_count'];
+                    }
+                }
+            }
+
+            if ($allowed_images > 0 && $allReadyAddedCount >= $allowed_images) {
+                FatUtility::dieJsonError(Labels::getLabel("ERE_CANT_UPLOAD_MORE_THAN_ALLOWED_IMAGES", $this->siteLangId));
+            }
+        }
+    }
 
     private function isShopActive($userId, $shopId = 0)
     {

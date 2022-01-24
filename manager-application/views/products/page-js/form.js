@@ -73,7 +73,7 @@
     };
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
-        if (rt_id == '') {
+        if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
                 $.ykmsg.error(tagsEditErr);
                 e.detail.tag.remove();

@@ -11,7 +11,7 @@ $plugin = new Plugin();
             <?php if (
                 $userPrivilege->canViewShop(UserAuthentication::getLoggedUserId(), true) ||
                 $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true) ||
-                $userPrivilege->canViewProductTags(UserAuthentication::getLoggedUserId(), true) ||
+                $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true) ||
                 $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true) ||
                 $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
@@ -47,7 +47,7 @@ $plugin = new Plugin();
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if (User::canAddCustomProduct() && $userPrivilege->canViewProductTags(UserAuthentication::getLoggedUserId(), true)) { ?>
+                        <?php if (User::canAddCustomProduct() && $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <li class="menu-sub-item">
                                 <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && $action == 'producttags') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productTags'); ?>">
                                     <span class="menu-sub-title">

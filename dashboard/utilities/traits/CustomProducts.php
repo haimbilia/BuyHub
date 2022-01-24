@@ -1105,7 +1105,7 @@ trait CustomProducts
 
     // public function setupTag()
     // {
-    //     $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId());
+    //     $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
     //     $frm = $this->getTagsForm();
     //     $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -1913,7 +1913,7 @@ trait CustomProducts
 
     public function updateProductTag()
     {
-        $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId());
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
@@ -1939,7 +1939,7 @@ trait CustomProducts
 
     public function removeProductTag()
     {
-        $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId());
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);

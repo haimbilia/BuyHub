@@ -1141,7 +1141,7 @@ class SellerController extends SellerBaseController
 
     public function productTags()
     {
-        $this->userPrivilege->canViewProductTags(UserAuthentication::getLoggedUserId());
+        $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         if (!$this->isShopActive($this->userParentId, 0, true)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -1698,7 +1698,7 @@ class SellerController extends SellerBaseController
         unset($post['page']);
         $frmSearchCatalogProduct->fill($post);
         $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
-        $this->set('canEdit', $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId(), true));
+        $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
