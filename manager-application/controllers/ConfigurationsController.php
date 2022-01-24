@@ -1533,37 +1533,24 @@ class ConfigurationsController extends ListingBaseController
 
                 $fileType = AttachedFile::FILETYPE_ADMIN_LOGO;
 
-                $imageArr = [];
-                $selectedRadio = array_key_first($ratioArr);
+                $imageArr = [];               
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
                     }
-                }
+                }               
 
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_ASPECT_RATIO", $langId),
-                    'ratio_type_' . $fileType,
-                    $ratioArr,
-                    $selectedRadio,
-                    [],
-                    ['class' => 'prefRatio-js']
-                );
-
-                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
-
-                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_ADMIN_LOGO", $langId)],
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_ADMIN_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $fld->attachField($fld1);
+              
                 $fld = $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1580,31 +1567,18 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                       
                     }
                 }
 
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_ASPECT_RATIO", $langId),
-                    'ratio_type_' . $fileType,
-                    $ratioArr,
-                    $selectedRadio,
-                    [],
-                    ['class' => 'prefRatio-js']
-                );
-
-                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
-
-                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_DESKTOP_LOGO", $langId)],
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_DESKTOP_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
-                ));
-                $fld->attachField($fld1);
+                ));          
                 $fld =  $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1675,31 +1649,18 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
                     }
                 }
 
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_ASPECT_RATIO", $langId),
-                    'ratio_type_' . $fileType,
-                    $ratioArr,
-                    $selectedRadio,
-                    [],
-                    ['class' => 'prefRatio-js']
-                );
-
-                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
-
-                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId)],
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
-                ));
-                $fld->attachField($fld1);
+                ));               
                 $fld = $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1802,30 +1763,19 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
                     }
                 }
-
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_ASPECT_RATIO", $langId),
-                    'ratio_type_' . $fileType,
-                    $ratioArr,
-                    $selectedRadio,
-                    [],
-                    ['class' => 'prefRatio-js']
-                );
-
-                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
-                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_INVOICE_LOGO", $langId)],
+            
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_INVOICE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $fld->attachField($fld1);
+           
                 $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
