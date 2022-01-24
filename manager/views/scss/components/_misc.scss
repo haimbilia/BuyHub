@@ -2173,8 +2173,8 @@ strong {
 
 .shipping-zone {
     border-bottom: $border;
-    // padding: 3rem;
-    //margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
     &:last-child {
         border: none;
         margin-bottom: 0;

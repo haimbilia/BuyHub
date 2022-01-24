@@ -2,6 +2,7 @@ $card-space: 1.5rem;
 $card-radius: 4px;
 $card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
 $card-bg: #fff;
+$sidebar-width: 230px;
 
 .my-dashboard {
     .sidebar {
@@ -102,16 +103,16 @@ $card-bg: #fff;
     }
     &.sidebar-is-expanded {
         .sidebar {
-            width: 280px;
+            width: $sidebar-width;
         }
         .header-dashboard {
-            padding-#{$start-direction}: 280px;
+            padding-#{$start-direction}: $sidebar-width;
             @include media-breakpoint-down(lg) {
                 padding-#{$start-direction}: 20px;
             }
         }
         .main {
-            padding-#{$start-direction}: 280px;
+            padding-#{$start-direction}: $sidebar-width;
             @include media-breakpoint-down(lg) {
                 padding-#{$start-direction}: 0;
             }
@@ -165,7 +166,10 @@ $card-bg: #fff;
         overflow: hidden;
         transition: all 0.5s ease-in-out;
         color: $txt-body;
-
+        margin-bottom: 1.5rem;
+        &:last-child {
+            margin-bottom: 0;
+        }
         &.is-active {
             background: $bg-brand-light;
             color: $brand-color;
@@ -181,26 +185,26 @@ $card-bg: #fff;
         text-align: #{$start-direction};
         width: 100%;
         margin: 0;
-        padding: 1rem 1rem;
+        padding: 0;
     }
     &-icon {
         display: flex;
         align-items: center;
         justify-content: center;
         .svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
     }
     &-head {
         margin-#{$start-direction}: 10px;
-        font-weight: 500;
+        font-weight: 600;
         color: $txt-body;
-        font-size: 0.875rem;
+        font-size: inherit;
         transition: all 0.7s ease-in-out;
     }
     .dropdown-toggle-custom-arrow {
-        #{$end-direction}: 25px;
+        //#{$end-direction}: 25px;
     }
     .menu-sub {
         padding: 0;
@@ -210,7 +214,7 @@ $card-bg: #fff;
             position: relative;
             color: $txt-gray;
             &:after {
-                content: "";
+                //content: "";
                 width: 5px;
                 height: 5px;
                 background: currentColor;
@@ -223,11 +227,12 @@ $card-bg: #fff;
         }
         &-link {
             flex: 0 0 100%;
-            padding: 0.5rem 2rem;
-            padding-#{$start-direction}: 44px;
+            padding: 0.5rem 0;
+            font-size: 0.8rem;
+            padding-#{$start-direction}: 30px;
             &::before {
                 background: rgba(0, 0, 0, 0.08);
-                content: "";
+                //content: "";
                 height: 100%;
                 width: 100%;
                 //border-radius: $radius4;
@@ -240,13 +245,16 @@ $card-bg: #fff;
             }
 
             &:hover,
-            &:focus,
-            &.active {
-                color: $txt-body;
+            &:focus {
+                color: $brand-color;
                 &::before {
                     opacity: 1;
                     transform: scale(1);
                 }
+            }
+            &.active {
+                color: $brand-color;
+                font-weight: 500;
             }
         }
     }
