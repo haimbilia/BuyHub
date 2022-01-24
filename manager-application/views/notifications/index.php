@@ -8,7 +8,7 @@ $actionItemsData['otherButtons'] = [
             'onclick' => "toggleBulkStatues(1, '')",
             'title' => Labels::getLabel('BTN_READ', $siteLangId)
         ],
-        'label' => '<svg class="svg" width="18" height="18">
+        'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
                                 </use>
@@ -21,7 +21,7 @@ $actionItemsData['otherButtons'] = [
             'onclick' => "toggleBulkStatues(0, '')",
             'title' => Labels::getLabel('BTN_UNREAD', $siteLangId)
         ],
-        'label' => '<svg class="svg" width="18" height="18">
+        'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#hide">
                                 </use>

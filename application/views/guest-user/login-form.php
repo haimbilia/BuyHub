@@ -34,7 +34,7 @@
             <div id="sign-in" class="form-item sign-in">
                 <div class="form-side-inner">
                     <?php
-                     $logoUrl = UrlHelper::generateUrl();
+                    $logoUrl = UrlHelper::generateUrl();
                     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);

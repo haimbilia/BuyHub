@@ -550,6 +550,7 @@ Enhancement:
 => Updated System Labels    
 
 ====================TV-9.4.0.20220120==================
+    => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

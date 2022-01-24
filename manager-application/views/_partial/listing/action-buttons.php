@@ -18,7 +18,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
-        '<svg class="svg" width="18" height="18">
+        '<svg class="svg btn-icon-start" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
             </use>
@@ -34,7 +34,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
-        '<svg class="svg" width="18" height="18">
+        '<svg class="svg btn-icon-start" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
             </use>
@@ -52,7 +52,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'onclick' => "deleteSelected()"
         ],
-        '<svg class="svg" width="18" height="18">
+        '<svg class="svg btn-icon-start" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
