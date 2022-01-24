@@ -18,7 +18,7 @@
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
-            langForm(res.langId, 0, res.productId);
+            langForm(res.langId, 0, res.recordId);
         });
     };
 
@@ -70,7 +70,7 @@
     };
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
-        if (rt_id == '') {
+        if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
                 $.ykmsg.error(tagsEditErr);
                 e.detail.tag.remove();
