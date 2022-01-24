@@ -646,5 +646,5 @@ $(document).on("click", ".sidebarOpenerBtnJs", function () {
         $(this).addClass("active");
     }
     $('#sidebar').addClass("animating");
-    $('#sidebar').removeClass("animating");
+    setInterval(function () { $('#sidebar').removeClass("animating"); }, 2000);
 });
