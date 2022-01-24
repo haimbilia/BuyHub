@@ -34,7 +34,6 @@
     </div>
 </div>
 <div class="footer-action">
-
     <div class="footer-action__item">
         <a class="footer-action__trigger" href="javascript:void(0);">
             <span class="icon">

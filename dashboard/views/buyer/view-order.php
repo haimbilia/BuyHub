@@ -341,9 +341,7 @@ if (!$print) { ?>
     </div>
 </main>
 <?php if ($print) { ?>
-    <script>
-        $(".sidebar-is-expanded").addClass('sidebar-is-reduced').removeClass('sidebar-is-expanded');
-    </script>
+
 <?php } ?>
 <script>
     $(document).ready(function() {
