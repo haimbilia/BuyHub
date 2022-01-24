@@ -21,7 +21,7 @@ $border: solid 1px $border-color;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //backgrounds colors
-$bg-body: #edf2f9;
+$bg-body: #f2f7ff;
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
@@ -32,6 +32,7 @@ $bg-placeholder: rgba(0, 0, 0, 0.03);
 //shadow
 $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 $shadow-rgb: var(--shadow-rgb);
+$shadow-theme: 0 0 1px rgba(40, 51, 65, 0.1), 0 1px 2px rgba(40, 51, 65, 0.1), 0 1px 3px rgba(40, 51, 65, 0.1);
 //radius
 
 $radius-common: 1px;

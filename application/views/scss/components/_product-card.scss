@@ -165,7 +165,7 @@
             --aspect-ratio: 1/1;
             display: block;
             margin: 0 0 15px;
-            padding-bottom: calc(100%/(var(--aspect-ratio)));
+            padding-bottom: calc(100% / (var(--aspect-ratio)));
             position: relative;
             width: 100%;
             overflow: hidden;
@@ -284,7 +284,7 @@
 }
 
 .not-available {
-    background-color: rgba(255, 255, 255, 0.80);
+    background-color: rgba(255, 255, 255, 0.8);
     color: $danger-color;
     border-radius: $radius3;
     border: none;
@@ -320,16 +320,16 @@
     transition-delay: 500ms;
     &.static--collection {
         #{$end-direction}: 0;
-        >ul>li {
+        > ul > li {
             display: inline-block;
             vertical-align: top;
             margin: 0 4px;
             position: relative;
         }
     }
-    >ul {
-        >li {
-            >span {
+    > ul {
+        > li {
+            > span {
                 display: block;
                 width: 2.5rem;
                 background: $brand-color;
@@ -358,7 +358,7 @@
         max-width: 100%;
         height: auto;
     }
-    >ul>li.is-active>span {
+    > ul > li.is-active > span {
         background: $secondary-color;
         color: $secondary-color-inverse;
     }
@@ -523,7 +523,7 @@
             opacity: 0.8;
         }
         .item__brand {
-            font-style: italic;
+            //font-style: italic;
         }
         .item__location {
             margin-bottom: 5px;
@@ -538,8 +538,10 @@
         .item__specification {
             color: lighten($body-color, 20%);
         }
-        .item__sold_by {}
-        .item__shipping {}
+        .item__sold_by {
+        }
+        .item__shipping {
+        }
         .item__date {
             display: block;
             opacity: 0.6;
@@ -576,11 +578,11 @@
     @include media-breakpoint-down(sm) {
         flex-wrap: wrap;
     }
-    >li {
+    > li {
         display: inline-block;
         vertical-align: top;
         margin: 0 10px 10px 0;
-        >a {
+        > a {
             display: block;
             background: none;
             padding: 5px;
@@ -591,7 +593,7 @@
             color: currentColor;
             font-size: 0.7rem !important;
             // border: $border;
-            // border-radius: $radius2; 
+            // border-radius: $radius2;
             border-radius: 50%;
             background: $bg-brand-light;
             color: $brand-color;

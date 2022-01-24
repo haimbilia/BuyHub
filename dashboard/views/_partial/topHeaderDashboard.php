@@ -12,25 +12,25 @@
                         <?php echo ($activeTab == 'S') ? Labels::getLabel('Lbl_Seller', $siteLangId) : (($activeTab == 'B') ? Labels::getLabel('Lbl_Buyer', $siteLangId) : (($activeTab == 'Ad') ? Labels::getLabel('Lbl_Advertiser', $siteLangId) : '')) ?>
                         <i class="dropdown-toggle-custom-arrow"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim" aria-labelledby="dashboardDropdown">
-                        <ul class="nav nav-block">
-                            <?php if (User::canViewSupplierTab()) { ?>
-                                <li class="nav__item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
-                                    <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>"><?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?></a>
-                                </li>
-                            <?php } ?>
-                            <?php if (User::canViewBuyerTab()) { ?>
-                                <li class="nav__item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
-                                    <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>"><?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?></a>
-                                </li>
-                            <?php } ?>
-                            <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
-                                <li class="nav__item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
-                                    <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>"><?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?></a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
+
+                    <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-anim" aria-labelledby="dashboardDropdown">
+                        <?php if (User::canViewSupplierTab()) { ?>
+                            <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
+                                <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>"><?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?></a>
+                            </li>
+                        <?php } ?>
+                        <?php if (User::canViewBuyerTab()) { ?>
+                            <li class="dropdown-menu-item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
+                                <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>"><?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?></a>
+                            </li>
+                        <?php } ?>
+                        <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
+                            <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
+                                <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>"><?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+
                 </div>
             <?php } ?>
             <div class="header-icons-group">
@@ -64,33 +64,45 @@
                     <li>
                         <a title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
                             <i class="icn icn--dashboard">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#dashboard" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#dashboard">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#dashboard">
                                     </use>
-                                </svg></i></a>
+                                </svg>
+                            </i>
+                        </a>
                     </li>
                     <li><a title="<?php echo Labels::getLabel('LBL_Home', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home">
                                     </use>
-                                </svg></i></a></li>
+                                </svg>
+                            </i>
+                        </a>
+                    </li>
                     <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-                        <li><a title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                        <li>
+                            <a title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
                                         </use>
-                                    </svg></i></a></li>
+                                    </svg>
+                                </i>
+                            </a>
+                        </li>
                     <?php } ?>
                 </ul>
                 <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
                     <div class="c-header-icon bell">
                         <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
-                            <i class="icn"><svg class="svg bell-shake-delay">
+                            <i class="icn"><svg class="svg bell-shake-delay" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
                                     </use>
                                 </svg>
                             </i>
-                            <span class="h-badge"><span class="heartbit"></span><?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
+                            <span class="h-badge">
+                                <span class="heartbit">
+                                </span>
+                                <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
                     </div>
                 <?php } ?>
                 <div class="short-links">
