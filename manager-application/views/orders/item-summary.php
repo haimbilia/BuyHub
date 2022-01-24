@@ -184,7 +184,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#history">
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#history">
                                                             </use>
                                                         </svg>
                                                     </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),

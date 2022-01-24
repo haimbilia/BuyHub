@@ -44,7 +44,11 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'viewSellerRequest('.$row['usuprequest_id'].')',
                             'title' => Labels::getLabel('LBL_View', $siteLangId)
                         ],
-                        'label' => "<i class='far fa-eye icon'></i>"
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#eye">
+                                        </use>
+                                    </svg>',
                     ]
                 ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
