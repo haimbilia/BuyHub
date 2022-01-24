@@ -65,7 +65,12 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'viewDetails('.$row['withdrawal_id'].','.$siteLangId.')' ,
                             'title' => Labels::getLabel('LBL_VIEW_DETAILS', $siteLangId),
                         ],
-                        'label' => "<i class='far fa-eye icon'></i>"
+                        'label' => '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#eye">
+                            </use>
+                        </svg>
+                    </i>'
                     ]
                 ];	                    
 

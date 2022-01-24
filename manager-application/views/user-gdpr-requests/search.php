@@ -45,7 +45,13 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'updateRequestStatus(' . $row['ureq_id'] . ',' . UserGdprRequest::STATUS_COMPLETE . ')',
                             'title' => Labels::getLabel('LBL_COMPLETE', $siteLangId)
                         ],
-                        'label' => "<i class='far fa-calendar-check'></i>"
+                        'label' => '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-completed">
+                        </use>
+                    </svg>
+                </i>'
                     ];
                     $data['otherButtons'][] = $pending;
 
@@ -57,7 +63,13 @@ foreach ($arrListing as $sn => $row) {
                                 'onclick' => 'truncateUserData(' . $row['user_id'] . ',' . $row['ureq_id'] . ')',
                                 'title' => Labels::getLabel('LBL_Truncate_User_Data', $siteLangId)
                             ],
-                            'label' => "<i class='fas fa-user-times'></i>"
+                            'label' => '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-user-truncate">
+                                </use>
+                            </svg>
+                        </i>'
                         ];
                         $data['otherButtons'][] = $truncate;
                     }

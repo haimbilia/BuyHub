@@ -1,4 +1,6 @@
+var cropper;
 (function () {
+   
     systemImgCropper = function (url, aspectRatio, callback, inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(url, '', function (t) {
@@ -38,7 +40,7 @@
             window.alert('Please choose an image file.');
         }
 
-        var cropper = new Cropper(image, options);
+        cropper = new Cropper(image, options);
         var originalImageURL = image.src;
         var uploadedImageURL;
 
