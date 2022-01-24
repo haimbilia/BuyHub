@@ -636,17 +636,15 @@ $(document).on("click", "#quickSearchCtrlJs", function () {
 });
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
-    if (0 < $("body[data-sidebar-minimize]").length) {
-        var sidebarStatus = $('body').attr('data-sidebar-minimize');
-        if ('on' == sidebarStatus) {
-            $.removeCookie("adminSidebar");
-            $("body").attr("data-sidebar-minimize", "off");
-        } else {
-            $.cookie('adminSidebar', true, { expires: 30 });
-            $("body").attr("data-sidebar-minimize", "on");
-        }
-    } else {
+    if ($(this).hasClass('active')) {
+        $.removeCookie("adminSidebar");
         $("body").attr("data-sidebar-minimize", "on");
+        $(this).removeClass("active");
+    } else {
         $.cookie('adminSidebar', true, { expires: 30 });
+        $("body").attr("data-sidebar-minimize", "off");
+        $(this).addClass("active");
     }
+    $('#sidebar').addClass("animating");
+    $('#sidebar').removeClass("animating");
 });
