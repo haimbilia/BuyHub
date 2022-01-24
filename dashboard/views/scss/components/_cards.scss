@@ -1,10 +1,10 @@
 .card {
-    box-shadow: 0 0 10px 0 rgba(76, 87, 125, 0.1);
-    background-color: #fff;
+    //box-shadow: $card-shadow;
+    background-color: $card-bg;
     //border: $border;
     border: none;
     position: relative;
-    border-radius: $radius4;
+    border-radius: $card-radius;
     margin-bottom: 1rem;
     //height: 100%;
     //animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
@@ -17,7 +17,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem;
+        padding: $card-space;
         margin-bottom: 0.5rem;
         color: $txt-body;
         background: none;
@@ -42,10 +42,10 @@
     }
     &-body {
         flex: 1 1 0;
-        padding: 1rem;
+        padding: $card-space;
     }
     &-foot {
-        padding: 1rem;
+        padding: $card-space;
         background: none;
         border-top: $border;
     }
@@ -54,7 +54,7 @@
         font-weight: 500;
         font-size: 1.1rem;
         a {
-            color: $txt-body;
+            color: currentColor;
         }
     }
 }

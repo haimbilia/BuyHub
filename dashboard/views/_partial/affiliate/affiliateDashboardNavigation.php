@@ -4,7 +4,7 @@ $action = strtolower($action);
 ?>
 <sidebar class="sidebar no-print">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
-    <div class="sidebar__content custom-scrollbar scroll scroll-y sidebarMenuJs" id="scrollElement-js">
+    <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
             <li class="dashboard-menu-item">
                 <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-general" aria-expanded="true" aria-controls="collapseOne" title="">
