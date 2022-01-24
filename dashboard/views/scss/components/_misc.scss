@@ -413,17 +413,38 @@ a:hover {
         }
     }
 }
+
+.card-commerce {
+    &-bg {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: right center;
+    }
+
+    h6 {
+        font-size: 0.85rem;
+        color: $txt-gray;
+    }
+}
+//Plugin
+
 .custom-select2-single {
     &.error {
         border: 1px solid $danger-color;
         background-color: transparent;
     }
     .select2-dropdown {
-        padding: 1rem;
+        //padding: 1rem;
         border: $border !important;
         border-radius: $radius-common !important;
     }
+    .select2-search--dropdown {
+        margin: 1rem;
+        padding: 0;
+    }
     .select2-search__field {
+        margin: 0;
+        padding: 0;
         border: $border !important;
         height: 40px;
         appearance: none;
@@ -436,18 +457,10 @@ a:hover {
             background-position: calc(100% - 13px) center;
         }
     }
-}
-
-.card-commerce {
-    &-bg {
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: right center;
-    }
-
-    h6 {
-        font-size: 0.85rem;
-        color: $txt-gray;
+    .select2-results__option--highlighted {
+        background-color: $brand-color;
+        color: $brand-color-inverse;
+        cursor: pointer;
     }
 }
 

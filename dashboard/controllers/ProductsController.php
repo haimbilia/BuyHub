@@ -3,6 +3,9 @@ class ProductsController extends SellerBaseController
 {
 
     use CatalogProduct;
+    use CatalogProduct {
+        validateGetForm as validateForm;
+    }
     use ProductDigitalDownloads;
 
     public function __construct($action)
@@ -199,7 +202,7 @@ class ProductsController extends SellerBaseController
             $codEnabled = false;
         }
         $this->set("codEnabled", $codEnabled);
-        $this->set("canEditTags", $this->userPrivilege->canEditProductTags(0, true));
+        $this->set("canEditTags", $this->userPrivilege->canEditProducts(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
 
@@ -267,11 +270,7 @@ class ProductsController extends SellerBaseController
         $langId = $post['lang_id'];
 
         $isNewProduct = true;
-        if (0 < $recordId) {
-            $prodSellerId = Product::getAttributesById($recordId, 'product_seller_id');
-            if ($prodSellerId != $this->userParentId) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
+        if (0 < $recordId) {            
             $isNewProduct = false;
         }
 
@@ -457,7 +456,7 @@ class ProductsController extends SellerBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -477,7 +476,7 @@ class ProductsController extends SellerBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -822,5 +821,27 @@ class ProductsController extends SellerBaseController
         }
 
         return false;
+    }
+
+    private function validateGetForm(&$post)
+    {
+        $recordId = $post['record_id'];                
+
+        if (0 < $recordId) {
+            $prodSellerId = Product::getAttributesById($recordId, 'product_seller_id');
+            if ($prodSellerId != $this->userParentId) {
+                FatUtility::dieWithError($this->str_invalid_request);
+            }            
+        }
+
+        if (
+            1 > $recordId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_products_allowed')
+        ) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+        } 
+
+        $this->validateForm($post);
     }
 }

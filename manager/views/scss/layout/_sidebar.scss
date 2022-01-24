@@ -25,16 +25,20 @@ $space: 25px;
         height: 65px;
         padding: 0 $space;
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        flex-direction: row-reverse;
         .logo {
             align-self: center;
             flex: 1;
         }
     }
     &-toggle {
+        width: 40px;
+        height: 40px;
         background-color: transparent;
         border: none;
-        margin-#{$end-direction}: 1rem;
+        //margin-#{$end-direction}: 1rem;
         padding: 0;
         &-icon {
             position: relative;
@@ -42,13 +46,13 @@ $space: 25px;
             width: 1.25rem;
             transition: $transition-base;
             display: block;
-            top: -0.3125rem;
+            top: -4px;
             padding-right: 0;
 
             .toggle-line {
                 display: block;
                 height: 100%;
-                border-radius: $border-radius;
+                border-radius: 2px;
                 transition: $transition-base;
                 background-color: #fff;
             }
@@ -61,7 +65,7 @@ $space: 25px;
                 background-color: #fff;
                 left: 0;
                 transition: $transition-base;
-                border-radius: $border-radius;
+                border-radius: 2px;
             }
 
             &:before {
@@ -74,13 +78,8 @@ $space: 25px;
                 width: 100%;
             }
         }
-
-        &.active {
-            &:before {
-                width: 100%;
-            }
-        }
     }
+
     &-close {
         @include media-breakpoint-up(lg) {
             display: none;
@@ -101,6 +100,44 @@ $space: 25px;
     }
     &--on & {
         transform: translateX(0 * $transform-direction);
+    }
+}
+
+@include media-breakpoint-up(md) {
+    [data-sidebar-minimize="on"] {
+        .sidebar {
+            width: $side-bar-size-close;
+            transition: width 0.3s ease;
+            &:not(:hover) {
+                .menu-title {
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                .nav_text {
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+            }
+
+            &-toggle {
+                &-icon {
+                    &:before {
+                        width: 100%;
+                    }
+                }
+            }
+            &-hoverable {
+                &:hover {
+                    &:not(.animating) {
+                        transition: width 0.3s ease;
+                        width: 265px;
+                    }
+                }
+            }
+        }
+        .wrap {
+            padding-#{$start-direction}: $side-bar-size-close;
+        }
     }
 }
 
@@ -297,40 +334,6 @@ $space: 25px;
                     }
                 }
             }
-        }
-    }
-}
-
-@include media-breakpoint-up(md) {
-    [data-sidebar-minimize="on"] {
-        .sidebar {
-            width: $side-bar-size-close;
-            transition: width 0.3s ease;
-            &:not(:hover) {
-                .menu-title {
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-                .nav_text {
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-            }
-
-            &-toggle {
-                &-icon {
-                    &:before {
-                        width: 100%;
-                    }
-                }
-            }
-        }
-        .sidebar-hoverable:hover {
-            transition: width 0.3s ease;
-            width: 265px;
-        }
-        .wrap {
-            padding-#{$start-direction}: $side-bar-size-close;
         }
     }
 }

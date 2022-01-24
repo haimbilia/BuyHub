@@ -61,7 +61,7 @@
     };
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
-        if (rt_id == '') {
+        if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
                 fcom.displayErrorMessage(tagsEditErr);
                 e.detail.tag.remove();
@@ -81,12 +81,12 @@
         let keyword = e.detail.value;
         let langId = $("#addProductfrm [name='langId']").val();
         var list = [];
-        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword, langId }, function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), { keyword, langId }, function (t) {
             var ans = $.parseJSON(t);
             for (i = 0; i < ans.length; i++) {
                 list.push({
-                    "id": ans[i].tag_id,
-                    "value": ans[i].tag_name,
+                    "id": ans[i].id,
+                    "value": ans[i].name,
                 });
             }
             tagify.settings.whitelist = list;

@@ -1,10 +1,10 @@
 <?php
 $controller = strtolower($controller);
 $action = strtolower($action);
-?> 
+?>
 <sidebar class="sidebar no-print">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
-    <div class="sidebar__content custom-scrollbar scroll scroll-y sidebarMenuJs" id="scrollElement-js">
+    <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
             <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
                 <li class="dashboard-menu-item">

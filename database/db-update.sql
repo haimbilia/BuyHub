@@ -1569,3 +1569,14 @@ ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
 
 ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);
 -- --------------------TV-9.4.0.20220120-----------------
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_TITLE_OR_CODE', 1, 'Search by title or code', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_TITLE";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_CODE";
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_USER_NAME_OR_EMAIL";
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', 1, 'Search by user name or email', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

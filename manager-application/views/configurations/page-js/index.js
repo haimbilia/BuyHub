@@ -117,21 +117,43 @@ $(document).ready(function () {
                 var file = inputBtn.files[0];
                 var minWidth = $(inputBtn).attr('data-min_width');
                 var minHeight = $(inputBtn).attr('data-min_height');
-                var options = {
-                    aspectRatio: minWidth / minHeight,
-                    data: {
-                        width: minWidth,
-                        height: minHeight,
-                    },
-                    minCropBoxWidth: minWidth,
-                    minCropBoxHeight: minHeight,
-                    minContainerHeight: 350,
+                var options = {    
+                   // minContainerHeight: 350,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
-                    imageSmoothingEnabled: true,
+                    imageSmoothingEnabled: true,                   
                 };
+
+                if(minWidth != undefined && minHeight != undefined){
+                    options['aspectRatio'] = minWidth / minHeight;
+                    options['minCropBoxWidth'] = minWidth;
+                    options['minCropBoxHeight'] = minHeight;
+                    options['data'] = {
+                        width: minWidth,
+                        height: minHeight,
+                    };
+                }else{
+                    let maxCroppedWidth = 500;
+                    let maxCroppedHeight = 500;
+                    options['initialAspectRatio'] = 1;  
+                    options['crop'] = function (event) {
+                        let width = event.detail.width;
+                        let height = event.detail.height;    
+                        console.log(width,height);
+                        if (
+                            width > maxCroppedWidth
+                          || height > maxCroppedHeight
+                        ) {
+                          cropper.setData({
+                            width: Math.min(maxCroppedWidth, width),
+                            height: Math.min(maxCroppedHeight, height),
+                          });
+                        }                       
+                      };                    
+                }
+
                 $(inputBtn).val('');
-                setTimeout(function () { cropImage(file, options, 'uploadConfImages', inputBtn) }, 100);
+                setTimeout(function () { cropImage(file, options, 'uploadConfImages', inputBtn) }, 200);
                 return;
             });
         }

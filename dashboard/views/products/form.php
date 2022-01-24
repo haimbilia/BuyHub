@@ -64,7 +64,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             <div class="row">
                                 <?php
                                 echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)']);
-                                //echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], '', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], '', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);

@@ -1,10 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-$frm->setFormTagAttribute('class', 'form');
-
 $displayDigitalDownloadAddBtn = false;
 $displayDigitalDownloadList = false;
 if (0 < $recordId) {
-    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL;
+    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
@@ -56,9 +54,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <div class="add-stock">            
                 <div class="add-stock-column column-main"> 
                     <div class="card" id="basic-details">
-                        <div class="card-header">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Basic Details </h3>
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Basic Details </h3>
                                 <span class="text-muted">Add basic details about your product</span>
                             </div>
                         </div>
@@ -66,12 +64,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             <div class="row">
                                 <?php
                                 echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
-                                echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
-                                echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
-                                echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategory()', 'class' => 'link']]);
-                                echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
+                                echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                                 $fld = $frm->getField('product_warranty');
                                 if (null !== $fld) {
@@ -81,11 +77,11 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             <?php
                                             $warrantTypes = Product::getWarrantyUnits($langId);
                                             ?>
-                                            <label class="label"><?php echo $fld->getCaption(); ?></label>
+                                            <label class="form-label"><?php echo $fld->getCaption(); ?></label>
                                             <div class="input-group">
                                                 <?php echo $fld->getHtml(); ?>
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-input dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                         <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                     </button>
                                                     <div class="dropdown-menu">
@@ -97,7 +93,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php }
+                                <?php }                               
                                 echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                                 echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
@@ -109,9 +105,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="variants-options">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Variants and options
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Variants and options
                                 </h3>
                                 <span class="text-muted">Add options like Color, size
                                     etc for your product</span>
@@ -155,9 +151,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="media">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Media </h3>
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Media </h3>
                                 <span class="text-muted">Attach media files for the product </span>
                             </div>
                             <div class="card-toolbar">
@@ -184,9 +180,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="specifications">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Specifications
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Specifications
                                 </h3>
                                 <span class="text-muted">Product Specifications are added in this
 
@@ -235,15 +231,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </div>
                                 </div>
                             </div>
-                            <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hide"></div>
+                            <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hidden"></div>
                             <div id="specificationsListJs">
                             </div>
                         </div>
                     </div>
                     <div class="card card-toggle" id="tax-shipping">
-                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
-                            <div class="card-header-label">
-                                <h3 class="card-header-title">Tax and Shipping
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Tax and Shipping
                                 </h3>
                                 <span class="text-muted">Add Tax and Shipping details from
                                     this
@@ -253,7 +249,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <div class="card-body show" id="stock-block4">
                             <div class="row">
                                 <?php
-                                echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
+                                echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id']);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
@@ -267,9 +263,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     <?php if ($displayDigitalDownloadList) { ?>
                         <div class="card card-toggle" id="digital-files">
-                            <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
-                                <div class="card-header-label">
-                                    <h3 class="card-header-title">Digital Files</h3>
+                            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Digital Files</h3>
                                     <span class="text-muted">Digital Files are added in this section </span>
                                 </div>
                                 <?php if ($displayDigitalDownloadAddBtn) { ?>
@@ -287,9 +283,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             </div>
                         </div>
                         <div class="card card-toggle" id="digital-links">
-                            <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
-                                <div class="card-header-label">
-                                    <h3 class="card-header-title">Digital Links</h3>
+                            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Digital Links</h3>
                                     <span class="text-muted">Digital Links are added in this section </span>
                                 </div>
                                 <?php if ($displayDigitalDownloadAddBtn) { ?>
@@ -363,9 +359,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             $fld->addFieldTagAttribute('id', 'product_tags');
                         ?>
                             <div class="card">
-                                <div class="card-header">
-                                    <div class="card-header-label">
-                                        <h3 class="card-header-title">Tags</h3>
+                                <div class="card-head">
+                                    <div class="card-head-label">
+                                        <h3 class="card-head-title">Tags</h3>
                                         <span class="text-muted">
                                             <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
                                         </span>
@@ -382,11 +378,11 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         </div>
         </form>
     </div>
-    <table class="hide" id="variantCloneJs">
+    <table class="hidden" id="variantCloneJs">
         <?php echo getVariantUiTr($langId, -1);  ?>
     </table>
     <?php echo $frm->getExternalJS();
-    $imgFrm->setFormTagAttribute('class', 'hide');
+    $imgFrm->setFormTagAttribute('class', 'hidden');
     $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm');
     $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');
     $fld = $imgFrm->getField('prod_image');
@@ -416,13 +412,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 brand_active: 1,
                 langId: langId
             });
-            select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'), {
+            select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete'), {
                 langId
             });
-            select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'), {
+            select2('ptt_taxcat_id', fcom.makeUrl('Products', 'autoCompleteTaxCategories'), {
                 langId
             });
-            select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
+            select2('ps_from_country_id', fcom.makeUrl('seller', 'countries_autocomplete'), {
                 langId
             });
 
@@ -436,7 +432,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         option_is_separate_images: productOptions[index]['option_is_separate_images'],
                     }]
                 }
-                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
+                select2($(this).attr('id'), fcom.makeUrl('Seller', 'autoCompleteOptions'), optionDataCallback,
                     resetOptionValuesTag,
                     resetOptionValuesTag,
                     '',
@@ -451,22 +447,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 tagifyOptionValue("#" + $(this).attr('id'));
             });
 
-
-            <?php
-            if (isset($isProductAddedByAdmin)  && isset($isSelProdCreatedBySeller)) {
-                if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
-                    select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
-                        joinShop: 1,
-                        user_is_supplier: 1,
-                        langId
-                    }, function(e) {
-                        getShippingProfileOptions(e.params.args.data.id)
-                    });
-                <?php } else { ?>
-                    $('select[name=\'product_seller_id\']').attr('disabled', true);
-            <?php }
-            } ?>
-
             upcType();
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
@@ -479,7 +459,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <?php
 function getVariantUiTr($langId, $i, $productOption = [])
 {
-    $deleteClass = $i == 0 ? 'hide' : '';
+    $deleteClass = $i == 0 ? 'hidden' : '';
     $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
     $confWebUrl = CONF_WEBROOT_URL;
 

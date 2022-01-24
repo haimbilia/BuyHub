@@ -2,7 +2,8 @@
     <div class="sidebar-logo">
         <a href="#" class="logo">
             <img width="34" height="34" data-ratio="16:9" title="Yo!Kart" src="/yokart/admin/image/site-admin-logo/1?t=1638444603" alt="Yo!Kart">
-        </a> <button class="sidebar-toggle sidebarOpenerBtnJs" type="button">
+        </a>
+        <button class="sidebar-toggle sidebarOpenerBtnJs" type="button">
             <i class="fas fa-angle-double-right"></i>
         </button>
     </div>

@@ -1,28 +1,35 @@
+$card-space: 1.5rem;
+$card-radius: 4px;
+$card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
+$card-bg: #fff;
+$sidebar-width: 230px;
+
 .my-dashboard {
     .sidebar {
         width: 70px;
-        position: absolute;
+        position: fixed;
         z-index: 12;
-        #{$start-direction}: 0;
+        //#{$start-direction}: 0;
         top: 0;
         bottom: 0;
-        background: #fff;
-        padding-top: 71px;
         height: 100%;
         transition: width 0.5s ease-in-out;
         display: flex;
         flex-direction: column;
-        border-#{$end-direction}: $border;
+        //border-#{$end-direction}: $border;
         @include media-breakpoint-down(lg) {
-            position: fixed;
+            //position: fixed;
         }
-        .sidebar__content {
-            padding-top: 1rem;
+        &-content {
+            padding: 1rem;
             height: 100%;
             max-height: none;
             width: auto;
             overflow-y: auto;
             width: 100% !important;
+            box-shadow: $card-shadow;
+            border-radius: $card-radius;
+            background-color: $card-bg;
         }
         .logo-wrapper {
             display: flex;
@@ -30,11 +37,11 @@
             align-items: center;
             padding: 1rem;
             height: 71px;
-            border-bottom: $border;
-            position: absolute;
-            top: 0;
-            z-index: 1;
-            background: #fff;
+            //border-bottom: $border;
+            //position: absolute;
+            //top: 0;
+            //z-index: 1;
+            //background: #fff;
             width: 100%;
             .logo-dashboard {
                 transition: all 0.5s ease-in-out;
@@ -53,17 +60,17 @@
             background: transparent;
             border: 1px solid transparent;
             cursor: pointer;
-            margin-#{$end-direction}: 10px;
+            margin-#{$end-direction}: 20px;
             //width: 2.5rem;
             & [class*="bar-"] {
                 display: block;
-                background: #102c58;
+                background: #000;
                 transform: rotate(0deg);
                 transition: 0.2s ease all;
-                border-radius: $radius2;
-                height: 2px;
+                border-radius: 1px;
+                height: 1px;
                 width: 24px;
-                margin-bottom: 4px;
+                margin-bottom: 5px;
                 &:nth-child(2) {
                     width: 18px;
                 }
@@ -96,16 +103,16 @@
     }
     &.sidebar-is-expanded {
         .sidebar {
-            width: 280px;
+            width: $sidebar-width;
         }
         .header-dashboard {
-            padding-#{$start-direction}: 280px;
+            padding-#{$start-direction}: $sidebar-width;
             @include media-breakpoint-down(lg) {
                 padding-#{$start-direction}: 20px;
             }
         }
         .main {
-            padding-#{$start-direction}: 280px;
+            padding-#{$start-direction}: $sidebar-width;
             @include media-breakpoint-down(lg) {
                 padding-#{$start-direction}: 0;
             }
@@ -159,7 +166,10 @@
         overflow: hidden;
         transition: all 0.5s ease-in-out;
         color: $txt-body;
-
+        margin-bottom: 1.5rem;
+        &:last-child {
+            margin-bottom: 0;
+        }
         &.is-active {
             background: $bg-brand-light;
             color: $brand-color;
@@ -175,26 +185,26 @@
         text-align: #{$start-direction};
         width: 100%;
         margin: 0;
-        padding: 1rem 1rem;
+        padding: 0;
     }
     &-icon {
         display: flex;
         align-items: center;
         justify-content: center;
         .svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
     }
     &-head {
         margin-#{$start-direction}: 10px;
-        font-weight: 500;
+        font-weight: 600;
         color: $txt-body;
-        font-size: 0.875rem;
+        font-size: inherit;
         transition: all 0.7s ease-in-out;
     }
     .dropdown-toggle-custom-arrow {
-        #{$end-direction}: 25px;
+        //#{$end-direction}: 25px;
     }
     .menu-sub {
         padding: 0;
@@ -204,7 +214,7 @@
             position: relative;
             color: $txt-gray;
             &:after {
-                content: "";
+                //content: "";
                 width: 5px;
                 height: 5px;
                 background: currentColor;
@@ -217,11 +227,12 @@
         }
         &-link {
             flex: 0 0 100%;
-            padding: 0.5rem 2rem;
-            padding-#{$start-direction}: 44px;
+            padding: 0.5rem 0;
+            font-size: 0.8rem;
+            padding-#{$start-direction}: 30px;
             &::before {
                 background: rgba(0, 0, 0, 0.08);
-                content: "";
+                //content: "";
                 height: 100%;
                 width: 100%;
                 //border-radius: $radius4;
@@ -234,13 +245,16 @@
             }
 
             &:hover,
-            &:focus,
-            &.active {
-                color: $txt-body;
+            &:focus {
+                color: $brand-color;
                 &::before {
                     opacity: 1;
                     transform: scale(1);
                 }
+            }
+            &.active {
+                color: $brand-color;
+                font-weight: 500;
             }
         }
     }
