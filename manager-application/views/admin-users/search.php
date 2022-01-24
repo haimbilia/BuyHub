@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#user-permission">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#user-permission">
                                                 </use>
                                             </svg>',
                         ];
@@ -53,7 +53,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
                                                 </use>
                                             </svg>',
                     ];

@@ -113,7 +113,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_EMAIL_USER', $siteLangId),
@@ -130,7 +130,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password-email">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),

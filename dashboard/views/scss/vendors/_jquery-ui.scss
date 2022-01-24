@@ -2194,29 +2194,6 @@ a.ui-button:active,
     background: rgba(0, 0, 0, 0.04);
 }
 
-.dropdown-menu {
-    background: #fff;
-    border-radius: 5px;
-    padding: 0;
-    position: absolute;
-    top: 100%;
-    min-width: 200px;
-    z-index: 2;
-    display: none;
-    list-style: none;
-    overflow-y: auto;
-}
-
-.dropdown-menu li {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-menu li a {
-    display: block;
-    padding: 10px;
-    color: inherit;
-}
-
 @media (max-width: 767px) {
     .ui-datepicker {
         min-width: 300px;
