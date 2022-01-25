@@ -241,7 +241,8 @@ class TaxCategoriesController extends ListingBaseController
         $srch->setPageNumber($page);
         $taxCategories = FatApp::getDb()->fetchAll($srch->getResultSet(), 'taxcat_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => [],
         );
         foreach ($taxCategories as $key => $taxCategory) {
             $taxCatName = strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'));

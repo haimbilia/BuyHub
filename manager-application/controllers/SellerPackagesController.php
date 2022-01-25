@@ -273,7 +273,10 @@ class SellerPackagesController extends ListingBaseController
         $rs = $srch->getResultSet();
 
         $plans = FatApp::getDb()->fetchAll($rs, 'spplan_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($plans as $key => $plan) {
             $json['results'][] = array(
                 'id' => $plan['spplan_id'],
