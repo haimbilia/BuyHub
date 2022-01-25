@@ -425,9 +425,11 @@ class FaqCategoriesController extends ListingBaseController
 
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $posts = $db->fetchAll($rs, 'faqcat_id');
-        $json = array();
+        $posts = FatApp::getDb()->fetchAll($rs, 'faqcat_id');
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($posts as $key => $post) {
             $json['results'][] = array(
                 'id' => $key,

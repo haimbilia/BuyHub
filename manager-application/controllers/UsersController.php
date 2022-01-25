@@ -628,7 +628,8 @@ class UsersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($users as $key => $user) {
             $userName = (0 < $joinShop) ? $user['shop_name'] : $user['credential_username'];

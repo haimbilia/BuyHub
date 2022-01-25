@@ -539,7 +539,10 @@ class ShopsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs, 'shop_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($products as $key => $product) {
             $json['results'][] = array(
                 'id' => $key,
