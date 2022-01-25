@@ -32,6 +32,9 @@
 
 
 
+
+
+
     <!-- Start Navigation Bar -->
 
     <div class="navigation-wrapper">
@@ -145,6 +148,105 @@
 
 
 
+ <!-- offcanvas-categories-menu -->
+
+ <nav id="menu">
+ <ul class="navigation">
+            <?php
+            if (count($headerNavigation)) {
+                foreach ($headerNavigation as $nav) {
+
+                    if ($nav['pages']) {
+
+                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
+                        foreach ($mainNavigation as $link) {
+
+                            $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
+                            $uploadedTime = AttachedFile::setTimeParam($catThumb['afile_updated_at']);
+                            $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
+                            $OrgnavUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
+                            $rootLinkUrl = UrlHelper::generateUrl('category', 'view', array($link['nlink_category_id']));
+                            $href = $navUrl;
+                            $navchild = '';
+                            $target = $link['nlink_target'];
+                            if (0 < count($link['children'])) {
+                                $href = 'javascript:void(0)';
+                                $navchild = 'navchild';
+                                $target = '_self';
+                            }
+            ?>
+
+                            <li class="navigation-item <?php echo $navchild; ?>">
+                                <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
+
+                                    <span class="link__mobilenav"></span>
+                                    <div class="subnav">
+                                        <div class="subnav-inner">
+                                            <div class="container">
+                                                <div class="categories-block">
+
+                                                    <?php $subyChild = 0;
+                                                    foreach ($link['children'] as $children) {
+                                                        $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                                        $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                    ?>
+                                                        <div class="categories-cols">
+
+                                                            <ul class="categories-list">
+
+                                                                <li class="categories-list-item">
+                                                                    <a class="categories-list-link categories-list-head" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+
+                                                                </li>
+                                                                <?php $subChild = 0;
+                                                                foreach ($children['children'] as $childCat) {
+                                                                    $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                                    $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                                ?>
+
+                                                                    <li class="categories-list-item">
+                                                                        <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                            <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                                    </li>
+
+
+                                                                <?php
+                                                                    if ($subChild++ == 7) {
+                                                                        break;
+                                                                    }
+                                                                }
+
+                                                                if ($subyChild++ == 3) {
+                                                                    break;
+                                                                } ?>
+                                                            </ul>
+
+                                                        </div>
+
+                                                    <?php
+                                                    } ?>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+
+                            </li>
+
+
+
+
+            <?php
+                        }
+                    }
+                }
+            } ?>
+        </ul>
+    </nav>
 
 
 <?php } ?>

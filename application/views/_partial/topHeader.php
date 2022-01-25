@@ -184,7 +184,7 @@
             </a>
         </li>
         <li class="mobile-actions-item active" role="none">
-            <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">
+            <button class="mobile-actions-link btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                     </use>
@@ -227,52 +227,9 @@
     </div>
 
 
-    <!-- offcanvas-categories-menu -->
-    <div class="offcanvas offcanvas-categories-menu offcanvas-start" tabindex="-1" id="categories-menu">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title"> </h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <nav id="menu" class="mm-spn mm-spn--light mm-spn--navbar mm-spn--main">
-                <ul>
-                    <li class="Selected"><a href="#">Home</a></li>
-                    <li>
-                        <span>About us</span>
-                        <ul>
-                            <li><a href="#about/history">History</a></li>
-                            <li>
-                                <span>The team</span>
-                                <ul>
-                                    <li><a href="#about/team/management">Management</a></li>
-                                    <li>
-                                        <a href="#about/team/sales">Sales</a>
-                                        <ul>
-                                            <li><a href="#about/history">Sales</a></li>
-                                            <li>
-                                                <span>The team</span>
-                                                <ul>
-                                                    <li><a href="#about/team/management">Sales101</a></li>
-                                                    <li><a href="#about/team/sales">Sales102</a></li>
-                                                    <li><a href="#about/team/development">Sales103</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#about/address">Our address</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#about/team/development">Development</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#about/address">Our address</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
+   
 
 
-    </div>
     <!-- offcanvas-account -->
     <div class="offcanvas offcanvas-account offcanvas-start" tabindex="-1" id="offcanvas-account">
         <div class="offcanvas-header">
