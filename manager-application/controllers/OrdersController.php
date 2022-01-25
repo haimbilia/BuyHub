@@ -196,9 +196,17 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('optosu.optsu_op_id', '=', $opId);
+        $rs = $srch->getResultSet();
+        $shippingUser = (array) FatApp::getDb()->fetch($rs);
+        
         $frm = $this->getShippingUserForm();
         $frm->fill(['op_id' => $opId, 'optsu_user_id' => $opRow['optsu_user_id']]);
         $this->set('frm', $frm);
+        $this->set('isShippingUserAssigned', (0 < count($shippingUser)));
         $this->set('orderId', $orderId);
         $this->set('recordId', $opId);
         $this->set('formTitle', $opRow['op_selprod_title']);
