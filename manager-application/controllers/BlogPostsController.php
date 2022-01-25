@@ -577,7 +577,10 @@ class BlogPostsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $posts = $db->fetchAll($rs, 'post_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($posts as $key => $post) {
             $json['results'][] = array(
                 'id' => $key,

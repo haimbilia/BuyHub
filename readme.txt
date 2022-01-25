@@ -297,7 +297,13 @@ Updates/Fixes :
     => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
     => 061115 - commission going negative when refund the product [RV-9.3.1]
     => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
-    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system 
+    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system
+    => 061812 - Admin UI: "No Record found" message is not showing while trying to search the un-exist records on the Product listing page
+    => 061770 - Admin UI: Pagination is not working properly while trying to see the records more than the actual records on the whole system
+    => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
+    => 061761 - Admin UI: Unit is not showing with the Dimensions on the table under the Shipping package section
+    => 061756 - Admin UI: Validation is missing for the 'State' field while adding and editing the pickup address
+    => 061754 - Admin UI: The drawer design is not consistent while adding, editing, and resting the pickup addresses
 
 New Features:  
     => Admin shipped products listing page
@@ -553,7 +559,10 @@ Enhancement:
     => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
     => 061665 - Admin UI: 'Search icon' is not showing in the search field and the 'search' watermark is also missing on the Abandoned cart page.
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
-
+    => 061857 - Admin UI: The 'wrong status' is showing for the inactive rating types while editing the same.
+    => 061870 - Admin UI: Search is not working under the setting section at the admin's end
+    => 061855 - Admin UI: Admin is not able to add the new rating types and able to active/inactive the by-default Rating types
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
