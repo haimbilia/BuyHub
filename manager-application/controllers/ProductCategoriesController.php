@@ -546,7 +546,9 @@ class ProductCategoriesController extends ListingBaseController
 
         $prodCateObj = new ProductCategory();
         $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 20, $langId, $excludeRecords);
-        $json = array();
+        $json = array(
+            'results' => []
+        );
         foreach ($categories as $key => $val) {
             $json['results'][] = array(
                 'id' => $key,

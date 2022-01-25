@@ -1,8 +1,7 @@
 <?php
 class ProductsController extends SellerBaseController
 {
-
-    use CatalogProduct;
+   
     use CatalogProduct {
         validateGetForm as validateForm;
     }
@@ -227,10 +226,7 @@ class ProductsController extends SellerBaseController
             $langId = CommonHelper::getDefaultFormLangId();
         }
         $productSpecifications = [];
-        if (0 < $recordId) {
-            if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $recordId)) {
-                LibHelper::exitWithError($this->str_invalid_request_id);
-            }
+        if (0 < $recordId) {           
             $prod = new Product($recordId);
             $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
         }
@@ -392,8 +388,9 @@ class ProductsController extends SellerBaseController
         Tag::updateProductTagString($recordId);
         Product::updateMinPrices($recordId);
         if ($isNewProduct) {
-            $prodObj->moveTempFiles(AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, $post['temp_product_id']);
+            $prodObj->moveTempFiles( $post['temp_product_id']);
         }
+
         $db->commitTransaction();
         $this->set('recordId', $recordId);
         $this->set('msg', $this->str_setup_successful);
@@ -613,7 +610,7 @@ class ProductsController extends SellerBaseController
 
         $this->set("lang_id", $langId);
         $this->set("option_id", $optionId);
-        $this->set("product_id", $recordId);
+        $this->set("record_id", $recordId);
         $this->set("file_type", $fileType);
         $this->set("msg", Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -667,11 +664,7 @@ class ProductsController extends SellerBaseController
         $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
 
         $upcCodeData = [];
-        if (0 < $recordId) {
-            if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $recordId)) {
-                LibHelper::exitWithError($this->str_invalid_request_id);
-            }
-
+        if (0 < $recordId) { 
             $srch = UpcCode::getSearchObject();
             $srch->addCondition('upc_product_id', '=', $recordId);
             $srch->doNotCalculateRecords();
@@ -744,7 +737,7 @@ class ProductsController extends SellerBaseController
             $allowed_images = $currentPlanData['ossubs_images_allowed'];   
 
             if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {           
-                $srch = new SearchBase(AttachedFile::DB_TBL);
+                $srch = new SearchBase(AttachedFileTemp::DB_TBL);
             } else {
                 $srch = new SearchBase(AttachedFile::DB_TBL);
                 $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);

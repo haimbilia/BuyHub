@@ -23,12 +23,13 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'shippack_units':
-                $unitType = (isset($unitTypeArray[$row['shippack_units']])) ? $unitTypeArray[$row['shippack_units']] : '';
-
-                $dimension = $row['shippack_length'] . ' x ' . $row['shippack_width'] . ' x ' . $row['shippack_height'] . ' ' . $unitType;
-
+            case 'dimensions':
+                $dimension = $row['shippack_length'] . ' x ' . $row['shippack_width'] . ' x ' . $row['shippack_height'];
                 $td->appendElement('plaintext', array(), $dimension, true);
+                break; 
+            case 'shippack_units':
+                $unitTypeHtm = ShippingPackage::getUnitTypeHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $unitTypeHtm, true);
                 break; 
             case 'action':
                 $data = [

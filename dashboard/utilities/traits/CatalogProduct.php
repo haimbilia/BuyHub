@@ -86,23 +86,14 @@ trait CatalogProduct
                 $weightFld->requirements()->setRange('0.01', '9999999999');
             }
 
-            if (1 == $isRequested) {
-                $shippingObj = new Shipping($langId);
-                if (!$shippingObj->getShippingApiObj(0)) {
-                    $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
-                }
-            } else {
+            if (0 == $isRequested) {
                 $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
-            }
+            } 
         }
 
         if (0 < $recordId && $isRequested == 0) {
             $frm->addCheckBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', 1, array(), false, 0);
-        }
-
-        if (0 < $recordId && $isRequested == 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $langId), '', ProductRequest::getStatusArr($langId), '', array(), '');           
-        }
+        }        
 
         if ($isRequested == 0) {
             $languageArr = Language::getDropDownList();
@@ -120,7 +111,7 @@ trait CatalogProduct
         $frm->addHiddenField('', 'optionValues');
         $frm->addHiddenField('', 'specifications');
 
-        if (1 > $recordId && $isRequested == 0) {
+        if (1 > $recordId) {
             $fld = $frm->addHiddenField('', 'temp_product_id');
             $fld->requirements()->setRequired();
         }
@@ -143,6 +134,21 @@ trait CatalogProduct
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+
+    public function customProductImageForm(int $recordId = 0, $tempProductId = 0)
+    {
+        $frm = $this->getImageFrm();
+        if (1 > $recordId) {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
+        } else {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $recordId]);
+        }
+
+        $this->set('frm', $frm);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
 
     private function getImageFrm()
     {

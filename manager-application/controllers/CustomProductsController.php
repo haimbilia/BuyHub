@@ -272,7 +272,7 @@ class CustomProductsController extends ListingBaseController
             }
         }
 
-        if (is_array($productData['product_option'])) {
+        if (is_array($productData['product_option']) && count($productData['product_option'])) {
             $srch = Option::getSearchObject($langId);
             $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
             $srch->addCondition('option_id', 'IN', $productData['product_option']);
@@ -673,7 +673,12 @@ class CustomProductsController extends ListingBaseController
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
-        return $this->getCatalogForm($langId, $productType, $recordId, 1);
+        $frm = $this->getCatalogForm($langId, $productType, $recordId, 1);
+        $shippingObj = new Shipping($langId);
+        if (!$shippingObj->getShippingApiObj(0)) {
+            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
+        }
+        return $frm;
     }
 
     public function imageForm($recordId = 0)
