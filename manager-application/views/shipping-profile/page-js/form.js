@@ -310,7 +310,7 @@ $(document).ready(function () {
 $(document).on('keyup', '.omni-search', function () {
     var filter = $(this).val();
     $('.list-zones').find("ul li").each(function () {
-        if ($(this).text().search(new RegExp(filter, "gi")) < stringLength) {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).hide();
             $(this).removeClass('li-display');
         } else {
