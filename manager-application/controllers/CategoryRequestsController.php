@@ -208,11 +208,8 @@ class CategoryRequestsController extends ListingBaseController
 
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $options = array();
-        if ($rs) {
-            $options = $db->fetchAll($rs, 'categoryReqId');
-        }
+        $options = FatApp::getDb()->fetchAll($rs, 'categoryReqId');
+        
         $json = array();
         foreach ($options as $key => $option) {
             $json[] = array(

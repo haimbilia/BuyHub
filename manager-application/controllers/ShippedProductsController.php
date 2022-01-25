@@ -86,8 +86,9 @@ class ShippedProductsController extends ListingBaseController
             $srch->addCondition('u.user_id', '=', $post['user_id']);
         }
 
-        if (!empty($post['shipping_profile']) && $post['shipping_profile'] > 0) {
-            $srch->addCondition('sppro.shippro_shipprofile_id', '=', $post['shipping_profile']);
+        $shippingProfile = FatApp::getPostedData('shipping_profile', FatUtility::VAR_INT, 0);
+        if (0 < $shippingProfile) {
+            $srch->addCondition('sppro.shippro_shipprofile_id', '=', $shippingProfile);
         }
         $srch->addGroupBy('sppro.shippro_product_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
@@ -257,7 +258,9 @@ class ShippedProductsController extends ListingBaseController
                 'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
             ]
         );
-        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+
+        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
+        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', array(), Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId));
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');

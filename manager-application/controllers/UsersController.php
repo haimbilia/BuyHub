@@ -359,7 +359,9 @@ class UsersController extends ListingBaseController
             $fld->requirements()->setRequired();
         }
         $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
@@ -626,7 +628,8 @@ class UsersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($users as $key => $user) {
             $userName = (0 < $joinShop) ? $user['shop_name'] : $user['credential_username'];

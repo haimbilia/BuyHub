@@ -285,7 +285,8 @@ class CountriesController extends ListingBaseController
         $srch->setPageSize($pagesize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($records as $key => $record) {
             $json['results'][] = array(

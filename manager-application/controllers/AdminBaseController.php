@@ -178,6 +178,7 @@ class AdminBaseController extends FatController
                     'maxLengthValidator' => Labels::getLabel('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', $this->siteLangId), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
                     'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
+                    'invalidState' => Labels::getLabel('LBL_INVALID_STATE', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {

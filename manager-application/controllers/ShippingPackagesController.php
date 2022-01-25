@@ -78,6 +78,7 @@ class ShippingPackagesController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
@@ -164,7 +165,8 @@ class ShippingPackagesController extends ListingBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'shippack_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'shippack_units' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
+            'dimensions' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
+            'shippack_units' => Labels::getLabel('LBL_UNIT', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('shippingPackTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -176,6 +178,7 @@ class ShippingPackagesController extends ListingBaseController
         return [
             'listSerial',
             'shippack_name',
+            'dimensions',
             'shippack_units',
             'action',
         ];
@@ -183,6 +186,6 @@ class ShippingPackagesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['shippack_units'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dimensions', 'shippack_units'], Common::excludeKeysForSort());
     }
 }

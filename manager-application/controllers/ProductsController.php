@@ -673,8 +673,9 @@ class ProductsController extends ListingBaseController
             $this->addSortingElements($frm, 'product_added_on', applicationConstants::SORT_DESC);
         }
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
-
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        
         if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
             $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'is_custom_or_catalog', array(-1 => Labels::getLabel('FRM_ALL', $this->siteLangId)) + applicationConstants::getCatalogTypeArr($this->siteLangId), -1, array(), '');
         }

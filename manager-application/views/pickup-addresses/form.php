@@ -15,10 +15,10 @@ $addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My
 
 $countryFld = $frm->getField('addr_country_id');
 $countryFld->setFieldTagAttribute('id', 'addr_country_id');
-$countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#shop_state\',' . $langId . ')');
+$countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#addrStateJs\',' . $langId . ')');
 
 $stateFld = $frm->getField('addr_state_id');
-$stateFld->setFieldTagAttribute('id', 'shop_state');
+$stateFld->setFieldTagAttribute('id', 'addrStateJs');
 
 $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-radio');
@@ -198,8 +198,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
     <?php if ($addressId > 0) { ?>
         $(document).ready(function() {
             $('.availabilityType-js:checked').trigger('change');
-            getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#shop_state', <?php echo $langId; ?>);
-
+            getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#addrStateJs', <?php echo $langId; ?>);
         });
     <?php } ?>
 </script>

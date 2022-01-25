@@ -70,12 +70,17 @@ $displayPageSizeDropdown = isset($displayPageSizeDropdown) ? $displayPageSizeDro
 <div class="row justify-content-between">
     <div class="col">
         <div class="data-length">
-            <?php $pageSizeArr = applicationConstants::getPageSizeValues();
+            <?php 
+            $pageSizeArr = applicationConstants::getPageSizeValues();
             if (!empty($pageSizeArr) && $displayPageSizeDropdown) { ?>
                 <select name="pageSize" id="pageSize" class="form-select data-length-select" onchange="<?php echo $setPageSizeJsFunc; ?>">
                     <?php foreach ($pageSizeArr as $val) { ?>
                         <option value="<?php echo $val; ?>" <?php echo ($pageSize == $val) ? 'selected' : ''; ?>><?php echo $val; ?></option>
-                    <?php } ?>
+                    <?php 
+                        if ($recordCount < $val) {
+                            break;
+                        }
+                    } ?>
                 </select>
             <?php } ?>
             <div class="data-length-info"></div>

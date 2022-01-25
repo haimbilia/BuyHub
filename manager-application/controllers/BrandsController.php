@@ -578,7 +578,8 @@ class BrandsController extends ListingBaseController
         $brands = FatApp::getDb()->fetchAll($srch->getResultSet(), 'brand_id');
 
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($brands as $key => $brand) {
             $json['results'][] = array(
