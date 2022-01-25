@@ -52,7 +52,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'ratingtype_active':
                 $title = ($row['ratingtype_id'] == RatingType::TYPE_PRODUCT) ? Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $siteLangId) : '';
-                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['ratingtype_id'], $row[$key], (!$canEdit || $row['ratingtype_id'] == RatingType::TYPE_PRODUCT), $title);
+                if(in_array($row['ratingtype_id'],[ RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
+                    $htm = '';
+                }else{
+                    $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['ratingtype_id'], $row[$key], (!$canEdit || $row['ratingtype_id'] == RatingType::TYPE_PRODUCT), $title);
+                }
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':
