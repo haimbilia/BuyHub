@@ -197,7 +197,7 @@
     };
 
     prodSpecifications = function () {
-        var recordId = getCurrentFrmRecordId();
+        var recordId = getCurrentFrmRecordId();        
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { recordId, langId }, function (res) {
             $('#specificationsListJs').html(res.html);

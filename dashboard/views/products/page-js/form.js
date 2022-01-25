@@ -1,5 +1,5 @@
+var advanceMedia = false; /* open via advance media*/
 (function () {
-
     getCurrentFrmLangId = function () {
         return $("#addProductfrm [name='lang_id']").val();
     };
@@ -299,18 +299,12 @@
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
         fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
-            var ans = $.parseJSON(t);
-            if (ans.status == 0) {
-                fcom.displayErrorMessage(ans.msg);
-                return;
-            } else {
-                fcom.displaySuccessMessage(ans.msg);
-            }
+            
             productImages(product_id, file_type, ans.optionId, ans.langId);
             if (ans.isDefaultLayout) {
                 productDefaultImages();
             }
-        });
+        },{ fOutMode: 'json'});
     };
 
     optionValuesChanges = function (e) {
@@ -424,9 +418,15 @@
             },{ fOutMode: 'json'});
         }, 2000);
     };
-    loadCropper = function (inputBtn) {
+    loadImageCropper = function (inputBtn) {     
+        loadCropper(inputBtn , true);
+    }
+
+    loadCropper = function (inputBtn , isAdvanceMedia = false) {
+            advanceMedia = isAdvanceMedia;
+
         if (inputBtn.files && inputBtn.files[0]) {
-            loadCropperSkeleton(false);
+            loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
@@ -437,14 +437,9 @@
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
@@ -478,18 +473,22 @@
             cache: false,
             contentType: false,
             processData: false,
-            success: function (ans) {
-                fcom.closeAlertMessage();  
+            success: function (ans) {   
+                fcom.closeAlertMessage();       
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                autoOpenSideBar = false;
-                $("#modalBoxJs").modal("hide");
+                $("#modalBoxJs").modal("hide");               
+                if(advanceMedia){
+                    $.ykmodal.show();
+                    productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);                    
+                }             
+            
                 fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
-                }               
+                }              
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 fcom.displayErrorMessage(
@@ -497,7 +496,7 @@
                 );
             },
         });
-    };
+    }; 
 
     productDefaultImages = function () {
         let recordId = getCurrentFrmRecordId();
@@ -630,123 +629,12 @@
         });
     };
 
-    loadCropperSkeleton = function (reopenSideBarOnClose = true) {
-        autoOpenSideBar = reopenSideBarOnClose;
+    loadCropperSkeleton = function () {     
         $("#modalBoxJs").remove();
         $("body").append(fcom.getModalBody());
         $("#modalBoxJs").modal("show");
         $.ykmodal.close();
-    };
-
-    loadImageCropper = function (inputBtn) {        
-
-        if (inputBtn.files && inputBtn.files[0]) {
-            loadCropperSkeleton();
-            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.updateWithAjax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {               
-                $("#modalBoxJs .modal-body").html(t.body);
-                $("#modalBoxJs .modal-footer").html(t.footer);
-                var file = inputBtn.files[0];
-
-                var frmName = $(inputBtn).closest('form').attr('name');
-                var minWidth = document[frmName].min_width.value;
-                var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
-                var options = {
-                    aspectRatio: aspectRatio,
-                    data: {
-                        width: minWidth,
-                        height: minHeight,
-                    },
-                    minCropBoxWidth: minWidth,
-                    minCropBoxHeight: minHeight,
-                    toggleDragModeOnDblclick: false,
-                    imageSmoothingQuality: "high",
-                    imageSmoothingEnabled: true,
-                };
-                $(inputBtn).val("");
-                setTimeout(function () {
-                    cropImage(file, options, "uploadImages", inputBtn);
-                }, 100);
-                return;
-            });
-        }
-    };
-
-    uploadImages = function (formData) {        
-
-        var frmName = formData.get("frmName");
-        var frm = document.forms[frmName];
-        var langId = 0;
-        if ('undefined' != typeof frm.lang_id) {
-            langId = frm.lang_id.value;
-        }
-        var slideScreen = 0;
-        if ("undefined" != typeof frm.slide_screen) {
-            slideScreen = frm.slide_screen.value;
-        }
-
-        var action = 'uploadMedia';
-        if ("undefined" != typeof frm.dataset.action) {
-            action = frm.dataset.action;
-        }
-
-        var other_data = $('form[name="' + frmName + '"]').serializeArray();
-        $.each(other_data, function (key, input) {
-            formData.append(input.name, input.value);
-        });
-
-        formData.append('fOutMode', 'json');
-        $.ajax({
-            url: fcom.makeUrl('Products', action),
-            type: "post",
-            dataType: "json",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
-            },
-            success: function (ans) {
-                fcom.closeAlertMessage();  
-                if (ans.status == 0) {
-                    fcom.displayErrorMessage(ans.msg);
-                    return;
-                }
-               
-                fcom.displaySuccessMessage(ans.msg);
-                if (true === $.ykmodal.isAdded()) {
-                    $.ykmodal.show();
-                    $("#modalBoxJs").modal("hide");
-                    if ("undefined" != typeof frm.dataset.callback) {
-                        eval(frm.dataset.callback);
-                    } else if ("undefined" != typeof frm.dataset.callbackfn) {
-                        window[frm.dataset.callbackfn](ans); /* callback function */
-                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
-                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
-                    } else {
-                        mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
-                    }
-                } else {
-                    mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
-                }               
-                
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                fcom.displayErrorMessage(
-                    thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
-                );
-            },
-        });
-    };
+    };   
 
 })();
 

@@ -1,5 +1,5 @@
+var advanceMedia = false; /* open via advance media*/
 (function () {
-
     getCurrentFrmLangId = function () {
         return $("#addProductfrm [name='lang_id']").val();
     };
@@ -7,6 +7,10 @@
     getCurrentFrmRecordId = function () {
         return $("#addProductfrm [name='record_id']").val();
     };   
+
+    getCurrentFrmTempProductId = function () {
+        return $("#addProductfrm [name='temp_product_id']").val();
+    };
 
     /**  record_id   =  product_id */
     setup = function (frm) {
@@ -207,17 +211,23 @@
     };
 
     imageForm = function () {
-        let recordId = getCurrentFrmRecordId();       
+
+        let recordId = getCurrentFrmRecordId();
+        let tempProductId = getCurrentFrmTempProductId();
         if (1 > recordId) {
-            return;
-        }      
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "imageForm", [recordId]), '', function (t) {
-            $.ykmodal(t.html);
-            $.ykmsg.close()           
-            loadImageOptions();           
+            if (tempProductId == undefined) {
+                console.warn('temp product id is manatory');
+                return;
+            }
+        }
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "customProductImageForm", [recordId,tempProductId]), '', function (t) {
+            isImageUploadByPopUp = true;
+            $.ykmodal(t.html); 
+            loadImageOptions();
+            var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();
-            productImages(recordId);
-            fcom.removeLoader();
+            productImages(recordId, fileType);          
+            fcom.closeAlertMessage(); 
         });
     };
     loadImageOptions = function () {
@@ -244,17 +254,9 @@
 
         })
     };
-
-    productImagesCallback = function (t) {  
-        productImages(t.recordId, t.option_id, t.lang_id)
-        if (t.isDefaultLayout) {
-            productDefaultImages();
-        }
-    };
-    productImages = function (recordId, option_id = 0, lang_id = 0) {
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, option_id, lang_id]), '', function (t) {
-            fcom.removeLoader();
-            $.ykmsg.close();
+   
+    productImages = function (recordId, file_type, option_id = 0, lang_id = 0) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, file_type,option_id, lang_id]), '', function (t) {
             $('#productImagesJs').html(t.html);
             $("#productImagesJs").sortable({
                 stop: function() {
@@ -266,27 +268,29 @@
                     var sort = mysortarr.join('-');
                     var lang_id = $('.language-js').val();
                     var record_id = $('#image_record_id').val();          
-                    var option_id = $('#image_option_id').val();                   
+                    var option_id = $('#image_option_id').val();  
+                    let fileType = $('#image_file_type').val();                 
                     fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
                         record_id,                       
                         ids: sort
                     }, function(t) {
-                        productImages(record_id, option_id, lang_id);
+                        productImages(record_id,fileType, option_id, lang_id);
                     });
                 }
             }).disableSelection();
         });
     };
 
-    deleteImage = function (record_id, image_id) {
+    deleteImage = function (record_id, image_id ,file_type) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteImage', [record_id, image_id]), '', function (t) {            
-            productImages(record_id, t.optionId, t.langId);
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'deleteImage', [record_id, image_id,file_type]), '', function (t) {            
+         
+            productImages(product_id, file_type, ans.optionId, ans.langId);
             if (t.isDefaultLayout) {
                 productDefaultImages();
             }
-        });
+        },{ fOutMode: 'json'});
     };
 
     optionValuesChanges = function (e) {
@@ -303,7 +307,7 @@
 
         var keyword = e.detail.value;
         var list = [];
-        fcom.ajax(fcom.makeUrl('OptionValues', 'autoComplete'), {
+        fcom.ajax(fcom.makeUrl('seller', 'autoCompleteValues'), {
             keyword: keyword,
             optionId: optionId,
             langId: getCurrentFrmLangId()
@@ -340,7 +344,7 @@
         tagifyObjs[index] = tagify;
     };
 
-    upcType = function () {
+    upcType = function () {        
         $('#addProductfrm button[type="submit"]').prop("disabled", true);
         if (typeof upcTypeTriggerEvent != 'undefined') {
             clearTimeout(upcTypeTriggerEvent);
@@ -348,9 +352,9 @@
         upcTypeTriggerEvent = setTimeout(function () {
 
             $('#variantsListJs').prepend(fcom.getLoader());
-            let type = $('.upc_type:checked').val();
-            let recordId = getCurrentFrmRecordId();
+            let type = $('.upc_type:checked').val();           
             let langId = getCurrentFrmLangId();
+            let recordId = getCurrentFrmRecordId();
             let productOptions = {};
             if (type == 0) {
                 $('#addProductfrm select.optionsJs').each(function () {
@@ -378,10 +382,50 @@
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
             },{ fOutMode: 'json'});
         }, 2000);
+    };    
+    
+    productDefaultImages = function () {
+        let recordId = getCurrentFrmRecordId();
+        fileType = 0;
+        if (1 > recordId) {
+            recordId = getCurrentFrmTempProductId();
+            fileType = tempImageType;
+        }    
+        fcom.displayProcessing();   
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
+            fcom.closeAlertMessage();
+            $('#productDefaultImagesJs li').not(":first").remove();
+            $('#productDefaultImagesJs').append(t.html);
+
+            $("#productDefaultImagesJs").sortable({
+                items: "li:not(.unsortableJs)",
+                stop: function() {
+                    var mysortarr = new Array();
+                    $(this).find('li').each(function() {
+                        mysortarr.push($(this).attr("id"));
+                    });
+
+                    var sort = mysortarr.join('-');
+                    var lang_id = $('.language-js').val();
+                    var record_id = $('#hiddenMediaFrmJs').find('[name="record_id"]').val();
+                    fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
+                        record_id,                      
+                        ids: sort
+                    });
+                }
+            }).disableSelection();
+        },{ fOutMode: 'json'});
     };
-    loadCropper = function (inputBtn) {
+
+    loadImageCropper = function (inputBtn) {     
+        loadCropper(inputBtn , true);
+    }
+
+    loadCropper = function (inputBtn , isAdvanceMedia = false) {
+            advanceMedia = isAdvanceMedia;
+
         if (inputBtn.files && inputBtn.files[0]) {
-            loadCropperSkeleton(false);
+            loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('CustomProducts', "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
@@ -392,14 +436,9 @@
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
@@ -433,19 +472,22 @@
             cache: false,
             contentType: false,
             processData: false,
-            success: function (ans) {
-                fcom.removeLoader();
+            success: function (ans) {   
+                fcom.closeAlertMessage();       
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                autoOpenSideBar = false;
-                $("#modalBoxJs").modal("hide");
-                $.ykmsg.success(ans.msg);
+                $("#modalBoxJs").modal("hide");               
+                if(advanceMedia){
+                    $.ykmodal.show();
+                    productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);                    
+                }             
+            
+                fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
-                }
-                fcom.removeLoader();
+                }              
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 fcom.displayErrorMessage(
@@ -453,42 +495,20 @@
                 );
             },
         });
-    };
-    
-    productDefaultImages = function () {
-        let recordId = getCurrentFrmRecordId();    
-        fcom.displayProcessing();   
-        fcom.ajax(fcom.makeUrl('CustomProducts', 'images', [recordId, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
-            fcom.closeAlertMessage();
-            $('#productDefaultImagesJs li').not(":first").remove();
-            $('#productDefaultImagesJs').append(t.html);
+    };    
 
-            $("#productDefaultImagesJs").sortable({
-                items: "li:not(.unsortableJs)",
-                stop: function() {
-                    var mysortarr = new Array();
-                    $(this).find('li').each(function() {
-                        mysortarr.push($(this).attr("id"));
-                    });
+    loadCropperSkeleton = function () {       
+        $("#modalBoxJs").remove();
+        $("body").append(fcom.getModalBody());
+        $("#modalBoxJs").modal("show");
+        $.ykmodal.close();
+    };    
 
-                    var sort = mysortarr.join('-');
-                    var lang_id = $('.language-js').val();
-                    var record_id = $('#hiddenMediaFrmJs').find('[name="record_id"]').val();
-                    fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
-                        record_id,                      
-                        ids: sort
-                    });
-                }
-            }).disableSelection();
-        },{ fOutMode: 'json'});
-    };
     digitalDownloadsForm = function (type, callback = '') {
         $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "digitalDownloadForm", [recordId, type]), "", function (t) {            
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
-            $.ykmsg.close();
-            fcom.removeLoader();
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');        
             if (typeof callback == 'function') {
                 callback();
             } else {
@@ -516,8 +536,7 @@
             data: data,
             processData: false,
             contentType: false,
-            success: function (t) {
-                fcom.removeLoader();
+            success: function (t) {              
                 t = $.parseJSON(t);
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
@@ -596,7 +615,7 @@
             let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });
-    };    
+    };  
 
 })();
 
@@ -690,17 +709,19 @@ $(document).on('click', '.optionsDeleteJs', function () {
 });
 
 $(document).on('change', '#image_option_id', function () {
-    let optionId = $(this).val();  
-    let productId = $('#image_record_id').val();
+    let optionId = $(this).val();
+    let fileType = $('#image_file_type').val();
+    let recordId = $('#image_record_id').val();
     let langId = $('#image_lang_id').val();
-    productImages(productId, optionId, langId);
+    productImages(recordId, fileType, optionId, langId);
 });
 
 $(document).on('change', '#image_lang_id', function () {
-    let langId = $(this).val();  
-    let productId = $('#image_record_id').val();
+    let langId = $(this).val();
+    let fileType = $('#image_file_type').val();
+    let recordId = $('#image_record_id').val();
     let optionId = $('#image_option_id').val();
-    productImages(productId, optionId, langId);
+    productImages(recordId, fileType, optionId, langId);
 });
 
 $(document).on('change', '#digitalFrmLangId', function () {
