@@ -300,6 +300,7 @@ Updates/Fixes :
     => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system
     => 061812 - Admin UI: "No Record found" message is not showing while trying to search the un-exist records on the Product listing page
     => 061770 - Admin UI: Pagination is not working properly while trying to see the records more than the actual records on the whole system
+    => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
 
 New Features:  
     => Admin shipped products listing page
