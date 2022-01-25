@@ -2,8 +2,11 @@ $(document).ready(function () {
     var profileId = $('input[name="profile_id"]').val();
     searchZone(profileId);
     searchProductsSection(profileId);
+
 });
 (function () {
+
+
     var prodListing = '#product-listing--js';
     var shipListing = '#shipping--js';
     var zoneListing = '#listing-zones';
@@ -58,11 +61,36 @@ $(document).ready(function () {
         $(dv).html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
             $.ykmsg.close();
-			fcom.removeLoader();
+            fcom.removeLoader();
             $(dv).html(res.html);
             searchProducts(profileId);
         });
         fcom.removeLoader();
+    };
+
+    clearSearch = function (profileId, frm) {
+        document.frmRecordSearch.reset();
+        searchProducts(profileId, frm);
+    };
+
+    loadLangData = function () {
+        var frm = $('#frmShippingProfile');
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'ProfileNameForm'), data, function (res) {
+            fcom.removeLoader();
+            $('#profile-name-form').html(res.html);
+        });
+    };
+
+    profileProductForm = function (profileId) {
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'form', [profileId]), '', function (t) {
+            $.ykmodal(t.html, true, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
     };
 
     setupProfileProduct = function (frm) {
@@ -95,7 +123,7 @@ $(document).ready(function () {
         $(zoneListing).html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
             $.ykmsg.close();
-			fcom.removeLoader();
+            fcom.removeLoader();
             $(zoneListing).html(res.html);
             if (true == scrollToNew) {
                 setTimeout(function () {
@@ -243,7 +271,7 @@ $(document).ready(function () {
     getZoneLocation = function (zoneId) {
         $.ajax({
             url: fcom.makeUrl('ShippingZones', 'getLocations', [zoneId, 1]),
-            data: { fIsAjax: 1 },
+            data: {fIsAjax: 1},
             dataType: 'json',
             type: 'post',
             success: function (res) {
@@ -279,7 +307,25 @@ $(document).ready(function () {
         }
     }
 })();
-
+$(document).on('keyup', '.omni-search', function () {
+    var filter = $(this).val();
+    $('.list-zones').find("ul li").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < stringLength) {
+            $(this).hide();
+            $(this).removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).addClass('li-display');
+        }
+    });
+    $('.checkbox_container--js .zones-states--js').each(function () {
+        if ($(this).find('.li-display').length == 0) {
+            $(this).closest('.zones--js').hide();
+        } else {
+            $(this).closest('.zones--js').show();
+        }
+    })
+});
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
         $('.checkbox_container--js input[type="checkbox"]').each(function (index) {
@@ -342,12 +388,12 @@ $(document).on('keyup', "input[name='product_name']", function () {
             'source': function (request, response) {
                 $.ajax({
                     url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: { fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId },
+                    data: {fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId},
                     dataType: 'json',
                     type: 'post',
                     success: function (json) {
                         response($.map(json, function (item) {
-                            return { label: item['name'], value: item['name'], id: item['id'] };
+                            return {label: item['name'], value: item['name'], id: item['id']};
                         }));
                     },
                 });
