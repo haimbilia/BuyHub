@@ -15,7 +15,7 @@ class Configurations extends FatModel
     public const FORM_LIVE_CHAT = 8;
     public const FORM_THIRD_PARTY_API = 9;
     public const FORM_EMAIL = 10;
-    /*   public const FORM_SERVER = 11; */
+    public const FORM_SERVER = 11;
     public const FORM_SHARING = 12;
     public const FORM_REFERAL = 13;
     public const FORM_MEDIA = 14;
