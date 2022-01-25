@@ -560,6 +560,8 @@ Enhancement:
     => 061665 - Admin UI: 'Search icon' is not showing in the search field and the 'search' watermark is also missing on the Abandoned cart page.
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
     => 061857 - Admin UI: The 'wrong status' is showing for the inactive rating types while editing the same.
+    => 061870 - Admin UI: Search is not working under the setting section at the admin's end
+    => 061855 - Admin UI: Admin is not able to add the new rating types and able to active/inactive the by-default Rating types
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
