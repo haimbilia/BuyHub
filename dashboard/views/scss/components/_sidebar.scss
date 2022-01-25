@@ -1,12 +1,8 @@
-$card-space: 1.5rem;
-$card-radius: 4px;
-$card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
-$card-bg: #fff;
-$sidebar-width: 230px;
+$sidebar-width: 250px;
 
 .my-dashboard {
     .sidebar {
-        width: 70px;
+        width: $sidebar-width;
         position: fixed;
         z-index: 12;
         //#{$start-direction}: 0;
@@ -16,6 +12,8 @@ $sidebar-width: 230px;
         transition: width 0.5s ease-in-out;
         display: flex;
         flex-direction: column;
+        background-color: $bg-white;
+        box-shadow: $shadow-theme;
         //border-#{$end-direction}: $border;
         @include media-breakpoint-down(lg) {
             //position: fixed;
@@ -27,9 +25,6 @@ $sidebar-width: 230px;
             width: auto;
             overflow-y: auto;
             width: 100% !important;
-            box-shadow: $card-shadow;
-            border-radius: $card-radius;
-            background-color: $card-bg;
         }
         .logo-wrapper {
             display: flex;
@@ -55,6 +50,7 @@ $sidebar-width: 230px;
             }
         }
         .hamburger-toggle {
+            display: none;
             position: relative;
             padding: 0;
             background: transparent;
@@ -101,61 +97,6 @@ $sidebar-width: 230px;
             }
         }
     }
-    &.sidebar-is-expanded {
-        .sidebar {
-            width: $sidebar-width;
-        }
-        .header-dashboard {
-            padding-#{$start-direction}: $sidebar-width;
-            @include media-breakpoint-down(lg) {
-                padding-#{$start-direction}: 20px;
-            }
-        }
-        .main {
-            padding-#{$start-direction}: $sidebar-width;
-            @include media-breakpoint-down(lg) {
-                padding-#{$start-direction}: 0;
-            }
-        }
-        .menu-head {
-            #{$start-direction}: 0 !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            display: block !important;
-        }
-        .menu-item__title {
-            #{$start-direction}: 0 !important;
-            opacity: 1 !important;
-        }
-    }
-    &.sidebar-is-reduced {
-        .logo-dashboard {
-            #{$start-direction}: -100% !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-        }
-        .dashboard-menu-icon {
-            margin: 0 auto;
-        }
-        .dashboard-menu-head {
-            display: none;
-        }
-        .dashboard-menu-arrow {
-            display: none;
-        }
-
-        @include media-breakpoint-down(lg) {
-            .sidebar {
-                width: 0;
-            }
-            .hamburger-toggle {
-                //#{$start-direction}: 35px;
-            }
-            .header-dashboard {
-                padding-#{$start-direction}: 70px;
-            }
-        }
-    }
 }
 
 .dashboard-menu {
@@ -185,6 +126,7 @@ $sidebar-width: 230px;
         text-align: #{$start-direction};
         width: 100%;
         margin: 0;
+        margin-bottom: 1rem;
         padding: 0;
     }
     &-icon {
@@ -229,7 +171,7 @@ $sidebar-width: 230px;
             flex: 0 0 100%;
             padding: 0.5rem 0;
             font-size: 0.8rem;
-            padding-#{$start-direction}: 30px;
+            padding-#{$start-direction}: 26px;
             &::before {
                 background: rgba(0, 0, 0, 0.08);
                 //content: "";

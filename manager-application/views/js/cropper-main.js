@@ -88,8 +88,9 @@ var cropper;
                         }
                     }
                 }
-
+                console.log(data.method);
                 switch (data.method) {
+                 
                     case 'rotate':
                         if (cropped && options.viewMode > 0) {
                             cropper.clear();

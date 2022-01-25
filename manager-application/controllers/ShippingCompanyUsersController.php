@@ -40,9 +40,10 @@ class ShippingCompanyUsersController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('shipping-company-users/page-js/index.js');
         $this->getListingData();
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USERNAME', $this->siteLangId));
+
+        $this->_template->addJs(array('shipping-company-users/page-js/index.js'));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -258,8 +259,10 @@ class ShippingCompanyUsersController extends ListingBaseController
         $frm->addHiddenField('', 'user_type');
         $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
+
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');

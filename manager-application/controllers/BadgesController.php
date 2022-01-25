@@ -273,7 +273,8 @@ class BadgesController extends ListingBaseController
         $frm->addHiddenField('', 'badge_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
+        $fld->addFieldTagAttribute('maxlength', Badge::RIBB_TEXT_MAX_LEN);
 
         return $frm;
     }

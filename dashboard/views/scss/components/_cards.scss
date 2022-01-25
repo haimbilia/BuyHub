@@ -1,6 +1,11 @@
+$card-space: 1.5rem;
+$card-radius: 4px;
+$card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
+$card-bg: #fff;
 .card {
     //box-shadow: $card-shadow;
     background-color: $card-bg;
+    box-shadow: $shadow-theme;
     //border: $border;
     border: none;
     position: relative;

@@ -28,8 +28,7 @@ if (!empty($excludeLocations)) {
         $disableStateId = $exLocation['shiploc_state_id'];
         $excludeCountryStates[$disableCountryId][] = $disableStateId;
     }
-}
-?>
+} ?>
 
 <div class="modal-header">
     <h5 class="modal-title">
@@ -38,7 +37,7 @@ if (!empty($excludeLocations)) {
 </div>
 <div class="modal-body form-edit loaderContainerJs">
     <div class="form-edit-body">
-        <form onsubmit="setupZone(this); return(false);" method="post" class="form" id="shippingZoneFrm">
+        <form onsubmit="setupZone(this); return(false);" method="post" class="form modalFormJs" id="shippingZoneFrm" data-onclear="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone_id; ?>)">
             <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
             <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
             <input type="hidden" name="shipzone_profile_id" value="<?php echo $profile_id; ?>">
@@ -83,7 +82,7 @@ if (!empty($excludeLocations)) {
 
                                             <?php echo $zone['zone_name']; ?>
                                         </label>
-                                        <button class="out-of-state dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">
+                                        <button type="button" class="out-of-state dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">
                                             <i class="dropdown-toggle-custom-arrow"></i>
                                         </button>
                                     </div>
@@ -114,7 +113,7 @@ if (!empty($excludeLocations)) {
                                                             <?php echo $country['country_name']; ?>
                                                         </label>
                                                         <?php if ($statesCount > 0) { ?>
-                                                            <button class="out-of-state dropdown-toggle-custom collapsed link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" data-bs-target="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
+                                                            <button type="button" class="out-of-state dropdown-toggle-custom collapsed link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" data-bs-target="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
                                                                 <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
 
                                                                 <?php echo Labels::getLabel("LBL_of", $siteLangId); ?>
