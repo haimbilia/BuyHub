@@ -303,6 +303,7 @@ Updates/Fixes :
     => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
     => 061761 - Admin UI: Unit is not showing with the Dimensions on the table under the Shipping package section
     => 061756 - Admin UI: Validation is missing for the 'State' field while adding and editing the pickup address
+    => 061754 - Admin UI: The drawer design is not consistent while adding, editing, and resting the pickup addresses
 
 New Features:  
     => Admin shipped products listing page
