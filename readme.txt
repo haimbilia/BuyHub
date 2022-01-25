@@ -553,7 +553,8 @@ Enhancement:
     => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
     => 061665 - Admin UI: 'Search icon' is not showing in the search field and the 'search' watermark is also missing on the Abandoned cart page.
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
-
+    => 061857 - Admin UI: The 'wrong status' is showing for the inactive rating types while editing the same.
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
