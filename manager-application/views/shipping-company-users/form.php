@@ -7,8 +7,6 @@ if ($recordId > 0) {
     $user_email->setFieldTagAttribute('disabled', 'disabled');
 }
 
-$dobFld = $frm->getField('user_dob');
-$dobFld->setFieldTagAttribute('class', 'user_dob_js');
 $countryFld = $frm->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id', 'user_country_id');
 $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#user_state_id\')');
@@ -41,8 +39,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 <script language="javascript">
     $(document).ready(function() {
         getCountryStates($("#user_country_id").val(), <?php echo $stateId; ?>, '#user_state_id');
-        $('.user_dob_js').datepicker('option', {
+        /* $('.user_dob_js').datepicker('option', {
             maxDate: new Date()
-        });
+        }); */
     });
 </script>

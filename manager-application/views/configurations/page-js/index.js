@@ -132,24 +132,20 @@ $(document).ready(function () {
                         width: minWidth,
                         height: minHeight,
                     };
-                }else{
-                    let maxCroppedWidth = 500;
-                    let maxCroppedHeight = 500;
-                    options['initialAspectRatio'] = 1;  
+                }else{ 
+                   
+                    /*
+                    let maxCroppedWidth = 300;
+                    let maxCroppedHeight = 300;
+                    //options['initialAspectRatio'] = 1;                      
                     options['crop'] = function (event) {
-                        let width = event.detail.width;
-                        let height = event.detail.height;    
-                        console.log(width,height);
-                        if (
-                            width > maxCroppedWidth
-                          || height > maxCroppedHeight
-                        ) {
-                          cropper.setData({
-                            width: Math.min(maxCroppedWidth, width),
-                            height: Math.min(maxCroppedHeight, height),
-                          });
-                        }                       
-                      };                    
+                        let boxData = cropper.getCropBoxData();                   
+                        console.log(boxData);                       
+                        boxData['width'] = Math.min((maxCroppedWidth -10) , boxData['width']);
+                        boxData['height'] = Math.min((maxCroppedHeight -10), boxData['height']);
+                        cropper.setCropBoxData( boxData); 
+                    } ;     
+                    */           
                 }
 
                 $(inputBtn).val('');

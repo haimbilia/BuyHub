@@ -183,11 +183,5 @@
     </div>
 </main>
 <?php if ($print) { ?>
-    <script>
-        $(".sidebar-is-expanded").addClass('sidebar-is-reduced').removeClass('sidebar-is-expanded');
-        /*window.print();
-        window.onafterprint = function(){
-            location.href = history.back();
-        }*/
-    </script>
+
 <?php } ?>
