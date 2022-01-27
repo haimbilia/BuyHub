@@ -18,6 +18,13 @@ $card-bg: #fff;
     @include media-breakpoint-down(md) {
         word-break: normal;
     }
+    &-tabs {
+        .card-head {
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
     &-head {
         display: flex;
         justify-content: space-between;
@@ -26,7 +33,7 @@ $card-bg: #fff;
         margin-bottom: 0.5rem;
         color: $txt-body;
         background: none;
-        border: none;
+        border-bottom: $border;
         & ~ .card-body {
             padding-top: 0;
         }

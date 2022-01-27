@@ -295,12 +295,12 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    deleteImage = function (product_id, image_id, file_type) {
+    deleteImage = function (recordId, image_id, file_type) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
-        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [recordId, image_id, file_type]), '', function (t) {
             
-            productImages(product_id, file_type, ans.optionId, ans.langId);
+            productImages(recordId, file_type, t.optionId, t.langId);
             if (ans.isDefaultLayout) {
                 productDefaultImages();
             }
@@ -517,7 +517,7 @@ var advanceMedia = false; /* open via advance media*/
         $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {            
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');           
             if (typeof callback == 'function') {
                 callback();
             }else{                
@@ -538,8 +538,7 @@ var advanceMedia = false; /* open via advance media*/
         frm.find('input[type=file]').each(function (i, v) {
             data.append(v.name, v.files[0]);
         });
-
-        $.ykmodal(fcom.getLoader());
+        fcom.displayProcessing();
         $.ajax({
             url: fcom.makeUrl('Products', 'setupDigitalDownload'),
             type: "POST",
@@ -613,6 +612,7 @@ var advanceMedia = false; /* open via advance media*/
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
+            fcom.closeAlertMessage();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalFile, recordId);
         });
@@ -624,6 +624,7 @@ var advanceMedia = false; /* open via advance media*/
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+            fcom.closeAlertMessage();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });

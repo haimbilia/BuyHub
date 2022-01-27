@@ -746,8 +746,12 @@ class ProductsController extends SellerBaseController
 
             $srch->doNotCalculateRecords();
             $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
-            $srch->addCondition('afile_record_id', '=', $recordId);
-            $srch->addCondition('afile_lang_id', 'IN', [$langId, 0]);
+            $srch->addCondition('afile_record_id', '=', $recordId);           
+            if($langId > 0){
+                $srch->addCondition('afile_lang_id', 'IN', [$langId, 0]);
+            }else{
+                $srch->addCondition('afile_lang_id', '=', 0);
+            }
             if (0 < $productOptionId) {
                 $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
                 $images = FatApp::getDb()->fetchAll($srch->getResultSet());

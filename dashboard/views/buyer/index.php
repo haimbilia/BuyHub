@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -40,7 +41,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 <?php } ?>
                             </div>
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body">
                             <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table table-justified">
                                     <thead>
@@ -179,7 +180,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                     <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderReturnRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                                 </div> <?php } ?>
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body">
                             <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table table-justified">
                                     <thead>
@@ -264,7 +265,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                     <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderCancellationRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                                 </div> <?php } ?>
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body">
                             <div class="js-scrollable table-wrap scroll scroll-x">
                                 <table class="table ">
                                     <thead>
@@ -336,17 +337,11 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     <div class="widget-scroll">
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
-                                <div class="card">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
                                     <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                        <i class="icn">
-                                            <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#Credits">
-                                                </use>
-                                            </svg>
-                                        </i>
                                     </div>
-                                    <div class="card-body ">
+                                    <div class="card-body">
                                         <div class="stats">
                                             <div class="stats-number">
                                                 <ul>
@@ -366,17 +361,12 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         </div>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('buyer', 'orders'); ?>">
-                                <div class="card">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
                                     <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></h5>
-                                        <i class="icn">
-                                            <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order">
-                                                </use>
-                                            </svg>
-                                        </i>
+
                                     </div>
-                                    <div class="card-body ">
+                                    <div class="card-body">
                                         <div class="stats">
                                             <div class="stats-number">
                                                 <ul>
@@ -395,18 +385,13 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         </div>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('buyer', 'rewardPoints'); ?>">
-                                <div class="card">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
                                     <div class="card-head">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
                                         </h5>
-                                        <i class="icn">
-                                            <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#rewards-change" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#rewards-change">
-                                                </use>
-                                            </svg>
-                                        </i>
+
                                     </div>
-                                    <div class="card-body ">
+                                    <div class="card-body">
                                         <div class="stats">
                                             <div class="stats-number">
                                                 <ul>
@@ -428,9 +413,6 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     </div>
                 </div>
             </div>
-
-
-
 
         </div>
     </div>

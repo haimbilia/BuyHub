@@ -74,24 +74,30 @@ class ProductRequest extends MyAppModel
         return $row_data;
     }
 
-    public function deleteProductImage($preq_id, $image_id)
+    public function deleteProductImage($recordId, $image_id , $fileType = 0)
     {
-        $preq_id = FatUtility :: int($preq_id);
+        $recordId = FatUtility :: int($recordId);
         $image_id = FatUtility :: int($image_id);
-        if ($preq_id < 1 || $image_id < 1) {
+        if ($recordId < 1 || $image_id < 1) {
             $this->error = 'Invalid Request!';
             return false;
         }
 
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $image_id)) {
+        if ($fileType == AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
+            $fileHandlerObj = new AttachedFileTemp();
+        } else {
+            $fileHandlerObj = new AttachedFile();
+            $fileType = AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE;
+        }        
+       
+        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $image_id)) {
             $this->error = $fileHandlerObj->getError();
             return false;
         }
         return true;
     }
 
-    public function updateProdImagesOrder($preq_id, $order)
+    public function updateProdImagesOrder($preq_id, $fileType = AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $order)
     {
         $preq_id = FatUtility :: int($preq_id);
         if (is_array($order) && sizeof($order) > 0) {
@@ -99,7 +105,11 @@ class ProductRequest extends MyAppModel
                 if (FatUtility::int($id) < 1) {
                     continue;
                 }
-                FatApp::getDb()->updateFromArray('tbl_attached_files', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $id)));
+                if ($fileType == AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
+                    FatApp::getDb()->updateFromArray('tbl_attached_files_temp', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array($fileType, $preq_id, $id)));
+                } else {
+                    FatApp::getDb()->updateFromArray('tbl_attached_files', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $id)));
+                }
             }
             return true;
         }

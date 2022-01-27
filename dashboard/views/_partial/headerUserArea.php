@@ -2,7 +2,7 @@
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
 if (!UserAuthentication::isUserLogged()) {
     if (UserAuthentication::isGuestUserLogged()) { ?>
-        <li>
+        <li class="short-links-item">
             <div class="dropdown">
                 <a href="javascript:void(0)" class="dropdown-toggle no-after" data-bs-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
                 <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
@@ -18,18 +18,25 @@ if (!UserAuthentication::isUserLogged()) {
                     </li>
                 </ul>
             </div>
-        </li><?php
-            } else {
-                ?> <li>
-            <div class="dropdown dropdown--user"><a href="javascript:void(0)" class="sign-in sign-in-popup-js"><i class="icn icn--login">
+        </li>
+    <?php
+    } else {
+    ?>
+        <li class="short-links-item">
+            <div class="dropdown dropdown--user">
+                <a href="javascript:void(0)" class="sign-in sign-in-popup-js">
+                    <i class="icn icn--login">
                         <svg class="svg" width="" height="">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
-                        </svg></i> <span>
-                        <strong>
-                            <?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?>
-                        </strong>
+                        </svg>
+                    </i>
+                    <span>
+
+                        <?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?>
+
                     </span>
-                </a></div>
+                </a>
+            </div>
         </li> <?php
             }
         } else {
@@ -55,12 +62,50 @@ if (!UserAuthentication::isUserLogged()) {
                 $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } ?>
-    <li class="">
-        <div class="dropdown">
-            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-display="static" data-bs-toggle="dropdown">
-                <img class="my-account__avatar" src="<?php echo $profilePicUrl; ?>" alt="">
-            </a>
+    <li class="short-links-item">
+        <div class="dropdown my-account">
+            <button class="my-account-btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+                <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="">
+            </button>
+            <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+                <div class="profile">
+                    <div class="profile-img">
+                        <img alt="" src="<?php echo $profilePicUrl; ?>">
+                    </div>
+                    <div class="profile-detail">
+                        <h6 class="h6"> Hi, Jack Doe </h6>
+                        <span class="text-muted">
+                            <a href="">yokartv8@dummyid.com</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <nav class="nav my-account-nav">
+                    <a class="my-account-nav-link" href=""> <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        </svg> My Store</a>
+                    <a class="my-account-nav-link" href="">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        </svg>
+                        Messages</a>
+                    <a class="my-account-nav-link" href="">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        </svg>My Profile</a>
 
+                    <a class="my-account-nav-link" href=""> <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        </svg>
+                        Change Password</a>
+                    <div class="divider"></div>
+                    <a class="my-account-nav-link" href="">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        </svg>
+                        log out</a>
+                </nav>
+            </div>
             <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
                 <?php
                 $userName = User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name");
