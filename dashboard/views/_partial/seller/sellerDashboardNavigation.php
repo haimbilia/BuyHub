@@ -15,7 +15,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-shop" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-shop" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
@@ -91,7 +91,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-shipping" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-shipping" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-profile">
@@ -136,7 +136,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-sales" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-sales" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-sales">
@@ -187,7 +187,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewBadgeLinks(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-promotions" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-promotions" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-promotions">
@@ -262,7 +262,7 @@ $plugin = new Plugin();
             $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
             if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-channel" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-channel" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
@@ -302,7 +302,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewUrlRewriting(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-seo" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-seo" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#URL-rewriting">
@@ -337,7 +337,7 @@ $plugin = new Plugin();
 
             <?php if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE') && $userPrivilege->canViewSubscription(UserAuthentication::getLoggedUserId(), true)) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-subscription" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-subscription" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#subscription-packages">
@@ -376,7 +376,7 @@ $plugin = new Plugin();
                 $userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId(), true)
             ) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-sales-report" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-sales-report" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#products-inventory">
@@ -409,7 +409,7 @@ $plugin = new Plugin();
 
                 <?php if ($userPrivilege->canViewFinancialReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="dashboard-menu-item">
-                        <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-financial-report" aria-expanded="true" aria-controls="collapseOne" title="">
+                        <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-financial-report" aria-expanded="true" aria-controls="collapseOne" title="">
                             <span class="dashboard-menu-icon">
                                 <svg class="svg" width="18" height="18">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-profit">
@@ -443,7 +443,7 @@ $plugin = new Plugin();
                 <?php } ?>
 
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-inventory-report" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-inventory-report" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-performance-report">
@@ -482,7 +482,7 @@ $plugin = new Plugin();
             <?php } ?>
 
             <li class="dashboard-menu-item">
-                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" title="">
+                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account">
@@ -532,7 +532,7 @@ $plugin = new Plugin();
                 </ul>
             </li>
             <li class="dashboard-menu-item">
-                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-plugins" aria-expanded="true" aria-controls="collapseOne" title="">
+                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-plugins" aria-expanded="true" aria-controls="collapseOne" title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#plugin-data-migration">
@@ -566,7 +566,7 @@ $plugin = new Plugin();
 
             <?php if ($userPrivilege->canViewImportExport(UserAuthentication::getLoggedUserId(), true)) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-import-export" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-import-export" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#import-export">
