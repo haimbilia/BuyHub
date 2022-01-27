@@ -6,7 +6,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="content-wrapper content-space">
         <?php
@@ -458,7 +458,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 
 
-</main>
+
 <?php
 function getVariantUiTr($langId, $i, $productOption = [])
 {

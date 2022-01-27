@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php $this->includeTemplate('_partial/header/content-header.php'); ?>
         <div class="content-body">
@@ -56,4 +56,3 @@
             </div>
         </div>
     </div>
-</main>

@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 $searchFrm->setFormTagAttribute('onSubmit', 'searchProfile(this); return false;');
 $searchFrm->setFormTagAttribute('class', 'form ');
 $searchFrm->developerTags['colClassPrefix'] = 'col-md-';
@@ -19,7 +19,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -68,4 +68,3 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             </div>
         </div>
     </div>
-</main>

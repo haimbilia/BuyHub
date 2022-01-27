@@ -1,11 +1,11 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php',['isUserDashboard' => $isUserDashboard]);
                                                             $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
                                                             $sharingFrm->addFormTagAttribute('class', 'form');
                                                             $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
                                                             $sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
                                                             $sharingFrm->developerTags['fld_default_col'] = 12;
                                                             ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -311,7 +311,7 @@
 
         </div>
     </div>
-</main>
+
 <script type="text/javascript">
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];

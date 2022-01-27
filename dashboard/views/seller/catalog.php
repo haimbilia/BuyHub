@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php 
         $title = ($type == 1) ? Labels::getLabel('LBL_Seller_Products', $siteLangId) : Labels::getLabel('LBL_Marketplace_Products', $siteLangId);
@@ -75,7 +75,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <script>
     $(document).ready(function() {
         searchCatalogProducts(document.frmSearchCatalogProduct);

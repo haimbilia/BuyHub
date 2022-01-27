@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 
 $label = Labels::getLabel("LBL_FAVORITES", $siteLangId);
 if (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
@@ -11,7 +11,7 @@ if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) 
     $function = 'searchWishList()';
 }
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -62,7 +62,7 @@ if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) 
             </div>
         </div>
     </div>
-</main>
+
 <script>
     <?php echo $function; ?>;
 </script>

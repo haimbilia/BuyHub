@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 $htmlContent = '';
 if (!empty($fields)) {
     $htmlContent = '<div class="dropdown custom-drag-drop">
@@ -28,7 +28,7 @@ if (!empty($fields)) {
                     </div>';
 }
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
@@ -77,7 +77,7 @@ if (!empty($fields)) {
             </div>
         </div>
     </div>
-</main>
+
 <script>
     var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
 </script>

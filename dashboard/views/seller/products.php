@@ -22,9 +22,9 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 $frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
@@ -76,7 +76,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <?php echo FatUtility::createHiddenFormFromData(array('product_id' => $product_id), array('name' => 'frmSearchSellerProducts')); ?>
 <script>
     jQuery(document).ready(function($) {

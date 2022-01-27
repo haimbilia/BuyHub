@@ -75,7 +75,7 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                 </div>
             </div>
         </div>
-    </main>
+    
 
     <aside class="sidebar" data-close-on-click-outside=" ">
         <div class="sidebar-content">
