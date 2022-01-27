@@ -272,7 +272,7 @@ class CustomProductsController extends ListingBaseController
             }
         }
 
-        if (is_array($productData['product_option'])) {
+        if (is_array($productData['product_option']) && count($productData['product_option'])) {
             $srch = Option::getSearchObject($langId);
             $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
             $srch->addCondition('option_id', 'IN', $productData['product_option']);
@@ -280,7 +280,7 @@ class CustomProductsController extends ListingBaseController
             foreach ($productData['product_option'] as $index => $optionId) {
                 if ($prodOptions[$optionId]) {
                     $productOptions[$index] = $prodOptions[$optionId];
-                    $productOptions[$index]['optionValues'] = product::getOptionValues($optionId, $langId, ($productData['product_option_values'][$index] ?? []));
+                    $productOptions[$index]['optionValues'] = Product::getOptionValues($optionId, $langId, ($productData['product_option_values'][$index] ?? []));
                 }
             }
         }
@@ -673,7 +673,12 @@ class CustomProductsController extends ListingBaseController
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
-        return $this->getCatalogForm($langId, $productType, $recordId, 1);
+        $frm = $this->getCatalogForm($langId, $productType, $recordId, 1);
+        $shippingObj = new Shipping($langId);
+        if (!$shippingObj->getShippingApiObj(0)) {
+            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
+        }
+        return $frm;
     }
 
     public function imageForm($recordId = 0)
@@ -924,7 +929,7 @@ class CustomProductsController extends ListingBaseController
             $order[$count] = $row;
             $count++;
         }
-        if (!$preqObj->updateProdImagesOrder($recordId, $order)) {
+        if (!$preqObj->updateProdImagesOrder($recordId, AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $order)) {
             LibHelper::exitWithError($preqObj->getError(), true);
         }
         $this->set("msg", $this->str_update_record);
@@ -973,13 +978,13 @@ class CustomProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteImage($productId, $imageId)
+    public function deleteImage($recordId, $imageId)
     {
         $this->checkEditPrivilege();
-        $productId = FatUtility::int($productId);
+        $recordId = FatUtility::int($recordId);
         $imageId = FatUtility::int($imageId);
 
-        if (1 > $imageId || 1 > $productId) {
+        if (1 > $imageId || 1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
@@ -990,7 +995,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $productObj = new ProductRequest();
-        if (!$productObj->deleteProductImage($productId, $imageId)) {
+        if (!$productObj->deleteProductImage($recordId, $imageId)) {
             LibHelper::exitWithError($productObj->getError(), true);
         }
 
@@ -1011,7 +1016,6 @@ class CustomProductsController extends ListingBaseController
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
         $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
-
 
         $languagesAssocArr = Language::getAllNames();
 

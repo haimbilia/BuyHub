@@ -452,11 +452,11 @@ class HtmlHelper
 
             if ($count > 2) {
                 $str .= ' 
-                <a href="javascript:void(0)" class="media media-sm media-circle"
+                <span class="media media-sm media-circle"
                     data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="">
                     <span>3+</span>
-                </a>';
+                </span>';
                 break;
             }
             if ($updatedOn) {
@@ -464,26 +464,26 @@ class HtmlHelper
                 $imgSrc  = UrlHelper::getCachedUrl($imgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             }
             $str .= '
-                <a href="javascript:void(0)" class="media media-sm media-circle"
+                <span class="media media-sm media-circle"
                     data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <img data-aspect-ratio="1:1"
                         src="' . $imgSrc . '"
                         alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
-                </a>';
+                </span>';
             $count++;
         }
         if (!count($images)) {
             $str .= '
-            <a href="javascript:void(0)" class="media media-sm media-circle"
+            <span class="media media-sm media-circle"
                 data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
                 <img data-aspect-ratio="1:1"
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
                     alt="' . $defaultImageName . '">
-            </a>';
+            </span>';
         }
 
         $str .= '</div>';

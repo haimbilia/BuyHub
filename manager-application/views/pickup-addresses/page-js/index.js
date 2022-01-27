@@ -1,4 +1,23 @@
+$(document).on('change', '#addrStateJs', function () {
+    if (0 < $(this).val()) {
+        $(this).removeClass('error'); 
+    } else {
+        $(this).addClass('error'); 
+    }
+});
+
 (function () {
+    addNew = function () {
+        /* Uncheck all if checked. */
+        $(".selectAllJs, .selectItemJs").prop("checked", false)
+
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md',);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
+    }
+
     editRecord = function (id, langId) {
         var data = 'langId=' + langId;
         fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
@@ -19,15 +38,22 @@
             return;
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
-                $.ylmsg.error(langLbl.selectTimeslotDay);
+                $.ykmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
         } else {
             if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
-                $.ylmsg.error(langLbl.invalidTimeSlot);
+                $.ykmsg.error(langLbl.invalidTimeSlot);
                 return false;
             }
         }
+
+        if (0 > $('#addrStateJs').val()) {
+            $('#addrStateJs').addClass('error');
+            $.ykmsg.error(langLbl.invalidState);
+            return false;
+        }
+
         $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
@@ -115,7 +141,7 @@
 
         if (fromTime == '' && toTime != '') {
             $(toElement).val("");
-            $.ylmsg.error(langLbl.invalidFromTime);
+            $.ykmsg.error(langLbl.invalidFromTime);
             return false;
         }
 

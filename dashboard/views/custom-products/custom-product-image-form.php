@@ -2,7 +2,6 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form');
-
 $fld = $frm->getField('prod_image');
 $fld->addFieldTagAttribute('onChange', "loadImageCropper(this)");
 $fld->addFieldTagAttribute('accept', "image/*");
