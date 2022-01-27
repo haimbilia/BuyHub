@@ -6,6 +6,8 @@
     <div class="wrapper">
         <header id="header-dashboard" class="header-dashboard no-print">
 
+
+
             <?php if ((User::canViewSupplierTab() && User::canViewBuyerTab()) || (User::canViewSupplierTab() && User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) || (User::canViewBuyerTab() && User::canViewAdvertiserTab())) { ?>
                 <div class="dropdown dashboard-user">
                     <button class="btn dropdown-toggle-custom dropdown-toggle no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +62,7 @@
                     $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
                 }
                 ?>
-                <ul class="c-header-links">
+                <!-- <ul class="c-header-links">
                     <li>
                         <a title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
                             <i class="icn icn--dashboard">
@@ -90,11 +92,12 @@
                             </a>
                         </li>
                     <?php } ?>
-                </ul>
+                </ul> -->
                 <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
                     <div class="c-header-icon bell">
                         <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
-                            <i class="icn"><svg class="svg bell-shake-delay" width="20" height="20">
+                            <i class="icn">
+                                <svg class="svg bell-shake-delay" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
                                     </use>
                                 </svg>
@@ -105,11 +108,11 @@
                                 <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
                     </div>
                 <?php } ?>
-                <div class="short-links">
-                    <ul>
-                        <?php $this->includeTemplate('_partial/headerUserArea.php', array('isUserDashboard' => $isUserDashboard)); ?>
-                    </ul>
-                </div>
+
+                <ul class="short-links">
+                    <?php $this->includeTemplate('_partial/headerUserArea.php', array('isUserDashboard' => $isUserDashboard)); ?>
+                </ul>
+
             </div>
         </header>
         <div class="display-in-print text-center">

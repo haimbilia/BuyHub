@@ -1,7 +1,7 @@
 <?php
 $controller = strtolower($controller);
 $action = strtolower($action); ?>
-<sidebar class="sidebar no-print">
+<sidebar class="sidebar no-print" id="sidebar" data-close-on-click-outside="sidebar">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
     <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
