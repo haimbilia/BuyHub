@@ -29,54 +29,54 @@ if (!empty($fields)) {
 }
 ?>
 
-    <div class="content-wrapper content-space">
-        <?php
-        $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
+<div class="content-wrapper content-space">
+    <?php
+    $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
 
-        $data = [
-            'headingLabel' => $pageTitle,
-            'siteLangId' => $siteLangId,
-            'otherButtons' => [
-                [
-                    'html' => $htmlContent
+    $data = [
+        'headingLabel' => $pageTitle,
+        'siteLangId' => $siteLangId,
+        'otherButtons' => [
+            [
+                'html' => $htmlContent
+            ],
+            [
+                'attr' => [
+                    'onclick' => 'exportReport()',
+                    'title' => Labels::getLabel('LBL_Export', $siteLangId)
                 ],
-                [
-                    'attr' => [
-                        'onclick' => 'exportReport()',
-                        'title' => Labels::getLabel('LBL_Export', $siteLangId)
-                    ],
-                    'label' => Labels::getLabel('LBL_Export', $siteLangId)
-                ],
-            ]
-        ];
+                'label' => Labels::getLabel('LBL_Export', $siteLangId)
+            ],
+        ]
+    ];
 
-        $data['otherButtons'] = array_merge($otherButton, $data['otherButtons']);
+    $data['otherButtons'] = array_merge($otherButton, $data['otherButtons']);
 
-        $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-        <div class="content-body">
-            <div class="row mb-3">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php echo $frmSearch->getFormHtml(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
+    <div class="content-body">
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="card card-search">
+                    <div class="card-body">
+                        <div class="replaced">
+                            <?php echo $frmSearch->getFormHtml(); ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
 <script>
     var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';

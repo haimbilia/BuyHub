@@ -1,6 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <footer class="footer">
-    <p>copy write</p>
+    <div class="row justify-content-between copyright-st">
+        <div class="col-12 col-sm-auto">
+            <p> ©2004-2022 FATbit Technologies (Ably Soft Pvt. Ltd). All rights reserved.</p>
+        </div>
+        <div class="col-12 col-sm-auto">V3.4</div>
+    </div>
+
     <ul class="mobile-actions">
         <li class="mobile-actions-item" role="none">
             <a class="mobile-actions-link" href="#">
