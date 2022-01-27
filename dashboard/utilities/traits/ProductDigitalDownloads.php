@@ -22,9 +22,9 @@ trait ProductDigitalDownloads
         }
 
         $selProdId = FatUtility::int($selProdId);
-        
+
         $ddpObj = new DigitalDownloadPrivilages();
-        
+
         if (0 < $selProdId) {
             $canDo = $ddpObj->canEdit(
                 $selProdId,
@@ -45,14 +45,14 @@ trait ProductDigitalDownloads
                 true
             );
         }
-        
+
         $frm = DigitalDownload::getDownloadFormInventory($this->siteLangId);
 
         $savedOptions = array();
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
-        
+
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-        
+
         foreach ($optionCombinations as $optionKey => $optionValue) {
             /* Check if product is added for this option [ */
             $selProdCode = $productId . '_' . $optionKey;
@@ -63,13 +63,13 @@ trait ProductDigitalDownloads
             $savedOptions[$selProdAvailable['selprod_id']] = $optionValue;
             /* ] */
         }
-        
+
         if ($selProdId > 0) {
             $currentOption[$selProdId] = (array_key_exists($selProdId, $savedOptions)) ? $savedOptions[$selProdId] : '';
             $savedOptions = $currentOption;
         }
         $savedOptions = array_filter($savedOptions);
-        
+
         $fld = $frm->getField('option_comb_id');
         if (1 > count($savedOptions)) {
             $frm->removeField($fld);
@@ -89,9 +89,9 @@ trait ProductDigitalDownloads
                 $frm->removeField($fld);
             }
         }
-        
+
         $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
-        
+
         $data = [
             'product_id' => $productId,
             'selprod_id' =>  $selProdId,
@@ -118,7 +118,7 @@ trait ProductDigitalDownloads
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
         } else {
-            $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);          
+            $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
             $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
 
@@ -152,7 +152,7 @@ trait ProductDigitalDownloads
     public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
     {
         $this->userPrivilege->canViewProducts();
-        
+
         $aFileId = FatUtility::int($aFileId);
         $recordId = FatUtility::int($recordId);
         $isPreview = FatUtility::int($isPreview);
@@ -161,7 +161,7 @@ trait ProductDigitalDownloads
         if (1 > $aFileId || 1 > $recordId) {
             FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
-        
+
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canDownload(
             $recordId,
@@ -170,7 +170,7 @@ trait ProductDigitalDownloads
             $this->siteLangId,
             $isPreview
         );
-        
+
         if (false == $canDo) {
             FatUtility::dieJsonError($ddpObj->getError());
         }
@@ -186,19 +186,19 @@ trait ProductDigitalDownloads
         }
 
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
-        
+
         if (1 > count($file)) {
             FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
-        
+
         if ($file['pddr_record_id'] != $recordId) {
             FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
-        
+
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
             FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
-        
+
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
@@ -214,7 +214,7 @@ trait ProductDigitalDownloads
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
         }
-    
+
         $srch = new OrderProductSearch(0, true);
         $srch->addMultipleFields(array('op_id', 'op_selprod_user_id'));
         $srch->addCondition('op_id', '=', $recordId);
@@ -225,7 +225,7 @@ trait ProductDigitalDownloads
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($recordId)));
         }
-        
+
         $file_row = AttachedFile::getAttributesById($aFileId);
         if ($file_row == false || $file_row['afile_record_id'] != $recordId || $file_row['afile_type'] != $fileType) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
@@ -271,8 +271,9 @@ trait ProductDigitalDownloads
         if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
         }
-        
-        if (!isset($_FILES['additional_attachment']['tmp_name'])
+
+        if (
+            !isset($_FILES['additional_attachment']['tmp_name'])
             || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
         ) {
             Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
@@ -308,18 +309,34 @@ trait ProductDigitalDownloads
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $productType = Product::getAttributesById($recordId, 'product_type');
-        if ($productType == false || $productType != Product::PRODUCT_TYPE_DIGITAL) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
         if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
+        $catalogType = $this->getCatalogType();
+        if (Product::CATALOG_TYPE_REQUEST == $catalogType) {
+            $productData = ProductRequest::getAttributesById($recordId, ['preq_content', 'preq_user_id']);
+            if ($productData == false) {
+                LibHelper::exitWithError($this->str_invalid_request_id);
+            }
+            $productData = $productData + json_decode($productData['preq_content'], true);
+            if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+                LibHelper::exitWithError($this->str_invalid_request_id);
+            }
+            $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
+        } else {
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
+            if ($productData == false) {
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
+            }
+            if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
 
-        $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);
+            $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);
+        }
+
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
 
         $fld = $frm->getField('option_comb_id');
@@ -338,7 +355,7 @@ trait ProductDigitalDownloads
         $this->set('frm', $frm);
         $this->set('type', $type);
         $this->set('formTitle', $formTitle);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, 'products/digital-download-form.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -356,25 +373,25 @@ trait ProductDigitalDownloads
         $catalogType = $this->getCatalogType();
 
         if (Product::CATALOG_TYPE_REQUEST == $catalogType) {
-            $productData = ProductRequest::getAttributesById($recordId, 'preq_content','preq_user_id');
+            $productData = ProductRequest::getAttributesById($recordId, ['preq_content', 'preq_user_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }  
-            $productData = json_decode($productData, true);
+            }
+            $productData = $productData + json_decode($productData['preq_content'], true);
             if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }   
-            $userId =  $productData['preq_user_id'];        
+            }
+            $userId =  $productData['preq_user_id'];
         } else {
-            $productData = Product::getAttributesById($recordId, ['product_type','product_seller_id']);
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
-            } 
+            }
             if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $userId =  $productData['product_seller_id'];
-        } 
+        }
 
         $ddpObj = new DigitalDownloadPrivilages();
 
@@ -384,14 +401,14 @@ trait ProductDigitalDownloads
         $product = $ddpObj->getProduct($recordId);
         $this->set('product', $product);
 
-        $rows = DigitalDownloadSearch::getLinks($recordId, Product::CATALOG_TYPE_PRIMARY, $optionCombi, $langId);
+        $rows = DigitalDownloadSearch::getLinks($recordId, $catalogType, $optionCombi, $langId);
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + Language::getAllNames();
 
         if (Product::CATALOG_TYPE_REQUEST == $catalogType) {
             $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
         } else {
             $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);
-        } 
+        }
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
 
@@ -400,7 +417,7 @@ trait ProductDigitalDownloads
         $this->set('options', $optionCombinations);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }    
+    }
 
     public function getDigitalDownloadAttachments()
     {
@@ -418,25 +435,25 @@ trait ProductDigitalDownloads
         $catalogType = $this->getCatalogType();
 
         if (Product::CATALOG_TYPE_REQUEST == $catalogType) {
-            $productData = ProductRequest::getAttributesById($recordId, 'preq_content','preq_user_id');
+            $productData = ProductRequest::getAttributesById($recordId, ['preq_content', 'preq_user_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }  
-            $productData = json_decode($productData, true);
+            }
+            $productData = $productData + json_decode($productData['preq_content'], true);
             if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }   
-            $userId =  $productData['preq_user_id'];        
+            }
+            $userId =  $productData['preq_user_id'];
         } else {
-            $productData = Product::getAttributesById($recordId, ['product_type','product_seller_id']);
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
-            } 
+            }
             if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $userId =  $productData['product_seller_id'];
-        } 
+        }
 
         $canDo = $ddpObj->canEdit($recordId, $catalogType, $userId, $this->siteLangId, false, true);
         $this->set('canDo', $canDo);
@@ -452,13 +469,13 @@ trait ProductDigitalDownloads
             $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
         } else {
             $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);
-        } 
+        }
 
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
 
         $this->set('options', $optionCombinations);
-        $this->set('recordId', $recordId); 
+        $this->set('recordId', $recordId);
         $this->set('downloadrefType', $catalogType);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -475,28 +492,28 @@ trait ProductDigitalDownloads
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $catalogType = $this->getCatalogType();     
-        
+        $catalogType = $this->getCatalogType();
+
         if (Product::CATALOG_TYPE_REQUEST == $catalogType) {
-            $productData = ProductRequest::getAttributesById($recordId, 'preq_content','preq_user_id');
+            $productData = ProductRequest::getAttributesById($recordId, ['preq_content', 'preq_user_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }  
-            $productData = json_decode($productData, true);
+            }
+            $productData = $productData + json_decode($productData['preq_content'], true);
             if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }   
-            $userId =  $productData['preq_user_id'];        
+            }
+            $userId =  $productData['preq_user_id'];
         } else {
-            $productData = Product::getAttributesById($recordId, ['product_type','product_seller_id']);
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
-            } 
+            }
             if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $userId =  $productData['product_seller_id'];
-        } 
+        }
 
         if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -538,13 +555,13 @@ trait ProductDigitalDownloads
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-       
+
         $post['option_comb_id'] = $optionValId;
 
         $ddObj = new DigitalDownload();
-        $refId = $ddObj->getReferenceId($recordId, $optionValId,$catalogType);
+        $refId = $ddObj->getReferenceId($recordId, $optionValId, $catalogType);
         if (1 > $refId) {
-            if (!$ddObj->saveReference($recordId, $optionValId,$catalogType)) {
+            if (!$ddObj->saveReference($recordId, $optionValId, $catalogType)) {
                 LibHelper::exitWithError($ddObj->getError(), true);
             }
         } else {
@@ -592,7 +609,7 @@ trait ProductDigitalDownloads
             $userId = ProductRequest::getAttributesById($reference['pddr_record_id'], 'preq_user_id');
         } else {
             $userId = Product::getAttributesById($reference['pddr_record_id'], 'product_seller_id');
-        } 
+        }
 
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canEdit(
@@ -601,7 +618,7 @@ trait ProductDigitalDownloads
             $userId,
             $this->siteLangId,
             $validateAllowedWithInventory
-        );        
+        );
 
         if (false == $canDo) {
             LibHelper::exitWithError($ddpObj->getError(), true);
@@ -645,7 +662,7 @@ trait ProductDigitalDownloads
         }
 
         if (
-                isset($_FILES['downloadable_file']['tmp_name']) && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
+            isset($_FILES['downloadable_file']['tmp_name']) && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
         ) {
             $mainFileId = $this->setupDigitalMainFile($ddObj, $langId);
             if (1 > $mainFileId) {
@@ -659,7 +676,7 @@ trait ProductDigitalDownloads
         }
 
         if (
-                isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])
+            isset($_FILES['preview_file']['tmp_name']) && is_uploaded_file($_FILES['preview_file']['tmp_name'])
         ) {
             if (1 > $this->setupDigitalPreviewFile($ddObj, $langId, $mainFileId)) {
                 LibHelper::exitWithError($ddObj->getError(), true);
@@ -701,7 +718,7 @@ trait ProductDigitalDownloads
             $userId = ProductRequest::getAttributesById($reference['pddr_record_id'], 'preq_user_id');
         } else {
             $userId = Product::getAttributesById($reference['pddr_record_id'], 'product_seller_id');
-        } 
+        }
 
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canEdit(
@@ -727,11 +744,11 @@ trait ProductDigitalDownloads
     private function setupDigitalMainFile($ddObj, $langId)
     {
         $fileId = $ddObj->saveAttachment(
-                $_FILES['downloadable_file']['tmp_name'],
-                $_FILES['downloadable_file']['name'],
-                $ddObj->getMainTableRecordId(),
-                0,
-                $langId
+            $_FILES['downloadable_file']['tmp_name'],
+            $_FILES['downloadable_file']['name'],
+            $ddObj->getMainTableRecordId(),
+            0,
+            $langId
         );
         if (1 > $fileId) {
             return 0;
@@ -743,12 +760,12 @@ trait ProductDigitalDownloads
     private function setupDigitalPreviewFile($ddObj, $langId, $mainFileId = 0)
     {
         $fileId = $ddObj->saveAttachment(
-                $_FILES['preview_file']['tmp_name'],
-                $_FILES['preview_file']['name'],
-                $ddObj->getMainTableRecordId(),
-                $mainFileId,
-                $langId,
-                true
+            $_FILES['preview_file']['tmp_name'],
+            $_FILES['preview_file']['name'],
+            $ddObj->getMainTableRecordId(),
+            $mainFileId,
+            $langId,
+            true
         );
 
         if (1 > $fileId) {
