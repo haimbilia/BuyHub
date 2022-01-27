@@ -271,4 +271,67 @@ class ProductRequest extends MyAppModel
         }
         return HtmlHelper::getStatusHtml($status, rtrim($msg));
     }
+
+     /**
+     * move images from temp to main table
+     */
+    public function moveTempFiles(int $tempRecordId)
+    {
+        if (!$this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        $db = FatApp::getDb();
+        $sql = "INSERT INTO tbl_attached_files(
+            afile_type,
+            afile_record_id,
+            afile_record_subid,
+            afile_lang_id,
+            afile_screen,
+            afile_physical_path,
+            afile_name,
+            afile_attribute_title,
+            afile_attribute_alt,
+            afile_aspect_ratio,
+            afile_display_order,
+            afile_updated_at
+        )
+        SELECT
+            " . AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE . ",
+            $this->mainTableRecordId,
+            afile_record_subid,
+            afile_lang_id,
+            afile_screen,
+            afile_physical_path,
+            afile_name,
+            afile_attribute_title,
+            afile_attribute_alt,
+            afile_aspect_ratio,
+            afile_display_order,
+            afile_updated_at
+        FROM
+            tbl_attached_files_temp
+        WHERE
+            afile_type = ".AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+
+
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        $sql = "delete from tbl_attached_files_temp where afile_type = ".AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        $db->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+        return true;
+    }
 }

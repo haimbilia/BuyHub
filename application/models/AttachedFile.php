@@ -457,6 +457,7 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_PRODUCT_IMAGE:
             case self::FILETYPE_PRODUCT_IMAGE_TEMP:
             case self::FILETYPE_CUSTOM_PRODUCT_IMAGE:
+            case self::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP:
                 $path .= self::FILETYPE_PRODUCT_IMAGE_PATH;
                 break;
             case self::FILETYPE_BLOG_POST_IMAGE:
@@ -1331,4 +1332,5 @@ class AttachedFile extends MyAppModel
         }
         return false;
     }
+    
 }

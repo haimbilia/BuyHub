@@ -68,6 +68,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                                 echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                                 $fld = $frm->getField('product_warranty');
                                 if (null !== $fld) {
@@ -399,6 +400,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
+        var tempImageType = '<?php echo AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP; ?>';
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
         var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
@@ -408,19 +410,17 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             tagifyProducts();
             productDefaultImages();
             var langId = getCurrentFrmLangId();
-            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
+            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete', [], siteConstants.webrootfront), {
                 brand_active: 1,
                 langId: langId
             });
-            select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete'), {
+            select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete', [], siteConstants.webrootfront), {
                 langId
             });
-            select2('ptt_taxcat_id', fcom.makeUrl('Products', 'autoCompleteTaxCategories'), {
+
+            select2('ptt_taxcat_id', fcom.makeUrl('products', 'autoCompleteTaxCategories', [], siteConstants.webrootfront), {
                 langId
-            });
-            select2('ps_from_country_id', fcom.makeUrl('seller', 'countries_autocomplete'), {
-                langId
-            });
+            });           
 
             $('#addProductfrm .optionsJs').each(function(index) {
                 var selectedOptionData = [];
