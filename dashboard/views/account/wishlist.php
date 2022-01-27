@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php'); 
+$this->includeTemplate('_partial/dashboardNavigation.php');
 
 $label = Labels::getLabel("LBL_FAVORITES", $siteLangId);
 if (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
@@ -11,9 +11,9 @@ if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) 
     $function = 'searchWishList()';
 }
 ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => $label,
             'siteLangId' => $siteLangId,
@@ -21,21 +21,17 @@ if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) 
 
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
-            <div class="card">
+            <div class="card card-tabs">
+                <div class="card-head">
+                    <nav class="nav nav-tabs">
+                        <a class="nav-link active" onClick="<?php echo $function; ?>" href="javascript:void(0);" id="tab-wishlist">
+                            <?php echo $label; ?>
+                        </a>
+                        <a class="nav-link" onClick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
+                    </nav>
+                </div>
                 <div class="card-body">
-                    <div class="tabs">
-                        <ul>
-                            <li class="is-active" id="tab-wishlist">
-                                <a onClick="<?php echo $function; ?>" href="javascript:void(0);">
-                                    <?php echo $label; ?>
-                                </a>
-                            </li>
-                            <li id="tab-fav-shop"><a onClick="searchFavoriteShop();"
-                                    href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="listingDiv" ></div>
+                    <div id="listingDiv"></div>
                     <div id="loadMoreBtnDiv"></div>
                 </div>
             </div>
@@ -43,5 +39,5 @@ if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) 
     </div>
 </main>
 <script>
-<?php echo $function; ?> ;
+    <?php echo $function; ?>;
 </script>

@@ -1,8 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $displayDigitalDownloadAddBtn = false;
 $displayDigitalDownloadList = false;
+
 if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
+    var_dump($displayDigitalDownloadAddBtn);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>

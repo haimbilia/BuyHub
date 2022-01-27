@@ -1,11 +1,17 @@
-//
+//Framework
 @import "bootstrap/bootstrap";
 @import "bootstrap/variables";
-//
+
+//themes
 @import "themes/variables";
-//
+
+//layout
+@import "layout/footer";
+@import "layout/sidebar";
+
+//components
 @import "components/misc";
-@import "components/sidebar";
+
 // @import 'components/main-search';
 // @import 'components/accordion';
 // @import 'components/categories';
@@ -28,7 +34,6 @@
 @import "components/dropdown";
 @import "components/featured-shop";
 // @import 'components/fetured-slider';
-
 // @import 'components/ftshops';
 @import "components/graph";
 // @import 'components/hamburger';
@@ -86,7 +91,8 @@
 @import "../../../application/views/scss/components/product-profile";
 @import "../../../application/views/scss/components/list-cart";
 @import "../../../application/views/scss/components/cart-summary";
-//
+
+//vendors
 // @import 'vendors/animate';
 @import "vendors/fontawesome";
 @import "vendors/chartist";
@@ -100,7 +106,7 @@
 @import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 // @import 'vendors/nouislider.min';
-//
+//pages
 @import "pages/dashboard";
 @import "pages/add-stock";
 @import "pages/share-earn";

@@ -453,7 +453,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     </svg>
                                                 </i>
                                             </div>
-                                            <div class="card-body ">
+                                            <div class="card-body">
                                                 <div class="stats">
                                                     <div class="stats-number">
                                                         <ul>
