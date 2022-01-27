@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="row justify-content-between align-items-center mb-4">
     <div class="col mb-3 mb-md-0">
         <h6 class="card-title m-0">

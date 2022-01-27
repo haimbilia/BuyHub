@@ -47,8 +47,7 @@ $space: 25px;
             transition: $transition-base;
             display: block;
             top: -4px;
-            padding-right: 0;
-
+            margin-#{$start-direction}: auto;
             .toggle-line {
                 display: block;
                 height: 100%;

@@ -60,6 +60,7 @@
             color: var(--brand-color-inverse);
         }
     }
+
     &-outline-brand {
         border-color: var(--brand-color);
         color: var(--brand-color);
@@ -67,24 +68,33 @@
             color: var(--brand-color);
         }
     }
-    &--white {
+    &-secondary {
+        background-color: var(--secondary-color);
+        color: var(--secondary-color-inverse);
+
+        &:hover {
+            color: var(--secondary-color-inverse);
+        }
+    }
+
+    &-outline-secondary {
+        border-color: var(--secondary-color);
+        color: var(--secondary-color);
+        &:hover {
+            color: var(--secondary-color);
+        }
+    }
+
+    &-white {
         background: #fff;
         color: #000;
-    }
-    &-outline-brand {
-        background: none;
-        border-color: $brand-color;
-        color: $brand-color;
-    }
-    &-outline-secondary {
-        background: none;
-        border-color: $secondary-color;
-        color: $secondary-color;
     }
     &-outline-white {
         background: none;
         border-color: #fff;
         color: #fff;
+    }
+    &-gray {
     }
     &-outline-gray {
         background: none;
@@ -98,6 +108,19 @@
     &-wide {
         padding-left: 2rem;
         padding-right: 2rem;
+    }
+    &-icon {
+        .svg {
+            // width: 12px;
+            // height: 12px;
+            //margin-#{$end-direction}: 6px;
+        }
+        &-start {
+            margin-#{$end-direction}: 6px;
+        }
+        &-end {
+            margin-#{$start-direction}: 6px;
+        }
     }
     &-sm {
         padding: 0.25rem 0.5rem;
