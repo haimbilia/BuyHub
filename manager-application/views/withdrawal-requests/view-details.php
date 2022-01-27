@@ -30,7 +30,7 @@
                     <span class="label"><?php echo Labels::getLabel('LBL_IFSC_CODE/SWIFT_CODE', $siteLangId); ?> :</span>
                    <span class="value"><?php echo $details['withdrawal_ifc_swift_code']; ?></span>
                 </li>
-                <li class="list-stats-item">
+                <li class="list-stats-item list-stats-item-full">
                     <span class="label"><?php echo Labels::getLabel('LBL_BANK_ADDRESS', $siteLangId); ?> :</span>
                    <span class="value"><?php echo $details['withdrawal_bank_address']; ?></span>
                 </li>
@@ -57,9 +57,9 @@
                 }
             }
             if (!empty($details["withdrawal_instructions"])) { ?>
-                <li class="list-stats-item">
+                <li class="list-stats-item list-stats-item-full">
                     <span class="label"><?php echo Labels::getLabel('LBL_INSTRUCTIONS', $siteLangId); ?> </span>
-                   <span class="value"><?php echo  $row['withdrawal_instructions']; ?></span>
+                   <span class="value"><?php echo  $details['withdrawal_instructions']; ?></span>
                 </li>
             <?php
             }
