@@ -377,13 +377,51 @@ a:hover {
     transition: 0.5s ease all;
 }
 
+// .dropdown-toggle-custom {
+//     cursor: pointer;
+//     position: relative;
+//     &-arrow {
+//         position: absolute;
+//         transform: translate(-6px, 0);
+//         top: calc(50% - 4px);
+//         #{$end-direction}: 0;
+//         &:after,
+//         &:before {
+//             content: "";
+//             position: absolute;
+//             background-color: currentColor;
+//             width: 1px;
+//             height: 8px;
+//             transition: all 0.25s ease-in-out;
+//         }
+//         &:before {
+//             transform: translate(-3px, 0) rotate(45deg);
+//         }
+//         &:after {
+//             transform: translate(3px, 0) rotate(-45deg);
+//         }
+//     }
+//     &:not(.show),
+//     &:not(.collapsed) {
+//         .dropdown-toggle-custom-arrow {
+//             &:before {
+//                 transform: translate(3px, 0) rotate(45deg);
+//             }
+//             &:after {
+//                 transform: translate(-3px, 0) rotate(-45deg);
+//             }
+//         }
+//     }
+// }
 .dropdown-toggle-custom {
     cursor: pointer;
+    border: none;
     position: relative;
     &-arrow {
         position: absolute;
         transform: translate(-6px, 0);
         top: calc(50% - 4px);
+        //#{$end-direction}: 25px;
         #{$end-direction}: 0;
         &:after,
         &:before {
@@ -391,24 +429,23 @@ a:hover {
             position: absolute;
             background-color: currentColor;
             width: 1px;
-            height: 8px;
+            height: 9px;
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(-3px, 0) rotate(45deg);
+            transform: translate(0px, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(3px, 0) rotate(-45deg);
+            transform: translate(-6px, 0px) rotate(-45deg);
         }
     }
-    &:not(.show),
     &:not(.collapsed) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(3px, 0) rotate(45deg);
+                transform: translate(-6px, 0px) rotate(45deg);
             }
             &:after {
-                transform: translate(-3px, 0) rotate(-45deg);
+                transform: translate(0px, 0) rotate(-45deg);
             }
         }
     }
