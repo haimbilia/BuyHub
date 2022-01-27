@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 <?php
 $returnRequestMsgsForm->addHiddenField('', 'isSeller', 1);
 $btn = $frmMsg->getField('btn_submit');
@@ -7,7 +7,7 @@ if (null != $btn) {
     $btn->addFieldTagAttribute('class', 'btn btn-brand');
 }
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -164,4 +164,3 @@ if (null != $btn) {
             </div>
         </div>
     </div>
-</main>

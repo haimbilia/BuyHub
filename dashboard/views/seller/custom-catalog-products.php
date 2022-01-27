@@ -23,8 +23,8 @@
     $cancelBtnFld->developerTags['col'] = 3;
     $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php 
         $title = Labels::getLabel('LBL_Products_Request', $siteLangId);
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-</main>
+
 <script>
     jQuery(document).ready(function($) {
         $(".initTooltip").click(function(){

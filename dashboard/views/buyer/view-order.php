@@ -44,9 +44,9 @@ if (true == $primaryOrder) {
 }
 
 if (!$print) { ?>
-    <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+    <?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 <?php } ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php if (!$print) {
             $data = [
@@ -339,7 +339,7 @@ if (!$print) { ?>
             </div>
         </div>
     </div>
-</main>
+
 <?php if ($print) { ?>
 
 <?php } ?>

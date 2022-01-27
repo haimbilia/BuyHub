@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (!$print) {
-    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 <?php
 }
 
@@ -22,7 +22,7 @@ $daysSpent = round($datediff / (60 * 60 * 24));
 
 $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php if (!$print) {
             $orderObj = new Orders();
@@ -337,7 +337,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
             </div>
         </div>
     </div>
-</main>
+
 <?php if ($print) { ?>
 
 <?php } ?>

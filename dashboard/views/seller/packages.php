@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <div class="content-body">
             <div class="card">
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-</main>
+
 <script>
     var currentActivePlanId = <?php echo ($currentActivePlanId) ? $currentActivePlanId : 0; ?>
 </script>
