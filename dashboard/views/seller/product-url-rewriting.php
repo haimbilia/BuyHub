@@ -18,8 +18,8 @@ $clearFld = $frmSearch->getField('btn_clear');
 $clearFld->setFieldTagAttribute('onclick', 'clearSearch()');
 $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php 
             $data = [
@@ -77,4 +77,3 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
             </div>
         </div>
     </div>
-</main>

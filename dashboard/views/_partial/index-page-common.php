@@ -14,9 +14,9 @@ $pagesTabsData = ([
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php $this->includeTemplate('_partial/header/content-header.php', $pagesTabsData, false); ?>
         <div class="content-body pagebody--js">
@@ -55,4 +55,3 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         </div>
         <span class="editRecord--js"></span>
     </div>
-</main>

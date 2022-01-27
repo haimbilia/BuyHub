@@ -596,3 +596,7 @@ $plugin = new Plugin();
         </ul>
     </div>
 </sidebar>
+<main id="main-area" class="main">
+    <?php
+    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId, 'isUserDashboard' => $isUserDashboard], false);
+    ?>

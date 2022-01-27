@@ -1,10 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body bg-gray">
-    <section class="dashboard">
-		<?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
+    <section class="dashboard">		
 		<div class="container">
 			<div class="row">
-			<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+			<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 			   <div class="col-xs-10 panel__right--full " >
 					<div class="cols--group">
 						<div class="panel__head">
