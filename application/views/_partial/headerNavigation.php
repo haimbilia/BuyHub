@@ -148,10 +148,11 @@
 
 
 
- <!-- offcanvas-categories-menu -->
+  <!-- Start Mobile Navigation Bar -->
 
- <nav id="menu">
- <ul class="navigation">
+
+    <nav id="menu">
+        <ul>
             <?php
             if (count($headerNavigation)) {
                 foreach ($headerNavigation as $nav) {
@@ -176,77 +177,67 @@
                             }
             ?>
 
-                            <li class="navigation-item <?php echo $navchild; ?>">
-                                <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
-                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
 
-                                    <span class="link__mobilenav"></span>
-                                    <div class="subnav">
-                                        <div class="subnav-inner">
-                                            <div class="container">
-                                                <div class="categories-block">
-
-                                                    <?php $subyChild = 0;
-                                                    foreach ($link['children'] as $children) {
-                                                        $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
-                                                        $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                    ?>
-                                                        <div class="categories-cols">
-
-                                                            <ul class="categories-list">
-
-                                                                <li class="categories-list-item">
-                                                                    <a class="categories-list-link categories-list-head" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
-
-                                                                </li>
-                                                                <?php $subChild = 0;
-                                                                foreach ($children['children'] as $childCat) {
-                                                                    $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
-                                                                    $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                                ?>
-
-                                                                    <li class="categories-list-item">
-                                                                        <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
-                                                                            <span><?php echo $childCat['prodcat_name']; ?></span></a>
-                                                                    </li>
+                            <li>
+                                <a class="" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                <ul>
+                                    <?php if (isset($link['children']) && count($link['children']) > 0) {
 
 
-                                                                <?php
-                                                                    if ($subChild++ == 7) {
-                                                                        break;
-                                                                    }
-                                                                }
+                                        foreach ($link['children'] as $children) {
+                                            $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                            $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
 
-                                                                if ($subyChild++ == 3) {
-                                                                    break;
-                                                                } ?>
-                                                            </ul>
 
-                                                        </div>
+                                    ?>
+
+
+                                            <li><a class="" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+                                                <ul>
 
                                                     <?php
-                                                    } ?>
+                                                    foreach ($children['children'] as $childCat) {
+                                                        $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                        $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                    ?>
+
+                                                        <li class="">
+                                                            <a class="" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                        </li>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </ul>
 
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
+                                            </li>
+
+
+
+
+
+
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
 
 
                             </li>
-
-
 
 
             <?php
                         }
                     }
                 }
-            } ?>
+            }
+            ?>
+
         </ul>
     </nav>
+<!-- End Mobile Navigation Bar -->
 
 
 <?php } ?>
