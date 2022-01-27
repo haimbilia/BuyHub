@@ -54,6 +54,47 @@ $card-bg: #fff;
             color: $txt-gray;
         }
     }
+    &-toolbar {
+        display: flex;
+        align-items: flex-start;
+        align-content: flex-start;
+        @include media-breakpoint-up(md) {
+            align-items: center;
+            align-content: flex-end;
+        }
+        .btn-add ~ .actions {
+            margin-#{$start-direction}: 2rem;
+        }
+        > .actions {
+            li {
+                margin: 0;
+                a {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+            .selected {
+                color: $brand-color;
+                .svg {
+                    fill: currentColor;
+                }
+            }
+        }
+        ul {
+            display: flex;
+            li {
+                list-style: none;
+                margin-#{$start-direction}: 0.5rem;
+                &:first-child {
+                    margin-#{$start-direction}: 0;
+                }
+                &:last-child {
+                    margin-#{$end-direction}: 0;
+                }
+            }
+        }
+    }
     &-body {
         flex: 1 1 0;
         padding: $card-space;

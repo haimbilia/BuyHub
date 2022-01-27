@@ -19,15 +19,15 @@ $clearFld->setFieldTagAttribute('onclick', 'clearSearch()');
 $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 ?>
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_URL_Rewriting', $siteLangId),
-                'siteLangId' => $siteLangId,
-            ];
+        <?php
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_URL_Rewriting', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
 
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
         ?>
         <div class="content-body">
             <div class="row mb-4">
@@ -62,8 +62,8 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body h-100">
+                    <div class="card h-100">
+                        <div class="card-body">
                             <div id="dvForm"></div>
                             <div class="alert-aligned" id="dvAlert">
                                 <div class="cards-message">
