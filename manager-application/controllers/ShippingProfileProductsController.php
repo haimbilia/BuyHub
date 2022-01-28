@@ -17,7 +17,8 @@ class ShippingProfileProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
      
-    public function search($profileId) {
+    public function search($profileId = 0) {
+        $profileId = FatApp::getPostedData('shippro_shipprofile_id', FatUtility::VAR_INT, $profileId);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -142,9 +143,17 @@ class ShippingProfileProductsController extends ListingBaseController {
     private function getForm($profileId = 0) {
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmProfileProducts');
-        $frm->addHiddenField('FRM_PRODUCT_NAME', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
-        $frm->addHiddenField(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'shippro_product_id', '')->requirements()->setRequired(true);
+
+        $htm = '<div class="alert alert-solid-brand " role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i>
+                    </div>
+                    <div class="alert-text text-xs">' . Labels::getLabel("LBL_Product_will_automatically_remove_from_other_profile", $this->siteLangId) . '</div>
+                </div>';
+        $frm->addHtml('', 'shippro_products_text', $htm);
+        $frm->addHiddenField('', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
+        $frm->addHiddenField('', 'shippro_product_id', '')->requirement->setRequired(true);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'product_name'); 
+        $fld->overrideFldType('search');
         return $frm;
     }
 

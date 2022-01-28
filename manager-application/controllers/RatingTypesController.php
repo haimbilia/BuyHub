@@ -69,14 +69,14 @@ class RatingTypesController extends ListingBaseController
             $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('restrictTypes', [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $this->set('types', RatingType::getTypeArr($this->siteLangId));
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -184,20 +184,17 @@ class RatingTypesController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmRating', array('id' => 'frmRating'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
-        
+
         $label = Labels::getLabel('LBL_THIS_CAN_BE_BIND_WITH_CATEGORIES.', $this->siteLangId);
         if (in_array($recordId, [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
             $label = Labels::getLabel('LBL_THIS_IS_DEFAULT_RATING_TYPE_CANNOT_BE_ASSIGNED.', $this->siteLangId);
         }
         
-        $htm = '<div class="alert alert-solid-info" role="alert">
-                            <div class="alert-icon">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
-                            <div class="alert-text">
-                                ' . $label . '
-                            </div>
-                        </div>';
+        $htm = '<div class="alert alert-solid-brand " role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i>
+                    </div>
+                    <div class="alert-text text-xs">' . $label . '</div>
+                </div>';
         $frm->addHtml('', 'rating_type_info', $htm);
 
         $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $this->siteLangId), 'ratingtype_name');
@@ -233,7 +230,7 @@ class RatingTypesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'ratingtype_id');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -246,7 +243,7 @@ class RatingTypesController extends ListingBaseController
         if (1 > $recordId || -1 == $status) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         if (RatingType::TYPE_PRODUCT == $recordId) {
             $status = applicationConstants::ACTIVE;
         }
