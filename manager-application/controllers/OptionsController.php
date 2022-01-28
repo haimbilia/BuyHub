@@ -293,7 +293,7 @@ class OptionsController extends ListingBaseController {
 
         $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as option_name', 'option_identifier','option_is_separate_images'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
@@ -316,9 +316,18 @@ class OptionsController extends ListingBaseController {
 
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 
+        $results = [];
+        foreach($options as $option){
+            $optionName = $option['option_name'];       
+            if($option['option_name']  != $option['option_identifier'] ){
+                $optionName.="(".$option['option_identifier'] .")"; 
+            }
+            $results[]= ['id'=> $option['id'],'text'=> $optionName];
+        }
+
         $json = array(
             'pageCount' => $srch->pages(),
-            'results' => $options
+            'results' => $results
         );
 
         die(FatUtility::convertToJson($json));

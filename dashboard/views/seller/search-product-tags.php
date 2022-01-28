@@ -34,7 +34,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $row['product_name'], true);
                 break;
             case 'tags':
-                $productTags = Product::getProductTags($row['product_id']);
+                $productTags = Product::getProductTags($row['product_id'],$siteLangId);
+                
                 $tagData = array();
                 foreach ($productTags as $key => $data) {
                     $tagData[$key]['id'] = $data['tag_id'];

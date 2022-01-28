@@ -2,6 +2,7 @@ $(document).ready(function () {
     var profileId = $('input[name="profile_id"]').val();
     searchZone(profileId);
     searchProductsSection(profileId);
+
 });
 (function () {
     var prodListing = '#product-listing--js';
@@ -37,32 +38,60 @@ $(document).ready(function () {
         searchProducts(profileId, frm);
     };
 
+    searchRecords = function (frm) {
+        searchProducts(0, frm);
+    }
+
     searchProducts = function (profileId, form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
 
-        $(prodListing).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
-            $.ykmsg.close();
-            fcom.removeLoader();
+        $(prodListing).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
+            res = $.parseJSON(res);
             $(prodListing).html(res.html);
+            fcom.removeLoader();
         });
         $(shipListing).html('');
-        fcom.removeLoader();
     };
 
     searchProductsSection = function (profileId) {
         var dv = '#product-section--js';
-        $(dv).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
-            $.ykmsg.close();
-			fcom.removeLoader();
+        $(dv).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
+            res = $.parseJSON(res);
+            fcom.removeLoader();
             $(dv).html(res.html);
             searchProducts(profileId);
         });
         fcom.removeLoader();
+    };
+
+    clearSearch = function (profileId, frm) {
+        document.frmRecordSearch.reset();
+        searchProducts(profileId, frm);
+    };
+
+    loadLangData = function () {
+        var frm = $('#frmShippingProfile');
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'ProfileNameForm'), data, function (res) {
+            fcom.removeLoader();
+            $('#profile-name-form').html(res.html);
+        });
+    };
+
+    profileProductForm = function (profileId) {
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'form', [profileId]), '', function (t) {
+            $.ykmodal(t.html, true, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
     };
 
     setupProfileProduct = function (frm) {
@@ -92,10 +121,10 @@ $(document).ready(function () {
     }
 
     searchZone = function (profileId, scrollToNew = false) {
-        $(zoneListing).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
-            $.ykmsg.close();
-			fcom.removeLoader();
+        $(zoneListing).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
+            res = $.parseJSON(res);
+            fcom.removeLoader();
             $(zoneListing).html(res.html);
             if (true == scrollToNew) {
                 setTimeout(function () {
@@ -142,9 +171,10 @@ $(document).ready(function () {
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
             var profileId = $('input[name="profile_id"]').val();
-            searchZone(profileId, true);
-            searchProductsSection(profileId);
-            $(document).trigger('close.facebox');
+            setTimeout(() => {
+                searchZone(profileId, true);
+                searchProductsSection(profileId);
+            }, 500);
         });
     };
 
@@ -280,6 +310,56 @@ $(document).ready(function () {
     }
 })();
 
+$(document).on('keyup', '.continentJs', function () {
+    var filter = $(this).val();
+    if (filter.length <= 1) {
+        $('.zones--js').find(".filter-country--js").show();
+        $('.zones--js').find(".country--js").show();
+        $('.zones--js').find(".zone-name--js").show();
+        $('.zones--js').find(".zones--js").show();
+        $('.zones--js').find(".list-zones li").show();
+        return;
+    }
+    $('.zones--js').find(".zone-name--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).closest('.zones--js').removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).closest('.zones--js').addClass('li-display');
+        }
+    });
+
+    $('.zones--js').find(".country--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).closest('.filter-country--js').hide();
+            $(this).closest('.filter-country--js').removeClass('li-display');
+        } else {
+            $(this).closest('.filter-country--js').show();
+            $(this).closest('.filter-country--js').addClass('li-display');
+        }
+    });
+
+    $('.list-zones').find("ul li").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).addClass('li-display');
+        }
+    });
+
+    $('.li-display').each(function () {
+        $(this).closest('.zones--js').find('.zone-name--js').show();
+        $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
+        if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').show();
+        } else {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display li').show();
+        }
+    });
+});
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
         $('.checkbox_container--js input[type="checkbox"]').each(function (index) {

@@ -878,7 +878,7 @@ class DashboardBaseController extends FatController
         if ($pageSize < 1) {
             return;
         }
-
+       
         if ($page > 1 && !empty($post['total_record_count'])) {
             $this->setPageRecord($post['total_record_count'], $pageSize, $page);
             return;
@@ -894,6 +894,7 @@ class DashboardBaseController extends FatController
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
+        //echo $recordCountSrch->getQuery();
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

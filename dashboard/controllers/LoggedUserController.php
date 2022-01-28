@@ -93,6 +93,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearOrderCancelRequestSearch();'));
         $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
         return $frm;
     }
 
@@ -112,6 +113,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearOrderReturnRequestSearch();'));
         $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
         return $frm;
     }
 
