@@ -39,7 +39,7 @@ class AmazonPayController extends PaymentController
         );
         $this->set('amazon', $amazon);
         if (!(strlen($amazon['merchant_id']) > 0 && strlen($amazon['access_key']) > 0 && strlen($amazon['secret_key']) > 0 && strlen($amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_STRING, '0')))) {
-            $this->error = Labels::getLabel('API_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
         }
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -88,13 +88,13 @@ class AmazonPayController extends PaymentController
     public function get_details($orderId)
     {
         if (strtolower($_SERVER['REQUEST_METHOD']) != 'post') {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
         $postedData = FatApp::getPostedData();
         if (!isset($postedData['orderReferenceId']) && !isset($postedData['addressConsentToken'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         } elseif (strlen($postedData['orderReferenceId']) <= 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }        
         $this->paymentInitiated($orderId);
         $config = array(
@@ -104,7 +104,7 @@ class AmazonPayController extends PaymentController
             'client_id' => trim($this->settings['amazon_clientId'])
         );
         if (!(strlen($config['merchant_id']) > 0 && strlen($config['access_key']) > 0 && strlen($config['secret_key']) > 0 && strlen($config['client_id']) > 0)) {
-            FatUtility::dieJsonError(Labels::getLabel('API_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
         }
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -116,7 +116,7 @@ class AmazonPayController extends PaymentController
             $config['currency_Code'] = strtoupper($this->currencyCode);
             $config['sandbox'] = (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == false);
             if (!class_exists('\PayWithAmazon\Client')) {
-                FatUtility::dieJsonError(Labels::getLabel('API_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
             }
             $client = new \PayWithAmazon\Client($config);
             $requestParameters = array();
@@ -135,19 +135,19 @@ class AmazonPayController extends PaymentController
             }
             FatUtility::dieJsonError($response->toJson());
         } else {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
     }
     public function doPayment($orderId)
     {
         if (strtolower($_SERVER['REQUEST_METHOD']) != 'post') {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
         $postedData = FatApp::getPostedData();
         if (!isset($postedData['amazon_order_reference_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         } elseif (strlen($postedData['amazon_order_reference_id']) <= 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
 
         $config = array(
@@ -157,7 +157,7 @@ class AmazonPayController extends PaymentController
             'client_id' => trim($this->settings['amazon_clientId'])
         );
         if (!(strlen($config['merchant_id']) > 0 && strlen($config['access_key']) > 0 && strlen($config['secret_key']) > 0 && strlen($config['client_id']) > 0)) {
-            FatUtility::dieJsonError(Labels::getLabel('API_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
         }
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -169,7 +169,7 @@ class AmazonPayController extends PaymentController
             $config['currency_Code'] = strtoupper($this->currencyCode);
             $config['sandbox'] = (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == false);
             if (!class_exists('\PayWithAmazon\Client')) {
-                FatUtility::dieJsonError(Labels::getLabel('API_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_AMAZON_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
             }
             $client = new \PayWithAmazon\Client($config);
             $requestParameters = array();
@@ -202,18 +202,18 @@ class AmazonPayController extends PaymentController
                         $responsearray['close'] = json_decode($response->toJson());
                         if ($client->success) {
                             /* Recording Payment in DB */
-                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $postedData['amazon_order_reference_id'], $paymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($responsearray));
+                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $postedData['amazon_order_reference_id'], $paymentAmount, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($responsearray));
                             /* End Recording Payment in DB */
                         }
                         if ($client->success) {
-                            FatUtility::dieJsonSuccess(Labels::getLabel('AMAZON_PAYMENT_COMPLETE', $this->siteLangId));
+                            FatUtility::dieJsonSuccess(Labels::getLabel('SUC_AMAZON_PAYMENT_COMPLETE', $this->siteLangId));
                         }
                     }
                 }
             }
             FatUtility::dieJsonError($responsearray);
         } else {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
     }
 

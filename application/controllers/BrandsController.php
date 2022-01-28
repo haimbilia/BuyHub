@@ -234,10 +234,10 @@ class BrandsController extends MyAppController
         $brandName = $post['brandName'];
         $brandId = FatUtility::int($post['brandId']);
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('LBL_Lang_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANG_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (1 > $brandId) {
-            trigger_error(Labels::getLabel('LBL_Brand_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_BRAND_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = Brand::getSearchObject($langId);
         $srch->addCondition('brand_name', '=', $brandName);
@@ -247,7 +247,7 @@ class BrandsController extends MyAppController
         $rs = $srch->getResultSet();
         $records = $srch->recordCount();
         if ($records > 0) {
-            FatUtility::dieJsonError(sprintf(Labels::getLabel('LBL_%s_not_available', $this->siteLangId), $brandName));
+            FatUtility::dieJsonError(sprintf(Labels::getLabel('ERR_%S_NOT_AVAILABLE', $this->siteLangId), $brandName));
         }
         FatUtility::dieJsonSuccess(array());
     }
@@ -258,7 +258,7 @@ class BrandsController extends MyAppController
         $parameters = FatApp::getParameters();
         switch ($action) {
         case 'view':
-            $nodes[] = array('title' => Labels::getLabel('LBL_Brands', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
+            $nodes[] = array('title' => Labels::getLabel('MSG_BRANDS', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
             if (isset($parameters[0]) && $parameters[0] > 0) {
                 $brandId = FatUtility::int($parameters[0]);
                 if ($brandId > 0) {
@@ -275,7 +275,7 @@ class BrandsController extends MyAppController
             break;
 
         case 'index':
-            $nodes[] = array('title' => Labels::getLabel('LBL_Brands', $this->siteLangId));
+            $nodes[] = array('title' => Labels::getLabel('MSG_Brands', $this->siteLangId));
 
             break;
 
