@@ -5004,31 +5004,35 @@ class SellerController extends SellerBaseController {
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
-        $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $userId);
+        $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $userId); 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post); 
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(
+            array(
+                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+            )
+        ); 
+        $srch->addOrder('splprice_id', 'DESC');
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
+        $srch->setPageSize($pagesize); 
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($arrListing)) {
             foreach ($arrListing as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
             }
         }
         $this->set("arrListing", $arrListing);
-        $this->set('canEdit', $this->userPrivilege->canEditSpecialPrice(UserAuthentication::getLoggedUserId(), true));
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
+        $this->set('canEdit', $this->userPrivilege->canEditSpecialPrice(UserAuthentication::getLoggedUserId(), true)); 
+        $this->set('postedData', $post); 
         $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
     private function getSpecialPriceSearchForm() {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
-
+        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId))); 
+        $frm->addHiddenField('', 'total_record_count');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
