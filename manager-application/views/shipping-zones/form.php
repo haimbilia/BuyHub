@@ -38,11 +38,10 @@ if (!empty($excludeLocations)) {
 </div>
 <div class="modal-body form-edit loaderContainerJs">
     <div class="form-edit-body">
-        <form onsubmit="setupZone(this); return(false);" method="post" class="form" id="shippingZoneFrm">
+        <form onsubmit="setupZone(this); return(false);" method="post" class="form modalFormJs" id="shippingZoneFrm" data-onclear="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone_id; ?>)">
             <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
             <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
             <input type="hidden" name="shipzone_profile_id" value="<?php echo $profile_id; ?>">
-            <!--<input type="hidden" name="selected_ship_zone"> -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group mb-4 zone-main-field--js">
@@ -55,7 +54,7 @@ if (!empty($excludeLocations)) {
                 <div class="col-lg-12">
                     <div class="list-zones">
                         <div class="list-zones-search sticky-top">
-                            <input type="search" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
+                            <input type="search" class="form-control omni-search continentJs" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
                         </div>
                         <div class="list-zones-head">
                             <label class="checkbox" data-zoneid="-1">
@@ -76,7 +75,7 @@ if (!empty($excludeLocations)) {
                                     }
                                     $countries = (isset($zone['countries'])) ? $zone['countries'] : array();
                                     $totalCountries = count($countries);
-                                    ?>
+                            ?>
                                     <div class="zones--js">
                                         <div class="list-zones-head zone-name--js">
                                             <label class="checkbox zone--js" data-zoneid="<?php echo $zone['zone_id']; ?>">
@@ -107,7 +106,7 @@ if (!empty($excludeLocations)) {
                                                     if (!empty($excludeCountryStates) && isset($excludeCountryStates[$countryId])) {
                                                         $disabled = 'disabled';
                                                     }
-                                                    ?>
+                                                ?>
                                                     <li class="list-states-item filter-country--js">
                                                         <div class="list-zones-head">
                                                             <label class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
@@ -146,7 +145,7 @@ if (!empty($excludeLocations)) {
                                                                     if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'], $excludeCountryStates[$countryId])) {
                                                                         $stateDisabled = ' disabled';
                                                                     }
-                                                                    ?>
+                                                                ?>
                                                                     <li class="list-states-item filter-state-label--js">
                                                                         <div class="list-zones-head">
                                                                             <label class="checkbox state-label--js" data-stateid="<?php echo $state['state_id']; ?>">
@@ -165,16 +164,16 @@ if (!empty($excludeLocations)) {
                                                 ?>
                                             </ul>
                                         <?php } ?>
-                                        <?php
-                                        echo "</div>";
-                                    }
+                                <?php
+                                    echo "</div>";
                                 }
+                            }
                                 ?>
-                            
+
+                                    </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
     <div class="form-edit-foot">
@@ -191,8 +190,8 @@ if (!empty($excludeLocations)) {
 
 <?php if (0 < $zone_id) { ?>
     <script>
-        setTimeout(function () {
-            $('.country--js input[type="checkbox"]').each(function () {
+        setTimeout(function() {
+            $('.country--js input[type="checkbox"]').each(function() {
                 var countryId = $(this).closest('.country--js').data('countryid');
                 var stateCount = $('.country_' + countryId + ' .state--js:checked').length;
                 if (!$(this).prop("checked")) {
@@ -203,7 +202,7 @@ if (!empty($excludeLocations)) {
                 $('.selectedStateCount--js_' + countryId).text(stateCount);
 
             });
-            $('.zone--js').each(function () {
+            $('.zone--js').each(function() {
                 var zoneId = $(this).data('zoneid');
                 var stateCount = $('.zone_' + zoneId + ' .state--js:checked').length;
                 if (0 < stateCount && !$(this).prop("checked")) {

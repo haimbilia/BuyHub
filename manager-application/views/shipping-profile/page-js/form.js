@@ -271,7 +271,7 @@ $(document).ready(function () {
     getZoneLocation = function (zoneId) {
         $.ajax({
             url: fcom.makeUrl('ShippingZones', 'getLocations', [zoneId, 1]),
-            data: {fIsAjax: 1},
+            data: { fIsAjax: 1 },
             dataType: 'json',
             type: 'post',
             success: function (res) {
@@ -308,59 +308,55 @@ $(document).ready(function () {
     }
 })();
 
-var timer;
-$(document).on('keyup', '.omni-search', function () {
+$(document).on('keyup', '.continentJs', function () {
     var filter = $(this).val();
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        if (filter.lenght <= 1) {
-            $('.zones--js').find(".country--js").show();
-            $('.zones--js').find(".zone-name--js").show();
-            $('.zones--js').find(".zones--js").show();
-            $('.zones--js').find(".list-zones li").show();
-            return;
+    if (filter.length <= 1) {
+        $('.zones--js').find(".filter-country--js").show();
+        $('.zones--js').find(".country--js").show();
+        $('.zones--js').find(".zone-name--js").show();
+        $('.zones--js').find(".zones--js").show();
+        $('.zones--js').find(".list-zones li").show();
+        return;
+    }
+    $('.zones--js').find(".zone-name--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).closest('.zones--js').removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).closest('.zones--js').addClass('li-display');
         }
-        $('.zones--js').find(".zone-name--js").each(function () {
-            if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
-                $(this).hide();
-                $(this).closest('.zones--js').removeClass('li-display');
-            } else {
-                $(this).show();
-                $(this).closest('.zones--js').addClass('li-display');
-            }
-        });
+    });
 
-        $('.zones--js').find(".country--js").each(function () {
-            if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
-                $(this).closest('.filter-country--js').hide();
-                $(this).closest('.filter-country--js').removeClass('li-display');
-            } else {
-                $(this).closest('.filter-country--js').show();
-                $(this).closest('.filter-country--js').addClass('li-display');
-            }
-        });
+    $('.zones--js').find(".country--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).closest('.filter-country--js').hide();
+            $(this).closest('.filter-country--js').removeClass('li-display');
+        } else {
+            $(this).closest('.filter-country--js').show();
+            $(this).closest('.filter-country--js').addClass('li-display');
+        }
+    });
 
-        $('.list-zones').find("ul li").each(function () {
-            if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
-                $(this).hide();
-                $(this).removeClass('li-display');
-            } else {
-                $(this).show();
-                $(this).addClass('li-display');
-            }
-        });
+    $('.list-zones').find("ul li").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).addClass('li-display');
+        }
+    });
 
-
-        $('.li-display').each(function () {
-            $(this).closest('.zones--js').find('.zone-name--js').show();
-            $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
-            if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {
-                $(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').show();
-            } else {
-                $(this).closest('.zones--js').find('.filter-country--js.li-display li').show();
-            }
-        });
-    }, 500);
+    $('.li-display').each(function () {
+        $(this).closest('.zones--js').find('.zone-name--js').show();
+        $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
+        if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').show();
+        } else {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display li').show();
+        }
+    });
 });
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
@@ -424,12 +420,12 @@ $(document).on('keyup', "input[name='product_name']", function () {
             'source': function (request, response) {
                 $.ajax({
                     url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: {fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId},
+                    data: { fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId },
                     dataType: 'json',
                     type: 'post',
                     success: function (json) {
                         response($.map(json, function (item) {
-                            return {label: item['name'], value: item['name'], id: item['id']};
+                            return { label: item['name'], value: item['name'], id: item['id'] };
                         }));
                     },
                 });
