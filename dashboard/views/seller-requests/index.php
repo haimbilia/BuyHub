@@ -17,7 +17,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                     <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">';
         if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
-                                                <a class="dropdown-menu-link" href="' . UrlHelper::generateUrl('Seller', 'customCatalogProductForm') . '">
+                                                <a class="dropdown-menu-link" href="' . UrlHelper::generateUrl('customProducts', 'form') . '">
                                                     ' . Labels::getLabel('LBL_Marketplace_Product', $siteLangId) . '
                                                 </a>
                                             </li>';
@@ -88,7 +88,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'customCatalogProductForm'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('CustomProducts', 'form'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>

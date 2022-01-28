@@ -139,7 +139,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         if (User::canAddCustomProductAvailableToAllSellers()) {
             $linkArr = array(
                 0 => array(
-                    'href' => UrlHelper::generateUrl('Seller', 'CustomCatalogProductForm'),
+                    'href' => UrlHelper::generateUrl('CustomProducts', 'form'),
                     'label' => Labels::getLabel('LBL_Request_New_Product', $siteLangId),
                 )
             );

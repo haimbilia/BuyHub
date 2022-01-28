@@ -54,7 +54,7 @@
                     if ($row['preq_status'] == ProductRequest::STATUS_PENDING) {
                         $li->appendElement(
                             'a',
-                            array('href' => UrlHelper::generateUrl('Seller', 'customCatalogProductForm', array($row['preq_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            array('href' => UrlHelper::generateUrl('CustomProducts', 'form', array($row['preq_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
                             '<i class="fa fa-edit"></i>',
                             true
                         );

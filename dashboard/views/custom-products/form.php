@@ -6,7 +6,6 @@ if (0 < $recordId) {
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
-?>
 <div class="content-wrapper content-space" dir="<?php echo $formLayout; ?>">
     <?php
     $frm->setFormTagAttribute('class', 'form');
@@ -15,7 +14,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
     echo $frm->getFormTag(); ?>
     <div class="content-header">
         <div class="content-header-title">
-            <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
+            <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_CUSTOM_PRODUCT_REQUEST', $langId) : Labels::getLabel('FRM_ADD_CUSTOM_PRODUCT_REQUEST', $langId); ?></h2>
             <span class="text-muted"> <span class="required"></span> required
                 information</span>
         </div>
