@@ -880,66 +880,7 @@ trait CustomCatalogProducts
     //     $this->set('preq_id', $preq_id);
     //     $this->set('shipping_rates', $shipping_rates);
     //     $this->_template->render(false, false);
-    // }
-
-    public function approveCustomCatalogProducts($preqId = 0)
-    {
-        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId());
-        $this->canAddCustomCatalogProduct(true);
-        $preqId = FatUtility::int($preqId);
-        if (!$preqId) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Access", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
-        }
-
-        if (!$productRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_content'))) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Access", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
-        }
-
-        $content = (!empty($productRow['preq_content'])) ? json_decode($productRow['preq_content'], true) : array();
-
-        $prodReqObj = new ProductRequest($preqId);
-        $data = array(
-            'preq_submitted_for_approval' => applicationConstants::YES,
-            'preq_requested_on' => date('Y-m-d H:i:s'),
-        );
-        $prodReqObj->assignValues($data);
-        if (!$prodReqObj->save()) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Access", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'SellerRequests'));
-        }
-
-        $mailData = array(
-            'request_title' => $content['product_identifier'],
-            'brand_name' => (!empty($content['brand_name'])) ? $content['brand_name'] : '',
-            'product_model' => (!empty($content['product_model'])) ? $content['product_model'] : '',
-        );
-
-        $email = new EmailHandler();
-        if (!$email->sendNewCustomCatalogNotification($this->siteLangId, $mailData)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_sent', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
-        }
-
-        /* send notification to admin [ */
-        $notificationData = array(
-            'notification_record_type' => Notification::TYPE_CATALOG,
-            'notification_record_id' => $preqId,
-            'notification_user_id' => $this->userParentId,
-            'notification_label_key' => Notification::NEW_CUSTOM_CATALOG_REQUEST_NOTIFICATION,
-            'notification_added_on' => date('Y-m-d H:i:s'),
-        );
-
-        if (!Notification::saveNotifications($notificationData)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        /* ] */
-
-        Message::addMessage(Labels::getLabel('MSG_Your_catalog_request_submitted_for_approval', $this->siteLangId));
-        FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
-    }
+    // }    
 
     /* private function getCustomCatalogProductCategoryForm() {
       $frm = new Form('frmCustomCatalogProductCategoryForm');
