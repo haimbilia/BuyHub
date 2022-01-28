@@ -309,6 +309,10 @@ Updates/Fixes :
     => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
     => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
     => 061738 - Admin UI: Product's listing is showing while binding the product with the shipping profile
+    => 061736 - Admin UI: Facing multiple UI issues while adding the shipping profile
+    => 061735 - Admin UI: Information is missing for the search i.e. according to what criteria admin can search the record on the shipping profile page
+    => 061733 - Admin UI: 'No Record Found' design is not correct on the shipping company and shipping profile page
+    => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
     
 New Features:  
     => Admin shipped products listing page

@@ -388,7 +388,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.success(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();

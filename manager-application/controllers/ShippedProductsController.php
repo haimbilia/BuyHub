@@ -76,7 +76,7 @@ class ShippedProductsController extends ListingBaseController
         $srch->addProductAdminShipCondition();
         $srch->addPhyProductCheckCondition(); 
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('tp_l.product_name', 'like', '%' . $post['keyword'] . '%');
         }
         if (!empty($post['user_id']) && $post['user_id'] > 0) {

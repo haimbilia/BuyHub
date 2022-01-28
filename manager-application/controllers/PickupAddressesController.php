@@ -68,7 +68,7 @@ class PickupAddressesController extends ListingBaseController
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition(Address::tblFld('type'), '=', Address::TYPE_ADMIN_PICKUP);
         $srch->addCondition('addr_deleted', '=', 0);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('addr_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('addr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('addr_address1', 'like', '%' . $post['keyword'] . '%', 'OR');

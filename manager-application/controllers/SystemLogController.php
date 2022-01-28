@@ -83,7 +83,7 @@ class SystemLogController extends ListingBaseController
 
         $srch = SystemLog::getSearchObject();
         $srch->addMultipleFields(array('sylog.*'));
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('slog_content', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('slog_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

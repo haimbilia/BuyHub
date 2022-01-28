@@ -39,7 +39,7 @@ class ShippingDurationsController extends ListingBaseController
 
         $srch = ShippingDurations::getSearchObject($this->siteLangId);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('sd.sduration_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('sd_l.sduration_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

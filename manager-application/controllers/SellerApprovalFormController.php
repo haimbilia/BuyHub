@@ -92,7 +92,7 @@ class SellerApprovalFormController extends ListingBaseController
             'sf_l'
         );
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('sf.sformfield_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('sf_l.sformfield_caption', 'like', '%' . $post['keyword'] . '%');
         }

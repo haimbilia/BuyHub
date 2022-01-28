@@ -82,7 +82,7 @@ class BannerLocationController extends ListingBaseController
             'blocation_id', 'blocation_promotion_cost', 'blocation_active', 'IFNULL(blocation_name,blocation_identifier) as blocation_name'
         ]);
         $srch->addCondition('blocation_collection_id', '=', 'mysql_func_0', 'AND', true);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('blocation_name', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('blocation_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

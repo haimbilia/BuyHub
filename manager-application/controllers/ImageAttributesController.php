@@ -80,7 +80,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -91,7 +91,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -102,7 +102,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('post_title', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('post_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -113,7 +113,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type', 'afile_id')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }

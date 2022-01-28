@@ -74,10 +74,13 @@ $(document).ready(function () {
         searchProducts(profileId, frm);
     };
 
-    loadLangData = function () {
+    loadLangData = function (autoFillLangData = 0) {
         var frm = $('#frmShippingProfile');
         if (frm) {
             data = fcom.frmData(frm);
+        }
+        if (0 < autoFillLangData) {
+            data += '&autoFillLangData=1';
         }
 
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'ProfileNameForm'), data, function (res) {
@@ -106,6 +109,7 @@ $(document).ready(function () {
             var profileId = $('input[name="profile_id"]').val();
             searchProducts(profileId);
             document.frmProfileProducts.reset();
+            closeForm();
         });
     };
 
@@ -407,38 +411,6 @@ $(document).ready(function () {
         $('.selectedStateCount--js_' + countryId).html(count);
         $('input[name="rest_of_the_world"]').prop('checked', false);
     });
-});
-
-$(document).on('keyup', "input[name='product_name']", function () {
-    var currObj = $(this);
-    var parentForm = currObj.closest('form').attr('id');
-    var shipProfileId = $("#" + parentForm + " input[name='shippro_shipprofile_id']").val();
-    if ('' != currObj.val()) {
-        currObj.siblings('ul.dropdown-menu').remove();
-        currObj.autocomplete({
-            'classes': {
-                "ui-autocomplete": "custom-ui-autocomplete"
-            },
-            'source': function (request, response) {
-                $.ajax({
-                    url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: { fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId },
-                    dataType: 'json',
-                    type: 'post',
-                    success: function (json) {
-                        response($.map(json, function (item) {
-                            return { label: item['name'], value: item['name'], id: item['id'] };
-                        }));
-                    },
-                });
-            },
-            select: function (event, ui) {
-                $("#" + parentForm + " input[name='shippro_product_id']").val(ui.item.id);
-            }
-        });
-    } else {
-        $("#" + parentForm + " input[name='shippro_product_id']").val('');
-    }
 });
 
 function isJson(str) {

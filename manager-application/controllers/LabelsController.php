@@ -110,7 +110,7 @@ class LabelsController extends ListingBaseController
         if ($type > -1) {
             $srch->addCondition('label_type', '=', $type);
         } 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

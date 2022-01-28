@@ -41,7 +41,7 @@ class CategoryRequestsController extends ListingBaseController
         $srch = CategoryRequest::getSearchObject($this->siteLangId);
         $srch->addFld('cat.*');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('cat.scategoryreq_identifier', 'like', '%' . $post['keyword'] . '%');
         }
 
@@ -201,7 +201,7 @@ class CategoryRequestsController extends ListingBaseController
         );
         $srch->addMultipleFields(array('categoryReqId, scategoryreq_name, categoryReqIdentifier'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('scategoryreq_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('categoryReqIdentifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

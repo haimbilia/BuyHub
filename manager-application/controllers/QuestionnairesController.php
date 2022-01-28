@@ -43,7 +43,7 @@ class QuestionnairesController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('questionnaire_l.questionnaire_name', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('questionnaire.questionnaire_identifier', 'like', '%' . $post['keyword'] . '%');
         }
@@ -329,7 +329,7 @@ class QuestionnairesController extends ListingBaseController
         $srch->joinFeedbacks();
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         $srch->addCondition('qfeedback_id', 'is not', 'mysql_func_null', 'and', true);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('qfeedback_user_name', 'like', "%$post[keyword]%");
             $cond->attachCondition('qfeedback_user_email', 'like', "%$post[keyword]%");
         }
