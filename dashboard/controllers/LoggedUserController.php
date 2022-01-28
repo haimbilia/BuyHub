@@ -90,7 +90,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addSelectBox('', 'ocrequest_status', array('-1' => Labels::getLabel('LBL_Status_Does_Not_Matter', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
         $frm->addDateField('', 'ocrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField('', 'ocrequest_date_to', '', array('readonly' => 'readonly'));
-
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderCancelRequestSearch();'));
         $frm->addHiddenField('', 'page');
@@ -111,6 +111,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addDateField('', 'orrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField('', 'orrequest_date_to', '', array('readonly' => 'readonly'));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderReturnRequestSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;

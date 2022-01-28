@@ -10,12 +10,13 @@ class ShippingProfileProductsController extends ListingBaseController {
         $this->objPrivilege->canViewShippingManagement();
     }
 
-    public function index($profileId) { 
-        $this->set("frm", $this->getForm($profileId));
+    public function index($profileId) {
+        $this->set("frm", $this->getProductSearchForm($profileId));
+        $this->set('profileId', $profileId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
+     
     public function search($profileId) {
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $post = FatApp::getPostedData();
@@ -24,17 +25,17 @@ class ShippingProfileProductsController extends ListingBaseController {
         $srch = ShippingProfileProduct::getSearchObject();
         $srch->addCondition('shippro_shipprofile_id', '=', $profileId);
         $srch->addCondition('shippro_user_id', '=', 0);
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('p_l.product_name', 'like', '%' . $post['keyword'] . '%');
+        }
         $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->addOrder('product_name', 'ASC');
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        $srch->setPageSize($pageSize);  
         $this->set('productsData', FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('profileData', ShippingProfile::getAttributesById($profileId));
-        $this->set('profile_id', $profileId);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set('profile_id', $profileId); 
         $this->set('postedData', $post);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -80,6 +81,16 @@ class ShippingProfileProductsController extends ListingBaseController {
         die(json_encode($json));
     }
 
+    public function form($profileId) {
+        $this->objPrivilege->canEditShippingManagement();
+        $profileId = FatUtility::int($profileId);  
+        $this->set('profile_id', $profileId); 
+        $this->set('frm', $this->getForm($profileId)); 
+        $this->set('languages', []);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+    
     public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $frm = $this->getForm();
@@ -133,8 +144,19 @@ class ShippingProfileProductsController extends ListingBaseController {
         $frm = new Form('frmProfileProducts');
         $frm->addHiddenField('FRM_PRODUCT_NAME', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
         $frm->addHiddenField(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'shippro_product_id', '')->requirements()->setRequired(true);
-        $fld = $frm->addTextBox('', 'product_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'product_name'); 
+        return $frm;
+    }
+
+    public function getProductSearchForm($profileId, $fields = []) {
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('FRM_PRODUCT_NAME', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
+        $frm->addHtml('', 'btn_clear', HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(' . $profileId . ',this)'));
         return $frm;
     }
 
