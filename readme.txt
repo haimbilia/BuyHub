@@ -309,6 +309,7 @@ Updates/Fixes :
     => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
     => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
     => 061738 - Admin UI: Product's listing is showing while binding the product with the shipping profile
+    => 061736 - Admin UI: Facing multiple UI issues while adding the shipping profile 
     
 New Features:  
     => Admin shipped products listing page

@@ -562,10 +562,8 @@ class SellerProductsController extends ListingBaseController
         $srch->setPageSize($pagesize);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $products = array();
-        if ($rs) {
-            $products = $db->fetchAll($rs, 'id');
-        }
+        $products = $db->fetchAll($rs, 'id');
+        
         $pageCount = $srch->pages();
         $json = array();
         foreach ($products as $key => $option) {
