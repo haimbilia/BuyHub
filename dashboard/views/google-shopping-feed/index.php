@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 $merchantId = isset($userData[$keyName . '_merchantId']) ? $userData[$keyName . '_merchantId'] : '';
 $serviceAccInfo = isset($userData['service_account']) ? $userData['service_account'] : '';
 ?>
-<main id="main-area" class="main"   >
+
     <div class="content-wrapper content-space">
         <?php 
             $data = [
@@ -61,7 +61,7 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
             <?php } ?>
         </div>
     </div>
-</main>
+
 
 <?php if (!empty($merchantId) && empty($serviceAccInfo) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
     <script>

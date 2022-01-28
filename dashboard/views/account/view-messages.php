@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main">
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?> 
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -119,4 +119,3 @@
             </div>
         </div>
     </div>
-</main>

@@ -550,7 +550,7 @@ class ProductsController extends ListingBaseController
         Tag::updateProductTagString($recordId);
         Product::updateMinPrices($recordId);
         if ($isNewProduct) {
-            $prodObj->moveTempFiles(AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, $post['temp_product_id']);
+            $prodObj->moveTempFiles($post['temp_product_id']);
         }
         $db->commitTransaction();
         $this->set('recordId', $recordId);

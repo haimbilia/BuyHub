@@ -6,8 +6,8 @@ $frmOrderCancel->developerTags['fld_default_col'] = 12;
 $btnSubmit = $frmOrderCancel->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -24,4 +24,4 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
             </div>
         </div>
     </div>
-</main>
+

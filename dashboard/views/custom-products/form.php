@@ -1,14 +1,16 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $displayDigitalDownloadAddBtn = false;
 $displayDigitalDownloadList = false;
+
 if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
+    var_dump($displayDigitalDownloadAddBtn);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
-<div class="content-wrapper content-space">
+    <div class="content-wrapper content-space">
         <?php
         $frm->setFormTagAttribute('class', 'form');
         $frm->setFormTagAttribute('id', 'addProductfrm');
@@ -21,14 +23,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     information</span>
             </div>
             <?php
-                $langFld =  $frm->getField('lang_id');
-                if (0 < $recordId) {
-                    $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
-                    $langFld->setfieldTagAttribute('onchange', 'langForm()');
-                    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                    if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
-                        $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
-                        $langFld->htmlAfterField = '<div class="input-group-append">
+            $langFld =  $frm->getField('lang_id');
+            if (0 < $recordId) {
+                $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
+                $langFld->setfieldTagAttribute('onchange', 'langForm()');
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+                    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+                    $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
@@ -36,23 +38,23 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                 </svg>
                                                             </a>
                                                         </div>';
-                    }
+                }
 
-                ?>
-                    <div class="content-header-toolbar">
-                        <div class="input-group">
-                            <?php
-                            echo $langFld->getHtml();
-                            ?>
-                        </div>
+            ?>
+                <div class="content-header-toolbar">
+                    <div class="input-group">
+                        <?php
+                        echo $langFld->getHtml();
+                        ?>
                     </div>
-                <?php } else {
-                    echo $langFld->getHtml();
-                } ?>
+                </div>
+            <?php } else {
+                echo $langFld->getHtml();
+            } ?>
         </div>
         <div class="content-body">
-            <div class="add-stock">            
-                <div class="add-stock-column column-main"> 
+            <div class="add-stock">
+                <div class="add-stock-column column-main">
                     <div class="card" id="basic-details">
                         <div class="card-head">
                             <div class="card-head-label">
@@ -68,6 +70,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                                 echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                                 $fld = $frm->getField('product_warranty');
                                 if (null !== $fld) {
@@ -93,7 +96,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php }                               
+                                <?php }
                                 echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                                 echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
@@ -399,6 +402,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
+        var tempImageType = '<?php echo AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP; ?>';
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
         var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
@@ -408,17 +412,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             tagifyProducts();
             productDefaultImages();
             var langId = getCurrentFrmLangId();
-            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
+            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete', [], siteConstants.webrootfront), {
                 brand_active: 1,
                 langId: langId
             });
-            select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete'), {
+            select2('ptc_prodcat_id', fcom.makeUrl('Products', 'linksAutocomplete', [], siteConstants.webrootfront), {
                 langId
             });
-            select2('ptt_taxcat_id', fcom.makeUrl('Products', 'autoCompleteTaxCategories'), {
-                langId
-            });
-            select2('ps_from_country_id', fcom.makeUrl('seller', 'countries_autocomplete'), {
+
+            select2('ptt_taxcat_id', fcom.makeUrl('products', 'autoCompleteTaxCategories', [], siteConstants.webrootfront), {
                 langId
             });
 
@@ -454,24 +456,24 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <?php } ?>
         });
     </script>
-</main>
 
-<?php
-function getVariantUiTr($langId, $i, $productOption = [])
-{
-    $deleteClass = $i == 0 ? 'hidden' : '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
 
-    $tagData = [];
-    if (!empty($productOption)) {
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+    <?php
+    function getVariantUiTr($langId, $i, $productOption = [])
+    {
+        $deleteClass = $i == 0 ? 'hidden' : '';
+        $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+        $confWebUrl = CONF_WEBROOT_URL;
+
+        $tagData = [];
+        if (!empty($productOption)) {
+            foreach ($productOption['optionValues'] as $key => $name) {
+                $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+            }
         }
-    }
-    $tagData = json_encode($tagData);
+        $tagData = json_encode($tagData);
 
-    return <<<HTML
+        return <<<HTML
     <tr class="rowJs">
         <td width="30%">
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
@@ -502,5 +504,5 @@ function getVariantUiTr($langId, $i, $productOption = [])
         </td> 
     </tr>
     HTML;
-}
-?>
+    }
+    ?>

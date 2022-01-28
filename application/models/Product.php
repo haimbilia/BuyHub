@@ -2150,7 +2150,7 @@ END,   special_price_found ) as special_price_found'
     /**
      * move images from temp to main table
      */
-    public function moveTempFiles(int $fileType, int $tempRecordId)
+    public function moveTempFiles(int $tempRecordId)
     {
         if (!$this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
@@ -2188,7 +2188,7 @@ END,   special_price_found ) as special_price_found'
         FROM
             tbl_attached_files_temp
         WHERE
-            afile_type = $fileType AND afile_record_id = $tempRecordId";
+            afile_type = ".AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
 
 
         if (!$db->query($sql)) {
@@ -2196,7 +2196,7 @@ END,   special_price_found ) as special_price_found'
             return false;
         }
 
-        $sql = "delete from tbl_attached_files_temp where afile_type = $fileType AND afile_record_id = $tempRecordId";
+        $sql = "delete from tbl_attached_files_temp where afile_type = ".AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;

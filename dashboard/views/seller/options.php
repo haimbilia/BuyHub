@@ -21,8 +21,8 @@
     $cancelBtnFld->developerTags['col'] = 2;
     $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <div class="content-header">
             <div class="content-header-title">              
@@ -74,4 +74,3 @@
             </div>
         </div>
     </div>
-</main>

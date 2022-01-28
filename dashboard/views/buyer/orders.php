@@ -50,7 +50,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
-?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?> <main id="main-area" class="main"   >
+?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?> 
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -82,4 +82,4 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             </div>
         </div>
     </div>
-</main>
+

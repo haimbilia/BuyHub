@@ -12,7 +12,7 @@ $(document).on('change', '#addrStateJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md',);
             $.ykmsg.close();
             fcom.removeLoader();
         });

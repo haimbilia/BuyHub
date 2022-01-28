@@ -27,7 +27,7 @@ $messageDetail = current($threadListing); ?>
     $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
 
-    <div class="col-md-6 threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
+    <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
         <div class="card mb-0 h-100">
             <div class="card-head">
                 <div class="card-head-label">
@@ -84,7 +84,7 @@ $messageDetail = current($threadListing); ?>
         </div>
     </div>
 
-    <div class="col-md-3 userJs">
+    <div class="communication-sidebar userJs">
         <div class="card mb-0 h-100">
             <div class="card-body">
                 <div class="message__user">

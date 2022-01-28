@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-</main>
+
 <script>
     $(document).ready(function() {
         <?php if ($tab == User::RETURN_ADDRESS_ACCOUNT_TAB && !$subTab) { ?>
