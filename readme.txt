@@ -312,6 +312,7 @@ Updates/Fixes :
     => 061736 - Admin UI: Facing multiple UI issues while adding the shipping profile
     => 061735 - Admin UI: Information is missing for the search i.e. according to what criteria admin can search the record on the shipping profile page
     => 061733 - Admin UI: 'No Record Found' design is not correct on the shipping company and shipping profile page
+    => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
     
 New Features:  
     => Admin shipped products listing page
