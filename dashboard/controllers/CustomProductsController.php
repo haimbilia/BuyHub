@@ -12,6 +12,11 @@ class CustomProductsController extends SellerBaseController
         $this->canAddCustomCatalogProduct();
     }
 
+    public function index()
+    {
+        FatApp::redirectUser(UrlHelper::generateUrl('sellerRequests'));
+    }
+
     /**
      * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
      *

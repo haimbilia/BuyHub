@@ -27,7 +27,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
 $cancelBtnFld->setWrapperAttribute('class', 'col-xs-6');
 $cancelBtnFld->developerTags['col'] = 3;
 ?>
-<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     <div class="content-wrapper content-space">
         <?php

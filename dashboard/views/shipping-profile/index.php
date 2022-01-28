@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
 $searchFrm->setFormTagAttribute('onSubmit', 'searchProfile(this); return false;');
 $searchFrm->setFormTagAttribute('class', 'form ');
 $searchFrm->developerTags['colClassPrefix'] = 'col-md-';

@@ -5,8 +5,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
-?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <div class="content-wrapper content-space" dir="<?php echo $formLayout; ?>">
     <?php
     $frm->setFormTagAttribute('class', 'form');
@@ -15,7 +14,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
     echo $frm->getFormTag(); ?>
     <div class="content-header">
         <div class="content-header-title">
-            <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
+            <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_CUSTOM_PRODUCT_REQUEST', $langId) : Labels::getLabel('FRM_ADD_CUSTOM_PRODUCT_REQUEST', $langId); ?></h2>
             <span class="text-muted"> <span class="required"></span> required
                 information</span>
         </div>
@@ -333,13 +332,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                             </div>
                         </div>
                     </div>
-                    <?php if(0 < $recordId && isset($productData['preq_submitted_for_approval']) && 1 > $productData['preq_submitted_for_approval']){ ?>
+                    <?php if (0 < $recordId && isset($productData['preq_submitted_for_approval']) && 1 > $productData['preq_submitted_for_approval']) { ?>
                         <div class="card">
                             <div class="card-body">
-                                <a href="<?php echo UrlHelper::generateUrl('CustomProducts','submitForApproval',[$recordId]);?>"  class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SUBMIT_FOR_APPROVAL', $langId); ?></a>                                
+                                <a href="<?php echo UrlHelper::generateUrl('CustomProducts', 'submitForApproval', [$recordId]); ?>" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SUBMIT_FOR_APPROVAL', $langId); ?></a>
                             </div>
                         </div>
-                        <?php } ?>
+                    <?php } ?>
                     <div class="card">
                         <div class="card-body">
                             <ul class="list-featured">
@@ -432,9 +431,9 @@ echo $imgFrm->getFormHtml();
             var selectedOptionData = [];
             if (index in productOptions) {
                 let optionName = productOptions[index]['option_name'];
-                    if(productOptions[index]['option_name'] != productOptions[index]['option_identifier']){
-                        optionName += '('+productOptions[index]['option_identifier']+')';
-                    }
+                if (productOptions[index]['option_name'] != productOptions[index]['option_identifier']) {
+                    optionName += '(' + productOptions[index]['option_identifier'] + ')';
+                }
                 selectedOptionData = [{
                     selected: true,
                     id: productOptions[index]['option_id'],

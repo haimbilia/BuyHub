@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
 $htmlContent = '';
 if (!empty($fields)) {
     $htmlContent = '<div class="dropdown custom-drag-drop">

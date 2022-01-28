@@ -104,7 +104,7 @@
         <?php } ?>
 
         <ul class="short-links">
-            <?php $this->includeTemplate('_partial/headerUserArea.php', array('isUserDashboard' => $isUserDashboard)); ?>
+            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
         </ul>
 
     </div>

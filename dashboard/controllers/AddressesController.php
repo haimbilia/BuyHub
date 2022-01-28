@@ -4,8 +4,7 @@ class AddressesController extends LoggedUserController
 {
     public function __construct($action)
     {
-        parent::__construct($action);
-        //$this->set('bodyClass','is--dashboard');
+        parent::__construct($action);        
     }
 
     public function setUpAddress()

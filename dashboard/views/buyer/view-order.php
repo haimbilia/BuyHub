@@ -44,7 +44,7 @@ if (true == $primaryOrder) {
 }
 
 if (!$print) { ?>
-    <?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+    <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
 
     <div class="content-wrapper content-space">

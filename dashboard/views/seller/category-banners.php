@@ -3,7 +3,7 @@
     <section class="dashboard">		
 		<div class="container">
 			<div class="row">
-			<?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+			<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 			   <div class="col-xs-10 panel__right--full " >
 					<div class="cols--group">
 						<div class="panel__head">

@@ -3,7 +3,7 @@ $frmSrch->setFormTagAttribute('onSubmit', 'searchRewardPoints(this); return fals
 $frmSrch->setFormTagAttribute('class', 'form');
 $frmSrch->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frmSrch->developerTags['fld_default_col'] = 12;
-?> <?php $this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?> 
+?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> 
     <div class="content-wrapper content-space">
         <?php
         $data = [

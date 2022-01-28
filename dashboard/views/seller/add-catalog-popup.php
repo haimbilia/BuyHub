@@ -7,7 +7,7 @@
   <ul>
     <?php if( User::canAddCustomProduct() ){ ?>
       <li data-heading="OR">
-        <a href="<?php echo UrlHelper::generateUrl('seller','customProductForm' );?>">
+        <a href="<?php echo UrlHelper::generateUrl('products','form' );?>">
           <i class="icn fa  fa-camera"></i>
           <p>
             <?php echo Labels::getLabel('LBL_Create_new_product',$siteLangId);?> 

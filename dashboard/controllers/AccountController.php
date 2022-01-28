@@ -16,8 +16,7 @@ class AccountController extends LoggedUserController
             } elseif (User::isAffiliate() || User::isSigningUpAffiliate()) {
                 $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
             }
-        }
-        $this->set('bodyClass', 'is--dashboard');
+        }        
     }
 
     public function index()

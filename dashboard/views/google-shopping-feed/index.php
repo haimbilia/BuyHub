@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
+$this->includeTemplate('_partial/dashboardNavigation.php');
 $merchantId = isset($userData[$keyName . '_merchantId']) ? $userData[$keyName . '_merchantId'] : '';
 $serviceAccInfo = isset($userData['service_account']) ? $userData['service_account'] : '';
 ?>
