@@ -570,7 +570,7 @@
         display: block;
         width: 100%;
         overflow-x: auto;
-        position: relative;
+        position: static !important;
         > &-bordered {
             border: 0;
         }
@@ -825,7 +825,7 @@
 
 .date {
     white-space: nowrap;
-    time{
+    time {
         display: block;
     }
 }

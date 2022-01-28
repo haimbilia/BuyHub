@@ -27,13 +27,13 @@ $input-color: #474747;
     appearance: none;
     &:focus,
     &:hover {
-        outline: none !important;
         box-shadow: none;
-        background-color: darken($input-bg, 5%);
+        background-color: transparent;
         transition: 0.3s all ease-in-out;
+        border-color: darken($border-color, 10);
     }
     &.error {
-        border: 1px solid $danger-color;
+        border-color: $danger-color;
         background-color: transparent;
     }
 }
@@ -83,6 +83,7 @@ $input-color: #474747;
         font-size: 0.8rem;
         color: $txt-body;
         margin: 0;
+        padding: 0;
         margin-bottom: 5px;
         /*for alignment issue where no content in form lebal - form button and input alignment */
         display: inline-block;

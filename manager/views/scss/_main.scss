@@ -1,8 +1,11 @@
+//Framework
 @import "bootstrap/bootstrap";
 @import "bootstrap/variables";
-//
+
+//themes
 @import "themes/variables";
-//
+
+//layout
 @import "layout/header";
 @import "layout/aside-menu";
 @import "layout/sidebar";
@@ -10,7 +13,7 @@
 @import "layout/profile";
 @import "layout/footer";
 
-//
+//Components
 @import "components/nav";
 @import "components/demo";
 @import "components/navbar";

@@ -108,7 +108,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                     </div>
                 </div>
                 <div class="card card-toggle" id="variants-options">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Variants and options
                             </h3>
@@ -116,45 +116,47 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                 etc for your product</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block1">
-                        <table class="table table-variants" id="variantsJs">
-                            <thead>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                    <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                    <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $optionCount = count($productOptions);
-                                for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                    echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                        <div class="separator separator-dashed my-4"></div>
-                        <div class="form-group row justify-content-between">
-                            <div class="col">
-                                <label class="label">This product has same EAN/UPC code for all variants</label>
+                    <div class="collapse" id="stock-block1">
+                        <div class="card-body">
+                            <table class="table table-variants" id="variantsJs">
+                                <thead>
+                                    <tr>
+                                        <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                        <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                        <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $optionCount = count($productOptions);
+                                    for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                        echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            <div class="separator separator-dashed my-4"></div>
+                            <div class="form-group row justify-content-between">
+                                <div class="col">
+                                    <label class="label">This product has same EAN/UPC code for all variants</label>
+                                </div>
+                                <div class="col-auto">
+                                    <?php
+                                    $fld = $frm->getField('upc_type');
+                                    HtmlHelper::configureSwitchForRadio($fld);
+                                    $fld->addOptionListTagAttribute('class', 'list-radio');
+                                    $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                    $fld->addFieldTagAttribute('class', 'upc_type');
+                                    echo $fld->getHtml();
+                                    ?>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <?php
-                                $fld = $frm->getField('upc_type');
-                                HtmlHelper::configureSwitchForRadio($fld);
-                                $fld->addOptionListTagAttribute('class', 'list-radio');
-                                $fld->addFieldTagAttribute('onchange', 'upcType()');
-                                $fld->addFieldTagAttribute('class', 'upc_type');
-                                echo $fld->getHtml();
-                                ?>
-                            </div>
+                            <div id="variantsListJs"></div>
                         </div>
-                        <div id="variantsListJs"></div>
                     </div>
                 </div>
                 <div class="card card-toggle" id="media">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media </h3>
                             <span class="text-muted">Attach media files for the product </span>
@@ -166,24 +168,26 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                     </div>
-                    <div class="card-body show" id="stock-block2">
-                        <div>
-                            <h6 class="h6 mb-3">Uploaded media</h6>
-                            <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                                <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
-                                        <strong> Upload Images(s)</strong>
-                                        <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
-                            </ul>
-                            <div class="form-text text-muted pt-2">Pay attention to the quality of
-                                pictures
-                                you add, comply with the
-                                background color standards. Notice that the product shows all the
-                                details</div>
+                    <div class="collapse" id="stock-block2">
+                        <div class="card-body">
+                            <div>
+                                <h6 class="h6 mb-3">Uploaded media</h6>
+                                <ul class="uploaded-stocks" id="productDefaultImagesJs">
+                                    <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
+                                            <strong> Upload Images(s)</strong>
+                                            <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
+                                </ul>
+                                <div class="form-text text-muted pt-2">Pay attention to the quality of
+                                    pictures
+                                    you add, comply with the
+                                    background color standards. Notice that the product shows all the
+                                    details</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card card-toggle" id="specifications">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
                             </h3>
@@ -192,55 +196,57 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                 <span class="input-helper"></span>section</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="specifications-block">
-                        <div id="specificationsFormJs">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                            amet consectetur adipisicing elit. </span>
+                    <div class="collapse" id="specifications-block">
+                        <div class="card-body">
+                            <div id="specificationsFormJs">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="label">
+                                                <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
+                                            </label>
+                                            <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
+                                            <span class="form-text text-muted">Lorem ipsum dolor sit,
+                                                amet consectetur adipisicing elit. </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="label">
+                                                <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
+                                            </label>
+                                            <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="label">
+                                                <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
+                                            </label>
+                                            <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="label"></label>
+                                            <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
+                                            <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                                                <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label"></label>
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
-                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
-                                        </button>
-                                    </div>
-                                </div>
+                            <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hidden"></div>
+                            <div id="specificationsListJs">
                             </div>
-                        </div>
-                        <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hidden"></div>
-                        <div id="specificationsListJs">
                         </div>
                     </div>
                 </div>
                 <div class="card card-toggle" id="tax-shipping">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Tax and Shipping
                             </h3>
@@ -249,24 +255,26 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                 <span class="input-helper"></span>section</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block4">
-                        <div class="row">
-                            <?php
-                            echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
-                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
-                            ?>
+                    <div class="collapse" id="stock-block4">
+                        <div class="card-body">
+                            <div class="row">
+                                <?php
+                                echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id']);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
+                                echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
+                                echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
+                                echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
+                                ?>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <?php if ($displayDigitalDownloadList) { ?>
                     <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title">Digital Files</h3>
                                 <span class="text-muted">Digital Files are added in this section </span>
@@ -280,13 +288,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body show" id="digital-files-block">
-                            <div id="digitalFilesDefaultListJs">
+                        <div class="collapse" id="digital-files-block">
+                            <div class="card-body">
+                                <div id="digitalFilesDefaultListJs">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card card-toggle" id="digital-links">
-                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title">Digital Links</h3>
                                 <span class="text-muted">Digital Links are added in this section </span>
@@ -300,8 +310,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUser
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body show" id="digital-links-block">
-                            <div id="digitalLinksDefaultListJs">
+                        <div class="collapse" id="digital-links-block">
+                            <div class="card-body">
+                                <div id="digitalLinksDefaultListJs">
+                                </div>
                             </div>
                         </div>
                     </div>

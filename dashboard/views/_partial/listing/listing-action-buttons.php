@@ -53,12 +53,12 @@ if (isset($deleteButton) && is_array($deleteButton)) {
 }
 
 if (isset($dropdownButtons) && is_array($dropdownButtons)) {
-    $li = $ul->appendElement('li', ['class' => 'dropdown', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)]);
+    $li = $ul->appendElement('li', ['class' => 'dropdown position-static', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)]);
     $li->appendElement('a', array('href' => 'javascript:void(0)', 'data-bs-toggle' => 'dropdown', 'aria-haspopup' => 'true',  'aria-expanded' => 'false'), '<svg class="svg" width="18" height="18">
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#more-dots">
                                     </use>
                                 </svg>', true);
-    $div = $li->appendElement('div', array('class' => 'dropdown-menu dropdown-menu-right'));
+    $div = $li->appendElement('div', array('class' => 'dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim'));
 
     if (isset($dropdownButtons['editButton'])) {
         $ddEditButton = $dropdownButtons['editButton'];

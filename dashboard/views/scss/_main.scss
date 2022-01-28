@@ -10,7 +10,6 @@
 @import "layout/sidebar";
 
 //components
-@import "components/misc";
 
 // @import 'components/main-search';
 // @import 'components/accordion';
@@ -87,6 +86,7 @@
 @import "components/scrollbar";
 @import "components/packages";
 @import "components/dropzone";
+@import "components/misc";
 
 @import "../../../application/views/scss/components/product-profile";
 @import "../../../application/views/scss/components/list-cart";

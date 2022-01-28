@@ -165,7 +165,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

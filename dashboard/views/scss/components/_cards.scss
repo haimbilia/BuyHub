@@ -48,7 +48,9 @@ $card-bg: #fff;
             flex: 1;
             //margin-#{$end-direction}: 8rem;
         }
-
+        &-title {
+            font-size: 1rem;
+        }
         .text-muted {
             font-size: 0.8rem;
             color: $txt-gray;

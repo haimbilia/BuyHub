@@ -6,7 +6,8 @@
     <?php if ((User::canViewSupplierTab() && User::canViewBuyerTab()) || (User::canViewSupplierTab() && User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) || (User::canViewBuyerTab() && User::canViewAdvertiserTab())) { ?>
         <div class="dropdown dashboard-user">
             <button class="btn dropdown-toggle-custom dropdown-toggle collapsed no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                <?php echo ($activeTab == 'S') ? Labels::getLabel('Lbl_Seller', $siteLangId) : (($activeTab == 'B') ? Labels::getLabel('Lbl_Buyer', $siteLangId) : (($activeTab == 'Ad') ? Labels::getLabel('Lbl_Advertiser', $siteLangId) : '')) ?>
+                <span class="meta">BD</span>
+                <?php echo ($activeTab == 'S') ? Labels::getLabel('Lbl_Seller_Dashboard', $siteLangId) : (($activeTab == 'B') ? Labels::getLabel('Lbl_Buyer_Dashboard', $siteLangId) : (($activeTab == 'Ad') ? Labels::getLabel('Lbl_Advertiser_Dashboard', $siteLangId) : '')) ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
 

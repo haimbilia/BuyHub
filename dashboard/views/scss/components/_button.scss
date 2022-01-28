@@ -46,18 +46,19 @@
     border-width: 2px;
     display: inline-flex;
     align-items: center;
-    &:focus {
-        outline: none !important;
-    }
-    &:hover {
-        outline: none !important;
-    }
+
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
 
+        &:focus {
+            outline: none !important;
+            box-shadow: $shadow2;
+        }
         &:hover {
             color: var(--brand-color-inverse);
+            outline: none !important;
+            box-shadow: $shadow1;
         }
     }
 
@@ -158,9 +159,6 @@
             }
         }
     }
-    &:focus {
-        outline: none !important;
-    }
 
     &.disabled {
         filter: grayscale(1);
@@ -193,12 +191,12 @@ a.link {
         #{$end-direction}: 0;
         background: $brand-color;
         color: $brand-color-inverse;
-        -webkit-transform-origin: bottom left;
+
         transform-origin: bottom left;
-        -webkit-transform: scaleX(1);
+
         transform: scaleX(1);
         transition: -webkit-transform 0.3s ease-in-out;
-        -webkit-transition: -webkit-transform 0.3s ease-in-out;
+
         transition: transform 0.3s ease-in-out;
         transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
     }
@@ -219,13 +217,12 @@ a.link-arrow {
     white-space: nowrap;
     color: $brand-color;
     display: block;
-    -webkit-transform: translateX(26px);
+
     transform: translateX(26px);
     transition: -webkit-transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
     transition: transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
     transition: transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform 0.35s cubic-bezier(0.645, 0.045, 0.355, 1);
     &:hover {
-        -webkit-transform: translateX(0);
         transform: translateX(0);
         svg {
             opacity: 1;
