@@ -42,7 +42,7 @@ class QuestionBanksController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('qb_l.qbank_name', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('qb.qbank_identifier', 'like', '%' . $post['keyword'] . '%');
         }

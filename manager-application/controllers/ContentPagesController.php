@@ -116,7 +116,7 @@ class ContentPagesController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = ContentPage::getSearchObject($this->siteLangId); 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('cpage_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('cpage_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -570,7 +570,7 @@ class ContentPagesController extends ListingBaseController
         $srch = ContentPage::getSearchObject($this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('cpage_title', 'LIKE', '%' . $post['keyword'] . '%');
         }
 

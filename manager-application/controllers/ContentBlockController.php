@@ -98,7 +98,7 @@ class ContentBlockController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Extrapage::getSearchObject($this->siteLangId, false);
         $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_PAGES);
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('epage_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('epage_label', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

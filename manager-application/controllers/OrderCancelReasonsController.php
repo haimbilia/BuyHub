@@ -93,7 +93,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = OrderCancelReason::getSearchObject($this->siteLangId); 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('ocreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('ocreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

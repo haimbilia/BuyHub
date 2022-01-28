@@ -105,7 +105,7 @@ class BrandRequestsController extends ListingBaseController
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
         $srch->addCondition('brand_status', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('brand_seller_id', '>', 'mysql_func_0', 'AND', true); 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

@@ -65,7 +65,7 @@ class FaqCategoriesController extends ListingBaseController
 
         $srch = FaqCategory::getSearchObject($this->siteLangId);
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('fc.faqcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('fc_l.faqcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -412,7 +412,7 @@ class FaqCategoriesController extends ListingBaseController
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('faqcat_id, IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'));
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('faqcat_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('faqcat_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

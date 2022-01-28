@@ -84,7 +84,7 @@ class AffiliateCommissionController extends ListingBaseController
 
         $srch->addMultipleFields($attr);
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('affiliate_cred.credential_username', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

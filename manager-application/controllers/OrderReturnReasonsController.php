@@ -89,7 +89,7 @@ class OrderReturnReasonsController extends ListingBaseController {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = OrderReturnReason::getSearchObject($this->siteLangId);
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('orreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('orreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

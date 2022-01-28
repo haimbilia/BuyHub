@@ -82,7 +82,7 @@ class RelatedProductsController extends ListingBaseController
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . SellerProduct::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $this->siteLangId, 'lang');
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('selprod_title', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -208,7 +208,7 @@ class RelatedProductsController extends ListingBaseController
         }
 
         $srch->addOrder('product_name');
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd = $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');

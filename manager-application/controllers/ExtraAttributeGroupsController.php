@@ -42,7 +42,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $srch = $extraAttrGroupObj->getSearchObject();
         $srch->addFld('eag.*');
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('eattrgroup_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('eattrgroup_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

@@ -73,7 +73,7 @@ class BrandsController extends ListingBaseController
 
         $prodBrandObj = new Brand();
         $srch = $prodBrandObj->getSearchObject($this->siteLangId, true, false, false);
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('b_l.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -551,7 +551,7 @@ class BrandsController extends ListingBaseController
         $srch = Brand::getSearchObject($langId, true, true);
         $srch->addMultipleFields(array('brand_id, IFNULL(brand_name, brand_identifier) as brand_name'));
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('brand_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

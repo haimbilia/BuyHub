@@ -41,7 +41,7 @@ class FilterGroupsController extends ListingBaseController
         $srch = $filterGroupObj->getSearchObject();
         $srch->addFld('fg.*');
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('fg.filtergroup_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('fgl.filtergroup_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

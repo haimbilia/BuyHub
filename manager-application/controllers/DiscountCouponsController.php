@@ -110,7 +110,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $srch = DiscountCoupons::getSearchObject($this->siteLangId, false);
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('dc.coupon_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('dc.coupon_code', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('dc_l.coupon_title', 'like', '%' . $post['keyword'] . '%');

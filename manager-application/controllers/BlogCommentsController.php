@@ -69,7 +69,7 @@ class BlogCommentsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = BlogComment::getSearchObject(true, $this->siteLangId); 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $keywordCond = $srch->addCondition('bpcomment_author_name', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bpcomment_author_email', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('post_title', 'like', '%' . $post['keyword'] . '%');

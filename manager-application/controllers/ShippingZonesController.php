@@ -41,7 +41,7 @@ class ShippingZonesController extends ListingBaseController {
         $srch = ShippingZone::getSearchObject();
         $srch->addOrder('shipzone_name');
         $srch->addCondition('shipzone_user_id', '=', 0); //== only admin added zones
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('shipzone_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->addMultipleFields(array('shipzone_id as id', 'shipzone_name'));

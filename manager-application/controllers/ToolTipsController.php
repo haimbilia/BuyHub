@@ -41,7 +41,7 @@ class ToolTipsController extends ListingBaseController
 
         $srch = Tooltip::getSearchObject();
         $srch->addFld('t.*');
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('t.tooltip_key', 'like', '%' . $post['keyword'] . '%');
         }
 

@@ -92,7 +92,7 @@ class TaxCategoriesController extends ListingBaseController
         $srch = Tax::getSearchObject($this->siteLangId, false);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $srch->addCondition('taxcat_plugin_id', '=', Tax::getActivatedServiceId());
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('t_l.taxcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('t.taxcat_code', 'like', '%' . $post['keyword'] . '%', 'OR');

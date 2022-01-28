@@ -114,7 +114,7 @@ class CollectionsController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('c.collection_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('c_l.collection_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

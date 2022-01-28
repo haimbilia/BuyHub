@@ -82,7 +82,7 @@ class EmptyCartItemsController extends ListingBaseController
 
         $srch = EmptyCartItems::getSearchObject($this->siteLangId, false, false);
        
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('emptycartitem_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('eci_l.emptycartitem_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

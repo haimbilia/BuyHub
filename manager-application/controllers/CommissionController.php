@@ -83,7 +83,7 @@ class CommissionController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(tu.user_parent > 0, user_parent, tu.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('tuc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -319,7 +319,7 @@ class CommissionController extends ListingBaseController
         $srch = Product::getSearchObject($this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->setPageNumber($page);

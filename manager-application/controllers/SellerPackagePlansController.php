@@ -117,7 +117,7 @@ class SellerPackagePlansController extends ListingBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('spp.spplan_price', 'like', $post['keyword'] . '%');
         }
 

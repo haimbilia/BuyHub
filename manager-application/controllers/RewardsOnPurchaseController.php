@@ -76,7 +76,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = RewardsOnPurchase::getSearchObject(); 
-        if ('' != $post['keyword']) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('rop.rop_purchase_upto', 'like', '%' . $post['keyword'] . '%');
         }
         
