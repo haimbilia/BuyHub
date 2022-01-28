@@ -325,6 +325,7 @@ trait Options
 
     public function autoCompleteOptions()
     {
+        
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
             $page = 1;
@@ -338,7 +339,7 @@ trait Options
 
         $cnd = $srch->addCondition('option_seller_id', '=', $userId);
         $cnd->attachCondition('option_seller_id', '=', 0, 'OR');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as option_name','option_identifier', 'option_is_separate_images'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize(20);
@@ -358,10 +359,18 @@ trait Options
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }       
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $results = [];
+        foreach($options as $option){
+            $optionName = $option['option_name'];       
+            if($option['option_name']  != $option['option_identifier'] ){
+                $optionName.="(".$option['option_identifier'] .")"; 
+            }
+            $results[]= ['id'=> $option['id'],'text'=> $optionName];
+        }
 
         $json = array(
             'pageCount' => $srch->pages(),
-            'results' => $options
+            'results' => $results
         );
         die(json_encode($json));
     }

@@ -21,8 +21,10 @@ var advanceMedia = false; /* open via advance media*/
             return; 
         }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
-            langForm(res.langId, 0, res.recordId);
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {             
+            setTimeout(function(){
+                langForm(res.langId, 0, res.recordId);
+            }, 500);            
         });
     };
 
