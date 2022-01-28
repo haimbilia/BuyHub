@@ -274,6 +274,7 @@ class MyAppModel extends FatModel
                 $srch->addFld($attr);
             }
         }
+        
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 

@@ -108,7 +108,7 @@ class ShippingZonesController extends ListingBaseController {
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
+     
     public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();
