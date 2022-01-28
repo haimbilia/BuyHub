@@ -10,7 +10,7 @@
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
 
-            <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-anim" aria-labelledby="dashboardDropdown">
+            <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-anim choose-dashboard" aria-labelledby="dashboardDropdown">
                 <?php if (User::canViewSupplierTab()) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>"><?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?></a>
@@ -56,7 +56,7 @@
             $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
         }
         ?>
-       <?php /*  <ul class="c-header-links">
+        <?php /*  <ul class="c-header-links">
             <li>
                 <a title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
                     <i class="icn icn--dashboard">
