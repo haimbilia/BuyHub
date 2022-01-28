@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (!$print) {
-    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <?php
 }
 
@@ -332,15 +332,11 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 </table>
                             </div>
                         <?php } ?>
-                    </div>`
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-<?php if ($print) { ?>
-
-<?php } ?>
 
 <script>
     $(document).ready(function() {

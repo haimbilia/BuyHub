@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
     <div class="content-wrapper content-space">
         <?php

@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/buyerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+<?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
  <div class="content-wrapper content-space">
     <?php 

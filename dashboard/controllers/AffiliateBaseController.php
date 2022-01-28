@@ -13,6 +13,6 @@ class AffiliateBaseController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
-        $this->set('bodyClass', 'is--dashboard');
+        
     }
 }

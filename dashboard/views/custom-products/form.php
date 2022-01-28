@@ -7,7 +7,7 @@ if (0 < $recordId) {
     var_dump($displayDigitalDownloadAddBtn);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="content-wrapper content-space">

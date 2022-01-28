@@ -14,7 +14,7 @@ $pagesTabsData = ([
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 
     <div class="content-wrapper content-space">

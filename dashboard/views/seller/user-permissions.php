@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
 $allAccessfrm->setFormTagAttribute('class', 'form');
 $allAccessfrm->developerTags['colClassPrefix'] = 'col-md-';
 $allAccessfrm->developerTags['fld_default_col'] = 4;

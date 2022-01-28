@@ -11,6 +11,6 @@ class AdvertiserBaseController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'Ad';
-        $this->set('bodyClass', 'is--dashboard');
+        
     }
 }

@@ -22,7 +22,7 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 $frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 
     <div class="content-wrapper content-space">
