@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 $col = (true === $canSendSms) ? '4' : '6'; ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -46,4 +46,3 @@ $col = (true === $canSendSms) ? '4' : '6'; ?>
             </div>
         </div>
     </div>
-</main>

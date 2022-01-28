@@ -5,8 +5,8 @@ $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);re
 $sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
 $sharingFrm->developerTags['fld_default_col'] = 12;
 
-$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php',['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -81,7 +81,7 @@ $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php'); ?
             </div>
         </div>
     </div>
-</main>
+
 
 <script type="text/javascript">
     (function(d, s, id) {

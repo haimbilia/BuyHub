@@ -7,9 +7,9 @@ $approvalFrm->developerTags['fld_default_col'] = '4';
 $btn = $approvalFrm->getField('btn_submit');
 $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
-$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -29,4 +29,3 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>

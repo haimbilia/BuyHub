@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 
-<main id="main-area" class="main">
+
     <input type='hidden' name='adsBatchId' value="<?php echo $adsBatchId; ?>">
     <div class="content-wrapper content-space">
         <?php
@@ -54,4 +54,3 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>

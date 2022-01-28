@@ -31,7 +31,7 @@ class ShippingZoneRatesController extends ListingBaseController {
         $frm = $this->getForm($zoneId, $rateId);
         if (0 < $rateId) {
             $data = ShippingRate::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $rateId, [
-                        'shiprate_name',
+                        'COALESCE(shiprate_name, shiprate_identifier) shiprate_name',
                         'shiprate_condition_type',
                         'shiprate_cost',
                         'shiprate_min_val',

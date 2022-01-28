@@ -1,11 +1,11 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 $allAccessfrm->setFormTagAttribute('class', 'form');
 $allAccessfrm->developerTags['colClassPrefix'] = 'col-md-';
 $allAccessfrm->developerTags['fld_default_col'] = 4;
 $submitFld = $allAccessfrm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 ?>
-<main id="main-area" class="main"   >
+
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -31,4 +31,4 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
             </div>
         </div>
     </div>
-</main>
+

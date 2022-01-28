@@ -6,7 +6,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="content-wrapper content-space">
         <?php
@@ -45,10 +45,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         echo $langFld->getHtml();
                         ?>
                     </div>
-                </div> 
-                <?php } else {
-                    echo $langFld->getHtml();
-                } ?>
+                </div>
+            <?php } else {
+                echo $langFld->getHtml();
+            } ?>
         </div>
         <div class="content-body">
             <div class="add-stock">
@@ -458,23 +458,23 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 
 
-</main>
-<?php
-function getVariantUiTr($langId, $i, $productOption = [])
-{
-    $deleteClass = $i == 0 ? 'hidden' : '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
 
-    $tagData = [];
-    if (!empty($productOption)) {
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+    <?php
+    function getVariantUiTr($langId, $i, $productOption = [])
+    {
+        $deleteClass = $i == 0 ? 'hidden' : '';
+        $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+        $confWebUrl = CONF_WEBROOT_URL;
+
+        $tagData = [];
+        if (!empty($productOption)) {
+            foreach ($productOption['optionValues'] as $key => $name) {
+                $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+            }
         }
-    }
-    $tagData = json_encode($tagData);
+        $tagData = json_encode($tagData);
 
-    return <<<HTML
+        return <<<HTML
     <tr class="rowJs">
         <td width="30%">
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
@@ -505,5 +505,5 @@ function getVariantUiTr($langId, $i, $productOption = [])
         </td> 
     </tr>
     HTML;
-}
-?>
+    }
+    ?>

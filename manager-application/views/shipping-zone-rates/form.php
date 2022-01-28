@@ -4,8 +4,7 @@
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupRate(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
+$frm->setFormTagAttribute('data-onclear', 'addEditShipRates(' . $zoneId . ', ' . $rateId . ')');
 
 $formTitle = Labels::getLabel('LBL_SHIPPING_RATES_SETUP', $siteLangId);
 $activeGentab = !empty($activeGentab) ? 'active' : '';
@@ -14,8 +13,14 @@ $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]);
 $label = isset($generalTab['label']) ? $generalTab['label'] : '';
 
+$fld = $frm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+	HtmlHelper::configureSwitchForCheckbox($fld);
+	$fld->developerTags['noCaptionTag'] = true;
+	$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
 $costFld = $frm->getField('shiprate_cost');
-//$costFld->htmlAfterField = "<div class='gap'></div><p class='add-condition--js'><a href='javascript:void(0);' onclick='modifyRateFields(1);'>" . Labels::getLabel("LBL_Add_Condition", $siteLangId) . "</a></p> <p class='remove-condition--js' style='display : none;'><a href='javascript:void(0);' onclick='modifyRateFields(0);'>" . Labels::getLabel("LBL_Remove_Condition", $siteLangId) . "</a></p>";
 $extraClass = 'hide';
 if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) {
     $extraClass = '';
@@ -53,8 +58,8 @@ $maxFld->developerTags['colWidthValues'] = [null, '6', null, null];
         <?php echo $formTitle; ?>
     </h5>
 </div>
+
 <div class="modal-body form-edit">
-    <!-- Closing tag must be added inside the files who include this file. -->
     <?php if (0 < count($languages)) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
@@ -69,14 +74,15 @@ $maxFld->developerTags['colWidthValues'] = [null, '6', null, null];
             </nav>
         </div>
     <?php } ?>
+
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
         </form>
     </div>
-    <?php
-    require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php');
-    ?>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>
+
 <?php if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) { ?>
     <script>
         $(document).ready(function() {

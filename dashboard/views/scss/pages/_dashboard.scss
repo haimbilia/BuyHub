@@ -200,7 +200,7 @@
     .header-dashboard {
         padding: 0 1rem;
         @include media-breakpoint-up(lg) {
-            padding: 0 3.125rem;
+            padding: 0 $content-space;
         }
         // padding-#{$start-direction}: $sidebar-width;
         position: sticky;
@@ -481,23 +481,26 @@
     @include media-breakpoint-up(lg) {
         padding-#{$start-direction}: 1rem;
         padding-#{$end-direction}: 1.5rem;
-        border-#{$end-direction}: $border;
     }
     height: 100%;
     display: flex;
     align-items: center;
     .btn {
+        border: solid 2px $secondary-color;
         text-align: #{$start-direction};
         padding-#{$end-direction}: 1.5rem;
         @include media-breakpoint-up(lg) {
             min-width: 110px;
+            .dropdown-toggle-custom-arrow {
+                #{$end-direction}: 12px;
+            }
         }
     }
 }
 
 .content-wrapper {
     &.content-space {
-        padding: 3.125rem;
+        padding: $content-space;
         min-height: calc(100vh - 100px);
         @include media-breakpoint-down(lg) {
             padding: 2rem;
@@ -603,7 +606,9 @@
         color: $txt-gray;
     }
     .total-numbers {
+        color: $txt-body;
         font-size: 1rem;
+        font-weight: 500;
     }
 }
 

@@ -7,10 +7,10 @@ if (0 < $recordId) {
     var_dump($displayDigitalDownloadAddBtn);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
-<div class="content-wrapper content-space">
+    <div class="content-wrapper content-space">
         <?php
         $frm->setFormTagAttribute('class', 'form');
         $frm->setFormTagAttribute('id', 'addProductfrm');
@@ -23,14 +23,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     information</span>
             </div>
             <?php
-                $langFld =  $frm->getField('lang_id');
-                if (0 < $recordId) {
-                    $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
-                    $langFld->setfieldTagAttribute('onchange', 'langForm()');
-                    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                    if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
-                        $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
-                        $langFld->htmlAfterField = '<div class="input-group-append">
+            $langFld =  $frm->getField('lang_id');
+            if (0 < $recordId) {
+                $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
+                $langFld->setfieldTagAttribute('onchange', 'langForm()');
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+                    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+                    $langFld->htmlAfterField = '<div class="input-group-append">
                                                             <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
@@ -38,23 +38,23 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                 </svg>
                                                             </a>
                                                         </div>';
-                    }
+                }
 
-                ?>
-                    <div class="content-header-toolbar">
-                        <div class="input-group">
-                            <?php
-                            echo $langFld->getHtml();
-                            ?>
-                        </div>
+            ?>
+                <div class="content-header-toolbar">
+                    <div class="input-group">
+                        <?php
+                        echo $langFld->getHtml();
+                        ?>
                     </div>
-                <?php } else {
-                    echo $langFld->getHtml();
-                } ?>
+                </div>
+            <?php } else {
+                echo $langFld->getHtml();
+            } ?>
         </div>
         <div class="content-body">
-            <div class="add-stock">            
-                <div class="add-stock-column column-main"> 
+            <div class="add-stock">
+                <div class="add-stock-column column-main">
                     <div class="card" id="basic-details">
                         <div class="card-head">
                             <div class="card-head-label">
@@ -96,7 +96,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php }                               
+                                <?php }
                                 echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                                 echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                                 echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
@@ -422,7 +422,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
             select2('ptt_taxcat_id', fcom.makeUrl('products', 'autoCompleteTaxCategories', [], siteConstants.webrootfront), {
                 langId
-            });           
+            });
 
             $('#addProductfrm .optionsJs').each(function(index) {
                 var selectedOptionData = [];
@@ -456,24 +456,24 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <?php } ?>
         });
     </script>
-</main>
 
-<?php
-function getVariantUiTr($langId, $i, $productOption = [])
-{
-    $deleteClass = $i == 0 ? 'hidden' : '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
 
-    $tagData = [];
-    if (!empty($productOption)) {
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+    <?php
+    function getVariantUiTr($langId, $i, $productOption = [])
+    {
+        $deleteClass = $i == 0 ? 'hidden' : '';
+        $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+        $confWebUrl = CONF_WEBROOT_URL;
+
+        $tagData = [];
+        if (!empty($productOption)) {
+            foreach ($productOption['optionValues'] as $key => $name) {
+                $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+            }
         }
-    }
-    $tagData = json_encode($tagData);
+        $tagData = json_encode($tagData);
 
-    return <<<HTML
+        return <<<HTML
     <tr class="rowJs">
         <td width="30%">
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
@@ -504,5 +504,5 @@ function getVariantUiTr($langId, $i, $productOption = [])
         </td> 
     </tr>
     HTML;
-}
-?>
+    }
+    ?>

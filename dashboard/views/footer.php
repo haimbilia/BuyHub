@@ -1,5 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <footer class="footer">
+    <div class="row justify-content-between copyright-st">
+        <div class="col-12 col-sm-auto">
+            <p> ©2004-2022 FATbit Technologies (Ably Soft Pvt. Ltd). All rights reserved.</p>
+        </div>
+        <div class="col-12 col-sm-auto">V3.4</div>
+    </div>
+
     <ul class="mobile-actions">
         <li class="mobile-actions-item" role="none">
             <a class="mobile-actions-link" href="#">
@@ -39,7 +46,7 @@
             <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                 <div class="profile">
                     <div class="profile-img">
-                        <img alt="" src="<?php echo $profilePicUrl; ?>">
+                        <img alt="" src="<?php /* echo $profilePicUrl; */ ?>">
                     </div>
                     <div class="profile-detail">
                         <h6 class="h6"> Hi, Jack Doe </h6>
@@ -156,6 +163,7 @@
         <?php } ?>
     </div>
 </footer>
+</main>
 </div>
 </body>
 

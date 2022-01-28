@@ -1,7 +1,15 @@
+$content-space: 3.125rem;
+
+.footer {
+    padding: 1rem $content-space;
+    .copyright-st {
+        font-size: 0.8rem;
+    }
+}
+
 .mobile-actions {
     font-size: 0.8rem;
     display: none;
-
     @include media-breakpoint-down(lg) {
         display: flex;
         align-items: center;
