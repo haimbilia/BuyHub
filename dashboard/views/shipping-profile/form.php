@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]);
 
 $frm->setFormTagAttribute('onSubmit', 'setupProfile(this); return false;');
 $frm->setFormTagAttribute('class', 'form ');
@@ -12,7 +12,7 @@ $submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -160,4 +160,3 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
         <?php } ?>
     </div>
     </div>
-</main>

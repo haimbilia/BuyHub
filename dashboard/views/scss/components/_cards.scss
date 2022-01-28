@@ -18,6 +18,14 @@ $card-bg: #fff;
     @include media-breakpoint-down(md) {
         word-break: normal;
     }
+    &-tabs {
+        .card-head {
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-bottom: $border;
+        }
+    }
     &-head {
         display: flex;
         justify-content: space-between;
@@ -27,6 +35,7 @@ $card-bg: #fff;
         color: $txt-body;
         background: none;
         border: none;
+        //border-bottom: $border;
         & ~ .card-body {
             padding-top: 0;
         }
@@ -43,6 +52,47 @@ $card-bg: #fff;
         .text-muted {
             font-size: 0.8rem;
             color: $txt-gray;
+        }
+    }
+    &-toolbar {
+        display: flex;
+        align-items: flex-start;
+        align-content: flex-start;
+        @include media-breakpoint-up(md) {
+            align-items: center;
+            align-content: flex-end;
+        }
+        .btn-add ~ .actions {
+            margin-#{$start-direction}: 2rem;
+        }
+        > .actions {
+            li {
+                margin: 0;
+                a {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+            .selected {
+                color: $brand-color;
+                .svg {
+                    fill: currentColor;
+                }
+            }
+        }
+        ul {
+            display: flex;
+            li {
+                list-style: none;
+                margin-#{$start-direction}: 0.5rem;
+                &:first-child {
+                    margin-#{$start-direction}: 0;
+                }
+                &:last-child {
+                    margin-#{$end-direction}: 0;
+                }
+            }
         }
     }
     &-body {

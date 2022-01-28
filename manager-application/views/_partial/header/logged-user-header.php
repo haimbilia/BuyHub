@@ -102,17 +102,20 @@
                                         <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+                                <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
                                                 <img alt="" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>">
                                             </div>
                                             <div class="profile__detail">
-                                                <h6><?php echo  Labels::getLabel('LBL_HI', $siteLangId); ?>,
+                                                <h6>
+                                                    <?php echo  Labels::getLabel('LBL_HI', $siteLangId); ?>,
                                                     <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name', true); ?>
-                                                    <h6>
-                                                        <a href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?>"><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?></a>
+                                                </h6>
+                                                <span>
+                                                    <a href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?>"><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?></a>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

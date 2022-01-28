@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <div class="content-header">
             <div class="content-header-title">
@@ -752,7 +752,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
 <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
 

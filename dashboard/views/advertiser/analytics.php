@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+<?php $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -61,4 +61,3 @@
             </div>
         </div>
     </div>
-</main>

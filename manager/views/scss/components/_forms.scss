@@ -354,6 +354,7 @@ form.custom-form {
 
 .input-group {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;

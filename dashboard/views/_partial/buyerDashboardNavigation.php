@@ -1,12 +1,12 @@
 <?php
 $controller = strtolower($controller);
 $action = strtolower($action); ?>
-<sidebar class="sidebar no-print">
+<sidebar class="sidebar no-print" id="sidebar" data-close-on-click-outside="sidebar">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
     <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
             <li class="dashboard-menu-item">
-                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-orders" aria-expanded="true" aria-controls="collapseOne" title="">
+                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-orders" aria-expanded="true" aria-controls="collapseOne" title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-sales">
@@ -44,7 +44,7 @@ $action = strtolower($action); ?>
             </li>
             <?php if (User::canViewBuyerTab()) { ?>
                 <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-offers" aria-expanded="true" aria-controls="collapseOne" title="">
+                    <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-offers" aria-expanded="true" aria-controls="collapseOne" title="">
                         <span class="dashboard-menu-icon">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-offers">
@@ -79,7 +79,7 @@ $action = strtolower($action); ?>
                 </li>
             <?php } ?>
             <li class="dashboard-menu-item">
-                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-general" aria-expanded="true" aria-controls="collapseOne" title="">
+                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-general" aria-expanded="true" aria-controls="collapseOne" title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#saved-searches">
@@ -125,7 +125,7 @@ $action = strtolower($action); ?>
                 </ul>
             </li>
             <li class="dashboard-menu-item">
-                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom" type="button" data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" title="">
+                <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-profile" aria-expanded="true" aria-controls="collapseOne" title="">
                     <span class="dashboard-menu-icon">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account">
@@ -160,3 +160,8 @@ $action = strtolower($action); ?>
         </ul>
     </div>
 </sidebar>
+
+<main id="main-area" class="main">
+    <?php
+    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId, 'isUserDashboard' => $isUserDashboard], false);
+    ?>

@@ -75,13 +75,13 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                 </div>
             </div>
         </div>
-    </main>
 
-    <aside class="sidebar" data-close-on-click-outside=" ">
-        <div class="sidebar-content">
-            <div id="order-summary" class="order-summary summary-listing-js"></div>
-            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); 
-            ?>
-        </div>
-    </aside>
+
+        <aside class="sidebar" data-close-on-click-outside=" ">
+            <div class="sidebar-content">
+                <div id="order-summary" class="order-summary summary-listing-js"></div>
+                <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); 
+                ?>
+            </div>
+        </aside>
 </div>

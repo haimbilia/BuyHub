@@ -377,5 +377,5 @@
     </div>
 </main>
 <script>
-    var formType = '<?php echo Configurations::FORM_SERVER; ?>';
+    var formType = '<?php echo Configurations::FORM_SYSTEM; ?>';
 </script>

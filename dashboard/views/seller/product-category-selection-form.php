@@ -2,7 +2,7 @@
 <script type="text/javascript">
 var  productId  =  <?php echo $productId ;?>
 </script>
-<main id="main-area" class="main"   >
+
 	<div class="content-wrapper content-space">
         <?php 
             $data = [
@@ -20,4 +20,3 @@ var  productId  =  <?php echo $productId ;?>
 			</div>
 		</div>
 	</div>
-</main>

@@ -1,5 +1,4 @@
 $sidebar-width: 250px;
-
 .my-dashboard {
     .sidebar {
         width: $sidebar-width;
@@ -9,14 +8,14 @@ $sidebar-width: 250px;
         top: 0;
         bottom: 0;
         height: 100%;
-        transition: width 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
         background-color: $bg-white;
         box-shadow: $shadow-theme;
         //border-#{$end-direction}: $border;
-        @include media-breakpoint-down(lg) {
-            //position: fixed;
+        @include media-breakpoint-down(md) {
+            transform: translateX(-100%);
         }
         &-content {
             padding: 1rem;
@@ -39,7 +38,7 @@ $sidebar-width: 250px;
             //background: #fff;
             width: 100%;
             .logo-dashboard {
-                transition: all 0.5s ease-in-out;
+                transition: all 0.3s ease-in-out;
                 // position: absolute;
                 // #{$start-direction}: 24px;
                 opacity: 1;
@@ -62,7 +61,7 @@ $sidebar-width: 250px;
                 display: block;
                 background: #000;
                 transform: rotate(0deg);
-                transition: 0.2s ease all;
+                transition: all 0.3s ease-in-out;
                 border-radius: 1px;
                 height: 1px;
                 width: 24px;
@@ -99,13 +98,19 @@ $sidebar-width: 250px;
     }
 }
 
+.sidebar--on {
+    .sidebar {
+        transform: translateX(0);
+    }
+}
+
 .dashboard-menu {
     color: $txt-gray;
     fill: currentColor;
     font-size: 0.85rem;
     &-item {
         overflow: hidden;
-        transition: all 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
         color: $txt-body;
         margin-bottom: 1.5rem;
         &:last-child {
@@ -126,7 +131,7 @@ $sidebar-width: 250px;
         text-align: #{$start-direction};
         width: 100%;
         margin: 0;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         padding: 0;
     }
     &-icon {
@@ -140,10 +145,10 @@ $sidebar-width: 250px;
     }
     &-head {
         margin-#{$start-direction}: 10px;
-        font-weight: 600;
+        font-weight: 500;
         color: $txt-body;
         font-size: inherit;
-        transition: all 0.7s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
     .dropdown-toggle-custom-arrow {
         //#{$end-direction}: 25px;
