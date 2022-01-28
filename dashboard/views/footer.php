@@ -18,12 +18,12 @@
 
     <ul class="mobile-actions">
         <li class="mobile-actions-item" role="none">
-            <a class="mobile-actions-link" href="#">
+            <a class="mobile-actions-link" href="<?php echo $dashboardOrgUrl; ?>">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home">
                     </use>
                 </svg>
-                <span class="txt">Home</span>
+                <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
             </a>
         </li>
         <li class="mobile-actions-item active" role="none">
@@ -32,7 +32,7 @@
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#menu">
                     </use>
                 </svg>
-                <span class="txt">Menu</span>
+                <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
             </button>
         </li>
         <li class="mobile-actions-item" role="none">
@@ -55,7 +55,10 @@
             <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                 <div class="profile">
                     <div class="profile-img">
-                        <img alt="" src="<?php /* echo $profilePicUrl; */ ?>">
+                        <?php
+                        $userImgUpdatedOn = User::getAttributesById(UserAuthentication::isUserLogged(), 'user_updated_on');
+                        $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn); ?>
+                        <img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Account', 'userProfileImage', array(UserAuthentication::isUserLogged(), 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                     </div>
                     <div class="profile-detail">
                         <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?> </h6>

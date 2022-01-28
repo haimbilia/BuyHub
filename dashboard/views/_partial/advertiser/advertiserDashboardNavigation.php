@@ -71,5 +71,5 @@ $action = strtolower($action);
 </sidebar>
 <main id="main-area" class="main">
     <?php
-    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId, false);
+    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false);
     ?>
