@@ -308,6 +308,7 @@ Updates/Fixes :
     => 061968 - Fatal error: Uncaught TypeError: Argument 1 passed is invalid, expected string
     => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
     => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
+    => 061738 - Admin UI: Product's listing is showing while binding the product with the shipping profile
     
 New Features:  
     => Admin shipped products listing page

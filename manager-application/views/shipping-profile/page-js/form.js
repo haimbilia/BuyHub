@@ -38,6 +38,10 @@ $(document).ready(function () {
         searchProducts(profileId, frm);
     };
 
+    searchRecords = function (frm) {
+        searchProducts(0, frm);
+    }
+
     searchProducts = function (profileId, form) {
         var data = '';
         if (form) {
