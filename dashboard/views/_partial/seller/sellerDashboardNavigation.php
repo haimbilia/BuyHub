@@ -40,7 +40,7 @@ $plugin = new Plugin();
                         <?php } ?>
                         <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <li class="menu-sub-item">
-                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ($action == 'customcatalogproductform' || $action == 'customproductform' || $action == 'catalog' || $action == 'products' || $action == 'customcatalogproducts')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ( $action == 'catalog' || $action == 'products')) ||  $controller == 'products' ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
                                     <span class="menu-sub-title">
                                         <?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?></span>
                                 </a>
@@ -598,5 +598,5 @@ $plugin = new Plugin();
 </sidebar>
 <main id="main-area" class="main">
     <?php
-    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId, 'isUserDashboard' => $isUserDashboard], false);
+    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false);
     ?>

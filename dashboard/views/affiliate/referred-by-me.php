@@ -26,7 +26,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block btn-outline-brand');
 $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $cancelBtnFld->developerTags['col'] = 2;
 ?>
-<?php $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php',['isUserDashboard' => $isUserDashboard]); ?>
+<?php $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php'); ?>
 
     <div class="content-wrapper content-space">
         <?php 

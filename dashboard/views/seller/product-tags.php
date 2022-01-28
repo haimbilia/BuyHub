@@ -17,7 +17,7 @@ $clearFld = $frmSearch->getField('btn_clear');
 $clearFld->setFieldTagAttribute('onclick', 'clearSearch()');
 $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
     <div class="content-wrapper content-space">
         <div class="content-header">           

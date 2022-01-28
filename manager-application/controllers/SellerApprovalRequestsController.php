@@ -85,7 +85,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $userObj = new User();
         $srch = $userObj->getUserSupplierRequestsObj(); 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('tusr.usuprequest_reference', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%', 'OR');

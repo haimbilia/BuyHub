@@ -62,7 +62,7 @@ class QuestionsController extends ListingBaseController
         if ($qbank_id = FatUtility::int($post['qbank_id'])) {
             $srch->addCondition('question_qbank_id', '=', $qbank_id);
         }
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('q_l.question_title', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('q.question_identifier', 'like', '%' . $post['keyword'] . '%');
         }

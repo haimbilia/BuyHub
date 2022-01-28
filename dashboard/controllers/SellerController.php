@@ -4,10 +4,9 @@ class SellerController extends SellerBaseController {
 
     // use Attributes;
     use Options;
-    use CustomProducts;
+    //use CustomProducts;
     use SellerProducts;
     use SellerCollections;
-    use CustomCatalogProducts;
     use SellerUsers;
     use ProductDigitalDownloads;
     use ShippingServices;
@@ -1744,7 +1743,7 @@ class SellerController extends SellerBaseController {
     public function taxCategories() {
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
         }
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);

@@ -75,7 +75,7 @@ class AbusiveWordsController extends ListingBaseController
         $srch = Abusive::getSearchObject(); 
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
         }
 

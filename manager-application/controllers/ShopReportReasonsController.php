@@ -94,7 +94,7 @@ class ShopReportReasonsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = ShopReportReason::getSearchObject($this->siteLangId); 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('reportreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('reportreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

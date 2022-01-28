@@ -11,7 +11,7 @@ $email = $sharingFrm->getField('email');
 $email->setFieldTagAttribute('class', 'emailAddressJs');
 $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId));
 
-$this->includeTemplate('_partial/dashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     <div class="content-wrapper content-space">
         <?php

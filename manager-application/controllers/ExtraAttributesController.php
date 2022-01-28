@@ -62,7 +62,7 @@ class ExtraAttributesController extends ListingBaseController
 
         $srch->addCondition('eattribute_eattrgroup_id', '=', $eattrgroup_id);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('eattribute_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('eattribute_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

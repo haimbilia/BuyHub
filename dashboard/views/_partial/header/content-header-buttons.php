@@ -5,7 +5,7 @@ $action = isset($action) ? $action : '';
 if ($canEdit) { ?>
     <div class="content-header-toolbar">
         <?php if (User::canAddCustomProduct() && $action == 'products') { ?>
-            <a href="<?php echo UrlHelper::generateUrl('seller', 'customProductForm'); ?>" class="btn btn-outline-brand btn-sm">
+            <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-brand btn-sm">
                 <?php echo Labels::getLabel('LBL_ADD_NEW_PRODUCT', $siteLangId); ?>
             </a>
             <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-brand btn-sm">
@@ -18,7 +18,7 @@ if ($canEdit) { ?>
             </a>
         <?php } ?>
         <?php if (User::canAddCustomProduct() && $action == 'catalog' && $type == 1) { ?>
-            <a href="<?php echo UrlHelper::generateUrl('seller', 'customProductForm'); ?>" class="btn btn-outline-brand btn-sm">
+            <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-brand btn-sm">
                 <?php echo Labels::getLabel('LBL_ADD_NEW_CATALOG', $siteLangId); ?>
             </a>
         <?php } ?>

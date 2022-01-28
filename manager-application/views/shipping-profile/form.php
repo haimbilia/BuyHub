@@ -1,25 +1,21 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
-?>
+
+$proFld = $frm->getField('shipprofile_name');
+$proFld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_PROFILE_NAME', $siteLangId));
+
+$langFld = $frm->getField('lang_id');
+$langFld->addFieldTagAttribute('onChange', "loadLangData()");
+$langFld->addFieldTagAttribute('autocomplete', "off"); ?>
 
 <main class="main mainJs">
     <div class="container">
-
-
         <div class="row justify-content-center">
             <div class="col-md-8"> <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
                 <div class="card"> 
-                    <?php
-                    $fld = $frm->getField('lang_id');
-                    $fld->value = 1;
-                    $fld->addFieldTagAttribute('onChange', "loadLangData()");
-                    $fld->addFieldTagAttribute('autocomplete', "off");
-                    $proFld = $frm->getField('shipprofile_name');
-                    $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_PROFILE_NAME', $siteLangId));
-                    echo $frm->getFormTag();
-                    ?>
+                    <?php echo $frm->getFormTag(); ?>
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_PROFILE_NAME', $siteLangId); ?></h3>
@@ -31,7 +27,13 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                         </div>
                     </div>
                     <div class="card-body" id="profile-name-form"> 
-                        <?php echo $this->includeTemplate('shipping-profile/profile-name-form.php', ['frm' => $frm, 'siteDefaultLangId' => $siteDefaultLangId, 'siteLangId' => $siteLangId, 'languages' => $languages], false, true); ?>
+                        <?php echo $this->includeTemplate('shipping-profile/profile-name-form.php', [
+                            'frm' => $frm,
+                            'siteDefaultLangId' => $siteDefaultLangId,
+                            'siteLangId' => $siteLangId,
+                            'languages' => $languages,
+                            'langId' => $langId,
+                        ], false, true); ?>
                     </div>
                     </form> 
                     <?php echo $frm->getExternalJs(); ?>
@@ -54,13 +56,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                     </div>
                     <div class="card-body">
                         <?php if (empty($profileData) || ((isset($profileData['shipprofile_default'])))) { ?>
-                            <div class="" id="product-section--js">
-                                <?php echo Labels::getLabel('LBL_Total_Products', $siteLangId); ?>
-                                : <?php echo $productCount; ?>
-                                <p><span class='form-text text-muted'><?php echo Labels::getLabel('LBL_We_don\'t_show_product_list_in_default_profile._The_products_removed_from_other_profiles_will_automatically_add_in_default_profile', $siteLangId); ?></span>
-                                </p>
-
-                            </div>
+                            <div id="product-section--js"></div>
                         <?php } ?>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php', ['isUserDashboard' => $isUserDashboard]); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space" dir="<?php echo $formLayout; ?>">
     <?php
@@ -440,10 +440,14 @@ echo $imgFrm->getFormHtml();
         $('#addProductfrm .optionsJs').each(function(index) {
             var selectedOptionData = [];
             if (index in productOptions) {
+                let optionName = productOptions[index]['option_name'];
+                    if(productOptions[index]['option_name'] != productOptions[index]['option_identifier']){
+                        optionName += '('+productOptions[index]['option_identifier']+')';
+                    }
                 selectedOptionData = [{
                     selected: true,
                     id: productOptions[index]['option_id'],
-                    text: productOptions[index]['option_name'],
+                    text: optionName,
                     option_is_separate_images: productOptions[index]['option_is_separate_images'],
                 }]
             }

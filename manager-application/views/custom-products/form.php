@@ -555,10 +555,14 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
             $('#addProductfrm .optionsJs').each(function(index) {
                 var selectedOptionData = [];
                 if (index in productOptions) {
+                    let optionName = productOptions[index]['option_name'];
+                    if(productOptions[index]['option_name'] != productOptions[index]['option_identifier']){
+                        optionName += '('+productOptions[index]['option_identifier']+')';
+                    }
                     selectedOptionData = [{
                         selected: true,
                         id: productOptions[index]['option_id'],
-                        text: productOptions[index]['option_name'],
+                        text: optionName,
                         option_is_separate_images: productOptions[index]['option_is_separate_images'],
                     }]
                 }

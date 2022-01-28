@@ -65,7 +65,7 @@ class ImportInstructionsController extends ListingBaseController
             'ep_l.*'
         ]);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ep.epage_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ep_l.epage_label', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

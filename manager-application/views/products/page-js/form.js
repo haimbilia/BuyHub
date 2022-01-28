@@ -421,7 +421,7 @@
                 beforeRemoveTag: function (tags) {
                     return new Promise((resolve, reject) => {
                         let recordId = getCurrentFrmRecordId();
-                        if (0 < productId) {
+                        if (0 < recordId) {
                             let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
                             let optionValueId = tags[0]['data']['id'];
                             fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { recordId, optionId, optionValueId }, function (t) {

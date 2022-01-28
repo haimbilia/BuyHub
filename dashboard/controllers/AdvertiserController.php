@@ -138,7 +138,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                     FatUtility::dieJsonError(Message::getHtml());
                 }
                 $promotion_record_id = $row['shop_id'];
@@ -164,7 +164,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                     FatUtility::dieJsonError(Message::getHtml());
                 }
                 $promotion_record_id = $row['selprod_id'];
@@ -207,14 +207,14 @@ class AdvertiserController extends AdvertiserBaseController
                 break;
 
             default:
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
                 break;
         }
 
         $promotionBudget = Fatutility::float($post['promotion_budget']);
         if ($minBudget > $promotionBudget) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("MSG_BUDGET_SHOULD_BE_GREATER_THAN_CPC", $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -241,7 +241,7 @@ class AdvertiserController extends AdvertiserBaseController
             /* echo $srch->getQuery();die;  */
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Promotion_record_with_same_period_already_exists', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_PROMOTION_RECORD_WITH_SAME_PERIOD_ALREADY_EXISTS', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
         }
@@ -385,13 +385,13 @@ class AdvertiserController extends AdvertiserBaseController
         $langId = $post['lang_id'];
 
         if ($promotionId == 0 || $langId == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $promotionData = Promotion::getAttributesById($promotionId, array('promotion_user_id'));
         if (!$promotionData || ($promotionData && $promotionData['promotion_user_id'] != $userId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -462,12 +462,12 @@ class AdvertiserController extends AdvertiserBaseController
 
 
         if (1 > $promotionId || !in_array($promotionType, $allowedTypeArr)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -496,7 +496,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
         if (1 > $recordId || 1 > $attachedFileType) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $db = FatApp::getDb();
@@ -542,7 +542,7 @@ class AdvertiserController extends AdvertiserBaseController
         $fileName = $_FILES['cropped_image']['name'];
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileName = strlen($fileName) > 10 ? substr($fileName, 0, 10) . '.' . $ext : $fileName;
-        Message::addMessage($fileName . " " . Labels::getLabel('MSG_File_uploaded_successfully_and_send_it_for_admin_approval', $this->siteLangId));
+        Message::addMessage($fileName . " " . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY_AND_SEND_IT_FOR_ADMIN_APPROVAL', $this->siteLangId));
 
         $this->set('promotionId', $promotionId);
         $this->set('file', $_FILES['cropped_image']['name']);
@@ -647,7 +647,7 @@ class AdvertiserController extends AdvertiserBaseController
         $userId = $this->userParentId;
 
         if (1 > $promotionType) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -663,7 +663,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
                     FatUtility::dieJsonError(Message::getHtml());
                 }
                 $label = $row['shop_name'];
@@ -1238,7 +1238,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm = new Form('frmPromotion');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
         $frm->addHiddenField('', 'promotion_record_id', '');
-        $frm->addRequiredField(Labels::getLabel('Lbl_Identifier', $this->siteLangId), 'promotion_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'promotion_identifier');
 
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
 
@@ -1278,59 +1278,59 @@ class AdvertiserController extends AdvertiserBaseController
             }
         }
 
-        $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'promotion_type', $promotioTypeArr, '', array(), '');
+        $pTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'promotion_type', $promotioTypeArr, '', array(), '');
 
         if (User::isSeller()) {
             /* Shop [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'promotion_shop', '', array(
+            $frm->addTextBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'promotion_shop', '', array(
                 'readonly' => true
             ))->requirements()->setRequired(true);
-            $shopUnReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('LBL_Shop', $this->siteLangId));
+            $shopUnReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('FRM_SHOP', $this->siteLangId));
             $shopUnReqObj->setRequired(false);
 
-            $shopReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('LBL_Shop', $this->siteLangId));
+            $shopReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('FRM_SHOP', $this->siteLangId));
             $shopReqObj->setRequired(true);
 
-            $frm->addTextBox(Labels::getLabel('LBL_CPC' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array(
+            $frm->addTextBox(Labels::getLabel('FRM_CPC' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array(
                 'readonly' => true
             ));
             /*]*/
 
             /* Product [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'promotion_product')->requirements()->setRequired(true);
-            $prodUnReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('LBL_Product', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_product')->requirements()->setRequired(true);
+            $prodUnReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
             $prodUnReqObj->setRequired(false);
 
-            $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('LBL_Product', $this->siteLangId));
+            $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
             $prodReqObj->setRequired(true);
 
-            $frm->addTextBox(Labels::getLabel('LBL_CPC' . '_[' . CommonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array(
+            $frm->addTextBox(Labels::getLabel('FRM_CPC' . '_[' . CommonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array(
                 'readonly' => true
             ));
             /* ]*/
 
             /* Banner Url [*/
-            $frm->addTextBox(Labels::getLabel('LBL_Url', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
-            $urlUnReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
+            $urlUnReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlUnReqObj->setRequired(false);
 
-            $urlReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $urlReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlReqObj->setRequired(true);
             /*]*/
 
             /* Slide Url [*/
-            $frm->addTextBox(Labels::getLabel('LBL_Url', $this->siteLangId), 'slide_url')->requirements()->setRequired(true);
-            $urlSlideUnReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'slide_url')->requirements()->setRequired(true);
+            $urlSlideUnReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlSlideUnReqObj->setRequired(false);
 
-            $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlSlideReqObj->setRequired(true);
 
-            $frm->addTextBox(Labels::getLabel('LBL_CPC', $this->siteLangId), 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array(
+            $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId), 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array(
                 'readonly' => true
             ));
 
-            /* $frm->addSelectBox(Labels::getLabel('LBL_Open_In',$this->siteLangId), 'slide_target', $linkTargetsArr, '',array(),'');     */
+            /* $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN',$this->siteLangId), 'slide_target', $linkTargetsArr, '',array(),'');     */
             /*]*/
 
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'banner_url', $urlUnReqObj);
@@ -1352,30 +1352,30 @@ class AdvertiserController extends AdvertiserBaseController
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'slide_url', $urlSlideReqObj);
         } else {
             /* $frm->addHiddenField('','promotion_type',Promotion::TYPE_BANNER);
-            $frm->addTextBox(Labels::getLabel('LBL_Url',$this->siteLangId), 'banner_url')->requirements()->setRequired(true); */
+            $frm->addTextBox(Labels::getLabel('FRM_URL',$this->siteLangId), 'banner_url')->requirements()->setRequired(true); */
 
             /* Banner Url [*/
-            $frm->addTextBox(Labels::getLabel('LBL_Url', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
-            $urlUnReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
+            $urlUnReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlUnReqObj->setRequired(false);
 
-            $urlReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $urlReqObj = new FormFieldRequirement('banner_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlReqObj->setRequired(true);
             /*]*/
 
             /* Slide Url [*/
-            $frm->addTextBox(Labels::getLabel('LBL_Url', $this->siteLangId), 'slide_url')->requirements()->setRequired(true);
-            $urlSlideUnReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'slide_url')->requirements()->setRequired(true);
+            $urlSlideUnReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlSlideUnReqObj->setRequired(false);
 
-            $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('LBL_Url', $this->siteLangId));
+            $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
             $urlSlideReqObj->setRequired(true);
 
-            $frm->addTextBox(Labels::getLabel('LBL_CPC' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array(
+            $frm->addTextBox(Labels::getLabel('FRM_CPC' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array(
                 'readonly' => true
             ));
 
-            /* $frm->addSelectBox(Labels::getLabel('LBL_Open_In',$this->siteLangId), 'slide_target', $linkTargetsArr, '',array(),''); */
+            /* $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN',$this->siteLangId), 'slide_target', $linkTargetsArr, '',array(),''); */
             /*]*/
 
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_url', $urlReqObj);
@@ -1385,10 +1385,10 @@ class AdvertiserController extends AdvertiserBaseController
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'slide_url', $urlSlideReqObj);
         }
 
-        //$frm->addTextBox(Labels::getLabel('LBL_Url',$this->siteLangId), 'banner_url')->requirements()->setRequired(true);
+        //$frm->addTextBox(Labels::getLabel('FRM_URL',$this->siteLangId), 'banner_url')->requirements()->setRequired(true);
 
 
-        /* $frm->addSelectBox(Labels::getLabel('LBL_Open_In',$this->siteLangId), 'banner_target', $linkTargetsArr, '',array(),'');
+        /* $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN',$this->siteLangId), 'banner_target', $linkTargetsArr, '',array(),'');
          */
 
         $srch = BannerLocation::getSearchObject($this->siteLangId);

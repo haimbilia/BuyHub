@@ -6,10 +6,10 @@
     getTimeout = function () {
         return 0 < CONF_AUTO_CLOSE_SYSTEM_MESSAGES ? CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000 : -1;
     };
-    
+
     var autoCloseTimeOut = getTimeout();
     var dir = langLbl.layoutDirection;
-    
+
     setOptions = function (fn, msg, closeButton = true, progressBar = true, positionClass = 'toast-bottom-center') {
         toastr.options = {
             "closeButton": closeButton,
@@ -17,7 +17,7 @@
             "newestOnTop": true,
             "progressBar": progressBar,
             "positionClass": positionClass,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
@@ -29,7 +29,7 @@
             "hideMethod": "fadeOut",
             "rtl": (dir == 'rtl'),
         };
-        
+
         if (undefined != fn && undefined != msg) {
             toastr[fn](msg);
         }
@@ -53,8 +53,7 @@
             setOptions('error', message);
         },
         close: function () {
-            $('.toast').remove();
-            toastr.clear();
+            toastr.remove();
         }
     });
 })(jQuery);

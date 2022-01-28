@@ -50,7 +50,7 @@ class SellerBaseController extends LoggedUserController
         }
         /* ----------------- */
 
-        $this->set('bodyClass', 'is--dashboard');
+        
     }
     
     public function imgCropper()

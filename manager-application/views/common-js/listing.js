@@ -168,12 +168,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(document.frmRecordSearchPaging);
     };
 
-    /* exportReport = function () {
-        setColumnsData(document.frmRecordSearch);
-        document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
-        document.frmRecordSearch.submit();
-    } */
-
     searchRecords = function (frm) {
         if (false === checkControllerName()) {
             return false;
@@ -187,7 +181,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
-            $.ykmsg.close();
             if (res.headSection) {
                 $('.tableHeadJs').replaceWith(res.headSection);
             }
@@ -369,17 +362,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            $.ykmsg.success(t.msg);
-
-            reloadList();
-            if (t.langId > 0) {
-                editLangData(t.recordId, t.langId);
-            } else if ("openMediaForm" in t) {
-                mediaForm(t.recordId);
-            } else if ('' != callback) {
-                window[callback](t.recordId);
-            }
-            return;
+            setTimeout(() => {
+                reloadList();
+                if (t.langId > 0) {
+                    editLangData(t.recordId, t.langId);
+                } else if ("openMediaForm" in t) {
+                    mediaForm(t.recordId);
+                } else if ('' != callback) {
+                    window[callback](t.recordId);
+                }
+                return;
+            }, 500);
         });
     };
 
@@ -395,7 +388,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.success(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();

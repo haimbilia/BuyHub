@@ -10,7 +10,7 @@ class BatchProductsController extends LoggedUserController
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
-        $this->set('bodyClass', 'is--dashboard');
+        
     }
 
     public function index()

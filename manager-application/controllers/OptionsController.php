@@ -98,7 +98,7 @@ class OptionsController extends ListingBaseController {
 
         $srch = Option::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = option_seller_id', 'u');
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('o.option_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ol.option_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             if (strtolower($post['keyword']) == strtolower(Labels::getLabel('LBL_Admin', $this->siteLangId))) {
@@ -293,9 +293,9 @@ class OptionsController extends ListingBaseController {
 
         $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as option_name', 'option_identifier','option_is_separate_images'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -316,9 +316,18 @@ class OptionsController extends ListingBaseController {
 
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 
+        $results = [];
+        foreach($options as $option){
+            $optionName = $option['option_name'];       
+            if($option['option_name']  != $option['option_identifier'] ){
+                $optionName.="(".$option['option_identifier'] .")"; 
+            }
+            $results[]= ['id'=> $option['id'],'text'=> $optionName];
+        }
+
         $json = array(
             'pageCount' => $srch->pages(),
-            'results' => $options
+            'results' => $results
         );
 
         die(FatUtility::convertToJson($json));

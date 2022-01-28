@@ -112,7 +112,7 @@ class StatesController extends ListingBaseController
             'c'
         );
             
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('st_l.state_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('st.state_code', 'like', $post['keyword'], 'OR');
