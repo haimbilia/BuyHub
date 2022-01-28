@@ -1,5 +1,7 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php
+defined('SYSTEM_INIT') or die('Invalid Usage.');
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php
@@ -54,7 +56,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 'html' => $otherBtnHtml
             ];
         }
-        $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
 
         <div class="content-body">
 
@@ -73,8 +76,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="col-md-6">
                                     <div class="info">
                                         <span> <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
-                                                </use>
+                                            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
+                                            </use>
                                             </svg><?php echo Labels::getLabel('LBL_Generate_requests_using_buttons_below', $siteLangId); ?></span>
                                     </div>
                                 </div>
@@ -151,7 +154,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
-    $(document).ready(function() {
+    $(document).ready(function () {
         if (canRequestCustomProduct) {
             searchCustomCatalogProducts();
         } else {
