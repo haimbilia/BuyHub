@@ -135,7 +135,7 @@ class OptionValuesController extends ListingBaseController
         $srch->addMultipleFields(['ov.*', 'ov_l.optionvalue_name']);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('ov.optionvalue_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ov_l.optionvalue_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -283,7 +283,7 @@ class OptionValuesController extends ListingBaseController
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
         $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

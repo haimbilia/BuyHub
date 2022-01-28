@@ -79,7 +79,7 @@ class ZonesController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->siteLangId);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('z_l.zone_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

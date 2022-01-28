@@ -43,7 +43,7 @@ class ManualShippingApiController extends ListingBaseController
         $obj = new ManualShippingApi();
         $srch = $obj->getListingObj($this->siteLangId, array('msa.*', 'msa_l.mshipapi_comment'));
         
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('sd.sduration_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('sd_l.sduration_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('msa.mshipapi_zip', 'like', '%' . $post['keyword'] . '%', 'OR');

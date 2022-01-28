@@ -89,7 +89,7 @@ class SlidesController extends ListingBaseController
         $srch = Slides::getSearchObject($this->siteLangId, false);
         $srch->addCondition('slide_type', '=', Slides::TYPE_SLIDE);
         $srch->addOrder($sortBy, $sortOrder);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('slide_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('slide_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

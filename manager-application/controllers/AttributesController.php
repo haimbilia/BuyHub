@@ -33,7 +33,7 @@ class AttributesController extends ListingBaseController
         $srch = AttributeGroup::getSearchObject();
         $srch->addFld('ag.*');
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('ag.attrgrp_name', 'like', '%' . $post['keyword'] . '%');
         }
 

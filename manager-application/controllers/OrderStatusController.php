@@ -107,7 +107,7 @@ class OrderStatusController extends ListingBaseController
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData); 
         $srch = OrderStatus::getSearchObject(false, $this->siteLangId); 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('ostatus.orderstatus_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ostatus_l.orderstatus_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

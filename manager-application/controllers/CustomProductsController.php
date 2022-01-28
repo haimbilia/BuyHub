@@ -93,7 +93,7 @@ class CustomProductsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');

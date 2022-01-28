@@ -108,7 +108,7 @@ class CurrencyManagementController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
         }
 

@@ -92,7 +92,7 @@ class BuyersReportController extends ListingBaseController
         $srch->addMultipleFields(['u.user_name as buyerName', 'uc.credential_email as buyerEmail', 'opq.*']);
         $srch->addCondition('totOrders', '>', 'mysql_func_0', 'AND', true);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cnd->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%');
         }

@@ -69,7 +69,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = SmartWeightageSettings::getSearchObject(); 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('sws.swsetting_name', 'like', '%' . $post['keyword'] . '%');
         }
         

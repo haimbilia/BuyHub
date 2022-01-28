@@ -93,7 +93,7 @@ class BlogPostsController extends ListingBaseController
 
         $srch = BlogPost::getSearchObject($this->siteLangId, true, false, false, false);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $keywordCond = $srch->addCondition('bp.post_identifier', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bp_l.post_title', 'like', '%' . $post['keyword'] . '%');
         }
@@ -557,7 +557,7 @@ class BlogPostsController extends ListingBaseController
 
         $srch->addMultipleFields(array('post_id, IFNULL(post_title, post_identifier) as post_title'));
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('post_title', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('post_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

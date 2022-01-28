@@ -131,7 +131,7 @@ class ProductReviewsController extends ListingBaseController
         $srch->joinSellerProducts($this->siteLangId);
         $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');

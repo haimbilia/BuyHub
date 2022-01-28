@@ -71,7 +71,7 @@ class BlogContributionsController extends ListingBaseController
 
         $srch = BlogContribution::getSearchObject();
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $keywordCond = $srch->addCondition('bcontributions_author_first_name', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_last_name', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_email', 'like', '%' . $post['keyword'] . '%');

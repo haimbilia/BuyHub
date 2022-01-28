@@ -63,7 +63,7 @@ class ShippingPackagesController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = ShippingPackage::getSearchObject();
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('spack.shippack_name', 'like', '%' . $post['keyword'] . '%');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);

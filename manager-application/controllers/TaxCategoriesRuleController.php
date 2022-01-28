@@ -110,7 +110,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
         $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id');
         $srch->joinTable(Tax::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxcat_id = taxcatlang_taxcat_id and taxcatlang_lang_id = ' . $this->siteLangId);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('taxrule_name', 'LIKE', "%" . $post['keyword'] . "%");
         }
 

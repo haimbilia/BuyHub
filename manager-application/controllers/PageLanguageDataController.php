@@ -103,7 +103,7 @@ class PageLanguageDataController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = PageLanguageData::getSearchObject();
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('plang_key', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('plang_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

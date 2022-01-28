@@ -30,7 +30,7 @@ class ShippingProfileProductsController extends ListingBaseController
         $srch = ShippingProfileProduct::getSearchObject();
         $srch->addCondition('shippro_shipprofile_id', '=', $profileId);
         $srch->addCondition('shippro_user_id', '=', 0);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('p_l.product_name', 'like', '%' . $post['keyword'] . '%');
         }
         $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '=', Product::PRODUCT_TYPE_PHYSICAL);
@@ -52,7 +52,7 @@ class ShippingProfileProductsController extends ListingBaseController
         $shipProfileId = FatApp::getPostedData('shipProfileId', FatUtility::VAR_INT, 0);
         $srch = new ProductSearch($this->siteLangId);
         $srch->addOrder('product_name');
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

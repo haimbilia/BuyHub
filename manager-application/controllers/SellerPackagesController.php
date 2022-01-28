@@ -102,7 +102,7 @@ class SellerPackagesController extends ListingBaseController
         $srch = SellerPackages::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array("sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name"));
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition("sp." . SellerPackages::DB_TBL_PREFIX . "identifier", 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition("spl." . SellerPackages::DB_TBL_PREFIX . "name", 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -258,7 +258,7 @@ class SellerPackagesController extends ListingBaseController
 
         $srch->addMultipleFields(array('spplan_id', "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spplan_interval", "spplan_frequency"));
         $srch->addCondition('spackage_active', '=', applicationConstants::YES);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('spackage_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('spackage_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

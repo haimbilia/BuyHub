@@ -121,7 +121,7 @@ class BannersController extends ListingBaseController
         $srch->addMultipleFields(array('IFNULL(promotion_name, promotion_identifier) as promotion_name', 'banner_id', 'banner_type', 'banner_url', 'banner_target', 'banner_active', 'banner_blocation_id', 'banner_title', 'banner_updated_on'));
         $srch->addCondition('b.banner_blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('banner_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('banner_type', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

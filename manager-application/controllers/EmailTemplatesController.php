@@ -60,7 +60,7 @@ class EmailTemplatesController extends ListingBaseController
         $srch = EmailTemplates::getSearchObject(0, false);
         $srch->addGroupBy(EmailTemplates::DB_TBL_PREFIX . 'code');
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('etpl_code', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('etpl_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('etpl_subject', 'like', '%' . $post['keyword'] . '%', 'OR');

@@ -40,7 +40,7 @@ class SuccessStoriesController extends ListingBaseController
         
         $srch = SuccessStories::getSearchObject($this->siteLangId);
         $srch->addCondition('sstory_deleted', '=', 0);
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('ss.sstory_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ss_l.sstory_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

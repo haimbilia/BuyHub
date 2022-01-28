@@ -104,7 +104,7 @@ class TestimonialsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Testimonial::getSearchObject($this->siteLangId, false);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('testimonial_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('testimonial_text', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -463,7 +463,7 @@ class TestimonialsController extends ListingBaseController
         $srch = Testimonial::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields(array('testimonial_id', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title'));
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('testimonial_title', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('testimonial_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }

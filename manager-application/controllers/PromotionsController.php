@@ -135,7 +135,7 @@ class PromotionsController extends ListingBaseController
         $srch->joinShops($this->siteLangId); 
         $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO); 
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('pr.promotion_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('pr_l.promotion_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

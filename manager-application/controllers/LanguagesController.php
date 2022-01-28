@@ -68,7 +68,7 @@ class LanguagesController extends ListingBaseController
 
         $srch->addFld('l.*');
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('l.language_code', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('l.language_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

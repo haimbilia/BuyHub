@@ -78,7 +78,7 @@ class SmsTemplatesController extends ListingBaseController
         $srch = SmsTemplate::getSearchObject($this->siteLangId);
         $srch->addGroupBy(SmsTemplate::DB_TBL_PREFIX . 'code');
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cond = $srch->addCondition('stpl_code', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('stpl_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }

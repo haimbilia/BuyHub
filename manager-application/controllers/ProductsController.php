@@ -94,7 +94,7 @@ class ProductsController extends ListingBaseController
         $srch = Product::getSearchObject($this->siteLangId);
         //$srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'product_seller_id = user_id', 'tu');
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('product_model', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');

@@ -515,7 +515,7 @@ class ShopsController extends ListingBaseController
         $srch = Shop::getSearchObject(false, $this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $srch->addCondition('shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 

@@ -83,7 +83,7 @@ class CountriesController extends ListingBaseController
         $srch = Countries::getSearchObject(false, $this->siteLangId);
         $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name']);
 
-        if (!empty($post['keyword'])) {
+        if ('' != $post['keyword']) {
             $condition = $srch->addCondition('c.country_code', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('c_l.country_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
