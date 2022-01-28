@@ -307,6 +307,7 @@ Updates/Fixes :
     => 061748 - Admin UI: Rate name is not showing while editing the default rate under the shipping profile section.
     => 061968 - Fatal error: Uncaught TypeError: Argument 1 passed is invalid, expected string
     => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
+    => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
     
 New Features:  
     => Admin shipped products listing page

@@ -5,8 +5,6 @@ $(document).ready(function () {
 
 });
 (function () {
-
-
     var prodListing = '#product-listing--js';
     var shipListing = '#shipping--js';
     var zoneListing = '#listing-zones';
@@ -46,21 +44,20 @@ $(document).ready(function () {
             data = fcom.frmData(form);
         }
 
-        $(prodListing).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
-            $.ykmsg.close();
-            fcom.removeLoader();
+        $(prodListing).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
+            res = $.parseJSON(res);
             $(prodListing).html(res.html);
+            fcom.removeLoader();
         });
         $(shipListing).html('');
-        fcom.removeLoader();
     };
 
     searchProductsSection = function (profileId) {
         var dv = '#product-section--js';
-        $(dv).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
-            $.ykmsg.close();
+        $(dv).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
+            res = $.parseJSON(res);
             fcom.removeLoader();
             $(dv).html(res.html);
             searchProducts(profileId);
@@ -120,9 +117,9 @@ $(document).ready(function () {
     }
 
     searchZone = function (profileId, scrollToNew = false) {
-        $(zoneListing).html(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
-            $.ykmsg.close();
+        $(zoneListing).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
+            res = $.parseJSON(res);
             fcom.removeLoader();
             $(zoneListing).html(res.html);
             if (true == scrollToNew) {
@@ -170,9 +167,10 @@ $(document).ready(function () {
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
             var profileId = $('input[name="profile_id"]').val();
-            searchZone(profileId, true);
-            searchProductsSection(profileId);
-            $(document).trigger('close.facebox');
+            setTimeout(() => {
+                searchZone(profileId, true);
+                searchProductsSection(profileId);
+            }, 500);
         });
     };
 

@@ -87,7 +87,7 @@ $(function () {
 
         displayProcessing: function () {
             $.ykmsg.close();
-            $.ykmsg.info(langLbl.processing, 0);
+            $.ykmsg.info(langLbl.processing, -1);
         },
         displaySuccessMessage: function (msg) {
             $.ykmsg.close();
