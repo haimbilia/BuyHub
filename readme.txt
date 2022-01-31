@@ -320,6 +320,7 @@ Updates/Fixes :
     => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
     => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
     => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
+    => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
 
 New Features:  
     => Admin shipped products listing page

@@ -61,7 +61,9 @@
 
             var navId = ('undefined' != typeof t.navId) ? t.navId : 0;
             var nlinkId = ('undefined' != typeof t.nlinkId) ? t.nlinkId : 0;
-            $('.openerJs[data-record-id="' + navId + '"]').show();
+            if (1 > $("#childrens-" + navId + " li:visible").length) {
+                $('.openerJs[data-record-id="' + navId + '"]').click();
+            }
             $(".subRecordsCountJs-" + navId).text(t.subRecordsCount);
             setTimeout(() => {
                 togglePlusMinus($('.openerJs[data-record-id="' + navId + '"]')[0], 1);
@@ -111,12 +113,13 @@
             return false;
         }
         $(dv).prepend(fcom.getLoader());
+
+        var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
         var data = 'recordId=' + navId;
         if (0 < nlinkId) {
             data += '&nlinkId=' + nlinkId;
         }
 
-        var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
         data += '&includeWrapper=' + includeWrapper;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'navLinks'), data, function (res) {
             fcom.removeLoader();

@@ -24,8 +24,6 @@
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.success(t.msg);
-
 			if (0 < $('.noRecordFoundJs').length) {
 				$('.noRecordFoundJs').remove();
 			}
