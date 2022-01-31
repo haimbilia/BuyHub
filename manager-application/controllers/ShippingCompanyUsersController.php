@@ -81,7 +81,6 @@ class ShippingCompanyUsersController extends ListingBaseController
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj();
-        $srch->addOrder('u.user_id', 'DESC');
         $srch->addCondition('u.user_is_shipping_company', '=', applicationConstants::YES);
 
         $keyword = FatApp::getPostedData('keyword', null, '');
@@ -329,6 +328,6 @@ class ShippingCompanyUsersController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['credential_username'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

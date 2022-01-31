@@ -13,7 +13,7 @@ var defaultController = controllerName;
         if (frm) {
             data = fcom.frmData(frm);
         }
-        fcom.updateWithAjax(fcom.makeUrl('transactions', 'shippingTransactionSearch'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Transactions', 'shippingTransactionSearch'), data, function (t) {
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
             $.ykmsg.close();
@@ -38,7 +38,7 @@ var defaultController = controllerName;
     addUserTransaction = function (userId) {
         var data = 'utxn_user_id=' + userId;
         fcom.updateWithAjax(fcom.makeUrl('transactions', 'form'), data, function (t) {
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            $.ykmodal(t.html, false);
             fcom.removeLoader();
             $.ykmsg.close();
         });

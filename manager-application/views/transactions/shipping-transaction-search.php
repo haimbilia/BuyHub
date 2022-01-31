@@ -1,10 +1,7 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$title = (!empty($arrListing) ? current($arrListing)['user_name'] : '');
-?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo $title; ?>
+        <?php echo Labels::getLabel('LBL_TRANSACTION_HISTORY', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
