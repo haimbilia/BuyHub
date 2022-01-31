@@ -7,7 +7,6 @@ $(function () {
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "requestStatusForm", [recordId]), "", function (t) {
             $.ykmodal(t.html, true);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

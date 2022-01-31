@@ -653,7 +653,7 @@ class HtmlHelper
             return '<p class="date">' . $formattedDT . '</p>';
         }
 
-        $time = date($timeFormat, strtotime($formattedDT));
+        $time = date($timeFormat, strtotime($dateTime));
         $date = FatDate::format($dateTime, false, $usetimezone, $timezone);
         return '<p class="date">' . $date . '
                     <time>' . $time . '</time>

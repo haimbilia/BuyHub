@@ -39,7 +39,6 @@
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('.topReferersJs').html(t.html);
 		});
 	};
@@ -50,7 +49,6 @@
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('.topCountriesJs').html(t.html);
 		});
 	};
@@ -61,7 +59,6 @@
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('.topProducts').html(t.html);
 		});
 	};
@@ -71,7 +68,6 @@
 		data = "rtype=top_search_keyword&interval=" + interval;
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('.topSearchKeywordJs').html(t.html);
 		});
 	};
@@ -140,7 +136,6 @@
 		$('#' + tab).html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('#' + tab).html(t.html);
 		});
 	};
@@ -149,7 +144,6 @@
 		$('#latestOrdersJs').html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('#latestOrdersJs').html(t.html);
 		});
 	};
@@ -159,7 +153,6 @@
 		$('#totalSalesJs').html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'totalSales'), data, function (t) {			
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('#totalSalesJs').html(t.html);
 		});
 	};
@@ -168,7 +161,6 @@
 		$('#topSellingProductsJs').html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			$('#topSellingProductsJs').html(t.html);
 		});
 	};

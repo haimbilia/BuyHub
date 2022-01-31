@@ -7,7 +7,6 @@
         markMainTabActive();
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'profileInfoForm'), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(dv).html(t.html);
         });
     };
@@ -17,7 +16,6 @@
         markMainTabActive();
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'changePassword'), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(dv).html(t.html);
         });
     };

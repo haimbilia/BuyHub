@@ -22,7 +22,6 @@ $(document).ready(function () {
 				controllerName = 'AbandonedCart';
 
 				$.ykmodal(t.html);
-				$.ykmsg.close();
 				fcom.removeLoader();
 			});
 			abandonedcartId = abandonedcart_id;

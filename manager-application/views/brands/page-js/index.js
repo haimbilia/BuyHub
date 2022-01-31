@@ -2,7 +2,6 @@
     brandImages = function (brandId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('Brands', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
             } else {

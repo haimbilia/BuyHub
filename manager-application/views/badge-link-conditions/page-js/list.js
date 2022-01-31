@@ -49,8 +49,20 @@ $(document).on('change', '#conditionTypeJs', function () {
         $('#conditionFromSectionJs').addClass("col-md-12");
         $('#conditionToSectionJs').hide();
         toSelector.attr('data-fatreq', JSON.stringify({ required: false }));
-        var htm = '<label class="label">' + langLbl.rate + '<span class="spn_must_field">*</span></label>';
+        var htm = '<label class="label">' + langLbl.rateDecimal + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);
+    } else if (parseInt($(this).val()) == COND_TYPE_COMPLETED_ORDERS) {
+        var htm = '<label class="label">' + langLbl.fromDigit + '<span class="spn_must_field">*</span></label>';
+        $('#conditionFromSectionJs label').replaceWith(htm);
+        
+        var htm = '<label class="label">' + langLbl.toDigit + '<span class="spn_must_field">*</span></label>';
+        $('#conditionToSectionJs label').replaceWith(htm);
+    } else {
+        var htm = '<label class="label">' + langLbl.fromDecimal + '<span class="spn_must_field">*</span></label>';
+        $('#conditionFromSectionJs label').replaceWith(htm);
+        
+        var htm = '<label class="label">' + langLbl.toDecimal + '<span class="spn_must_field">*</span></label>';
+        $('#conditionToSectionJs label').replaceWith(htm);
     }
 });
 
@@ -65,7 +77,6 @@ $(document).on('change', '#conditionTypeJs', function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
             $.ykmodal(t.html, false);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 

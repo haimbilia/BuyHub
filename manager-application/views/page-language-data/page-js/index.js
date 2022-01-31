@@ -2,7 +2,6 @@ editLangForm = function (pLangKey, langId, autoFillLangData = 0) {
     fcom.resetEditorInstance();
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [pLangKey, langId, autoFillLangData]), '', function (t) {
         $.ykmodal(t.html, '', 'modal-dialog-vertical-md');
-        $.ykmsg.close();
         fcom.removeLoader();
         fcom.setEditorLayout(langId);
         if (!navigator.clipboard) {

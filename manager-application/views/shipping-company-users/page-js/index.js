@@ -16,7 +16,6 @@ var defaultController = controllerName;
         fcom.updateWithAjax(fcom.makeUrl('Transactions', 'shippingTransactionSearch'), data, function (t) {
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -40,7 +39,6 @@ var defaultController = controllerName;
         fcom.updateWithAjax(fcom.makeUrl('transactions', 'form'), data, function (t) {
             $.ykmodal(t.html, false);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
         controllerName = defaultController;
     };
@@ -112,7 +110,6 @@ var defaultController = controllerName;
         loadMoreBtn.html(fcom.getRowSpinner());
 
         fcom.updateWithAjax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
-            $.ykmsg.close();
             $(".appendRowsJs").append(rows.html);
             loadMoreBtn.html(btnText);
 

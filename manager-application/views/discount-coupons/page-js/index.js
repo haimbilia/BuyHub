@@ -21,7 +21,6 @@ $(document).ready(function () {
 
     couponLinkPlanForm = function (couponId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'linkPlanForm'), 'recordId=' + couponId, function (t) {
-            $.ykmsg.close();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -31,7 +30,6 @@ $(document).ready(function () {
     couponHistory = function (couponId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory'), 'recordId=' + couponId, function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -45,7 +43,6 @@ $(document).ready(function () {
         data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory', [couponHistoryId]), data, function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -77,7 +74,6 @@ $(document).ready(function () {
     loadImages = function (recordId, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();

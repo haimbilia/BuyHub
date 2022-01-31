@@ -8,7 +8,6 @@ $(document).ready(function () {
     viewRequestPurpose = function (requestId) {
         fcom.updateWithAjax(fcom.makeUrl('UserGdprRequests', 'viewUserRequest', [requestId]), "", function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

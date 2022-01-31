@@ -47,7 +47,6 @@
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('Brands', "form"), "", function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close()
             fcom.removeLoader();
         });
     };
@@ -56,7 +55,6 @@
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close()
             fcom.removeLoader();
         });
     };
@@ -64,7 +62,6 @@
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close()
             fcom.removeLoader();
         });
     };
@@ -191,7 +188,6 @@
         var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'prodSpecifications'), { recordId, langId }, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
@@ -237,8 +233,7 @@
             return;
         }      
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "imageForm", [recordId]), '', function (t) {
-            $.ykmodal(t.html);
-            $.ykmsg.close()           
+            $.ykmodal(t.html);           
             loadImageOptions();           
             var recordId = $('#image_record_id').val();
             productImages(recordId);
@@ -279,7 +274,6 @@
     productImages = function (recordId, option_id = 0, lang_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, option_id, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $('#productImagesJs').html(t.html);
             $("#productImagesJs").sortable({
                 stop: function() {
@@ -485,7 +479,6 @@
         let recordId = getCurrentFrmRecordId();       
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
             fcom.removeLoader();
-            $.ykmsg.close();
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
 
@@ -513,7 +506,6 @@
         let productId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "digitalDownloadForm", [productId, type]), "", function (t) {            
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
-            $.ykmsg.close();
             fcom.removeLoader();
             if (typeof callback == 'function') {
                 callback();
@@ -566,8 +558,7 @@
             fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
                 if(langId == 0   && optionCombi == 0){
                     $("#digitalLinksDefaultListJs").html(res.html); 
-                }  
-                $.ykmsg.close();
+                }
                 fcom.removeLoader();
                 $("#digitalFrmListJs").html(res.html);              
             });
@@ -576,7 +567,6 @@
                 if(langId == 0   && optionCombi == 0){
                     $("#digitalFilesDefaultListJs").html(res.html);
                 }
-                $.ykmsg.close();
                 fcom.removeLoader();
                 $("#digitalFrmListJs").html(res.html);
             });

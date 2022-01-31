@@ -31,7 +31,6 @@ $(function () {
     viewComment = function (ocrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewComment",[ocrequestId]), '', function (t) {
             $.ykmodal(t.html, true);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -39,7 +38,6 @@ $(function () {
     viewAdminComment = function (ocrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[ocrequestId]), '', function (t) {
             $.ykmodal(t.html, true);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

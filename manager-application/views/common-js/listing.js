@@ -136,7 +136,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         loadMoreBtn.html(fcom.getRowSpinner());
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "getRows"), data, function (rows) {
-            $.ykmsg.close();
             $(".appendRowsJs").append(rows.html);
             loadMoreBtn.html(btnText);
 
@@ -271,7 +270,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
             $.ykmodal(t.html, displayInPopup, dialogClass);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -284,7 +282,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html, displayInPopup, dialogClass);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -304,7 +301,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             function (t) {
                 $.ykmodal(t.html, isPopupView);
                 fcom.removeLoader();
-                $.ykmsg.close();
             }
         );
     };
@@ -333,7 +329,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
@@ -362,17 +358,15 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            setTimeout(() => {
-                reloadList();
-                if (t.langId > 0) {
-                    editLangData(t.recordId, t.langId);
-                } else if ("openMediaForm" in t) {
-                    mediaForm(t.recordId);
-                } else if ('' != callback) {
-                    window[callback](t.recordId);
-                }
-                return;
-            }, 500);
+            reloadList();
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
+            } else if ("openMediaForm" in t) {
+                mediaForm(t.recordId);
+            } else if ('' != callback) {
+                window[callback](t.recordId);
+            }
+            return;
         });
     };
 
@@ -439,7 +433,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         fcom.updateWithAjax(frm.action, data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
@@ -481,7 +474,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             fcom.makeUrl(controllerName, "images", [recordId, fileType, langId, slide_screen]), "",
             function (t) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 if (fileType == "logo") {
                     $("#logoListingJs").html(t.html);
                     return;
@@ -500,7 +492,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
             function (t) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 loadImages(recordId, "logo", slide_screen, langId);
                 loadImages(recordId, "image", slide_screen, langId);
                 $.ykmodal(t.html, !$.ykmodal.isSideBarView());

@@ -83,7 +83,7 @@ echo isset($pagination) ? html_entity_decode($pagination) : '';
                 var order = $.tableDnD.serialize('id');
                 order += '&pcat_id=' + pcat_id;
                 fcom.ajax(fcom.makeUrl('productCategories', 'update_order'), order, function(res) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     var ans = JSON.parse(res);
                     if (ans.status == 1) {
                         $.ykmsg.success(ans.msg);

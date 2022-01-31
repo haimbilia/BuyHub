@@ -27,7 +27,6 @@ $(document).ready(function () {
         }
         $(dv).html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'search'), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $(dv).html(res.html);
         });

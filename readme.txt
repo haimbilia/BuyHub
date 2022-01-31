@@ -318,6 +318,7 @@ Updates/Fixes :
     => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
     => 061671 - Admin UI: Upload image option is not showing in discount coupon form
     => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
+    => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
 
 New Features:  
     => Admin shipped products listing page

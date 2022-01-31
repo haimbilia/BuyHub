@@ -3,7 +3,6 @@
         data = 'recordId=' + labelId;
         fcom.updateWithAjax(fcom.makeUrl('Labels', 'langForm', [type, autoFillLangData]), data, function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

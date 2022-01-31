@@ -4,7 +4,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'imagesForm', [post_id]), '', function (t) {
             loadImages(post_id);
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -12,7 +11,6 @@
     loadImages = function (post_id, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [post_id, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();

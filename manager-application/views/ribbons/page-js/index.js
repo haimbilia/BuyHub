@@ -5,7 +5,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -16,7 +15,6 @@
             data,
             function (t) {
                 $.ykmodal(t.html);
-                $.ykmsg.close();
                 fcom.removeLoader();
             }
         );

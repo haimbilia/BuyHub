@@ -26,7 +26,6 @@ function getNotifications(type, obj) {
         url,
         "",
         function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $("#notificationList").html(res.html);
             $('#notifiLinkViewAll').attr('href', viewAllUrl);

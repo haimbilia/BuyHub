@@ -59,7 +59,6 @@ $(document).ready(function () {
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(dv).replaceWith(t.html);
             setTabActive(frmType);
         });
@@ -80,7 +79,6 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     }
 
@@ -91,7 +89,6 @@ $(document).ready(function () {
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             getForm(document.frmConfiguration.form_type.value, lang_id);
         });
     };
@@ -203,7 +200,6 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'deleteVerificationFile', [fileType]), '', function (t) {
-            $.ykmsg.close();
             getForm(document.frmConfiguration.form_type.value, document.frmConfiguration.lang_id.value);
         });
     };

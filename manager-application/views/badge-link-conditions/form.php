@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0], "closeForm"); return(false);');
 $frm->setFormTagAttribute('data-onclear', 'editConditionRecord(' . $badgeId . ', ' . $recordId . ')');
 
 $fld = $frm->getField('blinkcond_user_id');
@@ -16,13 +17,13 @@ if (null != $fld) {
 
 $fld = $frm->getField('blinkcond_from_date');
 if (null != $fld) {
-    $fld->addFieldTagAttribute('class', 'field--calender');
+    $fld->addFieldTagAttribute('class', 'field--calender dateTimeJs');
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('blinkcond_to_date');
 if (null != $fld) {
-    $fld->addFieldTagAttribute('class', 'field--calender');
+    $fld->addFieldTagAttribute('class', 'field--calender dateTimeJs');
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
@@ -68,6 +69,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var COND_TYPE_AVG_RATING_SHOP = <?php echo BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP; ?>;
     var COND_TYPE_RETURN_ACCEPTANCE = <?php echo BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE; ?>;
     var COND_TYPE_ORDER_CANCELLED = <?php echo BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED; ?>;
+    var COND_TYPE_COMPLETED_ORDERS = <?php echo BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS; ?>;
+
     $(document).ready(function() {
         if (COND_AUTO == triggerType) {
             if (0 < $("#conditionTypeJs").length) {
@@ -85,5 +88,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 bindRecordsSelect2();
             }
         }
+        $('.dateTimeJs').datetimepicker({
+            minDate: new Date(),
+            format: 'Y-m-d H:i'
+        });
     });
 </script>

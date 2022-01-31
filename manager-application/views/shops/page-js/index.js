@@ -2,7 +2,6 @@
     mediaForm = function (shopId, langId = 0, slide_screen = 1) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'media', [shopId, langId, slide_screen]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             shopImages(shopId, 'logo', slide_screen, langId);
             shopImages(shopId, 'image', slide_screen, langId);
             fcom.removeLoader();
@@ -12,7 +11,6 @@
     shopImages = function (shopId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'images', [shopId, fileType, langId, slide_screen]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
             } else {

@@ -48,7 +48,6 @@ $(document).ready(function () {
 		}
 		$("#listing").html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'searchRequests'), data, function (res) {
-			$.ykmsg.close();
 			fcom.removeLoader();
 			$("#listing").html(res.html);
 		});
@@ -70,7 +69,6 @@ $(document).ready(function () {
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'setup', [1]), data, function (t) {
-			$.ykmsg.close();
 			if (t.status == 1) {
 				reloadList();
 			}
@@ -85,7 +83,6 @@ $(document).ready(function () {
 
 	prodCatRequestForm = function (id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'form', [id, 1]), '', function (t) {
-			$.ykmsg.close();
 			$.ykmodal(t.html);
 			fcom.removeLoader();
 			if (id > 0) {
@@ -213,7 +210,6 @@ $(document).ready(function () {
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t.html);
 				var prodCatId = $("[name='prodcat_id']").val();
@@ -245,8 +241,4 @@ $(document).ready(function () {
 			}
 		});
 	};
-
-
-
-
 })();

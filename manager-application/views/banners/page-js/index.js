@@ -15,7 +15,6 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { bannerLocationId }, function (t) {
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -25,7 +24,6 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
             $.ykmodal(t.html);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -37,7 +35,6 @@ $(document).on('change', '#imageLanguageJs', function (e) {
                 fcom.removeLoader();
                 loadImages(bannerLocationId, recordId, "logo", slide_screen, langId);
                 $.ykmodal(t.html);
-                $.ykmsg.close();
             }
         );
     };
@@ -45,10 +42,8 @@ $(document).on('change', '#imageLanguageJs', function (e) {
     loadImages = function (bannerLocationId, recordId, imageType, slide_screen, langId) {
         let slidescreen = $('#slideScreenJs').val();
         var data = { bannerLocationId, recordId, imageType, langId, screen: slidescreen };
-        console.log(data);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images'), data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $('#imageListingJs').html(t.html);
             reloadList();
         });

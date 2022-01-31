@@ -7,7 +7,6 @@
                 fcom.removeLoader();
                 loadImages(recordId, langId);
                 $.ykmodal(t.html, !$.ykmodal.isSideBarView());
-                $.ykmsg.close();
             }
         );
     };
@@ -15,7 +14,6 @@
     loadImages = function (recordId, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();

@@ -3,7 +3,6 @@
     editLangForm = function (etplCode, langId, autoFillLangData = 0) {
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) {
             $.ykmodal(t.html, '', 'modal-dialog-vertical-md');
-            $.ykmsg.close();
             fcom.removeLoader();
             fcom.setEditorLayout(langId);
             if (!navigator.clipboard) {

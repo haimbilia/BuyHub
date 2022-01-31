@@ -3,7 +3,6 @@
     mediaForm = function (banner_id, langId = 0, slide_screen = 1) {
         fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'media', [banner_id, langId, slide_screen]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
             images(banner_id, 'logo', slide_screen, langId);
             images(banner_id, 'image', slide_screen, langId);
@@ -13,7 +12,6 @@
     images = function (recordId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
             } else {
