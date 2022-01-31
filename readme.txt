@@ -575,6 +575,7 @@ Enhancement:
     => 061870 - Admin UI: Search is not working under the setting section at the admin's end
     => 061855 - Admin UI: Admin is not able to add the new rating types and able to active/inactive the by-default Rating types.
     => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
+    => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
