@@ -38,12 +38,12 @@ class CategoryRequest extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('ERR_Language_Id_not_specified.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $arr = array(
-        static::CATEGORY_REQUEST_PENDING => Labels::getLabel('LBL_Pending', $langId),
-        static::CATEGORY_REQUEST_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-        static::CATEGORY_REQUEST_CANCELLED => Labels::getLabel('LBL_Cancelled', $langId)
+        static::CATEGORY_REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+        static::CATEGORY_REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+        static::CATEGORY_REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
         );
         return $arr;
     }

@@ -46,7 +46,7 @@ class ProductGroupProductSearch extends SearchBase
     public function joinProducts($langId = 0)
     {
         if (!$this->sellerProductsJoined) {
-            trigger_error(Labels::getLabel('MSG_joinProducts_can_be_joined_only_if,_joinSellerProducts_is_joined.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINPRODUCTS_CAN_BE_JOINED_ONLY_IF,_JOINSELLERPRODUCTS_IS_JOINED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $langId = FatUtility::int($langId);

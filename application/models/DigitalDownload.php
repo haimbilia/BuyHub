@@ -63,7 +63,7 @@ class DigitalDownload extends MyAppModel
     public function saveLink( $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
         if (1 > $this->getMainTableRecordId()) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -193,7 +193,7 @@ class DigitalDownload extends MyAppModel
             $frm->addHiddenField('', 'download_type', $type);
         } else {
             $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
         }
         $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
         // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
@@ -237,7 +237,7 @@ class DigitalDownload extends MyAppModel
         }
 
         if ($message == '') {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId()) . __LINE__;
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()) . __LINE__;
         }
         FatUtility::dieJsonError($message);
     }

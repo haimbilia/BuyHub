@@ -489,13 +489,13 @@ class HomeController extends MyAppController
 
         if (0 < $download) {
             if (!Labels::updateDataToFile($langId, $langCode, Labels::TYPE_APP)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Unable_to_update_file', $langId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_Unable_to_update_file', $langId));
             }
             $fileName = $langCode . '.json';
             $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/AP/' . $fileName;
 
             if (false === file_exists(CONF_UPLOADS_PATH . $filePath)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_FILE_NOT_FOUND._PLEASE_SYNC_FILE_FROM_ADMIN.', $langId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_FILE_NOT_FOUND._PLEASE_SYNC_FILE_FROM_ADMIN.', $langId));
             }
             AttachedFile::downloadAttachment($filePath, $fileName);
             exit;
@@ -519,10 +519,10 @@ class HomeController extends MyAppController
         $this->updateSettingByCurrentLocation($countryCode);
 
         if (!$_SESSION['geo_location']) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Current_Location', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel('MSG_Settings_with_your_current_location_setup_successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_Settings_with_your_current_location_setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1444,12 +1444,12 @@ class HomeController extends MyAppController
     {
         $post = FatApp::getPostedData();
         if (1 > count($post)) {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
         $type = FatApp::getPostedData('type', null, '');
         if (empty($type)) {
-            $message = Labels::getLabel('MSG_Type_is_mandatory', $this->siteLangId);
+            $message = Labels::getLabel('ERR_TYPE_IS_MANDATORY', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
         $image_url = "";
@@ -1458,7 +1458,7 @@ class HomeController extends MyAppController
                 $product_id = FatApp::getPostedData('product_id', null, 0);
                 $seller_product_id = FatApp::getPostedData('seller_product_id', null, 0);
                 if (1 > $product_id || 1 > $seller_product_id) {
-                    $message = Labels::getLabel('MSG_Product_id_&_Seller_product_id_is_mandatory.', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_PRODUCT_ID_&_SELLER_PRODUCT_ID_IS_MANDATORY.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
                 $image_url = UrlHelper::generateFullUrl('image', 'product', array($product_id, "MEDIUM", $seller_product_id, 0, $this->siteLangId));
@@ -1466,7 +1466,7 @@ class HomeController extends MyAppController
             case 'SLIDE':
                 $slide_id = FatApp::getPostedData('slide_id', null, 0);
                 if (1 > $slide_id) {
-                    $message = Labels::getLabel('MSG_Slide_id_is_mandatory.', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_SLIDE_ID_IS_MANDATORY.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
                 $image_url = UrlHelper::generateFullUrl('Image', 'slide', array($slide_id, 0, $this->siteLangId));
@@ -1474,7 +1474,7 @@ class HomeController extends MyAppController
             case 'BANNER':
                 $banner_id = FatApp::getPostedData('banner_id', null, 0);
                 if (1 > $banner_id) {
-                    $message = Labels::getLabel('MSG_Banner_id_is_mandatory.', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_BANNER_ID_IS_MANDATORY.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
                 $image_url = UrlHelper::generateFullUrl('Banner', 'HomePageAfterFirstLayout', array($banner_id, $this->siteLangId));
@@ -1510,7 +1510,7 @@ class HomeController extends MyAppController
     {
         $countryId = FatUtility::int($countryId);
         if (1 > $countryId) {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
         $statesArr = $this->getStates($countryId, 0, true);
@@ -1557,7 +1557,7 @@ class HomeController extends MyAppController
     {
         $url = FatApp::getPostedData('url', FatUtility::VAR_STRING, '');
         if (empty($url)) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $detail = CommonHelper::getUrlTypeData($url);
         $this->set('data', ['urlSegmentsDetail' => (object) $detail]);

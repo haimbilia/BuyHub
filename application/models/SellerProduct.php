@@ -252,7 +252,7 @@ class SellerProduct extends MyAppModel
     public function addUpdateSellerUpsellProducts($selprod_id, $upsellProds = array())
     {
         if (!$selprod_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -278,7 +278,7 @@ class SellerProduct extends MyAppModel
     public function addUpdateSellerRelatedProdcts($selprod_id, $relatedProds = array())
     {
         if (!$selprod_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -363,7 +363,7 @@ class SellerProduct extends MyAppModel
         $sellProdId = FatUtility::convertToType($sellProdId, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$sellProdId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
 
@@ -442,7 +442,7 @@ class SellerProduct extends MyAppModel
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (!$selprod_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
         $db = FatApp::getDb();
@@ -471,7 +471,7 @@ class SellerProduct extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
         $option_id = FatUtility::int($option_id);
         if (!$selprod_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
 
@@ -481,7 +481,7 @@ class SellerProduct extends MyAppModel
 
         if ($withAllJoins) {
             if (!$lang_id) {
-                trigger_error(Labels::getLabel('ERR_Invalid_Arguments', CommonHelper::getLangId()), E_USER_ERROR);
+                trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS', CommonHelper::getLangId()), E_USER_ERROR);
             }
 
             $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
@@ -569,12 +569,12 @@ class SellerProduct extends MyAppModel
         $splprice_id = FatUtility::int($splprice_id);
         $splprice_selprod_id = FatUtility::int($splprice_selprod_id);
         if (!$splprice_id || !$splprice_selprod_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (0 < $userId) {
             $selProdUserId = SellerProduct::getAttributesById($splprice_selprod_id, 'selprod_user_id', false);
             if ($selProdUserId != $userId) {
-                $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+                $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
                 return false;
             }
         }
@@ -608,7 +608,7 @@ class SellerProduct extends MyAppModel
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (!$selprod_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments!', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS!', CommonHelper::getLangId()), E_USER_ERROR);
         }
         //return 10;
         $sellerProductRow = static::getAttributesById($selprod_id, array('selprod_id', 'selprod_product_id', 'selprod_user_id'));
@@ -670,7 +670,7 @@ class SellerProduct extends MyAppModel
         $forDate = $now;
 
         if ($prodgroup_id <= 0) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS', CommonHelper::getLangId()), E_USER_ERROR);
         }
 
         $srch = new SearchBase(ProductGroup::DB_PRODUCT_TO_GROUP, 'ptg');
@@ -795,7 +795,7 @@ class SellerProduct extends MyAppModel
     public function deleteSellerProduct($selprodId)
     {
         if (!$selprodId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -1031,19 +1031,19 @@ class SellerProduct extends MyAppModel
     public static function specialPriceForm($langId)
     {
         $frm = new Form('frmSellerProductSpecialPrice');
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Special_Price', $langId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_SPECIAL_PRICE', $langId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
         $fld->requirements()->setPositive();
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Price_Start_Date', $langId), 'splprice_start_date', '', array('readonly' => 'readonly'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_PRICE_START_DATE', $langId), 'splprice_start_date', '', array('readonly' => 'readonly'));
         $fld->requirements()->setRequired();
 
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Price_End_Date', $langId), 'splprice_end_date', '', array('readonly' => 'readonly'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_PRICE_END_DATE', $langId), 'splprice_end_date', '', array('readonly' => 'readonly'));
         $fld->requirements()->setRequired();
-        $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('LBL_Price_Start_Date', $langId));
+        $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('FRM_PRICE_START_DATE', $langId));
 
         $frm->addHiddenField('', 'splprice_selprod_id');
         $frm->addHiddenField('', 'splprice_id');
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
+        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
+        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
         $fld1->attachField($fld2);
         return $frm;
     }
@@ -1054,12 +1054,12 @@ class SellerProduct extends MyAppModel
 
         $frm->addHiddenField('', 'voldiscount_selprod_id', 0);
         $frm->addHiddenField('', 'voldiscount_id', 0);
-        $qtyFld = $frm->addIntegerField(Labels::getLabel("LBL_Minimum_Quantity", $langId), 'voldiscount_min_qty');
+        $qtyFld = $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_QUANTITY", $langId), 'voldiscount_min_qty');
         //$qtyFld->requirements()->setRange(self::VOL_DISCOUNT_MIN_QTY, self::VOL_DISCOUNT_MAX_QTY);
-        $discountFld = $frm->addFloatField(Labels::getLabel("LBL_Discount_in_(%)", $langId), "voldiscount_percentage");
+        $discountFld = $frm->addFloatField(Labels::getLabel("FRM_DISCOUNT_IN_(%)", $langId), "voldiscount_percentage");
         $discountFld->requirements()->setPositive();
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
+        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
+        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
         $fld1->attachField($fld2);
         return $frm;
     }
@@ -1185,7 +1185,7 @@ class SellerProduct extends MyAppModel
     public function saveMetaData()
     {
         if ($this->mainTableRecordId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
         $selprod_id = $this->mainTableRecordId;
@@ -1194,7 +1194,7 @@ class SellerProduct extends MyAppModel
         $metaType = MetaTag::META_GROUP_PRODUCT_DETAIL;
 
         if ($metaType == '' || !isset($tabsArr[$metaType])) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 

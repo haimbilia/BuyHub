@@ -47,7 +47,7 @@ class MolliePayController extends PaymentController
     public function charge($orderId)
     {
         if (empty($orderId)) {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -55,7 +55,7 @@ class MolliePayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -99,25 +99,25 @@ class MolliePayController extends PaymentController
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
 
 		if(strlen(trim($post['id'])) <= 0 ){
-			$msg = Labels::getLabel('MSG_Invalid_Callback_Response', $this->siteLangId);
+			$msg = Labels::getLabel('ERR_INVALID_CALLBACK_RESPONSE', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
 		}
 		
         if ($this->plugin->validatePaymentResponse($post) === false) {
-            $msg = Labels::getLabel('MSG_Invalid_Payment_Response', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_PAYMENT_RESPONSE', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
 		
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['id'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
             return false;
@@ -144,7 +144,7 @@ class MolliePayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         if (false === $processRequest) {	
             $frm->addHiddenField('', 'orderId');
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         return $frm;
     }
@@ -160,7 +160,7 @@ class MolliePayController extends PaymentController
         $response = !empty($response) ? $response : $_REQUEST;   
         SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
         if (empty($msg)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
         }
         

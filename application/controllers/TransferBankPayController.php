@@ -36,7 +36,7 @@ class TransferBankPayController extends PaymentController
             $this->set('frm', $frm);
             $this->set('paymentAmount', $paymentAmount);
         } else {
-            $this->set('error', Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            $this->set('error', Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
         $this->set('orderInfo', $orderInfo);
         $this->set('exculdeMainHeaderDiv', true);
@@ -80,13 +80,13 @@ class TransferBankPayController extends PaymentController
             }
 
             if (true === MOBILE_APP_API_CALL) {
-                $this->set('msg', Labels::getLabel('MSG_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('SUC_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId));
                 $this->_template->render();
             }
 
             $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
         } else {
-            $msg = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($msg);
             }

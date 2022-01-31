@@ -533,7 +533,7 @@ class EmailHandler extends FatModel
         if ($d['preq_comment'] != '') {
             $catalogRequestComments = nl2br($d['preq_comment']);
         } else {
-            $catalogRequestComments = '{new_request_status} ' . Labels::getLabel('LBL_By_admin', $langId);
+            $catalogRequestComments = '{new_request_status} ' . Labels::getLabel('LBL_BY_ADMIN', $langId);
         }
 
         $statusArr = ProductRequest::getStatusArr($langId);
@@ -658,12 +658,12 @@ class EmailHandler extends FatModel
     public function newOrderBuyerAdmin($order_id, $langId = 0, $includeAdmin = true, $pushNotification = true)
     {
         if ($order_id == '') {
-            trigger_error(Labels::getLabel("MSG_Order_Id_not_specified", $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ORDER_ID_NOT_SPECIFIED", $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED', $this->commonLangId), E_USER_ERROR);
         }
         $orderObj = new Orders();
         $orderInfo = $orderObj->getOrderById($order_id, $langId);
@@ -775,12 +775,12 @@ class EmailHandler extends FatModel
     public function newDigitalOrderBuyer($orderId = 0, $opId = 0, $langId = 0)
     {
         if ($opId == '') {
-            trigger_error(Labels::getLabel("MSG_OP_Id_not_specified", $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_OP_ID_NOT_SPECIFIED", $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED', $this->commonLangId), E_USER_ERROR);
         }
         $orderObj = new Orders();
         $OrderInfo = $orderObj->getOrderById($orderId, $langId);
@@ -968,7 +968,7 @@ class EmailHandler extends FatModel
 
         $frontEndUrl = (CONF_WEBROOT_FRONT_URL) ? CONF_WEBROOT_FRONT_URL : CONF_WEBROOT_URL;
         $url = UrlHelper::generateFullUrl('seller', 'products', array(), $frontEndUrl);
-        $productAnchor = "<a href='" . $url . "'>" . Labels::getLabel('LBL_click_here', $langId) . "</a>";
+        $productAnchor = "<a href='" . $url . "'>" . Labels::getLabel('LBL_CLICK_HERE', $langId) . "</a>";
 
         $arrReplacements = array(
             '{shop_name}' => $productInfo['shop_name'],
@@ -1118,11 +1118,11 @@ class EmailHandler extends FatModel
             $msgComments = '';
 
             if ($orderComment['oshistory_comments'] != "") {
-                $msgComments = Labels::getLabel('MSG_Comments_for_your_order', $langId) . ":<br/><br/><em>" . $orderComment['oshistory_comments'] . ".</em><br/><br/>";
+                $msgComments = Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . ":<br/><br/><em>" . $orderComment['oshistory_comments'] . ".</em><br/><br/>";
             }
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
-                $shipmentInformation = Labels::getLabel('MSG_Shipment_Information', $langId) . ": " . Labels::getLabel('MSG_Tracking_Number', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_Via', $langId) . " " . $orderComment["op_shipping_duration_name"];
+                $shipmentInformation = Labels::getLabel('LBL_SHIPMENT_INFORMATION', $langId) . ": " . Labels::getLabel('LBL_TRACKING_NUMBER', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_VIA', $langId) . " " . $orderComment["op_shipping_duration_name"];
                 if (!empty($orderComment['oshistory_tracking_url'])) {
                     $shipmentInformation .= ' <a href="' . $orderComment['oshistory_tracking_url'] . '" target="_blank">' . $orderComment['oshistory_tracking_url'] . '</a>';
                 }
@@ -1201,11 +1201,11 @@ class EmailHandler extends FatModel
             $msgComments = '';
 
             if ($orderComment['oshistory_comments'] != "") {
-                $msgComments = Labels::getLabel('MSG_Comments_for_your_order', $langId) . ":<br/><br/><em>" . $orderComment['oshistory_comments'] . ".</em><br/><br/>";
+                $msgComments = Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . ":<br/><br/><em>" . $orderComment['oshistory_comments'] . ".</em><br/><br/>";
             }
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
-                $shipmentInformation = Labels::getLabel('MSG_Shipment_Information', $langId) . ": " . Labels::getLabel('MSG_Tracking_Number', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_Via', $langId) . " " . $orderComment["op_shipping_duration_name"] . "<br/>";
+                $shipmentInformation = Labels::getLabel('LBL_SHIPMENT_INFORMATION', $langId) . ": " . Labels::getLabel('LBL_TRACKING_NUMBER', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_VIA', $langId) . " " . $orderComment["op_shipping_duration_name"] . "<br/>";
             }
 
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
@@ -1277,7 +1277,7 @@ class EmailHandler extends FatModel
         $arrReplacements = array(
             '{user_name}' => trim($txnDetail["user_name"]),
             '{txn_id}' => Transactions::formatTransactionNumber($txnId),
-            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_credited', $langId) : Labels::getLabel('L_debited', $langId),
+            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
             '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount, true, true),
             '{txn_comments}' => Transactions::formatTransactionComments($txnDetail["utxn_comments"]),
         );
@@ -1292,7 +1292,7 @@ class EmailHandler extends FatModel
         $this->sendSms("account_credited_debited", $phone, $arrReplacements, $langId);
         $notiArrReplacements = array(
             '{txnid}' => Transactions::formatTransactionNumber($txnId),
-            '{txntype}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_credited', $langId) : Labels::getLabel('L_debited', $langId),
+            '{txntype}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
             '{txnamount}' => CommonHelper::displayMoneyFormat($txnAmount, true, true),
         );
 
@@ -1345,7 +1345,7 @@ class EmailHandler extends FatModel
 
         $formattedRequestValue = "#" . str_pad($requestId, 6, '0', STR_PAD_LEFT);
         $url = UrlHelper::generateFullUrl('account', 'messages', array(), CONF_WEBROOT_URL);
-        $url = '<a href="' . $url . '">' . Labels::getLabel('Msg_click_here', $langId) . '</a>';
+        $url = '<a href="' . $url . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
 
         $statusArr = Transactions::getWithdrawlStatusArr($langId);
 
@@ -1431,7 +1431,7 @@ class EmailHandler extends FatModel
 
         $url = UrlHelper::generateFullUrl('account', 'viewMessages', array($message['thread_id'], $messageId), CONF_WEBROOT_FRONT_URL);
 
-        $url = '<a href="' . $url . '">' . Labels::getLabel('LBL_click_here', $langId) . '</a>';
+        $url = '<a href="' . $url . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
 
         $arrReplacements = array(
             '{user_full_name}' => $message['message_to_name'],
@@ -1520,7 +1520,7 @@ class EmailHandler extends FatModel
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 
-        $arrReplacements["{user_name}"] = Labels::getLabel("LBL_Admin", $langId);
+        $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
@@ -1548,11 +1548,11 @@ class EmailHandler extends FatModel
         $orrmsg_id = FatUtility::int($orrmsg_id);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         if (!$orrmsg_id) {
-            trigger_error(Labels::getLabel('MSG_Message_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_MESSAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new OrderReturnRequestMessageSearch();
@@ -1592,7 +1592,7 @@ class EmailHandler extends FatModel
         }
 
         if ($msgDetail['op_brand_name'] != '') {
-            $productExtraDetails .= '<br/>' . Labels::getLabel('LBL_Brand', $langId) . ': ' . $msgDetail['op_brand_name'];
+            $productExtraDetails .= '<br/>' . Labels::getLabel('LBL_BRAND', $langId) . ': ' . $msgDetail['op_brand_name'];
         }
 
         $returnRequestArr = OrderReturnRequest::getRequestTypeArr($langId);
@@ -1670,7 +1670,7 @@ class EmailHandler extends FatModel
         /*         * ** End Notification For Buyer ********** */
 
 
-        $arrReplacements["{user_name}"] = Labels::getLabel("LBL_Admin", $langId);
+        $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails("product_return", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
         $this->sendSms("product_return", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
@@ -1682,10 +1682,10 @@ class EmailHandler extends FatModel
         $langId = FatUtility::int($langId);
         $orrmsg_id = FatUtility::int($orrmsg_id);
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         if (!$orrmsg_id) {
-            trigger_error(Labels::getLabel('MSG_Message_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_MESSAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new OrderReturnRequestMessageSearch();
@@ -1716,7 +1716,7 @@ class EmailHandler extends FatModel
         }
 
         $requestDetailUrl = UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
-        $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
+        $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
 
         /* Buyer Notification [ */
         $arrReplacements = array(
@@ -1753,7 +1753,7 @@ class EmailHandler extends FatModel
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
             $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
-            $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
+            $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
             $arrReplacements['{click_here}'] = $requestDetailUrl;
             /* if ($return_request['refmsg_from_type']=="U"){
               $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
@@ -1804,7 +1804,7 @@ class EmailHandler extends FatModel
         /* To Admin[ */
         if ($msgDetail['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED) {
             $adminReturnRequestUrl = CommonHelper::getAdminUrl('OrderReturnRequests', 'View', array($msgDetail['orrequest_id']));
-            $adminReturnRequestUrl = '<a href="' . $adminReturnRequestUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
+            $adminReturnRequestUrl = '<a href="' . $adminReturnRequestUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
             $arrReplacements["{user_full_name}"] = "Admin";
             $arrReplacements["{click_here}"] = $adminReturnRequestUrl;
 
@@ -1874,10 +1874,10 @@ class EmailHandler extends FatModel
         $langId = FatUtility::int($langId);
         $scatrequestmsg_id = FatUtility::int($scatrequestmsg_id);
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         if (!$scatrequestmsg_id) {
-            trigger_error(Labels::getLabel('MSG_Message_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_MESSAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new CatalogRequestMessageSearch();
@@ -1901,7 +1901,7 @@ class EmailHandler extends FatModel
             return false;
         }
         $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'requestedCatalog', array(), CONF_WEBROOT_FRONT_URL);
-        $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
+        $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
 
         /* Buyer Notification [ */
         $arrReplacements = array(
@@ -1928,7 +1928,7 @@ class EmailHandler extends FatModel
         /* To Admin[ */
 
         $adminCatRequestUrl = CommonHelper::getAdminUrl('Users', 'sellerCatalogRequests');
-        $adminCatRequestUrl = '<a href="' . $adminCatRequestUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
+        $adminCatRequestUrl = '<a href="' . $adminCatRequestUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
         $arrReplacements["{user_full_name}"] = "Admin";
         $arrReplacements["{click_here}"] = $adminCatRequestUrl;
 
@@ -1943,7 +1943,7 @@ class EmailHandler extends FatModel
         $orrequest_id = FatUtility::int($orrequest_id);
         $langId = FatUtility::int($langId);
         if (!$orrequest_id || !$langId) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED.', $this->commonLangId), E_USER_ERROR);
         }
         $db = FatApp::getDb();
         $srch = new OrderReturnRequestSearch();
@@ -1964,7 +1964,7 @@ class EmailHandler extends FatModel
         $rs = $srch->getResultSet();
         $request = $db->fetch($rs);
         if (!$request) {
-            $this->error = Labels::getLabel(Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId), $langId);
+            $this->error = Labels::getLabel(Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId), $langId);
             return false;
         }
 
@@ -2072,7 +2072,7 @@ class EmailHandler extends FatModel
         $ocrequest_id = FatUtility::int($ocrequest_id);
         $langId = FatUtility::int($langId);
         if (!$ocrequest_id || !$langId) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new OrderCancelRequestSearch();
@@ -2131,7 +2131,7 @@ class EmailHandler extends FatModel
         $sreport_id = FatUtility::int($sreport_id);
         $langId = FatUtility::int($langId);
         if (!$sreport_id || !$langId) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new ShopReportSearch();
@@ -2217,12 +2217,12 @@ class EmailHandler extends FatModel
     public function sendBuyerReviewNotification($opId, $langId = 0)
     {
         if ($opId == '') {
-            trigger_error(Labels::getLabel('MSG_Order_Product_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_PRODUCT_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $orderObj = new Orders();
         $orderProduct = $orderObj->getOrderProductsByOpId($opId, $langId);
@@ -2264,12 +2264,12 @@ class EmailHandler extends FatModel
     public function sendBuyerReviewStatusUpdatedNotification($spreviewId, $langId = 0)
     {
         if ($spreviewId == '') {
-            trigger_error(Labels::getLabel('MSG_Review_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_REVIEW_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $schObj = new SelProdReviewSearch($langId);
@@ -2312,12 +2312,12 @@ class EmailHandler extends FatModel
     public function sendAdminAbusiveReviewNotification($spreviewId, $langId = 0)
     {
         if ($spreviewId == '') {
-            trigger_error(Labels::getLabel('MSG_Review_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_REVIEW_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $schObj = new SelProdReviewSearch($langId);
@@ -2355,7 +2355,7 @@ class EmailHandler extends FatModel
         $langId = FatUtility::int($langId);
         $urpId = FatUtility::int($urpId);
         if (!$urpId || !$langId) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $srch = new UserRewardSearch();
@@ -2377,7 +2377,7 @@ class EmailHandler extends FatModel
 
         $arrReplacements = array(
             '{user_name}' => trim($row["user_name"]),
-            '{debit_credit_type}' => $row['urp_points'] > 0 ? Labels::getLabel('LBL_credited', $langId) : Labels::getLabel('LBL_debited', $langId),
+            '{debit_credit_type}' => $row['urp_points'] > 0 ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
             '{reward_points}' => abs($row['urp_points']),
             '{comments}' => $row["urp_comments"],
             '{reward_point_balance}' => UserRewardBreakup::rewardPointBalance($row["urp_user_id"]),
@@ -2387,7 +2387,7 @@ class EmailHandler extends FatModel
         $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
         $this->sendSms("reward_points_credited_debited", $phone, $arrReplacements, $langId);
         $notiArrReplacements = array(
-            '{debitcredittype}' => $row['urp_points'] > 0 ? Labels::getLabel('LBL_credited', $langId) : Labels::getLabel('LBL_debited', $langId),
+            '{debitcredittype}' => $row['urp_points'] > 0 ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
             '{rewardpoints}' => abs($row['urp_points']),
         );
 
@@ -2443,10 +2443,10 @@ class EmailHandler extends FatModel
     public function sendMailShareEarn($senderId, $receiverEmail, $personalMsg, $langId)
     {
         if (empty($senderId)) {
-            trigger_error(Labels::getLabel('MSG_Sender_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SENDER_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         if (empty($receiverEmail)) {
-            trigger_error(Labels::getLabel('MSG_Receiver_Email_Address_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_RECEIVER_EMAIL_ADDRESS_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $tpl = 'share_earn_invitation_email';
         $userObj = new User($senderId);
@@ -2475,10 +2475,10 @@ class EmailHandler extends FatModel
     public function sendAffiliateMailShare($senderId, $receiverEmail, $personalMsg, $langId)
     {
         if (empty($senderId)) {
-            trigger_error(Labels::getLabel('MSG_Sender_Id_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SENDER_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         if (empty($receiverEmail)) {
-            trigger_error(Labels::getLabel('MSG_Receiver_Email_Address_not_specified.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_RECEIVER_EMAIL_ADDRESS_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
         }
         $tpl = 'affiliate_share_invitation_email';
         $userObj = new User($senderId);

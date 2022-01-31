@@ -39,8 +39,8 @@ class Labels extends MyAppModel
     public static function getTypeArr($langId)
     {
         return array(
-            static::TYPE_WEB => self::getLabel('LBL_Web', $langId),
-            static::TYPE_APP => self::getLabel('LBL_App', $langId)
+            static::TYPE_WEB => self::getLabel('LBL_WEB', $langId),
+            static::TYPE_APP => self::getLabel('LBL_APP', $langId)
         );
     }
 

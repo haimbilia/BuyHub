@@ -223,7 +223,7 @@ class DigitalDownloadPrivilages extends FatModel
             case Product::CATALOG_TYPE_PRIMARY:
                 $this->getProduct($recordId);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
                 
@@ -242,7 +242,7 @@ class DigitalDownloadPrivilages extends FatModel
                     || ProductRequest::STATUS_APPROVED == $this->productRequest['preq_status']
                     || applicationConstants::YES == $this->productRequest['preq_deleted']
                 ) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
 
@@ -256,7 +256,7 @@ class DigitalDownloadPrivilages extends FatModel
                 $this->getSellerProduct($recordId);
 
                 if (1 > count($this->sellerProduct)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
 
@@ -267,7 +267,7 @@ class DigitalDownloadPrivilages extends FatModel
 
                 $this->getProduct($this->sellerProduct['selprod_product_id']);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
                 
@@ -281,7 +281,7 @@ class DigitalDownloadPrivilages extends FatModel
                 return true;
                 break;
             default:
-                $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                 return false;
                 break;
         }

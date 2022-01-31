@@ -42,7 +42,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function joinOrders($langId = 0)
     {
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_joinOrders_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERS_CANNOT_BE_APPLIED_UNTIL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
         $this->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'op.op_order_id = o.order_id', 'o');
@@ -52,7 +52,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function joinSellerProducts($langId = 0)
     {
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_joinOrders_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERS_CANNOT_BE_APPLIED_UNTIL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         
         $langId = FatUtility::int($langId);
@@ -68,7 +68,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function joinOrderProductStatus($langId = 0)
     {
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_joinOrderProductStatus_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERPRODUCTSTATUS_CANNOT_BE_APPLIED_UNTIL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
         if ($this->langId) {
@@ -97,7 +97,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function joinOrderBuyerUser()
     {
         if (!$this->isOrdersJoined) {
-            trigger_error(Labels::getLabel('MSG_joinOrderBuyerUser_cannot_be_applied_untill_joinOrders_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERBUYERUSER_CANNOT_BE_APPLIED_UNTILL_JOINORDERS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'o.order_user_id = buyer.user_id', 'buyer');
@@ -107,7 +107,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function joinOrderSellerUser()
     {
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_joinOrderSellerUser_cannot_be_applied_untill_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERSELLERUSER_CANNOT_BE_APPLIED_UNTILL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'op.op_selprod_user_id = seller.user_id', 'seller');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller.user_id = seller_cred.credential_user_id', 'seller_cred');
@@ -117,7 +117,7 @@ class OrderCancelRequestSearch extends SearchBase
     {
         $type = FatUtility::int($type);
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_joinOrderProductChargesByType_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERPRODUCTCHARGESBYTYPE_CANNOT_BE_APPLIED_UNTIL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'op.op_id = ' . $alias . '.opcharge_op_id and ' . $alias . '.opcharge_type = ' . $type, $alias);
     }
@@ -125,7 +125,7 @@ class OrderCancelRequestSearch extends SearchBase
     public function addOrderProductCharges()
     {
         if (!$this->isJoinedOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_addOrderProductCharges_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ADDORDERPRODUCTCHARGES_CANNOT_BE_APPLIED_UNTIL_JOINORDERPRODUCTS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
         $srch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
         $srch->doNotCalculateRecords();

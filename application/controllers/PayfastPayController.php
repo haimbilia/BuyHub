@@ -53,7 +53,7 @@ class PayfastPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -61,7 +61,7 @@ class PayfastPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -106,7 +106,7 @@ class PayfastPayController extends PaymentController
         SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
         if (empty($msg)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
         }
 
@@ -130,7 +130,7 @@ class PayfastPayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         if (false === $processRequest) {	
 			$frm->addHiddenField('', 'orderId');
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {	
             $this->plugin->buildRequestBody($orderId);
             foreach ($this->plugin->getRequestBody() as $name => $value) {
@@ -153,25 +153,25 @@ class PayfastPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
 
         if ($this->plugin->validateResponseSignature($post) === false) {
-            $msg = empty($this->plugin->getError()) ? Labels::getLabel('MSG_INVALID_SIGNATURE', $this->siteLangId) : $this->plugin->getError();
+            $msg = empty($this->plugin->getError()) ? Labels::getLabel('ERR_INVALID_SIGNATURE', $this->siteLangId) : $this->plugin->getError();
             $this->logFailure($orderId, $msg);
             return false;
         }
 
         if ($this->validateIP() === false) {
-            $msg = Labels::getLabel('MSG_INVALID_IP', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_IP', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
 
         if ($this->validPaymentAmount($paymentAmount, $post['amount_gross']) === false) {
-            $msg = Labels::getLabel('MSG_INVALID_PAYMENT', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_PAYMENT', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
@@ -179,12 +179,12 @@ class PayfastPayController extends PaymentController
         $paramString = $this->generateParamString($post);
 
         if ($this->plugin->validServerConfirmation($paramString) === false) {
-            $msg = Labels::getLabel('MSG_INVALID_SERVER_CONFIRMATION', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_SERVER_CONFIRMATION', $this->siteLangId);
             $this->logFailure($orderId, $msg);
             return false;
         }
 
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['pf_payment_id'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['pf_payment_id'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
             return false;

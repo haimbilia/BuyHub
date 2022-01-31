@@ -56,7 +56,7 @@ class PaystackPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -64,7 +64,7 @@ class PaystackPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -137,7 +137,7 @@ class PaystackPayController extends PaymentController
 
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $referenceId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $response)) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $referenceId, $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $response)) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
@@ -163,7 +163,7 @@ class PaystackPayController extends PaymentController
         SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
         if (empty($msg)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
         }
 
@@ -187,7 +187,7 @@ class PaystackPayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         return $frm;
     }
@@ -227,7 +227,7 @@ class PaystackPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if ($orderInfo) {
             if ('charge.success' != $paymentResponse['event']) {
-                $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+                $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
                 $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $paymentResponse['event']]);
                 $this->logFailure($orderId, $msg, $paymentResponse);
             }
@@ -235,7 +235,7 @@ class PaystackPayController extends PaymentController
             $orderAmt = ($paymentResponse['data']['amount']) / 100;
             $totalPaidMatch = ((float)$orderAmt == (float)$paymentAmount);
             if (false === $totalPaidMatch) {
-                $msg = Labels::getLabel('MSG_PAYMENT_MISMATCH', $this->siteLangId);
+                $msg = Labels::getLabel('ERR_PAYMENT_MISMATCH', $this->siteLangId);
                 $this->logFailure($orderId, $msg, $paymentResponse);
             }
             /* Unset Session Element On Payment Success.  */

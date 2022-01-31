@@ -175,12 +175,12 @@ class Brand extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('ERR_Language_Id_not_specified.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $arr = array(
-            static::BRAND_REQUEST_PENDING => Labels::getLabel('LBL_Pending', $langId),
-            static::BRAND_REQUEST_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-            static::BRAND_REQUEST_CANCELLED => Labels::getLabel('LBL_Cancelled', $langId)
+            static::BRAND_REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            static::BRAND_REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+            static::BRAND_REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
         );
         return $arr;
     }

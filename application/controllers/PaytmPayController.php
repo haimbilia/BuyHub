@@ -27,7 +27,7 @@ class PaytmPayController extends PaymentController
     {
 
         if (empty($orderId)) {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -35,7 +35,7 @@ class PaytmPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -72,7 +72,7 @@ class PaytmPayController extends PaymentController
         }
         $orderId = $post['ORDERID'];
         if (!$this->plugin->verifySignature(FatApp::getPostedData())) {
-            $this->logFailure($orderId, Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            $this->logFailure($orderId, Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!$this->plugin->verifyPayment($orderId)) {
@@ -81,7 +81,7 @@ class PaytmPayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($orderId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['TXNID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['TXNID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
@@ -96,7 +96,7 @@ class PaytmPayController extends PaymentController
         $frm->addHiddenField('', 'orderId', $orderId);
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             $frm->addHiddenField('', 'mid');
             $frm->addHiddenField('', 'txnToken');
@@ -111,7 +111,7 @@ class PaytmPayController extends PaymentController
         SystemLog::transaction(json_encode($response), $orderId);
 
         if (empty($msg)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
         }
 

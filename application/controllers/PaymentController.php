@@ -15,19 +15,19 @@ abstract class PaymentController extends MyAppController
         
         $currency = Currency::getDefault();
         if (empty($currency)) {
-            $this->setErrorAndRedirect(Labels::getLabel('MSG_DEFAULT_CURRENCY_NOT_SET', $this->siteLangId), FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(Labels::getLabel('ERR_DEFAULT_CURRENCY_NOT_SET', $this->siteLangId), FatUtility::isAjaxCall());
         }
 
         $this->systemCurrencyId = $currency['currency_id'];
         $this->systemCurrencyCode = strtoupper($currency['currency_code']);
 
         if (!is_array($this->allowedCurrenciesArr())) {
-            $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_CURRENCY_FORMAT', $this->siteLangId), FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(Labels::getLabel('ERR_INVALID_CURRENCY_FORMAT', $this->siteLangId), FatUtility::isAjaxCall());
         }
 
         $validateCurrency = in_array($this->systemCurrencyCode, $this->allowedCurrenciesArr()) || in_array("*", $this->allowedCurrenciesArr());
         if (!$validateCurrency) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_CURRENCY_({CURRENCY})_PASSED_TO_GATEWAY', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_CURRENCY_({CURRENCY})_PASSED_TO_GATEWAY', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{CURRENCY}' => $this->systemCurrencyCode]);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }    

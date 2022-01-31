@@ -70,21 +70,21 @@ class SavedSearchProduct extends MyAppModel
         foreach ($arr as $key => $row) {
             switch ($key) {
                 case 'price-min-range':
-                    $result[$count]['label'] = Labels::getLabel('LBL_Price_min', $langId);
+                    $result[$count]['label'] = Labels::getLabel('LBL_PRICE_MIN', $langId);
                     $result[$count]['value'] = $row;
                     break;
                 case 'price-max-range':
-                    $result[$count]['label'] = Labels::getLabel('LBL_Price_max', $langId);
+                    $result[$count]['label'] = Labels::getLabel('LBL_PRICE_MAX', $langId);
                     $result[$count]['value'] = $row;
                     break;
                 case 'featured':
-                    $result[$count]['label'] = Labels::getLabel('LBL_Featured', $langId);
-                    $result[$count]['value'] = Labels::getLabel('LBL_Yes', $langId);
+                    $result[$count]['label'] = Labels::getLabel('LBL_FEATURED', $langId);
+                    $result[$count]['value'] = Labels::getLabel('LBL_YES', $langId);
                     break;
                 case 'currency_id':
                     $currency = Currency::getAttributesById($row, array('currency_code'));
                     if ($currency) {
-                        $result[$count]['label'] = Labels::getLabel('LBL_Currency', $langId);
+                        $result[$count]['label'] = Labels::getLabel('LBL_CURRENCY', $langId);
                         $result[$count]['value'] = $currency['currency_code'];
                     }
                     break;
@@ -95,7 +95,7 @@ class SavedSearchProduct extends MyAppModel
                     $rs = $brand->getResultSet();
                     $brandData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($brandData)) {
-                        $result[$count]['label'] = Labels::getLabel('LBL_Brand', $langId);
+                        $result[$count]['label'] = Labels::getLabel('LBL_BRAND', $langId);
                         $result[$count]['value'] = [];
                         foreach ($brandData as $val) {
                             $result[$count]['value'][] = ($val['brand_name'] != '') ? $val['brand_name'] : $val['brand_identifier'];
@@ -110,7 +110,7 @@ class SavedSearchProduct extends MyAppModel
                     $rs = $productCategory->getResultSet();
                     $productCategoryData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($productCategoryData)) {
-                        $result[$count]['label'] = Labels::getLabel('LBL_Category', $langId);
+                        $result[$count]['label'] = Labels::getLabel('LBL_CATEGORY', $langId);
                         $result[$count]['value'] = [];
                         foreach ($productCategoryData as $val) {
                             $result[$count]['value'][] = ($val['prodcat_name'] != '') ? $val['prodcat_name'] : $val['prodcat_identifier'];
@@ -119,7 +119,7 @@ class SavedSearchProduct extends MyAppModel
                     break;
                 case 'condition':
                     $conditionArr = Product::getConditionArr($langId);
-                    $result[$count]['label'] = Labels::getLabel('LBL_Condition', $langId);
+                    $result[$count]['label'] = Labels::getLabel('LBL_CONDITION', $langId);
                     $result[$count]['value'] = [];
                     foreach ($row as $val) {
                         if (!array_key_exists($val, $conditionArr)) {
@@ -135,7 +135,7 @@ class SavedSearchProduct extends MyAppModel
                     $rs = $optionValue->getResultSet();
                     $optionValueData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($optionValueData)) {
-                        $result[$count]['label'] = Labels::getLabel('LBL_Options', $langId);
+                        $result[$count]['label'] = Labels::getLabel('LBL_OPTIONS', $langId);
                         $result[$count]['value'] = [];
                         foreach ($optionValueData as $val) {
                             $result[$count]['value'][] = ($val['optionvalue_name'] != '') ? $val['optionvalue_name'] : $val['optionvalue_identifier'];
@@ -144,8 +144,8 @@ class SavedSearchProduct extends MyAppModel
                     break;
                 case 'availability':
                     if (in_array(1, $row)) {
-                        $result[$count]['label'] = Labels::getLabel('LBL_Out_of_stock', $langId);
-                        $result[$count]['value'] = Labels::getLabel('LBL_Yes', $langId);
+                        $result[$count]['label'] = Labels::getLabel('LBL_OUT_OF_STOCK', $langId);
+                        $result[$count]['value'] = Labels::getLabel('LBL_YES', $langId);
                     }
                     break;
             }

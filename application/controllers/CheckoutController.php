@@ -19,7 +19,7 @@ class CheckoutController extends MyAppController
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
-                $this->errMessage = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_LOCATION', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_LOCATION', $this->siteLangId);
                 LibHelper::exitWithError($this->errMessage, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('Cart'));
             }
@@ -28,7 +28,7 @@ class CheckoutController extends MyAppController
         if (UserAuthentication::isGuestUserLogged()) {
             $user_is_buyer = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_is_buyer');
             if (!$user_is_buyer) {
-                $this->errMessage = Labels::getLabel('MSG_PLEASE_LOGIN_WITH_BUYER_ACCOUNT', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT', $this->siteLangId);
                 Message::addErrorMessage($this->errMessage);
                 if (FatUtility::isAjaxCall()) {
                     FatUtility::dieWithError(Message::getHtml());
@@ -40,9 +40,9 @@ class CheckoutController extends MyAppController
             $userInfo = $userObj->getUserInfo(array(), false, false);
             if (empty($userInfo['user_phone']) && empty($userInfo['credential_email'])) {
                 if (true == SmsArchive::canSendSms()) {
-                    $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
                 } else {
-                    $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
                 }
                 if (true === MOBILE_APP_API_CALL) {
                     LibHelper::dieJsonError($message);
@@ -82,7 +82,7 @@ class CheckoutController extends MyAppController
                 case 'isUserLogged':
                     if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -90,7 +90,7 @@ class CheckoutController extends MyAppController
                 case 'hasProducts':
                     if (!$this->cartObj->hasProducts()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_YOUR_CART_SEEMS_TO_BE_EMPTY,_PLEASE_TRY_AFTER_RELOADING_THE_PAGE.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_YOUR_CART_SEEMS_TO_BE_EMPTY,_PLEASE_TRY_AFTER_RELOADING_THE_PAGE.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -115,7 +115,7 @@ class CheckoutController extends MyAppController
                         if (!$product['in_stock']) {
                             $stock = false;
                             $key = false;
-                            $this->errMessage = Labels::getLabel('MSG_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
+                            $this->errMessage = Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
                             Message::addErrorMessage($this->errMessage);
                             return false;
                             break;
@@ -130,7 +130,7 @@ class CheckoutController extends MyAppController
                                     $key = false;
                                     $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['name'];
 
-                                    $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('MSG_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
+                                    $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('ERR_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
                                     Message::addErrorMessage($this->errMessage);
                                     return false;
                                 }
@@ -142,7 +142,7 @@ class CheckoutController extends MyAppController
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                 $key = false;
                                 $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
-                                $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('MSG_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
+                                $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('ERR_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
                                 Message::addErrorMessage($this->errMessage);
                                 return false;
                             }
@@ -154,7 +154,7 @@ class CheckoutController extends MyAppController
                 case 'hasBillingAddress':
                     if (!$this->cartObj->getCartBillingAddress()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_BILLING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_BILLING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -162,7 +162,7 @@ class CheckoutController extends MyAppController
                 case 'hasShippingAddress':
                     if (!$this->cartObj->getCartShippingAddress()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_SHIPPING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_SHIPPING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -170,7 +170,7 @@ class CheckoutController extends MyAppController
                 case 'isProductShippingMethodSet':
                     if (!$this->cartObj->isProductShippingMethodSet()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -178,7 +178,7 @@ class CheckoutController extends MyAppController
                 case 'isProductPickUpAddrSet':
                     if (!$this->cartObj->isProductPickUpAddrSet()) {
                         $key = false;
-                        $this->errMessage = Labels::getLabel('MSG_PICKUP_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
+                        $this->errMessage = Labels::getLabel('ERR_PICKUP_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
                         Message::addErrorMessage($this->errMessage);
                         return false;
                     }
@@ -297,7 +297,7 @@ class CheckoutController extends MyAppController
         $cartObj = new Cart();
         if (!$this->isEligibleForNextStep($criteria)) {
             $this->set('redirectUrl', UrlHelper::generateUrl('GuestUser', 'LoginForm', [], CONF_WEBROOT_FRONTEND));
-            Message::addErrorMessage(Labels::getLabel('MSG_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -311,7 +311,7 @@ class CheckoutController extends MyAppController
         }
         $cart_products = $this->cartObj->getProducts($this->siteLangId);
         if (count($cart_products) == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_YOUR_CART_IS_EMPTY.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_CART_IS_EMPTY.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -357,7 +357,7 @@ class CheckoutController extends MyAppController
     public function setUpAddressSelection()
     {
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $this->errMessage = Labels::getLabel('MSG_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -377,7 +377,7 @@ class CheckoutController extends MyAppController
         $hasStock = $this->cartObj->hasStock();
 
         if ((!$hasProducts) || (!$hasStock)) {
-            $this->errMessage = Labels::getLabel('MSG_CART_SEEMS_TO_BE_EMPTY_OR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_CART_SEEMS_TO_BE_EMPTY_OR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -389,7 +389,7 @@ class CheckoutController extends MyAppController
         $hasPhysicalProduct = $this->cartObj->hasPhysicalProduct();
 
         if (1 > $billing_address_id) {
-            $this->errMessage = Labels::getLabel('MSG_PLEASE_SELECT_BILLING_ADDRESS.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_PLEASE_SELECT_BILLING_ADDRESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -398,7 +398,7 @@ class CheckoutController extends MyAppController
         }
 
         if ($hasPhysicalProduct && 1 > $shipping_address_id) {
-            $this->errMessage = Labels::getLabel('MSG_PLEASE_SELECT_SHIPPING_ADDRESS.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_PLEASE_SELECT_SHIPPING_ADDRESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -412,7 +412,7 @@ class CheckoutController extends MyAppController
         $billingAddressDetail = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
         if (!$billingAddressDetail) {
-            $this->errMessage = Labels::getLabel('MSG_INVALID_BILLING_ADDRESS.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_INVALID_BILLING_ADDRESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -432,7 +432,7 @@ class CheckoutController extends MyAppController
             $address = new Address($shipping_address_id);
             $shippingAddressDetail = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
             if (!$shippingAddressDetail) {
-                $this->errMessage = Labels::getLabel('MSG_INVALID_SHIPPING_ADDRESS.', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_INVALID_SHIPPING_ADDRESS.', $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($this->errMessage);
                 }
@@ -457,7 +457,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -468,11 +468,11 @@ class CheckoutController extends MyAppController
             if (Message::getErrorCount()) {
                 $this->errMessage = Message::getHtml();
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId));
                 $this->errMessage = Message::getHtml();
             }
             if (true === MOBILE_APP_API_CALL) {
-                $this->errMessage = Labels::getLabel('MSG_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
                 FatUtility::dieJsonError($this->errMessage);
             }
             FatUtility::dieWithError($this->errMessage);
@@ -488,7 +488,7 @@ class CheckoutController extends MyAppController
 
         $cartProducts = $this->cartObj->getProducts($this->siteLangId);
         if (count($cartProducts) == 0) {
-            $this->errMessage = Labels::getLabel('MSG_YOUR_CART_IS_EMPTY', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_YOUR_CART_IS_EMPTY', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -556,7 +556,7 @@ class CheckoutController extends MyAppController
         $cartProducts = $this->cartObj->getProducts($this->siteLangId);
         $shippingRates = $this->cartObj->getShippingRates();
         if (false == $shippingRates) {
-            $message = Labels::getLabel('MSG_SHIPPING_RATES_ARE_NOT_AVAILABLE', $this->siteLangId);
+            $message = Labels::getLabel('ERR_SHIPPING_RATES_ARE_NOT_AVAILABLE', $this->siteLangId);
             LibHelper::exitWithError($message, true);
         }
 
@@ -566,17 +566,17 @@ class CheckoutController extends MyAppController
         $basketProducts = $this->cartObj->getBasketProducts($this->siteLangId);
         foreach ($shippingServices as $prodIdCobination => $rateId) {
             if (empty($rateId)) {
-                $message = Labels::getLabel('MSG_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
+                $message = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             if (!array_key_exists($prodIdCobination, $shippingRates)) {
-                $message = Labels::getLabel('MSG_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
+                $message = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             if (!array_key_exists($rateId, $shippingRates[$prodIdCobination])) {
-                $message = Labels::getLabel('MSG_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+                $message = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
@@ -624,7 +624,7 @@ class CheckoutController extends MyAppController
         }
 
         if (empty($cartProducts)) {
-            $message = Labels::getLabel('MSG_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+            $message = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
             LibHelper::exitWithError($message, true);
         }
 
@@ -673,7 +673,7 @@ class CheckoutController extends MyAppController
         if (!$json) {
             $this->cartObj->setProductShippingMethod($productToShippingMethods);
             if (!$this->cartObj->isProductShippingMethodSet()) {
-                $this->errMessage = Labels::getLabel('MSG_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($this->errMessage);
                 }
@@ -682,7 +682,7 @@ class CheckoutController extends MyAppController
                 FatUtility::dieWithError(Message::getHtml());
             }
 
-            $this->set('msg', Labels::getLabel('MSG_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('SUC_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
             if (true === MOBILE_APP_API_CALL) {
                 $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
                 $cartObj = new Cart();
@@ -697,7 +697,7 @@ class CheckoutController extends MyAppController
             }
             $this->_template->render(false, false, 'json-success.php');
         } else {
-            $this->errMessage = Labels::getLabel('MSG_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -730,13 +730,13 @@ class CheckoutController extends MyAppController
             if (Message::getErrorCount()) {
                 $this->errMessage = Message::getHtml();
             } else {
-                $this->errMessage = Labels::getLabel('MSG_NOT_ALLOWED_TO_PROCEED_FOR_NEXT_STEP', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_NOT_ALLOWED_TO_PROCEED_FOR_NEXT_STEP', $this->siteLangId);
             }
             LibHelper::exitWithError($this->errMessage, true);
         }
 
         if (0 >= $fulfillmentType) {
-            $msg = Labels::getLabel("MSG_INVALID_FULFILLMENT_TYPE", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_INVALID_FULFILLMENT_TYPE", $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
 
@@ -746,7 +746,7 @@ class CheckoutController extends MyAppController
         // $cartProducts = $this->cartObj->getProducts($this->siteLangId);
         $cartProducts = $this->cartObj->getBasketProducts($this->siteLangId);
         if (count($cartProducts) == 0) {
-            $this->errMessage = Labels::getLabel('MSG_YOUR_CART_IS_EMPTY', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_YOUR_CART_IS_EMPTY', $this->siteLangId);
             FatUtility::dieJsonError($this->errMessage);
         }
 
@@ -864,7 +864,7 @@ class CheckoutController extends MyAppController
         }
 
         if (!$this->isEligibleForNextStep($criteria)) {
-            $this->errMessage = !empty($this->errMessage) ? $this->errMessage : Labels::getLabel('MSG_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+            $this->errMessage = !empty($this->errMessage) ? $this->errMessage : Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($this->errMessage);
             }
@@ -1438,14 +1438,14 @@ class CheckoutController extends MyAppController
                 $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
                 $WalletPaymentForm->fill(array('order_id' => $order_id));
                 $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-                $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('MSG_PAY_NOW', $this->siteLangId));
+                $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
             }
 
             if ($cartSummary['orderNetAmount'] <= 0) {
                 $confirmForm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
                 $confirmForm->fill(array('order_id' => $order_id));
                 /* $confirmForm->setFormTagAttribute('onsubmit', 'confirmOrderWithoutPayment(this); return(false);'); */
-                $confirmForm->addSubmitButton('', 'btn_submit', Labels::getLabel('MSG_CONFIRM_ORDER', $this->siteLangId));
+                $confirmForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_ORDER', $this->siteLangId));
             }
 
             $redeemRewardFrm = $this->getRewardsForm($this->siteLangId);
@@ -1509,13 +1509,13 @@ class CheckoutController extends MyAppController
     {
         $plugin_id = FatUtility::int($plugin_id);
         if (!$plugin_id) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_REQUEST!", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_INVALID_REQUEST!", $this->siteLangId));
         }
 
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
             /* Message::addErrorMessage( Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId) );
             FatUtility::dieWithError( Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('MSG_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
         }
         $user_id = UserAuthentication::getLoggedUserId();
 
@@ -1532,7 +1532,7 @@ class CheckoutController extends MyAppController
         if (!$orderInfo) {
             /* Message::addErrorMessage( Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId) );
             $this->set('error', Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
@@ -1578,7 +1578,7 @@ class CheckoutController extends MyAppController
         /* Partial Payment is not allowed, Wallet + COD, So, disabling COD in case of Partial Payment Wallet Selected. [ */
         if (in_array(strtolower($methodCode), ['cashondelivery', 'payatstore'])) {
             if ($this->cartObj->hasDigitalProduct()) {
-                $str = Labels::getLabel('MSG_{COD}_IS_NOT_AVAILABLE_IF_YOUR_CART_HAS_ANY_DIGITAL_PRODUCT', $this->siteLangId);
+                $str = Labels::getLabel('ERR_{COD}_IS_NOT_AVAILABLE_IF_YOUR_CART_HAS_ANY_DIGITAL_PRODUCT', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
                 FatUtility::dieWithError($str);
             }
@@ -1587,7 +1587,7 @@ class CheckoutController extends MyAppController
             $userWalletBalance = User::getUserBalance($user_id, true);
 
             if (!$cartSummary['isCodValidForNetAmt']) {
-                $str = Labels::getLabel('MSG_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId) . ' <br/>' . Labels::getLabel('MSG_{COD}_IS_AVAILABLE_ON_PAYABLE_AMOUNT_BETWEEN_{MIN}_AND_{MAX}', $this->siteLangId);
+                $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId) . ' <br/>' . Labels::getLabel('ERR_{COD}_IS_AVAILABLE_ON_PAYABLE_AMOUNT_BETWEEN_{MIN}_AND_{MAX}', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
                 $str = str_replace('{min}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MIN_COD_ORDER_LIMIT")), $str);
                 $str = str_replace('{max}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MAX_COD_ORDER_LIMIT")), $str);
@@ -1595,7 +1595,7 @@ class CheckoutController extends MyAppController
             }
 
             if ($cartSummary['cartWalletSelected'] && $userWalletBalance < $cartSummary['orderNetAmount']) {
-                $str = Labels::getLabel('MSG_WALLET_CAN_NOT_BE_USED_ALONG_WITH_{COD}', $this->siteLangId);
+                $str = Labels::getLabel('ERR_WALLET_CAN_NOT_BE_USED_ALONG_WITH_{COD}', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
                 FatUtility::dieWithError($str);
                 //$this->set('error', $str );
@@ -1629,7 +1629,7 @@ class CheckoutController extends MyAppController
         $rewardPoints = floor($post['redeem_rewards']);
 
         if (empty($rewardPoints)) {
-            $this->errMessage = Labels::getLabel('LBL_YOU_CANNOT_USE_0_REWARD_POINTS._PLEASE_ADD_REWARD_POINTS_GREATER_THAN_0', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_YOU_CANNOT_USE_0_REWARD_POINTS._PLEASE_ADD_REWARD_POINTS_GREATER_THAN_0', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -1640,7 +1640,7 @@ class CheckoutController extends MyAppController
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
         if (true === MOBILE_APP_API_CALL) {
             if (empty($post['orderId'])) {
-                FatUtility::dieJsonError(Labels::getLabel('LBL_ORDER_ID_IS_REQUIRED', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_ORDER_ID_IS_REQUIRED', $this->siteLangId));
             }
             $orderId = $post['orderId'];
         }
@@ -1672,7 +1672,7 @@ class CheckoutController extends MyAppController
             LibHelper::dieJsonError($msg);
         }
         if (!$this->cartObj->updateCartUseRewardPoints($rewardPoints)) {
-            $this->errMessage = Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -1700,7 +1700,7 @@ class CheckoutController extends MyAppController
     {
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!$cartObj->removeUsedRewardPoints()) {
-            $this->errMessage = Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -1711,7 +1711,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $orderId = FatApp::getPostedData('orderId', FatUtility::VAR_STRING, '');
             if (empty($orderId)) {
-                FatUtility::dieJsonError(Labels::getLabel('LBL_ORDER_ID_IS_REQUIRED', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_ORDER_ID_IS_REQUIRED', $this->siteLangId));
             }
 
             $orderObj = new Orders();
@@ -1755,13 +1755,13 @@ class CheckoutController extends MyAppController
             $pmethodIdentifier = $paymentMethodRow['plugin_identifier'];
 
             if (!$paymentMethodRow || $isActive != applicationConstants::ACTIVE) {
-                $this->errMessage = Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId);
+                $this->errMessage = Labels::getLabel("ERR_INVALID_PAYMENT_METHOD,_PLEASE_CONTACT_WEBADMIN.", $this->siteLangId);
                 LibHelper::dieJsonError($this->errMessage);
             }
         }
 
         if (!empty($paymentMethodRow) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $cartSummary['cartWalletSelected'] && $userWalletBalance < $orderNetAmount) {
-            $str = Labels::getLabel('MSG_Wallet_can_not_be_used_along_with_{COD}', $this->siteLangId);
+            $str = Labels::getLabel('ERR_WALLET_CAN_NOT_BE_USED_ALONG_WITH_{COD}', $this->siteLangId);
             $str = str_replace('{cod}', $pmethodIdentifier, $str);
             LibHelper::dieJsonError($str);
         }
@@ -1778,7 +1778,7 @@ class CheckoutController extends MyAppController
                 $paymentUrl = UrlHelper::generateFullUrl('WalletPay', 'charge', array($order_id));
             }
             if (empty($paymentUrl)) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_Please_Select_Payment_Method', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_PAYMENT_METHOD', $this->siteLangId));
             }
             $this->set('sendToWeb', $sendToWeb);
             $this->set('orderPayment', $paymentUrl);
@@ -1788,14 +1788,14 @@ class CheckoutController extends MyAppController
         if ($order_type == Orders::ORDER_WALLET_RECHARGE) {
             $criteria = array('isUserLogged' => true);
             if (!$this->isEligibleForNextStep($criteria)) {
-                $this->errMessage = Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId);
+                $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
                 LibHelper::dieJsonError($this->errMessage);
             }
 
             $user_id = UserAuthentication::getLoggedUserId();
 
             if ($order_id == '') {
-                $this->errMessage = Labels::getLabel("MSG_INVALID_Request", $this->siteLangId);
+                $this->errMessage = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
                 LibHelper::dieJsonError($this->errMessage);
             }
             $orderObj = new Orders();
@@ -1810,7 +1810,7 @@ class CheckoutController extends MyAppController
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
             if (!$orderInfo) {
-                $this->errMessage = Labels::getLabel("MSG_INVALID_ORDER_PAID_CANCELLED", $this->siteLangId);
+                $this->errMessage = Labels::getLabel("ERR_INVALID_ORDER_PAID_CANCELLED", $this->siteLangId);
                 LibHelper::dieJsonError($this->errMessage);
             }
 
@@ -1839,7 +1839,7 @@ class CheckoutController extends MyAppController
         }
 
         if (!$this->isEligibleForNextStep($criteria)) {
-            $this->errMessage = Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
 
@@ -1854,13 +1854,13 @@ class CheckoutController extends MyAppController
         $post = FatApp::getPostedData();
 
         if (!$paymentMethodRow || $isActive != applicationConstants::ACTIVE) {
-            $this->errMessage = Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId);
+            $this->errMessage = Labels::getLabel("ERR_INVALID_PAYMENT_METHOD,_PLEASE_CONTACT_WEBADMIN.", $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
 
         if (false === MOBILE_APP_API_CALL && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '')) {
             if (!CommonHelper::verifyCaptcha()) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId));
             }
         }
 
@@ -1872,7 +1872,7 @@ class CheckoutController extends MyAppController
 
         $post = $frm->getFormDataFromArray($post);
         if (!isset($post['order_id']) || $post['order_id'] == '') {
-            $this->errMessage = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
 
@@ -1889,16 +1889,16 @@ class CheckoutController extends MyAppController
         $orderInfo = FatApp::getDb()->fetch($rs);
 
         if (!$orderInfo) {
-            $this->errMessage = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
         if ($cartSummary['cartWalletSelected'] && $cartSummary['orderPaymentGatewayCharges'] == 0) {
-            $this->errMessage = Labels::getLabel('MSG_Try_to_pay_using_wallet_balance_as_amount_for_payment_gateway_is_not_enough.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_TRY_TO_PAY_USING_WALLET_BALANCE_AS_AMOUNT_FOR_PAYMENT_GATEWAY_IS_NOT_ENOUGH.', $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
 
         if ($cartSummary['orderPaymentGatewayCharges'] == 0 && $plugin_id) {
-            $this->errMessage = Labels::getLabel('MSG_Amount_for_payment_gateway_must_be_greater_than_zero.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_AMOUNT_FOR_PAYMENT_GATEWAY_MUST_BE_GREATER_THAN_ZERO.', $this->siteLangId);
             LibHelper::dieJsonError($this->errMessage);
         }
 
@@ -1914,7 +1914,7 @@ class CheckoutController extends MyAppController
         if (in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0) {
             $rewardDebited = UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $order_id, $orderInfo['order_language_id']);
             if (!$rewardDebited) {
-                $msg = Labels::getLabel("MSG_UNABLE_TO_DEBIT_REWARD_POINTS", $this->siteLangId);
+                $msg = Labels::getLabel("ERR_UNABLE_TO_DEBIT_REWARD_POINTS", $this->siteLangId);
                 LibHelper::dieJsonError($msg);
             }
         }
@@ -1945,9 +1945,9 @@ class CheckoutController extends MyAppController
         $this->set('addressFrm', $addressFrm);
         $this->set('address_id', $address_id);
         if ($address_id > 0) {
-            $labelHeading = Labels::getLabel('LBL_Edit_Address', $this->siteLangId);
+            $labelHeading = Labels::getLabel('MSG_EDIT_ADDRESS', $this->siteLangId);
         } else {
-            $labelHeading = Labels::getLabel('LBL_Add_Address', $this->siteLangId);
+            $labelHeading = Labels::getLabel('MSG_ADD_ADDRESS', $this->siteLangId);
         }
 
         $cartHasPhysicalProduct = false;
@@ -1999,7 +1999,7 @@ class CheckoutController extends MyAppController
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'plugin_id');
         if (empty($externalFrm)) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $langId));
         }
         return $frm;
     }
@@ -2022,9 +2022,9 @@ class CheckoutController extends MyAppController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmRewards');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Reward_Points', $langId), 'redeem_rewards', '', array());
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
         return $frm;
     }
 
@@ -2123,9 +2123,9 @@ class CheckoutController extends MyAppController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmPromoCoupons');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('LBL_Enter_Your_code', $langId)));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_Enter_Your_code', $langId)));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
         return $frm;
     }
 
@@ -2141,31 +2141,31 @@ class CheckoutController extends MyAppController
 
         foreach ($post['slot_id'] as $pickUpBy => $slotId) {
             if (empty($slotId) || empty($post['slot_date'][$pickUpBy])) {
-                $message = Labels::getLabel('MSG_Pickup_Method_is_not_selected_on_products_in_cart', $this->siteLangId);
+                $message = Labels::getLabel('ERR_PICKUP_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             $slotData = TimeSlot::getAttributesById($slotId);
             if (empty($slotData)) {
-                $message = Labels::getLabel('MSG_NO_TIME_SLOT_FOUND.', $this->siteLangId);
+                $message = Labels::getLabel('ERR_NO_TIME_SLOT_FOUND.', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             $selectedDate = $post['slot_date'][$pickUpBy];
             $selectedDay = date('w', strtotime($selectedDate));
             if ($selectedDay != $slotData['tslot_day']) {
-                $message = Labels::getLabel('MSG_INVALID_SLOT_DAY.', $this->siteLangId);
+                $message = Labels::getLabel('ERR_INVALID_SLOT_DAY.', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             if (array_search($slotData['tslot_record_id'], array_column($pickupOptions[$pickUpBy]['pickup_options'], 'addr_id')) === false) {
-                $message = Labels::getLabel('MSG_INVALID_PICKUP_ADDRESS.', $this->siteLangId);
+                $message = Labels::getLabel('ERR_INVALID_PICKUP_ADDRESS.', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
             $cartProducts = $this->cartObj->getProducts($this->siteLangId);
             if (empty($cartProducts)) {
-                $message = Labels::getLabel('MSG_YOUR_CART_IS_EMPTY', $this->siteLangId);
+                $message = Labels::getLabel('ERR_YOUR_CART_IS_EMPTY', $this->siteLangId);
                 LibHelper::exitWithError($message, true);
             }
 
@@ -2205,7 +2205,7 @@ class CheckoutController extends MyAppController
         }
 
         $this->cartObj->setProductPickUpAddresses($pickupAddressArr);
-        $this->set('msg', Labels::getLabel('MSG_Pickup_Method_selected_successfully.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_PICKUP_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -2215,7 +2215,7 @@ class CheckoutController extends MyAppController
     public function setUpBillingAddressSelection()
     {
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $this->errMessage = Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -2230,7 +2230,7 @@ class CheckoutController extends MyAppController
         $hasProducts = $this->cartObj->hasProducts();
         $hasStock = $this->cartObj->hasStock();
         if ((!$hasProducts) || (!$hasStock)) {
-            $this->errMessage = Labels::getLabel('MSG_Cart_seems_to_be_empty_or_products_are_out_of_stock.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_CART_SEEMS_TO_BE_EMPTY_OR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -2240,7 +2240,7 @@ class CheckoutController extends MyAppController
         }
 
         if (1 > $billing_address_id) {
-            $this->errMessage = Labels::getLabel('MSG_Please_select_Billing_address.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_PLEASE_SELECT_BILLING_ADDRESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -2251,7 +2251,7 @@ class CheckoutController extends MyAppController
         $address = new Address($billing_address_id);
         $billingAddressDetail = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
         if (!$billingAddressDetail) {
-            $this->errMessage = Labels::getLabel('MSG_Invalid_Billing_Address.', $this->siteLangId);
+            $this->errMessage = Labels::getLabel('ERR_INVALID_BILLING_ADDRESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($this->errMessage);
             }
@@ -2267,7 +2267,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('MSG_Address_Selection_Successfull', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2319,7 +2319,7 @@ class CheckoutController extends MyAppController
             FatUtility::dieWithError($userObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_OTP_SENT!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_OTP_SENT!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2350,12 +2350,12 @@ class CheckoutController extends MyAppController
 
             if (true === MOBILE_APP_API_CALL) {
                 if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
                 }
                 $otp = $post['upv_otp'];
             } else {
                 if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
                 }
                 $otp = implode("", $post['upv_otp']);
             }

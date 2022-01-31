@@ -139,7 +139,7 @@ class ProductSearch extends SearchBase
     public function joinForPrice($splPriceForDate = '', $criteria = array(), $checkAvailableFrom = true, $useTempTable = true)
     {
         if ($this->sellerProductsJoined) {
-            trigger_error(Labels::getLabel('ERR_SellerProducts_can_be_joined_only_once.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SELLERPRODUCTS_CAN_BE_JOINED_ONLY_ONCE.', $this->commonLangId), E_USER_ERROR);
         }
         $this->sellerProductsJoined = true;
         $now = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
@@ -357,7 +357,7 @@ class ProductSearch extends SearchBase
     public function joinSellerProducts($bySeller = 0, $splPriceForDate = '', $criteria = array(), $checkAvailableFrom = true, $isProductActive = true)
     {
         if ($this->sellerProductsJoined) {
-            trigger_error(Labels::getLabel('ERR_SellerProducts_can_be_joined_only_once.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SELLERPRODUCTS_CAN_BE_JOINED_ONLY_ONCE.', $this->commonLangId), E_USER_ERROR);
         }
         $this->sellerProductsJoined = true;
         $joinSpecialPrice = true;
@@ -489,7 +489,7 @@ class ProductSearch extends SearchBase
     public function joinShops($langId = 0, $isActive = true, $isDisplayStatus = true, $shopId = 0)
     {
         if (!$this->sellerUserJoined) {
-            trigger_error(Labels::getLabel('ERR_joinShops_cannot_be_joined,_unless_joinSellers_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINSHOPS_CANNOT_BE_JOINED,_UNLESS_JOINSELLERS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $langId = FatUtility::int($langId);
@@ -917,7 +917,7 @@ class ProductSearch extends SearchBase
     public function addProductIdCondition($product_id)
     {
         if (!$product_id) {
-            trigger_error(Labels::getLabel('ERR_Product_Id_not_Passed!', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PRODUCT_ID_NOT_PASSED!', $this->commonLangId), E_USER_ERROR);
         }
         $this->addCondition('product_id', '=', $product_id);
     }
@@ -1034,7 +1034,7 @@ class ProductSearch extends SearchBase
     {
         $shop_id = FatUtility::int($shop_id);
         if (!$shop_id) {
-            trigger_error(Labels::getLabel('ERR_Shop_Id_not_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SHOP_ID_NOT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
         $this->addCondition('shop_id', '=', $shop_id);
     }
@@ -1043,7 +1043,7 @@ class ProductSearch extends SearchBase
     {
         $collection_id = FatUtility::int($collection_id);
         if (!$collection_id) {
-            trigger_error(Labels::getLabel('ERR_Collection_Id_not_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_COLLECTION_ID_NOT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
 
         $this->joinTable(ShopCollection::DB_TBL_SHOP_COLLECTION_PRODUCTS, 'INNER JOIN', ShopCollection::DB_SELLER_PRODUCTS_PREFIX . 'id = ' . ShopCollection::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'selprod_id and ' . ShopCollection::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id = ' . $collection_id);
@@ -1075,7 +1075,7 @@ class ProductSearch extends SearchBase
     {
         $sellerId = FatUtility::int($sellerId);
         if ($productCode == '') {
-            trigger_error(Labels::getLabel('ERR_Invalid_Argument_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
 
         //$this->setDefinedCriteria();
@@ -1113,7 +1113,7 @@ class ProductSearch extends SearchBase
         $product_id = FatUtility::int($product_id);
         $lang_id = FatUtility::int($lang_id);
         if (!$product_id || !$lang_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Argument_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
 
         $this->joinTable(AttributeGroup::DB_TBL_ATTRIBUTES, 'INNER JOIN', 'p.product_attrgrp_id = attr.attr_attrgrp_id', 'attr');
@@ -1139,7 +1139,7 @@ class ProductSearch extends SearchBase
     public function joinSellerOrder($langId = 0)
     {
         if (!$this->sellerUserJoined) {
-            trigger_error(Labels::getLabel('ERR_Seller_must_joined.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SELLER_MUST_JOINED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $this->sellerSubscriptionOrderJoined = true;
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
@@ -1152,7 +1152,7 @@ class ProductSearch extends SearchBase
         $langId = FatUtility::int($langId);
 
         if (!$this->sellerSubscriptionOrderJoined) {
-            trigger_error(Labels::getLabel('ERR_Seller_Subscription_Order_must_joined.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SELLER_SUBSCRIPTION_ORDER_MUST_JOINED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $validDateCondition = '';
@@ -1180,7 +1180,7 @@ class ProductSearch extends SearchBase
         }
 
         if (!$this->sellerUserJoined) {
-            trigger_error(Labels::getLabel('ERR_Seller_must_joined.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SELLER_MUST_JOINED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
 
         $validDateCondition = '';
@@ -1278,7 +1278,7 @@ class ProductSearch extends SearchBase
     public function joinShippingProfileProducts()
     {
         if (!$this->joinProductShippedBy) {
-            trigger_error(Labels::getLabel('ERR_joinProductShippedBy_function_not_joined.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINPRODUCTSHIPPEDBY_FUNCTION_NOT_JOINED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $joinCondition = 'if(product_seller_id = 0, (if(psbs.psbs_user_id > 0, spprod.shippro_user_id = psbs.psbs_user_id, spprod.shippro_user_id = 0)), (spprod.shippro_user_id = selprod_user_id))';
@@ -1389,7 +1389,7 @@ class ProductSearch extends SearchBase
         }
 
         if (empty($this->geoAddress)) {
-            trigger_error(Labels::getLabel('ERR_setGoeAddress_function_not_joined.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_SETGOEADDRESS_FUNCTION_NOT_JOINED.', $langId), E_USER_ERROR);
         }
 
         $countryId = 0;

@@ -10,7 +10,7 @@ switch ($fulfillmentType) {
         break;
     
     default:
-        $msg = Labels::getLabel("MSG_INVALID_FULFILLMENT_TYPE", $siteLangId);
+        $msg = Labels::getLabel("ERR_INVALID_FULFILLMENT_TYPE", $siteLangId);
         FatUtility::dieJsonError($msg);
         break;
 }
