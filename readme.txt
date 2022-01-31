@@ -319,6 +319,7 @@ Updates/Fixes :
     => 061671 - Admin UI: Upload image option is not showing in discount coupon form
     => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
     => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
+    => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
 
 New Features:  
     => Admin shipped products listing page
