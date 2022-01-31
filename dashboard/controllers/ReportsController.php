@@ -86,7 +86,6 @@ class ReportsController extends SellerBaseController {
         $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
-        $srch->addMultipleFields(array('op_selprod_title', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_refund_qty) as totRefundQty', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlist_user_counts', 'op_selprod_sku'));
         $srch->addGroupBy('op.op_selprod_id');
         $srch->addGroupBy('op.op_is_batch');
         $srch->addHaving('totSoldQty', '>', 0, 'AND');
@@ -96,7 +95,9 @@ class ReportsController extends SellerBaseController {
             $cnd = $srch->addCondition('op_product_name', 'LIKE', '%' . $keyword . '%');
             $cnd->attachCondition('op_selprod_title', 'LIKE', '%' . $keyword . '%', 'OR');
         }
-
+        $srch->addMultipleFields(array('op_selprod_title', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_refund_qty) as totRefundQty', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlist_user_counts', 'op_selprod_sku'));
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -106,7 +107,6 @@ class ReportsController extends SellerBaseController {
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -130,16 +130,10 @@ class ReportsController extends SellerBaseController {
             }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Performance', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
-        }
-
+        } 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-        $this->set('arrListing', $arrListing);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
+        $srch->setPageSize($pageSize);  
+        $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -313,7 +307,6 @@ class ReportsController extends SellerBaseController {
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
         $srch->joinProductToCategory();
         $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
-        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
 
         /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
         $srch->addGroupBy('selprod_id');
@@ -339,7 +332,10 @@ class ReportsController extends SellerBaseController {
             $cnd->attachCondition('selprod_title', 'LIKE', "%$keyword%");
             $cnd->attachCondition('brand_name', 'LIKE', "%$keyword%");
         }
-
+        $srch->addFld('product_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
         if ($export == "export") {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -407,20 +403,14 @@ class ReportsController extends SellerBaseController {
         } else {
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arrListing = FatApp::getDb()->fetchAll($rs);
+            $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
 
             if (count($arrListing)) {
                 foreach ($arrListing as &$arr) {
                     $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 }
             }
-
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
-            $this->set('pageCount', $srch->pages());
             $this->set('postedData', $post);
-            $this->set('recordCount', $srch->recordCount());
             $this->set('arrListing', $arrListing);
             $this->set('fields', $fields);
             $this->set('sortBy', $sortBy);
@@ -499,14 +489,14 @@ class ReportsController extends SellerBaseController {
         $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'p.product_brand_id = b.brand_id', 'b');
         $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id  AND brandlang_lang_id = ' . $this->siteLangId, 'b_l');
         $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addOrder('selprod_active', 'DESC');
-        $srch->addMultipleFields(['IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_stock', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order', 'selprod_cost', '(selprod_stock * selprod_cost)  as inventory_value', 'selprod_price', '(selprod_stock * selprod_price)  as  total_value', 'selprod_id', 'brand_name', 'selprod_sku']);
-
         if ($keyword = FatApp::getPostedData('keyword')) {
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
             $cnd->attachCondition('selprod_title', 'LIKE', "%$keyword%");
             $cnd->attachCondition('brand_name', 'LIKE', "%$keyword%");
         }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
@@ -517,6 +507,8 @@ class ReportsController extends SellerBaseController {
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
+        $srch->addOrder('selprod_active', 'DESC');
+        $srch->addMultipleFields(['IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_stock', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order', 'selprod_cost', '(selprod_stock * selprod_cost)  as inventory_value', 'selprod_price', '(selprod_stock * selprod_price)  as  total_value', 'selprod_id', 'brand_name', 'selprod_sku']);
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -550,7 +542,6 @@ class ReportsController extends SellerBaseController {
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Inventory_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         }
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -561,11 +552,7 @@ class ReportsController extends SellerBaseController {
             }
         }
         $this->set("arrListing", $arrListing);
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -579,6 +566,7 @@ class ReportsController extends SellerBaseController {
     private function getProdPerformanceSrchForm() {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'sortBy', 'product_name');
         $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
@@ -742,7 +730,7 @@ class ReportsController extends SellerBaseController {
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
+        $srch->setPageSize($pageSize);
         $this->set('postedData', $post);
         $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('sortBy', $sortBy);
@@ -764,6 +752,7 @@ class ReportsController extends SellerBaseController {
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         return $frm;
@@ -805,7 +794,7 @@ class ReportsController extends SellerBaseController {
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-
+        $frm->addHiddenField('', 'total_record_count', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
