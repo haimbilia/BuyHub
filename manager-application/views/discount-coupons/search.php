@@ -10,12 +10,13 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['coupon_id']]);
+    
+    $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
                 $disabled = ($isExpired) ? 'disabled' : '';
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $disabled . '" type="checkbox" name="record_ids[]" ' . $disabled . ' value=' . $row['coupon_id'] . '><i class="input-helper"></i></label>', true);
                 break;
@@ -24,6 +25,14 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'coupon_title':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                break;
+            case 'coupon_code':
+                $code = $row[$key];
+                if ($isExpired) { 
+                    $code .= ' ' . HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel("LBL_EXPIRED", $siteLangId));
+                }
+                $code = '<div clss="d-flex">' . $code . '</div>';
+                $td->appendElement('plaintext', $tdAttr, $code, true);
                 break;
             case 'coupon_type':
                 $statusHtm = DiscountCoupons::getTypeHtml($siteLangId, $row[$key]);
@@ -42,7 +51,6 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $dispDate, true);
                 break;
             case 'coupon_active':
-                $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
                 if ($isExpired) {
                     $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['coupon_id'], $row[$key], true, Labels::getLabel("LBL_EXPIRED", $siteLangId));
                 } else {

@@ -315,7 +315,8 @@ Updates/Fixes :
     => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
     => 061729 - Admin UI: Sorting is not working and the Drawer design is also not consistent on the Shipping Company Users page
     => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
-    
+    => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

@@ -147,17 +147,20 @@ class DiscountCouponsController extends ListingBaseController
 
         $frm = $this->getForm($recordId, $includeTabs);
 
+        $isExpired = false;
         if (0 < $recordId) {
             $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
+            $isExpired = ($data['coupon_end_date'] != "0000-00-00" && strtotime($data['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
             $frm->fill($data);
         } else {
             $frm->fill(array('coupon_id' => $recordId));
         }
 
         $this->set('recordId', $recordId);
+        $this->set('isExpired', $isExpired);
         $this->set('frm', $frm);
         $this->set('coupon_type', (isset($data['coupon_type']) ? $data['coupon_type'] : DiscountCoupons::TYPE_DISCOUNT));
         $this->set('couponDiscountIn', isset($data['coupon_discount_in_percent']) ? $data['coupon_discount_in_percent'] : applicationConstants::PERCENTAGE);
@@ -184,6 +187,14 @@ class DiscountCouponsController extends ListingBaseController
 
         $recordId = $post['coupon_id'];
         unset($post['coupon_id']);
+
+        $oldStatus = (int) DiscountCoupons::getAttributesByLangId($recordId, 'coupon_active');
+        $status = FatApp::getPostedData('coupon_active', FatUtility::VAR_INT, 0);
+        $endDate = FatApp::getPostedData('coupon_end_date');
+
+        if (time() > $endDate) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.'), true);
+        }
 
         $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
