@@ -576,7 +576,10 @@ Enhancement:
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
     => 061857 - Admin UI: The 'wrong status' is showing for the inactive rating types while editing the same.
     => 061870 - Admin UI: Search is not working under the setting section at the admin's end
-    => 061855 - Admin UI: Admin is not able to add the new rating types and able to active/inactive the by-default Rating types
+    => 061855 - Admin UI: Admin is not able to add the new rating types and able to active/inactive the by-default Rating types.
+    => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
+    => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
+    => 061828 - Admin UI: Text cursor is not showing while searching the record from the drop-down on the whole system.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

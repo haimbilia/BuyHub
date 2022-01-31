@@ -994,12 +994,9 @@ class SellerOrdersController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_BUYER', $langId), 'buyer', '');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $langId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('FRM_ALL', $langId));
         $frm->addTextBox(Labels::getLabel('FRM_SELLER_SHOP', $langId), 'shop_name');
-        /* $frm->addTextBox(Labels::getLabel('FRM_CUSTOMER',$langId),'customer_name'); */
 
         $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $langId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        // $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('FRM_ORDER_FROM', $langId) . ' [' . $currencySymbol . ']'));
-        // $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('FRM_ORDER_TO', $langId) . ' [' . $currencySymbol . ']'));
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'user_id');
