@@ -317,6 +317,7 @@ Updates/Fixes :
     => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
     => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
     => 061671 - Admin UI: Upload image option is not showing in discount coupon form
+    => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
 
 New Features:  
     => Admin shipped products listing page

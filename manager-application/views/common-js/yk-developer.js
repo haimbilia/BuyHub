@@ -413,6 +413,11 @@ $(function () {
         setTimeout(() => {
             stylePhoneNumberFld('.phoneJs');
         }, 200);
+
+        /* Disable Top Action button if no item selected. */
+        if (typeof $(".selectItemJs:checked").val() === "undefined") {
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
+        }
     });
 })();
 
