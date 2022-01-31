@@ -316,6 +316,7 @@ Updates/Fixes :
     => 061729 - Admin UI: Sorting is not working and the Drawer design is also not consistent on the Shipping Company Users page
     => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
     => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
+    => 061671 - Admin UI: Upload image option is not showing in discount coupon form
 
 New Features:  
     => Admin shipped products listing page
