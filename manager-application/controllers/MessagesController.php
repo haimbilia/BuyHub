@@ -18,8 +18,8 @@ class MessagesController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_MESSAGE_BY', $this->siteLangId), 'message_by', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH', $this->siteLangId)]);
         $frm->addSelectBox(Labels::getLabel('FRM_MESSAGE_TO', $this->siteLangId), 'message_to', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH', $this->siteLangId)]);
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');

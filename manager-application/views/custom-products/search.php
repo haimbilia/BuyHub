@@ -35,7 +35,10 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                   $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:' . $row['user_id'] . '})'), $row[$key]);
+                    $href = "javascript:void(0)";
+					$onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> false, 'href' => $href, 'onclick' => $onclick,], false, true);
+                    $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }

@@ -401,8 +401,8 @@ class ShopsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_SHOP_STATUS_BY_SELLER', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');

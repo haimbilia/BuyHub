@@ -240,10 +240,10 @@ class ShopsReportController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'shop_id', [], '', [], '');
         $frm->addSelectBox(Labels::getLabel('FRM_SHOP_OWNER', $this->siteLangId), 'shop_user_id', [], '', [], '');
 
-        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_SHOP_CREATED_DATE_FROM', $this->siteLangId) .'</span>';
 
-        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $fld->htmlAfterField = $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
