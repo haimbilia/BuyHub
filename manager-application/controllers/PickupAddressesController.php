@@ -244,7 +244,7 @@ class PickupAddressesController extends ListingBaseController
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE', $langId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $langId));
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $langId));
 
         $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_SLOT_TIMINGS', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);

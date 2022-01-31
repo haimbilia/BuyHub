@@ -379,7 +379,7 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
                 $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
+                $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $langId));
 
                 $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');

@@ -318,6 +318,8 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
+
         $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
 
         $countryObj = new Countries();

@@ -314,6 +314,7 @@ Updates/Fixes :
     => 061733 - Admin UI: 'No Record Found' design is not correct on the shipping company and shipping profile page
     => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
     => 061729 - Admin UI: Sorting is not working and the Drawer design is also not consistent on the Shipping Company Users page
+    => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
     
 New Features:  
     => Admin shipped products listing page
