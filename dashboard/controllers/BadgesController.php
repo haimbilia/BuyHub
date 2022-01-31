@@ -85,22 +85,20 @@ class BadgesController extends SellerBaseController
             BadgeLinkCondition::DB_TBL_PREFIX . 'id',
             BadgeLinkCondition::DB_TBL_PREFIX . 'user_id',
         ]);
-        
-        $srch->addMultipleFields($attr);
+        $srch->addFld(Badge::DB_TBL_PREFIX . 'id');
         $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
-        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
-        $srch->getResultSet();
-        echo $srch->getError();
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields($attr); 
+        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC'); 
+        $srch->getResultSet(); 
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
+        $this->set("arrListing", $records); 
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->_template->render(false, false);
@@ -110,6 +108,7 @@ class BadgesController extends SellerBaseController
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
