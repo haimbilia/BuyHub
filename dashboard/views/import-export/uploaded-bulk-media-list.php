@@ -53,11 +53,23 @@ foreach ($arrListing as $sn => $row) {
                         'href' => 'javascript:void(0)', 'class' => 'button small green',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "removeDir('" . base64_encode($row['afile_physical_path']) . "')"
                     ),
-                    '<i class="fa fa-trash"></i>',
+                    '<i class="icn">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                        </use>
+                    </svg>
+                </i>',
                     true
                 );
                 $li = $ul->appendElement("li");
-                $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Download', $siteLangId), "onclick" => "downloadPathsFile('" . base64_encode($fullPath) . "')"), '<i class="fa fa-download"></i>', true);
+                $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Download', $siteLangId), "onclick" => "downloadPathsFile('" . base64_encode($fullPath) . "')"), '<i class="icn">
+                <svg class="svg" width="18" height="18">
+                    <use
+                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                    </use>
+                </svg>
+            </i>', true);
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

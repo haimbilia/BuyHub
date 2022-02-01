@@ -73,7 +73,13 @@ foreach ($arrListing as $sn => $row) {
                             'href' => 'javascript:void(0)',
                             'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
                             "onclick" => "editSettingForm('" . $row['plugin_code'] . "')"),
-                        '<i class="fa fa-edit"></i>',
+                            '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>
+                            </i>',
                         true
                 );
 

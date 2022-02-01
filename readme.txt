@@ -405,6 +405,7 @@ Updates/Fixes :
     => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
     => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
     => 061828 - Admin UI: Text cursor is not showing while searching the record from the drop-down on the whole system.
+    => 061858 - Processing and confirmation message is not showing while changing the status of the Maintenance Mode under the setting section.
     => 061812 - Admin UI: "No Record found" message is not showing while trying to search the un-exist records on the Product listing page
     => 061770 - Admin UI: Pagination is not working properly while trying to see the records more than the actual records on the whole system
     => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
