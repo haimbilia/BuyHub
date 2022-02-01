@@ -572,7 +572,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     '',
                     selectedOptionData
                 );
-                $(this).data("select2").$container.addClass("custom-select2-width");
+                $(this).data("select2").$container.addClass("custom-select2 custom-select2-width");
 
             });
 

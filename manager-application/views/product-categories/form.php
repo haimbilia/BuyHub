@@ -60,7 +60,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
-        $("select[name='prodcat_parent']").data("select2").$container.addClass("custom-select2-width custom-select2-single");
+        $("select[name='prodcat_parent']").data("select2").$container.addClass("custom-select2 custom-select2-width custom-select2-single");
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;
             var ratingtype_name = e.detail.tag.title;
