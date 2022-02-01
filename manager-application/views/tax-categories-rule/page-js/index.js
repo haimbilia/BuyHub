@@ -6,7 +6,6 @@
         }
         fcom.updateWithAjax(fcom.makeUrl('TaxCategoriesRule', 'getCombinedTaxes', [taxStrId, $('input[name="taxrule_id"]').val()]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $('.combinedTaxDetails').html(t.html);
         });
     };
@@ -23,7 +22,6 @@
         var data = "parantId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html, displayInPopup, dialogClass);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -32,7 +30,6 @@
 
 function checkStatesDefault(countryId, stateIds, field) {
     fcom.updateWithAjax(fcom.makeUrl('Users', 'getStates', [countryId, 0]), '', function (res) {
-        $.ykmsg.close();
         fcom.removeLoader();
         $(field).empty();
         var firstChild = '<option value = "-1" >All</option>';

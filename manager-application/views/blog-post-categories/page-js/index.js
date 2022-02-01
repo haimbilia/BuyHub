@@ -147,7 +147,6 @@
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'updateOrder'), data, function (res) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 		});
 	}
 
@@ -186,7 +185,6 @@
 		fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
 			function (res) {
 				fcom.removeLoader();
-				$.ykmsg.close();
 				var ans = $.parseJSON(res);
 				if (ans.status != 1) {
 					$(obj).prop("checked", 1 == oldStatus);

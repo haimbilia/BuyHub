@@ -14,7 +14,6 @@
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "sellerProductDownloadFrm", [selprod_id]), '', function (t) {
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
-            $.ykmsg.close();
             getDigitalDownloads();
             fcom.removeLoader();
         });

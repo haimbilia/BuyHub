@@ -39,7 +39,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "addNewComment", [orrequestId]), "", function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -55,7 +54,6 @@
     requestStatusForm = function (orrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "requestStatusForm", [orrequestId]), "", function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -87,7 +85,6 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orrequestId]), '', function (ans) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 $.ykmodal(ans.html);
             });
         }

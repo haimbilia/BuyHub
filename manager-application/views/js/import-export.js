@@ -8,7 +8,6 @@
     exportForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     }
@@ -16,7 +15,6 @@
     exportMediaForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -45,7 +43,6 @@
     importForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     }
@@ -54,14 +51,11 @@
         if (actionType == 13) {
             fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importLabelsForm'), '', function (t) {
                 $.ykmodal(t.html);
-                $.ykmsg.close();
                 fcom.removeLoader();
             });
         } else {
             fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
-                $.ykmsg.close();
                 $.ykmodal(t.html);
-                $.ykmsg.close();
                 fcom.removeLoader();
             });
         }
@@ -70,7 +64,6 @@
     importMediaForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -92,7 +85,7 @@
                 processData: false,
                 contentType: false,
                 success: function (t) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {

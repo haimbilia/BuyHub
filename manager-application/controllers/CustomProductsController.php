@@ -44,7 +44,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
 
         $this->checkEditPrivilege(true);
         $this->getListingData();
@@ -90,13 +90,13 @@ class CustomProductsController extends ListingBaseController
 
         $srch = ProductRequest::getSearchObject($this->siteLangId, true, true);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'preq_user_id = u.user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
         if (!empty($post['date_from'])) {
@@ -116,7 +116,7 @@ class CustomProductsController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name','credential_username','credential_email'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -144,6 +144,8 @@ class CustomProductsController extends ListingBaseController
                 'shop_name' => $res['shop_name'] ?? '',
                 'product_identifier' => $res['product_identifier'],
                 'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
+                'credential_username' => $res['credential_username'] ?? '',
+                'credential_email' => $res['credential_email'] ?? '',
             );
             $records[] = $arr;
         }
@@ -1377,10 +1379,10 @@ class CustomProductsController extends ListingBaseController
         $frm->setRequiredStarWith('caption');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs']);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs','placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ProductRequest::getStatusArr($this->siteLangId));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'total_record_count');
@@ -1488,8 +1490,8 @@ class CustomProductsController extends ListingBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
-            'product_identifier' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'preq_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
             'preq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'preq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),

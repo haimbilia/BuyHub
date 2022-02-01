@@ -24,8 +24,6 @@
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
 			fcom.removeLoader();
-			$.ykmsg.success(t.msg);
-
 			if (0 < $('.noRecordFoundJs').length) {
 				$('.noRecordFoundJs').remove();
 			}
@@ -117,7 +115,7 @@
 		fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
 			function (res) {
 				fcom.removeLoader();
-				$.ykmsg.close();
+				fcom.closeProcessing();
 				var ans = $.parseJSON(res);
 				if (ans.status != 1) {
 					$(obj).prop("checked", 1 == oldStatus);
@@ -235,14 +233,12 @@
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (res) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 		});
 	}
 
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id = 0) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
 			fcom.removeLoader();
-			$.ykmsg.close();
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t.html);
 				var prodCatId = $("[name='prodcat_id']").val();
@@ -392,7 +388,6 @@
 	mediaForm = function (record_id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imagesForm', [record_id]), '', function (t) {
 			$.ykmodal(t.html);
-			$.ykmsg.close();
 			fcom.removeLoader();
 			if (record_id > 0) {
 				categoryImages(record_id, 'icon', 1);

@@ -92,7 +92,6 @@ $(document).ready(function () {
     profileProductForm = function (profileId) {
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'form', [profileId]), '', function (t) {
             $.ykmodal(t.html, true, '');
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -149,7 +148,6 @@ $(document).ready(function () {
         }
         fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
             $.ykmodal(t.html, false, '');
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -211,7 +209,6 @@ $(document).ready(function () {
 
     addEditShipRates = function (zoneId, rateId) {
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
-            $.ykmsg.close();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
         });
@@ -239,7 +236,6 @@ $(document).ready(function () {
     editRateLangForm = function (zoneId, rateId, langId) {
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
             $.ykmodal(t.html, false, '');
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

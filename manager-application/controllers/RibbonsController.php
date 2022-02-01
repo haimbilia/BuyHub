@@ -54,11 +54,6 @@ class RibbonsController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
-        $actionItemsData['newRecordBtnAttrs'] = [
-            'attr' => [
-                'onclick' => 'addNew(true)'
-            ]
-        ];
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

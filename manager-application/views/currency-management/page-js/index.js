@@ -34,7 +34,7 @@ $(document).ajaxComplete(function () {
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
@@ -47,7 +47,7 @@ $(document).ajaxComplete(function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
@@ -60,7 +60,7 @@ $(document).ajaxComplete(function () {
         }
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             var ans = $.parseJSON(res);
             if (ans.status != 1) {
                 $.ykmsg.danger(ans.msg);

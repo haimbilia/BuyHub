@@ -12,7 +12,6 @@ $(document).ready(function () {
     addNewRecord = function (userId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "urp_user_id=" + userId, function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -20,7 +19,6 @@ $(document).ready(function () {
     getComments = function (recordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "getComments"), "recordId=" + recordId, function (t) {
             $.ykmodal(t.html, true);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

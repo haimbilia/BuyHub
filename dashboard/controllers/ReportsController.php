@@ -1,25 +1,22 @@
 <?php
 
-class ReportsController extends SellerBaseController
-{
-    public function __construct($action)
-    {
+class ReportsController extends SellerBaseController {
+
+    public function __construct($action) {
         parent::__construct($action);
     }
 
-    public function index()
-    {
+    public function index() {
         if (User::isSeller()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('seller', '',[], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD));
         } elseif (User::isBuyer()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer', '',[], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD));
         } else {
-            FatApp::redirectUser(UrlHelper::generateUrl('', '',[], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
         }
     }
 
-    public function productsPerformance()
-    {
+    public function productsPerformance() {
         $this->userPrivilege->canViewPerformanceReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard() || !User::isSellerVerified($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -34,8 +31,7 @@ class ReportsController extends SellerBaseController
         $this->_template->render(true, true);
     }
 
-    public function searchProductsPerformance($type = "")
-    {
+    public function searchProductsPerformance($type = "") {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -43,8 +39,8 @@ class ReportsController extends SellerBaseController
 
         $fields = $this->getProductsPerformanceFormColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultProductsPerformanceColumns() : $this->getDefaultProductsPerformanceColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultProductsPerformanceColumns() : $this->getDefaultProductsPerformanceColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current(array_keys($fields));
@@ -90,7 +86,6 @@ class ReportsController extends SellerBaseController
         $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
-        $srch->addMultipleFields(array('op_selprod_title', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_refund_qty) as totRefundQty', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlist_user_counts', 'op_selprod_sku'));
         $srch->addGroupBy('op.op_selprod_id');
         $srch->addGroupBy('op.op_is_batch');
         $srch->addHaving('totSoldQty', '>', 0, 'AND');
@@ -100,7 +95,9 @@ class ReportsController extends SellerBaseController
             $cnd = $srch->addCondition('op_product_name', 'LIKE', '%' . $keyword . '%');
             $cnd->attachCondition('op_selprod_title', 'LIKE', '%' . $keyword . '%', 'OR');
         }
-
+        $srch->addMultipleFields(array('op_selprod_title', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_refund_qty) as totRefundQty', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'IFNULL(tquwl.wishlist_user_counts, 0) as wishlist_user_counts', 'op_selprod_sku'));
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -110,7 +107,6 @@ class ReportsController extends SellerBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -134,16 +130,10 @@ class ReportsController extends SellerBaseController
             }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Performance', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
-        }
-
+        } 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-        $this->set('arrListing', $arrListing);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
+        $srch->setPageSize($pageSize);  
+        $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -151,8 +141,7 @@ class ReportsController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function searchMostWishListAddedProducts($export = "")
-    {
+    public function searchMostWishListAddedProducts($export = "") {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -172,8 +161,8 @@ class ReportsController extends SellerBaseController
         }
 
         /* $srch = new ProductSearch( $this->siteLangId );
-        $srch->setDefinedCriteria( 0 );
-        $srch->joinProductToCategory(); */
+          $srch->setDefinedCriteria( 0 );
+          $srch->joinProductToCategory(); */
 
         /* Sub Query to get, how many users added current product in his/her wishlist[ */
         $uWsrch = new UserWishListProductSearch($this->siteLangId);
@@ -225,18 +214,15 @@ class ReportsController extends SellerBaseController
         }
     }
 
-    public function exportMostWishListAddedProducts()
-    {
+    public function exportMostWishListAddedProducts() {
         $this->searchMostWishListAddedProducts("export");
     }
 
-    public function exportProductPerformance($orderBy = 'DESC')
-    {
+    public function exportProductPerformance($orderBy = 'DESC') {
         $this->searchProductsPerformance($orderBy, "export");
     }
 
-    public function productsInventory()
-    {
+    public function productsInventory() {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
         $fields = $this->productsInventoryColumns($this->siteLangId);
         $frmSrch = $this->getProductInventorySearchForm($fields);
@@ -246,12 +232,11 @@ class ReportsController extends SellerBaseController
         $this->_template->render(true, true);
     }
 
-    public function searchProductsInventory($export = "")
-    {
+    public function searchProductsInventory($export = "") {
         $fields = $this->productsInventoryColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getproductsInventoryDefaultColumns() : $this->getproductsInventoryDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getproductsInventoryDefaultColumns() : $this->getproductsInventoryDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current(array_keys($fields));
@@ -322,7 +307,6 @@ class ReportsController extends SellerBaseController
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
         $srch->joinProductToCategory();
         $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
-        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
 
         /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
         $srch->addGroupBy('selprod_id');
@@ -348,7 +332,10 @@ class ReportsController extends SellerBaseController
             $cnd->attachCondition('selprod_title', 'LIKE', "%$keyword%");
             $cnd->attachCondition('brand_name', 'LIKE', "%$keyword%");
         }
-
+        $srch->addFld('product_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', 'IFNULL(totOrders, 0) as totOrders', 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'selprod_sku', 'opq.*'));
         if ($export == "export") {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -416,20 +403,14 @@ class ReportsController extends SellerBaseController
         } else {
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arrListing = FatApp::getDb()->fetchAll($rs);
+            $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
 
             if (count($arrListing)) {
                 foreach ($arrListing as &$arr) {
                     $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 }
             }
-
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
-            $this->set('pageCount', $srch->pages());
             $this->set('postedData', $post);
-            $this->set('recordCount', $srch->recordCount());
             $this->set('arrListing', $arrListing);
             $this->set('fields', $fields);
             $this->set('sortBy', $sortBy);
@@ -438,13 +419,11 @@ class ReportsController extends SellerBaseController
         }
     }
 
-    public function exportProductsInventoryReport()
-    {
+    public function exportProductsInventoryReport() {
         $this->searchProductsInventory("export");
     }
 
-    public function productsInventoryStockStatus()
-    {
+    public function productsInventoryStockStatus() {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -459,8 +438,7 @@ class ReportsController extends SellerBaseController
         $this->_template->render();
     }
 
-    public function searchProductsInventoryStockStatus($type = "")
-    {
+    public function searchProductsInventoryStockStatus($type = "") {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -468,8 +446,8 @@ class ReportsController extends SellerBaseController
 
         $fields = $this->productsInventoryStockStatusColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getProdInventoryStockStatusDefaultColumns() : $this->getProdInventoryStockStatusDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getProdInventoryStockStatusDefaultColumns() : $this->getProdInventoryStockStatusDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current(array_keys($fields));
@@ -511,14 +489,14 @@ class ReportsController extends SellerBaseController
         $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'p.product_brand_id = b.brand_id', 'b');
         $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id  AND brandlang_lang_id = ' . $this->siteLangId, 'b_l');
         $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addOrder('selprod_active', 'DESC');
-        $srch->addMultipleFields(['IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_stock', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order', 'selprod_cost', '(selprod_stock * selprod_cost)  as inventory_value', 'selprod_price', '(selprod_stock * selprod_price)  as  total_value', 'selprod_id', 'brand_name', 'selprod_sku']);
-
         if ($keyword = FatApp::getPostedData('keyword')) {
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
             $cnd->attachCondition('selprod_title', 'LIKE', "%$keyword%");
             $cnd->attachCondition('brand_name', 'LIKE', "%$keyword%");
         }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
@@ -529,6 +507,8 @@ class ReportsController extends SellerBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
+        $srch->addOrder('selprod_active', 'DESC');
+        $srch->addMultipleFields(['IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_stock', 'IFNULL(qryop.stock_on_order, 0) as stock_on_order', 'selprod_cost', '(selprod_stock * selprod_cost)  as inventory_value', 'selprod_price', '(selprod_stock * selprod_price)  as  total_value', 'selprod_id', 'brand_name', 'selprod_sku']);
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -562,7 +542,6 @@ class ReportsController extends SellerBaseController
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Inventory_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         }
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -573,26 +552,21 @@ class ReportsController extends SellerBaseController
             }
         }
         $this->set("arrListing", $arrListing);
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->_template->render(false, false);
     }
 
-    public function exportProductsInventoryStockStatusReport()
-    {
+    public function exportProductsInventoryStockStatusReport() {
         $this->searchProductsInventoryStockStatus("export");
     }
 
-    private function getProdPerformanceSrchForm()
-    {
+    private function getProdPerformanceSrchForm() {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'sortBy', 'product_name');
         $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
@@ -602,32 +576,29 @@ class ReportsController extends SellerBaseController
         return $frm;
     }
 
-    private function getProductsPerformanceFormColumns($langId)
-    {
+    private function getProductsPerformanceFormColumns($langId) {
         $sellerProdPerformanceCacheVar = CacheHelper::get('sellerProdPerformanceCacheVar' . '-' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerProdPerformanceCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product', $langId),
-                'op_brand_name'    =>    Labels::getLabel('LBL_BRAND', $langId),
-                'op_selprod_sku'    =>    Labels::getLabel('LBL_SKU', $langId),
-                'wishlist_user_counts'    =>    Labels::getLabel('LBL_WishList_User_Counts', $langId),
+                'product_name' => Labels::getLabel('LBL_Product', $langId),
+                'op_brand_name' => Labels::getLabel('LBL_BRAND', $langId),
+                'op_selprod_sku' => Labels::getLabel('LBL_SKU', $langId),
+                'wishlist_user_counts' => Labels::getLabel('LBL_WishList_User_Counts', $langId),
                 'totSoldQty' => Labels::getLabel('LBL_Sold_Quantity', $langId),
                 'totRefundQty' => Labels::getLabel('LBL_Refund_Quantity', $langId)
             ];
             CacheHelper::create('sellerProdPerformanceCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($sellerProdPerformanceCacheVar);
+            $arr = unserialize($sellerProdPerformanceCacheVar);
         }
         return $arr;
     }
 
-    private function getDefaultProductsPerformanceColumns(): array
-    {
+    private function getDefaultProductsPerformanceColumns(): array {
         return ['product_name', 'op_selprod_sku', 'wishlist_user_counts', 'totRefundQty', 'totSoldQty'];
     }
 
-    public function salesReport($orderDate = '')
-    {
+    public function salesReport($orderDate = '') {
         $this->userPrivilege->canViewSalesReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -643,8 +614,7 @@ class ReportsController extends SellerBaseController
         $this->_template->render(true, true);
     }
 
-    public function searchSalesReport($export = "")
-    {
+    public function searchSalesReport($export = "") {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -653,8 +623,8 @@ class ReportsController extends SellerBaseController
         $orderDate = FatApp::getPostedData('orderDate', FatUtility::VAR_STRING, '');
         $fields = $this->getFormColumns($orderDate);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns($orderDate) : $this->getDefaultColumns($orderDate);
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns($orderDate) : $this->getDefaultColumns($orderDate);
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
@@ -706,11 +676,11 @@ class ReportsController extends SellerBaseController
             $srch->setGroupBy('op_invoice_number');
             $srch->addFld('op_invoice_number');
         }
-
-        $srch->setOrderBy($sortBy, $sortOrder);
         $srch->setDateCondition($fromDate, $toDate);
         $srch->addCondition('op_selprod_user_id', '=', $userId);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->setOrderBy($sortBy, $sortOrder);
         if ($export == "export") {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -761,28 +731,19 @@ class ReportsController extends SellerBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('arrListing', $arrListing);
+        $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->_template->render(false, false);
     }
 
-    public function exportSalesReport()
-    {
+    public function exportSalesReport() {
         $this->searchSalesReport("export");
     }
 
-    private function getProdInventoryStockStatusSrchForm($langId, $fields = [])
-    {
+    private function getProdInventoryStockStatusSrchForm($langId, $fields = []) {
         $frm = new Form('frmReportSearch');
         $frm->addTextBox('', 'keyword', '');
         $frm->addHiddenField('', 'page');
@@ -791,42 +752,40 @@ class ReportsController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
-    private function productsInventoryStockStatusColumns($langId)
-    {
+    private function productsInventoryStockStatusColumns($langId) {
         $selProdInventoryStockStatusCacheVar = CacheHelper::get('selProdInventoryStockStatusCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryStockStatusCacheVar) {
             $arr = [
-                'product_name'        =>    Labels::getLabel('LBL_Product_name', $langId),
-                'selprod_stock'    =>    Labels::getLabel('LBL_Stock_Available', $langId),
-                'brand_name'    =>    Labels::getLabel('LBL_Brand', $langId),
-                'selprod_sku'    =>    Labels::getLabel('LBL_Sku', $langId),
-                'stock_on_order' =>    Labels::getLabel('LBL_Stock_On_Order', $langId),
-                'selprod_cost'    =>    Labels::getLabel('LBL_Cost_Price', $langId),
-                'inventory_value'    =>    Labels::getLabel('LBL_Inventory_Value_', $langId),
-                'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $langId),
-                'total_value'    =>    Labels::getLabel('LBL_Total_Value_', $langId)
+                'product_name' => Labels::getLabel('LBL_Product_name', $langId),
+                'selprod_stock' => Labels::getLabel('LBL_Stock_Available', $langId),
+                'brand_name' => Labels::getLabel('LBL_Brand', $langId),
+                'selprod_sku' => Labels::getLabel('LBL_Sku', $langId),
+                'stock_on_order' => Labels::getLabel('LBL_Stock_On_Order', $langId),
+                'selprod_cost' => Labels::getLabel('LBL_Cost_Price', $langId),
+                'inventory_value' => Labels::getLabel('LBL_Inventory_Value_', $langId),
+                'selprod_price' => Labels::getLabel('LBL_Unit_Price', $langId),
+                'total_value' => Labels::getLabel('LBL_Total_Value_', $langId)
             ];
             CacheHelper::create('selProdInventoryStockStatusCacheVar' . $langId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($selProdInventoryStockStatusCacheVar);
+            $arr = unserialize($selProdInventoryStockStatusCacheVar);
         }
 
         return $arr;
     }
 
-    private function getProdInventoryStockStatusDefaultColumns(): array
-    {
+    private function getProdInventoryStockStatusDefaultColumns(): array {
         $arr = ['product_name', 'selprod_stock', 'stock_on_order', 'selprod_cost', 'inventory_value', 'selprod_price', 'total_value'];
         return $arr;
     }
 
-    private function getProductInventorySearchForm($fields = [])
-    {
+    private function getProductInventorySearchForm($fields = []) {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
         $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
@@ -835,21 +794,20 @@ class ReportsController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-
+        $frm->addHiddenField('', 'total_record_count', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
-    private function productsInventoryColumns($langId)
-    {
+    private function productsInventoryColumns($langId) {
         $selProdInventoryReportCacheVar = CacheHelper::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryReportCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product_name', $langId),
-                'selprod_sku'    =>    Labels::getLabel('LBL_SKU', $langId),
-                'followers'    =>    Labels::getLabel('LBL_Favorites', $langId),
-                'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $langId),
+                'product_name' => Labels::getLabel('LBL_Product_name', $langId),
+                'selprod_sku' => Labels::getLabel('LBL_SKU', $langId),
+                'followers' => Labels::getLabel('LBL_Favorites', $langId),
+                'selprod_price' => Labels::getLabel('LBL_Unit_Price', $langId),
                 'totOrders' => Labels::getLabel('LBL_Order_Placed', $langId),
                 'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $langId),
                 'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $langId),
@@ -870,23 +828,22 @@ class ReportsController extends SellerBaseController
             ];
             CacheHelper::create('selProdInventoryReportCacheVar' . $langId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($selProdInventoryReportCacheVar);
+            $arr = unserialize($selProdInventoryReportCacheVar);
         }
 
         return $arr;
     }
 
-    private function getproductsInventoryDefaultColumns(): array
-    {
+    private function getproductsInventoryDefaultColumns(): array {
         $arr = ['product_name', 'selprod_sku', 'selprod_price', 'totOrders', 'netSoldQty', 'grossSales', 'refundedAmount', 'orderNetAmount', 'adminSalesEarnings'];
         return $arr;
     }
 
-    private function getSalesReportSearchForm($fields = [], $orderDate = '')
-    {
+    private function getSalesReportSearchForm($fields = [], $orderDate = '') {
         $frm = new Form('frmReportSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
+        $frm->addHiddenField('', 'total_record_count');
         if (empty($orderDate)) {
             $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -905,8 +862,7 @@ class ReportsController extends SellerBaseController
         return $frm;
     }
 
-    private function getFormColumns($orderDate = '')
-    {
+    private function getFormColumns($orderDate = '') {
         $shopsReportCacheVar = CacheHelper::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
             $arr = [
@@ -931,7 +887,7 @@ class ReportsController extends SellerBaseController
             ];
             CacheHelper::create('shopsReportCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($shopsReportCacheVar);
+            $arr = unserialize($shopsReportCacheVar);
         }
 
         if (!empty($orderDate)) {
@@ -940,22 +896,22 @@ class ReportsController extends SellerBaseController
             $arr = [
                 'op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->siteLangId),
                 'order_date_added' => Labels::getLabel('LBL_Date', $this->siteLangId),
-            ] + $arr;
+                    ] + $arr;
         }
 
         return $arr;
     }
 
-    protected function getDefaultColumns($orderDate = ''): array
-    {
+    protected function getDefaultColumns($orderDate = ''): array {
         $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
         if (!empty($orderDate)) {
             unset($arr['orderDate']);
             $arr = [
                 'op_invoice_number',
                 'order_date_added'
-            ] + $arr;
+                    ] + $arr;
         }
         return $arr;
     }
+
 }

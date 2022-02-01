@@ -32,7 +32,7 @@ bindSortable = function() {
                 function(value) {
                     fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                         var ans = $.parseJSON(res);
                         if (ans.status == 1) {
                             $.ykmsg.success(ans.msg);
@@ -43,7 +43,7 @@ bindSortable = function() {
                 },
                 function(error) {
                     fcom.removeLoader();
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                 }
             );
         },
@@ -64,7 +64,6 @@ deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
 loadImages = function (recordId, imageType, slide_screen, langId) {
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
         fcom.removeLoader();
-        $.ykmsg.close();
         $('#imageListingJs').html(t.html);
     });
 };

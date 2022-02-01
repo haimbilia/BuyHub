@@ -37,7 +37,6 @@
     getOpCharges = function (orderId, chargeType) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $.ykmodal(t.html, true, "modal-dialog-vertical-md");
         });
     }
@@ -80,7 +79,6 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'op_id=' + opId, function (ans) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 $.ykmodal(ans.html);
             });
         }
@@ -92,7 +90,6 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItemStatusHistory', [orderId]), 'recordId=' + opId, function (ans) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 $.ykmodal(ans.html);
             });
         }
@@ -101,7 +98,6 @@
     getShippingUsersForm = function (orderId, opId) {
         fcom.updateWithAjax(fcom.makeUrl('Orders', 'shippingUsersForm', [orderId]), 'op_id=' + opId, function (ans) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $.ykmodal(ans.html);
         });
     };
@@ -109,7 +105,6 @@
     getOrderCommentForm = function (orderId, opId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderCommentsForm', [orderId]), 'op_id=' + opId, function (ans) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $.ykmodal(ans.html);
         });
     };
@@ -163,7 +158,7 @@
     proceedToShipment = function (opId) {
         fcom.displayProcessing();        
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
                 $.ykmsg.error(t.msg);
@@ -204,7 +199,7 @@
         fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {          
             $.ykmodal(res, false);
             fcom.removeLoader();
-            $.ykmsg.close();
+            fcom.closeProcessing();
         });
     }
 
@@ -213,7 +208,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), {orderId,op_id}, function (res) {
             $.ykmodal(res.html, false);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
@@ -257,7 +251,7 @@
     getPickupForm = function (opId) {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             $.ykmodal(res, false);
             if (0 < $('.date--js').length) {
                 $('.date--js').datepicker({
@@ -289,7 +283,7 @@
         fcom.displayProcessing();
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
                 $.ykmsg.error(t.msg);
@@ -308,7 +302,7 @@
     shippingRatesForm = function (opId) {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             $.ykmodal(res, false);
         });
     }
@@ -320,7 +314,7 @@
         fcom.displayProcessing();
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'setUpShippingRate'), data, function (t) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
                 $.ykmsg.error(t.msg);

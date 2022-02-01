@@ -30,7 +30,6 @@ $(document).ready(function () {
 
         $(listingTableJs).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $(dv).replaceWith(res.listingHtml);
             $('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');

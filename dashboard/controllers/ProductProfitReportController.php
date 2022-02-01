@@ -37,8 +37,7 @@ class ProductProfitReportController extends SellerBaseController
         }
         $srchFrm = $this->getSearchForm($fields);
 
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData()); 
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);        
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
@@ -73,13 +72,14 @@ class ProductProfitReportController extends SellerBaseController
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
-
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post); 
+        $srch->doNotCalculateRecords();
         switch ($sortBy) {
             default:
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
+                        
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -115,15 +115,8 @@ class ProductProfitReportController extends SellerBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $srch->setPageSize($pagesize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -147,7 +140,7 @@ class ProductProfitReportController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-
+        $frm->addHiddenField('', 'total_record_count', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
 

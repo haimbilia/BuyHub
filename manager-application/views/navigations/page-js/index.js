@@ -3,7 +3,6 @@
 
     reloadList = function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), '', function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $(dv).html(res.html);
         });
@@ -34,7 +33,6 @@
     addNewLinkForm = function (navId, nlinkId = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "linkForm"), 'nav_id=' + navId + '&nlink_id=' + nlinkId, function (t) {
             $.ykmodal(t.html, false);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -46,7 +44,6 @@
             data,
             function (t) {
                 $.ykmodal(t.html, false);
-                $.ykmsg.close();
                 fcom.removeLoader();
             }
         );
@@ -64,7 +61,9 @@
 
             var navId = ('undefined' != typeof t.navId) ? t.navId : 0;
             var nlinkId = ('undefined' != typeof t.nlinkId) ? t.nlinkId : 0;
-            $('.openerJs[data-record-id="' + navId + '"]').show();
+            if (1 > $("#childrens-" + navId + " li:visible").length) {
+                $('.openerJs[data-record-id="' + navId + '"]').click();
+            }
             $(".subRecordsCountJs-" + navId).text(t.subRecordsCount);
             setTimeout(() => {
                 togglePlusMinus($('.openerJs[data-record-id="' + navId + '"]')[0], 1);
@@ -114,15 +113,15 @@
             return false;
         }
         $(dv).prepend(fcom.getLoader());
+
+        var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
         var data = 'recordId=' + navId;
         if (0 < nlinkId) {
             data += '&nlinkId=' + nlinkId;
         }
 
-        var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
         data += '&includeWrapper=' + includeWrapper;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'navLinks'), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             if (0 < nlinkId) {
                 if (0 < $('.children-' + navId + '-' + nlinkId).length) {
@@ -190,7 +189,7 @@
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateNavlinksOrder'), value, function (res) {
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status == 1) {
@@ -202,7 +201,7 @@
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },

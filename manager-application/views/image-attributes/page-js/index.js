@@ -3,7 +3,6 @@ attributeForm = function (recordId) {
     data = "recordId=" + recordId;
     fcom.updateWithAjax(fcom.makeUrl(controllerName, "form", [recordId, moduleType]), data, function (t) {
         $.ykmodal(t.html);
-        $.ykmsg.close();
         fcom.removeLoader();
     });
 };
@@ -13,7 +12,7 @@ setup = function (frm) {
     var data = fcom.frmData(frm);
     $.ykmodal(fcom.getLoader());
     fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-        $.ykmsg.close();
+        fcom.closeProcessing();
         fcom.removeLoader();
     });
 };
@@ -25,7 +24,6 @@ $(document).on('change', '.languageJs', function () {
     var option_id = $('.optionJs').length ? $('.optionJs').val() : 0;
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [recordId, module, langId, option_id]), '', function (t) {
         $.ykmodal(t.html);
-        $.ykmsg.close();
         $('#frmImgAttributeJs input[name=lang_id]').val(langId);
         fcom.removeLoader();
     });
@@ -38,7 +36,6 @@ $(document).on('change', '.optionJs', function () {
     var langId = $('.languageJs').val() || 0;
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [recordId, module, langId, option_id]), '', function (t) {
         $.ykmodal(t.html);
-        $.ykmsg.close();
         $('#frmImgAttributeJs input[name=lang_id]').val(langId);
         fcom.removeLoader();
     });
