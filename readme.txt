@@ -1,17 +1,3 @@
-
-Release Number : 
-Release Date : 
-
-New Feature :     
-    => 88083 : System Log Listing Page 
-    
-Updates: N/A
-	
-Fixes: N/A
-    
-    
-================================================================================
-
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
@@ -27,6 +13,27 @@ New Feature :
     => 86472 : YoCo Payment gateway
     => 88040 : ShipRocket Shipping API Integration
     => 88449 : ShipEngine Shipping API Integration
+    => Admin shipped products listing page
+    => task-84719 Preview module for digital files
+    => task-85619 Adding files when digital order is delivered
+    => 88083 : System Log Listing Page 
+  
+Enhancements :
+   => At shop level  pickup interval option given
+   => Tracking order with Google Analytics ecommerce 
+   => W3c validator.
+   => Performance optimization
+   => Upgrades in GEO location module to configure default location.  
+   => Price surge based on special price. 
+   => Admin Reports.
+   => Map listing for products & shops 
+   => Withdrawal Requests
+   => Order Cancellation Requests 
+   => Manage Alert text
+   => Manage Product Reviews
+   => Multilingual Sitemap
+   => Add product screen
+
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -112,13 +119,15 @@ Updates/Fixes :
     => 055154	digital items> files linked with specific language are listing all on front end in preview
     => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
-    ====================TV-9.3.1.20210703==========================
+====================TV-9.3.1.20210703==========================
+
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
-    =====================TV-9.3.1.20210705========================
+=====================TV-9.3.1.20210705========================
 
     => 055632 - on accessing digital preview file from front end getting error
     => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
-    ======================TV-9.3.1.20210708====================== 
+======================TV-9.3.1.20210708====================== 
+
     => 055604 - zip file needs to be exported on click of download button on buyer end containing (files and link) just like Tribe
     => 055720 - admin> promotions> ribbon> bind conditions> list having select option which is of no use and on selecting, nothing appears on top for operations
     => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
@@ -143,6 +152,7 @@ Updates/Fixes :
     => 055840 - Google Shopping Feed Enhancement Changes
     => 055850 - Warning : Creating default object from empty value
 ==============================TV-9.3.2.20210716=====================================
+
     => 055874 - getting invalid request on linking rating type with new category
     => 056100 - Notice: Undefined index: op_special_price
     => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
@@ -159,20 +169,23 @@ Updates/Fixes :
     => 056197 - on adding item to wishlist getting 404
     => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
-
 =========================TV-9.3.2.20210720=====================================
+
     => 056192 - Showing fatal error while opening settings of split payment method.
     => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
     => 056228 - Undefined Variable rating types
     => 056229 - Notice: Undefined index: oua_phone_dcode
     => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
 ==========================TV-9.3.2.20210723========================================
+
     => 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
     => 056147 - buyer> orders> feedback form> rating stars are not populating
 ================TV-9.3.2.20210726===================
+
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
 ===============TV-9.3.2.20210728====================
+
     => 056264 - Shop details >> If "use manual shipping rates" checkbox is not checked then "postal code" should be mandatory
     => 056246 - Catalog -> Shipping options
     => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
@@ -188,6 +201,7 @@ Updates/Fixes :
     => 056508 - on order cancellation requests error coming at admin side
     => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
 ===================TV-9.3.2.20210730==================
+
     => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
     => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
     => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
@@ -206,6 +220,7 @@ Updates/Fixes :
     => 056241 - seller> sales reports> back button is not working
     => 056293 - Shipping profile is not getting created from admin end 
 ====================TV-9.3.2.20210805========================
+
     => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
     => 056944 - on saving seller catalog specification at admin end error coming
     => 056959 - on updating seller order getting error at admin end 
@@ -215,8 +230,8 @@ Updates/Fixes :
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
     => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days" Time Slots
     => 057163 - while adding the option in catalog getting struck in ajax loop
-
 ===========================TV-9.3.2.20210810==================
+
     => 057137 - Getting error while stripe connect transfer seller part
     => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
     => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
@@ -237,6 +252,30 @@ Updates/Fixes :
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
+
+    => 060304 - The homepage logo is not clearly visible.
+    => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
+	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
+    => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
+    => 060524 - Admin UI: "Subscription's status" moves to the "product's status listing" after inactivating the status by editing it.
+    => 060615 - Admin UI: Price's search is not working and the shop's listing is also not showing under the sales reports section.
+    => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
+    => 060564 - Admin UI: States listing is not showing for the default selected country under the "Users Addresses.
+    => 060570 - Admin UI: Spacing issue between "name" and "address" under the user's addresses.
+    => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
+    => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
+    => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
+    => 060776 - Recommended tag products section error is coming.
+    => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
+    => 060771 - Admin UI: Inconsistency => In the table of the special price, seller info. is not showing according to the 'volume discount' section.
+    => 060751 - Admin UI: Client-side validation is not showing while trying to enter the new password < 8 characters under the user's section.
+    => 060753 - Admin UI: Validation message is missing while clicking on the 'Resend set password email' option under the user's section.
+    => 060733 - Admin UI: Facing issue while adding the users at the admin's panel.
+    => 060897 - Tax category rule addition giving issue.
+    => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
+    => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
+    => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
+    => 060732 - Admin UI: Search is not working properly under the permission sections of the admin's sub-users.
     => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
     => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
     => 057261 - Admin: "Invalid Request" error is showing while clicking on the "Link" field after selecting "link type" in the Ribbons
@@ -290,213 +329,8 @@ Updates/Fixes :
     => 059422 - Seller: Admin disable the "Allow Sellers To Add Products" option and then, "Add Seller's Shipping profile" option is not showing to add the shipping for the marketplace product
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
-    => 060820 - On order subscription getting error
-    => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
-    => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
-    => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
-    => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
-    => 061115 - commission going negative when refund the product [RV-9.3.1]
-    => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
-    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system
-    => 061812 - Admin UI: "No Record found" message is not showing while trying to search the un-exist records on the Product listing page
-    => 061770 - Admin UI: Pagination is not working properly while trying to see the records more than the actual records on the whole system
-    => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
-    => 061761 - Admin UI: Unit is not showing with the Dimensions on the table under the Shipping package section
-    => 061756 - Admin UI: Validation is missing for the 'State' field while adding and editing the pickup address
-    => 061754 - Admin UI: The drawer design is not consistent while adding, editing, and resting the pickup addresses
-    => 061748 - Admin UI: Rate name is not showing while editing the default rate under the shipping profile section.
-    => 061968 - Fatal error: Uncaught TypeError: Argument 1 passed is invalid, expected string
-    => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
-    => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
-    => 061738 - Admin UI: Product's listing is showing while binding the product with the shipping profile
-    => 061736 - Admin UI: Facing multiple UI issues while adding the shipping profile
-    => 061735 - Admin UI: Information is missing for the search i.e. according to what criteria admin can search the record on the shipping profile page
-    => 061733 - Admin UI: 'No Record Found' design is not correct on the shipping company and shipping profile page
-    => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
-    => 061729 - Admin UI: Sorting is not working and the Drawer design is also not consistent on the Shipping Company Users page
-    => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
-    => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
-    => 061671 - Admin UI: Upload image option is not showing in discount coupon form
-    => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
-    => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
-    => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
-    => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
-    => 061711 - Admin UI: Images are not aligned in the table of the banners
-
-New Features:  
-    => Admin shipped products listing page
-    => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered 
-
-Enhancements :
-   => At shop level  pickup interval option given
-   => Tracking order with Google Analytics ecommerce 
-   => W3c validator.
-   => Performance optimization
-   => Upgrades in GEO location module to configure default location.  
-   => Price surge based on special price. 
-   => Admin Reports.
-   => Map listing for products & shops 
-   => Withdrawal Requests
-   => Order Cancellation Requests 
-   => Manage Alert text
-   => Manage Product Reviews
-
-Admin UI/UX Enhancements pages:
-    => Login / Register, Forgot Password
-    => My Profile/ Change Pasword
-    => Product Catalog
-        - Brands
-        - Shops
-        - Categories        
-
-    => Requests
-        - Brand request
-        - Categories requests 
-        - Seller approval requests
-        - Threshold products
-        - Rating types
-
-    => Orders
-        - Order Cancel Reasons
-        - Order Return Reasons
-        - Order Statuses
-
-    => Users
-        - Users
-        - Rewards
-        - Transactions
-        - Deleted Users
-        - Users addresses
-
-    => Promotions
-        - Special Price
-        - Volume Discount
-        - Related Products
-        - Promotions
-        - Rewards on purchase
-        - manage weightages
-        - Recommended tag products weightages
-
-    => Blog
-        - Blog Post Categories
-        - Blog Posts
-        - Blog Contributions
-        - Blog Comments
-
-    => Tax
-        - Tax structure
-        - Tax categories
-        - Tax categories rule
-
-    => CMS
-        - Content Pages
-        - Content Block
-        - Faq's
-        - Testimonials
-
-    => Reports
-        - Sales Report
-        - Financial Report
-        - Subscription Reports
-
-    => Import/Export
-
-    => Seo
-        - Url Rewriting
-        - Image attributes
-        - Generate Sitemap
-        - View Html
-        - View Xml
-        - Meta Tags Management
-
-    => Settings
-
-=========================TV-9.4.0.20211130======================
-=> Product Catalog
-    - Oprions
-
-=> Requests    
-    - Order return requests
-    - Order cancellation requests
-    - Withdrawal requests
-
-=> Orders
-    - Orders
-    - Subscription Orders
-    - Product Reviews
-
-=> Users
-    - Admin Users
-    - GDPR requests
-
-=> Promotions
-    - Discount Coupons
-    - Push notifications
-    - Badges
-    - Ribbons
-
-=> CMS
-    - Home page slidees
-    - Banners
-    - Navigations
-
-=> Reports
-   - Buyers report
-   - Discount coupons
-
-=> Shipping/Pickup
-    - Shipping compnay users
-    - Shipping packages
-    - Shipping profiles
-    - Pickup addresses
-    - Shipped addresses
-
-Bugs : 
-    => 060304 - The homepage logo is not clearly visible.
-    => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
-	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
-    => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
-    => 060524 - Admin UI: "Subscription's status" moves to the "product's status listing" after inactivating the status by editing it.
-    => 060615 - Admin UI: Price's search is not working and the shop's listing is also not showing under the sales reports section.
-    => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
-    => 060564 - Admin UI: States listing is not showing for the default selected country under the "Users Addresses.
-    => 060570 - Admin UI: Spacing issue between "name" and "address" under the user's addresses.
-    => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
-    => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
-    => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
-    => 060776 - Recommended tag products section error is coming.
-    => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
-    => 060771 - Admin UI: Inconsistency => In the table of the special price, seller info. is not showing according to the 'volume discount' section.
-    => 060751 - Admin UI: Client-side validation is not showing while trying to enter the new password < 8 characters under the user's section.
-    => 060753 - Admin UI: Validation message is missing while clicking on the 'Resend set password email' option under the user's section.
-    => 060733 - Admin UI: Facing issue while adding the users at the admin's panel.
-    => 060897 - Tax category rule addition giving issue.
-    => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
-    => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
-    => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
-    => 060732 - Admin UI: Search is not working properly under the permission sections of the admin's sub-users.
-
 ==================TV-9.4.0.20211215====================
-    => Dashboard Stats
-    => Product page
-    => UAT Fixes
 
-==================TV-9.4.0.20211223===================
-    => Multilingual Sitemap
-    => Add product screen
-    => UAT Fixes
-=============TV-9.4.0.20211228================
-=> Product Catalog
-    - Seller Inventory
-
-=> Notification and Logs
-
-=> Promotions   
-    - Badges 
-    - Robbons        
-
-Bugs : 
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
     => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
     => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
@@ -531,9 +365,15 @@ Bugs :
     => 060536 - Admin UI: View comments moved in popup view from listing.
     => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
     => 060505 - Admin UI: Suggestion to give some indication to admin i.e. how "Order Status Color Class" will appear at the front-end
-    => 061431 - Special Price and Volume discount listing design row issue while editing
-
+    => 061431 - Special Price and Volume discount listing design row issue while editing    
+    => 060820 - On order subscription getting error
+    => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
+    => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
+    => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
+    => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
+    => 061115 - commission going negative when refund the product [RV-9.3.1]
 =============TV-9.4.0.20210107================
+
     => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
     => 061012 - Admin UI: "Row's Re-arrange" functionality is not working properly on the whole system
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
@@ -545,8 +385,11 @@ Bugs :
     => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
     => 061445 - Admin UI: Admin is not able to add more than one option's value.
     => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
-    => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
+    => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.    
+    => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
+    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system
 ====================TV-9.4.0.20220112==============
+
     => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
     => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
     => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
@@ -564,16 +407,8 @@ Bugs :
     => 061583 - Admin UI: Clear functionality is not working properly under the "Order return requests" section
     => 061577 - Admin UI: Options text of the "Transfer refund" field is larger than the sub-titles and comments are also not showing on the orders details page
     => 061651 - Admin: 'Subscription period' and 'payment status' are not showing on the subscription order details page and the Seller's phone number is also missing
-
-New Features :
- => Getting Started
-
-Enhancement:
-=> left Navigations
-=> Quick Search
-=> Updated System Labels    
-
 ====================TV-9.4.0.20220120==================
+
     => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
     => 061665 - Admin UI: 'Search icon' is not showing in the search field and the 'search' watermark is also missing on the Abandoned cart page.
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
@@ -583,8 +418,35 @@ Enhancement:
     => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
     => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
     => 061828 - Admin UI: Text cursor is not showing while searching the record from the drop-down on the whole system.
-
+    => 061858 - Processing and confirmation message is not showing while changing the status of the Maintenance Mode under the setting section.
+    => 061812 - Admin UI: "No Record found" message is not showing while trying to search the un-exist records on the Product listing page
+    => 061770 - Admin UI: Pagination is not working properly while trying to see the records more than the actual records on the whole system
+    => 061767 - Admin UI: The wrong options are showing in the "Shipping profile" dropdown under the advanced-search section on the Shipped Products page
+    => 061761 - Admin UI: Unit is not showing with the Dimensions on the table under the Shipping package section
+    => 061756 - Admin UI: Validation is missing for the 'State' field while adding and editing the pickup address
+    => 061754 - Admin UI: The drawer design is not consistent while adding, editing, and resting the pickup addresses
+    => 061748 - Admin UI: Rate name is not showing while editing the default rate under the shipping profile section.
+    => 061968 - Fatal error: Uncaught TypeError: Argument 1 passed is invalid, expected string
+    => 061742 - Admin UI: 'Reset' and 'Search' functionality is not working while adding & editing the new zones under the shipping profile section
+    => 061741 - Admin UI: The 'Edit' and 'Add' actions are not working properly for the zones and their rules under the shipping profile section
+    => 061738 - Admin UI: Product's listing is showing while binding the product with the shipping profile
+    => 061736 - Admin UI: Facing multiple UI issues while adding the shipping profile
+    => 061735 - Admin UI: Information is missing for the search i.e. according to what criteria admin can search the record on the shipping profile page
+    => 061733 - Admin UI: 'No Record Found' design is not correct on the shipping company and shipping profile page
+    => 061732 - Admin UI: The 'whole word' is not showing on the transaction history's drawer on the Shipping Company users' page
+    => 061729 - Admin UI: Sorting is not working and the Drawer design is also not consistent on the Shipping Company Users page
+    => 061726 - Admin UI: Getting multiple UI issues while adding the shipping companies name
+    => 061670 - Admin UI: Expired status is not showing for the expired discount coupons
+    => 061671 - Admin UI: Upload image option is not showing in discount coupon form
+    => 061673 - Admin UI: Checkbox is not selected on the table after editing the record on the whole system
+    => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
+    => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
+    => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
+    => 061711 - Admin UI: Images are not aligned in the table of the banners    
     => 061710 - Admin UI: Search is not working according to 'type', disabled status is also changing and the whole page is loading while changing the media on the Banners page
+====================TV-9.4.0.20220201===================== 
+
+    => 061691 - Admin UI: Multiple-delete functionality is not working for the links of the badges and ribbons
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

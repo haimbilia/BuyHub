@@ -206,6 +206,25 @@ class ConfigurationsController extends ListingBaseController
 
     public function updateMaintenanceMode()
     {
+        $this->objPrivilege->canEditGeneralSettings();
+
+        $post = FatApp::getPostedData();
+        $langId  = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        
+        if(empty(FatApp::getConfig('CONF_MAINTENANCE_TEXT_'.$langId, FatUtility::VAR_STRING, ''))){
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_MAINTENANCE_MODE_TEXT_FIRST', $this->siteLangId), true);
+        }
+
+        $record = new Configurations();
+        if (!$record->update($post)) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
+
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     private function isSslEnabled()

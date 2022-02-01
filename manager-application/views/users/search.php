@@ -80,7 +80,7 @@ foreach ($arrListing as $sn => $row) {
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
