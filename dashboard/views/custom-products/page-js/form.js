@@ -276,8 +276,6 @@ var advanceMedia = false; /* open via advance media*/
                         record_id, 
                         file_type,                 
                         ids: sort
-                    }, function(t) {
-                        productImages(record_id,fileType, option_id, lang_id);
                     });
                 }
             }).disableSelection();
