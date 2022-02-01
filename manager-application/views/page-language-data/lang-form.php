@@ -9,8 +9,11 @@ $langFrm->setFormTagAttribute('dir', $formLayout);
 
 $fld = $langFrm->getField('lang_id');
 $fld->setfieldTagAttribute('onChange', "editLangForm('" . $pLangKey . "', this.value);");
+
 $fld = $langFrm->getField('plang_replacements');
-$repVarArr = array_filter(explode("<br>", $fld->value));
+if (!empty($fld->value)) {
+    $repVarArr = array_filter(explode("<br>", $fld->value));
+}
 
 $repVarHtml = '<label class="label">' . Labels::getLabel('LBL_REPLACEMENT_VARS', $siteLangId) . '</label><ul class="click-to-copy">';
 foreach ($repVarArr as $rVar) {
