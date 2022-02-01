@@ -447,7 +447,12 @@ Updates/Fixes :
 ====================TV-9.4.0.20220201===================== 
 
     => 061691 - Admin UI: Multiple-delete functionality is not working for the links of the badges and ribbons
-    
+    => 061690 - Admin UI: Added details are still showing after adding the links of the badges and ribbons
+    => 061700 - Admin UI: The 'cross' and ' drop-down' icons is not aligned under the advanced search section on the whole system.
+    => 061776 - Admin UI: Side men's icons, languages drop-down, and select default product variant options are missing while adding the product
+    => 061780 - Admin UI: Tag section is not working properly and the "Approved Status & Languages drop-down" is not showing while adding the product in the English language
+    => 061798 - Admin UI: UI design is not correct for uploaded images under the 'advanced media' section and for the country's dropdown under the tax/shipping section while adding the product
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

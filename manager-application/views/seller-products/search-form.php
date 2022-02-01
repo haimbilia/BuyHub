@@ -45,7 +45,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
             placeholder: $("#prodcatIdJs").attr('placeholder')
         }).on('select2:open', function(e) {
             $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-        }).data("select2").$container.addClass("custom-select2-width").$container.addClass("custom-select2");
+        }).data("select2").$container.addClass("custom-select2 custom-select2-width");
 
     });
 </script>

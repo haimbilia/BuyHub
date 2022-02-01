@@ -15,7 +15,7 @@
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                                                     </use>
@@ -23,7 +23,7 @@
                                                             </a>
                                                         </div>';
             }
-
+        }    
         ?>
             <div class="add-stock-column-head-action">
                 <div class="input-group">
@@ -32,10 +32,6 @@
                     ?>
                 </div>
             </div>
-        <?php } else {
-            echo $langFld->getHtml();
-        } ?>
-
     </div>
 
     <div class="card" id="basic-details">

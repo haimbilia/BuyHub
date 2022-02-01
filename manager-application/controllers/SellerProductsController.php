@@ -374,7 +374,7 @@ class SellerProductsController extends ListingBaseController {
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_SELLER', $this->siteLangId)]);
 
         $prodCatObj = new ProductCategory();
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);

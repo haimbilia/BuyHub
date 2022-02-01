@@ -4,8 +4,6 @@ class Tag extends MyAppModel
 {
     public const DB_TBL = 'tbl_tags';
     public const DB_TBL_PREFIX = 'tag_';
-    public const DB_TBL_LANG = 'tbl_tags_lang';
-    public const DB_TBL_LANG_PREFIX = 'taglang_';
 
     public function __construct($id = 0)
     {

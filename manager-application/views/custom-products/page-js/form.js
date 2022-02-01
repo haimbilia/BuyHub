@@ -79,7 +79,7 @@
     getTagsAutoComplete = function (e) {
 
         let keyword = e.detail.value;
-        let langId = $("#addProductfrm [name='langId']").val();
+        let langId = getCurrentFrmLangId();
         var list = [];
         fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword, langId }, function (t) {
             var ans = $.parseJSON(t);
@@ -231,10 +231,10 @@
         let recordId = getCurrentFrmRecordId();
         if (1 > recordId) {
             return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "imageForm", [recordId]), '', function (t) {
-            $.ykmodal(t.html);
-            loadImageOptions();
+        }      
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "customProductImageForm", [recordId]), '', function (t) {
+            $.ykmodal(t.html);           
+            loadImageOptions();           
             var recordId = $('#image_record_id').val();
             productImages(recordId);
             fcom.removeLoader();

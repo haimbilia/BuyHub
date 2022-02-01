@@ -4,7 +4,7 @@ foreach ($images as $image) {
     $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($image['afile_record_id'], "THUMB", 0, $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     if ($isDefaultLayout  == applicationConstants::YES) {
     ?>
-        <li class="abc" id="<?php echo $image['afile_id']; ?>">
+        <li id="<?php echo $image['afile_id']; ?>">
             <div class="uploaded-stocks-item" data-ratio="1:1">
                 <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
                 <div class="uploaded-stocks-actions">

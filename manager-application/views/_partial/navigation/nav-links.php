@@ -889,7 +889,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_CMS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Slides"]' href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -904,7 +904,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewBanners(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BannerLocation", "Banners"]' href="<?php echo UrlHelper::generateUrl('BannerLocation'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -919,7 +919,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentPages"]' href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -934,7 +934,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentBlock"]' href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -946,7 +946,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["FaqCategories", "Faq"]' href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -958,7 +958,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Testimonials"]' href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -970,7 +970,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Navigations"]' href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
@@ -982,7 +982,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
+                        <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Collections"]' href="<?php echo UrlHelper::generateUrl('Collections'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">

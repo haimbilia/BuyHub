@@ -75,8 +75,6 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
                         product_id,
                         file_type,
                         ids: sort
-                    }, function(t) {
-                        productImages(product_id, file_type, option_id, lang_id);
                     });
                 }
             }).disableSelection();

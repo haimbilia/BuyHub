@@ -276,13 +276,10 @@ select2 = function (
         $(select2Selector.selection.$search).attr('name', elementName + '-select2');
     }
 
-    if (0 < ele.closest(".advancedSearchJs").length) {
+    if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("custom-select2-width");
     }
 
-    if (0 < ele.closest(".form-group").length) {
-        select2Selector.$container.addClass("custom-select2-width");
-    }
     if (ele.attr('multiple') != undefined) {
         select2Selector.$container.addClass("custom-select2-multiple");
     }

@@ -308,9 +308,9 @@ class CustomProductsController extends SellerBaseController
             $post['lang_id'],
             $post['record_id'],
             $post['upc_type'],
-        );
+        );    
 
-        $data['preq_content']['shipping_profile'] = current(ShippingProfile::getProfileArr($langId, 0, true, true));
+        $data['preq_content']['shipping_profile'] = array_key_first(ShippingProfile::getProfileArr($langId, 0, true, true));
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
         $data['preq_status'] = $requestStatus;

@@ -8,6 +8,6 @@ $(document).ready(function () {
         placeholder: $("#prodcatIdJs").attr('placeholder')
     }).on('select2:open', function (e) {
         $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-    }).data("select2").$container.addClass("custom-select2-width");
+    }).data("select2").$container.addClass("custom-select2 custom-select2-width");
 
 });

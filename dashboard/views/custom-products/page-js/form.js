@@ -63,7 +63,7 @@ var advanceMedia = false; /* open via advance media*/
     getTagsAutoComplete = function (e) {
 
         let keyword = e.detail.value;
-        let langId = $("#addProductfrm [name='langId']").val();
+        let langId = getCurrentFrmLangId();
         var list = [];
         fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), { keyword, langId }, function (t) {
             var ans = $.parseJSON(t);
@@ -276,8 +276,6 @@ var advanceMedia = false; /* open via advance media*/
                         record_id, 
                         file_type,                 
                         ids: sort
-                    }, function(t) {
-                        productImages(record_id,fileType, option_id, lang_id);
                     });
                 }
             }).disableSelection();
