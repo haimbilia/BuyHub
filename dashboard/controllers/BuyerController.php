@@ -661,7 +661,7 @@ class BuyerController extends BuyerBaseController {
             $srch->addMaxPriceCondition($priceTo);
             $srch->addFld('totCombinedOrders as totOrders');
         }
-
+        $srch->addFld('order_id');
         $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addOrder("op_id", "DESC");

@@ -556,8 +556,8 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                 var selectedOptionData = [];
                 if (index in productOptions) {
                     let optionName = productOptions[index]['option_name'];
-                    if(productOptions[index]['option_name'] != productOptions[index]['option_identifier']){
-                        optionName += '('+productOptions[index]['option_identifier']+')';
+                    if (productOptions[index]['option_name'] != productOptions[index]['option_identifier']) {
+                        optionName += '(' + productOptions[index]['option_identifier'] + ')';
                     }
                     selectedOptionData = [{
                         selected: true,
@@ -572,7 +572,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     '',
                     selectedOptionData
                 );
-                $(this).data("select2").$container.addClass("w-100");
+                $(this).data("select2").$container.addClass("custom-select2-width");
 
             });
 
