@@ -484,6 +484,7 @@ class AffiliateController extends AffiliateBaseController
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');
+        $frm->addHiddenField('', 'total_record_count', '');
         $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
 
@@ -505,8 +506,7 @@ class AffiliateController extends AffiliateBaseController
         }
 
         $userObj = new User();
-        $srch = $userObj->referredByAffilates($loggedUserId);
-
+        $srch = $userObj->referredByAffilates($loggedUserId); 
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
         if ($user_id > 0) {
             $srch->addCondition('user_id', '=', $user_id);
@@ -528,18 +528,13 @@ class AffiliateController extends AffiliateBaseController
         if ($user_verified > -1) {
             $srch->addCondition('uc.credential_verified', '=', $user_verified);
         }
-
+        
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post); 
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'user_id');
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
+        $srch->setPageSize($pagesize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet(), 'user_id'));
+        $this->set('postedData', $post); 
         $this->_template->render(false, false);
     }
 
