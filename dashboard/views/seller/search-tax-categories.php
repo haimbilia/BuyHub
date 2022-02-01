@@ -47,7 +47,13 @@
                     $li->appendElement(
                         'a',
                         array('href' => UrlHelper::generateUrl('Seller', 'taxRules', array($row['taxcat_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Tax_Rates', $siteLangId)),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
                     break;

@@ -59,7 +59,13 @@ foreach ($requests as $sn => $row) {
                     'a',
                     array('href'=> $url, 'class'=>'',
                 'title'=>Labels::getLabel('LBL_View_Return_Order_Request', $siteLangId)),
-                    '<i class="fa fa-eye"></i>',
+                    '<i class="icn">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                        </use>
+                    </svg>
+                </i>',
                     true
                 );
                 break;

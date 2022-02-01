@@ -59,14 +59,26 @@
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId)),
-                            '<i class="fa fa-trash"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }

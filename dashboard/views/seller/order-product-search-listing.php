@@ -77,7 +77,13 @@
                             'href' => $orderDetailUrl, 'class' => '',
                             'title' => Labels::getLabel('LBL_View_Order', $siteLangId)
                         ),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 
@@ -89,7 +95,13 @@
                                 'href' => UrlHelper::generateUrl('seller', 'cancelOrder', array($order['op_id'])), 'class' => '',
                                 'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
                             ),
-                            '<i class="fas fa-times"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }

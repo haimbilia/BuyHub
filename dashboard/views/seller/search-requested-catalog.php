@@ -46,15 +46,33 @@
 						$ul = $td->appendElement("ul",array('class'=>'actions'),'',true);
 						$li = $ul->appendElement("li");
 						$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'viewRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_View',$siteLangId)),
-						'<i class="fa fa-eye"></i>', true);
+						'<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>', true);
 						if($row['scatrequest_status'] == User::CATALOG_REQUEST_PENDING){
 							$li = $ul->appendElement("li");
 							$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'deleteRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Delete',$siteLangId)),
-						'<i class="fa fa-trash"></i>', true);
+						'<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
+                    </i>', true);
 						}
 						$li = $ul->appendElement("li");
 						$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'messageForm('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Messages',$siteLangId)),
-						'<i class="fa fa-envelope"></i>', true);
+						'<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-message">
+                            </use>
+                        </svg>
+                    </i>', true);
 					break;
 					default:
 						$td->appendElement('plaintext', array(), $row[$key],true);

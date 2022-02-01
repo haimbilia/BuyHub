@@ -60,7 +60,13 @@
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "addCategoryReqForm(" . $row['prodcat_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }
