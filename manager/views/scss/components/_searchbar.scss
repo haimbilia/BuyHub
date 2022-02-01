@@ -1,10 +1,9 @@
 .quick-search {
-    min-height: 250px;
     &-head {
         margin-bottom: 2rem;
     }
     &-body {
-        max-height: 250px;
+        height: 300px;
         overflow-y: auto;
 
         .menu-section {
