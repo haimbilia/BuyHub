@@ -47,7 +47,7 @@
                     $td->appendElement('plaintext', array(), $name, true);
                     break;
                 case 'prodcat_status':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
                     $td->appendElement('small', array('class' => 'ml-1'), (isset($row['prodcat_status_updated_on']) && $row['prodcat_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['prodcat_status_updated_on']) : '', true);
                     break;
                 case 'prodcat_requested_on':

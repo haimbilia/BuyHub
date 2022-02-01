@@ -24,16 +24,12 @@ class TwocheckoutSettingsController extends PaymentMethodSettingsController
         $frm->addHTML(
             'Remember',
             '&nbsp;',
-            '<div class="row justify-content-center">
-                <div class="col-md-8">
-                    <p class="bg-gray p-4">
-                        In case of <strong>Hosted Checkout</strong>, Admin must set <strong>Redirect URL</strong> in which :<br>
-                        <strong>Return method : Header Redirect</strong><br>  
-                        <strong>Approved URL : ' . UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [], CONF_WEBROOT_FRONT_URL)  . '</strong><br>
-                        Under <strong><a href="https://secure.2checkout.com/cpanel/webhooks_api.php" target="_blank">Integration > Webhooks & API</a></strong> tab find "Redirect URL" section.<br/><br/>
-                    </p>
-                </div>
-            </div>'
+            '<span class="text-muted">
+                In case of <strong>Hosted Checkout</strong>, Admin must set <strong>Redirect URL</strong> in which :<br>
+                <strong>Return method : Header Redirect</strong><br>  
+                <strong>Approved URL : ' . UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [], CONF_WEBROOT_FRONT_URL)  . '</strong><br>
+                Under <strong><a href="https://secure.2checkout.com/cpanel/webhooks_api.php" target="_blank">Integration > Webhooks & API</a></strong> tab find "Redirect URL" section.<br/><br/>
+            </span>'
         );
 
         return $frm;

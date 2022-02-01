@@ -12,7 +12,6 @@
             function (t) {
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
                 fcom.removeLoader();
-                $.ykmsg.close();
             }
         );
     };

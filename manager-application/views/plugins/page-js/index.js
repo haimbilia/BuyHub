@@ -42,7 +42,6 @@ $(document).ajaxComplete(function () {
         data = fcom.frmData(frm);
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             setTabActive(type);
 
@@ -55,7 +54,6 @@ $(document).ajaxComplete(function () {
         var data = 'keyName=' + keyName;
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $.ykmodal(t.html);
         });
     };
@@ -85,7 +83,7 @@ $(document).ajaxComplete(function () {
         data = 'pluginId=' + pluginId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, 'changeStatusByType'), data, function (res) {
             fcom.removeLoader();
-            $.ykmsg.close();
+            fcom.closeProcessing();
             var ans = JSON.parse(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
@@ -137,7 +135,7 @@ $(document).ajaxComplete(function () {
                     function (value) {
                         fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function (res) {
                             fcom.removeLoader();
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             var ans = $.parseJSON(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);
@@ -148,7 +146,7 @@ $(document).ajaxComplete(function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                         var ans = $.parseJSON(res);
                         if (ans.status == 1) {
                             $.ykmsg.success(ans.msg);
@@ -159,7 +157,7 @@ $(document).ajaxComplete(function () {
             },
             function(error) {
                 fcom.removeLoader();
-                $.ykmsg.close();
+                fcom.closeProcessing();
             }
         }).disableSelection();
     }
@@ -199,7 +197,7 @@ $(document).on('click', '.uploadFile-Js', function () {
                 },
                 success: function (ans) {
                     fcom.removeLoader();
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     $('.text-danger').remove();
                     $('#plugin_icon').html(ans.msg);
                     if (ans.status == true) {

@@ -40,7 +40,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
@@ -53,7 +53,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
@@ -66,7 +66,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
             $.ykmodal(t.html, false);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     }
@@ -79,7 +78,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function (t) {
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -87,7 +85,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
     recordForm = function (id, type) {
         fcom.updateWithAjax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -124,7 +121,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
             function (t) {
                 fcom.removeLoader();
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-                $.ykmsg.close();
                 if (0 < $(".displayMediaOnlyJs:checked").val()) {
                     $('.mediaElementsJs').show();
                     loadImages(collection_id);
@@ -138,7 +134,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
     loadImages = function (recordId, langId = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
@@ -188,7 +183,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
     bannerForm = function (collection_id, banner_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -197,7 +191,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
         var data = "collection_id=" + collection_id + "&banner_id=" + banner_id + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function (t) {
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -205,7 +198,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
     banners = function (collection_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -266,7 +258,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 fcom.removeLoader();
                 loadBannerImages(collectionId, bannerId, langId, slide_screen);
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-                $.ykmsg.close();
             }
         );
     };
@@ -281,7 +272,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
         }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();

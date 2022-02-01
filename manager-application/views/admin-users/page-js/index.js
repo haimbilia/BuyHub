@@ -3,7 +3,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changePassword', [id]), '', function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 

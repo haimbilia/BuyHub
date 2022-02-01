@@ -13,7 +13,8 @@
                             $thead = $tbl->appendElement('thead');
                             $tbody = $tbl->appendElement('tbody');
                             foreach ($fields as $key => $val) {
-                                $thead->appendElement('th')
+                                $width = 'linkType' == $key ? '20%' : '80%';
+                                $thead->appendElement('th', ['width' => $width])
                                     ->appendElement('span')
                                     ->appendElement('plaintext', [], $val, true);
 
@@ -28,7 +29,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['product_id'],
-                                                'value' => htmlentities($item['product_name'], ENT_QUOTES),
+                                                'value' => htmlspecialchars_decode($item['product_name'], ENT_QUOTES),
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -38,7 +39,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['prodcat_id'],
-                                                'value' => htmlentities($item['prodcat_name'], ENT_QUOTES),
+                                                'value' => htmlspecialchars_decode($item['prodcat_name'], ENT_QUOTES),
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -49,7 +50,7 @@
                                             $userName = $item['user_name'] . ' ( '. $item['credential_username'] .' )';
                                             $tagifyData[] = [
                                                 'id' => $item['user_id'],
-                                                'value' => htmlentities($userName, ENT_QUOTES),
+                                                'value' => htmlspecialchars_decode($userName, ENT_QUOTES),
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -59,7 +60,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['shop_id'],
-                                                'value' => htmlentities($item['shop_name'], ENT_QUOTES),
+                                                'value' => htmlspecialchars_decode($item['shop_name'], ENT_QUOTES),
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -69,7 +70,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['brand_id'],
-                                                'value' => htmlentities($item['brand_name'], ENT_QUOTES),
+                                                'value' => htmlspecialchars_decode($item['brand_name'], ENT_QUOTES),
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -86,7 +87,7 @@
                                         case 'items':
                                             $data = $linksTypeData[$linkType];
 
-                                            $td->appendElement('plaintext', [], "<input class='tagifyJs' data-link-type='" . $linkType . "' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData) . "'>", true);
+                                            $td->appendElement('plaintext', [], "<input class='form-control tagifyJs' data-link-type='" . $linkType . "' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData) . "'>", true);
                                             break;
                                         default:
                                             $td->appendElement('plaintext', [], $label, true);

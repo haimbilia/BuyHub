@@ -1,16 +1,13 @@
 <?php
 
-class PayoutReportController extends SellerBaseController
-{
+class PayoutReportController extends SellerBaseController {
 
-    public function __construct($action)
-    {
+    public function __construct($action) {
         parent::__construct($action);
         $this->userPrivilege->canViewFinancialReport();
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $this->set('frmSearch', $frmSearch);
@@ -20,12 +17,11 @@ class PayoutReportController extends SellerBaseController
         $this->_template->render();
     }
 
-    public function search($type = false)
-    {
+    public function search($type = false) {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current(array_keys($fields));
@@ -51,7 +47,7 @@ class PayoutReportController extends SellerBaseController
         $pSrch->addCondition('pcharge_user_id', '=', $this->userParentId);
         $pSrch->addMultipleFields(['Date(pc.pcharge_date) as date']);
 
-        /*Sales Earnings */
+        /* Sales Earnings */
         $opSrch = new Report(0, [], true);
         $opSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
         $opSrch->joinOrders();
@@ -67,7 +63,6 @@ class PayoutReportController extends SellerBaseController
         $opSrch->doNotLimitRecords();
         $opSrch->setDateCondition($fromDate, $toDate);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userParentId);
-
 
         /* Subscription earning */
         $sSrch = new OrderSubscriptionSearch($this->siteLangId, true, true);
@@ -92,7 +87,8 @@ class PayoutReportController extends SellerBaseController
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = opSrch.date', 'opSrch');
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = sSrch.date', 'sSrch');
         $srch->addGroupBy('date');
-
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -145,14 +141,7 @@ class PayoutReportController extends SellerBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -160,15 +149,14 @@ class PayoutReportController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function export()
-    {
+    public function export() {
         $this->search('export');
     }
 
-    private function getSearchForm($fields = [])
-    {
+    private function getSearchForm($fields = []) {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
@@ -183,8 +171,7 @@ class PayoutReportController extends SellerBaseController
         return $frm;
     }
 
-    private function getFormColumns()
-    {
+    private function getFormColumns() {
         $sellerPayoutReportsCacheVar = CacheHelper::get('sellerPayoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerPayoutReportsCacheVar) {
             $arr = [
@@ -198,14 +185,14 @@ class PayoutReportController extends SellerBaseController
             ];
             CacheHelper::create('sellerPayoutReportsCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($sellerPayoutReportsCacheVar);
+            $arr = unserialize($sellerPayoutReportsCacheVar);
         }
 
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return ['date', 'promotionCharged', 'sellerTaxTotal', 'sellerShippingTotal', 'totalAmount'];
     }
+
 }

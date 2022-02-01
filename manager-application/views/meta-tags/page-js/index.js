@@ -58,7 +58,6 @@ $(document).on('blur', '.metaUrlJs', function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             setTabActive(type);
 
@@ -74,7 +73,6 @@ $(document).on('blur', '.metaUrlJs', function () {
     metaTagForm = function (id, metaType, metaTagRecordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -82,7 +80,6 @@ $(document).on('blur', '.metaUrlJs', function () {
     editMetaTagForm = function (id, metaType, metaTagRecordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -91,7 +88,6 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            $.ykmsg.close();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, t.metaType, t.metaTagRecordId);
@@ -103,7 +99,6 @@ $(document).on('blur', '.metaUrlJs', function () {
     editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -112,7 +107,6 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
-            $.ykmsg.close();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, metaType);

@@ -3,7 +3,6 @@
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "view"), data, function (t) {
             $.ykmodal(t.html, false);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -12,7 +11,6 @@
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html, false);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -20,7 +18,6 @@
     loadImages = function (recordId, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
@@ -43,7 +40,6 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'clone'), data, function (t) {
             reloadList();
             $.ykmodal(t.html, false);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -51,7 +47,6 @@
     notifyUsersForm = function (pNotificationId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'notifyUsersForm', [pNotificationId]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

@@ -3,7 +3,7 @@ $controller = strtolower($controller);
 $action = strtolower($action); ?>
 <sidebar class="sidebar no-print" id="sidebar" data-close-on-click-outside="sidebar">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
-    <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
+    <div class="sidebar-body sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
             <li class="dashboard-menu-item">
                 <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-orders" aria-expanded="true" aria-controls="collapseOne" title="">
@@ -157,6 +157,23 @@ $action = strtolower($action); ?>
                 </ul>
             </li>
             <?php $this->includeTemplate('_partial/dashboardLanguageArea.php'); ?>
+        </ul>
+    </div>
+    <div class="sidebar-foot">
+        <ul class="dashboard-menu">
+            <li class="dashboard-menu-item">
+                <button class="dashboard-menu-btn menuLinkJs" type="button" title="">
+                    <span class="dashboard-menu-icon">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#globe">
+                            </use>
+                        </svg>
+                    </span>
+                    <span class="dashboard-menu-head">
+                        <?php echo Labels::getLabel('LBL_Localization', $siteLangId); ?>
+                    </span>
+                </button>
+            </li>
         </ul>
     </div>
 </sidebar>

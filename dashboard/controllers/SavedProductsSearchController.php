@@ -20,8 +20,10 @@ class SavedProductsSearchController extends LoggedUserController
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
 
         $srch = SavedSearchProduct::getSearchObject();
+        $srch->addCondition('pssearch_user_id', '=', $this->userId); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post); 
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder('pssearch_added_on', 'DESC');
-        $srch->addCondition('pssearch_user_id', '=', $this->userId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -34,12 +36,8 @@ class SavedProductsSearchController extends LoggedUserController
             $arrListing[$key]['search_url'] = SavedSearchProduct::getSearchPageFullUrl($val['pssearch_type'], $val['pssearch_record_id']) . '?' . $val['pssearch_url'];
             $arrListing[$key]['totalRecords'] = 0;
             $arrListing[$key]['newRecords'] = 0;
-        }
-
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('pageCount', $srch->pages());
+        } 
+        $this->set('postedData', $post);
         $this->set('arrListing', $arrListing);
         $this->_template->render(false, false);
     }

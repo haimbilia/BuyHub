@@ -216,7 +216,7 @@ class PageLanguageDataController extends ListingBaseController
             'plang_helping_text' => $post['plang_helping_text'],
             'plang_recommendations' => $post['plang_recommendations']
         ];
-
+        
         if (!$pLangDataPage->addUpdateData($data)) {
             LibHelper::exitWithError($pLangDataPage->getError(), true);
         }

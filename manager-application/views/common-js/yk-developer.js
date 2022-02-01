@@ -86,13 +86,19 @@ $(function () {
         },
 
         displayProcessing: function () {
-            $.ykmsg.close();
-            $.ykmsg.info(langLbl.processing, -1);
+            fcom.closeProcessing();
+            $.ykmsg.info(langLbl.processing, -1, 'processingJs');
         },
+        
+        closeProcessing: function () {
+            $(".processingJs").remove();
+        },
+
         displaySuccessMessage: function (msg) {
             $.ykmsg.close();
             $.ykmsg.success(msg);
         },
+
         displayErrorMessage: function (msg) {
             $.ykmsg.close();
             $.ykmsg.error(msg);
@@ -214,7 +220,7 @@ $(function () {
             "",
             function (res) {
                 var json = JSON.parse(res);
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 $(dv).empty();
                 $(dv).append(json.html);
             }
@@ -237,7 +243,7 @@ $(function () {
             "",
             function (res) {
                 var json = JSON.parse(res);
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 $(dv).empty();
                 $(dv).append(json.html).change();
             }
@@ -413,6 +419,11 @@ $(function () {
         setTimeout(() => {
             stylePhoneNumberFld('.phoneJs');
         }, 200);
+
+        /* Disable Top Action button if no item selected. */
+        if (typeof $(".selectItemJs:checked").val() === "undefined") {
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
+        }
     });
 })();
 

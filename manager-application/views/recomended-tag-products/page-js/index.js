@@ -47,7 +47,7 @@ $(document).on('change', ".inputDateJs", function () {
             fcom.displayProcessing();
             var data = 'tag_id=' + tagId + '&product_id=' + productId + '&' + attribute + '=' + value;
             fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
                     $.ykmsg.error(ans.msg);

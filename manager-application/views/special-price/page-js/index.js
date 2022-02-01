@@ -71,7 +71,7 @@ $(document).ready(function () {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (t) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
                     $.ykmsg.error(ans.msg);

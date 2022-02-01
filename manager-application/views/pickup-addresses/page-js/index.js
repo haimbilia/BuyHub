@@ -12,8 +12,7 @@ $(document).on('change', '#addrStateJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md',);
-            $.ykmsg.close();
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
         });
     }
@@ -23,7 +22,6 @@ $(document).on('change', '#addrStateJs', function () {
         fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
             $.ykmodal(res.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
-            $.ykmsg.close();
             var oldLabel = $(".label-js").text();
             $(".label-js").attr("data-listlabel", oldLabel).text(langLbl.pickupAddressForm);
             $(".js-add-pickup-addr").addClass('d-none');
@@ -63,7 +61,6 @@ $(document).on('change', '#addrStateJs', function () {
     };
     getCountryStates = function (countryId, stateId, div, langId) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $(div).empty();
             $(div).append(res.html);

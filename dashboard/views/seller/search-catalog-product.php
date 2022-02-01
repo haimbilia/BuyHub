@@ -53,10 +53,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                     break;
                 case 'product_approved':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_active':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_shipped_by':
                     $active = "";

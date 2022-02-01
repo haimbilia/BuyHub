@@ -36,7 +36,7 @@ $(document).ready(function () {
             fcom.displayProcessing();
             var data = 'attribute=' + attribute + "&voldiscount_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.ajax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (t) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
                     $.ykmsg.error(ans.msg);

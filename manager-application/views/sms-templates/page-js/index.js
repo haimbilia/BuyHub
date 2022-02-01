@@ -14,7 +14,6 @@ $(document).ready(function () {
             fcom.makeUrl(controllerName, "editTemplate", [stplCode, langId, autoFillLangData]), '',
             function (t) {
                 $.ykmodal(t.html);
-                $.ykmsg.close();
                 fcom.removeLoader();
             }
         );

@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'from_date':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'to_date':
-                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $siteLangId) : HtmlHelper::formatDateTime($row[$key], true));
+                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $siteLangId) : HtmlHelper::formatDateTime($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())));
                 $td->appendElement('plaintext', [], $lbl, true);
                 break;
             case 'action':

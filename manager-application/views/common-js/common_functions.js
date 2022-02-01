@@ -26,7 +26,6 @@ function getNotifications(type, obj) {
         url,
         "",
         function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $("#notificationList").html(res.html);
             $('#notifiLinkViewAll').attr('href', viewAllUrl);
@@ -287,7 +286,7 @@ select2 = function (
 };
 
 $(document).on('select2:open', () => {
-    document.querySelector('.select2-search__field').focus(); 
+    setTimeout(function () { document.querySelector('.select2-search__field').focus();  }, 10);
 });
 /**
  * hiddenfields object = { fieldname : fieldValue}

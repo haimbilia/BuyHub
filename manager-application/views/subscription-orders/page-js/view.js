@@ -13,7 +13,6 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'ossubs_id=' + ossubsId, function (ans) {
                 fcom.removeLoader();
-                $.ykmsg.close();
                 $.ykmodal(ans.html);
             });
         }

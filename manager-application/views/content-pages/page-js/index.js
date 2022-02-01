@@ -39,7 +39,6 @@ $(document).on('change', '#imageLanguageJs', function () {
     backgroundImage = function (recordId, langId) {
         fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'images', [recordId, langId]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $('#imageListingJs').html(t.html);
         });
     };

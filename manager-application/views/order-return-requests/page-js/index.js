@@ -15,7 +15,6 @@ $(document).ready(function () {
     viewAdminComment = function (orrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[orrequestId]), '', function (t) {
             $.ykmodal(t.html, true);
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

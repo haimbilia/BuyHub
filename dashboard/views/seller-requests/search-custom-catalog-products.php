@@ -39,7 +39,7 @@
                     $td->appendElement('plaintext', array(), $html, true);
                     break;
                 case 'preq_status':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
                     $td->appendElement('p', array('class' => 'small'), ($row['preq_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['preq_status_updated_on']) : '', true);
                     break;
                 case 'preq_added_on':

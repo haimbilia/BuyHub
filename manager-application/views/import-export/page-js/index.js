@@ -16,7 +16,6 @@ $(document).ready(function () {
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(dv).html(t.html);
         });
     };
@@ -30,7 +29,6 @@ $(document).ready(function () {
         var dv = $('#listing');
         $("#listing").html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
-            $.ykmsg.close();
             fcom.removeLoader();
             $("#listing").html(res.html);
         });
@@ -58,7 +56,7 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 success: function (t) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
@@ -89,7 +87,7 @@ $(document).ready(function () {
         if (true == confirm(langLbl.confirmDelete)) {
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
                     $(document).trigger('close.facebox');

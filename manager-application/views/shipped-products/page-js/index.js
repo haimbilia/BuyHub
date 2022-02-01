@@ -12,14 +12,12 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            $.ykmsg.close();
         });
     };
 
     viewSellerShip = function (productId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId }, function (t) {
             $.ykmodal(t.html, false, '');
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -27,7 +25,6 @@
     viewAdminSellerShip = function (productId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId, adminShip: 1 }, function (t) {
             $.ykmodal(t.html, false, '');
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

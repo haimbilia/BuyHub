@@ -80,7 +80,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <?php } ?>
                     </div>
                     <div class="card-body">
-
                         <div id="profileInfoFrmBlock">
                             <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>

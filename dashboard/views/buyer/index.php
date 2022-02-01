@@ -83,7 +83,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                     <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row)); ?>
                                                 </td>
                                                 <td>
-                                                    <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
+                                                    <span class="badge badge-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
                                                         <?php echo $row['orderstatus_name']; ?>
                                                     </span>
                                                 </td>
@@ -225,7 +225,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                     <div class="request__qty"> <?php echo $row['orrequest_qty']; ?> </div>
                                                 </td>
                                                 <td>
-                                                    <span class="label label-inline <?php echo $OrderRetReqStatusClassArr[$row['orrequest_status']]; ?>">
+                                                    <span class="badge badge-inline <?php echo $OrderRetReqStatusClassArr[$row['orrequest_status']]; ?>">
                                                         <?php echo $OrderReturnRequestStatusArr[$row['orrequest_status']]; ?>
                                                     </span>
                                                 </td>
@@ -314,7 +314,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                         <?php echo $row['ocrequest_message']; ?> </div>
                                                 </td>
                                                 <td>
-                                                    <span class="label label-inline <?php echo $cancelReqStatusClassArr[$row['ocrequest_status']]; ?>">
+                                                    <span class="badge badge-inline <?php echo $cancelReqStatusClassArr[$row['ocrequest_status']]; ?>">
                                                         <?php echo $OrderCancelRequestStatusArr[$row['ocrequest_status']]; ?>
                                                     </span>
                                                 </td>

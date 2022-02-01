@@ -3,7 +3,6 @@ addNewFaq = function (faqCatId) {
     $(".selectAllJs, .selectItemJs").prop("checked", false)
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { faqCatId }, function (t) {
         $.ykmodal(t.html, false, '');
-        $.ykmsg.close();
         fcom.removeLoader();
     });
 };
@@ -43,7 +42,7 @@ bindSortable = function () {
                 function (value) {
                     fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                         var ans = $.parseJSON(res);
                         if (ans.status == 1) {
                             $.ykmsg.success(ans.msg);
@@ -54,7 +53,7 @@ bindSortable = function () {
                 },
                 function (error) {
                     fcom.removeLoader();
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                 }
             );
         },
@@ -67,7 +66,6 @@ editRecord = function (recordId, faqCatId) {
     data = { recordId, faqCatId };
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
         $.ykmodal(t.html);
-        $.ykmsg.close();
         fcom.removeLoader();
     });
 };
