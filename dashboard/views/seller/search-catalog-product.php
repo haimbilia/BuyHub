@@ -119,7 +119,13 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'onclick' => 'catalogInfo(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_product_Info', $siteLangId), true),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 
