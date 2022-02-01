@@ -79,7 +79,7 @@
     getTagsAutoComplete = function (e) {
 
         let keyword = e.detail.value;
-        let langId = $("#addProductfrm [name='langId']").val();
+        let langId = getCurrentFrmLangId();
         var list = [];
         fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword, langId }, function (t) {
             var ans = $.parseJSON(t);

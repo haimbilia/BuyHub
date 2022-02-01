@@ -90,7 +90,7 @@ trait CatalogProduct
             }
         }
 
-        if (0 < $recordId && $isRequested == 0) {
+        if ($isRequested == 0) {
             $frm->addCheckBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', 1, array(), false, 0);
         }
 

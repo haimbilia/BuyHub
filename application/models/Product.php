@@ -492,27 +492,7 @@ class Product extends MyAppModel
         }
         $this->logUpdatedRecord();
         return true;
-    }
-
-    public function addUpdateProductTags($tags = array())
-    {
-        if (!$this->mainTableRecordId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
-            return false;
-        }
-
-        FatApp::getDb()->deleteRecords(static::DB_PRODUCT_TO_TAG, array('smt' => static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
-        if (empty($tags)) {
-            return true;
-        }
-
-        foreach ($tags as $tag_id) {
-            if (!$this->addUpdateProductTag($tag_id)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    }   
 
     public function removeProductTag($tag_id)
     {
