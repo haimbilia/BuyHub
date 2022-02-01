@@ -19,11 +19,13 @@ $(window).on('load', function () {
 
 updateMaintenanceModeStatus = function (event,obj, status,langId) {
     $('.settingListJs').prepend(fcom.getLoader());
+    fcom.displayProcessing();
     event.stopPropagation();
     var data = $(obj).attr('name') + '=' + status + '&lang_id=' + langId;
     var oldStatus = $(obj).attr("data-old-status");
     var nextStatus = status == 1 ? 0 : 1;
     fcom.ajax(fcom.makeUrl('Configurations', 'updateMaintenanceMode'), data, function (ans) {
+        fcom.closeProcessing();
         var ans = JSON.parse(ans);
         $(obj).prop("checked", 1 == status);
         if (ans.status == 1) {
