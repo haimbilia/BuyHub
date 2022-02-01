@@ -582,6 +582,7 @@ Enhancement:
     => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
     => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
     => 061828 - Admin UI: Text cursor is not showing while searching the record from the drop-down on the whole system.
+    => 061776 - Admin UI: Side men's icons, languages drop-down, and select default product variant options are missing while adding the product
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

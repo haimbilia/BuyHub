@@ -1,7 +1,10 @@
 <?php
 
-trait Catalog
+trait CatalogProduct
 {
+
+    abstract public function checkEditPrivilege(): bool;
+
     /**
      * getForm
      *
@@ -11,17 +14,17 @@ trait Catalog
      * @param  mixed $isRequested - is requested catalog by seller
      * @return object
      */
+
     private function getCatalogForm($langId, $productType = 0, $recordId = 0, $isRequested = 0): object
     {
         $frm = new Form('frmProduct');
         $productTypeArr = Product::getProductTypes($langId);
         $productType = $productType == 0 ? array_key_first($productTypeArr) : $productType;
 
-        if (0 < $recordId) {
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
-        } else {
-            $fld = $frm->addHiddenField('', 'lang_id', $langId);
-            $fld->requirements()->setRequired();
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
+        $fld->requirements()->setRequired();
+        if (1 > $recordId) {
+            $fld->addFieldTagAttribute('disabled', 'disabled');
         }
 
         $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
@@ -52,9 +55,9 @@ trait Catalog
         }
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
-        $frm->addCheckBox(Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);        
+        $frm->addCheckBox(Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);
         $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
-        
+
         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', []);
         $fld->requirements()->setRequired();
@@ -82,22 +85,13 @@ trait Catalog
                 $weightFld->requirements()->setRange('0.01', '9999999999');
             }
 
-            if (1 == $isRequested) {
-                $shippingObj = new Shipping($langId);
-                if (!$shippingObj->getShippingApiObj(0)) {
-                    $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
-                }
-            } else {
+            if (0 == $isRequested) {
                 $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
             }
         }
 
         if (0 < $recordId && $isRequested == 0) {
             $frm->addCheckBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', 1, array(), false, 0);
-        }
-
-        if (0 < $recordId && $isRequested == 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $langId), '', ProductRequest::getStatusArr($langId), '', array(), '');           
         }
 
         if ($isRequested == 0) {
@@ -116,13 +110,63 @@ trait Catalog
         $frm->addHiddenField('', 'optionValues');
         $frm->addHiddenField('', 'specifications');
 
-        if (1 > $recordId && $isRequested == 0) {
+        if (1 > $recordId) {
             $fld = $frm->addHiddenField('', 'temp_product_id');
             $fld->requirements()->setRequired();
         }
 
         $frm->addHiddenField('', 'record_id', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
+        return $frm;
+    }
+    
+    public function imageForm(int $recordId = 0, $tempProductId = 0)
+    {
+        $frm = $this->getImageFrm();
+        if (1 > $recordId) {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
+        } else {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
+        }
+
+        $this->set('frm', $frm);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function customProductImageForm(int $recordId = 0, $tempProductId = 0)
+    {
+        $frm = $this->getImageFrm();
+        if (1 > $recordId) {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
+        } else {
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $recordId]);
+        }
+
+        $this->set('frm', $frm);
+        $this->set('html', $this->_template->render(false, false, 'products/image-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+
+    private function getImageFrm()
+    {
+        $frm = new Form('imageFrm');
+        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', [], '', array(), Labels::getLabel('FRM_FOR_ALL_OPTIONS', $this->siteLangId));
+        $languagesAssocArr = Language::getAllNames();
+        if (count($languagesAssocArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+        } else {
+            $langId = array_key_first($languagesAssocArr);
+            $frm->addHiddenField('', 'lang_id', $langId);
+        }
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'prod_image');
+        $frm->addHtml('', 'images', '');
+        $frm->addHiddenField('', 'min_width', 500);
+        $frm->addHiddenField('', 'min_height', 500);
+        $frm->addHiddenField('', 'record_id');
+        $frm->addHiddenField('', 'file_type');
+
         return $frm;
     }
     

@@ -232,7 +232,7 @@
         if (1 > recordId) {
             return;
         }      
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "imageForm", [recordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "customProductImageForm", [recordId]), '', function (t) {
             $.ykmodal(t.html);           
             loadImageOptions();           
             var recordId = $('#image_record_id').val();

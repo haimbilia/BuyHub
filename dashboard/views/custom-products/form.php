@@ -27,7 +27,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
@@ -35,18 +35,16 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                             </a>
                                                         </div>';
             }
-
+        }    
         ?>
-            <div class="content-header-toolbar">
-                <div class="input-group">
-                    <?php
-                    echo $langFld->getHtml();
-                    ?>
-                </div>
+        <div class="content-header-toolbar">
+            <div class="input-group">
+                <?php
+                echo $langFld->getHtml();
+                ?>
             </div>
-        <?php } else {
-            echo $langFld->getHtml();
-        } ?>
+        </div>
+       
     </div>
     <div class="content-body">
         <div class="add-stock">

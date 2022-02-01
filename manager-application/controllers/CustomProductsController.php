@@ -2,7 +2,7 @@
 
 class CustomProductsController extends ListingBaseController
 {
-    use Catalog;
+    use CatalogProduct;
     protected string $modelClass = 'ProductRequest';
     protected $pageKey = 'CUSTOM_PRODUCT_REQUEST';
 
@@ -274,7 +274,7 @@ class CustomProductsController extends ListingBaseController
             }
         }
 
-        if (is_array($productData['product_option']) && count($productData['product_option'])) {
+        if (isset($productData['product_option']) && is_array($productData['product_option']) && count($productData['product_option'])) {
             $srch = Option::getSearchObject($langId);
             $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
             $srch->addCondition('option_id', 'IN', $productData['product_option']);
@@ -681,14 +681,6 @@ class CustomProductsController extends ListingBaseController
             $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
         }
         return $frm;
-    }
-
-    public function imageForm($recordId = 0)
-    {
-        $frm = $this->getImageFrm($recordId);
-        $this->set('frm', $frm);
-        $this->set('html', $this->_template->render(false, false, 'products/image-form.php', true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function digitalDownloadForm($recordId, $type)
@@ -1459,26 +1451,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('downloadType', $post['download_type']);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getImageFrm($recordId = 0)
-    {
-        $frm = new Form('imageFrm');
-        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', [], '', array(), Labels::getLabel('FRM_FOR_ALL_OPTIONS', $this->siteLangId));
-        $languagesAssocArr = Language::getAllNames();
-        if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
-        } else {
-            $langId = array_key_first($languagesAssocArr);
-            $frm->addHiddenField('', 'lang_id', $langId);
-        }
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'prod_image');
-        $frm->addHtml('', 'images', '');
-        $frm->addHiddenField('', 'min_width', 500);
-        $frm->addHiddenField('', 'min_height', 500);
-        $frm->addHiddenField('', 'record_id', $recordId);
-        return $frm;
-    }
+    }   
 
     protected function getFormColumns(): array
     {
