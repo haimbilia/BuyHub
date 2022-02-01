@@ -50,8 +50,8 @@
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':                   
-                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order ,'siteLangId'=> $siteLangId], false, true);
+                case 'product':
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':
@@ -75,7 +75,7 @@
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
                     }
 
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $labelClass), $orderStatus . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $orderStatus . '<br>', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);

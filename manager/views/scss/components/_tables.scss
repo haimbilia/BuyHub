@@ -707,7 +707,8 @@
             text-decoration: none;
             //border: $input-border;
             height: $input-height;
-            padding: $input-padding;
+            width: $input-height;
+            padding: 0.5rem;
             font-size: $input-font-size;
             line-height: $input-line-height;
             border-radius: $input-border-radius;
