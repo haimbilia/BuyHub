@@ -1,17 +1,3 @@
-
-Release Number : 
-Release Date : 
-
-New Feature :     
-    => 88083 : System Log Listing Page 
-    
-Updates: N/A
-	
-Fixes: N/A
-    
-    
-================================================================================
-
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
@@ -27,6 +13,27 @@ New Feature :
     => 86472 : YoCo Payment gateway
     => 88040 : ShipRocket Shipping API Integration
     => 88449 : ShipEngine Shipping API Integration
+    => Admin shipped products listing page
+    => task-84719 Preview module for digital files
+    => task-85619 Adding files when digital order is delivered
+    => 88083 : System Log Listing Page 
+  
+Enhancements :
+   => At shop level  pickup interval option given
+   => Tracking order with Google Analytics ecommerce 
+   => W3c validator.
+   => Performance optimization
+   => Upgrades in GEO location module to configure default location.  
+   => Price surge based on special price. 
+   => Admin Reports.
+   => Map listing for products & shops 
+   => Withdrawal Requests
+   => Order Cancellation Requests 
+   => Manage Alert text
+   => Manage Product Reviews
+   => Multilingual Sitemap
+   => Add product screen
+
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -115,7 +122,6 @@ Updates/Fixes :
     ====================TV-9.3.1.20210703==========================
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
     =====================TV-9.3.1.20210705========================
-
     => 055632 - on accessing digital preview file from front end getting error
     => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
     ======================TV-9.3.1.20210708====================== 
@@ -237,137 +243,6 @@ Updates/Fixes :
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
-
-New Features:  
-    => Admin shipped products listing page
-    => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered
-
-Enhancements :
-   => At shop level  pickup interval option given
-   => Tracking order with Google Analytics ecommerce 
-   => W3c validator.
-   => Performance optimization
-   => Upgrades in GEO location module to configure default location.  
-   => Price surge based on special price. 
-   => Admin Reports.
-   => Map listing for products & shops 
-   => Withdrawal Requests
-   => Order Cancellation Requests 
-   => Manage Alert text
-   => Manage Product Reviews
-
-Admin UI/UX Enhancements pages:
-    => Login / Register, Forgot Password
-    => My Profile/ Change Pasword
-    => Product Catalog
-        - Brands
-        - Shops
-        - Categories        
-
-    => Requests
-        - Brand request
-        - Categories requests 
-        - Seller approval requests
-        - Threshold products
-        - Rating types
-
-    => Orders
-        - Order Cancel Reasons
-        - Order Return Reasons
-        - Order Statuses
-
-    => Users
-        - Users
-        - Rewards
-        - Transactions
-        - Deleted Users
-        - Users addresses
-
-    => Promotions
-        - Special Price
-        - Volume Discount
-        - Related Products
-        - Promotions
-        - Rewards on purchase
-        - manage weightages
-        - Recommended tag products weightages
-
-    => Blog
-        - Blog Post Categories
-        - Blog Posts
-        - Blog Contributions
-        - Blog Comments
-
-    => Tax
-        - Tax structure
-        - Tax categories
-        - Tax categories rule
-
-    => CMS
-        - Content Pages
-        - Content Block
-        - Faq's
-        - Testimonials
-
-    => Reports
-        - Sales Report
-        - Financial Report
-        - Subscription Reports
-
-    => Import/Export
-
-    => Seo
-        - Url Rewriting
-        - Image attributes
-        - Generate Sitemap
-        - View Html
-        - View Xml
-        - Meta Tags Management
-
-    => Settings
-
-=========================TV-9.4.0.20211130======================
-=> Product Catalog
-    - Oprions
-
-=> Requests    
-    - Order return requests
-    - Order cancellation requests
-    - Withdrawal requests
-
-=> Orders
-    - Orders
-    - Subscription Orders
-    - Product Reviews
-
-=> Users
-    - Admin Users
-    - GDPR requests
-
-=> Promotions
-    - Discount Coupons
-    - Push notifications
-    - Badges
-    - Ribbons
-
-=> CMS
-    - Home page slidees
-    - Banners
-    - Navigations
-
-=> Reports
-   - Buyers report
-   - Discount coupons
-
-=> Shipping/Pickup
-    - Shipping compnay users
-    - Shipping packages
-    - Shipping profiles
-    - Pickup addresses
-    - Shipped addresses
-
-Bugs : 
     => 060304 - The homepage logo is not clearly visible.
     => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
 	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
@@ -445,26 +320,6 @@ Bugs :
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
 ==================TV-9.4.0.20211215====================
-
-    => Dashboard Stats
-    => Product page
-    => UAT Fixes
-
-==================TV-9.4.0.20211223===================
-    => Multilingual Sitemap
-    => Add product screen
-    => UAT Fixes
-=============TV-9.4.0.20211228================
-=> Product Catalog
-    - Seller Inventory
-
-=> Notification and Logs
-
-=> Promotions   
-    - Badges 
-    - Robbons        
-
-Bugs : 
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
     => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
     => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
@@ -539,14 +394,6 @@ Bugs :
     => 061583 - Admin UI: Clear functionality is not working properly under the "Order return requests" section
     => 061577 - Admin UI: Options text of the "Transfer refund" field is larger than the sub-titles and comments are also not showing on the orders details page
     => 061651 - Admin: 'Subscription period' and 'payment status' are not showing on the subscription order details page and the Seller's phone number is also missing
-
-New Features :
- => Getting Started
-
-Enhancement:
-=> left Navigations
-=> Quick Search
-=> Updated System Labels    
 
 ====================TV-9.4.0.20220120==================
     => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
