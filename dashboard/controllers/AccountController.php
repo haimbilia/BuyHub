@@ -585,7 +585,7 @@ class AccountController extends LoggedUserController
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('utxn.utxn_date', $dateOrder); 
+        $srch->addOrder('utxn.utxn_date', $dateOrder);  
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
         $this->set('arrListing', $records); 
         $this->set('postedData', $post);
