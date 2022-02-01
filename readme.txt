@@ -119,12 +119,15 @@ Updates/Fixes :
     => 055154	digital items> files linked with specific language are listing all on front end in preview
     => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
-    ====================TV-9.3.1.20210703==========================
+====================TV-9.3.1.20210703==========================
+
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
-    =====================TV-9.3.1.20210705========================
+=====================TV-9.3.1.20210705========================
+
     => 055632 - on accessing digital preview file from front end getting error
     => 055631 - when pickup order is canceled by seller then listing delivery charges field on screen
-    ======================TV-9.3.1.20210708====================== 
+======================TV-9.3.1.20210708====================== 
+
     => 055604 - zip file needs to be exported on click of download button on buyer end containing (files and link) just like Tribe
     => 055720 - admin> promotions> ribbon> bind conditions> list having select option which is of no use and on selecting, nothing appears on top for operations
     => 055721 - admin> promotions> ribbon> bind conditions> filters> fields are not aligned properly
@@ -149,6 +152,7 @@ Updates/Fixes :
     => 055840 - Google Shopping Feed Enhancement Changes
     => 055850 - Warning : Creating default object from empty value
 ==============================TV-9.3.2.20210716=====================================
+
     => 055874 - getting invalid request on linking rating type with new category
     => 056100 - Notice: Undefined index: op_special_price
     => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
@@ -165,20 +169,23 @@ Updates/Fixes :
     => 056197 - on adding item to wishlist getting 404
     => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
-
 =========================TV-9.3.2.20210720=====================================
+
     => 056192 - Showing fatal error while opening settings of split payment method.
     => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
     => 056228 - Undefined Variable rating types
     => 056229 - Notice: Undefined index: oua_phone_dcode
     => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
 ==========================TV-9.3.2.20210723========================================
+
     => 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
     => 056147 - buyer> orders> feedback form> rating stars are not populating
 ================TV-9.3.2.20210726===================
+
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
 ===============TV-9.3.2.20210728====================
+
     => 056264 - Shop details >> If "use manual shipping rates" checkbox is not checked then "postal code" should be mandatory
     => 056246 - Catalog -> Shipping options
     => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
@@ -194,6 +201,7 @@ Updates/Fixes :
     => 056508 - on order cancellation requests error coming at admin side
     => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
 ===================TV-9.3.2.20210730==================
+
     => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
     => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
     => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
@@ -212,6 +220,7 @@ Updates/Fixes :
     => 056241 - seller> sales reports> back button is not working
     => 056293 - Shipping profile is not getting created from admin end 
 ====================TV-9.3.2.20210805========================
+
     => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
     => 056944 - on saving seller catalog specification at admin end error coming
     => 056959 - on updating seller order getting error at admin end 
@@ -221,8 +230,8 @@ Updates/Fixes :
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
     => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days" Time Slots
     => 057163 - while adding the option in catalog getting struck in ajax loop
-
 ===========================TV-9.3.2.20210810==================
+
     => 057137 - Getting error while stripe connect transfer seller part
     => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
     => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
@@ -243,6 +252,7 @@ Updates/Fixes :
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
+
     => 060304 - The homepage logo is not clearly visible.
     => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
 	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
@@ -320,6 +330,7 @@ Updates/Fixes :
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
 ==================TV-9.4.0.20211215====================
+
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
     => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
     => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
@@ -362,6 +373,7 @@ Updates/Fixes :
     => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
     => 061115 - commission going negative when refund the product [RV-9.3.1]
 =============TV-9.4.0.20210107================
+
     => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
     => 061012 - Admin UI: "Row's Re-arrange" functionality is not working properly on the whole system
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
@@ -377,6 +389,7 @@ Updates/Fixes :
     => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
     => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system
 ====================TV-9.4.0.20220112==============
+
     => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
     => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
     => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
@@ -394,8 +407,8 @@ Updates/Fixes :
     => 061583 - Admin UI: Clear functionality is not working properly under the "Order return requests" section
     => 061577 - Admin UI: Options text of the "Transfer refund" field is larger than the sub-titles and comments are also not showing on the orders details page
     => 061651 - Admin: 'Subscription period' and 'payment status' are not showing on the subscription order details page and the Seller's phone number is also missing
-
 ====================TV-9.4.0.20220120==================
+
     => 061669 - Sr. No is not correct, default-sorting is not showing, and the search's watermark is also not showing completely on the Discount Coupons page.
     => 061665 - Admin UI: 'Search icon' is not showing in the search field and the 'search' watermark is also missing on the Abandoned cart page.
     => 061677 - Admin UI: Default-sorting is not showing in the table and the character limit is also missing for the Arabic's name while adding the badges.
@@ -431,8 +444,7 @@ Updates/Fixes :
     => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
     => 061711 - Admin UI: Images are not aligned in the table of the banners    
     => 061710 - Admin UI: Search is not working according to 'type', disabled status is also changing and the whole page is loading while changing the media on the Banners page
-
-  ====================TV-9.4.0.20220201=====================  
+====================TV-9.4.0.20220201=====================  
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
