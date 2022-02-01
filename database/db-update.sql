@@ -1584,3 +1584,4 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.', 1, 'Coupon expired!! "Date To" must be greater than current date.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- --------------------TV-9.4.0.20220201-----------------

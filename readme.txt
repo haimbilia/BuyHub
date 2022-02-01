@@ -584,7 +584,7 @@ Enhancement:
     => 061711 - Admin UI: Images are not aligned in the table of the banners    
     => 061710 - Admin UI: Search is not working according to 'type', disabled status is also changing and the whole page is loading while changing the media on the Banners page
 
-    
+  ====================TV-9.4.0.20220201=====================  
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
