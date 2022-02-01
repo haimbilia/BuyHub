@@ -168,6 +168,7 @@
 }
 
 .my-dashboard {
+    min-height: 100%;
     background-color: #dae2f4;
     // height: auto;
     //background: $bg-gray;
@@ -194,7 +195,8 @@
         min-height: 100%;
         //height: inherit;
         margin: 0 auto;
-
+        display: flex;
+        flex-direction: column;
         //overflow: hidden;
         background-color: $bg-body;
     }
@@ -318,6 +320,9 @@
             background-color: transparent;
             border: none;
         }
+        &-target {
+            min-width: 16rem;
+        }
         &-avatar {
             overflow: hidden;
             border-radius: 50%;
@@ -346,7 +351,11 @@
             }
             &-detail {
                 .h6 {
+                    font-size: 0.85rem;
                     margin: 0;
+                }
+                .text-muted {
+                    font-size: 0.75rem;
                 }
             }
         }
@@ -466,10 +475,11 @@
     .main {
         display: flex;
         flex-direction: column;
+        flex: 1;
         // background: $bg-gray;
         //background: $bg-white;
         width: 100%;
-        height: 100%;
+        //height: 100%;
         // padding-#{$start-direction}: $sidebar-width;
         // padding-top: 72px;
         transition: all 0.3s ease-out;
@@ -1033,7 +1043,7 @@
     }
 }
 
-.avtar {
+.avatar {
     height: 60px;
     position: relative;
     width: 60px;
@@ -1041,7 +1051,7 @@
     border-radius: 100%;
     border: $border;
     position: relative;
-    .avtar--large {
+    &--large {
         width: 6.125rem;
         height: 6.125rem;
     }
@@ -1053,56 +1063,6 @@
         top: 0;
         margin: auto;
     }
-}
-
-.switch {
-    li {
-        display: inline-block;
-        vertical-align: top;
-        width: 50%;
-        margin: 0 -2px;
-        padding: 0 10px;
-        a {
-            display: block;
-            text-align: center;
-            line-height: 5;
-            font-size: 1em;
-            font-weight: 700;
-            color: inherit;
-            position: relative;
-            width: 100%;
-            border: $border;
-            border-radius: $radius4;
-            height: 100px;
-            padding: 10px;
-            background: #fff;
-            &:before {
-                font-family: "Font Awesome 5 Free";
-                font-size: 1.3em;
-                color: rgba(0, 0, 0, 0.1);
-                content: "\f111";
-                line-height: 1;
-                position: absolute;
-                #{$end-direction}: 5px;
-                bottom: 5px;
-            }
-        }
-        &.is-active {
-            a {
-                border-color: $brand-color;
-                background: $brand-color;
-                color: $brand-color-inverse;
-                &:before {
-                    content: "\f058";
-                    color: $brand-color-inverse;
-                }
-            }
-        }
-    }
-}
-
-.switch-group {
-    width: 100%;
 }
 
 .wishlists {

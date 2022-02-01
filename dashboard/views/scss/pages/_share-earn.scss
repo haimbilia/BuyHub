@@ -38,7 +38,7 @@
     //max-width: 80%;
     margin: 1.5rem auto;
     text-align: center;
-    >img {
+    > img {
         max-width: 70%;
     }
     h2 {
@@ -110,14 +110,14 @@
         }
         .share-network-pinterest {
             &:hover {
-                background-color: #E60023;
-                border-color: #E60023;
+                background-color: #e60023;
+                border-color: #e60023;
             }
         }
         .share-network-email {
             &:hover {
-                background-color: #D44638;
-                border-color: #D44638;
+                background-color: #d44638;
+                border-color: #d44638;
             }
         }
         .share-network-linkedin {
@@ -228,7 +228,7 @@
         padding-#{$end-direction}: 50px;
         max-width: 600px;
         &--focus {
-            border-color: $brand-color!important;
+            border-color: $brand-color !important;
         }
         &__input {
             min-height: 22px;

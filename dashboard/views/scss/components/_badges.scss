@@ -1,132 +1,43 @@
-.badges {
-    position: relative;
-    top: 0;
-    z-index: 9;
-    font-size: 0.8rem;
-    width: 50px;
-    height: 50px;
-    .svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        fill: $brand-color;
-        width: 50px;
-        height: 50px;
+.badge {
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding: 4px 8px;
+    text-align: center;
+    white-space: nowrap;
+    display: inline-block;
+    border-radius: $radius4;
+    &-default {
+        background: #fff;
+        border: $border;
     }
-    .text {
-        position: absolute;
-        top: auto;
-        text-transform: uppercase;
-        font-weight: 600;
-        text-align: center;
-        color: $brand-color-inverse;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    &-1 {
-        //background-color: $brand-color;
-        //color:lighten($brand-color, 55%);        
+    &-brand {
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%);
         @include bg-brand();
-        border-radius: $radius4;
-        padding: 4px 8px;
-        width: auto;
-        height: auto;
-        display: inline-block;
-        .text {
-            position: static;
-        }
     }
-    &-2 {
-        top: 0;
-        #{$end-direction}: 0;
-        .text {
-            font-weight: 600;
-            transform: rotate( 45deg);
-            position: absolute;
-            #{$start-direction}: 5px;
-            #{$end-direction}: 0;
-            top: 5px;
-            line-height: 30px;
-            text-transform: uppercase;
-            width: 50px;
-        }
-        &.badges-left {
-            transform: rotate(-90deg);
-        }
-        &.badges-right {
-            svg {
-                transform: scaleX($transform-direction);
-            }
-        }
+    &-primary {
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%);
+        @include bg-brand();
     }
-    &-3 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    &-secondary {
+        // background: $secondary-color;
+        // color: $secondary-color-inverse;
     }
-    &-4 {
-        .text {
-            transform: rotate( 45deg);
-            #{$start-direction}: 10px;
-            #{$end-direction}: 0;
-            line-height: 25px;
-            width: 50px;
-            top: 10px;
-        }
-        &.badges-left {
-            transform: rotate(-90deg);
-        }
+    &-success {
+        background: lighten($success-color, 50);
+        color: $success-color;
     }
-    &-5 {
-        top: 0;
-        #{$end-direction}: 1r0em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .text {
-            line-height: 1;
-            font-weight: 600;
-            text-transform: uppercase;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            top: 20px;
-            width: 40px;
-        }
+    &-info {
+        background: lighten($info-color, 30);
+        color: $info-color;
     }
-    &-left {
-        #{$start-direction}: 10px;
-        top: 10px;
+    &-danger {
+        background: lighten($danger-color, 30);
+        color: $danger-color;
     }
-    &-right {
-        #{$end-direction}: 10px;
-        top: 10px;
-        svg {
-            transform: scaleX($transform-direction);
-        }
-    }
-}
-
-[direction="rtl"] {
-    .badges {
-        &-4 {
-            .text {
-                #{$start-direction}: -10px;
-                top: 6px;
-                transform: rotate(-45deg);
-            }
-            &.badges-left {
-                transform: none;
-            }
-        }
-        &-2 {
-            .text {
-                #{$start-direction}: 0px;
-                top: 10px;
-                transform: rotate( -45deg);
-            }
-        }
+    &-warning {
+        background: lighten($warning-color, 35);
+        color: $warning-color;
     }
 }

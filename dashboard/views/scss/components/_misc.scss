@@ -211,14 +211,46 @@ a:hover {
         font-size: 2.5rem;
     }
     .alert-text {
-        -ms-flex-item-align: center;
         align-self: center;
     }
 }
 
 .profile-image {
-    .avtar {
+    position: relative;
+    margin: 2rem auto;
+    .avatar {
         margin: 0 auto;
+        border-radius: 50%;
+        width: 7rem;
+        height: 7rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $bg-gray;
+        box-shadow: $shadow1;
+        border: solid 1px transparent;
+        position: relative;
+        overflow: visible;
+        > img {
+            width: inherit;
+            height: inherit;
+            border-radius: 50%;
+        }
+    }
+    .btn-edit,
+    .btn-delete {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 0;
+        #{$end-direction}: 0;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        box-shadow: $shadow1;
     }
 }
 
@@ -569,6 +601,92 @@ a:hover {
                     border: none;
                 }
             }
+        }
+    }
+}
+
+.or {
+    position: relative;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: $txt-gray;
+    margin: 30px 0;
+    display: flex;
+    text-align: center;
+    &:after {
+        content: "";
+        height: 1px;
+        width: 100%;
+        background: $border-color;
+        position: absolute;
+        top: 50%;
+        left: 0;
+    }
+    span {
+        position: relative;
+        z-index: 1;
+        background: $bg-white;
+        padding: 0 5px;
+        letter-spacing: 2px;
+        margin: 0 auto;
+    }
+}
+
+.account-delete {
+    display: flex;
+    justify-content: space-between;
+    .btn {
+        font-size: 0.8rem;
+        background: none;
+        margin-#{$end-direction}: 10px;
+        margin-bottom: 1rem;
+        border: $border;
+        border-radius: 3px;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        color: $txt-gray;
+        height: auto;
+        flex: 1;
+        transition: all 0.5s ease;
+        text-align: center;
+        display: block;
+    }
+}
+
+.user-type {
+    display: flex;
+    align-items: center;
+    border: $border;
+    border-radius: $radius4;
+    li {
+        display: block;
+        flex: 0 0 50%;
+        max-width: 50%;
+        margin: 0;
+        padding: 0;
+        border-#{$end-direction}: $border;
+        &:last-child {
+            border-#{$end-direction}: none;
+        }
+    }
+    &-link {
+        background-color: transparent;
+        border: none;
+        display: block;
+        width: 100%;
+        text-align: center;
+        line-height: 1.5;
+        font-size: 1rem;
+        color: inherit;
+        position: relative;
+        padding: 12px 1rem;
+    }
+    .svg {
+        margin-#{$end-direction}: 5px;
+    }
+    .is-active {
+        .user-type-link {
+            color: $brand-color;
         }
     }
 }

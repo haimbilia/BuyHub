@@ -1,99 +1,103 @@
 $sidebar-width: 250px;
-.my-dashboard {
-    .sidebar {
-        width: $sidebar-width;
-        position: fixed;
-        z-index: 12;
-        //#{$start-direction}: 0;
-        top: 0;
-        bottom: 0;
-        height: 100%;
-        transition: all 0.3s ease-in-out;
+
+.sidebar {
+    width: $sidebar-width;
+    position: fixed;
+    z-index: 12;
+    //#{$start-direction}: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-white;
+    box-shadow: $shadow-theme;
+    //border-#{$end-direction}: $border;
+    @include media-breakpoint-down(md) {
+        transform: translateX(-100%);
+    }
+    &-head {
         display: flex;
-        flex-direction: column;
-        background-color: $bg-white;
-        box-shadow: $shadow-theme;
-        //border-#{$end-direction}: $border;
-        @include media-breakpoint-down(md) {
-            transform: translateX(-100%);
-        }
-        &-content {
-            padding: 1rem;
-            height: 100%;
-            max-height: none;
-            width: auto;
-            overflow-y: auto;
-            width: 100% !important;
-        }
-        .logo-wrapper {
-            display: flex;
-            // justify-content: flex-end;
-            align-items: center;
-            padding: 1rem;
-            height: 71px;
-            //border-bottom: $border;
-            //position: absolute;
-            //top: 0;
-            //z-index: 1;
-            //background: #fff;
-            width: 100%;
-            .logo-dashboard {
-                transition: all 0.3s ease-in-out;
-                // position: absolute;
-                // #{$start-direction}: 24px;
-                opacity: 1;
-                img {
-                    max-width: 100px;
-                    max-height: 70px;
-                }
+        // justify-content: flex-end;
+        align-items: center;
+        padding: 1rem;
+        height: 71px;
+        //border-bottom: $border;
+        //position: absolute;
+        //top: 0;
+        //z-index: 1;
+        //background: #fff;
+        width: 100%;
+        .logo-dashboard {
+            transition: all 0.3s ease-in-out;
+            // position: absolute;
+            // #{$start-direction}: 24px;
+            opacity: 1;
+            img {
+                max-width: 100px;
+                max-height: 70px;
             }
         }
-        .hamburger-toggle {
-            display: none;
-            position: relative;
-            padding: 0;
-            background: transparent;
-            border: 1px solid transparent;
-            cursor: pointer;
-            margin-#{$end-direction}: 20px;
-            //width: 2.5rem;
+    }
+
+    &-body {
+        padding: 1rem;
+        height: 100%;
+        max-height: none;
+        width: auto;
+        overflow-y: auto;
+        width: 100% !important;
+    }
+    &-foot {
+        padding: 1rem;
+    }
+
+    .hamburger-toggle {
+        display: none;
+        position: relative;
+        padding: 0;
+        background: transparent;
+        border: 1px solid transparent;
+        cursor: pointer;
+        margin-#{$end-direction}: 20px;
+        //width: 2.5rem;
+        & [class*="bar-"] {
+            display: block;
+            background: #000;
+            transform: rotate(0deg);
+            transition: all 0.3s ease-in-out;
+            border-radius: 1px;
+            height: 1px;
+            width: 24px;
+            margin-bottom: 5px;
+            &:nth-child(2) {
+                width: 18px;
+            }
+            &:last-child {
+                margin-bottom: 0;
+                width: 12px;
+            }
+        }
+        &.is-opened {
             & [class*="bar-"] {
-                display: block;
                 background: #000;
-                transform: rotate(0deg);
-                transition: all 0.3s ease-in-out;
-                border-radius: 1px;
-                height: 1px;
+            }
+            .bar-top {
+                transform: rotate(45deg);
+                transform-origin: 15% 15%;
+            }
+            .bar-mid {
+                opacity: 0;
+            }
+            .bar-bot {
+                transform: rotate(-45deg);
+                transform-origin: 15% 95%;
                 width: 24px;
-                margin-bottom: 5px;
-                &:nth-child(2) {
-                    width: 18px;
-                }
-                &:last-child {
-                    margin-bottom: 0;
-                    width: 12px;
-                }
             }
-            &.is-opened {
-                & [class*="bar-"] {
-                    background: #000;
-                }
-                .bar-top {
-                    transform: rotate(45deg);
-                    transform-origin: 15% 15%;
-                }
-                .bar-mid {
-                    opacity: 0;
-                }
-                .bar-bot {
-                    transform: rotate(-45deg);
-                    transform-origin: 15% 95%;
-                    width: 24px;
-                }
-            }
-            &:focus {
-                outline-width: 0;
-            }
+        }
+        &:focus {
+            outline-width: 0;
         }
     }
 }

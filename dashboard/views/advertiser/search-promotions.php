@@ -14,11 +14,11 @@ $arr_flds = array(
 );
 $tableClass = '';
 if (0 < count($arrListing)) {
-	$tableClass = "table-justified";
+    $tableClass = "table-justified";
 }
 $tbl = new HtmlElement(
     'table',
-    array('width' => '100%', 'class' => 'table '.$tableClass, 'id' => 'promotions')
+    array('width' => '100%', 'class' => 'table ' . $tableClass, 'id' => 'promotions')
 );
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $typeArr[$row[$key]], true);
                 break;
             case 'promotion_approved':
-                $td->appendElement('span', array('class' => 'label label-inline ' . $arrYesNoClassArr[$row[$key]]), $arrYesNo[$row[$key]], true);
+                $td->appendElement('span', array('class' => 'badge badge-inline ' . $arrYesNoClassArr[$row[$key]]), $arrYesNo[$row[$key]], true);
                 break;
             case 'promotion_active':
                 $active = "";
@@ -65,12 +65,12 @@ foreach ($arrListing as $sn => $row) {
                 $txt = '';
                 if ($row[$key] < date("Y-m-d")) {
                     $txt = Labels::getLabel('LBL_Expired', $siteLangId);
-                } else { 
-                    if($row['promotion_start_date'] <= date("Y-m-d") && $row['promotion_end_date'] >= date("Y-m-d")  && $row['promotion_start_time'] <= date('H:i') && $row['promotion_end_time'] >= date('H:i')) {
+                } else {
+                    if ($row['promotion_start_date'] <= date("Y-m-d") && $row['promotion_end_date'] >= date("Y-m-d")  && $row['promotion_start_time'] <= date('H:i') && $row['promotion_end_time'] >= date('H:i')) {
                         $txt = Labels::getLabel('LBL_RUNNING', $siteLangId);
-                        if(!$isPpcBalanceSufficent){
+                        if (!$isPpcBalanceSufficent) {
                             $txt = Labels::getLabel('LBL_LOW_BALANCE', $siteLangId);
-                        }                        
+                        }
                     } else {
                         $txt = Labels::getLabel('LBL_SCHEDULED', $siteLangId);
                     }
