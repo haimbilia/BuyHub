@@ -72,7 +72,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $ul = $td->appendElement("ul", array("class"=>"actions"));
+                    $ul = $td->appendElement("ul", array("class" => "actions"));
                     if (Badge::COND_MANUAL == $badgeConditionType) {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
 
@@ -83,10 +83,10 @@ foreach ($arrListing as $sn => $row) {
                             $icon = "<i class='far fa-eye icon'></i>";
                             $title = Labels::getLabel('LBL_VIEW', $siteLangId);
                         }
-                        $li = $ul->appendElement("li"); 
+                        $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
                         if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
-                            $li = $ul->appendElement("li"); 
+                            $li = $ul->appendElement("li");
                             $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                         }
                     } else if (in_array($row['blinkcond_condition_type'], BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
@@ -97,14 +97,14 @@ foreach ($arrListing as $sn => $row) {
                             $class = 'label-success';
                         }
 
-                        $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
-                        $li = $ul->appendElement("li"); 
+                        $htm = ' <span class="badge badge-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
+                        $li = $ul->appendElement("li");
                         $li->appendElement('plaintext', [], $htm, true);
                     } else {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                         $icon = "<i class='far fa-eye icon'></i>";
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);
-                        $li = $ul->appendElement("li"); 
+                        $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
                     }
                 } else {

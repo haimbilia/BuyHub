@@ -120,7 +120,6 @@
             #{$start-direction}: 50%;
         }
         &.sign-up {
-            
             transform: translateX(100% * $transform-direction);
             #{$end-direction}: 0;
             opacity: 0;
@@ -134,7 +133,7 @@
             }
             &.is-opened {
                 opacity: 1;
-                
+
                 transform: translateX(50% * $transform-direction);
                 transition: all 0.5s;
                 #{$end-direction}: 50%;
@@ -180,7 +179,7 @@
     display: flex;
     text-align: center;
     &:after {
-        content: '';
+        content: "";
         height: 1px;
         width: 100%;
         background: $border-color;
@@ -215,7 +214,7 @@
             .icn {
                 flex: 1;
                 margin: 0;
-                background: rgba(0, 0, 0, 0.10);
+                background: rgba(0, 0, 0, 0.1);
                 width: 40px;
                 height: 40px;
                 display: flex;

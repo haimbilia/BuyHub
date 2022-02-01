@@ -39,7 +39,7 @@
                     $td->appendElement('plaintext', array(), $html, true);
                     break;
                 case 'brand_status':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]] . '<br>', true);
                     $td->appendElement('small', array('class' => 'ml-1'), (isset($row['brand_status_updated_on']) && $row['brand_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['brand_status_updated_on']) : '', true);
                     break;
                 case 'brand_requested_on':
@@ -52,7 +52,13 @@
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "addBrandReqForm(" . $row['brand_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }

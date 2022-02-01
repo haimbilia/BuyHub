@@ -86,7 +86,12 @@
                             'href' => 'javascript:void(0)', 'class' => '',
                             'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $splPriceId . ")"
                         ),
-                        '<i class="fa fa-trash"></i>',
+                        '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="'.CONF_WEBROOT_URL. 'images/retina/sprite-actions.svg#delete">
+                                                </use>
+                                            </svg>
+                                        </i>',
                         true
                     );
                     break;

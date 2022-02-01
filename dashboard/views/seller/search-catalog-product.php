@@ -53,10 +53,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                     break;
                 case 'product_approved':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_active':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_shipped_by':
                     $active = "";
@@ -119,7 +119,13 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'onclick' => 'catalogInfo(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_product_Info', $siteLangId), true),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 

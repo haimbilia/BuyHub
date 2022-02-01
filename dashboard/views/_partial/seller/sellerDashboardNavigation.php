@@ -5,7 +5,7 @@ $plugin = new Plugin();
 ?>
 <sidebar class="sidebar no-print">
     <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
-    <div class="sidebar-content sidebarMenuJs" id="scrollElement-js">
+    <div class="sidebar-body sidebarMenuJs" id="scrollElement-js">
         <ul class="dashboard-menu">
             <?php if (
                 $userPrivilege->canViewShop(UserAuthentication::getLoggedUserId(), true) ||
@@ -40,7 +40,7 @@ $plugin = new Plugin();
                         <?php } ?>
                         <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <li class="menu-sub-item">
-                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ( $action == 'catalog' || $action == 'products')) ||  $controller == 'products' ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ($action == 'catalog' || $action == 'products')) ||  $controller == 'products' ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
                                     <span class="menu-sub-title">
                                         <?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?></span>
                                 </a>
@@ -593,6 +593,23 @@ $plugin = new Plugin();
                 </li>
             <?php } ?>
             <?php $this->includeTemplate('_partial/dashboardLanguageArea.php'); ?>
+        </ul>
+    </div>
+    <div class="sidebar-foot">
+        <ul class="dashboard-menu">
+            <li class="dashboard-menu-item">
+                <button class="dashboard-menu-btn menuLinkJs" type="button" title="">
+                    <span class="dashboard-menu-icon">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#globe">
+                            </use>
+                        </svg>
+                    </span>
+                    <span class="dashboard-menu-head">
+                        <?php echo Labels::getLabel('LBL_Localization', $siteLangId); ?>
+                    </span>
+                </button>
+            </li>
         </ul>
     </div>
 </sidebar>

@@ -2996,6 +2996,14 @@ $header-height: 65px;
 }
 
 //plugin
+.custom-select2 {
+    .select2-selection__clear {
+        font-size: 1rem !important;
+    }
+}
+.custom-select2-width {
+    width: 100% !important;
+}
 .custom-select2-single {
     &.error {
         border: 1px solid $danger-color;

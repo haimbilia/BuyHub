@@ -156,7 +156,7 @@
         </div>
 
         <aside class="sidebar" data-close-on-click-outside=" ">
-            <div class="sidebar-content">
+            <div class="sidebar-body">
                 <div id="order-summary" class="order-summary summary-listing-js">
                     <h5 class="mb-2"><?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?></h5>
                     <div class="order-summary_list">

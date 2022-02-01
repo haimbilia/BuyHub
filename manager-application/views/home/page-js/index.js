@@ -34,7 +34,7 @@
 	};
 
 	topReferers = function (interval) {
-		$('.topReferers').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
+		$('.topReferersJs').html(fcom.getLoader());
 		data = "rtype=top_referrers&interval=" + interval;
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
@@ -44,7 +44,7 @@
 	};
 
 	topCountries = function (interval) {
-		$('.topCountriesJs').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
+		$('.topCountriesJs').html(fcom.getLoader());
 		data = "rtype=top_countries&interval=" + interval;
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
@@ -54,7 +54,7 @@
 	};
 
 	topProducts = function (interval) {
-		$('.topProducts').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
+		$('.topProducts').html( fcom.getLoader() );
 		data = "rtype=top_products&interval=" + interval;
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
@@ -64,7 +64,7 @@
 	};
 
 	getTopSearchKeyword = function (interval) {
-		$('.topSearchKeywordJs').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
+		$('.topSearchKeywordJs').html( fcom.getLoader() );
 		data = "rtype=top_search_keyword&interval=" + interval;
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();

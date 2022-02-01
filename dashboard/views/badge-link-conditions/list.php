@@ -2,7 +2,7 @@
 
 $typeArr = Badge::getTypeArr($siteLangId);
 $headingLabel = $badgeName . ' ' . Labels::getLabel('LBL_BIND_CONDITIONS', $siteLangId);
-$headingLabel .= ' <span class="label label-inline label-info rounded-pill">' . $typeArr[$badgeType] . '</span>';
+$headingLabel .= ' <span class="badge badge-inline label-info rounded-pill">' . $typeArr[$badgeType] . '</span>';
 
 $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITIONS_LIST', $siteLangId);
 
@@ -47,9 +47,9 @@ if (!empty($frmSearch)) {
         $fld->developerTags['col'] = 2;
         $fld->developerTags['noCaptionTag'] = true;
     }
-    
+
     $fld = $frmSearch->getField('blinkcond_position');
-    if (null != $fld) {              
+    if (null != $fld) {
         $fld->developerTags['noCaptionTag'] = true;
     }
 

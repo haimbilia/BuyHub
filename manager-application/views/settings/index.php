@@ -16,7 +16,7 @@
                             $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0);
                             $checked = applicationConstants::ON == $status ? 'checked' : '';
                             ?>
-                            <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>)" <?php echo $checked; ?>>
+                            <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>,<?php echo $siteLangId; ?>)" <?php echo $checked; ?>>
                             <span class="input-helper"></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
                         </label>
                     </div>

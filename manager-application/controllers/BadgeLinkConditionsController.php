@@ -607,7 +607,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
 
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('badgeLinkIds'));
+        $recordIdsArr = FatApp::getPostedData('badgeLinkIds', FatUtility::VAR_INT, []);
         if (empty($recordIdsArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -628,7 +628,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
+        
         $obj = new BadgeLinkCondition($recordId);
         if (!$obj->deleteRecord(false)) {
             LibHelper::exitWithError($obj->getError(), true);
@@ -658,7 +658,6 @@ class BadgeLinkConditionsController extends ListingBaseController
         )) {
             LibHelper::exitWithError($db->getError(), true);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 
     public function isUnique(int $badgeType, int $recordType, int $record_id, int $position = 0)

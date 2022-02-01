@@ -13,7 +13,8 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['banner_id'] . '><i class="input-helper"></i></label>', true);
+                $disabled = (1 == $row['banner_id']) ? 'disabled' : '';
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $disabled . '" type="checkbox" ' . $disabled . ' name="record_ids[]" value=' . $row['banner_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
@@ -26,7 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'banner_img':
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
-                $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
+                $img = '<img width="40" height="40"  src="' . UrlHelper::generateFullUrl('Banner', 'showBanner', array($row['banner_id'], $siteLangId, 52, 42), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'banner_target':

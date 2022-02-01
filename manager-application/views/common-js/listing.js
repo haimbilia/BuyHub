@@ -436,7 +436,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
-            $.ykmsg.success(t.msg);
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };
