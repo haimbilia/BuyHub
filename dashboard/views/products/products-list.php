@@ -57,11 +57,11 @@ if ($vtype == 'list') {
                                             'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
                                             'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
-                                            'data-ratio'=> "1:1",
+                                            'data-ratio' => "1:1",
                                             'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']
                                         ];
                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, false);
-                                        ?>                                        
+                                        ?>
                                     </a>
                                 </div>
                             </div>
@@ -75,8 +75,8 @@ if ($vtype == 'list') {
                                 </div>
                                 <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
                                     </a></div> <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
-                                    
-                                    <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
+
+                                <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
                             </div>
                         </div>
                     </div>

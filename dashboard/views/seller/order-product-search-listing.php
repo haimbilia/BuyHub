@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+    <?php
     $arr_flds = array(
         'order_id'  =>    Labels::getLabel('LBL_Order_Id_Date', $siteLangId),
         'product'   =>    Labels::getLabel('LBL_Ordered_Product', $siteLangId),
@@ -38,7 +38,7 @@
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':                      
+                case 'product':
                     $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
@@ -51,7 +51,7 @@
                 case 'opshipping_by_seller_user_id':
                     $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
                     $class = (0 == $order[$key] ? 'label-warning' : 'label-success');
-                    $htm = '<span class="label label-inline ' . $class . '">' . $label . '</span>';
+                    $htm = '<span class="badge badge-inline ' . $class . '">' . $label . '</span>';
                     $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'status':
@@ -65,7 +65,7 @@
                         }
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
                     }
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $labelClass), $txt . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $txt . '<br>', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);

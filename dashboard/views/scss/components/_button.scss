@@ -144,13 +144,11 @@
         padding: 0;
         .arrow {
             display: inline-block;
-            -webkit-transition: all 0.2s ease-in-out;
             transition: all 0.2s ease-in-out;
             .svg {
                 width: 12px;
                 height: 12px;
                 margin-#{$end-direction}: 5px;
-                fill: currentcolor;
             }
         }
         &:hover {

@@ -49,12 +49,15 @@ class BannersController extends ListingBaseController
         $frm->addHiddenField('', 'banner_location_id', $this->bannerLocationId);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
+        
+        $frm->addSelectBox(Labels::getLabel('FRM_BANNER_TYPE', $this->siteLangId), 'banner_type', Banner::getBannerTypesArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT_BANNER_TYPE', $this->siteLangId));
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'banner_id');
         }
 
         HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -86,7 +89,7 @@ class BannersController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE_OR_TYPE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
         $this->checkEditPrivilege(true);
 
@@ -122,8 +125,12 @@ class BannersController extends ListingBaseController
         $srch->addCondition('b.banner_blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
-            $condition = $srch->addCondition('banner_title', 'like', '%' . $post['keyword'] . '%');
-            $condition->attachCondition('banner_type', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $srch->addCondition('banner_title', 'like', '%' . $post['keyword'] . '%');
+        }
+        
+        $bannerType = FatApp::getPostedData('banner_type', FatUtility::VAR_INT, 0);
+        if (0 < $bannerType) {
+            $srch->addCondition('banner_type', '=', $bannerType);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -213,7 +220,7 @@ class BannersController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $data = FatApp::getPostedData();
-        $recordId = $data['banner_id'];
+        $recordId = FatUtility::int($data['banner_id']);
         $bannerLocationId = $data['banner_blocation_id'];
         $frm = $this->getForm($bannerLocationId, $recordId);
         if (false === $data) {
@@ -222,6 +229,10 @@ class BannersController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (1 > $bannerLocationId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $status = $post['banner_active'];
+        if (1 == $recordId && applicationConstants::INACTIVE == $status) {
+            $post['banner_active'] = applicationConstants::ACTIVE;
         }
 
         $data = array(
@@ -257,18 +268,19 @@ class BannersController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        if ($recordId ==  0) {
+        if ($recordId == 0) {
             $recordId = $bannerObj->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
+            $newTabLangId = $langId;
             if (!Banner::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
-
+        
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
         $this->set('bannerLocationId', $bannerLocationId);

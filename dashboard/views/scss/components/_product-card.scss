@@ -39,8 +39,7 @@
 
 .product-listing {
     display: grid;
-    //grid-gap: 1rem;
-    grid-gap: 0;
+    grid-gap: 1rem;
     &[data-view="2"] {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -607,7 +606,7 @@
             text-decoration: none;
             position: relative;
             &:before {
-                background: $bg-brand-light;
+                background: $bg-gray;
                 content: "";
                 height: 100%;
                 width: 100%;
@@ -622,7 +621,7 @@
                 transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
             }
             &:hover {
-                color: $brand-color;
+                color: $txt-body;
                 &:before {
                     opacity: 1;
                     transform: scale(1);

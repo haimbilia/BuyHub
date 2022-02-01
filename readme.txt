@@ -321,6 +321,7 @@ Updates/Fixes :
     => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
     => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
     => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
+    => 061711 - Admin UI: Images are not aligned in the table of the banners
 
 New Features:  
     => Admin shipped products listing page
@@ -582,6 +583,8 @@ Enhancement:
     => 061848 - Admin UI: Getting multiple UI issues on the 'Custom products' page.
     => 061837 - Admin UI: Watermark is missing for the advanced search fields and cross icon is also missing for the search field.
     => 061828 - Admin UI: Text cursor is not showing while searching the record from the drop-down on the whole system.
+
+    => 061710 - Admin UI: Search is not working according to 'type', disabled status is also changing and the whole page is loading while changing the media on the Banners page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
