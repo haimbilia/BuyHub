@@ -76,7 +76,13 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $li->appendElement(
                         'a',
                         array('href' => UrlHelper::generateUrl('seller', 'sellerProductForm', array($row['selprod_product_id'], $row['selprod_id'])), 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                        '<i class="fa fa-edit"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 
@@ -84,7 +90,13 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "sellerProductDelete(" . $row['selprod_id'] . ")"),
-                        '<i class="fa fa-trash"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
                     $productOptions = Product::getProductOptions($row['selprod_product_id'], $siteLangId);
@@ -93,7 +105,13 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Clone', $siteLangId), "onclick" => "sellerProductCloneForm(" . $row['selprod_product_id'] . "," . $row['selprod_id'] . ")"),
-                            '<i class="fa fa-clone"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#copy">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }
