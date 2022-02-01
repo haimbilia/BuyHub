@@ -2,6 +2,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
     ul {
         display: flex;
         margin: 0;
@@ -69,4 +70,7 @@
             }
         }
     }
+}
+.breadcrumb {
+    font-size: 0.8rem;
 }

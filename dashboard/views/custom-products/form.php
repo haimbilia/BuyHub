@@ -80,7 +80,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         <div class="input-group">
                                             <?php echo $fld->getHtml(); ?>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button type="button" class="btn btn-input dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                 </button>
                                                 <div class="dropdown-menu">

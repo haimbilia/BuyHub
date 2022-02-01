@@ -27,10 +27,8 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-md-8">
-
-
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
                         </h5>
                         <div class="action">
@@ -110,7 +108,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
 
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Latest_Offers', $siteLangId); ?>
                         </h5>
                         <div class="action"> <?php if (count($offers) > 0) { ?> <a href="<?php echo UrlHelper::generateUrl('buyer', 'offers'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
@@ -172,7 +170,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
 
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Return_requests', $siteLangId); ?>
                         </h5> <?php if (count($returnRequests) > 0) { ?> <div class="action">
                                 <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderReturnRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
@@ -256,7 +254,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         ?>
                         </div> -->
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title">
                             <?php echo Labels::getLabel('LBL_Cancellation_requests', $siteLangId); ?></h5>
                         <?php if (count($cancellationRequests) > 0) { ?> <div class="action">
@@ -336,7 +334,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
                             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
-                                <div class="card-head">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
                                 </div>
                                 <div class="card-body">
@@ -360,7 +358,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('buyer', 'orders'); ?>">
                             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
-                                <div class="card-head">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></h5>
 
                                 </div>
@@ -384,7 +382,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('buyer', 'rewardPoints'); ?>">
                             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
-                                <div class="card-head">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
                                     </h5>
 
