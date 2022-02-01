@@ -25,7 +25,7 @@ if (null != $fld) {
 }
 
 $fld = $frmSearch->getField('prodcat_id');
-if(null != $fld){
+if (null != $fld) {
     $fld->setFieldTagAttribute('id', 'prodcatIdJs');
     $fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY', $siteLangId));
 }
@@ -43,9 +43,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
             dropdownParent: $("#prodcatIdJs").parent(),
             allowClear: true,
             placeholder: $("#prodcatIdJs").attr('placeholder')
-        }).on('select2:open', function (e) {
+        }).on('select2:open', function(e) {
             $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-        }).data("select2").$container.addClass("w-100");
-        
+        }).data("select2").$container.addClass("custom-select2-width").$container.addClass("custom-select2");
+
     });
 </script>

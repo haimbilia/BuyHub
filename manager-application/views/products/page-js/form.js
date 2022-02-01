@@ -13,10 +13,10 @@
     };
 
     setup = function (frm) {
-        if (!$(frm).validate()) {            
+        if (!$(frm).validate()) {
             $('html,body').stop().animate({
                 scrollTop: $('.error:first').offset().top - ($('.mainHeaderJs').height() + 50),
-            });            
+            });
             return;
         }
         var data = fcom.frmData(frm);
@@ -194,7 +194,7 @@
     };
 
     prodSpecifications = function () {
-        var recordId = getCurrentFrmRecordId();        
+        var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { recordId, langId }, function (res) {
             $('#specificationsListJs').html(res.html);
@@ -261,7 +261,7 @@
             }
             $('#product_fulfillment_type').trigger('change');
         });
-    };  
+    };
 
     imageForm = function () {
         let recordId = getCurrentFrmRecordId();
@@ -274,12 +274,12 @@
         }
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function (t) {
-            $.ykmodal(t.html);                     
+            $.ykmodal(t.html);
             loadImageOptions();
             var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();
             productImages(recordId, fileType);
-          
+
             fcom.removeLoader();
         });
     };
@@ -318,12 +318,12 @@
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
-            fcom.removeLoader();        
+            fcom.removeLoader();
             $('#productImagesJs').html(t.html);
             $("#productImagesJs").sortable({
-                stop: function() {
+                stop: function () {
                     var mysortarr = new Array();
-                    $(this).find('li').each(function() {
+                    $(this).find('li').each(function () {
                         mysortarr.push($(this).attr("id"));
                     });
 
@@ -337,7 +337,7 @@
                         record_id,
                         file_type,
                         ids: sort
-                    }, function(t) {
+                    }, function (t) {
                         productImages(product_id, file_type, option_id, lang_id);
                     });
                 }
@@ -469,7 +469,7 @@
                     });
                 });
             }
-            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {              
+            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {
                 fcom.removeLoader();
                 $('#variantsListJs').html(t.html);
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
@@ -564,13 +564,13 @@
             $('#productDefaultImagesJs').append(t.html);
             $("#productDefaultImagesJs").sortable({
                 items: "li:not(.unsortableJs)",
-                stop: function() {
+                stop: function () {
                     var mysortarr = new Array();
-                    $(this).find('li').each(function() {
+                    $(this).find('li').each(function () {
                         mysortarr.push($(this).attr("id"));
                     });
 
-                    var sort = mysortarr.join('-');                  
+                    var sort = mysortarr.join('-');
                     var record_id = $('#hiddenMediaFrmJs').find('[name="record_id"]').val();
                     var file_type = $('#hiddenMediaFrmJs').find('[name="file_type"]').val();
                     fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
@@ -584,15 +584,15 @@
     };
 
     digitalDownloadsForm = function (type, callback = '') {
-        $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
+        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
-        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {            
+        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             if (typeof callback == 'function') {
                 callback();
-            }else{                
-                getDigitalDownloads(type,recordId); 
-            }            
+            } else {
+                getDigitalDownloads(type, recordId);
+            }
             fcom.removeLoader();
         });
     };
@@ -635,7 +635,7 @@
         });
     };
 
-    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {       
+    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
@@ -783,13 +783,13 @@ $(document).on('click', '.warrantyTypeJs', function () {
 });
 
 $(document).on('change', '#product_fulfillment_type', function () {
-    if($('#shipping_profile').data('shippingApiActive') == 1){
-        return;        
+    if ($('#shipping_profile').data('shippingApiActive') == 1) {
+        return;
     }
-   
-    if($(this).val() == fulfilmentTypePickup){
+
+    if ($(this).val() == fulfilmentTypePickup) {
         $('#shipping_profile').parent().parent().addClass('hide');
-    }else{
+    } else {
         $('#shipping_profile').parent().parent().removeClass('hide');
     }
 });
@@ -815,7 +815,7 @@ $(document).on('click', '.optionsAddJs', function () {
         resetOptionValuesTag,
     );
 
-    $('#' + newOptionId).data("select2").$container.addClass("w-100");
+    $('#' + newOptionId).data("select2").$container.addClass("custom-select2-width");
     tagifyOptionValue("#" + newOptionValueId);
 });
 
