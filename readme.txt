@@ -321,6 +321,7 @@ Updates/Fixes :
     => 061680 - Admin UI: Time selection functionality should be there while adding badge link condition.
     => 061687 - Admin UI: Design is not consistent while adding and editing the ribbons
     => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
+    => 061711 - Admin UI: Images are not aligned in the table of the banners
 
 New Features:  
     => Admin shipped products listing page
