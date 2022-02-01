@@ -240,8 +240,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body">
-                        <ul class="list-stats list-stats-double topCountriesJs"></ul>
+                    <div class="card-body relative topCountriesJs">                       
                     </div>
                 </div>
 
@@ -260,8 +259,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body">
-                        <ul class="list-stats list-stats-inline topReferersJs"></ul>
+                    <div class="card-body relative topReferersJs">                       
                     </div>
                 </div>
                 <div class="card">
@@ -279,8 +277,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body">
-                        <ul class="list-stats list-stats-inline topSearchKeywordJs"></ul>
+                    <div class="card-body relative topSearchKeywordJs">
                     </div>
                 </div>
 

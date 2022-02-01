@@ -351,7 +351,7 @@ class HomeController extends ListingBaseController
         );
 
         $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId);
+        //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId);        
         if (!$dashboardInfoCache) {
             $result = [];
             if (strtoupper($type) == 'TOP_PRODUCTS') {
@@ -364,7 +364,7 @@ class HomeController extends ListingBaseController
                     if (isset($token['accessToken'])) {
                         $analytics->setAccessToken($token['accessToken']);
                     }
-                    $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
+                    $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
                     switch (strtoupper($type)) {
                         case 'TOP_COUNTRIES':
                             $result = $analytics->getTopCountries($interval, 9);
