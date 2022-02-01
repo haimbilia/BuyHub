@@ -75,12 +75,14 @@ class VolumeDiscountController extends ListingBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
-        $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId, false);
+        $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
+	'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name']
+        ); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $srch->setPageSize($pageSize); 
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet()); 
