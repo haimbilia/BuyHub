@@ -45,7 +45,6 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images'), data, function (t) {
             fcom.removeLoader();
             $('#imageListingJs').html(t.html);
-            reloadList();
         });
     };
 

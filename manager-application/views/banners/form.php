@@ -5,6 +5,10 @@ $fld = $frm->getField('banner_active');
 if ($fld != null) {
     HtmlHelper::configureSwitchForCheckbox($fld);
     $fld->developerTags['noCaptionTag'] = true;
+
+    if (1 == $recordId) {
+        $fld->setFieldTagAttribute('disabled', 'disabled');
+    }
 }
 
 $generalTab = [

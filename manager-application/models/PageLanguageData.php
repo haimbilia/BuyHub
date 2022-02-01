@@ -64,7 +64,8 @@ class PageLanguageData extends MyAppModel
             static::DB_TBL_PREFIX . 'summary' => $data['plang_summary'],
             static::DB_TBL_PREFIX . 'warring_msg' => $data['plang_warring_msg'],
             static::DB_TBL_PREFIX . 'recommendations' => $data['plang_recommendations'],
-            static::DB_TBL_PREFIX . 'replacements' => $data['plang_replacements']
+            static::DB_TBL_PREFIX . 'replacements' => $data['plang_replacements'],
+            static::DB_TBL_PREFIX . 'helping_text' => $data['plang_helping_text'],
         ];
 
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $assignValues, false, array(), $assignValues)) {
