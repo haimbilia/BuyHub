@@ -444,7 +444,9 @@ Updates/Fixes :
     => 061717 - Admin UI: Previous added links are not showing while adding the new links under the navigation section
     => 061711 - Admin UI: Images are not aligned in the table of the banners    
     => 061710 - Admin UI: Search is not working according to 'type', disabled status is also changing and the whole page is loading while changing the media on the Banners page
-====================TV-9.4.0.20220201=====================  
+====================TV-9.4.0.20220201===================== 
+
+    => 061691 - Admin UI: Multiple-delete functionality is not working for the links of the badges and ribbons
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
