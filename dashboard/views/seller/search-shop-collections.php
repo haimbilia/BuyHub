@@ -1,16 +1,26 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
-    <div class="btn-group">
-        <?php if ($canEdit) { ?>
-            <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(1)" class="btn btn-outline-brand btn-sm formActionBtn-js disabled"><?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?></a>
-            <a href="javascript:void(0)" onClick="toggleBulkCollectionStatues(0)" class="btn btn-outline-brand btn-sm  formActionBtn-js disabled"><?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?></a>
-            <a href="javascript:void(0)" onClick="deleteSelectedCollection()" class="btn btn-outline-brand btn-sm formActionBtn-js disabled"><?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?></a>
-            <?php if (count($arrListing) > 0) { ?>
-                <a href="javascript:void(0)" onClick="getShopCollectionGeneralForm(0)" class="btn btn-outline-brand btn-sm  btn-sm"><?php echo Labels::getLabel('LBL_Add_Collection', $siteLangId); ?></a>
-            <?php } ?>
-        <?php } ?>
-    </div>
+    <?php
+    if ($canEdit) {
+        $btnData = [
+            'newRecordBtn' => true,
+            'statusButtons' => true,
+            'deleteButton' => true,
+            'siteLangId' => $siteLangId,
+            'canEdit' => $canEdit
+        ];
+
+        if (count($arrListing) > 0) {
+            $btnData['newRecordBtnAttrs'] = [
+                'attr' => [
+                    'onclick' => "getShopCollectionGeneralForm(0)"
+                ]
+            ];
+        }
+        $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
+    }
+    ?>
 </div>
 <div class="card-body">
     <div class="row">

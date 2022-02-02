@@ -1585,3 +1585,9 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.', 1, 'Coupon expired!! "Date To" must be greater than current date.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- --------------------TV-9.4.0.20220201-----------------
+
+/* Update all stripe connect standard account users default form submited to 1. Because no form required. */
+INSERT IGNORE INTO tbl_user_meta (usermeta_user_id, usermeta_key, usermeta_value)
+  SELECT usermeta_user_id, 'stripe_form_submitted', '1' 
+  FROM tbl_user_meta WHERE usermeta_key LIKE 'stripe_account_type' AND usermeta_value LIKE 'standard';
+/* Update all stripe connect standard account users default form submited to 1. Because no form required. */ 
