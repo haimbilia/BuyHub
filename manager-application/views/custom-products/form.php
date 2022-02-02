@@ -593,12 +593,12 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php }
             } ?>
-
-            upcType();
+            
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
+            upcType();
         });
     </script>
 </main>

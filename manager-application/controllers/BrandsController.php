@@ -285,7 +285,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
+    public function images($brand_id, $file_type, $lang_id = 0,$slide_screen = 0)
     {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);

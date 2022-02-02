@@ -246,6 +246,7 @@ $(document).on("change", ".state", function () {
             $(dv).html(t);
         });
     };
+    
     shopCollectionProducts = function (el) {
         $(dv).html(fcom.getLoader());
         // console.log($(el).parent());
@@ -566,7 +567,7 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    toggleBulkCollectionStatues = function (status) {
+    toggleBulkStatues = function (status) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
             return false;
         }
@@ -574,7 +575,7 @@ $(document).on("change", ".state", function () {
         $("#frmCollectionsListing").submit();
     };
 
-    deleteSelectedCollection = function () {
+    deleteSelected = function () {
         if (!confirm(langLbl.confirmDelete)) {
             return false;
         }

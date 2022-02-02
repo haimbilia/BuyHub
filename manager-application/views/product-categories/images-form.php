@@ -2,12 +2,12 @@
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('data-onclear', 'catMediaForm(' . $recordId . ')');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
-$frm->setFormTagAttribute('data-callback', 'mediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('data-callback', 'catMediaForm(' . $recordId . ')');
 
 $iconLangFld = $frm->getField('icon_lang_id');
-$iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
+$iconLangFld->addFieldTagAttribute('class', 'catIconLanguageJs');
 
 $fld = $frm->getField('heading_icon');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_ICON', $siteLangId) . '</h3>';
@@ -29,10 +29,10 @@ $fld = $frm->getField('seperator');
 $fld->value = '<div class="separator separator-dashed my-4"></div>';
 
 $bannerLangFld = $frm->getField('banner_lang_id');
-$bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
+$bannerLangFld->addFieldTagAttribute('class', 'catBannerLanguageJs');
 
 $screenFld = $frm->getField('slide_screen');
-$screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
+$screenFld->addFieldTagAttribute('class', 'catPrefDimensionsJs');
 
 if (1 < $languageCount) {
     $bannerLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -43,7 +43,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
+            'onclick' => 'catMediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -65,8 +65,7 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
     $('input[name=logo_min_width]').val(150);
     $('input[name=logo_min_height]').val(150);
     var aspectRatio = 4 / 1;
-    $(document).on('change', '.prefDimensions-js', function() {
-        console.log('vvv')
+    $(document).on('change', '.catPrefDimensionsJs', function() {       
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 

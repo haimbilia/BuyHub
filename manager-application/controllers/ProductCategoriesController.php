@@ -52,7 +52,7 @@ class ProductCategoriesController extends ListingBaseController
         $records = (array) $prodCat->getCategories(true, true);
         $this->set("arrListing", $records);
 
-        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js','product-categories/page-js/add-media.js'));
         $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
 
         $this->_template->render();

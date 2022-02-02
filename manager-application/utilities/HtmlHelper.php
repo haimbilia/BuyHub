@@ -76,7 +76,7 @@ class HtmlHelper
         /* For Labels Fields */
 
         /* Group Label and Input field. */
-        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = $frm->developerTags['fieldWrapperRowExtraClassDefault'] ?? 'form-group';
         /* Group Label and Input field. */
     }
 

@@ -7,7 +7,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             <thead class="tableHeadJs">
                 <tr>
                     <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
-                    <th><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?></th>
+                    <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_UNIT_PRICE', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?></th>
                     <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId); ?></th>
