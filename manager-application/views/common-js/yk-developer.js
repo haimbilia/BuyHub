@@ -23,6 +23,8 @@ $(function () {
     };
 
     $.extend(fcom, {
+        processingCounter: 0,
+        processingClass:'processingJs',
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
                 $("html, body").animate(
@@ -75,9 +77,11 @@ $(function () {
             }
         },
 
-        getLoader: function () {
-            $(document.body).css({ cursor: "wait" });
-            $(".loaderJs").remove();
+        getLoader: function (addAsNew) {
+            if(typeof addAsNew === undefined){
+                $(document.body).css({ cursor: "wait" });
+                $(".loaderJs").remove();
+            }            
             return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
@@ -85,13 +89,17 @@ $(function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
 
-        displayProcessing: function () {
-            fcom.closeProcessing();
-            $.ykmsg.info(langLbl.processing, -1, 'processingJs');
+        displayProcessing: function () {          
+            fcom.processingCounter++;
+            $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);            
         },
         
-        closeProcessing: function () {
-            $(".processingJs").remove();
+        closeProcessing: function (counter) {      
+            var cls = fcom.processingClass;
+            if(typeof counter !== "undefined"){
+                cls += '-' + counter
+            }
+            $("."+ cls).remove();
         },
 
         displaySuccessMessage: function (msg) {
@@ -382,12 +390,12 @@ $(function () {
             message: langLbl.maxLengthValidator
         });
     }
-
+    /*
     $(document).ajaxStart(function () {
-        /* Set loader height and width. */
+        Set loader height and width. 
         if (0 < $(".loaderJs").length) {
             $(".loaderJs").each(function () {
-                if (0 < $(this).siblings('table').length) {
+                if (0 < $(this).siblings('table:visible').length) {
                     var selector = $(this).siblings('table');
                 } else {
                     var selector = $(this).parent();
@@ -399,6 +407,7 @@ $(function () {
             });
         }
     });
+    */
 
     $(document).ajaxComplete(function () {
         $('[data-bs-toggle="popover"]').popover();

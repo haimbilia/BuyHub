@@ -291,7 +291,7 @@
     <div class="sticky-top">
         <div class="card">
             <div class="card-body">
-                <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
+                <button type="submit" class="btn btn-brand btn-block submitBtnJs"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
                 <div class="mt-3">
                     <?php
                     $fld = $frm->getField('product_active');

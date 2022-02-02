@@ -455,7 +455,7 @@ Updates/Fixes :
     => 061695 - Admin UI: Spacing issue between the 'checkbox' and 'drag-drop icon' on the Home slides Management page
     => 061632 - Admin UI: There are multiple UI issues on the order details page
     => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section
-
+    => 061810 - Admin UI: Search icon is missing in the search field, Images are not clickable on the table, and initially Save button is disabled while adding the product 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

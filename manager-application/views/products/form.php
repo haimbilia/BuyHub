@@ -61,6 +61,7 @@ if (0 < $recordId) {
         var shippingProfileId = '<?php echo $shippingProfileId; ?>';
 
         $(function() {
+            $('.mainJs').addClass('isLoading').prepend(fcom.getLoader());
             prodSpecifications();
             tagifyProducts();
             productDefaultImages();
@@ -120,13 +121,12 @@ if (0 < $recordId) {
                 });
             <?php } else { ?>
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
-            <?php } ?>
-
-            upcType();
+            <?php } ?>           
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
+            upcType();
         });
     </script>
 </main>
