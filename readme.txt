@@ -449,6 +449,7 @@ Updates/Fixes :
     => 061691 - Admin UI: Multiple-delete functionality is not working for the links of the badges and ribbons
     => 061690 - Admin UI: Added details are still showing after adding the links of the badges and ribbons
     => 061700 - Admin UI: The 'cross' and ' drop-down' icons is not aligned under the advanced search section on the whole system.
+    => 061695 - Admin UI: Spacing issue between the 'checkbox' and 'drag-drop icon' on the Home slides Management page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

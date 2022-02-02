@@ -49,7 +49,8 @@ class OrderStatusController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData();
-
+        $this->setCustomColumnWidth();
+        $this->set('autoTableColumWidth', false);
         $this->_template->addJs(['js/jquery.tablednd.js', 'order-status/page-js/index.js']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -334,6 +335,39 @@ class OrderStatusController extends ListingBaseController
             'orderstatus_is_active',
             'action',
         ];
+    }
+
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'dragdrop' => [
+                'width' => '5%'
+            ],
+            'select_all' => [
+                'width' => '5%'
+            ],
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'orderstatus_name' => [
+                'width' => '50%'
+            ],
+            'orderstatus_priority' => [
+                'width' => '20%'
+            ],
+            'orderstatus_is_active' => [
+                'width' => '10%'
+            ],
+            'action' => [
+                'width' => '5%'
+            ],
+        ];
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function excludeKeysForSort($fields = []): array

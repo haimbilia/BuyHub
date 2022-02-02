@@ -12,7 +12,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
                 array(
                     $recordId, 
                     $image['afile_screen'], 
-                    $image['afile_lang_id'], 
+                    $langId, 
                     'THUMB', 
                     false
                 ), CONF_WEBROOT_FRONT_URL
@@ -21,12 +21,12 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 		'name' => $image['afile_name'],
 		'afile_id' => $image['afile_id'],
 	]; 
-} 
+}
 
 echo HtmlHelper::getfileInputHtml(
     ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_SLIDE_IMAGE", $siteLangId)],
     $siteLangId,
-    ($canEdit ? 'deleteMedia('.$recordId.','. $image['afile_id'].','.$image['afile_type'].','.$image['afile_lang_id'].','.$image['afile_screen'].')' :''),
+    ($canEdit ? 'deleteMedia('.$recordId.','. $image['afile_id'].','.$image['afile_type'].','.$langId.','.$image['afile_screen'].')' :''),
     ($canEdit ? 'editDropZoneImages(this)': ''),
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'

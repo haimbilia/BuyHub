@@ -255,6 +255,7 @@ class AttachedFile extends MyAppModel
         }
 
         $rs = $srch->getResultSet();
+        // echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 

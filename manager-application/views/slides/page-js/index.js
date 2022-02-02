@@ -60,6 +60,18 @@ deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
     });
 };    
 
+mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+    if (false === checkControllerName()) {
+        return false;
+    }
+
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
+        function (t) {
+            fcom.removeLoader();
+            $.ykmodal(t.html, !$.ykmodal.isSideBarView());
+        }
+    );
+};
 
 loadImages = function (recordId, imageType, slide_screen, langId) {
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
@@ -67,7 +79,8 @@ loadImages = function (recordId, imageType, slide_screen, langId) {
         $('#imageListingJs').html(t.html);
     });
 };
-$(document).on('change', '#imageLanguageJs', function() {
+$(document).on('change', '#imageLanguageJs', function(e) {
+    e.stopPropagation();
     let langId = $(this).val();
     let recordId = $(this).closest("form").find('input[name="slide_id"]').val();
     let slideScreen = $(this).closest("form").find('[name="slide_screen"]').val();
