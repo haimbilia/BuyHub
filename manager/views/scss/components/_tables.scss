@@ -67,7 +67,7 @@
                 padding-#{$start-direction}: 0;
             }
             &:last-child {
-                padding-#{$end-direction}: 0;
+                padding-#{$end-direction}: 5px;
             }
         }
         &.selected {

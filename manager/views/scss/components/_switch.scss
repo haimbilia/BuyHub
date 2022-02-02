@@ -189,8 +189,9 @@
                         margin: 2px 0;
                         height: 20px;
                         width: 40px;
+                        min-width: 40px;
                         border-radius: 12px;
-                        margin-#{$end-direction}: 10px;
+                        margin-#{$start-direction}: 10px;
                         &:before {
                             width: 38px;
                             border-radius: 12px;
