@@ -1,7 +1,8 @@
 <?php
 switch (strtoupper($stats_type)) {
-    case 'TOP_COUNTRIES':
+    case 'TOP_COUNTRIES': die('dsds');
         if (null != $stats_info && array_key_exists('rows', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
+            echo '<ul class="list-stats list-stats-double">';
             foreach ($stats_info['rows'] as $key => $val) {
                 $cls = (1 >  $val['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success';
                 echo '<li class="list-stats-item">
@@ -10,13 +11,15 @@ switch (strtoupper($stats_type)) {
                             <i class="icn fas ' . $cls . '"></i>' . $val['%age'] . '%</span>
                     </li>';
             }
+            echo '</ul>';
         } else {
-            echo "<li class='list-stats-item'>" . Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId) . "</li>";
+            echo  Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId);
         }
 
         break;
     case 'TOP_REFERRERS':
         if (null != $stats_info && array_key_exists('rows', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
+            echo '<ul class="list-stats list-stats-inline ">';
             foreach ($stats_info['rows'] as $key => $val) {
                 $cls = (30 <  $val['visit']) ? 'fa-arrow-up font-success' : '';
                 echo '<li class="list-stats-item">
@@ -25,8 +28,9 @@ switch (strtoupper($stats_type)) {
                         <i class="icn fas ' . $cls . '"></i>' . $val['visit'] . '%</span>
                 </li>';
             }
+            echo '</ul>';
         } else {
-            echo "<li class='list-stats-item'>" . Labels::getLabel('LBL_No_Record_Found', $siteLangId) . "</li>";
+            echo Labels::getLabel('LBL_No_Record_Found', $siteLangId);
         }
         break;
     case 'TRAFFIC_SOURCE':
@@ -41,7 +45,7 @@ switch (strtoupper($stats_type)) {
             $pieChatStats = rtrim($pieChatStats, ',');
             echo $pieChatStats .= "],['title','Traffic source']";
         } else {
-            echo "<li class='list-stats-item'>" . Labels::getLabel('LBL_No_Record_Found', $siteLangId) . "</li>";
+            echo  Labels::getLabel('LBL_No_Record_Found', $siteLangId);
         }
         break;
     case 'VISITORS_STATS':
@@ -64,7 +68,7 @@ switch (strtoupper($stats_type)) {
             $chatStats = rtrim($chatStats, ',');
             echo $chatStats .= "]";
         } else {
-            echo "<li class='list-stats-item'>" . Labels::getLabel('LBL_No_Record_Found', $siteLangId) . "</li>";
+            echo  Labels::getLabel('LBL_No_Record_Found', $siteLangId);
         }
         break;
     case 'TOP_PRODUCTS':
@@ -85,6 +89,7 @@ switch (strtoupper($stats_type)) {
     case 'TOP_SEARCH_KEYWORD':
         if ($stats_info != null && count($stats_info) > 0) {
             $count = 1;
+            echo '<ul class="list-stats list-stats-inline">';
             foreach ($stats_info as $row) {
                 if ($count > 11) {
                     break;
@@ -97,8 +102,9 @@ switch (strtoupper($stats_type)) {
                         <i class="icn fas ' . $cls . '"></i>' . $row['search_count'] . '%</span>
                 </li>';
             }
+            echo '</ul>';
         } else {
-            echo "<li class='list-stats-item'>" . Labels::getLabel('LBL_No_Record_Found', $siteLangId) . "</li>";
+            echo Labels::getLabel('LBL_No_Record_Found', $siteLangId);
         }
         break;
 }

@@ -29,7 +29,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
@@ -37,18 +37,16 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                             </a>
                                                         </div>';
             }
+        }
 
         ?>
-            <div class="content-header-toolbar">
-                <div class="input-group">
-                    <?php
+        <div class="content-header-toolbar">
+            <div class="input-group">
+                <?php
                     echo $langFld->getHtml();
-                    ?>
-                </div>
+                ?>
             </div>
-        <?php } else {
-            echo $langFld->getHtml();
-        } ?>
+        </div>      
     </div>
     <div class="content-body">
         <div class="add-stock">
@@ -82,7 +80,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         <div class="input-group">
                                             <?php echo $fld->getHtml(); ?>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button type="button" class="btn btn-input dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -441,9 +439,9 @@ echo $imgFrm->getFormHtml();
             var selectedOptionData = [];
             if (index in productOptions) {
                 let optionName = productOptions[index]['option_name'];
-                    if(productOptions[index]['option_name'] != productOptions[index]['option_identifier']){
-                        optionName += '('+productOptions[index]['option_identifier']+')';
-                    }
+                if (productOptions[index]['option_name'] != productOptions[index]['option_identifier']) {
+                    optionName += '(' + productOptions[index]['option_identifier'] + ')';
+                }
                 selectedOptionData = [{
                     selected: true,
                     id: productOptions[index]['option_id'],
