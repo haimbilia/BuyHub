@@ -35,7 +35,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
         </div>
     </div>
     <div class="card-body">
-        <div class="formBodyJs">
+        <div class="formBodyJs dfdf">
             <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
             <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                 <div id="map" style="height:500px"></div>
@@ -43,20 +43,23 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
         </div>
     </div>
 
-    <div class="card-foot">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col">
-                        <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
-                    </div>
-                    <div class="col-auto">
-                        <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
+    <?php if ($frmType != Configurations::FORM_MEDIA) { ?>
+        <div class="card-foot">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col">
+                            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
+                        </div>
+                        <div class="col-auto">
+                            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
+
     <script language="javascript">
         var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
         <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
