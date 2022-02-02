@@ -1,33 +1,27 @@
-(function () {
-    brandImages = function (brandId, fileType, slide_screen, langId) {
-        fcom.updateWithAjax(fcom.makeUrl('Brands', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
-            fcom.removeLoader();
-            if (fileType == 'logo') {
-                $('#logoListingJs').html(t.html);
-            } else {
-                $('#imageListingJs').html(t.html);
-            }
-        });
-    };
-
-    deleteMedia = function (brandId, fileType, afileId, langId, slide_screen) {
-        if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('brands', 'removeMedia', [brandId, fileType, afileId]), '', function (t) {
-            brandImages(brandId, fileType, slide_screen, langId);
-            reloadList();
-        });
-    };
-
-    $(document).on('change', '#logoLanguageJs', function () {
+(function () {   
+    $(document).on('change', '.brandPrefRatioJs', function() {
+        if ($(this).val() == ratioTypeSquare) {
+            $(minWidthLogoEle).val(500);
+            $(minHeightLogoEle).val(500);
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));
+        } else {
+            $(minWidthLogoEle).val(500);
+            $(minHeightLogoEle).val(280);
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
+        }
+    });
+   
+    $(document).on('change', '#brandlogoLanguageJs', function () {
         var lang_id = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
-        brandImages(brand_id, 'logo', 1, lang_id);
+        loadImages(brand_id, 'logo', 0, lang_id);
     });
-    $(document).on('change', '#imageLanguageJs', function () {
+
+    $(document).on('change', '#brandBannerLanguageJs', function () {
         var lang_id = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
         var slide_screen = $("#slideScreenJs").val();
-        brandImages(brand_id, 'image', slide_screen, lang_id);
+        loadImages(brand_id, 'image', slide_screen, lang_id);        
     });
 })();
 

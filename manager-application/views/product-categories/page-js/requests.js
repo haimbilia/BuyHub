@@ -221,8 +221,8 @@ $(document).ready(function () {
 			} else if (imageType == 'banner') {
 				$('#banner-imageListingJs').html(t.html);
 				var bannerImageId = $("#banner-imageListingJs li").attr('id');
-				var selectedLangId = $(".banner-language-js").val();
-				var screen = $(".prefDimensions-js").val();
+				var selectedLangId = $(".catBannerLanguageJs").val();
+				var screen = $(".catPrefDimensionsJs").val();
 				$("[name='cat_banner_image_id[" + selectedLangId + "_" + screen + "]']").val(bannerImageId);
 			}
 		});
