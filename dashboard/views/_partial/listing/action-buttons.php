@@ -7,6 +7,36 @@ if (isset($htmlContent) && !empty($htmlContent)) {
     $ul->appendElement('li', [], $htmlContent, true);
 }
 
+if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
+    $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
+    $href = "javascript:void(0)";
+    $onclick = "addNew()";
+    $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
+    $icon = '<svg class="svg btn-icon-start" width="18" height="18">
+                        <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                        </use>
+                    </svg>';
+    $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';
+    if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {
+        $href = $newRecordBtnAttrs['attr']['href'] ?? $href;
+        $onclick = $newRecordBtnAttrs['attr']['onclick'] ?? $onclick;
+        $title = $newRecordBtnAttrs['attr']['title'] ?? $title;
+        $label = $newRecordBtnAttrs['label'] ?? $label;
+    }
+
+    $li = $ul->appendElement('li', ['title' => $title, 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li->appendElement(
+        'a',
+        [
+            'href' => 'javascript:void(0)',
+            'class' => 'btn btn-outline-brand btn-icon',
+            'onclick' => $onclick
+        ],
+        $label,
+        true
+    );
+}
+
 $msg = isset($msg) ? $msg : '';
 if (isset($statusButtons) && true === $statusButtons && $canEdit) {
     $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_ACTIVE', $siteLangId), 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
@@ -71,36 +101,6 @@ if (isset($otherButtons) && is_array($otherButtons)) {
         $li = $ul->appendElement('li', $liAttr);
         $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
     }
-}
-
-if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
-    $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
-    $href = "javascript:void(0)";
-    $onclick = "addNew()";
-    $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
-    $icon = '<svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
-                        </use>
-                    </svg>';
-    $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';
-    if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {
-        $href = $newRecordBtnAttrs['attr']['href'] ?? $href;
-        $onclick = $newRecordBtnAttrs['attr']['onclick'] ?? $onclick;
-        $title = $newRecordBtnAttrs['attr']['title'] ?? $title;
-        $label = $newRecordBtnAttrs['label'] ?? $label;
-    }
-
-    $li = $ul->appendElement('li', ['title' => $title, 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-    $li->appendElement(
-        'a',
-        [
-            'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon',
-            'onclick' => $onclick
-        ],
-        $label,
-        true
-    );
 }
 
 if (!empty($columnButtons)) {
