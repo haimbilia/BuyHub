@@ -87,7 +87,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 </li>
             <?php } ?>
             <li class="list-stats-item">
-                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?>:</span>
+                <span class="lable"><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php
                     $orderStatus = ucwords($op['orderstatus_name']);
