@@ -25,57 +25,76 @@ $frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 
-    <div class="content-wrapper content-space">
-        <?php
-        $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
-        $data = [
-            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
-            'siteLangId' => $siteLangId,
-            'controllerName' => $controllerName,
-            'action' => $action,
-            'canEdit' => $canEdit,
-            'adminCatalogs' => $adminCatalogs,
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php echo $frmSearch->getFormHtml(); ?>
-                            </div>
+<div class="content-wrapper content-space">
+    <?php
+    $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
+    $data = [
+        'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
+        'siteLangId' => $siteLangId,
+        'controllerName' => $controllerName,
+        'action' => $action,
+        'canEdit' => $canEdit,
+        'adminCatalogs' => $adminCatalogs,
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </nav>
+    <div class="content-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-form">
+                    <div class="card-head">
+                        <div class="card-head-label">
+                            <?php echo $frmSearch->getFormHtml(); ?>
                         </div>
+                        <div class="card-toolbar">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-icon formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#active">
+                                            </use>
+                                        </svg>
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-icon formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#in-active">
+                                            </use>
+                                        </svg>
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-icon formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                            </use>
+                                        </svg>
+
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-head">
-                            <div class="card-title"></div>
-                            <div class="btn-group">
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
-                                    <?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>
-                                </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
-                                    <?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>
-                                </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
-                                    <?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                            </div>
+                    <div class="card-body">
+                        <div id="listing">
+                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <?php echo FatUtility::createHiddenFormFromData(array('product_id' => $product_id), array('name' => 'frmSearchSellerProducts')); ?>
 <script>

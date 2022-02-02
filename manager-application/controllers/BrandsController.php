@@ -273,6 +273,7 @@ class BrandsController extends ListingBaseController
         }
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
+        
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 

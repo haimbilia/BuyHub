@@ -114,7 +114,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         <div class="input-group">
                                             <input type="text" placeholder="">
                                             <div class="input-group-append ">
-                                                <button type="button" class="btn btn-outline-gray dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button type="button" class="btn btn-input dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     Days
                                                 </button>
                                                 <div class="dropdown-menu">

@@ -1,10 +1,11 @@
-
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Info_regarding_this_page',$siteLangId) ;?></h5>
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_Info_regarding_this_page', $siteLangId); ?>
+    </h5>
 </div>
 <div class="modal-body">
     <div id="catalogToolTip">
-        <?php 
+        <?php
         $obj = new Extrapage();
         switch ($type) {
             case Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS:

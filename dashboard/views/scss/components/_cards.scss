@@ -34,10 +34,10 @@ $card-bg: #fff;
         margin-bottom: 0.5rem;
         color: $txt-body;
         background: none;
-        border: none;
+        border-bottom: solid 1px lighten($border-color, 03);
         //border-bottom: $border;
         & ~ .card-body {
-            padding-top: 0;
+            //padding-top: 0;
         }
         &-label {
             color: $txt-body;
@@ -63,7 +63,13 @@ $card-bg: #fff;
         @include media-breakpoint-up(md) {
             align-items: center;
             align-content: flex-end;
+            margin-#{$start-direction}: 2rem;
         }
+        .btn {
+            border: $border;
+            border-radius: 4px;
+        }
+
         .btn-add ~ .actions {
             margin-#{$start-direction}: 2rem;
         }
