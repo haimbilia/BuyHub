@@ -118,7 +118,6 @@ class Common
 
     public static function headerLanguageArea($template)
     {
-        CommonHelper::printArray(debug_backtrace());
         $template->set('siteLangId', CommonHelper::getLangId());
         $template->set('siteCurrencyId', CommonHelper::getCurrencyId());
         $template->set('languages', Language::getAllNames(false));
