@@ -10,6 +10,7 @@ class DashboardBaseController extends FatController
     protected $str_delete_record;
     protected $str_invalid_Action;
     protected $str_setup_successful;
+    protected $nodes = [];
 
     public function __construct($action)
     {
@@ -351,7 +352,6 @@ class DashboardBaseController extends FatController
             return;
         }
 
-        $nodes = array();
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
@@ -359,12 +359,12 @@ class DashboardBaseController extends FatController
         $className = ucwords(implode(' ', $arr));
 
         if ($action == 'index') {
-            $nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($className), $this->siteLangId));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($className), $this->siteLangId));
         } else {
-            $nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($action), $this->siteLangId));
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($action), $this->siteLangId));
         }
-        return $nodes;
+        return $this->nodes;
     }
 
     public function checkIsShippingMode()
