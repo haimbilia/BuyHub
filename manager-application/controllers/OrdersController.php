@@ -312,7 +312,18 @@ class OrdersController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_NOTIFY_CUSTOMER', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], '')->requirements()->setRequired();
         if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-            $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+                
+            $shippedBySeller = applicationConstants::NO;
+            if (CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id'])) {
+                $shippedBySeller = applicationConstants::YES;
+            }
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderData['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            if(!$shippingApiObj){
+                $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            }else{
+                $manualFld = $frm->addSelectBox(Labels::getLabel('FRM_SHIPPED_VIA', $this->siteLangId), 'manual_shipping', [0 => Labels::getLabel("FRM_SHIPPING_PLUGIN", $this->siteLangId), 1 => Labels::getLabel("FRM_SELF_SHIPPING", $this->siteLangId)], 0 , array(), false);                
+            }
+            
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId));
             $manualShipUnReqObj->setRequired(false);
             $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId));
