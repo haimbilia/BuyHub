@@ -22,7 +22,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');; ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div id="ordersListing"></div>
                     </div>
