@@ -458,11 +458,14 @@ Updates/Fixes :
     => 061810 - Admin UI: Search icon is missing in the search field, Images are not clickable on the table, and initially Save button is disabled while adding the product 
     => 061818 - Admin UI: Category's media is not clickable, brands' uploaded media is not showing and getting an 'invalid request' error while removing the rating types while adding the category & brands on the product's page
     => 062159 - Undefined index: order_id in case of Wallet pay from mobile
+    => 061649 - Admin UI: Validation is showing for the 'Self shipping' fields while updating the order's status on the order's details page
+    => 061801 - Coupen not displaying to other user once put on pending order by other user
     => 062174 - Product tags page, binding tag issue.
-
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
+   
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
         => Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/

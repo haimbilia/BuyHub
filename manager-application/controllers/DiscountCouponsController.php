@@ -118,20 +118,20 @@ class DiscountCouponsController extends ListingBaseController
         if (!empty($post['coupon_type'])) {
             $srch->addCondition('dc.coupon_type', '=', $post['coupon_type']);
         }
-        
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
 
-        $srch->addOrder($sortBy, $sortOrder); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);    
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);  
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('discountTypeArr', DiscountCoupons::getTypeArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditDiscountCoupons($this->admin_id, true));
         $this->set('canView', $this->objPrivilege->canViewDiscountCoupons($this->admin_id, true));
@@ -188,14 +188,15 @@ class DiscountCouponsController extends ListingBaseController
         $recordId = $post['coupon_id'];
         unset($post['coupon_id']);
 
-        $oldStatus = (int) DiscountCoupons::getAttributesByLangId($recordId, 'coupon_active');
-        $status = FatApp::getPostedData('coupon_active', FatUtility::VAR_INT, 0);
-        $endDate = FatApp::getPostedData('coupon_end_date');
+        $startDate = FatApp::getPostedData('coupon_start_date', FatUtility::VAR_STRING);
+        $endDate = FatApp::getPostedData('coupon_end_date', FatUtility::VAR_STRING);
 
-        if (time() > $endDate) {
+        if (!empty($endDate) && time() > strtotime($endDate)) {
             LibHelper::exitWithError(Labels::getLabel('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.'), true);
         }
 
+        $post['coupon_start_date'] = !empty($startDate) ? $startDate : date('Y-m-d');
+        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d',strtotime('+60 year'));
         $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
         $record->assignValues($post);
@@ -286,7 +287,7 @@ class DiscountCouponsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         $frm->addSelectBox(Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId), 'coupon_type', DiscountCoupons::getTypeArr($this->siteLangId), '', [], Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId));
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

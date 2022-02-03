@@ -322,7 +322,7 @@ class OptionsController extends ListingBaseController {
             if($option['option_name']  != $option['option_identifier'] ){
                 $optionName.="(".$option['option_identifier'] .")"; 
             }
-            $results[]= ['id'=> $option['id'],'text'=> $optionName];
+            $results[]= ['id'=> $option['id'],'text'=> $optionName,'option_is_separate_images' => $option['option_is_separate_images']];
         }
 
         $json = array(

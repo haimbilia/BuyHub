@@ -232,8 +232,13 @@ class SubscriptionCart extends FatModel
 
     public function getCouponDiscounts()
     {
-        $couponObj = new DiscountCoupons();
-        $couponInfo = $couponObj->getSubscriptionCoupon($this->getSubscriptionCartDiscountCoupon(), $this->scart_lang_id);
+        if (!$this->getSubscriptionCartDiscountCoupon()) {
+            return false;
+        }
+
+        $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : false;       
+        $couponInfo = DiscountCoupons:: getValidSubscriptionCoupons($this->scart_user_id, $this->scart_lang_id, $this->getSubscriptionCartDiscountCoupon(), $orderId);
+     
         $cartSubTotal = $this->getSubTotal();
 
         if (!empty($couponInfo)) {
@@ -314,7 +319,8 @@ class SubscriptionCart extends FatModel
             $labelArr = array(
                 'coupon_label' => $couponInfo["coupon_title"],
                 'coupon_discount_in_percent' => $couponInfo["coupon_discount_in_percent"],
-                'max_discount_value' => $couponInfo["coupon_max_discount_value"]
+                'max_discount_value' => $couponInfo["coupon_max_discount_value"],
+                'coupon_id' => $couponInfo["coupon_id"],
             );
 
             // If discount greater than total

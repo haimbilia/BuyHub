@@ -970,6 +970,20 @@ class SellerController extends SellerBaseController
                     FatUtility::dieJsonError(Message::getHtml());
                 }
             }
+
+            if (!empty($orderDetail['order_discount_coupon_code'])) {
+                $srch = DiscountCoupons::getSearchObject();
+                $srch->addFld('coupon_id');
+                $srch->addCondition('coupon_code', '=', $orderDetail['order_discount_coupon_code']);                 
+                $couponData = FatApp::getDb()->fetch($srch->getResultSet());
+                if (!empty($couponData)) {                            
+                    if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $couponData['coupon_id'], 'couponhistory_order_id' => $orderDetail['order_id'], 'couponhistory_user_id' => $orderDetail['order_user_id'], 'couponhistory_amount' => $orderDetail['order_discount_total'], 'couponhistory_added_on' => $orderDetail['order_date_added'] ))) {
+                        $this->error = FatApp::getDb()->getError();
+                        return false;
+                    }                           
+                }
+                FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, array('smt' => 'ochold_order_id = ?', 'vals' => array($orderDetail['order_id'])));
+            }
         }
 
         $db->commitTransaction();
@@ -3977,9 +3991,18 @@ class SellerController extends SellerBaseController
         $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirements()->setRequired();
-
         if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] != FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            
+            $shippedBySeller = applicationConstants::NO;
+            if (CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id'])) {
+                $shippedBySeller = applicationConstants::YES;
+            }
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderData['opshipping_by_seller_user_id'] : 0)) ?? NULL;            
+            if(!$shippingApiObj){
+                $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            }else{
+                $manualFld = $frm->addSelectBox(Labels::getLabel('FRM_SHIPPED_VIA', $this->siteLangId), 'manual_shipping', [0 => Labels::getLabel("FRM_SHIPPING_PLUGIN", $this->siteLangId), 1 => Labels::getLabel("FRM_SELF_SHIPPING", $this->siteLangId)], 0 , array(), false);                
+            }
 
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipUnReqObj->setRequired(false);
