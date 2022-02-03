@@ -31,8 +31,8 @@ $wizard:'wizard';
                     content: "";
                     font-size: 1.25rem;
                     color: #a2a5b9;
-                    margin-left: 0.5rem;
-                    margin-right: 0.5rem;
+                    margin-#{$start-direction}: 0.5rem;
+                    margin-#{$end-direction}: 0.5rem;
                 }
                 &:last-child {
                     &:after {
@@ -174,7 +174,7 @@ $wizard:'wizard';
                         padding: 0.5rem 2rem;
                         .#{$wizard}-v1__nav-icon {
                             font-size: 1.5rem;
-                            margin-right: 1rem;
+                            margin-#{$end-direction}: 1rem;
                             margin-bottom: 0;
                         }
                     }
@@ -225,7 +225,7 @@ $wizard:'wizard';
                 flex-direction: row;
                 justify-content: space-between;
                 [data-ktwizard-type="action-prev"] {
-                    margin-right: auto;
+                    margin-#{$end-direction}: auto;
                 }
                 [data-ktwizard-type="action-next"] {
                     margin: auto 0 auto auto;
@@ -243,7 +243,7 @@ $wizard:'wizard';
                     flex-wrap: wrap;
                     justify-content: center;
                     [data-ktwizard-type="action-prev"] {
-                        margin-right: 0.5rem;
+                        margin-#{$end-direction}: 0.5rem;
                     }
                     [data-ktwizard-type="action-next"] {
                         margin: 0 0 1rem;

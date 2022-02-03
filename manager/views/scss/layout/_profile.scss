@@ -16,7 +16,7 @@
 
 .app {
     .app__content {
-        margin-left: 20px;
+        margin-#{$start-direction}: 20px;
     }
 }
 
@@ -35,7 +35,7 @@
             width: 100%;
         }
         .app__content {
-            margin-left: 0;
+            margin-#{$start-direction}: 0;
             canvas {
                 width: 100%!important;
             }

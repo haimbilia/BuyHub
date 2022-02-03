@@ -456,6 +456,7 @@ Updates/Fixes :
     => 061632 - Admin UI: There are multiple UI issues on the order details page
     => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section
     => 061810 - Admin UI: Search icon is missing in the search field, Images are not clickable on the table, and initially Save button is disabled while adding the product 
+    => 061818 - Admin UI: Category's media is not clickable, brands' uploaded media is not showing and getting an 'invalid request' error while removing the rating types while adding the category & brands on the product's page
     => 062159 - Undefined index: order_id in case of Wallet pay from mobile
 
 Known Issues and Problems :
