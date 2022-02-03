@@ -182,6 +182,7 @@ class AdminBaseController extends FatController
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
                     'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
                     'invalidState' => Labels::getLabel('LBL_INVALID_STATE', $this->siteLangId),
+                    'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {

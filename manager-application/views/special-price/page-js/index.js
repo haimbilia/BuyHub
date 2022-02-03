@@ -62,7 +62,7 @@ $(document).ready(function () {
             var discountPrice = price - value;
             if (0 < discountPrice) {
                 var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
-                discountPercentage = discountPercentage + "% off";
+                discountPercentage = discountPercentage + "%  " + langLbl.off;
             }
         }
 

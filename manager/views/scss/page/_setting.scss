@@ -175,6 +175,7 @@
         color: $txt-body;
         cursor: pointer;
         display: flex;
+        align-items: flex-start;
         justify-content: space-between;
         flex-direction: row-reverse;
         flex: 1;

@@ -100,6 +100,7 @@ $(function () {
                 cls += '-' + counter
             }
             $("."+ cls).remove();
+            $.ykmsg.close();
         },
 
         displaySuccessMessage: function (msg) {
