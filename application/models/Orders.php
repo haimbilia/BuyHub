@@ -363,7 +363,7 @@ class Orders extends MyAppModel
         
         if (array_key_exists('coupon_id', $discountInfo)) {
           
-            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->order_id);
+            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
                 $this->error = Labels::getLabel('ERR_Invalid_Coupon_Code', $data['order_language_id']);
                 return false;
@@ -933,7 +933,7 @@ class Orders extends MyAppModel
         }
 
         if (array_key_exists('coupon_id', $discountInfo)) {                  
-            $couponInfo = DiscountCoupons::getValidSubscriptionCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->order_id);
+            $couponInfo = DiscountCoupons::getValidSubscriptionCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
                 $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
                 return false;
