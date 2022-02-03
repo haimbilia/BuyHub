@@ -458,6 +458,7 @@ Updates/Fixes :
     => 061810 - Admin UI: Search icon is missing in the search field, Images are not clickable on the table, and initially Save button is disabled while adding the product 
     => 061818 - Admin UI: Category's media is not clickable, brands' uploaded media is not showing and getting an 'invalid request' error while removing the rating types while adding the category & brands on the product's page
     => 062159 - Undefined index: order_id in case of Wallet pay from mobile
+    => 062174 - Product tags page, binding tag issue.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
