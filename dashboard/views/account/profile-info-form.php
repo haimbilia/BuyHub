@@ -87,34 +87,25 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
                 ?>
                 <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                 <?php echo $imgFrm->getFormTag(); ?>
-                <?php if ($mode == 'Edit') { ?>
-                    <button class="btn btn-edit" type="button" onClick="popupImage()">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                            </use>
-                        </svg>
-                    </button>
-                <?php } else { ?>
-                    <label class="btn" title="Upload image file">
-                        <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
-                        <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
-                    </label>
-                <?php } ?>
-                <?php if ($mode == 'Edit' && 0 < $file_row['afile_id']) { ?>
-                    <!-- <button class="btn btn-delete"  type="button"  onClick="removeProfileImage()">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                            </use>
-                        </svg>
-                    </button> -->
-                <?php } ?>
+                    <?php if ($mode == 'Edit') { ?>
+                        <button class="btn btn-edit" type="button" onClick="popupImage()">
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </button>
+                    <?php } else { ?>
+                        <label class="btn" title="Upload image file">
+                            <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
+                            <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
+                        </label>
+                    <?php } ?>
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
                 <div id="dispMessage"></div>
             </div>
         </div>
         <?php if (User::isBuyer() && User::isSeller()) { ?>
-
             <div class="my-5">
                 <h6> <?php echo Labels::getLabel('LBL_Preferred_Dashboard', $siteLangId); ?> </h6>
                 <ul class="user-type setactive-js">
@@ -143,20 +134,21 @@ $fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
 
             </div>
 
-        <?php } ?> <?php echo $frm->getFormHtml(); ?>
-        <div class="or"><span>More Options</span></div>
-        <div class="account-delete">
-            <button type="button" class="btn btn-light">
-                Request To Remove My Data
-            </button>
-            <button type="button" class="btn btn-light">
-                Request My Data
-            </button>
+        <?php }
+        
+        echo $frm->getFormHtml(); ?>
 
+        <div class="or"><span><?php echo Labels::getLabel('LBL_MORE_OPTIONS', $siteLangId); ?></span></div>
+
+        <div class="account-delete">
+            <button type="button" class="btn btn-light" onclick="truncateDataRequestPopup()">
+                <?php echo Labels::getLabel('LBL_REQUEST_TO_REMOVE_MY_DATA', $siteLangId); ?>
+            </button>
+            <button type="button" class="btn btn-light" onclick="requestData()">
+                <?php echo Labels::getLabel('LBL_REQUEST_MY_DATA', $siteLangId); ?>
+            </button>
         </div>
     </div>
-
-
 </div>
 <script language="javascript">
     $(document).ready(function() {
