@@ -57,6 +57,7 @@ $(document).on("search", "input[name='keyword']", function () {
         searchRecords(document.frmRecordSearch);
     }
 });
+/* Reset result on clear(cross) icon on keyword search field. */
 
 $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {

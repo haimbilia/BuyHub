@@ -37,14 +37,8 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         'adminCatalogs' => $adminCatalogs,
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data</li>
-        </ol>
-    </nav>
     <div class="content-body">
+        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-form">

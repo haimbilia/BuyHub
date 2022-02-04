@@ -793,7 +793,7 @@ class Product extends MyAppModel
             if (count($attrs)) {
                 $srch->addMultipleFields($attrs);
             } else {
-                $srch->addMultipleFields(array('tag_id', 'tag_name'));
+                $srch->addMultipleFields(array('tag_id', 'COALESCE(tag_name, tag_identifier) as tag_name'));
             }
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }

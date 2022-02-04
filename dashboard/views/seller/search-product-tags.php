@@ -7,6 +7,7 @@
 );
 $tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table layout--'.$formLayout,'dir'=> $formLayout ));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
+
 foreach ($arr_flds as $key => $val) {
     if ($key == 'listserial') {
         $e = $th->appendElement('th', array('width' => '5%'), $val);
@@ -16,12 +17,12 @@ foreach ($arr_flds as $key => $val) {
         $e = $th->appendElement('th', array('width' => '65%'), $val);
     }
 }
-$productsArr = array();
-$sr_no = ($page == 1) ? 0 : ($pageSize*($page-1));
-foreach ($arrListing as $sn => $row) {
-    $productsArr[] = $row['product_id'];
-    $sr_no++;
-    $tr = $tbl->appendElement('tr', array('class' => ''));
+    $productsArr = array();
+    $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
+    foreach ($arrListing as $sn => $row) {
+        $productsArr[] = $row['product_id'];
+        $sr_no++;
+        $tr = $tbl->appendElement('tr', array('class' => ''));
 
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -50,6 +51,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
+
 if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_You_need_to_create_private_products_in_order_to_add_tags', $langId);
     $this->includeTemplate('_partial/no-record-found-with-info.php', array('langId'=>$langId,'message'=>$message));
@@ -59,7 +61,7 @@ if (count($arrListing) == 0) {
 </div>
 <?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmCatalogProductSearchPaging'));
-$pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'callBackJsFunc' => 'goToCatalogProductSearchPage');
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'callBackJsFunc' => 'goToCatalogProductSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>
 <?php if (count($arrListing) > 0) { ?>
@@ -93,6 +95,15 @@ $("document").ready(function() {
             .on('input', getTagsAutoComplete).on('focus', getTagsAutoComplete);
     });
 
-});
-</script>
-<?php }?>
+            $.each(productsArr, function(index, value) {
+                tagify = new Tagify(document.querySelector('input[name=tag_name' + value + ']'), {
+                    whitelist: [],
+                    delimiters: "#",
+                    editTags: false,
+                    backspace: false
+                }).on('focus', getTagsAutoComplete).on('dropdown:select', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+            });
+
+        });
+    </script>
+<?php } ?>
