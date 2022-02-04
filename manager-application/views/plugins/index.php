@@ -8,6 +8,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
 
 <main class="main">
     <div class="container">
+        <?php echo $frmSearch->getFormHtml(); ?>
         <?php if (1 > $tourStep) {
             $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
         ?>
@@ -56,7 +57,6 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                     </div>
                 </div>
                 <div class="grid-layout-right">
-                    <?php echo $frmSearch->getFormHtml(); ?>
                     <div id="pluginsListing" class="card">
                         <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>
                     </div>
@@ -66,7 +66,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
             <?php require_once(CONF_THEME_PATH . 'getting-started/top-nav.php'); ?>
             <div class="onboarding">
                 <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
-                <div class="onboarding-main">
+                <div class="onboarding-main" id="pluginsListing">
                     <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>
                 </div>
             </div>
