@@ -43,21 +43,17 @@
     height: $input-height;
     font-size: 0.85rem;
     line-height: 1.5;
-    border-width: 2px;
+    border-width: 1px;
     display: inline-flex;
     align-items: center;
-
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
-
         &:focus {
-            outline: none !important;
             box-shadow: $shadow2;
         }
         &:hover {
             color: var(--brand-color-inverse);
-            outline: none !important;
             box-shadow: $shadow1;
         }
     }
@@ -72,7 +68,6 @@
     &-secondary {
         background-color: var(--secondary-color);
         color: var(--secondary-color-inverse);
-
         &:hover {
             color: var(--secondary-color-inverse);
         }
@@ -171,8 +166,8 @@
 
 button:focus,
 :focus {
-    outline: none;
-    box-shadow: none !important;
+    // outline: none;
+    // box-shadow: none !important;
 }
 
 a.link {
