@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-    $frmSearch->setFormTagAttribute('id', 'frmSearchTaxCat');
+/* $frmSearch->setFormTagAttribute('id', 'frmSearchTaxCat');
     $frmSearch->setFormTagAttribute('onsubmit', 'searchTaxCategories(this); return(false);');
 
     $frmSearch->setFormTagAttribute('class', 'form');
@@ -20,45 +20,28 @@
     $cancelBtnFld = $frmSearch->getField('btn_clear');
     $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');  
     $cancelBtnFld->developerTags['col'] = 2;
-    $cancelBtnFld->developerTags['noCaptionTag'] = true;
+    $cancelBtnFld->developerTags['noCaptionTag'] = true; */
 ?>
 
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
-    <div class="content-wrapper content-space">
-        <?php 
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_Tax_Categories', $siteLangId),
-            'siteLangId' => $siteLangId
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <?php
-                                $submitFld = $frmSearch->getField('btn_submit');
-                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-
-                                $fldClear= $frmSearch->getField('btn_clear');
-                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                echo $frmSearch->getFormHtml();
-                                echo $frmSearch->getExternalJS();
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
-
-                        </div>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_Tax_Categories', $siteLangId),
+        'siteLangId' => $siteLangId
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <div class="card-body">
+                        <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

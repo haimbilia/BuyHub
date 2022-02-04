@@ -1798,6 +1798,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
         $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_TAX_CATEGORY_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -3659,8 +3660,7 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchTaxCat');
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
