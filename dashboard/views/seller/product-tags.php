@@ -49,9 +49,10 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                 </div>
                                 <div class='dvFocus-js'></div>
                                 <?php
-                                    $fld = $frmSearch->getField('lang_id');     
-                                    $fld->setFieldTagAttribute('id','tagLangId');                                
-                                    echo $fld->getHtml();
+                                    $langFld = $frmSearch->getField('lang_id');     
+                                    $langFld->setFieldTagAttribute('id','tagLangId');                                
+                                    echo $langFld->getHtml();
+                                    echo $langFld->value;
                                 ?>
                                 </form>
                                 <?php echo $frmSearch->getExternalJS(); ?>
@@ -69,7 +70,8 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                     <div class="input-group">
                                         <select class="form-control form-select" onchange="langForm(this)"  name="lang_id">
                                             <?php foreach($languages as $langId => $langName){
-                                                echo "<option value='$langId'>$langName</option>";
+                                                $selectedClass = $langFld->value == $langId ? 'selected':'';
+                                                echo "<option value='$langId' $selectedClass>$langName</option>";
                                             }
                                         ?>
                                         </select>            
