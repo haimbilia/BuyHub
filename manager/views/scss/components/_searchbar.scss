@@ -12,6 +12,12 @@
 
         .menu .sidebar-dropdown-menu .nav_link {
             padding: 6px 13px;
+            &:hover {
+            }
+            &:before {
+                z-index: -1;
+                background-color: $bg-gray;
+            }
             &:after {
                 #{$start-direction}: -6px;
             }
