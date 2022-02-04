@@ -24,12 +24,17 @@ foreach ($arrListing as $sn=>$row){
 			case 'user_name':
 				$href = "javascript:void(0)";
 				$onclick = 'redirectUser(' . $row['user_id'] . ')';
-				$str = $this->includeTemplate('_partial/user/user-info-card.php', [
+				$array = [
 					'user' => $row,
 					'siteLangId' => $siteLangId,
 					'href' => $href,
 					'onclick' => $onclick,
-				], false, true);
+				];
+				if(1 > $row['user_id']){
+					$array['onclick'] = false;
+					$array['user']['credential_username'] = Labels::getLabel('LBL_GUEST_USER', $siteLangId);
+				}
+				$str = $this->includeTemplate('_partial/user/user-info-card.php', $array, false, true);				
 				$td->appendElement('plaintext', [], $str , true);
 				break;
 			case 'notification':
