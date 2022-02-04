@@ -1110,7 +1110,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     </svg>
                                 </span>
                                 <span class="nav_text">
-                                    <?php echo Labels::getLabel('NAV_BUYERS_REPORTS', $siteLangId); ?>
+                                    <?php echo Labels::getLabel('NAV_USERS_REPORT', $siteLangId); ?>
                                 </span>
                                 <?php if (!$quickSearch) { ?>
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
