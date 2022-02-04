@@ -1,6 +1,6 @@
 <?php
 class HtmlHelper
-{   
+{
     public static function addButtonHtml(string $lbl, string $type = 'button', $name = '', $class = '', $onclick = ''): string
     {
         $name = (!empty($name) ? 'name="' . $name . '"' : '');
@@ -8,7 +8,7 @@ class HtmlHelper
         $class = !empty($class) ? $class : 'btn btn-brand btn-wide btn-search submitBtnJs';
         return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
     }
-    
+
     public static function addSearchButton(Form &$frm, string $lbl = '')
     {
         $lbl = empty($lbl) ? Labels::getLabel('FRM_SEARCH', CommonHelper::getLangId()) : $lbl;
@@ -84,7 +84,7 @@ class HtmlHelper
      */
     public static function getFieldHtml(Form $frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], bool $doNotAddFieldWrapper = false): string
     {
-        
+
         $fld = $frm->getField($fldName);
         if (null == $fld) {
             return '';
@@ -169,5 +169,17 @@ class HtmlHelper
             $div1->appendElement('plaintext', [], $fld->getHtml(), true);
             return $mainDiv->getHtml();
         }
-    }  
+    }
+    
+    public static function addStatusBtnHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '')
+    {
+        $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $recordId . ', ' . ((int) !$status) . ')' : 'return false;';
+        $statusClass = ($canEdit) ? '' : 'disabled';
+        $disabled = ($disabled) ? 'disabled' : '';
+        $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
+        return '<label class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
+                    <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                    <span class="input-helper"></span>
+                </label>';
+    }
 }

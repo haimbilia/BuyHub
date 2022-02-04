@@ -1185,7 +1185,9 @@ class SellerController extends SellerBaseController
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $frmSearchCatalogProduct->fill(['lang_id'=> $this->siteLangId]);
         $this->set("frmSearch", $frmSearchCatalogProduct);
-        $this->set("languages", Language::getAllNames());        
+        $this->set("languages", Language::getAllNames());      
+        $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));  
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_PRODUCTS', $this->siteLangId));  
         $this->_template->render(true, true);
     }
 
@@ -3936,6 +3938,8 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchCatalogProduct');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'lang_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
 
         /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
@@ -3946,14 +3950,9 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
-        $frm->addHiddenField('', 'lang_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
 
-        /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
-        $frm->addButton('', 'btn_clear', Labels::getLabel('LBL_Clear', $this->siteLangId));
-        /* } */
-        //$fldSubmit->attachField($fldCancel);
-        $frm->addHiddenField('', 'page');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

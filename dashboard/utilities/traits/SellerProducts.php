@@ -8,12 +8,12 @@ trait SellerProducts {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'product_id', $product_id);
         $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'page', 1);
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));
+
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -46,6 +46,9 @@ trait SellerProducts {
         $rs = $srch->getResultSet();
         $adminCatalogs = $srch->recordCount();
         $this->set('adminCatalogs', $adminCatalogs);
+        $this->set('statusButtons', true);
+        $this->set('deleteButton', true);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_SELPROD_NAME', $this->siteLangId));
         $this->_template->addJs(['js/select2.js']);
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->render(true, true);
