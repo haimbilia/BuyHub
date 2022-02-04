@@ -18,7 +18,7 @@ if (0 < $recordId) {
         $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
         echo $frm->getFormTag(); ?>
         <?php if (1 > $tourStep) { ?>
-            <div class="add-stock">
+            <div class="add-stock" id="productWrapper">
                 <?php require_once(CONF_THEME_PATH . 'products/form-left.php'); ?>
                 <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>
             </div>
@@ -61,7 +61,8 @@ if (0 < $recordId) {
         var shippingProfileId = '<?php echo $shippingProfileId; ?>';
 
         $(function() {
-            $('.mainJs').addClass('isLoading').prepend(fcom.getLoader());
+            $('.mainJs').addClass('isLoading');
+            $('#productWrapper').prepend(fcom.getLoader());
             prodSpecifications();
             tagifyProducts();
             productDefaultImages();
