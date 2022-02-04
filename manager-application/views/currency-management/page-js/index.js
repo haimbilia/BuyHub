@@ -58,16 +58,7 @@ $(document).ajaxComplete(function () {
         if (!confirm(langLbl.updateCurrencyRates)) {
             return false;
         }
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
-            fcom.closeProcessing();
-            var ans = $.parseJSON(res);
-            if (ans.status != 1) {
-                $.ykmsg.danger(ans.msg);
-                return false;   
-            }
-            $.ykmsg.success(ans.msg);
-            reloadList();
-        });
+        
+        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {});
     };
 })();
