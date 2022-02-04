@@ -17,9 +17,6 @@ $(document).ajaxComplete(function () {
     setTabActive = function (type) {
         $('ul.pluginTypesJs li.is-active').removeClass('is-active');
         $('ul.pluginTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
-            scrollTop: $("#pluginsListing").offset().top
-        }, 800);
     }
 
     searchRecords = function (object) {
