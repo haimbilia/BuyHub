@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchRecords(document.frmOrderSrch);
+	searchRecords(document.frmRecordSearch);
 });
 (function () {
 	var dv = '#ordersListing';
@@ -25,8 +25,8 @@ $(document).ready(function () {
 	}
 
 	clearSearch = function () {
-		document.frmOrderSrch.reset();
-		searchRecords(document.frmOrderSrch);
+		document.frmRecordSearch.reset();
+		searchRecords(document.frmRecordSearch);
 	};
 
 	/* Shipping Services */

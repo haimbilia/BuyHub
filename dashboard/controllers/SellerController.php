@@ -1182,10 +1182,11 @@ class SellerController extends SellerBaseController
         $this->_template->addJs('js/tagify.min.js');
         $this->_template->addJs('js/tagify.polyfills.min.js');
 
-        $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
-        $frmSearchCatalogProduct->fill(['lang_id'=> $this->siteLangId]);
-        $this->set("frmSearch", $frmSearchCatalogProduct);
-        $this->set("languages", Language::getAllNames());        
+        $frmSearch = $this->getTagsProdSrchForm();
+        $frmSearch->fill(['lang_id'=> $this->siteLangId]);
+        $this->set("frmSearch", $frmSearch);
+        $this->set("languages", Language::getAllNames());     
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));   
         $this->_template->render(true, true);
     }
 
@@ -1664,8 +1665,8 @@ class SellerController extends SellerBaseController
 
     public function searchProductTags()
     {
-        $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
-        $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
+        $srchFrm = $this->getTagsProdSrchForm();
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -1726,10 +1727,7 @@ class SellerController extends SellerBaseController
         $this->set('postedData', $post);
         $this->set('langId', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-
-        unset($post['page']);
-        $frmSearchCatalogProduct->fill($post);
-        $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
+        unset($post['page']);    
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }    
@@ -1800,6 +1798,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
         $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_TAX_CATEGORY_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -3661,8 +3660,7 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchTaxCat');
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -3936,24 +3934,27 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchCatalogProduct');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'lang_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
-
-        /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
-        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            //$frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'type', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + applicationConstants::getCatalogTypeArrForFrontEnd($this->siteLangId), '-1', array('id' => 'type'), '');
+        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {           
             $frm->addHiddenField('', 'type', $type);
         }
-
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
-        /* }  */
-        $frm->addHiddenField('', 'lang_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
+     
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        return $frm;
+    }
 
-        /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
-        $frm->addButton('', 'btn_clear', Labels::getLabel('LBL_Clear', $this->siteLangId));
-        /* } */
-        //$fldSubmit->attachField($fldCancel);
+    private function getTagsProdSrchForm()
+    {
+        $frm = new Form('frmRecordSearch');   
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword'); 
+        $frm->addHiddenField('', 'lang_id');
         $frm->addHiddenField('', 'page');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
