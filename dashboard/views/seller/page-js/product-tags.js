@@ -1,35 +1,27 @@
 $(document).ready(function(){
-    searchCatalogProducts(document.frmSearchCatalogProduct);
+    searchRecords(document.frmRecordSearch);
 });
-
-/* $(document).on('keyup', "input[name='keyword']", function(){
-    var parentForm = $(this).closest('form');
-    parentForm.submit();
-}); */
 
 (function() {
 	var dv = '#listing';
-	searchCatalogProducts = function(frm){
-
+	searchRecords = function(frm){
 		/*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
 		var data = '';
 		if (frm) {
 			data = fcom.frmData(frm);
 		}
-		/*]*/
-		var dv = $('#listing');
-		$(dv).html( fcom.getLoader() );
-
+		/*]*/	
+		$(dv).prepend( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Seller','searchProductTags'), data, function(res){
-			$("#listing").html(res);
+			$(dv).html(res);
 		});
 	};
     clearSearch = function(selProd_id){
         if (0 < selProd_id) {
             location.href = fcom.makeUrl('Seller','volumeDiscount');
         } else {
-    		document.frmSearchCatalogProduct.reset();
-    		searchCatalogProducts(document.frmSearchCatalogProduct);
+    		document.frmRecordSearch.reset();
+    		searchRecords(document.frmRecordSearch);
         }
 	};
     goToCatalogProductSearchPage = function(page){
@@ -38,26 +30,21 @@ $(document).ready(function(){
 		}
 		var frm = document.frmCatalogProductSearchPaging;
 		$(frm.page).val(page);
-		searchCatalogProducts(frm);
+		searchRecords(frm);
 	}
 
 	reloadList = function() {
-		var frm = document.frmSearchCatalogProduct;
-		searchCatalogProducts(frm);
+		var frm = document.frmRecordSearch;
+		searchRecords(frm);
 	}  
 
 	attachTag = function (e) {
-		console.log('vvvv');
-		console.log(e);
 		let tag_id = e.detail.data.id;
 		let product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
 	}
 
 	addTagData = function (e) {	
-
-		console.log(e);
-
 		var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
 		var tag_id = e.detail.data.id;
 
@@ -95,8 +82,8 @@ $(document).ready(function(){
 	}
 
 	langForm = function(obj){  
-		document.frmSearchCatalogProduct.lang_id.value = $(obj).val();
-		searchCatalogProducts(document.frmSearchCatalogProduct);
+		document.frmRecordSearch.lang_id.value = $(obj).val();
+		searchRecords(document.frmRecordSearch);
     }
 
 })();
