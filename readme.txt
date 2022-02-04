@@ -464,6 +464,7 @@ Updates/Fixes :
     => 062174 - Product tags page, binding tag issue
     => 062213 - View order from application order total amount is wrong on change currency (9.3.1)
     => 062225 - on seller product form copy function only working on first feild(9.3.1)
+    => 062183 - Admin UI: Getting multiple issues on the "Payment Methods" table while accessing the 'Getting Started' section
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
