@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfReports':
                 if ($canViewShopReports && 0 < $row[$key]) {
                     $fn = 'redirectToShopReport(' . $row['shop_id'] . ')';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfReviews':
                 if ($canViewShopReports && 0 < $row[$key]) {
                     $fn = 'redirectToProductReviews(' . $row['shop_user_id'] . ')';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfProducts':
                 if ($canViewSellerProducts && 0 < $row[$key]) {
                     $fn = 'redirectToSellerProduct(0, {"user_id" : ' . $row['shop_user_id'] . '})';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
