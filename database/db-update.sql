@@ -1591,3 +1591,8 @@ INSERT IGNORE INTO tbl_user_meta (usermeta_user_id, usermeta_key, usermeta_value
   SELECT usermeta_user_id, 'stripe_form_submitted', '1' 
   FROM tbl_user_meta WHERE usermeta_key LIKE 'stripe_account_type' AND usermeta_value LIKE 'standard';
 /* Update all stripe connect standard account users default form submited to 1. Because no form required. */ 
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('NAV_USERS_REPORT', 1, 'Users report', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+DELETE FROM tbl_language_labels WHERE label_key = "NAV_BUYERS_REPORTS";
