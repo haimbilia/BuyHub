@@ -1,35 +1,27 @@
 $(document).ready(function(){
-    searchCatalogProducts(document.frmSearchCatalogProduct);
+    searchRecords(document.frmRecordSearch);
 });
-
-/* $(document).on('keyup', "input[name='keyword']", function(){
-    var parentForm = $(this).closest('form');
-    parentForm.submit();
-}); */
 
 (function() {
 	var dv = '#listing';
-	searchCatalogProducts = function(frm){
-
+	searchRecords = function(frm){
 		/*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
 		var data = '';
 		if (frm) {
 			data = fcom.frmData(frm);
 		}
-		/*]*/
-		var dv = $('#listing');
-		$(dv).html( fcom.getLoader() );
-
+		/*]*/	
+		$(dv).prepend( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Seller','searchProductTags'), data, function(res){
-			$("#listing").html(res);
+			$(dv).html(res);
 		});
 	};
     clearSearch = function(selProd_id){
         if (0 < selProd_id) {
             location.href = fcom.makeUrl('Seller','volumeDiscount');
         } else {
-    		document.frmSearchCatalogProduct.reset();
-    		searchCatalogProducts(document.frmSearchCatalogProduct);
+    		document.frmRecordSearch.reset();
+    		searchRecords(document.frmRecordSearch);
         }
 	};
     goToCatalogProductSearchPage = function(page){
@@ -38,38 +30,35 @@ $(document).ready(function(){
 		}
 		var frm = document.frmCatalogProductSearchPaging;
 		$(frm.page).val(page);
-		searchCatalogProducts(frm);
+		searchRecords(frm);
 	}
 
 	reloadList = function() {
-		var frm = document.frmSearchCatalogProduct;
-		searchCatalogProducts(frm);
+		var frm = document.frmRecordSearch;
+		searchRecords(frm);
+	}  
+
+	attachTag = function (e) {
+		let tag_id = e.detail.data.id;
+		let product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
 	}
 
-    /*editTagsLangForm = function(product_id){
-        $('input[name=\'product_id\']').val(product_id);
-		$.facebox({ div: '#productTagForm' }, '');
-	};*/
+	addTagData = function (e) {	
+		var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
+		var tag_id = e.detail.data.id;
 
-    addTagData = function(e){
-        var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
-        var tag_id = e.detail.tag.id;
-        var tag_name = e.detail.tag.title;
-        if(tag_id == ''){
-            var data = 'tag_id=0&tag_identifier='+tag_name
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagSetup'), data, function(t) {
-                var dataLang = 'tag_id='+t.tagId+'&tag_name='+tag_name+'&lang_id=0';
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function(t2) {
-                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) {
-                         var tagifyId = e.detail.tag.__tagifyId;
-                         $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
-                     });
-                });
-            });
-        }else{
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) { });
-        }
-    }
+		if(tag_id == undefined || tag_id == ''){
+			var tag_name = e.detail.tag.title;
+			var data = { tag_name, lang_id: $('#tagLangId').val() };
+			fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagSetup'), data, function (t) {
+				fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + t.tagId, function (t3) {			
+					e.detail.tag.id = t.tagId;					
+				});
+			});
+		}		
+		
+	}
 
     removeTagData = function(e){
         var tag_id = e.detail.tag.id;
@@ -91,5 +80,10 @@ $(document).ready(function(){
             }
 		});
 	}
+
+	langForm = function(obj){  
+		document.frmRecordSearch.lang_id.value = $(obj).val();
+		searchRecords(document.frmRecordSearch);
+    }
 
 })();

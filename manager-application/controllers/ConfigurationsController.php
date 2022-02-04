@@ -1173,10 +1173,10 @@ class ConfigurationsController extends ListingBaseController
 
                 /* $fld = $frm->addRadioButtons(Labels::getLabel("FRM_SEND_EMAIL", $langId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio')); */
                 HtmlHelper::configureSwitchForRadio($fld);
+
                 if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
-                    $fld = $frm->addHTML('', 'sendmailhtml', '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("FRM_CLICK_HERE", $langId) . '</a> to test email. ' . Labels::getLabel("FRM_THIS_WILL_SEND_TEST_EMAIL_TO_SITE_OWNER_EMAIL", $langId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"));
-                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                    /*  $fld->htmlAfterField = '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("FRM_CLICK_HERE", $langId) . '</a> to test email. ' . Labels::getLabel("FRM_THIS_WILL_SEND_TEST_EMAIL_TO_SITE_OWNER_EMAIL", $langId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"); */
+                    $fld = $frm->addHTML('', 'sendmailhtml', '<div class="border p-3 text-center cms" role="alert"><p>' . Labels::getLabel("FRM_CLICK_BUTTON_TO_SEND_TEST_EMAIL_TO_SITE_OWNER_AT", $langId) . ' -<br><strong>'. FatApp::getConfig("CONF_SITE_OWNER_EMAIL").'</strong></p><a class="btn btn-secondary btn-sm" href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("FRM_CLICK_HERE", $langId) . '</a></div>');
+                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];                    
                 }
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SEND_SMTP_EMAIL", $langId), 'CONF_SEND_SMTP_EMAIL', 1, array(), false, 0);

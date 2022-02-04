@@ -625,13 +625,17 @@
 }
 
 .stats-number {
-    ul li {
-        // border-top: $border;
-        //border-color: lighten($border-color, 05);
+    ul {
         display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        padding: 0.5rem 0;
+        grid-gap: 2rem;
+        li {
+            // border-top: $border;
+            //border-color: lighten($border-color, 05);
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            padding: 0.5rem 0;
+        }
     }
     .total {
         font-size: 0.8rem;

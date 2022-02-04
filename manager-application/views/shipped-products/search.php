@@ -19,14 +19,14 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'total_seller_ship':
                 if ($row[$key] > 0) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>"link-text", 'onclick' => "viewSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
                 break;
             case 'total_admin_seller_ship':
                 if ($row[$key] > 0) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', "onclick" => "viewAdminSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>"link-text", 'onclick' => "viewAdminSellerShip(" . $row['shippro_product_id'] . ")"), $row[$key], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }

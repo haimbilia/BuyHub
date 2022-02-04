@@ -630,12 +630,10 @@ class HtmlHelper
         $statusClass = ($canEdit) ? '' : 'disabled';
         $disabled = ($disabled) ? 'disabled' : '';
         $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
-        return '<span class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
-                    <label>
-                        <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                        <span class="input-helper"></span>
-                    </label>
-                </span>';
+        return '<label class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
+                    <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                    <span class="input-helper"></span>
+                </label>';
     }
 
     /**

@@ -143,7 +143,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
                                 $class = (string) $fld->getFieldtagAttribute('class');
-                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');                                
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                                 $class = ltrim($class, ' ');
                                 $fld->setFieldtagAttribute('class', $class);
 
@@ -154,9 +154,9 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             }
                             ?>
                             <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-                                <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                <a class="btn advanced-trigger collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#filter">
                                         </use>
                                     </svg>
                                 </a>
