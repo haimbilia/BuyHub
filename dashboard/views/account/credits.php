@@ -45,138 +45,137 @@ $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
-    <div class="content-wrapper content-space">
-        <?php
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_MY_CREDITS', $siteLangId),
-            'siteLangId' => $siteLangId
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <?php if ($codMinWalletBalance > -1) { ?>
-                        <p class="note">
-                            <?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?>
-                        </p>
-                    <?php } ?>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-head">
-                                            <h5 class="card-title">
-                                                <?php echo Labels::getLabel('LBL_Search_Transactions', $siteLangId); ?></h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="replaced">
-                                                <?php
-                                                $submitFld = $frmSrch->getField('btn_submit');
-                                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-
-                                                $fldClear = $frmSrch->getField('btn_clear');
-                                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                                echo $frmSrch->getFormHtml();
-                                                ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div id="creditListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div id="credits-info"></div>
-
-                            <div class="card card-commerce form">
-                                <div class="card-head">
-                                    <h6>
-                                        <p><?php echo Labels::getLabel('LBL_Available_Balance', $siteLangId); ?>: </p>
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <h3><?php echo CommonHelper::displayMoneyFormat($userWalletBalance); ?></h3>
-                                    <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                                        <small class="d-block">
-                                            <?php echo Labels::getLabel('LBL_Approx.', $siteLangId); ?>
-                                            <?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, true); ?>
-                                        </small>
-                                    <?php } ?>
-                                    <div class="row">
-                                        <div class="col-lg-8">
-                                            <select name='payout_type' class='custom-select payout_type'>
-                                                <?php
-                                                foreach ($payouts as $type => $name) { ?>
-                                                    <option value='<?php echo $type; ?>'><?php echo $name; ?></option>
-                                                <?php }
-                                                ?>
-                                            </select>
-
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <a href="javascript:void(0)" onClick="withdrawalReqForm()" class="btn btn-brand btn-block">
-                                                <?php echo Labels::getLabel('LBL_Withdraw', $siteLangId); ?>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card withdrawForm">
-                                <div id="withdrawalReqForm"></div>
-                            </div>
-
-                            <?php $srchFormDivWidth = $canAddMoneyToWallet ? '8' : '12'; ?>
-                            <?php if ($canAddMoneyToWallet) { ?>
-                                <div class="card card-commerce">
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_MY_CREDITS', $siteLangId),
+        'siteLangId' => $siteLangId
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body">
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <?php if ($codMinWalletBalance > -1) { ?>
+                    <p class="note">
+                        <?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?>
+                    </p>
+                <?php } ?>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
                                     <div class="card-head">
-                                        <h6>
-                                            <?php
-                                            $str = Labels::getLabel('LBL_Add_Wallet_Credits_[{CURRENCY-SYMBOL}]', $siteLangId);
-                                            echo CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => CommonHelper::getDefaultCurrencySymbol()]); ?>
-                                        </h6>
-
+                                        <h5 class="card-title">
+                                            <?php echo Labels::getLabel('LBL_Search_Transactions', $siteLangId); ?></h5>
                                     </div>
                                     <div class="card-body">
-                                        <div id="rechargeWalletDiv" class="">
+                                        <div class="replaced">
                                             <?php
-                                            $frmRechargeWallet->setFormTagAttribute('onSubmit', 'setUpWalletRecharge(this); return false;');
-                                            $frmRechargeWallet->setFormTagAttribute('class', 'form');
-                                            $frmRechargeWallet->developerTags['colClassPrefix'] = 'col-md-';
-                                            $frmRechargeWallet->developerTags['fld_default_col'] = 12;
-                                            $frmRechargeWallet->setRequiredStarPosition(Form::FORM_REQUIRED_STAR_WITH_NONE);
+                                            $submitFld = $frmSrch->getField('btn_submit');
+                                            $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
-                                            $amountFld = $frmRechargeWallet->getField('amount');
-                                            $amountFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_Amount', $siteLangId));
-                                            $amountFld->developerTags['noCaptionTag'] = true;
-                                            $amountFld->developerTags['col'] = 7;
-                                            $buttonFld = $frmRechargeWallet->getField('btn_submit');
-                                            $buttonFld->setFieldTagAttribute('class', 'btn-block block-on-mobile');
-                                            $buttonFld->developerTags['noCaptionTag'] = true;
-                                            $buttonFld->developerTags['col'] = 5;
-                                            $buttonFld->setFieldTagAttribute('class', "btn btn-brand btn-block");
-                                            echo $frmRechargeWallet->getFormHtml(); ?>
+                                            $fldClear = $frmSrch->getField('btn_clear');
+                                            $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+                                            echo $frmSrch->getFormHtml();
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="creditListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div id="credits-info"></div>
+                        <div class="card card-commerce form">
+                            <div class="card-head border-0">
+                                <h6>
+                                    <p><?php echo Labels::getLabel('LBL_Available_Balance', $siteLangId); ?>: </p>
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <h3><?php echo CommonHelper::displayMoneyFormat($userWalletBalance); ?></h3>
+                                <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                                    <small class="d-block">
+                                        <?php echo Labels::getLabel('LBL_Approx.', $siteLangId); ?>
+                                        <?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, true); ?>
+                                    </small>
+                                <?php } ?>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <select name='payout_type' class='custom-select payout_type'>
+                                            <?php
+                                            foreach ($payouts as $type => $name) { ?>
+                                                <option value='<?php echo $type; ?>'><?php echo $name; ?></option>
+                                            <?php }
+                                            ?>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <a href="javascript:void(0)" onClick="withdrawalReqForm()" class="btn btn-brand btn-block">
+                                            <?php echo Labels::getLabel('LBL_Withdraw', $siteLangId); ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card withdrawForm">
+                            <div id="withdrawalReqForm"></div>
+                        </div>
+
+                        <?php $srchFormDivWidth = $canAddMoneyToWallet ? '8' : '12'; ?>
+                        <?php if ($canAddMoneyToWallet) { ?>
+                            <div class="card card-commerce">
+                                <div class="card-head border-0">
+                                    <h6>
+                                        <?php
+                                        $str = Labels::getLabel('LBL_Add_Wallet_Credits_[{CURRENCY-SYMBOL}]', $siteLangId);
+                                        echo CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => CommonHelper::getDefaultCurrencySymbol()]); ?>
+                                    </h6>
+
+                                </div>
+                                <div class="card-body">
+                                    <div id="rechargeWalletDiv" class="">
+                                        <?php
+                                        $frmRechargeWallet->setFormTagAttribute('onSubmit', 'setUpWalletRecharge(this); return false;');
+                                        $frmRechargeWallet->setFormTagAttribute('class', 'form');
+                                        $frmRechargeWallet->developerTags['colClassPrefix'] = 'col-md-';
+                                        $frmRechargeWallet->developerTags['fld_default_col'] = 12;
+                                        $frmRechargeWallet->setRequiredStarPosition(Form::FORM_REQUIRED_STAR_WITH_NONE);
+
+                                        $amountFld = $frmRechargeWallet->getField('amount');
+                                        $amountFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_Amount', $siteLangId));
+                                        $amountFld->developerTags['noCaptionTag'] = true;
+                                        $amountFld->developerTags['col'] = 7;
+                                        $buttonFld = $frmRechargeWallet->getField('btn_submit');
+                                        $buttonFld->setFieldTagAttribute('class', 'btn-block block-on-mobile');
+                                        $buttonFld->developerTags['noCaptionTag'] = true;
+                                        $buttonFld->developerTags['col'] = 5;
+                                        $buttonFld->setFieldTagAttribute('class', "btn btn-brand btn-block");
+                                        echo $frmRechargeWallet->getFormHtml(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
-
-
-
-
-
         </div>
+
+
+
+
+
     </div>
+</div>
