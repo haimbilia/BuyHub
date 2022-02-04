@@ -1150,6 +1150,7 @@ class SellerController extends SellerBaseController {
     }
 
     public function productTags() {
+
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         if (!$this->isShopActive($this->userParentId, 0, true)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
@@ -1164,7 +1165,9 @@ class SellerController extends SellerBaseController {
         $this->_template->addJs('js/tagify.polyfills.min.js');
 
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
+        $frmSearchCatalogProduct->fill(['lang_id'=> $this->siteLangId]);
         $this->set("frmSearch", $frmSearchCatalogProduct);
+        $this->set("languages", Language::getAllNames());        
         $this->_template->render(true, true);
     }
 
@@ -1631,21 +1634,24 @@ class SellerController extends SellerBaseController {
         $this->_template->render(false, false);
     }
 
-    public function searchProductTags() {
+    public function searchProductTags()
+    {
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
+
         //$srch = Product::getSearchObject($this->siteLangId);
-        $srch = new ProductSearch($this->siteLangId, null, null, true, true, true);
+        $srch = new ProductSearch($langId, null, null, true, true, true);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
         $srch->addCondition('product_seller_id', '=', $this->userParentId);
         $srch->addDirectCondition(
-                '((CASE
+            '((CASE
                     WHEN product_seller_id = 0 THEN product_active = 1
                     WHEN product_seller_id > 0 THEN product_active IN (1, 0)
                     END ) )'
@@ -1670,12 +1676,13 @@ class SellerController extends SellerBaseController {
         }
 
         $srch->addMultipleFields(
-                array(
-                    'product_id',
-                    'product_identifier',
-                    'IFNULL(product_name, product_identifier) as product_name',
-                )
+            array(
+                'product_id',
+                'product_identifier',
+                'IFNULL(product_name, product_identifier) as product_name',
+            )
         );
+
         $srch->addOrder('product_active', 'DESC');
         $srch->addOrder('product_added_on', 'DESC');
         $srch->addGroupBy('product_id');
@@ -1689,14 +1696,15 @@ class SellerController extends SellerBaseController {
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('siteLangId', $this->siteLangId);
+        $this->set('langId', $langId);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
 
         unset($post['page']);
         $frmSearchCatalogProduct->fill($post);
         $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
-    }
+    }    
 
     public function setUpshippedBy() {
         $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId());
@@ -3856,7 +3864,7 @@ class SellerController extends SellerBaseController {
 
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
-
+        $frm->addHiddenField('', 'lang_id');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
 
         /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
@@ -5783,6 +5791,111 @@ class SellerController extends SellerBaseController {
         ]);
         $shopData = (array) Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), $attr, true, $this->siteLangId);
         FatUtility::dieJsonSuccess(['shopData' => $shopData]);
+    }
+
+    public function tagsAutoComplete()
+    {
+        $post = FatApp::getPostedData();
+
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');    
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
+
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        $options = $db->fetchAll($rs, 'tag_id');
+        $json = array();
+        foreach ($options as $key => $option) {
+            $json[] = array(
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),        
+            );
+        }
+        die(json_encode($json));
+    }
+
+    public function updateProductTag()
+    {
+        $this->checkEditPrivilege();
+        $post = FatApp::getPostedData();
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
+        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        if ($productId < 1 || $tagId < 1) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        $prod = new Product($productId);
+        if (!$prod->addUpdateProductTag($tagId)) {
+            Message::addErrorMessage(Labels::getLabel($prod->getError(), $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        Tag::updateProductTagString($productId);
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function tagSetup()
+    {
+        $tagName = FatApp::getPostedData('tag_name', FatUtility::VAR_STRING);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (empty($tagName) || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+
+        $record = new Tag();
+        $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
+
+        if (!$record->save()) {
+            Message::addErrorMessage(Labels::getLabel('MSG_This_identifier_is_not_available._Please_try_with_another_one.', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        $tag_id = $record->getMainTableRecordId();
+        /* update product tags association and tag string in products lang table[ */
+        Tag::updateTagStrings($tag_id);
+        /* ] */
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successful', $this->siteLangId));
+        $this->set('tagId', $tag_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function removeProductTag()
+    {
+        $this->checkEditPrivilege();
+        
+        $post = FatApp::getPostedData();
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
+        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        if ($productId < 1 || $tagId < 1) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $prod = new Product($productId);
+        if (!$prod->removeProductTag($tagId)) {
+            Message::addErrorMessage(Labels::getLabel($prod->getError(), $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        Tag::updateProductTagString($productId);
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     /**

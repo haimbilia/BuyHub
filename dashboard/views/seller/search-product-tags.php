@@ -2,11 +2,10 @@
 <div class="js-scrollable table-wrap scroll scroll-x">
 <?php $arr_flds = array(
     'listserial'=>'#',
-    'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
-    'tags' => Labels::getLabel('LBL_Tags', $siteLangId)
+    'product_identifier' => Labels::getLabel('LBL_Product', $langId),
+    'tags' => Labels::getLabel('LBL_Tags', $langId)
 );
-
-$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table'));
+$tbl = new HtmlElement('table', array('width'=>'100%', 'class'=>'table layout--'.$formLayout,'dir'=> $formLayout ));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
 foreach ($arr_flds as $key => $val) {
     if ($key == 'listserial') {
@@ -34,12 +33,11 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $row['product_name'], true);
                 break;
             case 'tags':
-                $productTags = Product::getProductTags($row['product_id'],$siteLangId);
-                
+                $productTags = Product::getProductTags($row['product_id'], $langId);                
                 $tagData = array();
                 foreach ($productTags as $key => $data) {
                     $tagData[$key]['id'] = $data['tag_id'];
-                    $tagData[$key]['value'] = $data['tag_identifier'];
+                    $tagData[$key]['value'] = $data['tag_name'];
                 }
                 $readOnly = (!$canEdit) ? 'readonly' : '';
                 $encodedData = htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8');
@@ -53,8 +51,8 @@ foreach ($arrListing as $sn => $row) {
 }
 
 if (count($arrListing) == 0) {
-    $message = Labels::getLabel('LBL_You_need_to_create_private_products_in_order_to_add_tags', $siteLangId);
-    $this->includeTemplate('_partial/no-record-found-with-info.php', array('siteLangId'=>$siteLangId,'message'=>$message));
+    $message = Labels::getLabel('LBL_You_need_to_create_private_products_in_order_to_add_tags', $langId);
+    $this->includeTemplate('_partial/no-record-found-with-info.php', array('langId'=>$langId,'message'=>$message));
 } else {
     echo $tbl->getHtml();
 } ?>
@@ -76,10 +74,11 @@ $("document").ready(function() {
             for (i = 0; i < ans.length; i++) {
                 list.push({
                     "id" : ans[i].id,
-                    "value" : ans[i].tag_name,
+                    "value" : ans[i].name,
                 });
-            }
-            e.detail.tagify.settings.whitelist = list;        
+            }        
+            e.detail.tagify.settings.whitelist = list; 
+            e.detail.tagify.loading(false).dropdown.show.call(e.detail.tagify, keyword);
         });       
     }
    
@@ -89,7 +88,9 @@ $("document").ready(function() {
                delimiters : "#",
                editTags : false,
                backspace : false
-            }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+            })
+            .on('dropdown:select', attachTag).on('add', addTagData).on('remove', removeTagData)
+            .on('input', getTagsAutoComplete).on('focus', getTagsAutoComplete);
     });
 
 });

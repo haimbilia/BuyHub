@@ -44,32 +44,34 @@ $(document).ready(function(){
 	reloadList = function() {
 		var frm = document.frmSearchCatalogProduct;
 		searchCatalogProducts(frm);
+	}  
+
+	attachTag = function (e) {
+		console.log('vvvv');
+		console.log(e);
+		let tag_id = e.detail.data.id;
+		let product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
 	}
 
-    /*editTagsLangForm = function(product_id){
-        $('input[name=\'product_id\']').val(product_id);
-		$.facebox({ div: '#productTagForm' }, '');
-	};*/
+	addTagData = function (e) {	
 
-    addTagData = function(e){
-        var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
-        var tag_id = e.detail.tag.id;
-        var tag_name = e.detail.tag.title;
-        if(tag_id == ''){
-            var data = 'tag_id=0&tag_identifier='+tag_name
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagSetup'), data, function(t) {
-                var dataLang = 'tag_id='+t.tagId+'&tag_name='+tag_name+'&lang_id=0';
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function(t2) {
-                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) {
-                         var tagifyId = e.detail.tag.__tagifyId;
-                         $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
-                     });
-                });
-            });
-        }else{
-            fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+tag_id, function(t) { });
-        }
-    }
+		console.log(e);
+
+		var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
+		var tag_id = e.detail.data.id;
+
+		if(tag_id == undefined || tag_id == ''){
+			var tag_name = e.detail.tag.title;
+			var data = { tag_name, lang_id: $('#tagLangId').val() };
+			fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagSetup'), data, function (t) {
+				fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + t.tagId, function (t3) {			
+					e.detail.tag.id = t.tagId;					
+				});
+			});
+		}		
+		
+	}
 
     removeTagData = function(e){
         var tag_id = e.detail.tag.id;
@@ -91,5 +93,10 @@ $(document).ready(function(){
             }
 		});
 	}
+
+	langForm = function(obj){  
+		document.frmSearchCatalogProduct.lang_id.value = $(obj).val();
+		searchCatalogProducts(document.frmSearchCatalogProduct);
+    }
 
 })();

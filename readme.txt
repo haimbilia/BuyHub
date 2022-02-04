@@ -460,6 +460,7 @@ Updates/Fixes :
     => 062159 - Undefined index: order_id in case of Wallet pay from mobile
     => 061649 - Admin UI: Validation is showing for the 'Self shipping' fields while updating the order's status on the order's details page
     => 061801 - Coupen not displaying to other user once put on pending order by other user
+    => 062174 - Undefined index tag identifier { aslo need to add languae dropdown to show as per language}
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

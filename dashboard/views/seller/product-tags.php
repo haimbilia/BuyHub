@@ -48,6 +48,11 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                     </div>
                                 </div>
                                 <div class='dvFocus-js'></div>
+                                <?php
+                                    $fld = $frmSearch->getField('lang_id');     
+                                    $fld->setFieldTagAttribute('id','tagLangId');                                
+                                    echo $fld->getHtml();
+                                ?>
                                 </form>
                                 <?php echo $frmSearch->getExternalJS(); ?>
                             </div>
@@ -59,6 +64,18 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+                            <?php if(1 < count($languages)) {?>
+                                <div class="content-header-toolbar">
+                                    <div class="input-group">
+                                        <select class="form-control form-select" onchange="langForm(this)"  name="lang_id">
+                                            <?php foreach($languages as $langId => $langName){
+                                                echo "<option value='$langId'>$langName</option>";
+                                            }
+                                        ?>
+                                        </select>            
+                                </div>
+                            <?php } ?>
+                            </div>  
                             <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                         </div>
                     </div>
