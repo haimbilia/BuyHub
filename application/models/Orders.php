@@ -292,7 +292,6 @@ class Orders extends MyAppModel
     private function addUpdateProductOrder($data = array(), $langId = 1)
     {
         $db = FatApp::getDb();
-
         $ordersLangData = [];
         if (array_key_exists('orderLangData', $data)) {
             $ordersLangData = $data['orderLangData'];
@@ -360,11 +359,11 @@ class Orders extends MyAppModel
 
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
 
-        $this->setMainTableRecordId($this->getOrderId());
-
-        $discountCouponHoldTblUpdate = false;
+        $this->setMainTableRecordId($this->getOrderId());        
+        
         if (array_key_exists('coupon_id', $discountInfo)) {
-            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->getOrderId());
+          
+            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
                 $this->error = Labels::getLabel('ERR_Invalid_Coupon_Code', $data['order_language_id']);
                 return false;
@@ -375,19 +374,19 @@ class Orders extends MyAppModel
                 'ochold_coupon_id' => $discountInfo['coupon_id'],
                 'ochold_added_on' => date('Y-m-d H:i:s')
             );
+
             if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $holdCouponData, true, array(), $holdCouponData)) {
                 $db->rollbackTransaction();
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
-            $discountCouponHoldTblUpdate = true;
-        }
 
-        if (array_key_exists('coupon_id', $discountInfo) && true === $discountCouponHoldTblUpdate) {
-            $dataToUp = ['ochold_order_id' => $this->getOrderId()];
-            $where = array('ochold_coupon_id = ?', 'vals' => [$discountInfo['coupon_id']]);
-            FatApp::getDb()->updateFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $dataToUp, $where);
-        }
+            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
+                return false;
+            }          
+        }        
 
         if (!empty($ordersLangData)) {
             $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => [$this->getOrderId()]));
@@ -782,6 +781,11 @@ class Orders extends MyAppModel
         $subscrCharges = $data['subscrCharges'];
         unset($data['subscrCharges']);
 
+        $discountInfo = [];
+        if (array_key_exists('order_discount_info', $data)) {
+            $discountInfo = json_decode($data['order_discount_info'], true);
+        }
+
         if (!empty($data['order_id'])) {
             $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_number']);
             if (false === $oldOrderData || Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
@@ -924,6 +928,31 @@ class Orders extends MyAppModel
             if (!$oextraRecordObj->addNew(array(), $flds_update_on_duplicate)) {
                 $db->rollbackTransaction();
                 $this->error = $oextraRecordObj->getError();
+                return false;
+            }
+        }
+
+        if (array_key_exists('coupon_id', $discountInfo)) {                  
+            $couponInfo = DiscountCoupons::getValidSubscriptionCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
+            if ($couponInfo == false) {
+                $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
+                return false;
+            }
+
+            $holdCouponData = array(
+                'ochold_order_id' => $this->getOrderId(),
+                'ochold_coupon_id' => $discountInfo['coupon_id'],
+                'ochold_added_on' => date('Y-m-d H:i:s')
+            );
+
+            if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $holdCouponData, true, array(), $holdCouponData)) {
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
+                return false;
+            }
+            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
                 return false;
             }
         }

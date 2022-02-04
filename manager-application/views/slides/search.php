@@ -25,9 +25,31 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'slide_media':
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $row['slide_id'], 0, $siteLangId);
+                $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                $url = UrlHelper::getCachedUrl(
+                    UrlHelper::generateFileUrl(
+                        'Image',
+                        'Slide',
+                        array(
+                            $row['slide_id'],
+                            applicationConstants::SCREEN_DESKTOP,
+                            $siteLangId,
+                            'THUMB',
+                            false
+                        ),
+                        CONF_WEBROOT_FRONT_URL
+                    ) . $uploadedTime,
+                    CONF_IMG_CACHE_TIME,
+                    '.jpg'
+                );
+                $slideImage = '<img class="banner-thumb" width="100" height="50" title="' . $row['slide_title'] . '" alt="' . $row['slide_title'] . '" src="' . $url . '">';
+                $td->appendElement('plaintext', $tdAttr, $slideImage, true);
+                break;
             case 'slide_title':
-                $brandName = !empty($row['epage_label']) ? $row['epage_label'] : $row[$key];
-                $td->appendElement('plaintext', $tdAttr, $brandName, true);
+                $title = !empty($row['epage_label']) ? $row['epage_label'] : $row[$key];
+                $td->appendElement('plaintext', $tdAttr, $title, true);
                 break;
             case 'slide_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['slide_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -63,7 +85,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

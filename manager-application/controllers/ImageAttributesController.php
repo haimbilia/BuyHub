@@ -188,8 +188,12 @@ class ImageAttributesController extends ListingBaseController
                 $title = ($records) ? $records['brand_name'] : '';
                 break;
         }
-        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
-        $languages = Language::getAllNames();
+        $languages = Language::getAllNames(); 
+        if (count($languages) <= 1) {
+            $langId = array_key_first($languages);
+        }
+
+        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
         $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $this->set('recordId', $recordId);
         $this->set('moduleType', $moduleType);
@@ -245,14 +249,19 @@ class ImageAttributesController extends ListingBaseController
         if (!$recordId || !$moduleType) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-
-        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
-
+        $languages = Language::getAllNames(); 
+        if (count($languages) <= 1) {
+            $langId = array_key_first($languages);
+        }
+        
+        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
+        
         $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+            
 
         $db = FatApp::getDb();
         foreach ($images as $afileId => $afileData) {

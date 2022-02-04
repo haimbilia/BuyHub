@@ -285,15 +285,15 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                             <span class="text-muted">Attach media files for the product </span>
                         </div>
                         <div class="card-toolbar">
-                            <div class="me-5">
-                                <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
-                            </div>
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                     </div>
                     <div class="card-body show" id="stock-block2">
                         <div>
-                            <h6 class="h6 mb-3">Uploaded media</h6>
+                            <div class="d-flex justify-content-between mb-3">
+                            <h6 class="h6 ">Uploaded media </h6>
+                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                            </div>
                             <ul class="uploaded-stocks" id="productDefaultImagesJs">
                                 <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
                                         <strong> Upload Images(s)</strong>
@@ -593,12 +593,12 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php }
             } ?>
-
-            upcType();
+            
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
+            upcType();
         });
     </script>
 </main>

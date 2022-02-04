@@ -8,6 +8,19 @@ class HtmlHelper
         $class = !empty($class) ? $class : 'btn btn-brand btn-wide btn-search submitBtnJs';
         return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
     }
+    
+    public static function addSearchButton(Form &$frm, string $lbl = '')
+    {
+        $lbl = empty($lbl) ? Labels::getLabel('FRM_SEARCH', CommonHelper::getLangId()) : $lbl;
+        $frm->addHtml('', 'btn_submit', self::addButtonHtml($lbl, 'submit', 'btn_submit'));
+    }
+
+    public static function addClearButton(Form &$frm, string $btnClass = 'btn btn-link', string $lbl = '')
+    {
+        $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', $btnClass, 'clearSearch()'));
+    }
+
 
     public static function formatFormFields(Form &$frm, $col = 12)
     {

@@ -1865,7 +1865,6 @@ class ConfigurationsController extends ListingBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $fld = $frm->addHtml('', 'spacer10', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
             case Configurations::FORM_SHARING:

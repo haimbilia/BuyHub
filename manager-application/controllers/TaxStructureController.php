@@ -134,6 +134,26 @@ class TaxStructureController extends ListingBaseController {
         return $frm;
     }
 
+    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0) {
+        $frm = new Form('frmLangJs', array('id' => 'frmLangJs'));
+        $frm->addHiddenField('', 'taxstr_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
+
+        if ($isCombined) {
+            $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
+            $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
+            $count = 1;
+            foreach ($combinedTaxes as $key => $value) {
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TITLE', $this->siteLangId).' '.$count++]);
+                if (2 < $count) {
+                    $fld->developerTags['noCaptionTag'] = true;
+                }
+            }
+        }
+        return $frm;
+    }
+
     /* @@ todo We have to modifiy the current procress for tax component */
 
     public function form() {
@@ -305,25 +325,6 @@ class TaxStructureController extends ListingBaseController {
         $this->set('langId', $lang_id);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0) {
-        $frm = new Form('frmLangJs', array('id' => 'frmLangJs'));
-        $frm->addHiddenField('', 'taxstr_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
-
-        if ($isCombined) {
-            $htmlFld = $frm->addHTML('', 'component_link', '<div class="separator separator-dashed my-4"></div>' . '<h3 class="h3">' . Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id) . '</h3>');
-            $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
-            $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
-            $count = 1;
-            foreach ($combinedTaxes as $key => $value) {
-                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TITLE', $this->siteLangId).' '.$count++]);
-                $fld->developerTags['noCaptionTag'] = true;
-            }
-        }
-        return $frm;
     }
 
     protected function getFormColumns(): array {

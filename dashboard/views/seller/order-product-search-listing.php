@@ -49,9 +49,10 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'opshipping_by_seller_user_id':
-                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
-                    $class = (0 == $order[$key] ? 'label-warning' : 'label-success');
-                    $htm = '<span class="badge badge-inline ' . $class . '">' . $label . '</span>';
+                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
+                    $class = (0 == $order[$key] ? 'badge-warning' : 'badge-success');
+                    $htm = '<span class="badge ' . $class . '">' . $label . '</span>';
+                    
                     $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'status':

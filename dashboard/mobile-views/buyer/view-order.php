@@ -3,7 +3,7 @@
 $orderDetail['charges'] = !empty($orderDetail['charges']) ? $orderDetail['charges'] : (object)array();
 $orderDetail['billingAddress'] = !empty($orderDetail['billingAddress']) ? $orderDetail['billingAddress'] : (object)array();
 $orderDetail['shippingAddress'] = !empty($orderDetail['shippingAddress']) ? $orderDetail['shippingAddress'] : (object)array();
-$orderDetail['order_net_amount'] = !empty($orderDetail['order_net_amount']) ? CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], false, false, false) : 0;
+$orderDetail['order_net_amount'] = !empty($orderDetail['order_net_amount']) ? $orderDetail['order_net_amount'] : 0;
 $orderDetail['pickupAddress'] =  isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress']) ? $orderDetail['pickupAddress'] : (object)array();
 
 if (!empty($orderDetail['charges'])) {

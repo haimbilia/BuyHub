@@ -273,6 +273,7 @@ class BrandsController extends ListingBaseController
         }
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
+        
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
@@ -284,7 +285,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
+    public function images($brand_id, $file_type, $lang_id = 0,$slide_screen = 0)
     {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);

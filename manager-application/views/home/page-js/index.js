@@ -34,48 +34,48 @@
 	};
 
 	topReferers = function (interval) {
-		$('.topReferersJs').html(fcom.getLoader());
+		$('.topReferersJs').prepend(fcom.getLoader());
 		data = "rtype=top_referrers&interval=" + interval;
 
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
 			$('.topReferersJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	topCountries = function (interval) {
 		$('.topCountriesJs').html(fcom.getLoader());
 		data = "rtype=top_countries&interval=" + interval;
 
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
 			$('.topCountriesJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	topProducts = function (interval) {
-		$('.topProducts').html( fcom.getLoader() );
+		$('.topProducts').prepend(fcom.getLoader());
 		data = "rtype=top_products&interval=" + interval;
 
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
 			$('.topProducts').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	getTopSearchKeyword = function (interval) {
-		$('.topSearchKeywordJs').html( fcom.getLoader() );
+		$('.topSearchKeywordJs').prepend(fcom.getLoader());
 		data = "rtype=top_search_keyword&interval=" + interval;
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
 			$('.topSearchKeywordJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	traficSource = function (interval) {
-		$('#piechart').html(fcom.getLoader());
+		$('#piechart').prepend(fcom.getLoader());
 		data = "rtype=traffic_source&interval=" + interval;
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			var ans = parseJsonData(t.html);
 			if (ans) {
 				var dataTraficSrc = google.visualization.arrayToDataTable(ans);
@@ -85,14 +85,14 @@
 			} else {
 				$('#piechart').html(t.html);
 			}
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	visitorStats = function () {
-		$('#visitsGraph').html(fcom.getLoader());
+		$('#visitsGraph').prepend(fcom.getLoader());
 		data = "rtype=visitors_stats";
 
-		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			var ans = parseJsonData(t.html);
 			if (ans) {
 				var dataVisits = google.visualization.arrayToDataTable(ans);
@@ -122,7 +122,7 @@
 			} else {
 				$('#visitsGraph').html(t.html);
 			}
-		});
+		}, { fOutMode: 'json' });
 
 	};
 
@@ -141,28 +141,28 @@
 	};
 
 	latestOrders = function () {
-		$('#latestOrdersJs').html(fcom.getLoader());
-		fcom.updateWithAjax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
+		$('#latestOrdersJs').prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
 			fcom.removeLoader();
 			$('#latestOrdersJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	totalSales = function (interval) {
 		data = "interval=" + interval;
 		$('#totalSalesJs').html(fcom.getLoader());
-		fcom.updateWithAjax(fcom.makeUrl('home', 'totalSales'), data, function (t) {			
+		fcom.ajax(fcom.makeUrl('home', 'totalSales'), data, function (t) {
 			fcom.removeLoader();
 			$('#totalSalesJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 	topSellingProducts = function () {
 		$('#topSellingProductsJs').html(fcom.getLoader());
-		fcom.updateWithAjax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
+		fcom.ajax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
 			fcom.removeLoader();
 			$('#topSellingProductsJs').html(t.html);
-		});
+		}, { fOutMode: 'json' });
 	};
 
 })();
@@ -227,7 +227,7 @@ $(".navTabsJs li a").click(function () {
 	}
 });
 
-$(window).on('load', function () {
+$(function () {
 	callChart('monthlysalesJs', $SalesChartKey, $SalesChartVal, $position);
 	topCountries('yearly');
 	latestOrders();
@@ -236,14 +236,4 @@ $(window).on('load', function () {
 	getTopSearchKeyword('yearly');
 	traficSource('yearly');
 	visitorStats();
-
-	// $('.carousel--oneforth-js').slick(getSlickSliderSettings(4));
-	/* FUNCTION FOR SCROLLBAR */
-	/* $('.scrollbar-js').enscroll({
-		verticalTrackClass: 'scroll__track',
-		verticalHandleClass: 'scroll__handle'
-	}); */
-	/* searchStatistics('statistics');
-	 */
-	fcom.removeLoader();
 });

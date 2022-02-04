@@ -77,6 +77,9 @@ $("document").ready(function () {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Account", "viewFavouriteItems"), "",
             function (ans) {
+                $('.navLinkJs.active').removeClass('active');
+                $('.navLinkJs.favtProductsJs').addClass('active');
+
                 if (append == 1) {
                     $(dv).find(".loader-yk").remove();
                     $(dv).append(ans);
@@ -176,14 +179,15 @@ $("document").ready(function () {
         if (typeof frm == undefined || frm == null) {
             frm = document.frmFavShopSearchPaging;
         }
+        $('.actionBtnsSectionJs').hide();
         data = fcom.frmData(frm);
-        $("#tab-fav-shop").parents().children().removeClass("is-active");
-        $("#tab-fav-shop").addClass("is-active");
         $(dv).html(fcom.getLoader());
         fcom.ajax(
             fcom.makeUrl("Account", "favoriteShopSearch"),
             data,
             function (res) {
+                $('.navLinkJs.active').removeClass('active');
+                $('.navLinkJs.favtShopsJs').addClass('active');
                 $(dv).html(res);
             }
         );

@@ -460,13 +460,12 @@ echo $imgFrm->getFormHtml();
 
         $('#addProductfrm .optionValuesJs').each(function(index) {
             tagifyOptionValue("#" + $(this).attr('id'));
-        });
-
-        upcType();
+        });        
         <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
+        upcType();
     });
 </script>
 <?php

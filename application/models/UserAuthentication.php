@@ -489,6 +489,12 @@ class UserAuthentication extends FatModel
 
     private function setSession($data)
     {
+        unset($_SESSION['shopping_cart']["order_id"]);
+        unset($_SESSION['wallet_recharge_cart']["order_id"]);
+        unset($_SESSION['subscription_shopping_cart']["order_id"]);
+        unset($_SESSION['shopping_cart']["order_id"]);
+        unset($_SESSION["order_id"]);
+        
         session_regenerate_id();
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME] = array(
             'user_id' => $data['user_id'],

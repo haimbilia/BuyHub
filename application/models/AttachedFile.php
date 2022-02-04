@@ -213,7 +213,7 @@ class AttachedFile extends MyAppModel
         $fileType = FatUtility::int($fileType);
         $recordId = FatUtility::int($recordId);
         $recordSubid = FatUtility::int($recordSubid);
-        $langId = FatUtility::int($langId);
+        $langId = FatUtility::int($langId); 
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
@@ -255,6 +255,7 @@ class AttachedFile extends MyAppModel
         }
 
         $rs = $srch->getResultSet();
+        //echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 
