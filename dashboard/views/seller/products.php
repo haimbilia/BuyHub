@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+
 <div class="content-wrapper content-space">
     <?php
     $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
