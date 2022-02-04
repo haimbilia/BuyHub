@@ -6,12 +6,10 @@ if ($userTotalWalletBalance != $userWalletBalance || ($promotionWalletToBeCharge
 } ?>
 <?php if ($showTotalBalanceAvailableDiv) { ?>
 
-
-
     <div class="credits-number">
         <?php if ($userTotalWalletBalance != $userWalletBalance) { ?>
             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
-                <div class="card-head">
+                <div class="card-head border-0">
                     <h6> <?php echo Labels::getLabel('LBL_Wallet_Balance', $siteLangId); ?>: </h6>
                     <i class="icn"> </i>
                 </div>
@@ -31,7 +29,7 @@ if ($userTotalWalletBalance != $userWalletBalance || ($promotionWalletToBeCharge
         <?php } ?>
         <?php if ($promotionWalletToBeCharged) { ?>
             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
-                <div class="card-head">
+                <div class="card-head border-0">
                     <h6> <?php echo Labels::getLabel('LBL_Pending_Promotions_Charges', $siteLangId); ?>: </h6>
                     <i class="icn"> </i>
                 </div>
@@ -50,7 +48,7 @@ if ($userTotalWalletBalance != $userWalletBalance || ($promotionWalletToBeCharge
         <?php } ?>
         <?php if ($withdrawlRequestAmount) { ?>
             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
-                <div class="card-head">
+                <div class="card-head border-0">
                     <h6> <?php echo Labels::getLabel('LBL_Pending_Withdrawl_Requests', $siteLangId); ?>: </h6>
                     <i class="icn"> </i>
                 </div>
@@ -65,5 +63,4 @@ if ($userTotalWalletBalance != $userWalletBalance || ($promotionWalletToBeCharge
             </div>
         <?php } ?>
     </div>
-
 <?php } ?>

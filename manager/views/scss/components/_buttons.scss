@@ -185,11 +185,26 @@ a.link {
     white-space: nowrap;
     text-rendering: optimizeLegibility;
     transition: color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 50% 100%;
     background-repeat: no-repeat;
     background-size: 0% 1px;
     transition: background-size 0.3s;
+    &:hover {
+        text-decoration: none;
+        background-size: 100% 1px;
+    }
+}
+
+.link-arrow {
+    color: $brand-color;
+    position: relative;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    text-rendering: optimizeLegibility;
+    transition: color 0.3s ease-in-out;
     display: flex;
     align-items: center;
     &:after {
@@ -199,6 +214,7 @@ a.link {
         opacity: 0;
         content: "→";
     }
+
     &:hover {
         color: $brand-color;
         text-decoration: none;
@@ -209,16 +225,15 @@ a.link {
             opacity: 1;
         }
     }
-    &--inline {
-        display: inline-flex;
-    }
 }
-
+.link-inline {
+    display: inline-flex;
+}
 .link-text {
     display: inline-flex;
     align-items: center;
     font-size: 0.9rem;
-    color: $brand-color;
+    color: $brand-color !important;
     font-weight: 600;
     .icn {
         width: 12px;
