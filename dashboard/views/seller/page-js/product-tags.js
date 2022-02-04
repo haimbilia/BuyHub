@@ -3,16 +3,15 @@ $(document).ready(function(){
 });
 
 (function() {
-	var dv = '#ordersListing';
+	var dv = '#listing';
 	searchRecords = function(frm){
-
 		/*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
 		var data = '';
 		if (frm) {
 			data = fcom.frmData(frm);
 		}
 		/*]*/	
-		$(dv).html( fcom.getLoader() );
+		$(dv).prepend( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Seller','searchProductTags'), data, function(res){
 			$(dv).html(res);
 		});
@@ -40,17 +39,12 @@ $(document).ready(function(){
 	}  
 
 	attachTag = function (e) {
-		console.log('vvvv');
-		console.log(e);
 		let tag_id = e.detail.data.id;
 		let product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
 	}
 
 	addTagData = function (e) {	
-
-		console.log(e);
-
 		var product_id = $(e.detail.tagify.DOM.originalInput).attr('data-product_id');
 		var tag_id = e.detail.data.id;
 

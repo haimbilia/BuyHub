@@ -1798,6 +1798,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
         $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_TAX_CATEGORY_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -3659,8 +3660,7 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchTaxCat');
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -3934,14 +3934,14 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchCatalogProduct');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'lang_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
         if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {           
             $frm->addHiddenField('', 'type', $type);
         }
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
      
-        $frm->addHiddenField('', 'page');
-
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

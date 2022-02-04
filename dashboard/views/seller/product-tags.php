@@ -6,15 +6,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
+    $title = Labels::getLabel('LBL_Product_Tags', $siteLangId);
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Product_Tags', $siteLangId),
+        'headingLabel' =>  $title . '<i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="' . Labels::getLabel('LBL_Tags_can_only_be_added_for_private_products', $siteLangId) . '"></i>',
         'siteLangId' => $siteLangId,
     ];
 
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
-        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -29,10 +29,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                 echo "<option value='$langId' $selectedClass>$langName</option>";
                                             }
                                         ?>
-                                        </select>            
+                                    </select>
                                 </div>
                             <?php } ?>
-                        <div id="ordersListing"></div>
+                        <div id="listing"></div>
                     </div>
                 </div>
             </div>

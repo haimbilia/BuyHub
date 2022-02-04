@@ -10,6 +10,8 @@ trait Options {
         }
         $this->set('canEdit', $this->userPrivilege->canEditProductOptions(UserAuthentication::getLoggedUserId(), true));
         $frmSearch = $this->getSearchForm();
+        $this->set('deleteButton', true);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_OPTION_NAME', $this->siteLangId));
         $this->set("frmSearch", $frmSearch);
         $this->_template->addJs('js/jscolor.js');
         $this->_template->addJs('js/jquery.tablednd.js');
@@ -20,8 +22,8 @@ trait Options {
         $frm = new Form('frmOptionSearch', array('id' => 'frmOptionSearch'));
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearOptionSearch();'));
+        
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 

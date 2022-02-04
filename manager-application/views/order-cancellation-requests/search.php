@@ -86,7 +86,20 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
-                    $data['editButton'] = [];
+                    $arr = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'editRecord(' . $row['ocrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ];
+                    array_unshift($data['otherButtons'], $arr);
                 } else if ($row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED && !empty($row['ocrequest_admin_comment'])) {
                     $data['otherButtons'][] = [
                         'attr' => [
