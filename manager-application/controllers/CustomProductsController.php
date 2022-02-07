@@ -321,6 +321,7 @@ class CustomProductsController extends ListingBaseController
         $this->set("recordId", $recordId);
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         if (FatUtility::isAjaxCall()) {
             $this->set('html', $this->_template->render(false, false, NULL, true));
             $this->_template->render(false, false, 'json-success.php', true, false);
