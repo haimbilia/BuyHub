@@ -4,7 +4,7 @@ if (count($arrListing) > 0) {
 		$mainDiv = new HtmlElement("div", array("class" => "notification"));
 		$div = $mainDiv->appendElement("div", array("class" => "notification__img"));
 		$div = $div->appendElement("div", array("class" => "icon"));
-		$div->appendElement("img", ['class' => '', 'href' => UrlHelper::generateFullUrl('Image', 'user', array($row['notification_user_id'], 'MINI', true), CONF_WEBROOT_FRONT_URL)]);
+		$div->appendElement("img", ['class' => '', 'src' => UrlHelper::generateFullUrl('Image', 'user', array($row['notification_user_id'], 'MINI', true), CONF_WEBROOT_FRONT_URL)]);
 
 		$uname = ($row['user_name']) ? $row['user_name'] : Labels::getLabel('LBL_GUEST_USER', $siteLangId);
 		$url = UrlHelper::generateUrl($labelArr[$row['notification_label_key']][1]);

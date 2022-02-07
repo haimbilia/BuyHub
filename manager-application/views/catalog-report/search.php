@@ -22,6 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['brand_name'] != '') {
                     $name .= "<br/><strong>" . Labels::getLabel('LBL_Brand', $siteLangId) . ": </strong>" . $row['brand_name'];
                 }
+                $name = "<div class='info-wrap'>".$name."</div>";
                 $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
             case 'product_type':

@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
             case 'shop_name':
                 $shop = $row['shop_name'];
                 $shop .= '<br/>'.Labels::getLabel('LBL_Created_On', $siteLangId).': ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
-                $shop = "<div>".$shop."</div>";
+                $shop = "<div class='info-wrap'>".$shop."</div>";
                 $td->appendElement('plaintext', $tdAttr, $shop, true);
                 break;
 

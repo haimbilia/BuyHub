@@ -51,6 +51,7 @@ $input-color: #474747;
     background-size: 10px;
     background-repeat: no-repeat;
     background-position: calc(100% - 12px) center;
+    color: $txt-gray;
     &:hover {
         cursor: pointer;
     }

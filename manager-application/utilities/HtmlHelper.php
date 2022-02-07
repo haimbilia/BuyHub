@@ -290,7 +290,14 @@ class HtmlHelper
                     </div>
                 </div>
                 <script>
-                $.initDropZone("' . $url . '").on("sending", function(file, xhr, formData){';
+                $.initDropZone("' . $url . '")
+                .on("addedfile",function(event){                                 
+                    $(".upload_cover").addClass("hidden"); 
+                })
+                .on("queuecomplete",function(event){                                 
+                    $(".upload_cover").removeClass("hidden"); 
+                })
+                    .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {
             $str .= $callbackfn . '(file, xhr, formData)';;
         }
