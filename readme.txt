@@ -464,10 +464,16 @@ Updates/Fixes :
     => 062174 - Product tags page, binding tag issue
     => 062213 - View order from application order total amount is wrong on change currency (9.3.1)
     => 062225 - on seller product form copy function only working on first feild(9.3.1)
-    
+    => 062183 - Admin UI: Getting multiple issues on the "Payment Methods" table while accessing the 'Getting Started' section
+    => 062171 - Admin UI: Getting multiple UI issues on the "Email Configuration" page while accessing the 'Getting Started' section 
+    => 062114 - Admin UI: "Delete multiple records" functionality is not working on the Seller's Inventory page at the admin's end.
+	=> 062146 - Admin UI: The guest user's name is not showing in the table and search is also not working for some users.
+    => 062142 - Admin UI: Username's search is not working properly on the notification's page at the admin's end.
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
+    => 062190 - Admin UI: "Mark as default" font is not correct and the 'default' tag is showing with the plugin even after inactive and disabling the default status on the "Tax Services, and Shipping Services" pages while accessing the 'Getting Started' section.
    
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin

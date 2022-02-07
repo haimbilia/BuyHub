@@ -57,7 +57,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                     </div>
                 </div>
                 <div class="grid-layout-right">
-                    <div id="pluginsListing" class="card">
+                    <div class="card" id="pluginsListing">
                         <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>
                     </div>
                 </div>
@@ -66,8 +66,10 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
             <?php require_once(CONF_THEME_PATH . 'getting-started/top-nav.php'); ?>
             <div class="onboarding">
                 <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
-                <div class="onboarding-main" id="pluginsListing">
-                    <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>
+                <div class="onboarding-main "  >
+                    <div class="card" id="pluginsListing">
+                        <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>
+                    </div>
                 </div>
             </div>
         <?php } ?>

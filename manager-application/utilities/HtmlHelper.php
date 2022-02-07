@@ -290,7 +290,14 @@ class HtmlHelper
                     </div>
                 </div>
                 <script>
-                $.initDropZone("' . $url . '").on("sending", function(file, xhr, formData){';
+                $.initDropZone("' . $url . '")
+                .on("addedfile",function(event){                                 
+                    $(".upload_cover").addClass("hidden"); 
+                })
+                .on("queuecomplete",function(event){                                 
+                    $(".upload_cover").removeClass("hidden"); 
+                })
+                    .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {
             $str .= $callbackfn . '(file, xhr, formData)';;
         }
@@ -623,12 +630,10 @@ class HtmlHelper
         $statusClass = ($canEdit) ? '' : 'disabled';
         $disabled = ($disabled) ? 'disabled' : '';
         $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
-        return '<span class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
-                    <label>
-                        <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                        <span class="input-helper"></span>
-                    </label>
-                </span>';
+        return '<label class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
+                    <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                    <span class="input-helper"></span>
+                </label>';
     }
 
     /**

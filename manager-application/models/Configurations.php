@@ -73,7 +73,7 @@ class Configurations extends FatModel
             Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),
             Configurations::FORM_PPC => Labels::getLabel('NAV_PPC_MANAGEMENT', $langId),
             Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_LIVE_CHAT', $langId),
-            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL', $langId),
+            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL_CONFIGURATION', $langId),
             Configurations::FORM_CMS => Labels::getLabel('NAV_CMS_PAGES', $langId),
             Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_CHECKOUT', $langId),
             Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SYSTEM', $langId),

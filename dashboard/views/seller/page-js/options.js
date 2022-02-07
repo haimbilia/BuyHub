@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	searchOptions(document.frmOptionSearch);
+	searchRecords(document.frmRecordSearch);
 });
 
 (function() {
@@ -12,12 +12,12 @@ $(document).ready(function(){
 		}
 		var frm = document.frmOptionsSearchPaging;
 		$(frm.page).val(page);
-		searchOptions(frm);
+		searchRecords(frm);
 	}
 
 	reloadList = function() {
 		var frm = document.frmOptionsSearchPaging;
-		searchOptions(frm);
+		searchRecords(frm);
 	}
 
 	optionForm = function(optionId){
@@ -136,14 +136,14 @@ $(document).ready(function(){
 		});
 	};
 
-	searchOptions = function(form){
+	searchRecords = function(form){
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
 		}
 		/*]*/
-		$("#optionListing").html('Loading....');
+		$("#optionListing").prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('seller','searchOptions'),data,function(res){
 			$("#optionListing").html(res);
@@ -168,10 +168,4 @@ $(document).ready(function(){
 		if( !confirm(langLbl.confirmDelete) ){ return; }
 		$("#frmOptionListing").submit();
 	};
-
-	clearOptionSearch = function(){
-		document.frmOptionSearch.reset();
-		searchOptions(document.frmOptionSearch);
-	};
-
 })();

@@ -46,6 +46,7 @@ class SellerProductsController extends ListingBaseController {
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['statusButton'] = true;
         $actionItemsData['newRecordBtn'] = false;

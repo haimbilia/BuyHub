@@ -16,5 +16,5 @@
     }?>
 </div>
 <script>
-    $('.formActionBtn-js').hide();
+    $(".formActionBtn-js").addClass("disabled");
 </script>

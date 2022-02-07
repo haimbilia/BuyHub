@@ -28,7 +28,7 @@
     langForm = function (langId = 0, autoFillLangData = 0, recordId = 0) {
         recordId = recordId || getCurrentFrmRecordId();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
-        $('.mainJs').prepend(fcom.getLoader());
+        $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
             $('.mainJs').replaceWith(res.html);            
         });
@@ -38,7 +38,7 @@
         let recordId = getCurrentFrmRecordId();
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
-        $('.mainJs').prepend(fcom.getLoader());
+        $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res.html);          
         });

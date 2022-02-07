@@ -201,7 +201,7 @@ class PluginsController extends ListingBaseController
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
-        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -217,17 +217,11 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         unset($post['plugin_id'], $post['plugin_type']);
-
-        if (1 > $recordId) {
+       
+        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id','plugin_type']);
+        if ($pluginData === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        if (0 < $recordId) {
-            $recordId = Plugin::getAttributesById($recordId, 'plugin_id');
-            if ($recordId === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-        }
+        }      
 
         $record = new Plugin($recordId);
         $post['plugin_identifier'] = $post['plugin_name'];
@@ -238,7 +232,8 @@ class PluginsController extends ListingBaseController
                 $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
             LibHelper::exitWithError($msg, true);
-        }
+        }        
+
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
         $newTabLangId = 0;
@@ -264,6 +259,10 @@ class PluginsController extends ListingBaseController
                     LibHelper::exitWithError($confRecord->getError(), true);
                 }
             }
+        }
+
+        if (false == Plugin::updateStatus($pluginData['plugin_type'], $post['plugin_active'], $recordId, $error)) {
+            LibHelper::exitWithError($error, true);
         }
 
         $this->set('msg', $this->str_update_record);

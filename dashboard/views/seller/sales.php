@@ -18,7 +18,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
-        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
