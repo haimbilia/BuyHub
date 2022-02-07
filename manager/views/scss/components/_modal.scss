@@ -12,6 +12,10 @@
             margin: -1rem;
             margin-#{$start-direction}: auto !important;
         }
+        .btn-close {
+            margin-#{$start-direction}: auto !important;
+            margin-#{$end-direction}: 0 !important;
+        }
     }
     &-title {
         font-size: 1.2rem;
