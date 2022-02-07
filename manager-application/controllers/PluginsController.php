@@ -60,6 +60,8 @@ class PluginsController extends ListingBaseController
         $this->set('labels', Plugin::getLabels($this->siteLangId));
         $this->getListingData($activeTab);
         $this->set('tourStep', SiteTourHelper::getStepIndex());
+        $this->_template->addCss('css/cropper.css');
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
         $this->_template->render();
     }
 
@@ -181,6 +183,7 @@ class PluginsController extends ListingBaseController
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
+        $pluginLogo = NULL;
         if (0 < $recordId) {
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -194,14 +197,19 @@ class PluginsController extends ListingBaseController
             }
             $identifier = $data['plugin_identifier'];
             $frm->fill($data);
+            if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
+                $pluginLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId);  
+            }          
         }
-
+        
+        $this->set('pluginLogo', $pluginLogo);
 
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
+        $this->set('canEdit', $this->objPrivilege->canEditPlugins($this->admin_id , true));  
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, NULL, true));             
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -216,12 +224,14 @@ class PluginsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        unset($post['plugin_id'], $post['plugin_type']);
+        unset($post['plugin_id'], $post['plugin_type'], $post['plugin_active']);
        
-        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id','plugin_type']);
+        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id','plugin_type','plugin_active']);
         if ($pluginData === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }      
+        }
+
+        $active = FatApp::getPostedData('plugin_active', FatUtility::VAR_INT, 0);
 
         $record = new Plugin($recordId);
         $post['plugin_identifier'] = $post['plugin_name'];
@@ -261,9 +271,12 @@ class PluginsController extends ListingBaseController
             }
         }
 
-        if (false == Plugin::updateStatus($pluginData['plugin_type'], $post['plugin_active'], $recordId, $error)) {
-            LibHelper::exitWithError($error, true);
+        if($pluginData['plugin_active'] != $active){
+            if (false == Plugin::updateStatus($pluginData['plugin_type'], $active, $recordId, $error)) {
+                LibHelper::exitWithError($error, true);
+            }
         }
+        
 
         $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
@@ -271,31 +284,46 @@ class PluginsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function uploadIcon($plugin_id)
-    {
+    public function uploadIcon()
+    {      
         $this->objPrivilege->canEditPlugins();
-
-        $plugin_id = FatUtility::int($plugin_id);
+        $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);        
 
         if (1 > $plugin_id) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $post = FatApp::getPostedData();
-
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
+        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        $res = $fileHandlerObj->saveAttachment($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_PLUGIN_LOGO, $plugin_id, 0, $_FILES['file']['name'], -1, $unique_record = true);
+        $res = $fileHandlerObj->saveAttachment($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_PLUGIN_LOGO, $plugin_id, 0, $_FILES['cropped_image']['name'], -1, true);
         if (!$res) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('pluginId', $plugin_id);
-        $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->siteLangId));
+        $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteIcon()
+    {      
+        $this->objPrivilege->canEditPlugins();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);        
+
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)){
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+       
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -390,17 +418,7 @@ class PluginsController extends ListingBaseController
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
-            $fld = $frm->addButton(
-                'Icon',
-                'plugin_icon',
-                Labels::getLabel('FRM_UPLOAD_FILE', $this->siteLangId),
-                array('class' => 'btn btn-outline-brand btn-sm uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
-            );
-            if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
-                $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
-                $fld->htmlAfterField .= '<div class="uploaded--image">
-                <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($recordId, 'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></div>';
-            }
+            $frm->addHTML('', 'plugin_logo', '');            
         }
 
         return $frm;

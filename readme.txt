@@ -469,7 +469,8 @@ Updates/Fixes :
     => 062114 - Admin UI: "Delete multiple records" functionality is not working on the Seller's Inventory page at the admin's end.
 	=> 062146 - Admin UI: The guest user's name is not showing in the table and search is also not working for some users.
     => 062142 - Admin UI: Username's search is not working properly on the notification's page at the admin's end.
-
+    => 062178 - Admin UI: Getting multiple issues on the "Payment Methods" page while accessing the 'Getting Started' section
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

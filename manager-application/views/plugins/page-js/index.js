@@ -157,7 +157,19 @@ $(document).ajaxComplete(function () {
                 fcom.closeProcessing();
             }
         }).disableSelection();
-    }
+    },
+    deleteIcon = function (recordId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
+        fcom.updateWithAjax(
+            fcom.makeUrl('plugins', "deleteIcon"),
+            {recordId},
+            function (t) {
+                editRecord(recordId);
+            }
+        );
+    };
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {
