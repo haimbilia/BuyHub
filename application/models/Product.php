@@ -785,15 +785,15 @@ class Product extends MyAppModel
         }
 
         $srch = new SearchBase(static::DB_PRODUCT_TO_TAG);
+        $srch->doNotCalculateRecords();
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
         $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
-        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);
-
+        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);       
         if (true == $assoc) {
             if (count($attrs)) {
                 $srch->addMultipleFields($attrs);
             } else {
-                $srch->addMultipleFields(array('tag_id', 'COALESCE(tag_name, tag_identifier) as tag_name'));
+                $srch->addMultipleFields(array('tag_id', 'tag_name'));
             }
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
