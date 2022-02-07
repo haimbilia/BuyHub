@@ -543,26 +543,26 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 var file = inputBtn.files[0];
 
                 var frmName = $(inputBtn).closest('form').attr('name');
-                var minWidth = document[frmName].min_width.value;
-                var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
-                var options = {
-                    aspectRatio: aspectRatio,
-                    data: {
-                        width: minWidth,
-                        height: minHeight,
-                    },
-                    minCropBoxWidth: minWidth,
-                    minCropBoxHeight: minHeight,
+                var options = {                    
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: "high",
                     imageSmoothingEnabled: true,
                 };
+
+                if(document[frmName].min_width != undefined && document[frmName].min_height != undefined){
+                    var minWidth = document[frmName].min_width.value;
+                    var minHeight = document[frmName].min_height.value;
+                    options['aspectRatio'] = minWidth / minHeight;
+                    options['minCropBoxWidth'] = minWidth;
+                    options['minCropBoxHeight'] = minHeight;
+                    options['data'] = {
+                        width: minWidth,
+                        height: minHeight,
+                    };
+                }else{
+                    options['initialAspectRatio'] = 1;                    
+                }              
+                
                 $(inputBtn).val("");
                 setTimeout(function () {
                     cropImage(file, options, "uploadImages", inputBtn);
