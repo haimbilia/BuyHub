@@ -56,7 +56,8 @@ class NotificationsController extends ListingBaseController
     {
         $this->getListingData();
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, NUll, true),
+            'listingHtml' => $this->_template->render(false, false, 'notifications/search.php', true),
+            //'listingHtml' => $this->_template->render(false, false, NUll, true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
@@ -97,6 +98,7 @@ class NotificationsController extends ListingBaseController
         }
 
         $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
+        $post['user_id'] = $userId;
         if (0 < $userId) {
             $srch->addCondition('notification_user_id', '=', $userId);
         }

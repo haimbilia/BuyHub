@@ -29,6 +29,7 @@
         &_name {
             margin-bottom: 0.5rem;
             font-weight: 600;
+            font-size: 0.85rem;
         }
     }
     .trash {
@@ -38,6 +39,7 @@
     }
     .progress {
         height: 6px;
-        &-bar {}
+        &-bar {
+        }
     }
 }

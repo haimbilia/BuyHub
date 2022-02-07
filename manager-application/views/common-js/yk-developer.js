@@ -77,8 +77,8 @@ $(function () {
             }
         },
 
-        getLoader: function (addAsNew) {
-            if(typeof addAsNew === undefined){
+        getLoader: function (addAsNew) {        
+            if(typeof addAsNew === 'undefined'){             
                 $(document.body).css({ cursor: "wait" });
                 $(".loaderJs").remove();
             }            
