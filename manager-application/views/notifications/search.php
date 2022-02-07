@@ -59,6 +59,7 @@ foreach ($arrListing as $sn=>$row){
 
 include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
+
 if ($printData) {
     echo $tbody->getHtml();
 }
