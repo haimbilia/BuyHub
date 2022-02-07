@@ -1,9 +1,13 @@
 .add-stock {
     // display: flex;
     // justify-content: space-between;
-    display: grid;
-    grid-template-columns: 25% 1fr 25%;
-    grid-gap: 2rem;
+
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-template-columns: 25% 1fr 25%;
+        grid-gap: 2rem;
+    }
+
     &-column {
         &-head {
             display: flex;

@@ -7,7 +7,7 @@
     .alert-icon {
         display: flex;
         align-items: center;
-        padding: 0 0.6rem 0 0;
+        padding-#{$end-direction}: 0.6rem;
         &.alert-icon-top {
             align-items: flex-start;
             align-content: stretch;
