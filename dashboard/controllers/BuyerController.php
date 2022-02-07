@@ -582,8 +582,8 @@ class BuyerController extends BuyerBaseController {
     }
 
     public function orders() {
-        $frmOrderSrch = $this->getOrderSearchForm($this->siteLangId);
-        $this->set('frmOrderSrch', $frmOrderSrch);
+        $frmSearch = $this->getOrderSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frmSearch);
         $this->_template->render(true, true);
     }
 
@@ -2693,7 +2693,7 @@ class BuyerController extends BuyerBaseController {
         $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
 
-        $frm = new Form('frmOrderSrch');
+        $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
         $frm->addSelectBox('', 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))), '', array(), Labels::getLabel('LBL_Status', $langId));
@@ -2701,10 +2701,9 @@ class BuyerController extends BuyerBaseController {
         $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
         $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
         $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
-        $frm->addHiddenField('', 'page');
-        //$fldSubmit->attachField($fldCancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        $frm->addHiddenField('', 'page');       
         return $frm;
     }
 

@@ -1,48 +1,12 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSrch->setFormTagAttribute('onSubmit', 'searchCredits(this); return false;');
-$frmSrch->setFormTagAttribute('class', 'form');
-$frmSrch->developerTags['colClassPrefix'] = 'col-md-';
-$frmSrch->developerTags['fld_default_col'] = 12;
+$dateFromFld = $frmSearch->getField('date_from');
+$dateFromFld->setFieldTagAttribute('class', 'field--calender');
+$dateFromFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_FROM_DATE', $siteLangId));
 
-$keyFld = $frmSrch->getField('keyword');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-$keyFld->setWrapperAttribute('class', 'col-lg-6');
-$keyFld->developerTags['col'] = 6;
-$keyFld->developerTags['noCaptionTag'] = true;
-
-$keyFld = $frmSrch->getField('debit_credit_type');
-$keyFld->setWrapperAttribute('class', 'col-lg-6');
-$keyFld->developerTags['col'] = 6;
-$keyFld->developerTags['noCaptionTag'] = true;
-
-$keyFld = $frmSrch->getField('date_from');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_From_Date', $siteLangId));
-$keyFld->setWrapperAttribute('class', 'col-lg-4');
-$keyFld->developerTags['col'] = 4;
-$keyFld->developerTags['noCaptionTag'] = true;
-
-$keyFld = $frmSrch->getField('date_to');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_To_Date', $siteLangId));
-$keyFld->setWrapperAttribute('class', 'col-lg-4');
-$keyFld->developerTags['col'] = 4;
-$keyFld->developerTags['noCaptionTag'] = true;
-
-/* $keyFld = $frmSrch->getField('date_order');
-$keyFld->setWrapperAttribute('class','col-lg-6');
-$keyFld->developerTags['col'] = 6; */
-
-$submitBtnFld = $frmSrch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn-block');
-$submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
-$submitBtnFld->developerTags['col'] = 2;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-
-$cancelBtnFld = $frmSrch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
-$cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
+$dateToFld = $frmSearch->getField('date_to');
+$dateToFld->setFieldTagAttribute('class', 'field--calender');
+$dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', $siteLangId));
 ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
@@ -57,38 +21,17 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             <div class="col-lg-12">
                 <?php if ($codMinWalletBalance > -1) { ?>
                     <p class="note">
-                        <?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?>
+                        <?php echo Labels::getLabel('MSG_MINIMUM_BALANCE_REQUIRED_FOR_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?>
                     </p>
                 <?php } ?>
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-head">
-                                        <h5 class="card-title">
-                                            <?php echo Labels::getLabel('LBL_Search_Transactions', $siteLangId); ?></h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="replaced">
-                                            <?php
-                                            $submitFld = $frmSrch->getField('btn_submit');
-                                            $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-
-                                            $fldClear = $frmSrch->getField('btn_clear');
-                                            $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                            echo $frmSrch->getFormHtml();
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
+                                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                                     <div class="card-body">
-                                        <div id="creditListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
+                                        <div id="creditListing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +42,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                         <div class="card card-commerce form">
                             <div class="card-head border-0">
                                 <h6>
-                                    <p><?php echo Labels::getLabel('LBL_Available_Balance', $siteLangId); ?>: </p>
+                                    <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?>: </p>
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -172,10 +115,5 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
 </div>

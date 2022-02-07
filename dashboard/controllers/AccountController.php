@@ -16,7 +16,7 @@ class AccountController extends LoggedUserController
             } elseif (User::isAffiliate() || User::isSigningUpAffiliate()) {
                 $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
             }
-        }        
+        }
     }
 
     public function index()
@@ -398,7 +398,7 @@ class AccountController extends LoggedUserController
         $this->set('payouts', $payouts);
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
         $this->set('codMinWalletBalance', $codMinWalletBalance);
-        $this->set('frmSrch', $frm);
+        $this->set('frmSearch', $frm);
         $this->set('accountSummary', $accountSummary);
         $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
         $this->set('canAddMoneyToWallet', $canAddMoneyToWallet);
@@ -547,9 +547,9 @@ class AccountController extends LoggedUserController
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
 
         $debit_credit_type = FatApp::getPostedData('debit_credit_type', FatUtility::VAR_INT, -1);
-        $dateOrder = FatApp::getPostedData('date_order', FatUtility::VAR_STRING, "DESC"); 
-        
-        $srch = Transactions::getUserTransactionsObj($this->userId); 
+        $dateOrder = FatApp::getPostedData('date_order', FatUtility::VAR_STRING, "DESC");
+
+        $srch = Transactions::getUserTransactionsObj($this->userId);
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cond = $srch->addCondition('utxn.utxn_order_id', 'like', '%' . $keyword . '%');
@@ -580,13 +580,13 @@ class AccountController extends LoggedUserController
                     break;
             }
         }
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post,true); 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('utxn.utxn_date', $dateOrder);  
+        $srch->addOrder('utxn.utxn_date', $dateOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
-        $this->set('arrListing', $records); 
+        $this->set('arrListing', $records);
         $this->set('postedData', $post);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
@@ -2282,17 +2282,17 @@ class AccountController extends LoggedUserController
         $srch->joinThreadLastMessage();
         $srch->joinMessagePostedFromUser(true, $this->siteLangId);
         $srch->joinMessagePostedToUser(true, $this->siteLangId);
-        $srch->joinThreadStartedByUser(); 
+        $srch->joinThreadStartedByUser();
         $srch->addCondition('ttm.message_deleted', '=', 0);
         $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndTheirChildIds);
-        $cnd->attachCondition('ttm.message_to', 'IN', $parentAndTheirChildIds, 'OR'); 
-        $srch->addGroupBy('ttm.message_thread_id'); 
+        $cnd->attachCondition('ttm.message_to', 'IN', $parentAndTheirChildIds, 'OR');
+        $srch->addGroupBy('ttm.message_thread_id');
         if ($post['keyword'] != '') {
             $cnd = $srch->addCondition('tth.thread_subject', 'like', "%" . $post['keyword'] . "%");
             $cnd->attachCondition('tfr.user_name', 'like', "%" . $post['keyword'] . "%", 'OR');
             $cnd->attachCondition('tfr_c.credential_username', 'like', "%" . $post['keyword'] . "%", 'OR');
         }
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post,true); 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array(
             'tth.*',
@@ -2305,7 +2305,7 @@ class AccountController extends LoggedUserController
         $srch->setPageSize($pagesize);
         $srch->addOrder('message_id', 'DESC');
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs); 
+        $records = FatApp::getDb()->fetchAll($rs);
         if (true === MOBILE_APP_API_CALL) {
             $message_records = array();
             foreach ($records as $mkey => $mval) {
@@ -2320,10 +2320,10 @@ class AccountController extends LoggedUserController
         }
 
         /*CommonHelper::printArray($records); die;*/
-        $this->set("arrListing", $records); 
-        $this->set('loggedUserId', $this->userId); 
+        $this->set("arrListing", $records);
+        $this->set('loggedUserId', $this->userId);
         $this->set('parentAndTheirChildIds', $parentAndTheirChildIds);
-        $this->set('postedData', $post); 
+        $this->set('postedData', $post);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -3214,15 +3214,15 @@ class AccountController extends LoggedUserController
 
     private function getCreditsSearchForm($langId)
     {
-        $frm = new Form('frmCreditSrch');
+        $frm = new Form('frmRecordSearch');
         $frm->addTextBox('', 'keyword', '');
-        $frm->addHiddenField('', 'total_record_count', ''); 
+        $frm->addHiddenField('', 'total_record_count', '');
         $frm->addSelectBox('', 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
         $frm->addDateField('', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField('', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         /* $frm->addSelectBox( '', 'date_order', array( 'ASC' => Labels::getLabel('LBL_Date_Order_Ascending', $langId), 'DESC' => Labels::getLabel('LBL_Date_Order_Descending', $langId) ), 'DESC', array(), '' ); */
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         $frm->addHiddenField('', 'page');
         return $frm;
     }
