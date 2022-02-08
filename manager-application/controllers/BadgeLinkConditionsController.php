@@ -570,7 +570,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $frm->addHiddenField('', 'badge_trigger_type', $this->badgeData['badge_trigger_type']);
 
         if (Badge::COND_MANUAL == $this->badgeData['badge_trigger_type']) {
-            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_SELLER', $this->siteLangId)]);
+            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
             $frm->addSelectBox(Labels::getLabel('FRM_RECORD_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
             $frm->addDateField(Labels::getLabel('FRM_VALID_FROM', $this->siteLangId), 'blinkcond_from_date', '', ['placeholder' => Labels::getLabel('FRM_VALID_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender']);
             $frm->addDateField(Labels::getLabel('FRM_VALID_TO', $this->siteLangId), 'blinkcond_to_date', '', ['placeholder' => Labels::getLabel('FRM_VALID_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender']);
