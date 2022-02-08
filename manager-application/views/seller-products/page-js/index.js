@@ -1,12 +1,5 @@
 (function () {
-    trackInventory = function (el) {
-        if ($(el).prop("checked") == false) {
-            $("#selprod_threshold_stock_level").val(0).attr("disabled", "disabled");
-        } else {
-            $("#selprod_threshold_stock_level").removeAttr("disabled");
-        }
-    };
-
+  
     sellerProductDownloadFrm = function (selprod_id) {
         if (false === checkControllerName()) {
             return false;
@@ -37,6 +30,21 @@
         var data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getInventoryDigitalDownloads'), data, function (res) {
             $("#digital_download_list").html(res.html);
+        });
+    }
+    getUniqueSlugUrl = function(obj,str,recordId){
+        if(str == ''){
+            return;
+        }
+        var data = {url_keyword:str,recordId:recordId}
+        fcom.ajax(fcom.makeUrl('SellerProducts', 'isProductRewriteUrlUnique'), data, function(t) { 
+            var ans = $.parseJSON(t);
+            $(obj).next().html(ans.msg);
+            if(ans.status == 0){
+                $(obj).next().removeClass('text-muted').addClass('text-danger');
+            }else{
+                $(obj).next().addClass('text-muted').removeClass('text-danger');
+            }
         });
     }
 })();
