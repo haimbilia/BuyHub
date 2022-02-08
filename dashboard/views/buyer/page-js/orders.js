@@ -1,9 +1,9 @@
 $(document).ready(function(){
-	searchOrders(document.frmOrderSrch);
+	searchRecords(document.frmRecordSearch);
 });
 
 (function() {
-	searchOrders = function(frm){
+	searchRecords = function(frm){
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
 		var data = fcom.frmData(frm);
 		/*]*/
@@ -22,18 +22,18 @@ $(document).ready(function(){
 		});
 	};
 	
-	goToOrderSearchPage = function(page) {
+	goToSearchPage = function(page) {
 		if(typeof page==undefined || page == null){
 			page =1;
 		}
-		var frm = document.frmOrderSrchPaging;
+		var frm = document.frmRecordSearchPaging;
 		$(frm.page).val(page);
-		searchOrders(frm);
+		searchRecords(frm);
 	};
 	
 	clearSearch = function(){
-		document.frmOrderSrch.reset();
-		searchOrders(document.frmOrderSrch);
+		document.frmRecordSearch.reset();
+		searchRecords(document.frmRecordSearch);
 	};
 	
 })();

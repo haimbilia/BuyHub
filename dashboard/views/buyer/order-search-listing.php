@@ -176,6 +176,6 @@
     } ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmOrderSrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToOrderSearchPage');
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmRecordSearchPaging'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

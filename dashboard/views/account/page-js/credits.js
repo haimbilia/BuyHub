@@ -1,12 +1,12 @@
 $(document).ready(function () {
     creditsInfo();
-    searchCredits(document.frmCreditSrch);
+    searchRecords(document.frmRecordSearch);
 });
 (function () {
     var dv = '#creditListing';
     var dvForm = '#withdrawalReqForm';
 
-    searchCredits = function (frm) {
+    searchRecords = function (frm) {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
         var data = fcom.frmData(frm);
         /*]*/
@@ -25,18 +25,18 @@ $(document).ready(function () {
         });
     };
 
-    goToOrderSearchPage = function (page) {
+    goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmCreditSrchPaging;
+        var frm = document.frmRecordSearchPaging;
         $(frm.page).val(page);
-        searchCredits(frm);
+        searchRecords(frm);
     };
 
     clearSearch = function () {
-        document.frmCreditSrch.reset();
-        searchCredits(document.frmCreditSrch);
+        document.frmRecordSearch.reset();
+        searchRecords(document.frmRecordSearch);
     };
 
     withdrawalReqForm = function () {
@@ -63,7 +63,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestWithdrawal'), data, function (t) {
             $(dvForm).html('');
             creditsInfo();
-            searchCredits(document.frmCreditSrch);
+            searchRecords(document.frmRecordSearch);
         });
     };
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl(frm.keyName.value, 'setup'), data, function (t) {
             $(dvForm).html('');
             creditsInfo();
-            searchCredits(document.frmCreditSrch);
+            searchRecords(document.frmRecordSearch);
         });
     };
 })();

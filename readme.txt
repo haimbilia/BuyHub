@@ -472,8 +472,10 @@ Updates/Fixes :
     => 062259 - Admin UI: "View Details" icon is not correct on the "Withdrawal Requests" page.
     => 062140 - Admin UI: "No Record Found" design is not correct and the loader is also not aligned while clicking on the "Clear" button on the notification page at the admin's end.
     => 062178 - Admin UI: Getting multiple issues on the "Payment Methods" page while accessing the 'Getting Started' section
-    => 062221 - Admin UI: Pagination is not working properly while admin selecting the different page numbers on the last page of the table on the whole system
-    
+    => 062124 - Admin UI: Admin is not able to disable the "Publish Inventory" option while editing the seller inventory at the admin's end.
+    => 062118 - Admin UI: "Active and Inactive" option is not showing in the table and while searching on the Seller Inventory page at the admin end.
+    => 062221 - Admin UI: Pagination is not working properly while admin selecting the different page numbers on the last page of the table on the whole system 
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
