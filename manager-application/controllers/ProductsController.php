@@ -83,7 +83,7 @@ class ProductsController extends ListingBaseController
             $sortBy = 'product_added_on';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 
@@ -113,8 +113,9 @@ class ProductsController extends ListingBaseController
         $product_seller_id = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
         if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            $is_custom_or_catalog = FatApp::getPostedData('is_custom_or_catalog', FatUtility::VAR_INT, -1);
-            if ($is_custom_or_catalog == applicationConstants::SYSTEM_CATALOG) {
+            $is_custom_or_catalog = FatApp::getPostedData('is_custom_or_catalog', FatUtility::VAR_INT, -1); 
+            $post['is_custom_or_catalog'] = $is_custom_or_catalog; 
+            if ($is_custom_or_catalog == applicationConstants::SYSTEM_CATALOG) {             
                 $srch->addCondition('product_seller_id', '=', 0);
             } elseif ($is_custom_or_catalog == applicationConstants::CUSTOM_CATALOG) {
                 if (0 < $product_seller_id) {
@@ -132,7 +133,6 @@ class ProductsController extends ListingBaseController
                 $srch->addCondition('product_seller_id', '=', $product_seller_id);
             }
         }
-
 
         $prodcat_id = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, -1);
         if ($prodcat_id > 0) {
@@ -173,6 +173,7 @@ class ProductsController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
+        //echo $srch->getQuery();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
