@@ -388,7 +388,7 @@ class MetaTagsController extends ListingBaseController
 
         HtmlHelper::addSearchButton($frm);
         $frm->addHiddenField('', 'total_record_count'); 
-        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(true)');
+        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(false)');
         $frm->addHtml('', 'btn_clear', $clearBtnHtm);
         return $frm;
     }
