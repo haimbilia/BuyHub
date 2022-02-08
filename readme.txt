@@ -471,7 +471,8 @@ Updates/Fixes :
     => 062142 - Admin UI: Username's search is not working properly on the notification's page at the admin's end.
     => 062259 - Admin UI: "View Details" icon is not correct on the "Withdrawal Requests" page.
     => 062140 - Admin UI: "No Record Found" design is not correct and the loader is also not aligned while clicking on the "Clear" button on the notification page at the admin's end.
-    => => 062178 - Admin UI: Getting multiple issues on the "Payment Methods" page while accessing the 'Getting Started' section
+    => 062178 - Admin UI: Getting multiple issues on the "Payment Methods" page while accessing the 'Getting Started' section
+    => 062124 - Admin UI: Admin is not able to disable the "Publish Inventory" option while editing the seller inventory at the admin's end.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
