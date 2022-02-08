@@ -48,7 +48,7 @@ class SellerProductsController extends ListingBaseController {
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
-        $actionItemsData['statusButton'] = true;
+        $actionItemsData['statusButtons'] = true;
         $actionItemsData['newRecordBtn'] = false;
 
         $this->set('actionItemsData', $actionItemsData);
@@ -1758,7 +1758,7 @@ class SellerProductsController extends ListingBaseController {
 
     public function updateStatus() {
         $this->objPrivilege->canEditSellerProducts();
-        $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);
+        $selprodId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (0 == $selprodId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -2537,8 +2537,7 @@ class SellerProductsController extends ListingBaseController {
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_PRICE', $this->siteLangId),
             'selprod_stock' => Labels::getLabel('LBL_QUANTITY', $this->siteLangId),
-            'selprod_available_from' => Labels::getLabel('LBL_AVAILABLE_FROM', $this->siteLangId),
-            'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'selprod_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('inventoryHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -2553,7 +2552,6 @@ class SellerProductsController extends ListingBaseController {
             'user_name',
             'selprod_price',
             'selprod_stock',
-            'selprod_available_from',
             'selprod_active',
             'action',
         ];

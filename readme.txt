@@ -473,6 +473,7 @@ Updates/Fixes :
     => 062140 - Admin UI: "No Record Found" design is not correct and the loader is also not aligned while clicking on the "Clear" button on the notification page at the admin's end.
     => 062178 - Admin UI: Getting multiple issues on the "Payment Methods" page while accessing the 'Getting Started' section
     => 062124 - Admin UI: Admin is not able to disable the "Publish Inventory" option while editing the seller inventory at the admin's end.
+    => 062118 - Admin UI: "Active and Inactive" option is not showing in the table and while searching on the Seller Inventory page at the admin end.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
