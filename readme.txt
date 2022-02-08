@@ -477,7 +477,8 @@ Updates/Fixes :
     => 062116 - Admin UI: Placeholder is missing for the "Seller name or email" field while searching and the whole table is not getting blurred while loading on the Seller Inventory page at the admin's end.
     => 062221 - Admin UI: Pagination is not working properly while admin selecting the different page numbers on the last page of the table on the whole system 
     => 062275 - Admin UI: "Action button" label is missing under the language label section.
-
+    => 062167 - Admin UI: Hint text is not showing for the "getting started" and "search" while hovering on it at the admin's end
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

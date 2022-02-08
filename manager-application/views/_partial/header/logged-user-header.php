@@ -24,7 +24,7 @@
                     <div class="main-header-toolbar">
                         <div class="header-action">
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="<?php echo SiteTourHelper::getUrl(SiteTourHelper::STEP_CONFIGURATION); ?>">
+                                <a class="header-action__trigger" href="<?php echo SiteTourHelper::getUrl(SiteTourHelper::STEP_CONFIGURATION); ?>" title="<?php echo Labels::getLabel('LBL_GET_STARTED', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-getting-started">
@@ -34,7 +34,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger quickSearchMainJs" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main">
+                                <a class="header-action__trigger quickSearchMainJs" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main" title="<?php echo Labels::getLabel('LBL_GLOBAL_SEARCH', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
