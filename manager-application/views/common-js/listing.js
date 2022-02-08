@@ -155,9 +155,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     setPageSize = function (pageSize) {
-        var frm = document.frmRecordSearchPaging;
-        $(frm.pageSize).val(pageSize);
-        reloadList();
+        var frm = document.frmRecordSearch;
+        $(frm.pageSize).val(pageSize);     
+        searchRecords(frm);
     };
 
     redirectBack = function (redirecrt) {
