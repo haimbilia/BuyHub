@@ -2600,9 +2600,8 @@ trait SellerProducts {
             }
         } else {
             $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-
             if (false === $post) {
-                FatUtility::dieJsonError(current($frm->getValidationErrors()));
+                FatUtility::dieJsonError(current($srchFrm->getValidationErrors()));
             } else {
                 unset($post['btn_submit'], $post['btn_clear']);
                 $srchFrm->fill($post);
@@ -2616,6 +2615,9 @@ trait SellerProducts {
         $this->set("dataToEdit", $dataToEdit);
         $this->set("frmSearch", $srchFrm);
         $this->set("selProd_id", $selProd_id);
+
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
+        $this->set('deleteButton', true);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
@@ -2653,10 +2655,9 @@ trait SellerProducts {
     private function getVolumeDiscountSearchForm() {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $frm->addHiddenField('', 'total_record_count');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 

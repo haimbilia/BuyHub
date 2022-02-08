@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchSpecialPriceProducts(document.frmSearch);
+    searchRecords(document.frmRecordSearch);
     $(".date_js").datepicker("option", { minDate: new Date() });
 
     $("select[name='product_name']")
@@ -117,7 +117,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
 
 (function () {
     var dv = "#listing";
-    searchSpecialPriceProducts = function (frm) {
+    searchRecords = function (frm) {
         /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
         var data = "";
         if (frm) {
@@ -140,22 +140,21 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         if (0 < selProd_id) {
             location.href = fcom.makeUrl("Seller", "specialPrice");
         } else {
-            document.frmSearch.reset();
-            searchSpecialPriceProducts(document.frmSearch);
+            document.frmRecordSearch.reset();
+            searchRecords(document.frmRecordSearch);
         }
     };
     goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmSearchSpecialPricePaging;
+        var frm = document.frmRecordSearchSpecialPricePaging;
         $(frm.page).val(page);
-        searchSpecialPriceProducts(frm);
+        searchRecords(frm);
     };
 
     reloadList = function () {
-        var frm = document.frmSearch;
-        searchSpecialPriceProducts(frm);
+        searchRecords(document.frmRecordSearch);
     };
 
     deleteSellerProductSpecialPrice = function (splPrice_id) {
@@ -169,12 +168,13 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             function (t) {
                 $("form#frmSplPriceListing table tr#row-" + splPrice_id).remove();
                 if (1 > $("form#frmSplPriceListing table tbody tr").length) {
-                    searchSpecialPriceProducts(document.frmSearch);
+                    searchRecords(document.frmRecordSearch);
                 }
             }
         );
     };
-    deleteSpecialPriceRows = function () {
+
+    deleteSelected = function () {
         if (typeof $(".selectItem--js:checked").val() === "undefined") {
             $.mbsmessage(langLbl.atleastOneRecord, "alert--danger");
             return false;
@@ -195,7 +195,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
                 } else {
                     $.mbsmessage(ans.msg, true, "alert--danger");
                 }
-                searchSpecialPriceProducts(document.frmSearch);
+                searchRecords(document.frmRecordSearch);
             }
         );
     };
@@ -222,7 +222,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
                     }
                     $(".js-discount-percentage").html("");
                     $(".js-prod-price").html("");
-                    searchSpecialPriceProducts(document.frmSearch);
+                    searchRecords(document.frmRecordSearch);
                 }
                 $(document).trigger("close.facebox");
                 if (0 < frm.addMultiple.value) {
@@ -263,7 +263,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             }
         }
         if ("" != value && value != oldValue) {
-            var data ="attribute=" + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
+            var data = "attribute=" + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.ajax(
                 fcom.makeUrl("Seller", "updateSpecialPriceColValue"),
                 data,

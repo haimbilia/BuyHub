@@ -1,18 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_Related_Products', $siteLangId),
+        'siteLangId' => $siteLangId,
+    ];
 
-    <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_Related_Products', $siteLangId),
-                'siteLangId' => $siteLangId,
-            ];
-
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
-        ?>
-        <div class="content-body">
-			<?php if($canEdit){ ?>
-            <div class="row mb-4">
+    $this->includeTemplate('_partial/header/content-header.php', $data, false);
+    ?>
+    <div class="content-body">
+        <?php if ($canEdit) { ?>
+            <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-search">
                         <div class="card-body">
@@ -32,7 +31,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="field-set">
                                         <div class="field-wraper">
                                             <div class="field_cover">
-                                                <?php echo $relProdFrm->getFieldHTML('product_name');?>                                  
+                                                <?php echo $relProdFrm->getFieldHTML('product_name'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -41,8 +40,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="field-set">
                                         <div class="field-wraper">
                                             <div class="field_cover custom-tagify">
-                                                <?php echo $relProdFrm->getFieldHTML('products_related');?>
-                                                <div class="list-tag-wrapper scroll scroll-y"><ul class="list-tags" id="related-products"></ul></div>
+                                                <?php echo $relProdFrm->getFieldHTML('products_related'); ?>
+                                                <div class="list-tag-wrapper scroll scroll-y">
+                                                    <ul class="list-tags" id="related-products"></ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -51,31 +52,30 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="field-set">
                                         <div class="field-wraper">
                                             <div class="field_cover">
-                                                <?php echo $relProdFrm->getFieldHTML('btn_submit');?>
+                                                <?php echo $relProdFrm->getFieldHTML('btn_submit'); ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <?php echo $relProdFrm->getFieldHTML('selprod_id'); ?>
-                        </form>
-                        <?php echo $relProdFrm->getExternalJS();?>
+                            <?php echo $relProdFrm->getFieldHTML('selprod_id'); ?>
+                            </form>
+                            <?php echo $relProdFrm->getExternalJS(); ?>
                         </div>
                     </div>
                 </div>
             </div>
-			<?php }?>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                            </div>
+        <?php } ?>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="listing">
+                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>

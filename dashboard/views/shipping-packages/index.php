@@ -1,60 +1,22 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); 
-$frmSearch->setFormTagAttribute('onsubmit', 'searchShipPackages(this); return(false);');
-$frmSearch->setFormTagAttribute('class', 'form ');
-$frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-$frmSearch->developerTags['fld_default_col'] = 6;
-
-$keywordFld = $frmSearch->getField('keyword');
-$keywordFld->developerTags['col'] = 8;
-$keywordFld->developerTags['noCaptionTag'] = true;
-
-$submitBtnFld = $frmSearch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-$submitBtnFld->developerTags['col'] = 2;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-
-$cancelBtnFld = $frmSearch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
-?>
-
-    <div class="content-wrapper content-space">
-        <?php 
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_Shipping_Packages', $siteLangId),
-            'siteLangId' => $siteLangId,
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php
-                                $submitFld = $frmSearch->getField('btn_submit');
-
-                                $fldClear= $frmSearch->getField('btn_clear');
-                                $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
-                                echo $frmSearch->getFormHtml();
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
-                        </div>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_Shipping_Packages', $siteLangId),
+        'siteLangId' => $siteLangId,
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <div class="card-body">
+                        <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>

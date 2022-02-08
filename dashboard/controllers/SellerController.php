@@ -2944,8 +2944,8 @@ class SellerController extends SellerBaseController
     public function orderCancellationRequests()
     {
         $this->userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId());
-        $frm = $this->getOrderCancellationRequestsSearchForm($this->siteLangId);
-        $this->set('frmOrderCancellationRequestsSrch', $frm);
+        $frmSearch = $this->getOrderCancellationRequestsSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frmSearch);
         $this->_template->render(true, true);
     }
 
@@ -3006,8 +3006,9 @@ class SellerController extends SellerBaseController
     public function orderReturnRequests()
     {
         $this->userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId());
-        $frm = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
-        $this->set('frmOrderReturnRequestsSrch', $frm);
+        $frmSearch = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frmSearch);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_IN_ORDER_INVOICE_NUMBER,_PRODUCT_NAME,_BRAND_NAME,_SKU,_MODEL', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -5130,6 +5131,8 @@ class SellerController extends SellerBaseController
         $this->set("dataToEdit", $dataToEdit);
         $this->set("frmSearch", $srchFrm);
         $this->set("selProd_id", $selProd_id);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
+        $this->set('deleteButton', true);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
@@ -5172,10 +5175,10 @@ class SellerController extends SellerBaseController
     private function getSpecialPriceSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
         $frm->addHiddenField('', 'total_record_count');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
+        
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
