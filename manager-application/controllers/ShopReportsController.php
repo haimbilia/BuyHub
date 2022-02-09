@@ -117,8 +117,7 @@ class ShopReportsController extends ListingBaseController
             return json_decode($tblHeadingCols, true);
         }
 
-        $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+        $arr = [        
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_REPORTED_BY', $this->siteLangId),
@@ -132,8 +131,7 @@ class ShopReportsController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return [
-            'select_all',
+        return [         
             'listSerial',
             'shop_name',
             'user_name',
