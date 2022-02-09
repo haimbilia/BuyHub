@@ -13,6 +13,7 @@ class CatalogReportController extends SellerBaseController {
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
@@ -165,9 +166,8 @@ class CatalogReportController extends SellerBaseController {
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -175,7 +175,7 @@ class CatalogReportController extends SellerBaseController {
         $sellerCatalogReportCacheVar = CacheHelper::get('sellerCatalogReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerCatalogReportCacheVar) {
             $arr = [
-                'product_name' => Labels::getLabel('LBL_Product', $langId),
+                'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $langId),
                 'totOrders' => Labels::getLabel('LBL_No._of_Orders', $langId),
                 'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $langId),
                 'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $langId),

@@ -22,7 +22,6 @@ class ShippingProfileController extends SellerBaseController
 
     public function search()
     {
-        $userId = UserAuthentication::getLoggedUserId();
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();

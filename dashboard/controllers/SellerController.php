@@ -329,20 +329,10 @@ class SellerController extends SellerBaseController
 
         $userId = $this->userParentId;
 
-        /*  $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
-          $ocSrch->doNotCalculateRecords();
-          $ocSrch->doNotLimitRecords();
-          $ocSrch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
-          $ocSrch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
-          $ocSrch->addGroupBy('opc.opcharge_op_id');
-          $qryOtherCharges = $ocSrch->getQuery(); */
-
         $srch = new OrderSubscriptionSearch($this->siteLangId, true, true);
         $srch->joinSubscription();
         $srch->joinOrderUser();
-        //$srch->addCountsOfOrderedProducts();
         $srch->joinOtherCharges();
-        // $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'oss.ossubs_id = opcc.opcharge_op_id', 'opcc');
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->addOrder("ossubs_id", "DESC");
@@ -356,7 +346,7 @@ class SellerController extends SellerBaseController
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $srch->joinOrderUser();
-            $srch->addKeywordSearch($keyword);
+            $srch->addKeywordSearch(trim($keyword));
         }
 
         $op_status_id = FatApp::getPostedData('status', null, '0');
@@ -389,6 +379,7 @@ class SellerController extends SellerBaseController
             $srch->addMaxPriceCondition($priceTo);
         }
         $rs = $srch->getResultSet();
+        // echo $srch->getQuery();
         $orders = FatApp::getDb()->fetchAll($rs);
 
         $oObj = new Orders();
@@ -4066,21 +4057,14 @@ class SellerController extends SellerBaseController
 
     private function getSubscriptionOrderSearchForm($langId)
     {
-        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
-        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
-
         $frm = new Form('frmOrderSrch');
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
-        /* $frm->addSelectBox('','status', Orders::getOrderSubscriptionStatusArr( $langId, unserialize(FatApp::getConfig("CONF_SUBSCRIPTION_ORDER_STATUS")) ), '', array(), Labels::getLabel('LBL_Status', $langId) ); */
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
-        /* $frm->addTextBox( '', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $langId).' ['.$currencySymbol.']' ) );
-          $frm->addTextBox( '', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_to', $langId).' ['.$currencySymbol.']' ) ); */
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
-        //$fldSubmit->attachField($fldCancel);
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -4137,13 +4121,14 @@ class SellerController extends SellerBaseController
         }
         $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
 
-        $frmOrderSrch = $this->getSubscriptionOrderSearchForm($this->siteLangId);
+        $frmSearch = $this->getSubscriptionOrderSearchForm($this->siteLangId);
         $userId = $this->userParentId;
         $autoRenew = User::getAttributesById($userId, 'user_autorenew_subscription');
         $this->set('canEdit', $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true));
         $this->set('currentActivePlan', $currentActivePlan);
-        $this->set('frmOrderSrch', $frmOrderSrch);
         $this->set('autoRenew', $autoRenew);
+        $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_ORDER_ID_/_PACKAGE_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
