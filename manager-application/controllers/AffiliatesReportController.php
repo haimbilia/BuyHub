@@ -52,9 +52,10 @@ class AffiliatesReportController extends ListingBaseController
         $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current(array_keys($fields));
+            $sortBy = current($allowedKeysForSorting);
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -154,7 +155,7 @@ class AffiliatesReportController extends ListingBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', array_keys($fields));
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
     }
 
     public function export()
@@ -221,5 +222,10 @@ class AffiliatesReportController extends ListingBaseController
                 break;
         }
         return $this->nodes;
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['affiliateLink'], Common::excludeKeysForSort());
     }
 }
