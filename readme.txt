@@ -479,6 +479,7 @@ Updates/Fixes :
     => 062275 - Admin UI: "Action button" label is missing under the language label section.
     => 062167 - Admin UI: Hint text is not showing for the "getting started" and "search" while hovering on it at the admin's end
     => 062210 - Admin UI: Warning message is showing while editing and adding the category and '+' icon is not showing in the correct position under the categories section in the Arabic language.
+    => 062281 - Admin UI: By default, the search's placeholder is removed while clicking on the "Clear" button under the Order statuses section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
