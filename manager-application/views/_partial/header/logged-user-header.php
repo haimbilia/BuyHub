@@ -83,7 +83,7 @@
                                         </div>
                                         <div class="header-notification__body">
                                             <div class="tab-1 tab-container visible">
-                                                <div class="scroll-y p-4">
+                                                <div class="scroll-y p-3">
                                                     <div class="notifications" id="notificationList">
                                                     </div>
                                                 </div>

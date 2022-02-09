@@ -479,7 +479,8 @@ Updates/Fixes :
     => 062167 - Admin UI: Hint text is not showing for the "getting started" and "search" while hovering on it at the admin's end
     => 062119 - Admin UI: Multiple issues are faced while editing the seller's inventory at the admin's end
     => 062121 - Admin UI: Multiple issues while viewing the "download files and links" on the Seller Inventory at the admin's end
-    
+    => 062133 - Admin UI: Multiple UI issues while clicking on the Notification icon at the admin's panel
+         
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
