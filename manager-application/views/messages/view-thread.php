@@ -6,8 +6,8 @@ $messageDetail = current($threadListing); ?>
             <div class="card-body">
                 <div class="not-found">
                     <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                    <h3><?php echo Labels::getLabel('MSG_SORRY,_NO_RESULT_FOUND_:('); ?></h3>
-                    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet </p>
+                    <h3><?php echo Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND'); ?></h3>
+                    <p> <?php echo Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS'); ?> </p>
                 </div>
             </div>
         </div>

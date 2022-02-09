@@ -41,7 +41,7 @@ $(document).ajaxComplete(function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             fcom.removeLoader();
             setTabActive(type);
-
+            window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
         });

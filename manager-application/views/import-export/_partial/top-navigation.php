@@ -10,7 +10,7 @@
             </i>
             <div class="">
                 <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_EXPORT', $siteLangId); ?></h6>
-                <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
+                <span class="settings-inner-desc"><?php echo Labels::getLabel('MSG_BACKUP_AND_BULK_EXPORT_THROUGH_CSV_FILE', $siteLangId); ?> </span>
             </div>
         </a>
     </li>
@@ -24,7 +24,7 @@
             </i>
             <div class="">
                 <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_IMPORT', $siteLangId); ?></h6>
-                <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
+                <span class="settings-inner-desc"><?php echo Labels::getLabel('MSG_BULK_UPDATE_USING_EXPORTED_CSV_FILE', $siteLangId); ?> </span>
             </div>
         </a>
     </li>
@@ -38,7 +38,7 @@
             </i>
             <div class="">
                 <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_ADD_MEDIA_TO_SERVER', $siteLangId); ?></h6>
-                <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
+                <span class="settings-inner-desc"><?php echo Labels::getLabel('MSG_ADD_BULK_IMAGES_INTO_THE_SERVER', $siteLangId); ?> </span>
             </div>
         </a>
     </li>
@@ -52,7 +52,7 @@
             </i>
             <div class="">
                 <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_SETTINGS', $siteLangId); ?></h6>
-                <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
+                <span class="settings-inner-desc"><?php echo Labels::getLabel('MSG_CONFIGURE_SETTINGS_BEFORE_IMPORT_EXPORT', $siteLangId); ?> </span>
             </div>
         </a>
     </li>
