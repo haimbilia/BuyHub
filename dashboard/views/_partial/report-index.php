@@ -54,9 +54,7 @@ if (!empty($fields)) {
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <?php 
-                    $data = [];
-                    require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body p-0">
                         <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                     </div>

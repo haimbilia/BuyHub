@@ -61,6 +61,7 @@ $(document).ready(function () {
             fcom.removeLoader();
             $(dv).replaceWith(t.html);
             setTabActive(frmType);
+            window.history.pushState('', '', fcom.makeUrl('Configurations', 'index', [frmType]));
         });
     };
 
@@ -114,14 +115,14 @@ $(document).ready(function () {
                 var file = inputBtn.files[0];
                 var minWidth = $(inputBtn).attr('data-min_width');
                 var minHeight = $(inputBtn).attr('data-min_height');
-                var options = {    
-                   // minContainerHeight: 350,
+                var options = {
+                    // minContainerHeight: 350,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
-                    imageSmoothingEnabled: true,                   
+                    imageSmoothingEnabled: true,
                 };
 
-                if(minWidth != undefined && minHeight != undefined){
+                if (minWidth != undefined && minHeight != undefined) {
                     options['aspectRatio'] = minWidth / minHeight;
                     options['minCropBoxWidth'] = minWidth;
                     options['minCropBoxHeight'] = minHeight;
@@ -129,8 +130,8 @@ $(document).ready(function () {
                         width: minWidth,
                         height: minHeight,
                     };
-                }else{ 
-                   
+                } else {
+
                     /*
                     let maxCroppedWidth = 300;
                     let maxCroppedHeight = 300;
@@ -142,7 +143,7 @@ $(document).ready(function () {
                         boxData['height'] = Math.min((maxCroppedHeight -10), boxData['height']);
                         cropper.setCropBoxData( boxData); 
                     } ;     
-                    */           
+                    */
                 }
 
                 $(inputBtn).val('');

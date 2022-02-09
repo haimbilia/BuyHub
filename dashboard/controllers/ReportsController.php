@@ -31,6 +31,7 @@ class ReportsController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultProductsPerformanceColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
 
         $this->_template->render(true, true);
     }
@@ -238,6 +239,7 @@ class ReportsController extends SellerBaseController
         $this->set('defaultColumns', $this->getproductsInventoryDefaultColumns());
         $this->set('frmSrch', $frmSrch);
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -446,6 +448,7 @@ class ReportsController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getProdInventoryStockStatusDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         // $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
@@ -586,8 +589,9 @@ class ReportsController extends SellerBaseController
         $frm->addHiddenField('', 'sortBy', 'product_name');
         $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
         $frm->addHiddenField('', 'reportColumns', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -766,7 +770,6 @@ class ReportsController extends SellerBaseController
     private function getProdInventoryStockStatusSrchForm($langId, $fields = [])
     {
         $frm = new Form('frmReportSearch');
-        $frm->addTextBox('', 'keyword', '');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'selprod_title');
@@ -774,8 +777,10 @@ class ReportsController extends SellerBaseController
             $frm->addHiddenField('', 'reportColumns', '');
         }
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox('', 'keyword', '');
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -812,15 +817,15 @@ class ReportsController extends SellerBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addHiddenField('', 'total_record_count', '');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-        $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -941,5 +946,40 @@ class ReportsController extends SellerBaseController
             ] + $arr;
         }
         return $arr;
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+        
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsInventory') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsInventoryStockStatus') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsPerformance') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_PERFORMANCE_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
     }
 }

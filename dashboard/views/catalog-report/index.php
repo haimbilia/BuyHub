@@ -9,5 +9,6 @@ $reportsData = [
     'actionButtons' => [],
     'fields' => $fields,
     'defaultColumns' => $defaultColumns,
+    'keywordPlaceholder' => $keywordPlaceholder,
 ];
 $this->includeTemplate('_partial/report-index.php', $reportsData, false);
