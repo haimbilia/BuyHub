@@ -1120,7 +1120,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
-                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
+                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_BUYER;?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
                                                 <span class="nav_text">
                                                     <?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?>
                                                 </span>
@@ -1129,7 +1129,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
-                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
+                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_SELLER;?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
                                                 <span class="nav_text">
                                                     <?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?>
                                                 </span>
