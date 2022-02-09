@@ -2,7 +2,6 @@
 
 class TransactionReportController extends SellerBaseController
 {
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -16,6 +15,7 @@ class TransactionReportController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('MSG_SEARCH_BY_ORDER_ID,_COMMENTS,_USER_NAME_OR_USER_EMAIL', $this->siteLangId));
         $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
@@ -157,8 +157,8 @@ class TransactionReportController extends SellerBaseController
             $frm->addHiddenField('', 'reportColumns', '');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }
