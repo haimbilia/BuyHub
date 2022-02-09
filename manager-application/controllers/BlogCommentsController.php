@@ -77,10 +77,14 @@ class BlogCommentsController extends ListingBaseController
 
         if (isset($post['bpcomment_approved']) && $post['bpcomment_approved'] != '') {
             $srch->addCondition('bpcomment_approved', '=', $post['bpcomment_approved']);
+        }        
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $commentId = FatApp::getPostedData('bpcomment_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $commentId) {
+            $srch->addCondition('bpcomment_id', '=', $commentId);
         }
-        if (isset($post['bpcomment_id']) && $post['bpcomment_id'] != '') {
-            $srch->addCondition('bpcomment_id', '=', $post['bpcomment_id']);
-        }
+
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords(); 
         $srch->addMultipleFields(array('bpcomment_id', 'bpcomment_author_name', 'bpcomment_author_email', 'bpcomment_approved', 'bpcomment_added_on', 'post_id', 'ifnull(post_title,post_identifier) post_title'));

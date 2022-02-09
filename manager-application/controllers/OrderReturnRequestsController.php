@@ -128,10 +128,12 @@ class OrderReturnRequestsController extends ListingBaseController {
         if (isset($post['orrequest_type']) && $post['orrequest_type'] != '') {
             $orrequest_type = FatUtility::int($post['orrequest_type']);
             $srch->addCondition('orrequest_type', '=', $orrequest_type);
-        }
+        }        
 
-        if (isset($post['orrequest_id']) && $post['orrequest_id'] > 0) {
-            $srch->addCondition('orrequest_id', '=', $post['orrequest_id']);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $requestId = FatApp::getPostedData('orrequest_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $requestId) {
+            $srch->addCondition('orrequest_id', '=', $requestId);
         }
 
         $dateFrom = FatApp::getPostedData('date_from', null, '');

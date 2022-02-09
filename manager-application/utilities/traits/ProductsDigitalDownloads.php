@@ -26,7 +26,7 @@ trait ProductsDigitalDownloads
 
         $canDo = $ddpObj->canEdit($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
 
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId, -1, $selProdId);
+        $frm = DigitalDownload::getDownloadFormInventory($this->siteLangId,$selProdId);
 
         $savedOptions = array();
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
@@ -78,7 +78,7 @@ trait ProductsDigitalDownloads
     {
         $this->objPrivilege->canViewSellerProducts();
 
-        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
@@ -95,7 +95,7 @@ trait ProductsDigitalDownloads
 
         $this->set('canDelete', $canDoDigDownload);
         $this->set('canDoDigDownload', $canDoDigDownload);
-        $this->set('records', $records);
+        $this->set('arrListing', $records);
         $this->set('recordId', $recordId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
         $languages = Language::getAllNames();

@@ -133,6 +133,11 @@ trait OrdersPackage
             $srch->addMaxPriceCondition($priceTo);
         }
 
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);    
+        if (0 < $recordId) {
+            $srch->addCondition('order_id', '=', $recordId);
+        }
+
         $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
         $srch->addCondition('order_deleted', '=', $isDeleted);
         $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));

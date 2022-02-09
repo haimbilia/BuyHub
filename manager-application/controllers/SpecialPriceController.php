@@ -81,7 +81,7 @@ class SpecialPriceController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name'
             )
         );
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
@@ -459,7 +459,6 @@ class SpecialPriceController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
-            'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
             'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
@@ -477,7 +476,6 @@ class SpecialPriceController extends ListingBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'credential_username',
             'selprod_price',
             'splprice_price',
             'splprice_start_date',

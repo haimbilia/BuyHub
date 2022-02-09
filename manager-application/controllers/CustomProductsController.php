@@ -114,6 +114,12 @@ class CustomProductsController extends ListingBaseController
         if (0 < $post['seller_id']) {
             $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
         }
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);       
+        if (0 < $recordId) {
+            $srch->addCondition('preq_id', '=', $recordId);
+        }
+
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name','credential_username','credential_email'));

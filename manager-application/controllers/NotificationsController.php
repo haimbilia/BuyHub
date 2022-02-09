@@ -124,17 +124,44 @@ class NotificationsController extends ListingBaseController
         $this->checkEditPrivilege(true);
     }
 
+
+    public function updateReadStatus()
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id);
+        }
+
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+
+        $obj = new Notification();
+        if (!$obj->changeReadStatus($status, $recordId)) {
+            LibHelper::exitWithError($obj->getError());
+        }
+
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function toggleBulkStatuses()
     {
         $this->checkEditPrivilege();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
-        if (empty($recordsArr) || -1 == $status) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        if (empty($recordsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $obj = new Notification();
-        if (!$obj->changeNotifyStatus($status, $recordsArr)) {
+        if (!$obj->changeReadStatus($status, $recordsArr)) {
             LibHelper::exitWithError($obj->getError(), true);
         }
 

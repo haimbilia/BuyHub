@@ -209,7 +209,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     clearSearch = function (loadRowsOnly = false) {
         document.frmRecordSearch.reset();
-        $(':input', document.frmRecordSearch).not(':hidden').val('');
+        $('input', document.frmRecordSearch).not(':hidden').val('');
         $("input:checkbox[name=listingFld]:checked").each(function () {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
