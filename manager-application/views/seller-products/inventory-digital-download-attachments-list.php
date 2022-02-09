@@ -3,7 +3,7 @@ $fields = array(
     'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
     'mainfile' => Labels::getLabel('LBL_DD_File', $siteLangId),
     'preview' => Labels::getLabel('LBL_DD_Preview', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_DDLanguage', $siteLangId),
+    //'afile_lang_id' => Labels::getLabel('LBL_DDLanguage', $siteLangId),
 );
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -12,10 +12,12 @@ foreach ($fields as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
+$tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
+
 $serialNo = 0;
-foreach ($records as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $serialNo++;
-    $tr = $tbl->appendElement('tr');
+    $tr = $tbody->appendElement('tr');
 
     foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
@@ -26,7 +28,7 @@ foreach ($records as $sn => $row) {
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);               
-                $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                //$dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 break;
             case 'preview':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
@@ -69,10 +71,7 @@ foreach ($records as $sn => $row) {
     }
 }
 
-if (empty($records)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($fields)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');  
 ?>
 <div class="col-md-12">
     <?php echo $tbl->getHtml(); ?>
