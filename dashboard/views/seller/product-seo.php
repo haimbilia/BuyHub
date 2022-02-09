@@ -11,14 +11,7 @@ $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Pr
 $keywordFld->developerTags['col'] = 4;
 $keywordFld->developerTags['noCaptionTag'] = true;
 
-$submitFld = $frmSearch->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-
-$clearFld = $frmSearch->getField('btn_clear');
-$clearFld->setFieldTagAttribute('onclick', 'clearSearch()');
-$clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -33,25 +26,7 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         <div class="row mb-4">
             <div class="col-lg-12">
                 <div class="card card-search">
-                    <div class="card-body">
-                        <div>
-                            <?php echo $frmSearch->getFormTag(); ?>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="field-set"><?php echo $frmSearch->getFieldHTML('keyword'); ?></div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_submit'); ?></div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="field-set"><?php echo $frmSearch->getFieldHTML('btn_clear'); ?></div>
-                                </div>
-                            </div>
-                            <div class='dvFocus-js'></div>
-                            </form>
-                            <?php echo $frmSearch->getExternalJS(); ?>
-                        </div>
-                    </div>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 </div>
             </div>
         </div>

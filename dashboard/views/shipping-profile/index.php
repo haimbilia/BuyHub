@@ -1,25 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
-$searchFrm->setFormTagAttribute('onSubmit', 'searchProfile(this); return false;');
-$searchFrm->setFormTagAttribute('class', 'form ');
-$searchFrm->developerTags['colClassPrefix'] = 'col-md-';
-$searchFrm->developerTags['fld_default_col'] = 6;
-
-$keywordFld = $searchFrm->getField('keyword');
-$keywordFld->developerTags['col'] = 8;
-$keywordFld->developerTags['noCaptionTag'] = true;
-
-$submitBtnFld = $searchFrm->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-$submitBtnFld->developerTags['col'] = 2;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-
-$cancelBtnFld = $searchFrm->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
-?>
-
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -39,27 +19,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
         }
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php
-                                $submitFld = $searchFrm->getField('btn_submit');
-
-                                $fldClear = $searchFrm->getField('btn_clear');
-                                $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
-                                echo $searchFrm->getFormHtml();
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                        <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                         <div class="card-body">
                             <div id="profilesListing"></div>
                         </div>

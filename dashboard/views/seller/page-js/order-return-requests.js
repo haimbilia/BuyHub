@@ -1,8 +1,8 @@
 $(document).ready(function(){
-	searchOrderReturnRequests(document.frmOrderReturnRequest);
+	searchRecords(document.frmRecordSearch);
 });
 (function() {
-	searchOrderReturnRequests = function(frm){
+	searchRecords = function(frm){
 		var data = fcom.frmData(frm);
 		$("#returnOrderRequestsListing").html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Seller','orderReturnRequestSearch'), data, function(res){
@@ -16,11 +16,7 @@ $(document).ready(function(){
 		}
 		var frm = document.frmOrderReturnRequestSrchPaging;		
 		$(frm.page).val(page);
-		searchOrderReturnRequests(frm);
+		searchRecords(frm);
 	}
 	
-	clearOrderReturnRequestSearch = function(){
-		document.frmOrderReturnRequest.reset();
-		searchOrderReturnRequests(document.frmOrderReturnRequest);
-	};
 })();

@@ -2,7 +2,7 @@
 <div class="card-body">
     <?php $arr_flds = array(
         'listserial' => '#',
-        'product_name' => Labels::getLabel('LBL_Product', $siteLangId),
+        'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $siteLangId),
     );
     if (1 > count($arrListing)) {
         unset($arr_flds['select_all']);

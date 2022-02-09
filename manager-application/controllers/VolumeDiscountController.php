@@ -79,13 +79,13 @@ class VolumeDiscountController extends ListingBaseController
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-	'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name']
+	'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name']
         ); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize); 
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
-        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $arrListing);  
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr); 
@@ -439,7 +439,6 @@ class VolumeDiscountController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
-            'credential_username' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'voldiscount_min_qty' => Labels::getLabel('LBL_MINIMUM_QUANTITY', $this->siteLangId),
             'voldiscount_percentage' => Labels::getLabel('LBL_DISCOUNT', $this->siteLangId) . ' (%)',
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -455,7 +454,6 @@ class VolumeDiscountController extends ListingBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'credential_username',
             'voldiscount_min_qty',
             'voldiscount_percentage',
             'action',

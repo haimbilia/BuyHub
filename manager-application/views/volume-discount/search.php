@@ -27,22 +27,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId,'shopName'=>$row['shop_name']], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
-                break;
-            case 'credential_username':
-                $href = "javascript:void(0)";
-                $onclick = 'redirectUser(' . $row['user_id'] . ')';
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
-                    'user' => $row,
-                    'extraClass' => 'user-profile-sm',
-                    'displayEmail' => false,
-                    'userTitleClass' => 'text-muted',
-                    'siteLangId' => $siteLangId,
-                    'href' => $href,
-                    'onclick' => $onclick,
-                ], false, true);
-                $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':

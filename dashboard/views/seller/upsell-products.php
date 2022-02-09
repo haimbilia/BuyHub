@@ -10,7 +10,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <?php if ($canEdit) { ?>
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-search">
                             <div class="card-body">

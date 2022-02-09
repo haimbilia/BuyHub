@@ -93,9 +93,9 @@ class OrderStatusController extends ListingBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_priority');
-        if (!array_key_exists($sortBy, $fields) && 'orderstatus_priority' != $sortBy) {
-            $sortBy = 'orderstatus_priority';
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_name');
+        if (!array_key_exists($sortBy, $fields) && 'orderstatus_name' != $sortBy) {
+            $sortBy = 'orderstatus_name';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));

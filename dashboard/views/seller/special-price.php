@@ -1,83 +1,46 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('class', 'form');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchSpecialPriceProducts(this); return(false);');
-$frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-//$frmSearch->developerTags['fld_default_col'] = 8;
-
 $keywordFld = $frmSearch->getField('keyword');
-$keywordFld->developerTags['col'] = 8;
-$keywordFld->developerTags['noCaptionTag'] = true;
-
 if (0 < $selProd_id) {
     $keywordFld->setFieldTagAttribute('readonly', 'readonly');
 }
-$submitBtnFld = $frmSearch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-$submitBtnFld->setWrapperAttribute('class', (0 < $selProd_id ? ' d-none' : ''));
-$submitBtnFld->setWrapperAttribute('class', 'col-6');
-$submitBtnFld->developerTags['col'] = 2;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-
-$cancelBtnFld = $frmSearch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('onclick', 'clearSearch(' . $selProd_id . ');');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-6');
-$cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
-?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-
-    <div class="content-wrapper content-space">
-        <?php
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_Seller_Products_Special_Price_List', $siteLangId),
-            'siteLangId' => $siteLangId,
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data, false);
-        ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php echo $frmSearch->getFormHtml(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_SELLER_PRODUCTS_SPECIAL_PRICE', $siteLangId),
+        'siteLangId' => $siteLangId,
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data, false);
+    ?>
+    <div class="content-body">
+        <?php if ($canEdit) { ?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <?php
-                        if ($canEdit) {
-                            foreach ($dataToEdit as $data) {
-                                $data['addMultiple'] = (1 > $selProd_id) ? 1 : 0;
-                                $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId, 'data' => $data), false);
-                            }
-                            if (1 > $selProd_id) {
-                                $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId), false);
-                            }
+                        <?php foreach ($dataToEdit as $data) {
+                            $data['addMultiple'] = (1 > $selProd_id) ? 1 : 0;
+                            $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId, 'data' => $data), false);
+                        }
+                        if (1 > $selProd_id) {
+                            $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId), false);
                         }
                         ?>
-                        <div class="card-head">
-                            <div class="card-title"></div>
-                            <div class="btn-group">
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete_Special_Price', $siteLangId); ?>" onclick="deleteSpecialPriceRows()" href="javascript:void(0)">
-                                    <?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                            </div>
-
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <div class="card-body">
+                        <div id="listing">
+                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

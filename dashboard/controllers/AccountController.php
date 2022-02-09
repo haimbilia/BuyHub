@@ -3215,15 +3215,15 @@ class AccountController extends LoggedUserController
     private function getCreditsSearchForm($langId)
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox('', 'keyword', '');
         $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addSelectBox('', 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
-        $frm->addDateField('', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        /* $frm->addSelectBox( '', 'date_order', array( 'ASC' => Labels::getLabel('LBL_Date_Order_Ascending', $langId), 'DESC' => Labels::getLabel('LBL_Date_Order_Descending', $langId) ), 'DESC', array(), '' ); */
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
+        $frm->addSelectBox(Labels::getLabel('LBL_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
-        $frm->addHiddenField('', 'page');
         return $frm;
     }
 

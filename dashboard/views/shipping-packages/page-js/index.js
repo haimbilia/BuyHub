@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    searchShipPackages(document.frmPackageSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 (function() {	
@@ -10,15 +10,15 @@ $(document).ready(function() {
         }
         var frm = document.frmPackageSearchPaging;
         $(frm.page).val(page);
-        searchShipPackages(frm);
+        searchRecords(frm);
     };
 
     reloadList = function() {
         var frm = document.frmPackageSearchPaging;
-        searchShipPackages(frm);
+        searchRecords(frm);
     };
 	
-	searchShipPackages = function(form) {		
+	searchRecords = function(form) {		
         var data = '';
         if (form) {
             data = fcom.frmData(form);
@@ -28,10 +28,4 @@ $(document).ready(function() {
             $(dv).html(res);
         });
 	}
-	
-	clearSearch = function() {
-        document.frmSearch.reset();
-        searchShipPackages(document.frmSearch);
-    };
-	
 })(); 
