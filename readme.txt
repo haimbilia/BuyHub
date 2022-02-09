@@ -484,6 +484,7 @@ Updates/Fixes :
     => 062121 - Admin UI: Multiple issues while viewing the "download files and links" on the Seller Inventory at the admin's end
     => 062133 - Admin UI: Multiple UI issues while clicking on the Notification icon at the admin's panel
     => 062134 - Admin UI: Wrong navigation while clicking on the notification and notification's details are showing under the logs section at the admin's end
+    => 062350 - Admin UI: Messages' format is not the same as the buyer sent it from the front-end.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
