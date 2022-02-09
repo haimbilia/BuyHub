@@ -77,7 +77,7 @@ class Notification extends MyAppModel
     public static function getLabelKeyString($langId)
     {
         $brandRequestApproval = FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL');
-        $brandRequestUrl = ($brandRequestApproval) ? 'brands/brand-requests' : 'brands';
+        $brandRequestUrl = ($brandRequestApproval) ? 'brand-requests' : 'brands';
 
         $labelArr = array(
             Notification::NEW_USER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_user_registration_notification', $langId), 'users'),
@@ -85,7 +85,7 @@ class Notification extends MyAppModel
             Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_guest_adviser_registration_notification', $langId), 'users'),
             Notification::GUEST_ADVISER_REGISTERATION => array(Labels::getLabel('LBL_user_order_placed_notification', $langId), 'orders'),
             Notification::NEW_CATALOG_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_Catalog_request_notification', $langId), 'products'),
-            Notification::SUPPLIER_APPROVAL => array(Labels::getLabel('LBL_user_supplier_approval_notification', $langId), 'users/seller-approval-requests'),
+            Notification::SUPPLIER_APPROVAL => array(Labels::getLabel('LBL_user_supplier_approval_notification', $langId), 'seller-approval-requests'),
             Notification::BRAND_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_seller_brand_request_notification', $langId), $brandRequestUrl),
             Notification::NEW_ORDER_STATUS_NOTIFICATION => array(Labels::getLabel('LBL_user_order_status_notification', $langId), 'orders'),
             Notification::ORDER_CANCELLATION_NOTIFICATION => array(Labels::getLabel('LBL_user_order_cancellation_notification', $langId), 'order-cancellation-requests'),
@@ -98,8 +98,8 @@ class Notification extends MyAppModel
             Notification::NEW_SUBSCRIPTION_PURCHASE_NOTIFICATION => array(Labels::getLabel('LBL_user_new_subscription_purchase_notification', $langId), ''),
             Notification::PROMOTION_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_user_promotion_approval_notification', $langId), 'promotions'),
             Notification::WITHDRAWL_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_user_withdrawl_request_notification', $langId), 'withdrawal-requests'),
-            Notification::NEW_SUPPLIER_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_user_supplier_approval_notification', $langId), 'users/seller-approval-requests'),
-            Notification::NEW_SELLER_APPROVED_NOTIFICATION => array(Labels::getLabel('LBL_user_seller_approved_notification', $langId), 'users/seller-approval-requests'),
+            Notification::NEW_SUPPLIER_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_user_supplier_approval_notification', $langId), 'seller-approval-requests'),
+            Notification::NEW_SELLER_APPROVED_NOTIFICATION => array(Labels::getLabel('LBL_user_seller_approved_notification', $langId), 'seller-approval-requests'),
             Notification::ABUSIVE_REVIEW_POSTED_NOTIFICATION => array(Labels::getLabel('LBL_admin_abusive_review_posted_notification', $langId), ''),
             Notification::PRODUCT_REVIEW_NOTIFICATION => array(Labels::getLabel('LBL_admin_Product_review_notification', $langId), 'product-reviews'),
             Notification::ORDER_PAYMENT_STATUS_CHANGE_NOTIFICATION => array(Labels::getLabel('LBL_admin_order_payment_status_change_notification', $langId), 'orders'),
@@ -109,7 +109,7 @@ class Notification extends MyAppModel
             Notification::NEW_CUSTOM_CATALOG_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_admin_custom_catalog_request_notification', $langId), 'custom-products'),
             Notification::BLOG_COMMENT_NOTIFICATION => array(Labels::getLabel('LBL_user_blog_comment_notification', $langId), 'blog-comments'),
             Notification::BLOG_CONTRIBUTION_NOTIFICATION => array(Labels::getLabel('LBL_user_blog_contibution_notification', $langId), 'blog-contributions'),
-            Notification::PRODUCT_CATEGORY_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_Product_category_request_notification', $langId), 'product-categories/requests'),
+            Notification::PRODUCT_CATEGORY_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_Product_category_request_notification', $langId), 'product-categories-request'),
             Notification::ORDER_PAYMENT_TRANSFERRED_TO_BANK => array(Labels::getLabel('LBL_ORDER_PAYMENT_TRANSFERRED_TO_BANK', $langId), 'orders'),
         );
 
@@ -145,7 +145,7 @@ class Notification extends MyAppModel
         return true;
     }
 
-    public function changeNotifyStatus($status, $recordId)
+    public function changeReadStatus($status, $recordId)
     {
         $db = FatApp::getDb();
         if(is_array($recordId)){

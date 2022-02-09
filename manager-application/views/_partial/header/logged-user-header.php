@@ -77,8 +77,8 @@
                                         <div class="header-notification__head">
                                             <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide" id="notifiLinkCount"></span></h5>
                                             <nav class="nav nav--tabs js-tab">
-                                                <a class="is-current abc" href="javascript:void(0)" onclick="getNotifications(0,this);"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
-                                                <a class="abc" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>
+                                                <a class="is-current headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(0,this);"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
+                                                <a class="headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>
                                             </nav>
                                         </div>
                                         <div class="header-notification__body">

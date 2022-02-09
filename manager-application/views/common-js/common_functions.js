@@ -16,6 +16,9 @@ function getNotifications(type, obj) {
     if (type == 1) {
         url = fcom.makeUrl("SystemLog", "notificationList");
         viewAllUrl = fcom.makeUrl("SystemLog");
+    }else{
+        $('.headerNotificationTabJs').removeClass('is-current');
+        $('.headerNotificationTabJs:first').addClass('is-current');
     }
     if (typeof obj != undefined) {
         $(obj).siblings().removeClass('is-current');
@@ -341,37 +344,24 @@ redirectToBlogPosts = function (id, extraData = {}) {
     redirectfunc(fcom.makeUrl('BlogPosts'), extraData, 0, true);
 };
 
-redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
+redirectfunc = async function (url, hiddenfields = {}, nid, newTab) {
     newTab = typeof newTab != "undefined" ? newTab : true;
-    if (nid > 0) {
-        fcom.displayProcessing();
-        markRead(nid, url, id);
-    } else {
-        var target = newTab ? ' target="_blank" ' : " ";
-        let inputs = "";
-        $.each(hiddenfields, function (index, value) {
-            inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
+    if (nid > 0) { 
+        await $.ajax({
+            url: fcom.makeUrl('Notifications', 'updateReadStatus'),
+            type: 'POST',
+            data: { recordId: nid, status: 1, fOutMode: 'json', fIsAjax: 1 },
         });
-        $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
     }
+    var target = newTab ? ' target="_blank" ' : " ";
+    let inputs = "";
+    $.each(hiddenfields, function (index, value) {
+        inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
+    });
+    console.log(inputs);
+    $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
 };
 
-markRead = function (nid, url, id) {
-    if (nid.length < 1) {
-        return false;
-    }
-    var data = "record_ids=" + nid + "&status=" + 1 + "&markread=1";
-    fcom.updateWithAjax(
-        fcom.makeUrl("Notifications", "changeStatus"),
-        data,
-        function (t) {
-            var form = '<input type="hidden" name="id" value="' + id + '">';
-            $('<form action="' + url + '" method="POST">' + form + "</form>")
-                .appendTo($(document.body))
-                .submit();
-        }
-    );
-};
 
 markNavActive = function (ele) {
     ele.addClass("active");

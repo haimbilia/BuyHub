@@ -148,9 +148,10 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addCondition('ocrequest_id', '=', $post['ocrequest_id']);
         }
 
-        if (isset($post['ocrequest_ocreason_id']) && $post['ocrequest_ocreason_id'] != '') {
-            $ocrequest_ocreason_id = FatUtility::int($post['ocrequest_ocreason_id']);
-            $srch->addCondition('ocrequest_ocreason_id', '=', $ocrequest_ocreason_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);   
+        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, $recordId); 
+        if (0 < $reasonId) {
+            $srch->addCondition('ocrequest_ocreason_id', '=', $reasonId);
         }
 
         $buyer = FatApp::getPostedData('buyer', FatUtility::VAR_INT, 0);

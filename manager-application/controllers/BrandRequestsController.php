@@ -109,13 +109,18 @@ class BrandRequestsController extends ListingBaseController
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        if (!empty($post['brand_id'])) {
-            $srch->addCondition('b.brand_id', '=', $post['brand_id']);
-        }
+        
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
             $srch->addCondition('brand_seller_id', '=', 'mysql_func_' . $user_id, 'AND', true);
         }
+        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1); 
+        $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, $recordId);    
+        if (0 < $brandId) {
+            $srch->addCondition('brand_id', '=', $brandId);
+        }
+        
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));

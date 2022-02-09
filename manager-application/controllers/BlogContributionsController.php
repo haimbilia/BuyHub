@@ -80,10 +80,14 @@ class BlogContributionsController extends ListingBaseController
 
         if (isset($post['bcontributions_status']) && $post['bcontributions_status'] != '') {
             $srch->addCondition('bcontributions_status', '=', $post['bcontributions_status']);
+        }        
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $contributionId = FatApp::getPostedData('bcontributions_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $contributionId) {
+            $srch->addCondition('bcontributions_id', '=', $contributionId);
         }
-        if (isset($post['bcontributions_id']) && $post['bcontributions_id'] != '') {
-            $srch->addCondition('bcontributions_id', '=', $post['bcontributions_id']);
-        }
+
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords(); 
         $srch->setPageNumber($page);

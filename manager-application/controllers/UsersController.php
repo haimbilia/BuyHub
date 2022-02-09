@@ -75,9 +75,10 @@ class UsersController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        $recordId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if ($recordId > 0) {
-            $srch->addCondition('user_id', '=', $recordId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $userId) {
+            $srch->addCondition('user_id', '=', $userId);
         }
 
         $userActive = FatApp::getPostedData('user_active');

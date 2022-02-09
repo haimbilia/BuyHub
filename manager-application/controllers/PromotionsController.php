@@ -153,11 +153,12 @@ class PromotionsController extends ListingBaseController
         $active = FatApp::getPostedData('active');
         if ('' != $active && '-1' != $active) {
             $srch->addCondition('pr.promotion_active', '=', $active);
-        }
+        }        
 
-        $promotion_id = FatApp::getPostedData('promotion_id');
-        if (!empty($promotion_id) && $promotion_id >= 0) {
-            $srch->addCondition('pr.promotion_id', '=', $promotion_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $promotionId = FatApp::getPostedData('promotion_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $promotionId) {
+            $srch->addCondition('pr.promotion_id', '=', $promotionId);
         }
 
         $approved = FatApp::getPostedData('approve');

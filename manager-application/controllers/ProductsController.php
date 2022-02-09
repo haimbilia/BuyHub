@@ -155,10 +155,11 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('tp.product_added_on', '<=', $date_to . ' 23:59:59');
         }
 
-        $product_id = FatApp::getPostedData('product_id', FatUtility::VAR_INT, '');
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $product_id = FatApp::getPostedData('product_id', FatUtility::VAR_INT, $recordId);
         if (!empty($product_id)) {
             $srch->addCondition('product_id', '=', $product_id);
-        }
+        }        
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
