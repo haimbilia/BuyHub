@@ -1,16 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('class', 'form');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchSeoProducts(this); return(false);');
-$frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-$frmSearch->developerTags['fld_default_col'] = 4;
-
-$keywordFld = $frmSearch->getField('keyword');
-$keywordFld->setWrapperAttribute('class', 'col-lg-4');
-$keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Product', $siteLangId));
-$keywordFld->developerTags['col'] = 4;
-$keywordFld->developerTags['noCaptionTag'] = true;
-
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
@@ -20,20 +8,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         'siteLangId' => $siteLangId,
     ];
 
-    $this->includeTemplate('_partial/header/content-header.php', $data, false);
-    ?>
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
-        <div class="row mb-4">
-            <div class="col-lg-12">
-                <div class="card card-search">
-                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-6 mb-3 mb-md-0">
-                <div class="card" id="listing">
-                    <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
+                <div class="card">
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <span id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></span>
                 </div>
             </div>
             <div class="col-md-6">

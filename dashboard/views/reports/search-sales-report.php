@@ -85,9 +85,7 @@ foreach ($arrListing as $sn => $row) {
 }
 echo $tbl->getHtml();
 if (count($arrListing) == 0) {
-
-    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => Labels::getLabel('LBL_No_Records_Found', $siteLangId)));
 } ?>
 </div>
 <?php $postedData['page'] = $page;

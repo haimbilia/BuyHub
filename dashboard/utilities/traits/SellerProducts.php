@@ -105,19 +105,6 @@ trait SellerProducts
         if ($product_id) {
             $srch->addCondition('selprod_product_id', '=', $product_id);
         }
-        /* if ($product_id) {
-          $srch->addCondition('selprod_product_id', '=', $product_id);
-          $srch->doNotCalculateRecords();
-          $srch->doNotLimitRecords();
-          } else {
-          $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
-          $post = FatApp::getPostedData();
-          $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-          $page = (empty($page) || $page <= 0) ? 1 : $page;
-          $page = FatUtility::int($page);
-          $srch->setPageNumber($page);
-          $srch->setPageSize($pageSize);
-          } */
 
         $srch->addOrder('selprod_id', 'DESC');
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -131,12 +118,6 @@ trait SellerProducts
         $this->set('product_id', $product_id);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
-        /* if (!$product_id) {
-          $this->set('page', $page);
-          $this->set('pageCount', $srch->pages());
-          $this->set('pageSize', $pageSize);
-          $this->set('recordCount', $srch->recordCount());
-          } */
         $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
@@ -1773,6 +1754,7 @@ trait SellerProducts
     {
         $this->userPrivilege->canViewUrlRewriting(UserAuthentication::getLoggedUserId());
         $this->set('frmSearch', $this->getSellerProductSearchForm());
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -3330,5 +3312,36 @@ trait SellerProducts
         $srch->addGroupBy('badge_id');
         $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(json_encode(['badges' => $badges]));
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productSeo') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productUrlRewriting') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_URL_REWRITING', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
     }
 }

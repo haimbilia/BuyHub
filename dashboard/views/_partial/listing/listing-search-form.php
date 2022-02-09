@@ -67,9 +67,8 @@ foreach ($frmFields['hidden'] as $fldName) {
     echo $frmSearch->getFieldHtml($fldName);
 }
 
-if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
-?>
-    <div class="card-head">
+if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
+    <div class="card-head mb-0">
         <div class="card-head-label">
             <div class="row">
                 <?php if (0 == $extraFldCount) { ?>
