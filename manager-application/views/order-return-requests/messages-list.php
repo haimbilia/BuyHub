@@ -88,8 +88,8 @@ foreach ($messagesList as $sn => $row) {
 if (count($messagesList) == 0) {
     $img = '<div class="not-found">
                 <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
-                <h3>' . Labels::getLabel('MSG_SORRY,_NO_RESULT_FOUND_:(') . '</h3>
-                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet </p>
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
             </div>';
     $tbody->appendElement('tr')->appendElement(
         'td',

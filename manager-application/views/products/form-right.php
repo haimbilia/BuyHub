@@ -15,7 +15,7 @@
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                                                     </use>
@@ -23,15 +23,15 @@
                                                             </a>
                                                         </div>';
             }
-        }    
+        }
         ?>
-            <div class="add-stock-column-head-action">
-                <div class="input-group">
-                    <?php
-                    echo $langFld->getHtml();
-                    ?>
-                </div>
+        <div class="add-stock-column-head-action">
+            <div class="input-group">
+                <?php
+                echo $langFld->getHtml();
+                ?>
             </div>
+        </div>
     </div>
 
     <div class="card" id="basic-details">
@@ -46,8 +46,8 @@
                 <?php
                 echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
                 echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
-                echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
-                echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
+                echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
+                echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategory()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
@@ -146,10 +146,10 @@
         </div>
         <div class="card-body show" id="stock-block2">
             <div>
-            <div class="d-flex justify-content-between mb-3">
-                            <h6 class="h6 ">Uploaded media </h6>
-                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
-                            </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <h6 class="h6 ">Uploaded media </h6>
+                    <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                </div>
                 <!-- <h6 class="h6 mb-3">Uploaded media</h6> -->
                 <ul class="uploaded-stocks" id="productDefaultImagesJs">
                     <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
