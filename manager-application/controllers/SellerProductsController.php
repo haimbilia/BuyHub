@@ -1,13 +1,15 @@
 <?php
 
-class SellerProductsController extends ListingBaseController {
+class SellerProductsController extends ListingBaseController
+{
 
     use ProductsDigitalDownloads;
 
     protected string $modelClass = 'SellerProduct';
     protected $pageKey = 'MANAGE_SELLER_INVENTORIES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerProducts($this->admin_id);
     }
@@ -18,7 +20,8 @@ class SellerProductsController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
         } else {
@@ -32,14 +35,16 @@ class SellerProductsController extends ListingBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title'), $this->modelObj::tblFld('comments')];
         $this->set('formTitle', Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $this->siteLangId));
     }
 
-    public function index($product_id = 0) {
+    public function index($product_id = 0)
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
@@ -65,7 +70,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'seller-products/search.php', true),
@@ -74,7 +80,8 @@ class SellerProductsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData($product_id = 0) {
+    public function getListingData($product_id = 0)
+    {
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -161,11 +168,11 @@ class SellerProductsController extends ListingBaseController {
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addMultipleFields(
-                array(
-                    'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
-                    'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name',
-                    'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
-                )
+            array(
+                'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
+                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
+            )
         );
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -192,7 +199,8 @@ class SellerProductsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $selProdId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         if (1 > $selProdId) {
@@ -238,10 +246,10 @@ class SellerProductsController extends ListingBaseController {
 
         $frmSellerProduct->fill($sellerProductRow);
 
-        $productSellerId = Product::getAttributesById($sellerProductRow['selprod_product_id'], 'product_seller_id');
+        $productRow = Product::getAttributesById($sellerProductRow['selprod_product_id'], ['product_min_selling_price', 'product_seller_id']);
 
         $shippedBySeller = 0;
-        if (Product::isProductShippedBySeller($sellerProductRow['selprod_product_id'], $productSellerId, $sellerProductRow['selprod_user_id'])) {
+        if (Product::isProductShippedBySeller($sellerProductRow['selprod_product_id'], $productRow['product_seller_id'], $sellerProductRow['selprod_user_id'])) {
             $shippedBySeller = 1;
         }
         $productOptions = Product::getProductOptions($sellerProductRow['selprod_product_id'], $this->siteLangId, true);
@@ -250,11 +258,13 @@ class SellerProductsController extends ListingBaseController {
         $this->set('productOptions', $productOptions);
         $this->set('frm', $frmSellerProduct);
         $this->set('recordId', $selProdId);
+        $this->set('productMinSellingPrice', $productRow['product_min_selling_price']);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->objPrivilege->canEditSellerProducts();
 
         $post = FatApp::getPostedData();
@@ -354,7 +364,7 @@ class SellerProductsController extends ListingBaseController {
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $selProdId)) {
+                if (!SellerProduct::getAttributesByLangId($langId, $selProdId)) {
                     $newTabLangId = $langId;
                     break;
                 }
@@ -369,7 +379,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getSearchForm($fields = []) {
+    protected function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch', array('id' => 'frmRecordSearch'));
         $frm->setRequiredStarWith('caption');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
@@ -391,7 +402,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $lang_id = 0)
+    {
         $frm = new Form('frmLang');
         $frm->addHiddenField('', 'selprod_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
@@ -400,7 +412,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function addPolicyPoint() {
+    public function addPolicyPoint()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         if (empty($post['selprod_id']) || empty($post['ppoint_id'])) {
@@ -418,7 +431,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removePolicyPoint() {
+    public function removePolicyPoint()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         if (empty($post['selprod_id']) || empty($post['ppoint_id'])) {
@@ -438,7 +452,8 @@ class SellerProductsController extends ListingBaseController {
 
     /* Seller Product Seo [ */
 
-    public function productSeo($selprod_id = 0) {
+    public function productSeo($selprod_id = 0)
+    {
         $selprod_id = Fatutility::int($selprod_id);
 
         $this->set('activeTab', 'SEO');
@@ -453,7 +468,8 @@ class SellerProductsController extends ListingBaseController {
 
     /*  - --- Seller Product Links  ----- [ */
 
-    public function sellerProductLinkFrm($selProd_id) {
+    public function sellerProductLinkFrm($selProd_id)
+    {
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($selProd_id);
         $sellProdObj = new SellerProduct();
@@ -475,7 +491,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getLinksFrm() {
+    private function getLinksFrm()
+    {
         $prodObj = new Product();
 
         $frm = new Form('frmLinks', array('id' => 'frmLinks'));
@@ -493,7 +510,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function autoComplete() {
+    public function autoComplete()
+    {
         $pagesize = 20;
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -547,7 +565,7 @@ class SellerProductsController extends ListingBaseController {
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $products = $db->fetchAll($rs, 'id');
-        
+
         $pageCount = $srch->pages();
         $json = array();
         foreach ($products as $key => $option) {
@@ -568,7 +586,8 @@ class SellerProductsController extends ListingBaseController {
         die(json_encode(['pageCount' => $pageCount, 'results' => $json]));
     }
 
-    public function setupSellerProductLinks() {
+    public function setupSellerProductLinks()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
@@ -600,7 +619,8 @@ class SellerProductsController extends ListingBaseController {
 
     /*  - ---  ] Seller Product Links  ----- */
 
-    public function sellerProductSpecialPrices($selprod_id) {
+    public function sellerProductSpecialPrices($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
         $productRow = Product::getAttributesById($sellerProductRow['selprod_product_id'], array('product_type'));
@@ -616,7 +636,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function sellerProductSpecialPriceForm($selprod_id, $splprice_id = 0) {
+    public function sellerProductSpecialPriceForm($selprod_id, $splprice_id = 0)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $splprice_id = FatUtility::int($splprice_id);
         if (!$selprod_id) {
@@ -645,11 +666,13 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getSellerProductSpecialPriceForm() {
+    private function getSellerProductSpecialPriceForm()
+    {
         return SellerProduct::specialPriceForm($this->siteLangId);
     }
 
-    public function setUpSellerProductSpecialPrice() {
+    public function setUpSellerProductSpecialPrice()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $frm = $this->getSellerProductSpecialPriceForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -672,7 +695,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateSelProdSplPrice($post, $return = false) {
+    private function updateSelProdSplPrice($post, $return = false)
+    {
         $selprod_id = !empty($post['splprice_selprod_id']) ? FatUtility::int($post['splprice_selprod_id']) : 0;
         $splprice_id = !empty($post['splprice_id']) ? FatUtility::int($post['splprice_id']) : 0;
 
@@ -750,7 +774,8 @@ class SellerProductsController extends ListingBaseController {
         return $splPriceId;
     }
 
-    public function deleteSellerProductSpecialPrice() {
+    public function deleteSellerProductSpecialPrice()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $splPriceId = FatApp::getPostedData('splprice_id', FatUtility::VAR_INT, 0);
         if (1 > $splPriceId) {
@@ -766,7 +791,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSpecialPriceRows() {
+    public function deleteSpecialPriceRows()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $splpriceIdArr = FatApp::getPostedData('selprod_ids');
         $splpriceIds = FatUtility::int($splpriceIdArr);
@@ -779,7 +805,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function deleteSpecialPrice($splPriceId, $selProdId) {
+    private function deleteSpecialPrice($splPriceId, $selProdId)
+    {
         $sellerProdObj = new SellerProduct($selProdId);
         if (!$sellerProdObj->deleteSellerProductSpecialPrice($splPriceId, $selProdId)) {
             LibHelper::exitWithError($sellerProdObj->getError(), true);
@@ -789,7 +816,8 @@ class SellerProductsController extends ListingBaseController {
 
     /* Seller Product Volume Discount [ */
 
-    public function sellerProductVolumeDiscounts($selprod_id) {
+    public function sellerProductVolumeDiscounts($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id, array('selprod_user_id', 'selprod_id', 'selprod_product_id'));
         $productRow = Product::getAttributesById($sellerProductRow['selprod_product_id'], array('product_type'));
@@ -813,7 +841,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function sellerProductVolumeDiscountForm($selprod_id, $voldiscount_id) {
+    public function sellerProductVolumeDiscountForm($selprod_id, $voldiscount_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $voldiscount_id = FatUtility::int($voldiscount_id);
         if ($selprod_id <= 0) {
@@ -842,7 +871,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUpSellerProductVolumeDiscount() {
+    public function setUpSellerProductVolumeDiscount()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['voldiscount_selprod_id']);
@@ -865,7 +895,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateSelProdVolDiscount($selprod_id, $voldiscount_id, $minQty, $perc) {
+    private function updateSelProdVolDiscount($selprod_id, $voldiscount_id, $minQty, $perc)
+    {
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id, array('selprod_user_id', 'selprod_stock', 'selprod_min_order_qty'), false);
         if ($minQty > $sellerProductRow['selprod_stock']) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Quantity_cannot_be_more_than_the_Stock', $this->siteLangId), true);
@@ -919,7 +950,8 @@ class SellerProductsController extends ListingBaseController {
         return ($voldiscount_id > 0) ? $voldiscount_id : $record->getId();
     }
 
-    public function deleteSellerProductVolumeDiscount() {
+    public function deleteSellerProductVolumeDiscount()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         $voldiscount_id = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
@@ -940,7 +972,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteVolumeDiscountArr() {
+    public function deleteVolumeDiscountArr()
+    {
         $splpriceIdArr = FatApp::getPostedData('selprod_ids');
         $splpriceIds = FatUtility::int($splpriceIdArr);
         foreach ($splpriceIds as $voldiscount_id => $selProdId) {
@@ -956,7 +989,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function deleteVolumeDiscount($volumeDiscountId, $volumeDiscountSelprodId) {
+    private function deleteVolumeDiscount($volumeDiscountId, $volumeDiscountSelprodId)
+    {
         $db = FatApp::getDb();
         if (!$db->deleteRecords(SellerProductVolumeDiscount::DB_TBL, array('smt' => 'voldiscount_id = ? AND voldiscount_selprod_id = ?', 'vals' => array($volumeDiscountId, $volumeDiscountSelprodId)))) {
             LibHelper::exitWithError(Labels::getLabel("LBL_" . $db->getError(), $this->siteLangId), true);
@@ -964,13 +998,15 @@ class SellerProductsController extends ListingBaseController {
         return true;
     }
 
-    private function getSellerProductVolumeDiscountForm($langId) {
+    private function getSellerProductVolumeDiscountForm($langId)
+    {
         return SellerProduct::volumeDiscountForm($langId);
     }
 
     /* ] */
 
-    public function productTaxRates($selprod_id) {
+    public function productTaxRates($selprod_id)
+    {
         $selprod_id = Fatutility::int($selprod_id);
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
 
@@ -985,7 +1021,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getTaxRates($productId, $userId = 0) {
+    private function getTaxRates($productId, $userId = 0)
+    {
         $productId = Fatutility::int($productId);
         $userId = Fatutility::int($userId);
 
@@ -1008,7 +1045,8 @@ class SellerProductsController extends ListingBaseController {
         return $taxRates ? $taxRates : array();
     }
 
-    private function changeTaxCategoryForm($langId) {
+    private function changeTaxCategoryForm($langId)
+    {
         $frm = new Form('frmTaxRate');
         $frm->addHiddenField('', 'selprod_id');
         $taxCatArr = Tax::getSaleTaxCatArr($langId);
@@ -1019,7 +1057,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function changeTaxCategory($selprod_id) {
+    public function changeTaxCategory($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
 
@@ -1042,7 +1081,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUpTaxCategory() {
+    public function setUpTaxCategory()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
@@ -1068,7 +1108,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function resetTaxRates($selprod_id) {
+    public function resetTaxRates($selprod_id)
+    {
         $this->objPrivilege->canEditSellerProducts();
         $selprod_id = FatUtility::int($selprod_id);
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
@@ -1082,7 +1123,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getBreadcrumbNodes($action) {
+    public function getBreadcrumbNodes($action)
+    {
         $nodes = array();
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
@@ -1101,7 +1143,8 @@ class SellerProductsController extends ListingBaseController {
         return $nodes;
     }
 
-    public function linkPoliciesForm($product_id, $selprod_id, $ppoint_type) {
+    public function linkPoliciesForm($product_id, $selprod_id, $ppoint_type)
+    {
         $product_id = FatUtility::int($product_id);
         $ppoint_type = FatUtility::int($ppoint_type);
         $selprod_id = FatUtility::int($selprod_id);
@@ -1123,7 +1166,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getLinkPoliciesForm($selprod_id, $ppoint_type) {
+    private function getLinkPoliciesForm($selprod_id, $ppoint_type)
+    {
         $frm = new Form('frmLinkWarrantyPolicies');
         $frm->addHiddenField('', 'selprod_id', $selprod_id);
         $frm->addHiddenField('', 'ppoint_type', $ppoint_type);
@@ -1131,7 +1175,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function searchPoliciesToLink() {
+    public function searchPoliciesToLink()
+    {
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $ppoint_type = FatApp::getPostedData('ppoint_type', FatUtility::VAR_INT, 0);
         $searchForm = $this->getLinkPoliciesForm($selprod_id, $ppoint_type);
@@ -1159,7 +1204,8 @@ class SellerProductsController extends ListingBaseController {
 
     /* Catalog Section [ */
 
-    public function catalog() {
+    public function catalog()
+    {
         $this->objPrivilege->canViewSellerProducts();
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
@@ -1167,11 +1213,13 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function requestedCatalog() {
+    public function requestedCatalog()
+    {
         $this->_template->render();
     }
 
-    public function searchRequestedCatalog() {
+    public function searchRequestedCatalog()
+    {
         if (!User::canRequestProduct()) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
         }
@@ -1182,15 +1230,15 @@ class SellerProductsController extends ListingBaseController {
         $cRequestObj = new User();
         $srch = $cRequestObj->getUserCatalogRequestsObj();
         $srch->addMultipleFields(
-                array(
-                    'scatrequest_id',
-                    'scatrequest_user_id',
-                    'scatrequest_reference',
-                    'scatrequest_title',
-                    'scatrequest_comments',
-                    'scatrequest_status',
-                    'scatrequest_date'
-                )
+            array(
+                'scatrequest_id',
+                'scatrequest_user_id',
+                'scatrequest_reference',
+                'scatrequest_title',
+                'scatrequest_comments',
+                'scatrequest_status',
+                'scatrequest_date'
+            )
         );
         $srch->addOrder('scatrequest_date', 'DESC');
         $srch->setPageNumber($page);
@@ -1213,7 +1261,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function addCatalogRequest() {
+    public function addCatalogRequest()
+    {
         if (!User::canRequestProduct()) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
         }
@@ -1223,7 +1272,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUpCatalogRequest() {
+    public function setUpCatalogRequest()
+    {
         $this->objPrivilege->canEditSellerProducts();
         if (!User::canRequestProduct()) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
@@ -1288,7 +1338,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewRequestedCatalog($scatrequest_id) {
+    public function viewRequestedCatalog($scatrequest_id)
+    {
         $scatrequest_id = FatUtility::int($scatrequest_id);
         if (1 > $scatrequest_id) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
@@ -1316,7 +1367,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function catalogRequestMsgForm($requestId = 0) {
+    public function catalogRequestMsgForm($requestId = 0)
+    {
         $requestId = FatUtility::int($requestId);
         $frm = $this->getCatalogRequestMessageForm($requestId);
 
@@ -1349,7 +1401,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function catalogRequestMessageSearch() {
+    public function catalogRequestMessageSearch()
+    {
         $frm = $this->getCatalogRequestMessageSearchForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
@@ -1366,13 +1419,13 @@ class SellerProductsController extends ListingBaseController {
         $srch->setPageSize($pageSize);
         $srch->addOrder('scatrequestmsg_id', 'DESC');
         $srch->addMultipleFields(
-                array(
-                    'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                    'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                    'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
-                    'msg_user_cred.credential_email as msg_user_email',
-                    'scatrequest_status'
-                )
+            array(
+                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
+                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
+                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
+                'msg_user_cred.credential_email as msg_user_email',
+                'scatrequest_status'
+            )
         );
 
         $rs = $srch->getResultSet();
@@ -1403,7 +1456,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setUpCatalogRequestMessage() {
+    public function setUpCatalogRequestMessage()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $requestId = FatApp::getPostedData('requestId', null, '0');
         $frm = $this->getCatalogRequestMessageForm($requestId);
@@ -1456,7 +1510,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRequestedCatalog() {
+    public function deleteRequestedCatalog()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $post = FatApp::getPostedData();
         $scatrequest_id = FatUtility::int($post['scatrequest_id']);
@@ -1494,7 +1549,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function searchCatalogProduct() {
+    public function searchCatalogProduct()
+    {
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
@@ -1517,15 +1573,15 @@ class SellerProductsController extends ListingBaseController {
         }
 
         $srch->addMultipleFields(
-                array(
-                    'product_id',
-                    'product_identifier',
-                    'product_name',
-                    'product_added_on',
-                    'product_model',
-                    'product_attrgrp_id',
-                    'attrgrp_name'
-                )
+            array(
+                'product_id',
+                'product_identifier',
+                'product_name',
+                'product_added_on',
+                'product_model',
+                'product_attrgrp_id',
+                'attrgrp_name'
+            )
         );
         $srch->addOrder('product_added_on', 'DESC');
         $srch->setPageNumber($page);
@@ -1550,14 +1606,16 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getCatalogRequestMessageSearchForm() {
+    private function getCatalogRequestMessageSearchForm()
+    {
         $frm = new Form('frmCatalogRequestMsgsSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'requestId');
         return $frm;
     }
 
-    private function getCatalogProductSearchForm() {
+    private function getCatalogProductSearchForm()
+    {
         $frm = new Form('frmSearchCatalogProduct');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
@@ -1567,7 +1625,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    private function getCatalogRequestMessageForm($requestId) {
+    private function getCatalogRequestMessageForm($requestId)
+    {
         $frm = new Form('catalogRequestMsgForm');
 
         $frm->addHiddenField('', 'requestId', $requestId);
@@ -1578,7 +1637,8 @@ class SellerProductsController extends ListingBaseController {
 
     /* Catalog section closed ] */
 
-    private function isShopActive($userId, $shopId = 0, $returnResult = false) {
+    private function isShopActive($userId, $shopId = 0, $returnResult = false)
+    {
         $shop = new Shop($shopId, $userId);
         if (false == $returnResult) {
             return $shop->isActive();
@@ -1591,7 +1651,8 @@ class SellerProductsController extends ListingBaseController {
         return false;
     }
 
-    private function addNewCatalogRequestForm() {
+    private function addNewCatalogRequestForm()
+    {
         $frm = new Form('frmAddCatalogRequest', array('enctype' => "multipart/form-data"));
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'scatrequest_title');
         /* $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_CONTENT',$this->siteLangId),'scatrequest_content');
@@ -1604,13 +1665,15 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function thresholdProducts() {
+    public function thresholdProducts()
+    {
         $this->objPrivilege->canViewSellerProducts();
         $this->set('frmSearch', $this->getThresholdLevelProductsSearchForm());
         $this->_template->render();
     }
 
-    public function searchThresholdLevelProducts() {
+    public function searchThresholdLevelProducts()
+    {
         $frmSearch = $this->getThresholdLevelProductsSearchForm();
 
         $data = FatApp::getPostedData();
@@ -1655,7 +1718,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function sendMailForm($user_id, $selprod_id) {
+    public function sendMailForm($user_id, $selprod_id)
+    {
         $user_id = FatUtility::int($user_id);
         $selprod_id = FatUtility::int($selprod_id);
         $userObj = new User($user_id);
@@ -1670,7 +1734,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function sendMailThresholdStock($user_id, $selprod_id) {
+    public function sendMailThresholdStock($user_id, $selprod_id)
+    {
         $user_id = FatUtility::int($user_id);
         $selprod_id = FatUtility::int($selprod_id);
 
@@ -1688,7 +1753,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSendMailForm($user_id = 0, $selprod_id = 0) {
+    private function getSendMailForm($user_id = 0, $selprod_id = 0)
+    {
         $user_id = FatUtility::int($user_id);
         $selprod_id = FatUtility::int($selprod_id);
         $frm = new Form('sendMailFrm');
@@ -1702,7 +1768,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    private function getThresholdLevelProductsSearchForm() {
+    private function getThresholdLevelProductsSearchForm()
+    {
         $frm = new Form('frmProductSearch');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('FRM_SEARCH', $this->siteLangId));
@@ -1711,7 +1778,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function sellerProductDelete() {
+    public function sellerProductDelete()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $selprod_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($selprod_id < 1) {
@@ -1727,7 +1795,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSelected() {
+    public function deleteSelected()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $selprod_ids_arr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
         if (empty($selprod_ids_arr)) {
@@ -1744,7 +1813,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($selprod_id) {
+    protected function markAsDeleted($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
             LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
@@ -1756,7 +1826,8 @@ class SellerProductsController extends ListingBaseController {
         }
     }
 
-    public function updateStatus() {
+    public function updateStatus()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $selprodId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (0 == $selprodId) {
@@ -1778,7 +1849,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function toggleBulkStatuses() {
+    public function toggleBulkStatuses()
+    {
         $this->objPrivilege->canEditSellerProducts();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $selprodIdsArr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
@@ -1796,7 +1868,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateSellerProductStatus($selprodId, $status) {
+    private function updateSellerProductStatus($selprodId, $status)
+    {
         $status = FatUtility::int($status);
         $selprodId = FatUtility::int($selprodId);
         if (1 > $selprodId || -1 == $status) {
@@ -1809,7 +1882,8 @@ class SellerProductsController extends ListingBaseController {
         }
     }
 
-    public function specialPrice($selProd_id = 0) {
+    public function specialPrice($selProd_id = 0)
+    {
         $selProd_id = FatUtility::int($selProd_id);
 
         if (0 < $selProd_id || 0 > $selProd_id) {
@@ -1859,7 +1933,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function volumeDiscount($selProd_id = 0) {
+    public function volumeDiscount($selProd_id = 0)
+    {
         $selProd_id = FatUtility::int($selProd_id);
 
         if (0 < $selProd_id || 0 > $selProd_id) {
@@ -1906,7 +1981,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function searchSpecialPriceProducts() {
+    public function searchSpecialPriceProducts()
+    {
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
@@ -1915,10 +1991,10 @@ class SellerProductsController extends ListingBaseController {
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId);
         $srch->addMultipleFields(
-                array(
-                    'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                    'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
-                )
+            array(
+                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+            )
         );
         $srch->addOrder('splprice_id', 'DESC');
         $srch->setPageNumber($page);
@@ -1938,7 +2014,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function searchVolumeDiscountProducts() {
+    public function searchVolumeDiscountProducts()
+    {
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
@@ -1948,8 +2025,11 @@ class SellerProductsController extends ListingBaseController {
         $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(['selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-            'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name']
+        $srch->addMultipleFields(
+            [
+                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
+                'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+            ]
         );
         $srch->addOrder('voldiscount_id', 'DESC');
         $srch->setPageSize($pageSize);
@@ -1964,7 +2044,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getSpecialPriceSearchForm() {
+    private function getSpecialPriceSearchForm()
+    {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -1976,7 +2057,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    private function getVolumeDiscountSearchForm() {
+    private function getVolumeDiscountSearchForm()
+    {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -1988,7 +2070,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function updateSpecialPriceRow() {
+    public function updateSpecialPriceRow()
+    {
         $data = FatApp::getPostedData();
         if (empty($data)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
@@ -2022,7 +2105,8 @@ class SellerProductsController extends ListingBaseController {
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function updateVolumeDiscountRow() {
+    public function updateVolumeDiscountRow()
+    {
         $data = FatApp::getPostedData();
 
         if (empty($data)) {
@@ -2063,7 +2147,8 @@ class SellerProductsController extends ListingBaseController {
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function updateSpecialPriceColValue() {
+    public function updateSpecialPriceColValue()
+    {
         $splPriceId = FatApp::getPostedData('splprice_id', FatUtility::VAR_INT, 0);
         if (1 > $splPriceId) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
@@ -2107,7 +2192,8 @@ class SellerProductsController extends ListingBaseController {
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function updateVolumeDiscountColValue() {
+    public function updateVolumeDiscountColValue()
+    {
         $volDiscountId = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
         if (1 > $volDiscountId) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
@@ -2147,7 +2233,8 @@ class SellerProductsController extends ListingBaseController {
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function getRelatedProductsList($selprod_id) {
+    public function getRelatedProductsList($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $srch = SellerProduct::searchRelatedProducts($this->siteLangId);
         $srch->addCondition(SellerProduct::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id', '=', $selprod_id);
@@ -2164,7 +2251,8 @@ class SellerProductsController extends ListingBaseController {
           $this->_template->render(false, false, 'json-success.php'); */
     }
 
-    private function getRelatedProductsForm() {
+    private function getRelatedProductsForm()
+    {
         $frm = new Form('frmRelatedSellerProduct');
 
         $frm->addHiddenField('', 'selprod_id', 0);
@@ -2178,7 +2266,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function relatedProducts($selProd_id = 0) {
+    public function relatedProducts($selProd_id = 0)
+    {
         $selProd_id = FatUtility::int($selProd_id);
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
@@ -2229,7 +2318,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function searchRelatedProducts() {
+    public function searchRelatedProducts()
+    {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
@@ -2274,7 +2364,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getRelatedProductsSearchForm() {
+    private function getRelatedProductsSearchForm()
+    {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -2283,7 +2374,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function setupRelatedProduct() {
+    public function setupRelatedProduct()
+    {
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
         if ($selprod_id <= 0) {
@@ -2305,7 +2397,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSelprodRelatedProduct($selprod_id, $relprod_id) {
+    public function deleteSelprodRelatedProduct($selprod_id, $relprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $relprod_id = FatUtility::int($relprod_id);
         if (!$selprod_id || !$relprod_id) {
@@ -2324,7 +2417,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getUpsellProductsList($selprod_id) {
+    public function getUpsellProductsList($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $srch = SellerProduct::searchUpsellProducts($this->siteLangId);
         $srch->addCondition(SellerProduct::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id', '=', $selprod_id);
@@ -2340,7 +2434,8 @@ class SellerProductsController extends ListingBaseController {
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function getUpsellProductsForm() {
+    private function getUpsellProductsForm()
+    {
         $frm = new Form('frmUpsellSellerProduct');
 
         $frm->addHiddenField('', 'selprod_id', 0);
@@ -2354,7 +2449,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function upsellProducts($selProd_id = 0) {
+    public function upsellProducts($selProd_id = 0)
+    {
         $selProd_id = FatUtility::int($selProd_id);
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
@@ -2405,7 +2501,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function searchUpsellProducts() {
+    public function searchUpsellProducts()
+    {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
@@ -2452,7 +2549,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getUpsellProductsSearchForm() {
+    private function getUpsellProductsSearchForm()
+    {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -2461,7 +2559,8 @@ class SellerProductsController extends ListingBaseController {
         return $frm;
     }
 
-    public function setupUpsellProduct() {
+    public function setupUpsellProduct()
+    {
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
         if ($selprod_id <= 0) {
@@ -2484,7 +2583,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSelprodUpsellProduct($selprod_id, $relprod_id) {
+    public function deleteSelprodUpsellProduct($selprod_id, $relprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $relprod_id = FatUtility::int($relprod_id);
         if (!$selprod_id || !$relprod_id) {
@@ -2503,7 +2603,8 @@ class SellerProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function isProductRewriteUrlUnique() {
+    public function isProductRewriteUrlUnique()
+    {
         $selprod_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $urlKeyword = FatApp::getPostedData('url_keyword');
         $sellerProdObj = new SellerProduct($selprod_id);
@@ -2524,7 +2625,8 @@ class SellerProductsController extends ListingBaseController {
         LibHelper::exitWithError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId), true);
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $inventoryHeadingCols = CacheHelper::get('inventoryHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($inventoryHeadingCols) {
             return json_decode($inventoryHeadingCols);
@@ -2544,7 +2646,8 @@ class SellerProductsController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -2557,8 +2660,8 @@ class SellerProductsController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, Common::excludeKeysForSort());
     }
-
 }

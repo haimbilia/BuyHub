@@ -353,11 +353,9 @@ class HtmlHelper
         $str = self::getFieldHtml($frm, $fldName, 6, $setFieldTagAttrs, '', $msg, [], true);
         $fld = $frm->getField($fldName);
 
-        $oldFldPostion = $fld->getFormIndex();
-        $frm->removeField($fld);
-
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
-        $htmlFld->setFormIndex($oldFldPostion);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
         $htmlFld->developerTags = $fld->developerTags;
         return $htmlFld;
     }
@@ -584,7 +582,7 @@ class HtmlHelper
             $label->appendElement('i', [
                 'class' => 'fas fa-exclamation-circle',
                 'data-bs-toggle' => 'tooltip',
-                'data-original-title' => $labelInfoText,
+                'title' => $labelInfoText,
             ]);
         }
 

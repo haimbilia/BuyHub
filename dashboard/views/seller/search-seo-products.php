@@ -2,7 +2,7 @@
 <div class="card-body">
     <?php $arr_flds = array(
         'listserial' => '#',
-        'product_name' => Labels::getLabel('LBL_Product', $siteLangId),
+        'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $siteLangId),
     );
     if (1 > count($arrListing)) {
         unset($arr_flds['select_all']);
@@ -71,11 +71,14 @@
     echo $frm->getFormTag(); ?>
     </form>
 </div>
-<div class="card-foot">
-    <?php
-    $postedData['page'] = $page;
-    echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchSeoProductsPaging'));
 
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage', 'adminLangId' => $siteLangId);
-    $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
-</div>
+<?php if (1 < $pageCount) { ?>
+    <div class="card-foot">
+        <?php
+        $postedData['page'] = $page;
+        echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchSeoProductsPaging'));
+
+        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage', 'adminLangId' => $siteLangId);
+        $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+    </div>
+<?php } ?>

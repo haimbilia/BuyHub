@@ -135,7 +135,7 @@ class OrderSubscriptionSearch extends SearchBase
     }
     public function addKeywordSearch($keyword)
     {
-        $cnd = $this->addCondition('oss.ossubs_order_id', 'like', '%' . $keyword . '%');
+        $cnd = $this->addCondition('o.order_number', 'like', '%' . $keyword . '%');
         $cnd->attachCondition('oss.ossubs_invoice_number', 'like', '%' . $keyword . '%', 'OR');
         if ($this->isOrderUserTableJoined) {
             $cnd->attachCondition('ou.user_name', 'like', '%' . $keyword . '%', 'OR');

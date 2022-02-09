@@ -106,10 +106,14 @@ class ProductCategoriesRequestController extends ListingBaseController
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }        
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $prodcatId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $prodcatId) {
+            $srch->addCondition('prodcat_id', '=', $prodcatId);
         }
-        if (!empty($post['prodcat_id'])) {
-            $srch->addCondition('prodcat_id', '=', $post['prodcat_id']);
-        }
+
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
             $srch->addCondition('prodcat_seller_id', '=', $user_id);

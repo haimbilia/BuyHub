@@ -399,7 +399,7 @@ $plugin = new Plugin();
                         <?php } ?>
                         <?php if ($userPrivilege->canViewCatalogReport(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <li class="menu-sub-item">
-                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'catalogreport' && $action == 'index') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('CatalogReport', 'index'); ?>">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'catalogreport' && $action == 'index') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
                                     <span class="menu-sub-title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></span></a>
 
                             </li>

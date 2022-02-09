@@ -13,15 +13,15 @@ class ShippingProfileController extends SellerBaseController
         ShippingProfile::getDefaultProfileId($this->userParentId);
         /* Add Default Shipping If Not Created */
 
-        $searchFrm = $this->getSearchForm();
+        $frmSearch = $this->getSearchForm();
         $this->set('canEdit', $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId(), true));
-        $this->set("searchFrm", $searchFrm);
+        $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_SHIPPING_PROFILE_NAME', $this->siteLangId));
         $this->_template->render();
     }
 
     public function search()
     {
-        $userId = UserAuthentication::getLoggedUserId();
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
@@ -246,10 +246,10 @@ class ShippingProfileController extends SellerBaseController
     private function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId));
         $frm->addHiddenField('', 'total_record_count', '');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
+        
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 

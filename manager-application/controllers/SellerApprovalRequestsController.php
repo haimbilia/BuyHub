@@ -100,6 +100,12 @@ class SellerApprovalRequestsController extends ListingBaseController
         if (!empty($post['date_to'])) {
             $srch->addCondition('tusr.usuprequest_date', '<=', $post['date_to'] . ' 23:59:59');
         }
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);        
+        if (0 < $recordId) {
+            $srch->addCondition('usuprequest_id', '=', $recordId);
+        }
+        
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addFld('tusr.*');

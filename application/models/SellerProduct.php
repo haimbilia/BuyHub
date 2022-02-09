@@ -1009,6 +1009,8 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
         $srch->joinTable(static::DB_TBL_SELLER_PROD_SPCL_PRICE, 'INNER JOIN', 'spp.splprice_selprod_id = sp.selprod_id', 'spp');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+        $srch->joinTable(SHOP::DB_TBL, 'INNER JOIN', 'shop.shop_user_id = sp.selprod_user_id', 'shop');
+        $srch->joinTable(SHOP::DB_TBL_LANG, 'LEFT JOIN','shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
 
         if (0 < $selProdId) {
             $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
@@ -1038,6 +1040,8 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
         $srch->joinTable(SellerProductVolumeDiscount::DB_TBL, 'INNER JOIN', 'vd.voldiscount_selprod_id = sp.selprod_id', 'vd');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+        $srch->joinTable(SHOP::DB_TBL, 'INNER JOIN', 'shop.shop_user_id = sp.selprod_user_id', 'shop');
+        $srch->joinTable(SHOP::DB_TBL_LANG, 'LEFT JOIN','shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
 
         if (0 < $selProdId) {
             $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);

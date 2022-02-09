@@ -1617,3 +1617,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('MSG_CONFIGURE_SETTINGS_BEFORE_IMPORT_EXPORT', 1, 'Configure the settings before importing and exporting data.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+('LBL_SOLD_BY', 1, 'Sold by', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_comments`;

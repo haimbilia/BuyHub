@@ -2,7 +2,7 @@
 $fields = array(
     'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
     'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $siteLangId),
-    'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId)
+   // 'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId)
 );
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -10,10 +10,12 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($fields as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
+
+$tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
 $serialNo = 0;
-foreach ($records as $sn => $row) {
+foreach ($arrListing as $sn => $row) {
     $serialNo++;
-    $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
+    $tr = $tbody->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
     foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
@@ -71,10 +73,9 @@ foreach ($records as $sn => $row) {
     }
 }
 
-if (empty($records)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($fields)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
-}
+
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');   
+
 ?>
 <div class="col-md-12">
     <?php echo $tbl->getHtml(); ?>

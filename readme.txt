@@ -478,7 +478,15 @@ Updates/Fixes :
     => 062221 - Admin UI: Pagination is not working properly while admin selecting the different page numbers on the last page of the table on the whole system 
     => 062275 - Admin UI: "Action button" label is missing under the language label section.
     => 062167 - Admin UI: Hint text is not showing for the "getting started" and "search" while hovering on it at the admin's end
-    
+    => 062210 - Admin UI: Warning message is showing while editing and adding the category and '+' icon is not showing in the correct position under the categories section in the Arabic language.
+    => 062281 - Admin UI: By default, the search's placeholder is removed while clicking on the "Clear" button under the Order statuses section.
+    => 062119 - Admin UI: Multiple issues are faced while editing the seller's inventory at the admin's end
+    => 062121 - Admin UI: Multiple issues while viewing the "download files and links" on the Seller Inventory at the admin's end
+    => 062133 - Admin UI: Multiple UI issues while clicking on the Notification icon at the admin's panel
+    => 062134 - Admin UI: Wrong navigation while clicking on the notification and notification's details are showing under the logs section at the admin's end
+    => 062350 - Admin UI: Messages' format is not the same as the buyer sent it from the front-end.
+    => 062363 - Admin UI: 2 options are selected while selecting buyer OR seller and the heading is also the same for both options.
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

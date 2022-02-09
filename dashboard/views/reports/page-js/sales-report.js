@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchReport(document.frmReportSrch);
+	searchRecords(document.frmRecordSearch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
@@ -14,7 +14,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		$(frm.sortOrder).val('ASC');
 		document.getElementById("sortOrder").value = 'ASC';
 	}
-	searchReport(frm, false);
+	searchRecords(frm, false);
 });
 
 $(function () {
@@ -28,7 +28,7 @@ $(function () {
 (function () {
 	var dv = '#listingDiv';
 
-	searchReport = function (frm, withloader) {
+	searchRecords = function (frm, withloader) {
 		setColumnsData(frm);
 		if (typeof withloader == 'undefined' || withloader != false) {
 			$(dv).html(fcom.getLoader());
@@ -45,35 +45,30 @@ $(function () {
 		}
 		var frm = document.frmReportPaging;
 		$(frm.page).val(page);
-		searchReport(frm);
+		searchRecords(frm);
 	}
 
 	reloadList = function (withloader) {
-		var frm = document.frmReportSrch;
-		searchReport(frm, withloader);
+		var frm = document.frmRecordSearch;
+		searchRecords(frm, withloader);
 	};
 
 	clearSearch = function () {
-		document.frmReportSrch.reset();
+		document.frmRecordSearch.reset();
 		$("input:checkbox[name=reportColumns]:checked").each(function () {
 			if ($(this).attr('disabled') != 'disabled') {
 				$(this).prop('checked', false);
 			}
 		});
-		searchReport(document.frmReportSrch);
+		searchRecords(document.frmRecordSearch);
 	};
 
 	exportReport = function () {
-		setColumnsData(document.frmReportSrch);
-		document.frmReportSrch.action = fcom.makeUrl('Reports', 'exportSalesReport');
-		document.frmReportSrch.submit();
+		setColumnsData(document.frmRecordSearch);
+		document.frmRecordSearch.action = fcom.makeUrl('Reports', 'exportSalesReport');
+		document.frmRecordSearch.submit();
 	};
-
-	/* redirectBack = function (redirecrt) {
-		var url = SITE_ROOT_URL + '' + redirecrt;
-		window.location = url;
-	} */
-
+	
 	setColumnsData = function (frm) {
 		reportColumns = [];
 		$("input:checkbox[name=reportColumns]:checked").each(function () {

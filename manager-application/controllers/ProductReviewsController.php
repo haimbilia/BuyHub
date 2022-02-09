@@ -146,8 +146,10 @@ class ProductReviewsController extends ListingBaseController
             $srch->addCondition('spreview_seller_user_id', '=', $post['seller_id']);
         }
 
-        if ($post['spreview_id'] > 0) {
-            $srch->addCondition('spreview_id', '=', $post['spreview_id']);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $reviewId = FatApp::getPostedData('spreview_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $reviewId) {
+            $srch->addCondition('spreview_id', '=', $reviewId);
         }
 
         if ($post['spreview_status'] != '' && $post['spreview_status'] > -1) {

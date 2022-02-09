@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchRecords(document.frmSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 $(document).on('change', '.icon-language-js', function () {
@@ -38,14 +38,14 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     backToListing = function () {
-        searchRecords(document.frmSearch);
+        searchRecords(document.frmRecordSearch);
         $('.editRecord--js').html("");
         $('.pagebody--js').fadeIn();
     }
 
     clearSearch = function () {
-        document.frmSearch.reset();
-        searchRecords(document.frmSearch);
+        document.frmRecordSearch.reset();
+        searchRecords(document.frmRecordSearch);
         $('.searchHead--js').click();
     };
 
@@ -276,7 +276,7 @@ $(document).on('change', '.icon-language-js', function () {
 
     deleteBadgeRequest = function (badgeReqId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmSearch) });
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmRecordSearch) });
     }
 
 })()

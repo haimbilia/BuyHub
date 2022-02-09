@@ -359,10 +359,12 @@ class DashboardBaseController extends FatController
         $className = ucwords(implode(' ', $arr));
 
         if ($action == 'index') {
-            $this->nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($className), $this->siteLangId));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
         } else {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => Labels::getLabel('LBL_' . ucwords($action), $this->siteLangId));
+            $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;
     }

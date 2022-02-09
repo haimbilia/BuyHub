@@ -73,7 +73,7 @@ $messageDetail = current($threadListing); ?>
                             </div>
                             <div class="message-detail">
                                 <div class="message">
-                                    <?php echo $row['message_text']; ?>
+                                    <?php echo nl2br($row['message_text']); ?>
                                 </div>
                                 <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                             </div>

@@ -3,7 +3,7 @@
     <?php $arr_flds = array(
         'ocrequest_id'    =>    Labels::getLabel('LBL_ID', $siteLangId),
         'ocrequest_date'    =>    Labels::getLabel('LBL_Date', $siteLangId),
-        'op_invoice_number'        =>    Labels::getLabel('LBL_Order_Id/Invoice_Number', $siteLangId),
+        'op_invoice_number'        =>    Labels::getLabel('LBL_Order_Invoice_Number', $siteLangId),
         'ocreason_title'    =>    Labels::getLabel('LBL_Request_Details', $siteLangId),
         'ocrequest_status'    =>    Labels::getLabel('LBL_Status', $siteLangId),
     );

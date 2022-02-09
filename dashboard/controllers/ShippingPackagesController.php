@@ -22,6 +22,7 @@ class ShippingPackagesController extends SellerBaseController {
         $frmSearch = $this->getSearchForm();
         $this->set("frmSearch", $frmSearch);
         $this->set('canEdit', $this->userPrivilege->canEditShippingPackages(0, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_SHIPPPING_PACKAGE_NAME', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -72,10 +73,10 @@ class ShippingPackagesController extends SellerBaseController {
 
     private function getSearchForm() {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
+        
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 

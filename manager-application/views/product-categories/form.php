@@ -7,7 +7,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('prodcat_id');
 $fld->setFieldTagAttribute('id', "prodcat_id");
 
-$fld = $frm->getField('prodcat_name[' . $siteLangId . ']');
+$fld = $frm->getField('prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('prodcat_parent');
