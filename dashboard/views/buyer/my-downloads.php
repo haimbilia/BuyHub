@@ -13,7 +13,7 @@
             <div class="col-lg-12">
                 <div class="card card-tabs">
                     <div class="card-head">
-                        <nav class="nav nav-tabs">
+                        <nav class="nav nav-tabs navTabsJs">
                             <a class="nav-link active" href="javascript:void(0);" onclick="searchBuyerDownloads('', this)">
                                 <?php echo Labels::getLabel('LBL_Downloadable_Files', $siteLangId); ?></a>
                             <a class="nav-link" href="javascript:void(0);" onclick="searchBuyerDownloadLinks('', this)">

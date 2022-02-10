@@ -14,8 +14,8 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadSearch'), data, function (res) {
 			$(dv).html(res);
 			if ('undefined' != typeof el) {
-				$(el).parent().siblings().removeClass('is-active');
-				$(el).parent().addClass('is-active');
+				$(".navTabsJs .active").removeClass('active');
+				$(el).addClass('active');
 			}
 		});
 	};
@@ -28,8 +28,8 @@ $(document).ready(function () {
 		$(dv).html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadLinksSearch'), data, function (res) {
 			$(dv).html(res);
-			$(el).parent().siblings().removeClass('is-active');
-			$(el).parent().addClass('is-active');
+			$(".navTabsJs .active").removeClass('active');
+			$(el).addClass('active');
 		});
 	};
 
@@ -81,7 +81,7 @@ $(document).ready(function () {
 		$('.opId--js').val(opId);
 		searchBuyerDownloads(document.frmSrch);
 	}
-	
+
 	showLinks = function (opId) {
 		$('.opId--js').val(opId);
 		searchBuyerDownloadLinks(document.frmSrch);
