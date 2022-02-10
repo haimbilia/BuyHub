@@ -83,7 +83,7 @@
         background-repeat: no-repeat;
         margin-#{$end-direction}: 0px;
         position: absolute;
-        left: 0;
+        #{$start-direction}: 0;
         top: 0;
         font-size: 12px;
         cursor: pointer;

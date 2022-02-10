@@ -38,6 +38,16 @@ body {
 }
 a {
     text-decoration: none;
+    &:focus-visible {
+        outline: $focus-outline!important;
+        box-shadow: none;
+    }
+}
+button{
+    &:focus-visible {
+        outline: $focus-outline;
+        box-shadow: none;
+    }
 }
 
 img {
@@ -3064,6 +3074,9 @@ $header-height: 65px;
 [dir="rtl"] .iti__flag-container {
     right: 0 !important;
     left: auto !important;
+}
+[dir="rtl"] .iti__country-list{
+    right: 0;
 }
 .ui-datepicker {
     // z-index: $zindex-dropdown !important;

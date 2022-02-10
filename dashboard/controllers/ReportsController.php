@@ -1,12 +1,15 @@
 <?php
 
-class ReportsController extends SellerBaseController {
+class ReportsController extends SellerBaseController
+{
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
     }
 
-    public function index() {
+    public function index()
+    {
         if (User::isSeller()) {
             FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD));
         } elseif (User::isBuyer()) {
@@ -16,7 +19,8 @@ class ReportsController extends SellerBaseController {
         }
     }
 
-    public function productsPerformance() {
+    public function productsPerformance()
+    {
         $this->userPrivilege->canViewPerformanceReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard() || !User::isSellerVerified($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -27,11 +31,13 @@ class ReportsController extends SellerBaseController {
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultProductsPerformanceColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
 
         $this->_template->render(true, true);
     }
 
-    public function searchProductsPerformance($type = "") {
+    public function searchProductsPerformance($type = "")
+    {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -130,10 +136,10 @@ class ReportsController extends SellerBaseController {
             }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Performance', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
-        } 
+        }
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
-        $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $srch->setPageSize($pageSize);
+        $this->set('arrListing', FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -141,7 +147,8 @@ class ReportsController extends SellerBaseController {
         $this->_template->render(false, false);
     }
 
-    public function searchMostWishListAddedProducts($export = "") {
+    public function searchMostWishListAddedProducts($export = "")
+    {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -214,25 +221,30 @@ class ReportsController extends SellerBaseController {
         }
     }
 
-    public function exportMostWishListAddedProducts() {
+    public function exportMostWishListAddedProducts()
+    {
         $this->searchMostWishListAddedProducts("export");
     }
 
-    public function exportProductPerformance($orderBy = 'DESC') {
+    public function exportProductPerformance($orderBy = 'DESC')
+    {
         $this->searchProductsPerformance($orderBy, "export");
     }
 
-    public function productsInventory() {
+    public function productsInventory()
+    {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
         $fields = $this->productsInventoryColumns($this->siteLangId);
         $frmSrch = $this->getProductInventorySearchForm($fields);
         $this->set('defaultColumns', $this->getproductsInventoryDefaultColumns());
         $this->set('frmSrch', $frmSrch);
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
-    public function searchProductsInventory($export = "") {
+    public function searchProductsInventory($export = "")
+    {
         $fields = $this->productsInventoryColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getproductsInventoryDefaultColumns() : $this->getproductsInventoryDefaultColumns();
@@ -419,11 +431,13 @@ class ReportsController extends SellerBaseController {
         }
     }
 
-    public function exportProductsInventoryReport() {
+    public function exportProductsInventoryReport()
+    {
         $this->searchProductsInventory("export");
     }
 
-    public function productsInventoryStockStatus() {
+    public function productsInventoryStockStatus()
+    {
         $this->userPrivilege->canViewInventoryReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -434,11 +448,13 @@ class ReportsController extends SellerBaseController {
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getProdInventoryStockStatusDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         // $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
-    public function searchProductsInventoryStockStatus($type = "") {
+    public function searchProductsInventoryStockStatus($type = "")
+    {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -559,11 +575,13 @@ class ReportsController extends SellerBaseController {
         $this->_template->render(false, false);
     }
 
-    public function exportProductsInventoryStockStatusReport() {
+    public function exportProductsInventoryStockStatusReport()
+    {
         $this->searchProductsInventoryStockStatus("export");
     }
 
-    private function getProdPerformanceSrchForm() {
+    private function getProdPerformanceSrchForm()
+    {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'total_record_count');
@@ -571,12 +589,14 @@ class ReportsController extends SellerBaseController {
         $frm->addHiddenField('', 'sortBy', 'product_name');
         $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
         $frm->addHiddenField('', 'reportColumns', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function getProductsPerformanceFormColumns($langId) {
+    private function getProductsPerformanceFormColumns($langId)
+    {
         $sellerProdPerformanceCacheVar = CacheHelper::get('sellerProdPerformanceCacheVar' . '-' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerProdPerformanceCacheVar) {
             $arr = [
@@ -594,11 +614,13 @@ class ReportsController extends SellerBaseController {
         return $arr;
     }
 
-    private function getDefaultProductsPerformanceColumns(): array {
+    private function getDefaultProductsPerformanceColumns(): array
+    {
         return ['product_name', 'op_selprod_sku', 'wishlist_user_counts', 'totRefundQty', 'totSoldQty'];
     }
 
-    public function salesReport($orderDate = '') {
+    public function salesReport($orderDate = '')
+    {
         $this->userPrivilege->canViewSalesReport(UserAuthentication::getLoggedUserId());
         if (!User::canAccessSupplierDashboard()) {
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
@@ -614,7 +636,8 @@ class ReportsController extends SellerBaseController {
         $this->_template->render(true, true);
     }
 
-    public function searchSalesReport($export = "") {
+    public function searchSalesReport($export = "")
+    {
         if (!User::canAccessSupplierDashboard()) {
             Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Access!", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -739,13 +762,14 @@ class ReportsController extends SellerBaseController {
         $this->_template->render(false, false);
     }
 
-    public function exportSalesReport() {
+    public function exportSalesReport()
+    {
         $this->searchSalesReport("export");
     }
 
-    private function getProdInventoryStockStatusSrchForm($langId, $fields = []) {
+    private function getProdInventoryStockStatusSrchForm($langId, $fields = [])
+    {
         $frm = new Form('frmReportSearch');
-        $frm->addTextBox('', 'keyword', '');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'selprod_title');
@@ -753,12 +777,15 @@ class ReportsController extends SellerBaseController {
             $frm->addHiddenField('', 'reportColumns', '');
         }
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox('', 'keyword', '');
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function productsInventoryStockStatusColumns($langId) {
+    private function productsInventoryStockStatusColumns($langId)
+    {
         $selProdInventoryStockStatusCacheVar = CacheHelper::get('selProdInventoryStockStatusCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryStockStatusCacheVar) {
             $arr = [
@@ -780,27 +807,30 @@ class ReportsController extends SellerBaseController {
         return $arr;
     }
 
-    private function getProdInventoryStockStatusDefaultColumns(): array {
+    private function getProdInventoryStockStatusDefaultColumns(): array
+    {
         $arr = ['product_name', 'selprod_stock', 'stock_on_order', 'selprod_cost', 'inventory_value', 'selprod_price', 'total_value'];
         return $arr;
     }
 
-    private function getProductInventorySearchForm($fields = []) {
+    private function getProductInventorySearchForm($fields = [])
+    {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addHiddenField('', 'total_record_count', '');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-        $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function productsInventoryColumns($langId) {
+    private function productsInventoryColumns($langId)
+    {
         $selProdInventoryReportCacheVar = CacheHelper::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryReportCacheVar) {
             $arr = [
@@ -834,16 +864,24 @@ class ReportsController extends SellerBaseController {
         return $arr;
     }
 
-    private function getproductsInventoryDefaultColumns(): array {
+    private function getproductsInventoryDefaultColumns(): array
+    {
         $arr = ['product_name', 'selprod_sku', 'selprod_price', 'totOrders', 'netSoldQty', 'grossSales', 'refundedAmount', 'orderNetAmount', 'adminSalesEarnings'];
         return $arr;
     }
 
-    private function getSalesReportSearchForm($fields = [], $orderDate = '') {
+    private function getSalesReportSearchForm($fields = [], $orderDate = '')
+    {
         $frm = new Form('frmReportSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orderDate', $orderDate);
         $frm->addHiddenField('', 'total_record_count');
+        if (!empty($fields)) {
+            $frm->addHiddenField('', 'sortBy', 'orderDate');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
+            $frm->addHiddenField('', 'reportColumns', '');
+        }
+
         if (empty($orderDate)) {
             $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -851,18 +889,13 @@ class ReportsController extends SellerBaseController {
             $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
         }
 
-        if (!empty($fields)) {
-            $frm->addHiddenField('', 'sortBy', 'orderDate');
-            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
-            $frm->addHiddenField('', 'reportColumns', '');
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function getFormColumns($orderDate = '') {
+    private function getFormColumns($orderDate = '')
+    {
         $shopsReportCacheVar = CacheHelper::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
             $arr = [
@@ -896,22 +929,57 @@ class ReportsController extends SellerBaseController {
             $arr = [
                 'op_invoice_number' => Labels::getLabel('LBL_invoice_number', $this->siteLangId),
                 'order_date_added' => Labels::getLabel('LBL_Date', $this->siteLangId),
-                    ] + $arr;
+            ] + $arr;
         }
 
         return $arr;
     }
 
-    protected function getDefaultColumns($orderDate = ''): array {
+    protected function getDefaultColumns($orderDate = ''): array
+    {
         $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
         if (!empty($orderDate)) {
             unset($arr['orderDate']);
             $arr = [
                 'op_invoice_number',
                 'order_date_added'
-                    ] + $arr;
+            ] + $arr;
         }
         return $arr;
     }
 
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+        
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsInventory') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsInventoryStockStatus') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productsPerformance') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_PERFORMANCE_REPORT', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
+    }
 }

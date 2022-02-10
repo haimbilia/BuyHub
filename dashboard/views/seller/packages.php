@@ -5,7 +5,7 @@
         <div class="content-body">
             <div class="card">
                 <div class="card-body">
-                    <div class="section-head section-head-center mt-4 mb-5">
+                    <div class="section-head section-head-center">
                         <div class="section__heading">
                             <?php echo html_entity_decode($pageData['epage_content']); ?>
                         </div>

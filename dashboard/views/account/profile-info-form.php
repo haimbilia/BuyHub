@@ -69,9 +69,6 @@ if (User::isAdvertiser() && $parent == 0) {
     $userCompFld->developerTags['col'] = 12;
 }
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
-/* $imgFrm->setFormTagAttribute('id', 'imageFrm');
-$fld = $imgFrm->getField('user_profile_image');
-$fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
 ?>
 <div class="row justify-content-center">
     <div class="col-lg-6">

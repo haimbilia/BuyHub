@@ -33,6 +33,12 @@ $action = strtolower($action);
                             <span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span>
                         </a>
                     </li>
+                    <li class="menu-sub-item">
+                        <a class="menu-sub-link navLinkJs <?php echo ($controller == 'Affiliate' && ($action == 'paymentInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_PAYMENT_INFO', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Affiliate', 'paymentInfoForm'); ?>">
+                            <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_PAYMENT_INFO", $siteLangId); ?></span>
+                        </a>
+                    </li>
+
                     <?php if (!User::canViewAffiliateTab()) { ?>
                         <li class="menu-sub-item">
                             <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'messages') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">

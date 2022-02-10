@@ -485,8 +485,11 @@ Updates/Fixes :
     => 062133 - Admin UI: Multiple UI issues while clicking on the Notification icon at the admin's panel
     => 062134 - Admin UI: Wrong navigation while clicking on the notification and notification's details are showing under the logs section at the admin's end
     => 062350 - Admin UI: Messages' format is not the same as the buyer sent it from the front-end.
+    => 062363 - Admin UI: 2 options are selected while selecting buyer OR seller and the heading is also the same for both options.
+    => 062374 - Admin UI: Parse Error is showing while trying to sort the table according to the "affiliate link" under the Affiliate table.
+    => 062271 - Admin UI: "Undefined offset" error is showing while viewing the subscription order's details.
     => 062354 - Admin UI: Search by Keyword is not working under the messages section and search fields UI is also not correct 
-    
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

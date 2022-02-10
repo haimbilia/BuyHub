@@ -1606,6 +1606,17 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 UPDATE `tbl_language_labels` SET `label_caption`='Action buttons' WHERE `label_key` = 'LBL_ACTION_BUTTONS' AND `label_lang_id` = 1;
 
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_BACKUP_AND_BULK_EXPORT_THROUGH_CSV_FILE', 1, 'Backup and bulk prepare data through a single .csv file including products, catalogue, categories etc.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_BULK_UPDATE_USING_EXPORTED_CSV_FILE', 1, 'Bulk import and update data using exported .csv file including  products, catalogue, categories etc.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_ADD_BULK_IMAGES_INTO_THE_SERVER', 1, 'Add images to products, categories etc from media files that are stored on the server.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CONFIGURE_SETTINGS_BEFORE_IMPORT_EXPORT', 1, 'Configure the settings before importing and exporting data.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ('LBL_SOLD_BY', 1, 'Sold by', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 

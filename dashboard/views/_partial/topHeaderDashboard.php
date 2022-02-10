@@ -6,8 +6,33 @@
     <?php if ((User::canViewSupplierTab() && User::canViewBuyerTab()) || (User::canViewSupplierTab() && User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) || (User::canViewBuyerTab() && User::canViewAdvertiserTab())) { ?>
         <div class="dropdown dashboard-user">
             <button class="btn dropdown-toggle-custom dropdown-toggle collapsed no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                <span class="meta">BD</span>
-                <?php echo ($activeTab == 'S') ? Labels::getLabel('Lbl_Seller_Dashboard', $siteLangId) : (($activeTab == 'B') ? Labels::getLabel('Lbl_Buyer_Dashboard', $siteLangId) : (($activeTab == 'Ad') ? Labels::getLabel('Lbl_Advertiser_Dashboard', $siteLangId) : '')) ?>
+                <?php
+                $dashTitle = '';
+                switch ($activeTab) {
+                    case 'S':
+                        $dashTitle = Labels::getLabel('LBL_SELLER_DASHBOARD', $siteLangId);
+                        break;
+                    case 'B':
+                        $dashTitle = Labels::getLabel('LBL_BUYER_DASHBOARD', $siteLangId);
+                        break;
+                    case 'Ad':
+                        $dashTitle = Labels::getLabel('LBL_ADVERTISER_DASHBOARD', $siteLangId);
+                        break;
+                    case 'AFFILIATE':
+                        $dashTitle = Labels::getLabel('LBL_AFFILIATE_DASHBOARD', $siteLangId);
+                        break;
+                }
+                $titleArr = explode(' ', $dashTitle);
+                $title = '';
+                foreach ($titleArr as $val) {
+                    $title .= substr($val, 0, 1);                   
+                    if (strlen($title) == 2) {
+                        break;
+                    }
+                }
+                ?>
+                <span class="meta"><?php echo $title; ?></span>
+                <?php echo $dashTitle; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
 
