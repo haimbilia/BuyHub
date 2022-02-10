@@ -320,7 +320,8 @@ class Cart extends FatModel
                     $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
                 }
-
+                
+                $quantity = $sellerProductRow['quantity'];
                 $fulfilmentType = $this->fulfilmentType;
                 if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
                     $fulfilmentType =  $this->SYSTEM_ARR['shopping_cart']['checkout_type'];
@@ -486,7 +487,8 @@ class Cart extends FatModel
                         $this->removeCartKey($key, $selprod_id, $quantity);
                         continue;
                     }
-
+                    
+                    $quantity = $sellerProductRow['quantity'];
                     $fulfilmentType = $this->fulfilmentType;
                     if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
                         $fulfilmentType =  $this->SYSTEM_ARR['shopping_cart']['checkout_type'];
@@ -922,6 +924,7 @@ class Cart extends FatModel
                 $fulfillmentType = Shipping::FULFILMENT_ALL;
             }
             $sellerProductRows[$key]['fulfillment_type'] = $fulfillmentType;
+            $sellerProductRows[$key]['quantity'] = $quantity;
         }
         return $sellerProductRows;
     }
