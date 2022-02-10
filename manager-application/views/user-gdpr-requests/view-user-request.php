@@ -31,7 +31,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="label"><?php echo Labels::getLabel('LBL_Purpose_of_request', $siteLangId); ?></label>
-                                <div class=""><?php echo $userRequest['ureq_purpose']; ?></div>
+                                <div class=""><?php echo nl2br($userRequest['ureq_purpose']); ?></div>
                             </div>
                         </div>
                     <?php } ?>
