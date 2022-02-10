@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$messageDetail = current($threadListing); ?>
+$messageDetail = current($threadListing); 
+
+?>
 <?php if (empty($messageDetail)) { ?>
     <div class="col-md-9">
         <div class="card mb-0 h-100">
@@ -16,13 +18,18 @@ $messageDetail = current($threadListing); ?>
     $fromUserId = $messageDetail['message_from_user_id'];
     $fromUserUpdatedOn = $messageDetail['message_from_user_updated_on'];
     $fromUserName = $messageDetail['message_from_name'];
+    $fromEmail = $messageDetail['message_from_email'];
+
+    $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
+
     if ($messageDetail['thread_started_by'] == $messageDetail['message_to_user_id']) {
         $fromUserId = $messageDetail['message_to_user_id'];
         $fromUserUpdatedOn = $messageDetail['message_to_user_updated_on'];
         $fromUserName = $messageDetail['message_to_name'];
+        $fromEmail = $messageDetail['message_to_email'];
+        $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
     }
-
-    $add = current((new Address())->getData(Address::TYPE_USER, $fromUserId, 1));
+    
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
     $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
@@ -49,36 +56,39 @@ $messageDetail = current($threadListing); ?>
                 <div class="messages">
                     <?php
                     $lastDate = '';
-                    foreach ($threadListing as $sn => $row) {
-                        $msgTimeStamp = strtotime($row['message_date']);
-                        $date = date('Y-m-d', $msgTimeStamp);
-                        if ($lastDate != $date) { ?>
-                            <div class="date">
-                                <?php
-                                $lastDate = $date;
-                                echo HtmlHelper::getTheDay($lastDate, $siteLangId);
-                                ?>
-                            </div>
-                        <?php } ?>
-                        <?php $class = ($row['thread_started_by'] == $row['message_from_user_id']) ? 'from' : 'to'; ?>
-                        <div class="message-wrap message-wrap--<?php echo $class; ?>">
-                            <div class="message-avtar">
-                                <div class="user user-circle">
+
+                    if(!isset($doNotshowMessages)){
+                        foreach ($threadListing as $sn => $row) {
+                            $msgTimeStamp = strtotime($row['message_date']);
+                            $date = date('Y-m-d', $msgTimeStamp);
+                            if ($lastDate != $date) { ?>
+                                <div class="date">
                                     <?php
-                                    $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
-                                    $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], 'thumb', true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $lastDate = $date;
+                                    echo HtmlHelper::getTheDay($lastDate, $siteLangId);
                                     ?>
-                                    <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
+                                </div>
+                            <?php } ?>
+                            <?php $class = ($row['thread_started_by'] == $row['message_from_user_id']) ? 'from' : 'to'; ?>
+                            <div class="message-wrap message-wrap--<?php echo $class; ?>">
+                                <div class="message-avtar">
+                                    <div class="user user-circle">
+                                        <?php
+                                        $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
+                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], 'thumb', true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                        ?>
+                                        <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
+                                    </div>
+                                </div>
+                                <div class="message-detail">
+                                    <div class="message">
+                                        <?php echo nl2br($row['message_text']); ?>
+                                    </div>
+                                    <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
-                            <div class="message-detail">
-                                <div class="message">
-                                    <?php echo nl2br($row['message_text']); ?>
-                                </div>
-                                <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
-                            </div>
-                        </div>
-                    <?php } ?>
+                        <?php } 
+                        }?>
                 </div>
             </div>
         </div>
@@ -89,9 +99,9 @@ $messageDetail = current($threadListing); ?>
             <div class="card-body">
                 <div class="message__user">
                     <div class="user user-circle">
-                        <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $messageDetail['message_from_name']; ?>">
+                        <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
                     </div>
-                    <h3 class="message__user-name"><?php echo $messageDetail['message_from_name']; ?></h3>
+                    <h3 class="message__user-name"><?php echo $fromUserName; ?></h3>
                     <ul class="list__group">
                         <li class="list__group-item">
                             <div class="list__group-icon">
@@ -101,10 +111,11 @@ $messageDetail = current($threadListing); ?>
                                 </svg>
                             </div>
                             <div class="list__group-title">
-                                <h4><?php echo $messageDetail['message_from_email']; ?></h4>
+                                <h4><?php echo $fromEmail; ?></h4>
                             </div>
                         </li>
 
+                        <?php if(!empty($fromPhoneNo)) { ?>
                         <li class="list__group-item">
                             <div class="list__group-icon">
                                 <svg class="svg">
@@ -114,45 +125,11 @@ $messageDetail = current($threadListing); ?>
                             </div>
                             <div class="list__group-title">
                                 <h4>
-                                    <?php
-                                    if (!empty($messageDetail['message_from_user_phone'])) {
-                                        echo ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'];
-                                    } else {
-                                        echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId);
-                                    }
-                                    ?>
+                                    <?php echo $fromPhoneNo;?>
                                 </h4>
                             </div>
                         </li>
-
-                        <?php
-                        $address = (!empty($add['addr_address1'])) ? $add['addr_address1'] . ', ' : '';
-                        $address .= (!empty($add['add_address2'])) ? $add['addr_address2'] : '';
-
-                        $address .= (!empty($add['addr_city'])) ? $add['addr_city'] . ', ' : '';
-                        $address .= (!empty($add['state_name'])) ? $add['state_name'] . ', ' : '';
-                        $address .= (!empty($add['addr_zip'])) ? $add['addr_zip'] . ', ' : '';
-                        $address .= (!empty($add['country_name'])) ? $add['country_name'] : '';
-                        ?>
-                        <li class="list__group-item">
-                            <div class="list__group-icon">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-map">
-                                    </use>
-                                </svg>
-                            </div>
-                            <div class="list__group-title">
-                                <h4>
-                                    <?php
-                                    if (!empty($address)) {
-                                        echo $address;
-                                    } else {
-                                        echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId);
-                                    }
-                                    ?>
-                                </h4>
-                            </div>
-                        </li>
+                        <?php } ?>                       
                     </ul>
                 </div>
             </div>

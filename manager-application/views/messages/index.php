@@ -42,7 +42,7 @@
                             <?php echo $frmSearch->getFieldHtml('keyword'); ?>
 
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+                                <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
@@ -116,6 +116,7 @@
 
                 </div>
             <?php
+                $doNotshowMessages = false;
                 $threadListing = [current($arrListing)];
                 require_once(CONF_THEME_PATH . 'messages/view-thread.php');
             } ?>

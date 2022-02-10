@@ -1,6 +1,7 @@
 $(document).ready(function () {
     bindUserSelect2('searchFrmBuyerIdJs', { user_is_buyer: 1, deletedUser: 1});
     bindUserSelect2('searchFrmSellerIdJs', { user_is_seller: 1, deletedUser: 1});
+    $('.listingRecordJs .listItemJs.is-active').trigger('click');
 });
 
 (function () {
