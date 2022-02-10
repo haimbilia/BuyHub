@@ -43,21 +43,21 @@ if (!$userActiveTab) {
             <div class="divider"></div>
             <nav class="nav my-account-nav">
                 <a class="my-account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"> <svg class="svg" width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-dashboard"></use>
                     </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?></a>
                 <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <svg class="svg" width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-user"></use>
                     </svg><?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?></a>
 
                 <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>"> <svg class="svg" width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-update"></use>
                     </svg>
                     <?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a>
                 <div class="divider"></div>
                 <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
                     <svg class="svg" width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
                     </svg>
                     <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
             </nav>
