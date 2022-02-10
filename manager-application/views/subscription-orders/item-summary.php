@@ -25,7 +25,7 @@
                             if ($op['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $op['ossubs_till_date'] < date("Y-m-d")) {
                                 $orderStatus = Labels::getLabel('LBL_EXPIRED', $siteLangId);
                             } else {
-                                $orderStatus = $orderStatuses[$op['ossubs_status_id']];
+                                $orderStatus = isset($orderStatuses[$op['ossubs_status_id']]) ? $orderStatuses[$op['ossubs_status_id']] :  '';
                             }
 
                             echo OrderProduct::getStatusHtml((int)$op["orderstatus_color_class"], $orderStatus); ?>
