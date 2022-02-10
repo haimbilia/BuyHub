@@ -91,8 +91,8 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
     );
 }
 
-if (isset($otherButtons) && is_array($otherButtons)) {
-    foreach ($otherButtons as $attr) {
+if (isset($listTopButtons) && is_array($listTopButtons)) {
+    foreach ($listTopButtons as $attr) {
         $liAttr = [];
         if (isset($attr['attr']['title'])) {
             $liAttr = ['title' => $attr['attr']['title'], 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top'];
@@ -124,7 +124,7 @@ if (!empty($columnButtons)) {
 
     $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
-if (!empty($newRecordBtn) || !empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
+if (!empty($newRecordBtn) || !empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($listTopButtons) || !empty($columnButtons)) {
     echo '<div class="card-toolbar">';
     echo $ul->getHtml();
     echo '</div>';

@@ -80,7 +80,6 @@ trait SellerProducts
         $srch->addGroupBy('selprod_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
-        $srch->addOrder('selprod_active', 'DESC');
         $srch->addOrder('selprod_added_on', 'DESC');
         $srch->addOrder('selprod_id', 'DESC');
         $srch->addOrder('product_name');

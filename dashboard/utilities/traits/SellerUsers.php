@@ -5,10 +5,10 @@ trait SellerUsers {
     protected function getUserSearchForm() {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton('', "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page', 1);
+        $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
+        
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -23,6 +23,15 @@ trait SellerUsers {
         }
         $this->set('frmSearch', $this->getUserSearchForm());
         $this->set('canEdit', true);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_USERNAME', $this->siteLangId));
+        $this->set('statusButtons', true);
+        $this->set('newRecordBtn', true);
+        $this->set('newRecordBtnAttrs', [
+            'attr' => [
+                'onclick' => 'addUserForm(0);',
+                'title' => Labels::getLabel('LBL_Add_User', $this->siteLangId)
+            ]
+        ]);
         $this->_template->render(true, true);
     }
 
