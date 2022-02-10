@@ -4,8 +4,10 @@
 }
 
 .newsletter {
+    background-color: #fff;
     max-width: 500px;
     padding: 4rem;
+    margin: 4rem;
     display: flex;
     flex-direction: column;
     &-head {

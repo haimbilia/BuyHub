@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $headerSrchFrm->getFormTag();
-$headerSrchFrm->setFormTagAttribute('class', 'form mega-search-form');
+$headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
 
 $keywordFld = $headerSrchFrm->getField('keyword');
 $keywordFld->overrideFldType('search');
@@ -17,11 +17,13 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
 ?>
 
 <div class="mega-search">
-    <?php echo $headerSrchFrm->getFormTag(); ?>
-    <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
-    <div id="search-suggestions-js"> </div>
-    <?php echo $headerSrchFrm->getFieldHTML('category'); ?>
-    <?php /* echo $headerSrchFrm->getFieldHTML('btnSiteSrchSubmit'); */ ?>
-    </form>
-    <?php echo $headerSrchFrm->getExternalJS(); ?>
+    <div class="mega-search-inner">
+        <?php echo $headerSrchFrm->getFormTag(); ?>
+        <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
+        <div id="search-suggestions-js"> </div>
+        <?php echo $headerSrchFrm->getFieldHTML('category'); ?>
+        <?php /* echo $headerSrchFrm->getFieldHTML('btnSiteSrchSubmit'); */ ?>
+        </form>
+        <?php echo $headerSrchFrm->getExternalJS(); ?>
+    </div>
 </div>

@@ -118,23 +118,23 @@
                     </div>
                     <div class="top-bar__right">
                         <ul class="quick-nav">
+                            <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
+                            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
                             <li class="quick-nav-item item-desktop">
                                 <button type="button" class="quick-nav-link button-store">
                                     <i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#store">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#wishlist">
                                             </use>
                                         </svg>
                                     </i>
-                                    <span class="txt">Open A Store</span>
+                                    <span class="txt">Wishlist</span>
                                 </button>
                             </li>
-                            <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
-                            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
-                            <li class="quick-nav-item">
+                            <li class="quick-nav-item item-mobile">
                                 <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
                                     <i class="icn">
-                                        <svg class="svg" width="18" height="18">
+                                        <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
                                             </use>
                                         </svg>

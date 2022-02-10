@@ -30,7 +30,7 @@ if (!UserAuthentication::isUserLogged()) {
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                     <i class="icn">
-                        <svg class="svg" width="18" height="18">
+                        <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                         </svg>
                     </i>
@@ -67,7 +67,7 @@ if (!UserAuthentication::isUserLogged()) {
         <div class="dropdown">
             <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
                 <i class="icn">
-                    <svg class="svg" width="18" height="18">
+                    <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                     </svg>
                 </i>

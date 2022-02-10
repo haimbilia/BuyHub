@@ -14,17 +14,22 @@ if (!UserAuthentication::isUserLogged()) {
                             </a>
                         </li>
                         <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], 'CONF_WEBROOT_FRONTEND'); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </li><?php
             } else {
-                ?> <li>
-            <div class="dropdown dropdown--user"><a href="javascript:void(0)" class="sign-in sign-in-popup-js"><i class="icn icn--login"><svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
+                ?>
+        <li>
+            <div class="dropdown dropdown--user">
+                <a href="javascript:void(0)" class="sign-in sign-in-popup-js">
+                    <i class="icn icn--login"><svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
                         </svg></i> <span>
-                        <strong><?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?></strong></span></a></div>
+                        <strong><?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?></strong></span></a>
+            </div>
         </li> <?php
             }
         } else {
