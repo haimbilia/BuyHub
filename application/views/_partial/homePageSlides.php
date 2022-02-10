@@ -61,7 +61,7 @@
 				<picture>
 					<source type="image/webp" srcset="' . $mobileWebpUrl . $tabletWebpUrl  . $desktopWebpUrl . '" media="(max-width: 767px),(max-width: 1024px)">
 					<source type="image/jpeg" srcset="' . $mobileUrl . $tabletUrl  . $desktopUrl . '" media="(max-width: 767px),(max-width: 1024px)">
-					<img data-aspect-ratio="' . $imageDimension['aspectRatio'] . '" src="' . $desktopUrl . '" alt="" loading="lazy">
+					<img data-aspect-ratio="' . $imageDimension['DESKTOP']['aspectRatio'] . '" src="' . $desktopUrl . '" alt="" loading="lazy">
 				</picture>
 			</div>';
             if ($haveUrl) {

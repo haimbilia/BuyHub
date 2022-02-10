@@ -175,28 +175,38 @@ if (CommonHelper::demoUrl()) { ?>
 </div>
 
 </script>
-<script>
-    $(document).ready(function() {
-        var menu = new MmenuLight(document.querySelector("#menu"), "all");
+<script id="rendered-js" >
+// variables
+var $menu = $('#menu');
+var $btnMenu = $('.btn-menu');
+var $img = $('img'); 
 
-        var navigator = menu.navigation({
-            // selectedClass: 'Selected',
-            // slidingSubmenus: true,
-            // theme: 'dark',
-            // title: 'Menu'
-        });
+// mmenu customization
+$menu.mmenu({
+  counters: true,
+  navbar: {
+    title: "Menu Content"
+  },
+  extensions: ["pageshadow", "effect-zoom-menu", "effect-zoom-panels"],
+  offCanvas: {
+    position  : "left",
+    zposition : "back"
+  }
+});
 
-        var drawer = menu.offcanvas({
-            // position: 'left'
-        });
+// toggle menu
+var api = $menu.data("mmenu");
 
-        //	Open the menu.
-        document.querySelector('a[href="#menu"]').addEventListener("click", (evnt) => {
-            evnt.preventDefault();
-            drawer.open();
-        });
-    });
-</script>
+$btnMenu.click(function() {
+  api.open();
+});
+
+
+// change toggle behavior for subpanels
+$menu.find( ".mm-next" ).addClass("mm-fullsubopen");
+    </script>
+
+  
 
 </body>
 

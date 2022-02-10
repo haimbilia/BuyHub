@@ -32,6 +32,9 @@
 
 
 
+
+
+
     <!-- Start Navigation Bar -->
 
     <div class="navigation-wrapper">
@@ -145,6 +148,96 @@
 
 
 
+  <!-- Start Mobile Navigation Bar -->
+
+
+    <nav id="menu">
+        <ul>
+            <?php
+            if (count($headerNavigation)) {
+                foreach ($headerNavigation as $nav) {
+
+                    if ($nav['pages']) {
+
+                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
+                        foreach ($mainNavigation as $link) {
+
+                            $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
+                            $uploadedTime = AttachedFile::setTimeParam($catThumb['afile_updated_at']);
+                            $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
+                            $OrgnavUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
+                            $rootLinkUrl = UrlHelper::generateUrl('category', 'view', array($link['nlink_category_id']));
+                            $href = $navUrl;
+                            $navchild = '';
+                            $target = $link['nlink_target'];
+                            if (0 < count($link['children'])) {
+                                $href = 'javascript:void(0)';
+                                $navchild = 'navchild';
+                                $target = '_self';
+                            }
+            ?>
+
+
+                            <li>
+                                <a class="" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                <ul>
+                                    <?php if (isset($link['children']) && count($link['children']) > 0) {
+
+
+                                        foreach ($link['children'] as $children) {
+                                            $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                            $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+
+
+                                    ?>
+
+
+                                            <li><a class="" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+                                                <ul>
+
+                                                    <?php
+                                                    foreach ($children['children'] as $childCat) {
+                                                        $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                        $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                    ?>
+
+                                                        <li class="">
+                                                            <a class="" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                        </li>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </ul>
+
+
+                                            </li>
+
+
+
+
+
+
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+
+
+                            </li>
+
+
+            <?php
+                        }
+                    }
+                }
+            }
+            ?>
+
+        </ul>
+    </nav>
+<!-- End Mobile Navigation Bar -->
 
 
 <?php } ?>
