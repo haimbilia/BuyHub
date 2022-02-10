@@ -57,7 +57,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		}
 		var frm = document.frmRecordSearch;
 		$(frm.page).val(page);
-		loadSellerProducts(frm);
+		searchRecords(frm, page);
 	}
 
 	productInstructions = function (type) {
@@ -109,8 +109,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	reloadList = function () {
-		var frm = document.frmRecordSearch;
-		loadSellerProducts(frm);
+		loadSellerProducts(document.frmRecordSearch);
 	};
 
 	toggleBulkStatues = function (status) {
@@ -158,6 +157,6 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			return false;
 		}
 		$("#frmSellerProductsListing").attr({ 'action': fcom.makeUrl('Seller', 'volumeDiscount'), 'target': "_blank" }).removeAttr('onsubmit').submit();
-		loadSellerProducts(document.frmSearchSellerProducts);
+		loadSellerProducts(document.frmRecordSearch);
 	};
 })();

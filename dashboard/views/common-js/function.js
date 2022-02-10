@@ -101,6 +101,8 @@ $(document).ready(function () {
             markNavActive($(this));
         }
     });
+
+    $(".navLinkJs.active").closest('ul').addClass('show').siblings('.menuLinkJs').addClass('active').removeClass('collapsed');
     /* Active Sidebar Link. */
 });
 

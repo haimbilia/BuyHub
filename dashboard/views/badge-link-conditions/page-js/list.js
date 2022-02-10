@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchRecords(document.frmSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 $(document).on('click', '.selectAll-js, .selectItem--js', function () {
@@ -34,14 +34,15 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
         if (form) {
             data = fcom.frmData(form);
         }
+        console.log(data);
         fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
             $(dv).html(res);
         });
     };
 
     clearSearch = function () {
-        document.frmSearch.reset();
-        searchRecords(document.frmSearch);
+        document.frmRecordSearch.reset();
+        searchRecords(document.frmRecordSearch);
         $('.searchHead--js').click();
     };
     
