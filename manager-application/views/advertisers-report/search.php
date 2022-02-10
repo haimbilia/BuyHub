@@ -19,6 +19,15 @@ foreach ($arrListing as $sn => $row) {
             case 'name':
                 $td->appendElement('plaintext', $tdAttr, $row['name'] . '<br/>(' . $row['email'] . ')', true);
                 break;
+            case 'user_regdate':
+                $date = HtmlHelper::formatDateTime(
+                    $row[$key],
+                    true,
+                    true,
+                    FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
+                );
+                $td->appendElement('plaintext', $tdAttr, $date, true);
+                break;
             case 'affiliateLink':
                 $url = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
                 $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url, '</a>', true);

@@ -1,10 +1,11 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
-                                                            $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
-                                                            $sharingFrm->addFormTagAttribute('class', 'form');
-                                                            $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
-                                                            $sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
-                                                            $sharingFrm->developerTags['fld_default_col'] = 12;
-                                                            ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+$yesNoArr = applicationConstants::getYesNoArr($siteLangId);
+$sharingFrm->addFormTagAttribute('class', 'form');
+$sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
+$sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
+$sharingFrm->developerTags['fld_default_col'] = 12;
+?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -253,7 +254,7 @@
                             </a>
                         </div> <?php
                             } ?> <?php if (false !== $twitterUrl) {
-                                        ?> <div class="widget widget-stats">
+                                    ?> <div class="widget widget-stats">
                             <a class="box--share box--share-tw" id="twitter_btn" href="javascript:void(0);">
                                 <i class="icon fa fa-twitter"></i>
                                 <div class="detail">
@@ -265,7 +266,7 @@
                                 <span class="ajax_message thanks-msg" id="twitter_ajax"></span>
                             </a>
                         </div> <?php
-                                        } ?> <div class="widget widget-stats">
+                                    } ?> <div class="widget widget-stats">
                         <a class="showbutton box--share box--share-mail" href="javascript:void(0);">
                             <i class="fa fa-envelope"></i>
                             <div class="detail">

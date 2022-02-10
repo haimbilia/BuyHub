@@ -93,16 +93,6 @@ class AffiliateController extends AffiliateBaseController
     {
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $frm = $this->getPaymentInfoForm($this->siteLangId);
-        /* $userExtraData = User::getUserExtraData( $loggedUserId, array(
-        'uextra_tax_id',
-        'uextra_payment_method',
-        'uextra_cheque_payee_name',
-        'uextra_bank_name',
-        'uextra_bank_branch_number',
-        'uextra_bank_swift_code',
-        'uextra_bank_account_name',
-        'uextra_bank_account_number',
-        'uextra_paypal_email_id') ); */
         $userExtraData = User::getUserExtraData(
             $loggedUserId,
             array(
@@ -124,7 +114,7 @@ class AffiliateController extends AffiliateBaseController
         $frm->fill($frmData);
         $this->set('userExtraData', $frmData);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->_template->render();
     }
 
     public function setUpPaymentInfo()

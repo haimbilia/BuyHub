@@ -29,10 +29,7 @@ $(document).ready(function(){
         
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateProfileInfo'), data, function(t) {
-			profileInfoForm();
-			$.mbsmessage.close();
-		});
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateProfileInfo'), data, function(t) {});
 	};
 
 	setPreferredDashboad = function (id){
@@ -40,14 +37,6 @@ $(document).ready(function(){
 		});
 	};
 
-	bankInfoForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-bankaccount").parents().children().removeClass("is-active");
-		$("#tab-bankaccount").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Account','bankInfoForm'),'',function(t){
-			$(dv).html(t);
-		});
-	};
 	settingsForm = function(){
 		$(dv).html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account','settingsInfo'),'',function(t){
@@ -85,15 +74,6 @@ $(document).ready(function(){
 			}
 		});
 	};
-
-	affiliatePaymentInfoForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-paymentinfo").parents().children().removeClass("is-active");
-		$("#tab-paymentinfo").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Affiliate','paymentInfoForm'),'',function(t){
-			$(dv).html(t);
-		});
-	}
 
 	setUpAffiliatePaymentInfo = function( frm ){
 		if (!$(frm).validate()) return;
@@ -178,10 +158,6 @@ $(document).ready(function(){
 	};
 
 	sendTruncateRequest = function(){
-		/* var agree = confirm( langLbl.confirmDeletePersonalInformation );
-		if( !agree ){
-			return false;
-		} */
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendTruncateRequest'), '', function(t) {
 			profileInfoForm();
 			$.facebox.close();
@@ -207,39 +183,11 @@ $(document).ready(function(){
 			$.facebox.close();
 		});
     };
-    
-    pluginForm = function(keyName){
-		$(dv).html(fcom.getLoader());
-		$("ul.tabs-js li").removeClass("is-active");
-		$("#tab-" +keyName ).addClass("is-active");
-		fcom.ajax(fcom.makeUrl(keyName, 'form'),'',function(t){
-			$(dv).html(t);
-		});
-    };
-    
-    setupPluginForm = function(frm){
-		if (!$(frm).validate()) return;
-		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl(frm.keyName.value, 'setupAccountForm'), data, function(t) {
-			pluginForm(frm.keyName.value);
-		});
-	};
-    
-    cookiesPreferencesForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-cookies-preferences").parents().children().removeClass("is-active");
-		$("#tab-cookies-preferences").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Account','cookiesPreferencesForm'),'',function(t){
-			$(dv).html(t);
-		});
-	};
-    
+
     setCookiesPreferences = function(frm){
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function(t) {
-			cookiesPreferencesForm();
-		});
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function(t) {});
 	};
     
 })();

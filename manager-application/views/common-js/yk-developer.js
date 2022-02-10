@@ -99,7 +99,7 @@ $(function () {
             if(typeof counter !== "undefined"){
                 cls += '-' + counter
             }
-            $("."+ cls).remove();
+            // $("."+ cls).remove(); 
             $.ykmsg.close();
         },
 

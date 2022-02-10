@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$this->includeTemplate('_partial/dashboardNavigation.php');
 
 $frm->setFormTagAttribute('onsubmit', 'setCookiesPreferences(this); return(false);');
-//$frm->setFormTagAttribute('id', 'bankInfoFrm');
 $frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 4;
@@ -10,38 +10,64 @@ $fld = $frm->getField('ucp_functional');
 $fld->setFieldTagAttribute('disabled', "disabled");
 
 $fld = $frm->getField('btn_submit');
-$fld->developerTags['col'] = 12;
 $fld->setFieldTagAttribute('class', "btn btn-brand");
+
+$fld = $frm->getField('ucp_functional');
+HtmlHelper::configureSwitchForCheckbox($fld);
+
+$fld = $frm->getField('ucp_statistical');
+HtmlHelper::configureSwitchForCheckbox($fld);
+
+$fld = $frm->getField('ucp_personalized');
+HtmlHelper::configureSwitchForCheckbox($fld);
 ?>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_COOKIE_PREPERENCES', $siteLangId),
+        'siteLangId' => $siteLangId,
+    ];
 
-<?php echo $frm->getFormTag(); ?>
-<ul class="cookie-preferences">
-    <li>
-        <?php echo $frm->getFieldHtml('ucp_functional'); ?>
-        <div class="data">
-            <p>
-                <?php echo Labels::getLabel('LBL_Functional_Cookies_Information', $siteLangId); ?>
-            </p>
-        </div>
-    </li>
-    <li>
-        <?php echo $frm->getFieldHtml('ucp_statistical'); ?>
-        <div class="data">
-            <p>
-                <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
-            </p>
-        </div>
-    </li>
-    <li>
-        <?php echo $frm->getFieldHtml('ucp_personalized'); ?>
-        <div class="data">
-            <p>
-                <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
-            </p>
-        </div>
-    </li>
-</ul>
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body">
+        <div class="card card-tabs">
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <?php echo $frm->getFormTag(); ?>
+                            <ul class="cookie-preferences">
+                                <li>
+                                    <?php echo $frm->getFieldHtml('ucp_functional'); ?>
+                                    <div class="data">
+                                        <p>
+                                            <?php echo Labels::getLabel('LBL_Functional_Cookies_Information', $siteLangId); ?>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <?php echo $frm->getFieldHtml('ucp_statistical'); ?>
+                                    <div class="data">
+                                        <p>
+                                            <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <?php echo $frm->getFieldHtml('ucp_personalized'); ?>
+                                    <div class="data">
+                                        <p>
+                                            <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
 
-<?php echo $frm->getFieldHtml('btn_submit'); ?>
-</form>
-<?php echo $frm->getExternalJs();  ?>
+                            <?php echo $frm->getFieldHtml('btn_submit'); ?>
+                        <?php echo '</form>'; ?>
+                        <?php echo $frm->getExternalJs();  ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

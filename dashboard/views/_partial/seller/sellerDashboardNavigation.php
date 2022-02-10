@@ -498,14 +498,40 @@ $plugin = new Plugin();
                 <ul class="menu-sub menu-sub-accordion collapse" id="nav-profile" aria-labelledby="" data-parent="#dashboard-menu">
                     <li class="menu-sub-item">
                         <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_My_Account', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
-                            <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span></a>
-
+                            <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span>
+                        </a>
                     </li>
+
                     <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
+                        <?php if (!User::isAffiliate()) { ?>
+                            <li class="menu-sub-item">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm'); ?>">
+                                    <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_BANK_ACCOUNT", $siteLangId); ?></span>
+                                </a>
+                            </li>
+                        <?php } ?>
+                        
+                        <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) { ?>
+                            <li class="menu-sub-item">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'cookiesPreferencesForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'cookiesPreferencesForm'); ?>">
+                                    <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_COOKIE_PREFERENCES", $siteLangId); ?></span>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <?php if (Plugin::isActiveByType(Plugin::TYPE_PAYOUTS)) { ?>
+                            <li class="menu-sub-item">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'payouts')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_PAYOUT_DETAIL', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'payouts'); ?>">
+                                    <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_PAYOUT_DETAIL", $siteLangId); ?></span>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+
                         <li class="menu-sub-item">
                             <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ($action == 'users' || $action == 'userpermissions')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Sub_Users', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Users'); ?>">
-                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Sub_Users", $siteLangId); ?></span></a>
-
+                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Sub_Users", $siteLangId); ?></span>
+                            </a>
                         </li>
                     <?php } ?>
                     <?php if ($userPrivilege->canViewMessages(UserAuthentication::getLoggedUserId(), true)) { ?>

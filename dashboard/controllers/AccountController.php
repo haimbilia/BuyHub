@@ -407,12 +407,18 @@ class AccountController extends LoggedUserController
 
     public function payouts()
     {
-        $payoutPlugins = Plugin::getDataByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
-        $data = [
-            'isBankPayoutEnabled' => applicationConstants::YES,
-            'payoutPlugins' => array_values($payoutPlugins)
-        ];
-        $this->set('data', $data);
+        if (true === MOBILE_APP_API_CALL) {
+            $payoutPlugins = Plugin::getDataByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+            $data = [
+                'isBankPayoutEnabled' => applicationConstants::YES,
+                'payoutPlugins' => array_values($payoutPlugins)
+            ];
+            $this->set('data', $data);
+        } else {
+            $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+            $this->set('payouts', $payoutPlugins);
+        }
+
         $this->_template->render();
     }
 
@@ -902,17 +908,6 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false);
     }
 
-    public function bankInfo()
-    {
-        $userObj = new User($this->userId);
-        $data = $userObj->getUserBankInfo();
-        if (true === MOBILE_APP_API_CALL) {
-            return $data;
-        }
-        $this->set('info', $data);
-        $this->_template->render(false, false);
-    }
-
     public function profileInfoForm()
     {
         $frm = $this->getProfileInfoForm();
@@ -1132,7 +1127,7 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function bankInfoForm()
+    private function loadBankInfoForm()
     {
         if (User::isAffiliate()) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
@@ -1151,9 +1146,21 @@ class AccountController extends LoggedUserController
         if ($data != false) {
             $frm->fill($data);
         }
-
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('info', $data);
+    }
+
+    public function bankInfo()
+    {
+        $this->loadBankInfoForm();
+        $this->_template->render();
+    }
+
+    public function bankInfoForm()
+    {
+        $this->loadBankInfoForm();
+        $this->_template->addJs('account/page-js/profile-info.js');
+        $this->_template->render();
     }
 
     public function settingsInfo()
@@ -2794,7 +2801,7 @@ class AccountController extends LoggedUserController
                         <svg class="svg">
                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
                             </use>
-                        </svg>' . Labels::getLabel('Lbl_Your_Bank/Card_info_is_safe_with_us', $this->siteLangId) . '
+                        </svg>' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
@@ -3684,7 +3691,8 @@ class AccountController extends LoggedUserController
         }
 
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->_template->addJs('account/page-js/profile-info.js');
+        $this->_template->render();
     }
 
     private function getCookiesPreferencesForm()
@@ -3853,5 +3861,40 @@ class AccountController extends LoggedUserController
         )) {
             echo "2424";
         }
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'profileInfo') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'bankInfoForm') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'cookiesPreferencesForm') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
     }
 }
