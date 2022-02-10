@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchUsers();
+    searchRecords();
 });
 
 (function () {
@@ -7,10 +7,10 @@ $(document).ready(function () {
     var dv = '#listing';
 
     reloadList = function () {
-        searchUsers();
+        searchRecords();
     };
 
-    searchUsers = function (form) {
+    searchRecords = function (form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
@@ -28,13 +28,12 @@ $(document).ready(function () {
         }
         var frm = document.frmUserSearchPaging;
         $(frm.page).val(page);
-        searchUsers(frm);
+        searchRecords(frm);
     }
 
     addUserForm = function (id) {
         fcom.ajax(fcom.makeUrl('Seller', 'addSubUserForm', [id]), '', function (t) {
-            $(dv).html(t);
-            $('.hideDiv-js').addClass('d-none');
+            $.facebox(t);
             stylePhoneNumberFld();
         });
     };
@@ -45,14 +44,14 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupSubUser'), data, function (t) {
             $.mbsmessage.close();
+            $.facebox.close();
             reloadList();
         });
     };
 
     userPasswordForm = function (id) {
         fcom.ajax(fcom.makeUrl('Seller', 'subUserPasswordForm', [id]), '', function (t) {
-            $(dv).html(t);
-            $('.hideDiv-js').addClass('d-none');
+            $.facebox(t);
         });
     };
 
@@ -61,6 +60,7 @@ $(document).ready(function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateUserPassword'), data, function (t) {
+            $.facebox.close();
             $.mbsmessage.close();
             reloadList();
         });

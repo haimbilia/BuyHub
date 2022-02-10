@@ -527,7 +527,6 @@ $plugin = new Plugin();
                             </li>
                         <?php } ?>
 
-
                         <li class="menu-sub-item">
                             <a class="menu-sub-link navLinkJs <?php echo ($controller == 'seller' && ($action == 'users' || $action == 'userpermissions')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Sub_Users', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Users'); ?>">
                                 <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Sub_Users", $siteLangId); ?></span>

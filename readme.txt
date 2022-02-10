@@ -489,6 +489,7 @@ Updates/Fixes :
     => 062374 - Admin UI: Parse Error is showing while trying to sort the table according to the "affiliate link" under the Affiliate table.
     => 062271 - Admin UI: "Undefined offset" error is showing while viewing the subscription order's details.
     => 062325 - Admin UI: Arabic Language: Records are not showing on the Recommended tag products Weightages page.
+    => 062354 - Admin UI: Search by Keyword is not working under the messages section and search fields UI is also not correct 
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

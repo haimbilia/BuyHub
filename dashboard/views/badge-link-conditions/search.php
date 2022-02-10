@@ -19,7 +19,12 @@ if (Badge::TYPE_RIBBON == $badgeType) {
 }
 
 if (Badge::COND_AUTO == $badgeConditionType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+    unset(
+        $arr_flds['cond_seller_name'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'from_date'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'to_date'],
+    );
 } else {
     unset(
         $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'],

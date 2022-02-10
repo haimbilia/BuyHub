@@ -8,7 +8,9 @@ if (!$frmSearch->getFormTagAttribute('onsubmit')) {
     $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 }
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form form-search');
+if (!$frmSearch->getFormTagAttribute('class')) {
+    $frmSearch->setFormTagAttribute('class', 'form form-search');
+}
 
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
