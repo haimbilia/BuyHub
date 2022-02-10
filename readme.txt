@@ -487,6 +487,7 @@ Updates/Fixes :
     => 062350 - Admin UI: Messages' format is not the same as the buyer sent it from the front-end.
     => 062363 - Admin UI: 2 options are selected while selecting buyer OR seller and the heading is also the same for both options.
     => 062374 - Admin UI: Parse Error is showing while trying to sort the table according to the "affiliate link" under the Affiliate table.
+    => 062271 - Admin UI: "Undefined offset" error is showing while viewing the subscription order's details.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

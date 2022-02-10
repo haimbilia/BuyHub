@@ -28,7 +28,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
             </li>
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Posted_On', $siteLangId); ?></span>
-                <span class='value'><?php echo $data['bcontributions_added_on']; ?></span>
+                <span class='value'><?php echo FatDate::format($data['bcontributions_added_on'],true); ?></span>
             </li>
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></span>

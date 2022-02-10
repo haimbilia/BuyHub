@@ -673,7 +673,7 @@
     display: flex;
     align-items: center;
     &-select {
-        max-width: 70px;
+        max-width: 80px;
         margin-#{$end-direction}: 1.5rem;
     }
 }
@@ -770,11 +770,11 @@
         }
         &:before {
             content: "\2191";
-            right: -12px;
+            #{$end-direction}: -12px;
         }
         &:after {
             content: "\2193";
-            right: -17px;
+            #{$end-direction}: -17px;
         }
     }
     &_asc {

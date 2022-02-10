@@ -31,14 +31,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="label"><?php echo Labels::getLabel('LBL_Purpose_of_request', $siteLangId); ?></label>
-                                <div class=""><?php echo $userRequest['ureq_purpose']; ?></div>
+                                <div class=""><?php echo nl2br($userRequest['ureq_purpose']); ?></div>
                             </div>
                         </div>
                     <?php } ?>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="label"><?php echo Labels::getLabel('LBL_Request_Date', $siteLangId); ?></label>
-                            <div class=""><?php echo $userRequest['ureq_date']; ?></div>
+                            <div class=""><?php echo FatDate::format($userRequest['ureq_date'],true); ?></div>
                         </div>
                     </div>
                 </div>

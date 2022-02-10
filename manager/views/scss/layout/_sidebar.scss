@@ -40,6 +40,9 @@ $space: 25px;
         border: none;
         //margin-#{$end-direction}: 1rem;
         padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &-icon {
             position: relative;
             height: 0.125rem;
@@ -47,7 +50,7 @@ $space: 25px;
             transition: $transition-base;
             display: block;
             top: -4px;
-            margin-#{$start-direction}: auto;
+            // margin-#{$start-direction}: auto;
             .toggle-line {
                 display: block;
                 height: 100%;
