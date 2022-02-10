@@ -13,7 +13,7 @@ class MessagesController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page', 1);
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', ['placeholder' => Labels::getLabel('FRM_SEARCH', $this->siteLangId)]);
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', ['title'=> Labels::getLabel('FRM_SEARCH_BY_SUBJECT_AND_MESSAGE', $this->siteLangId),'placeholder' => Labels::getLabel('FRM_SEARCH_BY_SUBJECT_OR_MESSAGE', $this->siteLangId)]);
         $fld->overrideFldType('search');
 
         $frm->addSelectBox(Labels::getLabel('FRM_MESSAGE_BY', $this->siteLangId), 'message_by', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH', $this->siteLangId)]);
@@ -83,9 +83,13 @@ class MessagesController extends ListingBaseController
         $srch->joinMessagePostedToUser(true, $this->siteLangId);
         $srch->joinThreadStartedByUser();
         $srch->addMultipleFields(array(
-            'tth.*', 'ttm.*', 'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on', 'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
+            'tth.*', 'ttm.*', 'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on',
+            'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode',
+            'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
             'tfrs.shop_id as message_from_shop_id', 'tftos.shop_id as message_to_shop_id',
-            'tfto.user_name as message_sent_to_name', 'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+            'tfto.user_name as message_sent_to_name', 'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name',
+             'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
         ));
 
         $srch->addGroupBy('ttm.message_thread_id');
@@ -122,7 +126,7 @@ class MessagesController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($rs);     
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -156,7 +160,7 @@ class MessagesController extends ListingBaseController
         ));
         $srch->addCondition('message_deleted', '=', applicationConstants::NO);
         $srch->addCondition('tth.thread_id', '=', $threadId);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());      
         $this->set("threadListing", $records);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
