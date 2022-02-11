@@ -77,7 +77,7 @@
                 dropdown: {
                     position: 'text',
                     classname: dir,
-                    enabled: 1 // show suggestions dropdown after 1 typed character
+                    enabled: 0 // show suggestions dropdown after 1 typed character
                 }, hooks: {
                     beforeRemoveTag: function (tags) {
                         return new Promise((resolve, reject) => {

@@ -12,6 +12,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('categories');
 $fld->addFieldTagAttribute('class', 'tagifyJs');
+$fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_TYPE_TO_SEARCH', $siteLangId));
 
 $fld = $frm->getField('post_title');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -85,6 +86,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         $(element).siblings(".tagify").remove();
         tagify = new Tagify(document.querySelector('.tagifyJs'), {
             whitelist: [],
+            dropdown: {
+                position: 'text',
+                enabled: 0 // show suggestions dropdown after 1 typed character
+            },
             delimiters: "#",
             editTags: false,
         }).on('add', addBlogPostCategory).on('input', getCategories).on('focus', getCategories);

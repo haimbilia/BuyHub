@@ -25,6 +25,15 @@ if (!empty($repVarArr)) {
 } else {
     $fld->setfieldTagAttribute('class', "d-none");
 }
-
-$pageTitle = Labels::getLabel('LBL_PAGE_LANGUAGE_DATA_UPDATE', $siteLangId);
-require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php');
+?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_PAGE_LANGUAGE_DATA_UPDATE', $siteLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $langFrm->getFormHtml(); ?>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>

@@ -33,11 +33,11 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <div class="col-md-4">
                     <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
                 </div>
-                <div class="col-md-2">
-                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                </div>
-                <div class="col-md-2">
-                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                <div class="col-md-3">
+                    <div class="btn-group">
+                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                    </div>
                 </div>
             <?php } else { ?>
                 <div class="col-md-8">

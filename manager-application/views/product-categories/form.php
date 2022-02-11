@@ -20,7 +20,7 @@ $fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFr
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
 
 $fld = $frm->getField('rating_type');
-$fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SELECT_RATING_TYPES', $siteLangId));
+$fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_TYPE_TO_SEARCH', $siteLangId));
 $url = UrlHelper::generateFullUrl('RatingTypes');
 $fld->htmlAfterField = '<span class="form-text text-muted"><a href="' . $url . '" target="_blank">' . $url . '</a></span>';
 
@@ -115,6 +115,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             $(element).siblings(".tagify").remove();
             tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
                 whitelist: [],
+                dropdown: {                   
+                    enabled: 0 // show suggestions dropdown after 1 typed character
+                },
                 delimiters: "#",
                 editTags: false,
                 closeOnSelect: false,
