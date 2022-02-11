@@ -493,7 +493,9 @@ Updates/Fixes :
     => 062335 - Admin UI: The product's listing is not showing after adding the one product on the "Related products" page
     => 062352 - Admin UI: Address details of the buyer are not showing under the messages section and shop details are also missing(Receiver details)
     => 062371 - Admin UI: Admin navigates to the other reports while clicking on the sorting on the seller's page
-
+    => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
+    => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

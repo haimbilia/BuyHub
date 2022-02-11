@@ -30,7 +30,7 @@ class BlogContributionsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME_EMAIL_AND_PHONE_WITHOUT_CODE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -74,6 +74,7 @@ class BlogContributionsController extends ListingBaseController
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $keywordCond = $srch->addCondition('bcontributions_author_first_name', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_last_name', 'like', '%' . $post['keyword'] . '%');
+            $keywordCond->attachCondition('mysql_func_concat(bcontributions_author_first_name," ",bcontributions_author_last_name)', 'like', '%' . $post['keyword'] . '%','or',true);
             $keywordCond->attachCondition('bcontributions_author_email', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_phone', 'like', '%' . $post['keyword'] . '%');
         }
