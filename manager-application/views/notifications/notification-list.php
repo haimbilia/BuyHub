@@ -12,8 +12,8 @@ if (count($arrListing) > 0) {
 		$url = UrlHelper::generateUrl($labelArr[$row['notification_label_key']][1]);
 		$onclick = 'redirectfunc("' . $url  . '",{recordId:' . $row['notification_record_id'] . '},'.$row['notification_id'].')';
 
-		$div->appendElement("a", ['href' => 'javascript:void(0)', 'onclick'=> $onclick, 'class' => 'title'], $uname);
-		$div->appendElement("div", ['class' => 'summary'], $labelArr[$row['notification_label_key']][0]);
+		$div->appendElement("a", ['href' => 'javascript:void(0)', 'onclick'=> $onclick, 'class' => 'title', 'title' => $labelArr[$row['notification_label_key']][0]], $uname);
+		$div->appendElement("div", ['class' => 'summary', 'title' => $labelArr[$row['notification_label_key']][0]], $labelArr[$row['notification_label_key']][0]);
 
 		$mainDiv->appendElement("a", ['class' => 'notification__time'], HtmlHelper::getRelativeTime($row['notification_added_on'], $siteLangId));
 		echo $mainDiv->getHtml();
