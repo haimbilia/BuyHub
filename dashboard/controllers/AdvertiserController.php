@@ -1,12 +1,14 @@
 <?php
 
-class AdvertiserController extends AdvertiserBaseController {
-
-    public function __construct($action) {
+class AdvertiserController extends AdvertiserBaseController
+{
+    public function __construct($action)
+    {
         parent::__construct($action);
     }
 
-    public function index() {
+    public function index()
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $user = new User($userId);
@@ -67,7 +69,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(true, true);
     }
 
-    public function getPromotionsSearch($active = false) {
+    public function getPromotionsSearch($active = false)
+    {
         $pSrch = $this->searchPromotionsObj();
         $pSrch->addOrder('promotion_id', 'DESC');
         $pSrch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
@@ -103,7 +106,8 @@ class AdvertiserController extends AdvertiserBaseController {
         return $pSrch;
     }
 
-    public function setupPromotion() {
+    public function setupPromotion()
+    {
         $this->userPrivilege->canEditPromotions();
         $userId = $this->userParentId;
         $frm = $this->getPromotionForm();
@@ -374,7 +378,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setupPromotionLang() {
+    public function setupPromotionLang()
+    {
         $this->userPrivilege->canEditPromotions();
         $post = FatApp::getPostedData();
         $userId = $this->userParentId;
@@ -442,7 +447,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function promotionUpload() {
+    public function promotionUpload()
+    {
         $this->userPrivilege->canEditPromotions();
         $userId = $this->userParentId;
         $post = FatApp::getPostedData();
@@ -545,7 +551,8 @@ class AdvertiserController extends AdvertiserBaseController {
         FatUtility::dieJsonSuccess(Message::getHtml());
     }
 
-    public function searchPromotions() {
+    public function searchPromotions()
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -621,14 +628,16 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false);
     }
 
-    public function searchPromotionsObj() {
+    public function searchPromotionsObj()
+    {
         $srch = new PromotionSearch($this->siteLangId);
         $srch->addCondition('promotion_deleted', '=', applicationConstants::NO);
         $srch->addCondition('promotion_user_id', '=', $this->userParentId);
         return $srch;
     }
 
-    public function getTypeData($promotionId, $promotionType = 0) {
+    public function getTypeData($promotionId, $promotionType = 0)
+    {
         $promotionType = FatUtility::int($promotionType);
         $promotionId = FatUtility::int($promotionId);
 
@@ -661,7 +670,7 @@ class AdvertiserController extends AdvertiserBaseController {
             case Promotion::TYPE_PRODUCT:
                 if ($promotionId > 0) {
                     $row = Promotion::getAttributesById($promotionId, array(
-                                'promotion_record_id'
+                        'promotion_record_id'
                     ));
 
                     $srch = new PromotionSearch($this->siteLangId);
@@ -698,12 +707,13 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function promotions() {
+    public function promotions()
+    {
         $this->userPrivilege->canViewPromotions();
         $data = FatApp::getPostedData();
-        $frmSearchPromotions = $this->getPromotionSearchForm($this->siteLangId);
+        $frmSearch = $this->getPromotionSearchForm($this->siteLangId);
         if ($data) {
-            $frmSearchPromotions->fill($data);
+            $frmSearch->fill($data);
         }
         $userId = $this->userParentId;
         $srch = new PromotionSearch($this->siteLangId);
@@ -724,17 +734,20 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
         $this->set('canEdit', $this->userPrivilege->canEditPromotions(0, true));
-        $this->set("frmSearchPromotions", $frmSearchPromotions);
+        $this->set("frmSearch", $frmSearch);
         $this->set("records", $records);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PROMOTION_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
-    public function promotionCharges() {
+    public function promotionCharges()
+    {
         $this->userPrivilege->canViewPromotions();
         $this->_template->render(true, true);
     }
 
-    public function searchPromotionCharges() {
+    public function searchPromotionCharges()
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -763,7 +776,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false);
     }
 
-    public function promotionForm($promotionId = 0) {
+    public function promotionForm($promotionId = 0)
+    {
         $userId = $this->userParentId;
         $promotionId = FatUtility::int($promotionId);
 
@@ -828,7 +842,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false);
     }
 
-    public function promotionLangForm($promotionId = 0, $langId = 0, $autoFillLangData = 0) {
+    public function promotionLangForm($promotionId = 0, $langId = 0, $autoFillLangData = 0)
+    {
         $promotionId = FatUtility::int($promotionId);
         $langId = FatUtility::int($langId);
 
@@ -868,7 +883,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false);
     }
 
-    public function promotionMediaForm($promotionId = 0) {
+    public function promotionMediaForm($promotionId = 0)
+    {
         $userId = $this->userParentId;
         $promotionId = FatUtility::int($promotionId);
 
@@ -928,14 +944,15 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(
             0 => ''
-                ) + applicationConstants::getDisplaysArr($this->siteLangId));
+        ) + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('promotionId', $promotionId);
         $this->set('languages', Language::getAllNames());
         $this->set('mediaFrm', $mediaFrm);
         $this->_template->render(false, false);
     }
 
-    public function images($promotionId = 0, $langId = 0, $screen = 0) {
+    public function images($promotionId = 0, $langId = 0, $screen = 0)
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $promotionId = FatUtility::int($promotionId);
@@ -992,13 +1009,14 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(
             0 => ''
-                ) + applicationConstants::getDisplaysArr($this->siteLangId));
+        ) + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('promotionId', $promotionId);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
-    public function removePromotionBanner() {
+    public function removePromotionBanner()
+    {
         $this->userPrivilege->canEditPromotions();
         $promotionId = FatApp::getPostedData('promotionId', FatUtility::VAR_INT, 0);
         $bannerId = FatApp::getPostedData('bannerId', FatUtility::VAR_INT, 0);
@@ -1006,9 +1024,9 @@ class AdvertiserController extends AdvertiserBaseController {
         $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, 0);
 
         $data = Promotion::getAttributesById($promotionId, array(
-                    'promotion_id',
-                    'promotion_type',
-                    'promotion_user_id'
+            'promotion_id',
+            'promotion_type',
+            'promotion_user_id'
         ));
         if (!$data || $data['promotion_user_id'] != $this->userParentId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
@@ -1041,31 +1059,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function deletePromotionRecord(){
-      $promotionId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-
-      if(1 > $promotionId){
-      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID',$this->siteLangId));
-      FatUtility::dieJsonError( Message::getHtml() );
-      }
-
-      $data = Promotion::getAttributesById($promotionId,array('promotion_id','promotion_user_id'));
-      if(!$data || $data['promotion_user_id']!= $this->userParentId){
-      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID',$this->siteLangId));
-      FatUtility::dieJsonError( Message::getHtml() );
-      }
-
-      $obj = new Promotion($promotionId);
-      $obj->assignValues(array(Promotion::tblFld('deleted') => 1));
-      if(!$obj->save()){
-      Message::addErrorMessage($obj->getError());
-      FatUtility::dieJsonError( Message::getHtml() );
-      }
-
-      FatUtility::dieJsonSuccess(Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY',$this->siteLangId));
-      } */
-
-    public function autoCompleteSelprods() {
+    public function autoCompleteSelprods()
+    {
         $userId = $this->userParentId;
         $db = FatApp::getDb();
 
@@ -1110,7 +1105,8 @@ class AdvertiserController extends AdvertiserBaseController {
         die(json_encode($json));
     }
 
-    public function analytics($promotionId = 0) {
+    public function analytics($promotionId = 0)
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $searchForm = $this->getPPCAnalyticsSearchForm($this->siteLangId);
@@ -1140,7 +1136,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(true, true);
     }
 
-    public function searchAnalyticsData() {
+    public function searchAnalyticsData()
+    {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
         $data = FatApp::getPostedData();
@@ -1157,8 +1154,6 @@ class AdvertiserController extends AdvertiserBaseController {
             Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-
-        $promotionType = 0;
 
         $frmSearch = $this->getPPCAnalyticsSearchForm($this->siteLangId);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
@@ -1206,7 +1201,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false);
     }
 
-    private function getPromotionForm($promotionId = 0) {
+    private function getPromotionForm($promotionId = 0)
+    {
         $frm = new Form('frmPromotion');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
         $frm->addHiddenField('', 'promotion_record_id', '');
@@ -1370,10 +1366,10 @@ class AdvertiserController extends AdvertiserBaseController {
             'ifnull(blocation_name,blocation_identifier) as blocation_name'
         ));
         $srch->joinTable(
-                Collections::DB_TBL,
-                'INNER JOIN',
-                'collections.collection_id = blocation_collection_id',
-                'collections'
+            Collections::DB_TBL,
+            'INNER JOIN',
+            'collections.collection_id = blocation_collection_id',
+            'collections'
         );
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'blocation_id');
@@ -1405,8 +1401,8 @@ class AdvertiserController extends AdvertiserBaseController {
 
 
         $fldDuration = $frm->addSelectBox(Labels::getLabel('LBL_Duration', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array(
-                    'id' => 'promotion_duration'
-                        ), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+            'id' => 'promotion_duration'
+        ), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
 
         $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->siteLangId), 'promotion_start_date', '', array(
             'placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId),
@@ -1431,7 +1427,8 @@ class AdvertiserController extends AdvertiserBaseController {
         return $frm;
     }
 
-    private function getPromotionLangForm($promotionId, $langId) {
+    private function getPromotionLangForm($promotionId, $langId)
+    {
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
@@ -1447,11 +1444,13 @@ class AdvertiserController extends AdvertiserBaseController {
         return $frm;
     }
 
-    public function imgCropper() {
+    public function imgCropper()
+    {
         $this->_template->render(false, false, 'cropper/index.php');
     }
 
-    private function getPromotionMediaForm($promotionId = 0, $promotionType = 0) {
+    private function getPromotionMediaForm($promotionId = 0, $promotionType = 0)
+    {
         $promotionId = FatUtility::int($promotionId);
         $frm = new Form('frmPromotionMedia');
 
@@ -1469,7 +1468,8 @@ class AdvertiserController extends AdvertiserBaseController {
         return $frm;
     }
 
-    private function getPromotionSearchForm($langId) {
+    private function getPromotionSearchForm($langId)
+    {
         $langId = FatUtility::int($langId);
 
         $frm = new Form('frmPromotionSearch');
@@ -1482,36 +1482,36 @@ class AdvertiserController extends AdvertiserBaseController {
             unset($typeArr[Promotion::TYPE_SHOP]);
             unset($typeArr[Promotion::TYPE_PRODUCT]);
         }
-        $frm->addSelectBox('', 'active_promotion', array(
+        $frm->addSelectBox(Labels::getLabel('LBL_PROMOTION_STATUS'), 'active_promotion', array(
             '-1' => Labels::getLabel('LBL_All', $langId),
             '1' => Labels::getLabel('LBL_Active_Promotions', $langId)
-                ), '', array(), '');
-        $frm->addSelectBox('', 'type', array(
+        ), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_TYPE'), 'type', array(
             '-1' => Labels::getLabel('LBL_All_Type', $langId)
-                ) + $typeArr, '', array(), '');
+        ) + $typeArr, '', array(), '');
 
-        $frm->addDateField('', 'date_from', '', array(
+        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM'), 'date_from', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
             'placeholder' => Labels::getLabel('LBL_Date_From', $langId)
         ));
-        $frm->addDateField('', 'date_to', '', array(
+        $frm->addDateField(Labels::getLabel('LBL_DATE_TO'), 'date_to', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
             'placeholder' => Labels::getLabel('LBL_Date_To', $langId)
         ));
 
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array(
-            'onclick' => 'clearPromotionSearch();'
-        ));
         $frm->addHiddenField('', 'total_record_count', '');
         /* $fldSubmit->attachField($fldClear); */
         $frm->addHiddenField('', 'page');
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function getPPCAnalyticsSearchForm($langId) {
+    private function getPPCAnalyticsSearchForm($langId)
+    {
         $langId = FatUtility::int($langId);
 
         $frm = new Form('frmPromotionAnalyticsSearch');
@@ -1538,7 +1538,8 @@ class AdvertiserController extends AdvertiserBaseController {
         return $frm;
     }
 
-    private function getRechargeWalletForm($langId) {
+    private function getRechargeWalletForm($langId)
+    {
         $frm = new Form('frmRechargeWallet');
         $fld = $frm->addFloatField('', 'amount');
         //$fld->requirements()->setRequired();
@@ -1546,7 +1547,8 @@ class AdvertiserController extends AdvertiserBaseController {
         return $frm;
     }
 
-    public function checkValidPromotionBudget() {
+    public function checkValidPromotionBudget()
+    {
         $post = FatApp::getPostedData();
         $promotionType = Fatutility::int($post['promotion_type']);
         $promotionBudget = Fatutility::float($post['promotion_budget']);
@@ -1583,7 +1585,8 @@ class AdvertiserController extends AdvertiserBaseController {
         FatUtility::dieJsonSuccess(Message::getHtml());
     }
 
-    public function getBannerLocationDimensions($promotionId, $deviceType) {
+    public function getBannerLocationDimensions($promotionId, $deviceType)
+    {
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b', $deviceType);
         $srch->addCondition('promotion_id', '=', $promotionId);
@@ -1598,7 +1601,8 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changePromotionStatus() {
+    public function changePromotionStatus()
+    {
         $this->userPrivilege->canEditPromotions();
         $promotionId = FatApp::getPostedData('promotionId', FatUtility::VAR_INT, 0);
         $userId = $this->userParentId;
@@ -1617,13 +1621,14 @@ class AdvertiserController extends AdvertiserBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updatePromotionStatus($promotionId, $status) {
+    private function updatePromotionStatus($promotionId, $status)
+    {
         $this->userPrivilege->canEditPromotions();
         $promotionId = FatUtility::int($promotionId);
         $status = FatUtility::int($status);
         if (1 > $promotionId || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $promotion = new Promotion($promotionId);
@@ -1632,5 +1637,4 @@ class AdvertiserController extends AdvertiserBaseController {
             FatUtility::dieWithError(Message::getHtml());
         }
     }
-
 }
