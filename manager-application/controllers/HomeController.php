@@ -438,6 +438,7 @@ class HomeController extends ListingBaseController
             setcookie('defaultAdminSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
         }
         $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->siteLangId));
+        $this->set('langId', $langId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
