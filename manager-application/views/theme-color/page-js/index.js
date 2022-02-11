@@ -196,6 +196,9 @@ $(document).ready(function () {
 
         tagify = new Tagify(input, {
             whitelist: [],
+            dropdown: {          
+                enabled: 0 // show suggestions dropdown after 1 typed character
+            },
         }).on('input', getVariants).on('focus', getVariants).on('add', addElement);
     };
     tagifyElement();

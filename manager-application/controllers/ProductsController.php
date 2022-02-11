@@ -157,7 +157,7 @@ class ProductsController extends ListingBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
         $product_id = FatApp::getPostedData('product_id', FatUtility::VAR_INT, $recordId);
-        if (!empty($product_id)) {
+        if (0 < $product_id) {
             $srch->addCondition('product_id', '=', $product_id);
         }        
 

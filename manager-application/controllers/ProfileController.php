@@ -78,9 +78,10 @@ class ProfileController extends ListingBaseController
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'admin_email');
         $fld->setUnique('tbl_admin', 'admin_email', 'admin_id', 'admin_id', 'admin_id');
-
+        $frm->addHiddenField('', 'admin_id', '', array('id' => 'admin_id'));
         $frm->addRequiredField(Labels::getLabel('FRM_FULL_NAME', $this->siteLangId), 'admin_name');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+
         return $frm;
     }
 
