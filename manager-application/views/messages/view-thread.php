@@ -19,15 +19,15 @@ $messageDetail = current($threadListing);
     $fromUserUpdatedOn = $messageDetail['message_from_user_updated_on'];
     $fromUserName = $messageDetail['message_from_name'];
     $fromEmail = $messageDetail['message_from_email'];
-
     $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
-
+    $toUserName = $messageDetail['message_to_name'];
     if ($messageDetail['thread_started_by'] == $messageDetail['message_to_user_id']) {
         $fromUserId = $messageDetail['message_to_user_id'];
         $fromUserUpdatedOn = $messageDetail['message_to_user_updated_on'];
         $fromUserName = $messageDetail['message_to_name'];
         $fromEmail = $messageDetail['message_to_email'];
         $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
+        $toUserName = $messageDetail['message_from_name'];
     }
     
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
@@ -84,6 +84,9 @@ $messageDetail = current($threadListing);
                                     <div class="message">
                                         <?php echo nl2br($row['message_text']); ?>
                                     </div>
+                                    <?php if($row['thread_started_by'] != $row['message_from_user_id']){ ?>
+                                     <span class="time"><?php echo $toUserName; ?></span>
+                                    <?php } ?>
                                     <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>

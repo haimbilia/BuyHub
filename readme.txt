@@ -491,6 +491,7 @@ Updates/Fixes :
     => 062325 - Admin UI: Arabic Language: Records are not showing on the Recommended tag products Weightages page.
     => 062354 - Admin UI: Search by Keyword is not working under the messages section and search fields UI is also not correct 
     => 062335 - Admin UI: The product's listing is not showing after adding the one product on the "Related products" page
+    => 062352 - Admin UI: Address details of the buyer are not showing under the messages section and shop details are also missing(Receiver details)
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
