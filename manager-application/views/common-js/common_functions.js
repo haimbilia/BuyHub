@@ -5,7 +5,7 @@ function setSiteDefaultLang(langId) {
         function (res) {
             setTimeout(function () {
                 window.location.reload(1);
-            }, 2000);
+            }, 5000);
         }
     );
 }
