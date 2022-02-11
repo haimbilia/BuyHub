@@ -236,7 +236,7 @@ class DashboardBaseController extends FatController
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
         $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
-        
+
         $this->set('currencySymbolLeft', $currencySymbolLeft);
         $this->set('currencySymbolRight', $currencySymbolRight);
         $this->set('controllerName', $controllerName);
@@ -362,6 +362,7 @@ class DashboardBaseController extends FatController
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
             $this->nodes[] = array('title' => $title);
         } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
@@ -882,7 +883,7 @@ class DashboardBaseController extends FatController
         if ($pageSize < 1) {
             return;
         }
-       
+
         if ($page > 1 && !empty($post['total_record_count'])) {
             $this->setPageRecord($post['total_record_count'], $pageSize, $page);
             return;
