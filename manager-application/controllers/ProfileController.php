@@ -55,7 +55,8 @@ class ProfileController extends ListingBaseController
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
+        }        
+        unset($post['admin_id']);
                 
         $this->_adminProfileObj->assignValues($post);
         if (!$this->_adminProfileObj->save()) {
