@@ -495,6 +495,7 @@ Updates/Fixes :
     => 062371 - Admin UI: Admin navigates to the other reports while clicking on the sorting on the seller's page
     => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
     => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
+    => 060542 - Admin UI: Suggestion to show the "items per page" option if the records listing contains less than 20 records on the whole system
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

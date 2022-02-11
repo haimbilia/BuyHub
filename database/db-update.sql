@@ -1629,3 +1629,6 @@ DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_AUTHOR_NAME,_EM
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('FRM_SEARCH_BY_AUTHOR_NAME_EMAIL_AND_PHONE_WITHOUT_CODE', 1, 'Search by author name email and phone without code', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'CONF_ADMIN_PAGESIZE';
