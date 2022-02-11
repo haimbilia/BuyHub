@@ -3,9 +3,8 @@
     <?php $arr_flds = array(
         'orrequest_id'    =>    Labels::getLabel('LBL_ID', $siteLangId),
         'orrequest_date'    =>    Labels::getLabel('LBL_Date', $siteLangId),
-        'op_invoice_number'        =>    Labels::getLabel('LBL_Order_Id/Invoice_Number', $siteLangId),
-        'products'            => Labels::getLabel('LBL_Products', $siteLangId),
-        /* 'orrequest_type'        =>    Labels::getLabel( 'LBL_Request_Type', $siteLangId ), */
+        'op_invoice_number'        =>    Labels::getLabel('LBL_ORDER_INVOICE_NUMBER', $siteLangId),
+        'products'            => Labels::getLabel('LBL_PRODUCT_NAME', $siteLangId),
         'orrequest_qty'        =>    Labels::getLabel('LBL_Return_Qty', $siteLangId),
         'orrequest_status'    =>    Labels::getLabel('LBL_Status', $siteLangId),
         'action'            =>    '',
@@ -29,7 +28,6 @@
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'orrequest_id':
-                    /* $requestId = CommonHelper::formatOrderReturnRequestNumber($row[$key]); */
                     $td->appendElement('plaintext', array(), $row['orrequest_reference'], true);
                     break;
                 case 'orrequest_date':

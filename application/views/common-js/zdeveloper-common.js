@@ -1066,7 +1066,7 @@ $(document).ready(function () {
             return false;
         }
         $.mbsmessage.close();
-        fcom.updateWithAjax(
+        fcom.ajax(
             fcom.makeUrl(
                 "Account",
                 "markAsFavorite",
@@ -1086,16 +1086,17 @@ $(document).ready(function () {
                         langLbl.RemoveProductFromFavourite
                     );
                 }
-            }
+            }, { fOutMode: 'json' }
         );
     };
+
     removeFromFavorite = function (selProdId, callbackFunction = false) {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
         }
         $.mbsmessage.close();
-        fcom.updateWithAjax(
+        fcom.ajax(
             fcom.makeUrl(
                 "Account",
                 "removeFromFavorite",
@@ -1115,7 +1116,7 @@ $(document).ready(function () {
                         langLbl.AddProductToFavourite
                     );
                 }
-            }
+            }, { fOutMode: 'json' }
         );
         if (callbackFunction !== false) {
             window[callbackFunction]();

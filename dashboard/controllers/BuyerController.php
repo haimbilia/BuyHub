@@ -1253,7 +1253,8 @@ class BuyerController extends BuyerBaseController {
 
     public function orderReturnRequests() {
         $frm = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
-        $this->set('frmOrderReturnRequestsSrch', $frm);
+        $this->set('frmSearch', $frm);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_ORDER_INVOICE_NUMBER,_PRODUCT_NAME_OR_BRAND_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 

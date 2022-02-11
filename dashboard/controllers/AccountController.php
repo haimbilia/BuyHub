@@ -1678,26 +1678,13 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false);
     }
 
-    public function viewFavouriteItems()
-    {
-        $favouriteListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
-
-        if (!$favouriteListRow) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->set('wishListRow', $favouriteListRow);
-        $this->_template->render(false, false, 'account/favourite-list-items.php');
-        // $this->_template->render(false, false, 'account/wish-list-items.php');
-    }
-
     public function searchWishListItems()
     {
         $post = FatApp::getPostedData();
         $db = FatApp::getDb();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-        $uwlist_id = empty($post['uwlist_id']) ? 0 : FatUtility::int($post['uwlist_id']);
+        $uwlist_id = FatApp::getPostedData('uwlist_id', FatUtility::VAR_INT, 0);
 
         if (false === MOBILE_APP_API_CALL) {
             $wishListRow = UserWishList::getAttributesById($uwlist_id, array('uwlist_id'));
@@ -1806,17 +1793,13 @@ class AccountController extends LoggedUserController
         $this->set('endRecord', $endRecord);
         $this->set('showActionBtns', true);
         $this->set('isWishList', true);
-
+        $this->set('uwlist_id', $uwlist_id);
+        
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
 
-        if ($totalRecords > 0) {
-            $this->set('html', $this->_template->render(false, false, 'products/products-list.php', true, false));
-        } else {
-            $this->set('html', $this->_template->render(false, false, '_partial/no-record-found.php', true, false));
-        }
-        $this->set('loadMoreBtnHtml', $this->_template->render(false, false, 'products/products-list-load-more-btn.php', true, false));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -1828,7 +1811,6 @@ class AccountController extends LoggedUserController
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
 
         $wishListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
-
         if (!$wishListRow) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -1855,7 +1837,6 @@ class AccountController extends LoggedUserController
         $wishListSubQuery = $wislistPSrchObj->getQuery();
         $srch->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
 
-
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
@@ -1867,7 +1848,6 @@ class AccountController extends LoggedUserController
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
         $selProdRviewSubQuery = $selProdReviewObj->getQuery();
         $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
-
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -1922,13 +1902,8 @@ class AccountController extends LoggedUserController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        if ($totalRecords > 0) {
-            $this->set('html', $this->_template->render(false, false, 'products/products-list.php', true, false));
-        } else {
-            $this->set('html', $this->_template->render(false, false, '_partial/no-record-found.php', true, false));
-        }
-        $this->set('loadMoreBtnHtml', $this->_template->render(false, false, 'products/products-list-load-more-btn.php', true, false));
+        
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -1968,28 +1943,6 @@ class AccountController extends LoggedUserController
         }
 
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function viewWishListItems()
-    {
-        $post = FatApp::getPostedData();
-        $uwlist_id = FatUtility::int($post['uwlist_id']);
-
-        $db = FatApp::getDb();
-
-        $srch = UserWishList::getSearchObject($this->userId);
-        $srch->addMultipleFields(array('uwlist_id', 'uwlist_title', 'uwlist_type'));
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addCondition('uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
-        $rs = $srch->getResultSet();
-        $wishListRow = $db->fetch($rs);
-        if (!$wishListRow) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->set('wishListRow', $wishListRow);
-        $this->_template->render(false, false, 'account/wish-list-items.php');
     }
 
     public function updateSearchdate()
@@ -3891,6 +3844,7 @@ class AccountController extends LoggedUserController
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
         } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
