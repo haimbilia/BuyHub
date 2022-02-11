@@ -3,7 +3,9 @@ function setSiteDefaultLang(langId) {
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
         function (res) {
-            document.location.reload();
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 2000);
         }
     );
 }
@@ -16,7 +18,7 @@ function getNotifications(type, obj) {
     if (type == 1) {
         url = fcom.makeUrl("SystemLog", "notificationList");
         viewAllUrl = fcom.makeUrl("SystemLog");
-    }else{
+    } else {
         $('.headerNotificationTabJs').removeClass('is-current');
         $('.headerNotificationTabJs:first').addClass('is-current');
     }
@@ -346,7 +348,7 @@ redirectToBlogPosts = function (id, extraData = {}) {
 
 redirectfunc = async function (url, hiddenfields = {}, nid, newTab) {
     newTab = typeof newTab != "undefined" ? newTab : true;
-    if (nid > 0) { 
+    if (nid > 0) {
         await $.ajax({
             url: fcom.makeUrl('Notifications', 'updateReadStatus'),
             type: 'POST',
