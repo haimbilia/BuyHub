@@ -1794,7 +1794,7 @@ class AccountController extends LoggedUserController
         $this->set('showActionBtns', true);
         $this->set('isWishList', true);
         $this->set('uwlist_id', $uwlist_id);
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1902,7 +1902,7 @@ class AccountController extends LoggedUserController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        
+
         $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -2219,7 +2219,7 @@ class AccountController extends LoggedUserController
     {
         $this->userPrivilege->canViewMessages($this->userId);
         $frm = $this->getMessageSearchForm($this->siteLangId);
-        $this->set('frmSrch', $frm);
+        $this->set('frmSearch', $frm);
         $this->_template->render();
     }
 
@@ -2550,12 +2550,18 @@ class AccountController extends LoggedUserController
 
     private function getMessageSearchForm($langId)
     {
-        $frm = new Form('frmMessageSrch');
-        $frm->addTextBox('', 'keyword');
-        $frm->addHiddenField('', 'total_record_count', '');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearSearch();'));
-        $frm->addHiddenField('', 'page');
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page', 1);
+        $frm->addHiddenField('', 'total_record_count', 1);
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', ['title' => Labels::getLabel('FRM_SEARCH_BY_SUBJECT_AND_MESSAGE', $this->siteLangId), 'placeholder' => Labels::getLabel('FRM_SEARCH_BY_SUBJECT_OR_MESSAGE', $this->siteLangId)]);
+        $fld->overrideFldType('search');
+
+        $frm->addSelectBox(Labels::getLabel('FRM_MESSAGE_TO', $this->siteLangId), 'message_to', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH', $this->siteLangId)]);
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -3816,6 +3822,31 @@ class AccountController extends LoggedUserController
         }
     }
 
+    public function viewThread(int $threadId)
+    {
+        if (empty($threadId)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $srch = new MessageSearch();
+        $srch->joinThreadMessage();
+        $srch->joinMessagePostedFromUser(true, $this->siteLangId);
+        $srch->joinMessagePostedToUser();
+        $srch->joinShops($this->siteLangId);
+        $srch->joinOrderProducts($this->siteLangId);
+        $srch->addMultipleFields(array(
+            'tth.*', 'ttm.*',
+            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+        ));
+        $srch->addCondition('message_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("threadListing", $records);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+    
     public function getBreadcrumbNodes($action)
     {
         if (FatUtility::isAjaxCall()) {
