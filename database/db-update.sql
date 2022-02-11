@@ -1619,3 +1619,13 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_seller_products` DROP `selprod_comments`;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SOLD_BY', 1, 'Sold by', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE";
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_AUTHOR_NAME_EMAIL_AND_PHONE_WITHOUT_CODE', 1, 'Search by author name email and phone without code', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
