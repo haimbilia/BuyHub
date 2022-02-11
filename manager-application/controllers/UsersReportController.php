@@ -184,6 +184,8 @@ class UsersReportController extends ListingBaseController
 
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
+        $post['user_type'] = $userType;
+
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
