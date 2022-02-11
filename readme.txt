@@ -495,8 +495,12 @@ Updates/Fixes :
     => 062371 - Admin UI: Admin navigates to the other reports while clicking on the sorting on the seller's page
     => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
     => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
+    => 062411 - Admin UI: Sorting is not working and display Order is showing zero in the table on the "Collection" pages.
+    
     => 060542 - Admin UI: Suggestion to show the "items per page" option if the records listing contains less than 20 records on the whole system
     => 062416 - Admin UI: Arabic Language: Instructions are not showing in the Arabic language and the admin navigates to the export section while trying to download the N/A file 
+    => 060565 - Admin UI: In the search, Address's title is also deleted while deleting the Users under the Users address
+
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
