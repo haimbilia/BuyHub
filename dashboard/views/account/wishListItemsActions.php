@@ -1,40 +1,56 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-$displayActions = true;
-if (isset($wishListRow['products']) && 1 > count($wishListRow['products'])) {
-    $displayActions = false;
-}
-
-if (true === $displayActions) {
-    if (true == $isWishList) {
-        $function = 'removeSelectedFromWishlist(' . $wishListRow['uwlist_id'] . ', event)';
-    } else {
-        $function = 'removeSelectedFromFavtlist(event)';
-    }
+$uwlist_id = $uwlist_id ?? 0;
+if (isset($products) && 0 < count($products)) {
+    $function = (true == $isWishList) ? 'removeSelectedFromWishlist(' . $uwlist_id . ', event)' : 'removeSelectedFromFavtlist(event)';
 ?>
-    <div class="col-auto">
-        <div class="action action--favs btn-group-scroll">
-            <label class="btn btn-outline-brand btn-sm checkbox checkbox-inline select-all">
-                <input type="checkbox" class='selectAll-js' onclick="selectAll($(this));"><i class="input-helper"></i>Select all
+    <ul>
+        <li title="<?php echo Labels::getLabel('LBL_SELECT_ALL_ITEMS', $siteLangId); ?>" data-bs-toggle="tooltip" data-bs-placement="top">
+            <label class="btn btn-outline-gray checkbox checkbox-inline select-all">
+                <input type="checkbox" class="selectAll-js" onclick="selectAll($(this));">
+                <?php echo Labels::getLabel('LBL_SELECT_ALL', $siteLangId); ?>
             </label>
-            <div class="btn-group">
-                <?php if (true == $isWishList) { ?>
-                    <a title='<?php echo Labels::getLabel('LBL_Move_to_other_wishlist', $siteLangId); ?>' class="btn btn-outline-brand btn-sm formActionBtn-js disabled" onclick="viewWishList(0,this,event, <?php echo !empty($wishListRow['uwlist_id']) ? $wishListRow['uwlist_id'] : 0; ?>);" href="javascript:void(0)">
-                        <i class="fa fa-heart"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Move', $siteLangId); ?>
-                    </a>
-                <?php } ?>
-                <a title='<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>' class="btn btn-outline-brand btn-sm formActionBtn-js disabled" onClick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);" href="javascript:void(0)">
-                    <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Cart', $siteLangId); ?>
-                </a>
-                <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' class="btn btn-outline-brand btn-sm formActionBtn-js disabled" onClick="<?php echo $function; ?>" href="javascript:void(0)">
-                    <i class="fa fa-trash"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
-                </a>
-                <?php if (true == $isWishList) { ?>
-                    <a class="btn btn-brand btn-sm" onClick="searchWishList();" href="javascript:void(0)">
-                        <i class="fa fa-backward"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                    </a>
-                <?php } ?>
-            </div>
-        </div>
-    </div>
+        </li>
+
+        <?php if (true == $isWishList) { ?>
+            <li title="<?php echo Labels::getLabel('LBL_MOVE_TO_OTHER_WISHLIST', $siteLangId); ?>" data-bs-toggle="tooltip" data-bs-placement="top">
+                <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="viewWishList(0, this, event, <?php echo $uwlist_id; ?>);">
+                    <svg class="svg btn-icon-start" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#test">
+                        </use>
+                    </svg>
+                    <span><?php echo Labels::getLabel('LBL_MOVE', $siteLangId); ?></span>
+                </button>
+            </li>
+        <?php } ?>
+
+        <li title='<?php echo Labels::getLabel('LBL_MOVE_TO_CART', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
+            <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);">
+                <svg class="svg btn-icon-start" width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#test">
+                    </use>
+                </svg>
+                <span><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
+            </button>
+        </li>
+
+        <li title='<?php echo Labels::getLabel('LBL_REMOVE_FROM_LIST', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
+            <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="<?php echo $function; ?>">
+                <svg class="svg btn-icon-start" width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                    </use>
+                </svg>
+                <span><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></span></button>
+        </li>
+
+        <?php if (true == $isWishList) { ?>
+            <li title="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>" data-bs-toggle="tooltip" data-placement="top">
+                <button class="btn btn-outline-gray btn-icon" onclick="searchWishList()">
+                    <svg class="svg btn-icon-start" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                        </use>
+                    </svg>
+                    <span><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></span></button>
+            </li>
+        <?php } ?>
+    </ul>
 <?php } ?>

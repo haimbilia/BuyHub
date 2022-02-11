@@ -8,5 +8,5 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "closeForm"); return(fal
 
 $fld = $frm->getField('abusive_lang_id');
 $fld->addFieldTagAttribute('onChange', 'changeFormLayOut(this);');
-
+$formTitle = Labels::getLabel('LBL_ABUSIVE_WORD_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

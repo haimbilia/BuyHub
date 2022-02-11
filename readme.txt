@@ -492,8 +492,11 @@ Updates/Fixes :
     => 062354 - Admin UI: Search by Keyword is not working under the messages section and search fields UI is also not correct 
     => 062335 - Admin UI: The product's listing is not showing after adding the one product on the "Related products" page
     => 062352 - Admin UI: Address details of the buyer are not showing under the messages section and shop details are also missing(Receiver details)
+    => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
+    => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
+    => 060542 - Admin UI: Suggestion to show the "items per page" option if the records listing contains less than 20 records on the whole system
     => 062416 - Admin UI: Arabic Language: Instructions are not showing in the Arabic language and the admin navigates to the export section while trying to download the N/A file 
-    
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

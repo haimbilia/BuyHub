@@ -12,7 +12,7 @@ $btn = $frm->getField('btn_submit');
 $btn->setFieldTagAttribute('class', 'btn btn-brand');
 ?>
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Your_List', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Your_List', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
     <?php if ($wishLists) { ?>
@@ -36,6 +36,6 @@ $btn->setFieldTagAttribute('class', 'btn btn-brand');
         echo $frm->getFieldHtml('btn_submit');
         ?>
         </form>
-        <?php echo $frm->getExternalJs(); ?> 
+        <?php echo $frm->getExternalJs(); ?>
     </div>
 </div>

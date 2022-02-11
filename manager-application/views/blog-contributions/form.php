@@ -13,7 +13,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
-        <ul class="list-stats">
+        <ul class="list-stats list-stats-double">
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Full_Name', $siteLangId); ?></span>
                 <span class='value'><?php echo CommonHelper::displayName($data['bcontributions_author_first_name'] . ' ' . $data['bcontributions_author_last_name']); ?></span>
@@ -35,12 +35,13 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                 <span class='value'><?php echo $statusArr[$data['bcontributions_status']]; ?></span>
             </li>
             <?php if (!empty($attachedFile)) { ?>
-                <li class="list-stats-item">
+                <li class="list-stats-item list-stats-item-full">
                     <span class='lable'><?php echo Labels::getLabel('LBL_Attached_File', $siteLangId); ?></span>
                     <span class='value'><a target="_new" href="<?php echo UrlHelper::generateUrl('BlogContributions', 'downloadAttachedFile', array($data['bcontributions_id'])); ?>"><?php echo $attachedFile; ?></a></span>
                 </li>
             <?php } ?>
         </ul>
+        <div class="separator separator-dashed my-4"></div>
         <?php echo $frm->getFormHtml(); ?>
     </div>
 
