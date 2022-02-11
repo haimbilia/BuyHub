@@ -31,7 +31,7 @@ class ContentPagesController extends ListingBaseController
                     'onclick' => "pagesLayouts()",
                     'title' => Labels::getLabel('LBL_LAYOUTS_INSTRUCTIONS', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start " width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg#icon-dashboard">
                                 </use>

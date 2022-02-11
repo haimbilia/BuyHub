@@ -32,11 +32,11 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-3">
                 <?php echo $frmSearch->getFieldHtml('bcontributions_status'); ?>
             </div>
-            <div class="col-md-2">
-                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-            </div>
-            <div class="col-md-2">
-                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+            <div class="col-md-3">
+                <div class="btn-group">
+                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                </div>
             </div>
         </div>
     </div>

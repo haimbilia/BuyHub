@@ -8,7 +8,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         <li class="menu-item dropdownJs">
             <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
                 <span class="menu-icon">
-                    <svg class="svg" width="24" height="24">
+                    <svg class="svg " width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
                         </use>
                     </svg>
@@ -1041,7 +1041,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     ) {
                     ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#salesReportNav" href="#salesReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#salesReportNav" href="#salesReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1102,7 +1102,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     ) {
                     ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#usersReportNav" href="#usersReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#usersReportNav" href="#usersReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1160,7 +1160,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <?php } ?>
                     <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1205,7 +1205,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <?php } ?>
                     <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1235,7 +1235,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
 
                     <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["DiscountCouponsReport"]' href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-selector='["DiscountCouponsReport"]' href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
