@@ -141,9 +141,24 @@ $action = strtolower($action); ?>
                 <ul class="menu-sub menu-sub-accordion collapse" id="nav-profile" aria-labelledby="" data-parent="#dashboard-menu">
                     <li class="menu-sub-item">
                         <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
-                            <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?></span>
+                            <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span>
                         </a>
                     </li>
+                    <?php if (!User::isAffiliate()) { ?>
+                        <li class="menu-sub-item">
+                            <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm'); ?>">
+                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_BANK_ACCOUNT", $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) { ?>
+                        <li class="menu-sub-item">
+                            <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'cookiesPreferencesForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'cookiesPreferencesForm'); ?>">
+                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_COOKIE_PREFERENCES", $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <li class="menu-sub-item">
                         <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'myaddresses') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>">
                             <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?></span>
@@ -179,6 +194,4 @@ $action = strtolower($action); ?>
 </sidebar>
 
 <main id="main-area" class="main">
-    <?php
-    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false);
-    ?>
+    <?php $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false); ?>

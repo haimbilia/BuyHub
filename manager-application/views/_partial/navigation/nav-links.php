@@ -870,7 +870,8 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true) ||
-        $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)
+        $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true) ||
+        $objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true)        
     ) {
     ?>
         <li class="menu-item dropdownJs">
@@ -932,7 +933,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span>
                             </a>
                         </li>
-                    <?php } ?>
+                    <?php } ?>                    
                     <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentBlock"]' href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
@@ -942,6 +943,18 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ImportInstructions"]' href="<?php echo UrlHelper::generateUrl('ImportInstructions'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_IMPORT_INSTRUCTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>

@@ -4,9 +4,7 @@ $(document).ready(function () {
 
 (function () {
     bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
-            clearSearch();
-        }); 
+        select2(element, fcom.makeUrl('Users', 'autoComplete')); 
     }
 
     editAddress = function (recordId, addrRecordId) {

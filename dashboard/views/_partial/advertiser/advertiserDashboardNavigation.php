@@ -59,6 +59,21 @@ $action = strtolower($action);
                         <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                             <span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span></a>
                     </li>
+                    <?php if (!User::isAffiliate()) { ?>
+                        <li class="menu-sub-item">
+                            <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm'); ?>">
+                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_BANK_ACCOUNT", $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) { ?>
+                        <li class="menu-sub-item">
+                            <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'cookiesPreferencesForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'cookiesPreferencesForm'); ?>">
+                                <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_COOKIE_PREFERENCES", $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <li class="menu-sub-item">
                         <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_UPDATE_CREDENTIALS", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
                             <span class="menu-item__title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?></span></a>
@@ -87,6 +102,4 @@ $action = strtolower($action);
     </div>
 </sidebar>
 <main id="main-area" class="main">
-    <?php
-    $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false);
-    ?>
+    <?php $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false); ?>

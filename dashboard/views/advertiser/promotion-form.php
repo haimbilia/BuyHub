@@ -3,12 +3,7 @@ $frm->setFormTagAttribute('class', 'form form--horizontal');
 $frm->setFormTagAttribute('onsubmit', 'setupPromotion(this); return(false);');
 
 $frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
-/* if($promotionId)
-    {
-        $typeFld = $frm->getField('promotion_type');
-        $typeFld->addFieldTagAttribute('disabled','disabled');
-    } */
+$frm->developerTags['fld_default_col'] = 6;
 
 if (User::isSeller()) {
     $shopFld = $frm->getField('promotion_shop');
@@ -32,14 +27,10 @@ $locationFld = $frm->getField('banner_blocation_id');
 $locationFld->setFieldTagAttribute('id', 'banner_blocation_id');
 $locationFldId = $locationFld->getFieldTagAttribute('id');
 $locationFld->setWrapperAttribute('class', 'location_fld');
-// $locationFld->htmlAfterField= '<a href="javascript:void(0)" onClick="viewWrieFrame($(\'#'.$locationFldId.'\').val())">'.Labels::getLabel('LBL_View_WireFrame', $siteLangId).'</a>';
 
 $slideUrlFld = $frm->getField('slide_url');
 $slideUrlFld->setWrapperAttribute('class', 'slide_url_fld');
 $slideUrlFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_slider.', $siteLangId) . '</p>';
-
-/* $slideTargetUrlFld = $frm->getField('slide_target');
-    $slideTargetUrlFld->setWrapperAttribute( 'class' , 'slide_url_fld'); */
 
 $slideCpcFld = $frm->getField('promotion_slides_cpc');
 $slideCpcFld->setWrapperAttribute('class', 'slide_url_fld');
@@ -49,32 +40,47 @@ $urlFld = $frm->getField('banner_url');
 $urlFld->setWrapperAttribute('class', 'banner_url_fld');
 $urlFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_banner.', $siteLangId) . '</p>';
 
-/* $bannerTargetUrlFld = $frm->getField('banner_target');Request Products Which Is Availble To All Sellers
-    $bannerTargetUrlFld->setWrapperAttribute( 'class' , 'banner_url_fld'); */
 
 $btnSubmitFld = $frm->getField('btn_submit');
 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 ?>
-<div class="tabs">
-    <ul>
-        <li class="is-active"><a href="javascript:void(0);" onClick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-        <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
-            <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+<div id="listing">
+    <div class="card-head">
+        <h5 class="card-title">
+            <a title="<?php echo Labels::getLabel('LBL_PROMOTION_LIST', $siteLangId); ?>" class="back" href="javascript:void(0)" onclick="searchRecords()" data-bs-toggle="tootip">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                    </use>
+                </svg>
             </a>
-        </li>
-        <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
-        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-            <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($promotionId > 0) {
-                                                                                ?> onClick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php
-                                                                                } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-        <?php } ?>
-    </ul>
-</div>
-<div class="tabs__content">
-    <div class="row">
-        <div class="col-md-6">
-            <?php echo $frm->getFormHtml(); ?>
+            <?php echo Labels::getLabel('LBL_BACK_TO_PROMOTION_LIST', $siteLangId); ?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="tabs">
+                    <ul>
+                        <li class="is-active"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                        <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
+                            <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                            </a>
+                        </li>
+                        <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
+                        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
+                            <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onClick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+                        <?php } ?>
+                    </ul>
+                </div>
+                <div class="tabs__content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo $frm->getFormHtml(); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

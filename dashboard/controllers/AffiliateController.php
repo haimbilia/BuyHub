@@ -457,6 +457,7 @@ class AffiliateController extends AffiliateBaseController
         $this->set('user_listing', $user_listing);
         $this->set('frmSearch', $frmSearch);
         $this->set('user_listing', $user_listing);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_NAME_OR_EMAIL', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -464,7 +465,6 @@ class AffiliateController extends AffiliateBaseController
     {
         $frm = new Form('frmUserSearch');
         $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        //$keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
 
         $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
         $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
@@ -475,8 +475,9 @@ class AffiliateController extends AffiliateBaseController
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');
         $frm->addHiddenField('', 'total_record_count', '');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }
@@ -496,7 +497,7 @@ class AffiliateController extends AffiliateBaseController
         }
 
         $userObj = new User();
-        $srch = $userObj->referredByAffilates($loggedUserId); 
+        $srch = $userObj->referredByAffilates($loggedUserId);
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
         if ($user_id > 0) {
             $srch->addCondition('user_id', '=', $user_id);
@@ -518,13 +519,13 @@ class AffiliateController extends AffiliateBaseController
         if ($user_verified > -1) {
             $srch->addCondition('uc.credential_verified', '=', $user_verified);
         }
-        
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post); 
+
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);  
+        $srch->setPageSize($pagesize);
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet(), 'user_id'));
-        $this->set('postedData', $post); 
+        $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
