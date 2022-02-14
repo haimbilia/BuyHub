@@ -557,8 +557,12 @@ function defaultSetUpLogin(frm, v) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
-        getLoader: function () {
-            return '<div class="loader-yk"><div class="loader-yk-inner"></div></div>';
+        getLoader: function (addAsNew) {
+            if (typeof addAsNew === 'undefined') {
+                $(document.body).css({ cursor: "wait" });
+                $(".loaderJs").remove();
+            }
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
@@ -653,6 +657,14 @@ function defaultSetUpLogin(frm, v) {
         },
         getModalBody: function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
+        },
+        removeLoader: function (cls) {
+            $(document.body).css({ cursor: "default" });
+            $(".loaderJs").remove();
+            $(".submitBtnJs").removeClass("loading");
+        },
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
         },
 
     });

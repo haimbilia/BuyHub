@@ -17,6 +17,7 @@ $("document").ready(function () {
         $("#tab-wishlist").addClass("is-active");
         $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Account", "wishListSearch"), "", function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
@@ -64,6 +65,7 @@ $("document").ready(function () {
 
         fcom.ajax(fcom.makeUrl("Account", "searchFavouriteListItems"), data,
             function (ans) {
+                fcom.removeLoader();
                 ans = $.parseJSON(ans);
                 $.mbsmessage.close();
                 $(dv).replaceWith(ans.html);
@@ -75,10 +77,11 @@ $("document").ready(function () {
         var dv2 = "#favListItems";
         append = append == "undefined" ? 0 : append;
         page = page == "undefined" ? 0 : page;
-        
+
         $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Account", "searchWishListItems"), "uwlist_id=" + uwlist_id + "&page=" + page,
             function (ans) {
+                fcom.removeLoader();
                 ans = $.parseJSON(ans);
                 $(dv).replaceWith(ans.html);
             }
@@ -116,6 +119,7 @@ $("document").ready(function () {
             fcom.makeUrl("Account", "favoriteShopSearch"),
             data,
             function (res) {
+                fcom.removeLoader();
                 $('.navLinkJs.active').removeClass('active');
                 $('.navLinkJs.favtShopsJs').addClass('active');
                 $(dv).html(res);

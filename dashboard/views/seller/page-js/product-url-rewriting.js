@@ -16,6 +16,7 @@ $(document).ready(function () {
 		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'searchUrlRewritingProducts'), data, function (res) {
+            fcom.removeLoader();
 			$("#listing").html(res);
 		});
 	};

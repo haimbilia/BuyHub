@@ -10,17 +10,18 @@ $(document).ready(function () {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
         var data = fcom.frmData(frm);
         /*]*/
-        $(dv).html(fcom.getLoader());
-
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Account', 'creditSearch'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
 
     creditsInfo = function () {
         var div = '#credits-info';
-        $(div).html(fcom.getLoader());
+        $(div).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Account', 'creditsInfo'), '', function (res) {
+            fcom.removeLoader();
             $(div).html(res);
         });
     };
@@ -40,14 +41,16 @@ $(document).ready(function () {
     };
 
     withdrawalReqForm = function () {
-        $(dvForm).html(fcom.getLoader());
+        $(dvForm).prepend(fcom.getLoader());
         $payoutType = $(".payout_type").val();
         if ('-1' == $payoutType) {
             fcom.ajax(fcom.makeUrl('Account', 'requestWithdrawal'), '', function (res) {
+                fcom.removeLoader();
                 $(dvForm).html(res);
             });
         } else {
             fcom.ajax(fcom.makeUrl($payoutType, 'getRequestForm'), '', function (res) {
+                fcom.removeLoader();
                 $(dvForm).html(res);
             });
         }

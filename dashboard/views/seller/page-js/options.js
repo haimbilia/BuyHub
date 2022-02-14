@@ -146,6 +146,7 @@ $(document).ready(function(){
 		$("#optionListing").prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('seller','searchOptions'),data,function(res){
+            fcom.removeLoader();
 			$("#optionListing").html(res);
 		});
 	};

@@ -15,15 +15,17 @@ $(document).ready(function(){
 	};
 
 	searchAddresses = function(){
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account','searchAddresses'),'',function(res){
+            fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
 
 	addAddressForm = function(id){
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'addAddressForm', [id]), '', function(t) {
+            fcom.removeLoader();
 			$(dv).html(t);
 		});
 	};

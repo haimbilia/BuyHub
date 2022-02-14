@@ -15,8 +15,9 @@ $(document).ready(function () {
         if (form) {
             data = fcom.frmData(form);
         }
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'searchUsers'), data, function (res) {
+            fcom.removeLoader();
             showFormActionsBtns();
             $(dv).html(res);
             $('.hideDiv-js').removeClass('d-none');
