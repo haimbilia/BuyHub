@@ -36,9 +36,9 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			fcom.removeLoader();
 			$(".tabs_panel").html('');
 			$(".tabs_panel").hide();
-			$(".tabs_nav-js  > li").removeClass('is-active');
 			$("#tabs_001").show();
-			$("a[rel='tabs_001']").parent().addClass('is-active');
+			$(".tabsNavJs > a").removeClass('active');
+			$("a[rel='tabs_001']").addClass('active');
 			$("#tabs_001").html(t);
 		});
 	};
@@ -188,9 +188,9 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		// fcom.ajax(fcom.makeUrl('Seller', 'sellerProductDownloadFrm', [ product_id, selprod_id ]), '', function(t) {
 		$(".tabs_panel").html('');
 		$(".tabs_panel").hide();
-		$(".tabs_nav-js  > li").removeClass('is-active');
 		$("#tabs_002").show();
-		$("a[rel='tabs_002']").parent().addClass('is-active');
+		$(".tabsNavJs  > a").removeClass('active');
+		$("a[rel='tabs_002']").addClass('active');
 		$("#tabs_002").html('<div class="col-md-12" id="digital_download_form"></div> <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>');
 		$(".downloadType-js").each(function () {
 			$(this).trigger("change");

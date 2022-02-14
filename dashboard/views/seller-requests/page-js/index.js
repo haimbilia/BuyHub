@@ -11,8 +11,8 @@
     };
 
     markActive = function (element) {
-        $('ul.tabs_nav-js li.is-active').removeClass('is-active');
-        $(element).closest('li').addClass('is-active');
+        $('.tabsNavJs a.active').removeClass('active');
+        $(element).addClass('active');
     }
 
     goToCustomCatalogProductSearchPage = function (page) {
