@@ -557,8 +557,12 @@ function defaultSetUpLogin(frm, v) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
-        getLoader: function () {
-            return '<div class="loader-yk"><div class="loader-yk-inner"></div></div>';
+        getLoader: function (addAsNew) {        
+            if(typeof addAsNew === 'undefined'){             
+                $(document.body).css({ cursor: "wait" });
+                $(".loaderJs").remove();
+            }            
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
