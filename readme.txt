@@ -494,11 +494,11 @@ Updates/Fixes :
     => 062352 - Admin UI: Address details of the buyer are not showing under the messages section and shop details are also missing(Receiver details)
     => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
     => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
-    => 062411 - Admin UI: Sorting is not working and display Order is showing zero in the table on the "Collection" pages.
-    
+    => 062411 - Admin UI: Sorting is not working and display Order is showing zero in the table on the "Collection" pages.    
     => 060542 - Admin UI: Suggestion to show the "items per page" option if the records listing contains less than 20 records on the whole system
     => 062416 - Admin UI: Arabic Language: Instructions are not showing in the Arabic language and the admin navigates to the export section while trying to download the N/A file 
     => 060565 - Admin UI: In the search, Address's title is also deleted while deleting the Users under the Users address
+    => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
 
 
 Known Issues and Problems :
