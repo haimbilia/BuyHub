@@ -13,6 +13,7 @@ trait Options {
         $this->set('deleteButton', true);
         $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_OPTION_NAME', $this->siteLangId));
         $this->set("frmSearch", $frmSearch);
+        $this->set("newRecordBtn", true);
         $this->_template->addJs('js/jscolor.js');
         $this->_template->addJs('js/jquery.tablednd.js');
         $this->_template->render(true, true);

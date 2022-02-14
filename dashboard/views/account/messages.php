@@ -1,7 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keyFld = $frmSearch->getField('keyword');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn-block');
 
@@ -39,6 +36,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
 
                     $fld = $frmSearch->getField('keyword');
                     $fld->addFieldtagAttribute('class', 'form-control omni-search');
+                    $fld->addFieldtagAttribute('title', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
+                    $fld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
 
                     echo $frmSearch->getFormTag();
                     echo $frmSearch->getFieldHtml('page');
