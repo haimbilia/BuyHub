@@ -46,10 +46,7 @@
             text-decoration: none;
         }
         &.is-active {
-            // // background-color: $brand-color;
-            // color:  lighten($brand-color, 55%);
-            @include bg-brand();
-            // color:  lighten($brand-color, 55%);
+            color: $brand-color-inverse;
             @include bg-brand();
             .message-to {
                 background: #00000054;
