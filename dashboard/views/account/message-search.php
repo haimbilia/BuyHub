@@ -22,7 +22,7 @@ if (!empty($arrListing)) {
         $toUserId = $row['message_to_user_id'];
         $toUserUpdatedOn = $row['message_to_user_updated_on'];
         $toUserName = $row['message_to_name'];
-        if ($row['thread_started_by'] == $row['message_to_user_id']) {
+        if ($row['thread_started_by'] == $row['message_to_user_id'] || $activeTab == "B") {
             $fromUserId = $row['message_to_user_id'];
             $fromUserUpdatedOn = $row['message_to_user_updated_on'];
             $fromUserName = $row['message_to_name'];

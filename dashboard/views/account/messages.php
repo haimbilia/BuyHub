@@ -40,9 +40,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                     $fld = $frmSearch->getField('keyword');
                     $fld->addFieldtagAttribute('class', 'form-control omni-search');
 
-                    $fld = $frmSearch->getField('message_to');
-                    $fld->addFieldtagAttribute('id', 'searchFrmSellerIdJs');
-
                     echo $frmSearch->getFormTag();
                     echo $frmSearch->getFieldHtml('page');
                     ?>
@@ -58,15 +55,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                                 </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
-                                <div class="form-group">
-                                    <label class="label">
-                                        <?php
-                                        $fld = $frmSearch->getField('message_to');
-                                        echo $fld->getCaption();;
-                                        ?>
-                                    </label>
-                                    <?php echo $frmSearch->getFieldHtml('message_to'); ?>
-                                </div>
                                 <div class="form-group">
                                     <label class="label">
                                         <?php
@@ -111,7 +99,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
 
             </div>
         <?php
-            $doNotshowMessages = false;
+            $doNotshowMessages = true;
             $threadListing = [current($arrListing)];
             require_once(CONF_THEME_PATH . 'account/view-thread.php');
         } ?>
