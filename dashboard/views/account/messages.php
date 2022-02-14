@@ -37,9 +37,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                     $frmSearch->setFormTagAttribute('class', 'form');
                     $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 
-                    $fld = $frmSearch->getField('message_by');
-                    $fld->addFieldtagAttribute('id', 'searchFrmBuyerIdJs');
-
                     $fld = $frmSearch->getField('keyword');
                     $fld->addFieldtagAttribute('class', 'form-control omni-search');
 
@@ -116,7 +113,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
         <?php
             $doNotshowMessages = false;
             $threadListing = [current($arrListing)];
-            require_once(CONF_THEME_PATH . 'messages/view-thread.php');
+            require_once(CONF_THEME_PATH . 'account/view-thread.php');
         } ?>
     </div>
     <!-- <div class="content-body">

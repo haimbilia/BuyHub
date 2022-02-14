@@ -2215,15 +2215,7 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function messages()
-    {
-        $this->userPrivilege->canViewMessages($this->userId);
-        $frm = $this->getMessageSearchForm($this->siteLangId);
-        $this->set('frmSearch', $frm);
-        $this->_template->render();
-    }
-
-    public function messageSearch()
+    private function setMessages()
     {
         $userImgUpdatedOn = User::getAttributesById($this->userId, 'user_updated_on');
         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
@@ -2232,7 +2224,8 @@ class AccountController extends LoggedUserController
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
@@ -2255,11 +2248,10 @@ class AccountController extends LoggedUserController
         $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array(
-            'tth.*',
-            'ttm.message_id', 'ttm.message_text', 'ttm.message_date', 'ttm.message_is_unread',
-            'ttm.message_to', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name',
-            'tfrs.shop_id as message_from_shop_id', 'tftos.shop_id as message_to_shop_id',
-            'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
+            'tth.*', 'ttm.*',
+            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
         ));
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -2279,15 +2271,41 @@ class AccountController extends LoggedUserController
             $records = $message_records;
         }
 
-        /*CommonHelper::printArray($records); die;*/
         $this->set("arrListing", $records);
-        $this->set('loggedUserId', $this->userId);
         $this->set('parentAndTheirChildIds', $parentAndTheirChildIds);
         $this->set('postedData', $post);
+    }
+
+    public function messages()
+    {
+        $this->userPrivilege->canViewMessages($this->userId);
+        $frm = $this->getMessageSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frm);
+
+        $this->setMessages();
+        $this->_template->render();
+    }
+
+    public function messageSearch()
+    {
+        $this->setMessages();
+        $this->set('loggedUserId', $this->userId);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
         $this->_template->render(false, false);
+    }
+        
+    /**
+     * Used for load more functionality
+     */
+    public function getRows()
+    {
+        $this->setMessages();
+        $jsonData = [
+            'html' => $this->_template->render(false, false, 'account/message-search.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function viewMessages($threadId, $messageId = 0)
@@ -3846,7 +3864,7 @@ class AccountController extends LoggedUserController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function getBreadcrumbNodes($action)
     {
         if (FatUtility::isAjaxCall()) {

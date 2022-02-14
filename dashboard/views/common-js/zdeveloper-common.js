@@ -655,6 +655,10 @@ function defaultSetUpLogin(frm, v) {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
 
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
+        },
+
     });
     $(document).bind("reveal.facebox", function () {
         fcom.resetFaceboxHeight();
