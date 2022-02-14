@@ -499,7 +499,7 @@ Updates/Fixes :
     => 062416 - Admin UI: Arabic Language: Instructions are not showing in the Arabic language and the admin navigates to the export section while trying to download the N/A file 
     => 060565 - Admin UI: In the search, Address's title is also deleted while deleting the Users under the Users address
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
-
+    => 062456 - Admin UI: "Language Data" option is showing while editing the advanced setting on the meta-tag management page under the SEO section
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
