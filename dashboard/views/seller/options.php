@@ -16,7 +16,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     'onclick' => 'optionForm(0)',
                     'title' => Labels::getLabel('LBL_Add_Option', $siteLangId)
                 ],
-                'label' => Labels::getLabel('LBL_Add_Option', $siteLangId)
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                                </use>
+                            </svg>' . Labels::getLabel('LBL_Add_Option', $siteLangId)
             ],
         ];
     }

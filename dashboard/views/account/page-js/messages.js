@@ -1,8 +1,9 @@
 $(document).ready(function () {
-	searchRecords(document.frmMessageSrch);
+	searchRecords(document.frmRecordSearch);
+	$('.listingRecordJs .listItemJs.is-active').trigger('click');
 });
 (function () {
-	var dv = '#messageListing';
+	var dv = '.listingRecordJs';
 
 	searchRecords = function (frm) {
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
@@ -14,8 +15,9 @@ $(document).ready(function () {
 		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Account', 'messageSearch'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(res);
+			$('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');
 		});
 	};
 
@@ -29,20 +31,34 @@ $(document).ready(function () {
 	};
 
 	clearSearch = function () {
-		document.frmMessageSrch.reset();
-		searchRecords(document.frmMessageSrch);
+		document.frmRecordSearch.reset();
+		searchRecords(document.frmRecordSearch);
 	};
 
 	viewThread = function (obj) {
+		console.log(obj);
 		var currEle = $(obj);
 		var threadId = currEle.data('threadId');
 		$('.listItemJs.is-active').removeClass('is-active');
 		currEle.addClass('is-active');
 		$('.threadJs').prepend(fcom.getLoader());
-		fcom.updateWithAjax(fcom.makeUrl('Account', "viewThread", [threadId]), '', function (t) {
-            fcom.removeLoader();
+		fcom.ajax(fcom.makeUrl('Account', "viewThread", [threadId]), '', function (t) {
+			fcom.removeLoader();
 			$('.userJs').remove();
 			$('.threadJs').replaceWith(t.html);
-		});
+			$('.messages').scrollTop($('.messages')[0].scrollHeight);
+		}, { fOutMode: 'json' });
+	};
+
+	sendMessage = function (frm) {
+		if (!$(frm).validate()) return;
+		var data = fcom.frmData(frm);
+		$('.threadJs').prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'sendMessage'), data, function (t) {
+			fcom.removeLoader();
+			$(frm.message_text).val('');
+			searchRecords(document.frmRecordSearch);
+			viewThread($('[data-thread-id="' + frm.message_thread_id.value + '"]'));
+		}, { fOutMode: 'json' });
 	};
 })();	

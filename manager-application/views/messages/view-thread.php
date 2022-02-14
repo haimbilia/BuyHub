@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$messageDetail = current($threadListing); 
-
+$messageDetail = current($threadListing);
+$doNotshowMessages = $doNotshowMessages ?? false;
 ?>
 <?php if (empty($messageDetail)) { ?>
     <div class="col-md-9">
@@ -29,7 +29,7 @@ $messageDetail = current($threadListing);
         $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
         $toUserName = $messageDetail['message_from_name'];
     }
-    
+
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
     $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
@@ -56,8 +56,7 @@ $messageDetail = current($threadListing);
                 <div class="messages">
                     <?php
                     $lastDate = '';
-
-                    if(!isset($doNotshowMessages)){
+                    if (false === $doNotshowMessages) {
                         foreach ($threadListing as $sn => $row) {
                             $msgTimeStamp = strtotime($row['message_date']);
                             $date = date('Y-m-d', $msgTimeStamp);
@@ -84,14 +83,14 @@ $messageDetail = current($threadListing);
                                     <div class="message">
                                         <?php echo nl2br($row['message_text']); ?>
                                     </div>
-                                    <?php if($row['thread_started_by'] != $row['message_from_user_id']){ ?>
-                                     <span class="time"><?php echo $toUserName; ?></span>
+                                    <?php if ($row['thread_started_by'] != $row['message_from_user_id']) { ?>
+                                        <span class="time"><?php echo $toUserName; ?></span>
                                     <?php } ?>
                                     <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
-                        <?php } 
-                        }?>
+                    <?php }
+                    } ?>
                 </div>
             </div>
         </div>
@@ -118,21 +117,21 @@ $messageDetail = current($threadListing);
                             </div>
                         </li>
 
-                        <?php if(!empty($fromPhoneNo)) { ?>
-                        <li class="list__group-item">
-                            <div class="list__group-icon">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
-                                    </use>
-                                </svg>
-                            </div>
-                            <div class="list__group-title">
-                                <h4>
-                                    <?php echo $fromPhoneNo;?>
-                                </h4>
-                            </div>
-                        </li>
-                        <?php } ?>                       
+                        <?php if (!empty($fromPhoneNo)) { ?>
+                            <li class="list__group-item">
+                                <div class="list__group-icon">
+                                    <svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
+                                        </use>
+                                    </svg>
+                                </div>
+                                <div class="list__group-title">
+                                    <h4>
+                                        <?php echo $fromPhoneNo; ?>
+                                    </h4>
+                                </div>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>

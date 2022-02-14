@@ -1,7 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keyFld = $frmSearch->getField('keyword');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn-block');
 
@@ -39,9 +36,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
 
                     $fld = $frmSearch->getField('keyword');
                     $fld->addFieldtagAttribute('class', 'form-control omni-search');
-
-                    $fld = $frmSearch->getField('message_to');
-                    $fld->addFieldtagAttribute('id', 'searchFrmSellerIdJs');
+                    $fld->addFieldtagAttribute('title', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
+                    $fld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
 
                     echo $frmSearch->getFormTag();
                     echo $frmSearch->getFieldHtml('page');
@@ -58,15 +54,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                                 </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
-                                <div class="form-group">
-                                    <label class="label">
-                                        <?php
-                                        $fld = $frmSearch->getField('message_to');
-                                        echo $fld->getCaption();;
-                                        ?>
-                                    </label>
-                                    <?php echo $frmSearch->getFieldHtml('message_to'); ?>
-                                </div>
                                 <div class="form-group">
                                     <label class="label">
                                         <?php
@@ -111,7 +98,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
 
             </div>
         <?php
-            $doNotshowMessages = false;
+            $doNotshowMessages = true;
             $threadListing = [current($arrListing)];
             require_once(CONF_THEME_PATH . 'account/view-thread.php');
         } ?>
