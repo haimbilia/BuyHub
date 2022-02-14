@@ -1,12 +1,11 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'promotion_name' => Labels::getLabel('LBL_TITLE', $siteLangId),
+    'promotion_name' => Labels::getLabel('LBL_PROMOTION_NAME', $siteLangId),
     'promotion_budget' => Labels::getLabel('LBL_Budget', $siteLangId),
     'promotion_duration' => Labels::getLabel('LBL_Duration', $siteLangId),
     'promotion_type' => Labels::getLabel('LBL_Type', $siteLangId),
     'promotion_date' => Labels::getLabel('LBL_SCHEDULED', $siteLangId),
-    // 'promotion_time'=>Labels::getLabel('LBL_Time', $siteLangId),
     'promotion_end_date' => Labels::getLabel('LBL_PROMOTION', $siteLangId),
     'promotion_approved' => Labels::getLabel('LBL_Approved', $siteLangId),
     'promotion_active' => Labels::getLabel('LBL_Status', $siteLangId),

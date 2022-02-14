@@ -89,7 +89,7 @@ foreach ($arrListing as $sn => $row) {
                     $arr = [
                         'attr' => [
                             'href' => 'javascript:void(0)',
-                            'onclick' => 'editRecord(' . $row['ocrequest_id'] . ')',
+                            'onclick' => 'editRecord(' . $row['ocrequest_id'] . ',true)',
                             'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
                         ],
                         'label' => '<i class="icn">

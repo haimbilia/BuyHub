@@ -92,7 +92,7 @@ class CollectionsController extends ListingBaseController
     private function getListingData()
     {
         $this->checkEditPrivilege(true);
-
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -108,9 +108,12 @@ class CollectionsController extends ListingBaseController
         $srchFrm = $this->getSearchForm($fields);
 
         $postedData = FatApp::getPostedData();
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
         $post = $srchFrm->getFormDataFromArray($postedData);
 
         $srch = Collections::getSearchObject(false, $this->siteLangId);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
@@ -130,22 +133,19 @@ class CollectionsController extends ListingBaseController
         }
         $srch->addMultipleFields(array('c.*', 'c_l.collection_name'));
 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-
-        $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $post);
+        $this->set('frmSearch', $srchFrm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('doNotLimitRecords', true);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
     }
 
@@ -272,6 +272,10 @@ class CollectionsController extends ListingBaseController
 
         $collectionForApp = $post['collection_for_app'] ?? 0;
         $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::APP_COLLECTIONS_ONLY) ? 1 : $collectionForApp;
+        if(1 > $recordId){
+            $maxDisplayOrder = Collections::getMaxDisplayOrder();
+            $post['collection_display_order'] = $maxDisplayOrder + 1;
+        }
         $collection = new Collections($recordId);
         $collection->assignValues($post);
         if (!$collection->save()) {
@@ -1300,6 +1304,6 @@ class CollectionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop','collection_layout_type'], Common::excludeKeysForSort());
     }
 }
