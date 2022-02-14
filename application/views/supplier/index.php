@@ -19,7 +19,7 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
                 <div class="col-xl-5 col-lg-6">
                     <div class="seller-register-form">
                         <div class="section-head">
-                            <div class="section__heading">
+                            <div class="section-heading">
                                 <h2><?php echo Labels::getLabel('L_Register_Today', $siteLangId); ?></h2>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-6">
                         <div class="section-head section-head-center mb-0">
-                            <div class="section__heading">
+                            <div class="section-heading">
                                 <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
                             </div>
                         </div>

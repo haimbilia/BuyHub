@@ -2,12 +2,20 @@
 if ($relatedProductsRs) { ?>
     <div class="container">
         <div class="section-head section-head-center">
-            <div class="section__heading">
+            <div class="section-heading">
                 <h2><?php echo Labels::getLabel('LBL_Similar_Products', $siteLangId); ?>
                 </h2>
             </div>
+            <div class="section-action">
+                <div class="slider-controls">
+                    <button class="btn btn-prev" type="button" data-href="#product-listing"> <span class=""></span>
+                    </button>
+                    <button class="btn btn-next" type="button" data-href="#product-listing"> <span class=""></span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div id="similar-product" class="js-collection-corner collection-corner" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+        <div class="js-carousel product-listing related-products" id="product-listing" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
             <?php
             $tLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
             $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];

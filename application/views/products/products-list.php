@@ -41,7 +41,7 @@ if ($vtype == 'list') {
                     }
 
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
-                    <div class="items">
+                    <div class="item">
                         <!--product tile-->
                         <div class="products">
                             <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product, 'siteLangId' => $siteLangId], false); ?>

@@ -3,7 +3,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
     <section class="section bg-gray">
         <div class="container">
             <div class="section-head section-head-center">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2>
                         <?php echo $collection['collection_name']; ?>
                     </h2>
@@ -15,7 +15,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                     <div>
                         <div class="slider-testimonials-item">
                             <div class="slider-testimonials-image">
-                                <img width="300" height="300" class="slider-testimonials-user" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')) . '?t=' . time(); ?>">
+                                <img width="280" height="280" class="slider-testimonials-user" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')) . '?t=' . time(); ?>">
                             </div>
                             <div class="slider-testimonials-data">
                                 <div class="slider-testimonials-text">

@@ -223,11 +223,13 @@
 
     <!-- offcanvas-mega-search -->
     <div class="offcanvas offcanvas-mega-search" data-bs-backdrop="false" tabindex="-1" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
+
         <?php $this->includeTemplate('_partial/headerSearchFormArea.php'); ?>
+
     </div>
 
 
-   
+
 
 
     <!-- offcanvas-account -->

@@ -86,7 +86,7 @@ if (!empty($postList)) { ?>
     <section class="section bg-gray" data-collection="Featured blogs">
         <div class="container">
             <div class="section-head section-head-center">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2>
                         <?php echo Labels::getLabel('LBL_Featured_Blogs', $siteLangId); ?>
                     </h2>
@@ -186,7 +186,7 @@ if (!empty($postList)) { ?>
     <section class="section" data-collection="Popular stories">
         <div class="container">
             <div class="section-head section-head-center">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2>
                         <?php echo Labels::getLabel('LBL_Popular_Blogs', $siteLangId); ?>
                     </h2>

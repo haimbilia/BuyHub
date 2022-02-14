@@ -25,5 +25,7 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
         <?php /* echo $headerSrchFrm->getFieldHTML('btnSiteSrchSubmit'); */ ?>
         </form>
         <?php echo $headerSrchFrm->getExternalJS(); ?>
+        <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
     </div>
 </div>

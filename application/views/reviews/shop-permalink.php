@@ -10,7 +10,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-8">
                     <div class="section-head mb-0">
-                        <div class="section__heading">
+                        <div class="section-heading">
                             <h2><?php echo $shop['shop_name']; ?></h2>
                             <p><?php echo $shopLocation; ?>
                                 <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?>

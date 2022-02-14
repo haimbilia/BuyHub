@@ -1,15 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div id="body" class="body enter-page">
-    <div class="banner-side" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/bg-signup.png);">
-        <div class="banner-side-cta">
-            <h2>
-                <?php echo Labels::getLabel('LBL_Dont_have_an_account_yet?', $siteLangId); ?></h2>
-            <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>" class="btn btn-outline-white">
-                <?php echo Labels::getLabel('LBL_Register_Now', $siteLangId); ?>
-            </a>
-        </div>
-    </div>
     <div class="form-sign">
         <?php
         $logoUrl = UrlHelper::generateUrl();

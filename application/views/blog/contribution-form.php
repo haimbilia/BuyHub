@@ -25,7 +25,7 @@ if ($isUserLogged) {
             <div class="row justify-content-center">
                 <div class="col-lg-7">
                     <div class="section-head section-head-center">
-                        <div class="section__heading">
+                        <div class="section-heading">
                             <h1><?php echo Labels::getLabel('Lbl_Blog_Contribution', $siteLangId); ?>
                             </h1>
                             <p>Lorem ipsum dolor, sit amet consectetu sed quaerat recusandae </p>

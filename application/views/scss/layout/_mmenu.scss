@@ -32,13 +32,9 @@ nav span {
 }
 
 main {
-    display: block;
+    //display: block;
     /* IE */
-    padding: 50px 10%;
-}
-
-p + p {
-    margin-top: 20px;
+    //padding: 50px 10%;
 }
 
 .history h3 {
@@ -55,7 +51,7 @@ p + p {
 /* mmenu.js STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .mm-menu {
-    background: #bbe3f4;
+    background: #fff;
     max-width: 350px;
 }
 
@@ -400,7 +396,7 @@ li.mm-vertical.mm-opened > .mm-panel {
     right: 20px;
 }
 .mm-menu {
-    background: #f3f3f3;
+    background: #fff;
     border-color: rgba(0, 0, 0, 0.1);
     color: rgba(0, 0, 0, 0.7);
 }

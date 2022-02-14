@@ -41,23 +41,28 @@
         #{$end-direction}: calc(50% - 38vw);
     }
     .slick-dots {
-        padding: 0;
+        padding: 0.5rem 1rem;
         position: absolute;
-        bottom: 10px;
+        bottom: 50px;
         #{$start-direction}: 0;
         #{$end-direction}: 0;
         margin: 0 auto;
         text-align: center;
+        background-color: #fff;
+        box-shadow: $shadow3;
+        border-radius: 20px;
+        display: inline-block;
+        width: max-content;
         li {
             vertical-align: middle;
             display: inline-block;
-            margin: 0 3px;
-            width: 13px;
-            height: 3px;
-            box-shadow: $shadow2;
-            border-radius: $radius1;
+            margin: 0 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid transparent;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.5);
+            background: #464646;
             transition: all 0.5s ease-in-out;
             button {
                 background: none;
@@ -65,26 +70,11 @@
                 text-indent: -9999999px;
             }
             &.slick-active {
-                background: $brand-color;
-                color: $brand-color-inverse;
-                width: 30px;
-                border-radius: 15px;
+                background: #fff;
+                border-color: var(--brand-color);
             }
         }
     }
-}
-
-.slick-arrow {
-    position: absolute;
-    top: calc(50% - 20px);
-    background-color: #fff;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: none;
-    text-indent: -999999px;
-    z-index: 1;
-    cursor: pointer;
 }
 
 .how-works {
@@ -146,7 +136,7 @@
 .featured-products {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    .items {
+    .item {
         .products {
             &-body {
                 .products-img {
@@ -209,7 +199,7 @@
         }
     }
     &[data-view="1"] {
-        .items {
+        .item {
             grid-column-start: 5;
             grid-column-end: 9;
             @include media-breakpoint-down(lg) {
@@ -223,7 +213,7 @@
         }
     }
     &[data-view="2"] {
-        .items {
+        .item {
             &:first-child {
                 grid-column-start: 4;
                 grid-column-end: 7;
@@ -246,7 +236,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 4;
@@ -283,7 +273,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 2;
@@ -321,7 +311,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child,
                 &:nth-child(2) {
@@ -375,7 +365,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 1;
@@ -448,7 +438,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 2;

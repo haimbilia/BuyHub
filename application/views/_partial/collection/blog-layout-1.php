@@ -2,10 +2,10 @@
     <section class="section">
         <div class="container">
             <div class="section-head">
-                <?php echo (isset($collection['collection_name']) && $collection['collection_name'] != '') ? ' <div class="section__heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
+                <?php echo (isset($collection['collection_name']) && $collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
 
                 <?php if (isset($collection['totBlogs']) && $collection['totBlogs'] > Collections::LIMIT_BLOG_LAYOUT1) { ?>
-                    <div class="section__action">
+                    <div class="section-action">
                         <a href="<?php echo UrlHelper::generateUrl('blog'); ?>" class="link">
                             <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?>
                         </a>

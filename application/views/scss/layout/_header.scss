@@ -1,7 +1,5 @@
 $header-height: 154px;
-@include media-breakpoint-up(lg) {
-    $header-height: 138px;
-}
+
 .header {
     position: sticky;
     z-index: $zindex-fixed;
@@ -207,16 +205,4 @@ $header-height: 154px;
 
 .dropdown.is-active .dropdown__target {
     pointer-events: auto;
-}
-
-.btn-mega-search {
-    background-color: $brand-color;
-    color: $brand-color-inverse;
-    border-radius: 50%;
-    width: 2.625rem;
-    height: 2.625rem;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }

@@ -23,7 +23,7 @@
     }
     .tab-content {
         .faq-list {
-            max-width: 60%;
+            max-width: 70%;
             margin: 0 auto;
             margin-top: 2rem;
             display: flex;
@@ -33,7 +33,7 @@
                 max-width: none;
             }
             &-item {
-                padding: 2rem;
+                padding: 2rem 3rem;
                 margin-bottom: 1rem;
                 background: $bg-gray;
                 h5 {
@@ -49,11 +49,12 @@
                 }
             }
             &-link {
-                background: none;
+                background-color: transparent;
                 border: none;
                 position: relative;
                 display: flex;
                 width: 100%;
+                font-size: 1.125rem;
                 font-weight: 500;
                 margin: 0;
                 padding: 0;
@@ -82,5 +83,7 @@
 
     .faq_data {
         margin-top: 2rem;
+        font-size: 1rem;
+        line-height: 1.6;
     }
 }

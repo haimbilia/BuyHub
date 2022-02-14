@@ -2,10 +2,10 @@
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
-                <?php echo ($collection['collection_name'] != '') ? ' <div class="section__heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
+                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
 
                 <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
-                    <div class="section__action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+                    <div class="section-action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
                 <?php } ?>
             </div>
             <div class="brand-layout-1">
@@ -36,5 +36,5 @@
         </div>
     </section>
 
- 
+
 <?php } ?>

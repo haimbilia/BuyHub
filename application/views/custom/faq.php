@@ -5,7 +5,7 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6">
                     <div class="section-head section-head-center mb-0">
-                        <div class="section__heading">
+                        <div class="section-heading">
                             <h1><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h1>
                         </div>
                     </div>

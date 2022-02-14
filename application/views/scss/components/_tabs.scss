@@ -10,12 +10,12 @@
         //margin: 0 1rem;
         &:last-child {
             .nav-link {
-                padding-#{$end-direction}: 0;
+                margin-#{$end-direction}: 0;
             }
         }
         &:first-child {
             .nav-link {
-                padding-#{$start-direction}: 0;
+                margin-#{$start-direction}: 0;
             }
         }
     }
@@ -23,12 +23,12 @@
         color: $txt-body;
         border: none;
         font-weight: 500;
-        font-size: 0.85rem;
-        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        padding: 0.7rem 0;
+        margin: 0 2rem;
         &:hover {
             color: $brand-color;
         }
-
         &.active {
             background: none;
             border: none;

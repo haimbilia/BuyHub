@@ -174,10 +174,9 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getBadgeRequestImageData($sizeType);
                 break;
         }
-
-
         foreach ($imageDimensions as $key => $val) {
-            $imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val['width'], $val['height']);
+            $imageDimensions[$key]['aspectRatio'] = "1:1";
+            //$imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val['width'], $val['height']);
         }
 
 

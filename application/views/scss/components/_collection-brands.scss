@@ -1,7 +1,9 @@
 .brand-layout-1 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-gap: 1rem;
+    grid-gap: 2rem;
+    justify-content: center;
+    flex: 0 0 100%;
     @include media-breakpoint-down(sm) {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
@@ -32,15 +34,11 @@
     }
 }
 .brand-layout-2 {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     display: grid;
-    grid-gap: 4rem;
-    grid-template-columns: repeat(3, 1fr);
-    @include media-breakpoint-up(lg) {
-        grid-template-columns: repeat(6, 1fr);
-    }
+    grid-template-columns: repeat(auto-fit, 200px);
+    gap: 1.5rem;
+    justify-content: center;
+    flex: 0 0 100%;
     .brand {
         display: flex;
         flex-direction: column;
@@ -56,8 +54,9 @@
             padding: 0;
             margin: 0;
             box-shadow: $shadow4;
-
+            max-height: 172px;
             img {
+                object-fit: contain;
                 margin: auto;
                 &[data-ratio="16:9"] {
                     max-width: 120px;
@@ -68,7 +67,9 @@
             }
         }
         &-thumb {
+            aspect-ratio: 1/1;
             img {
+                object-fit: contain;
                 margin: auto;
             }
         }

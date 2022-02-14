@@ -7,7 +7,7 @@
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2>
                         <?php echo $collection['collection_name']; ?>
                     </h2>

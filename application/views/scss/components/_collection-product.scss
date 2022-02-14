@@ -8,9 +8,7 @@
         display: flex;
         justify-content: space-between;
         @include media-breakpoint-down(sm) {
-            & {
-                flex-direction: column;
-            }
+            flex-direction: column;
         }
     }
     .shop-detail-side {
@@ -121,16 +119,13 @@
     &.ftshops-rtl {
         .shop-detail-side {
             -webkit-box-ordinal-group: 3;
-            -ms-flex-order: 2;
             order: 2;
             &:after {
                 border-left-color: $brand-color;
                 border-right-color: $brand-color;
             }
             @include media-breakpoint-down(sm) {
-                & {
-                    order: inherit;
-                }
+                order: inherit;
             }
         }
         .product-wrapper {
@@ -196,9 +191,8 @@
 
 .product-layout-1 {
     display: grid;
-    grid-gap: 5px;
+    grid-gap: 2rem;
     grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
-
     @include media-breakpoint-down(md) {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
@@ -244,7 +238,7 @@
     max-width: 1000px;
     margin: auto;
     display: grid;
-    grid-gap: 4rem;
+    column-gap: 4rem;
     grid-template-columns: repeat(4, 1fr);
     .products {
         height: 100%;

@@ -1,6 +1,6 @@
 <div class="detail-content">
     <div class="section-head">
-        <div class="section__heading" id="prev-files">
+        <div class="section-heading" id="prev-files">
             <h2>
                 <?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?>
             </h2>

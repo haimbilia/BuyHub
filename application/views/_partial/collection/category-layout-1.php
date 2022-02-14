@@ -3,8 +3,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
     <section class="section">
         <div class="container">
             <div class="section-head">
-                <?php echo ($collection['collection_name'] != '') ? ' <div class="section__heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
-                <div class="section__action">
+                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
+                <div class="section-action">
                     <ul class="nav nav-tabs" role="tablist">
                         <?php
                         $x = 0;
@@ -42,7 +42,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                     $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                 }
                             ?>
-                                <div class="items">
+                                <div class="item">
                                     <?php $prodImgSize = 'MEDIUM'; ?>
                                     <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> item--sold  <?php } ?>">
                                         <?php if ($product['selprod_stock'] <= 0) { ?>
@@ -95,7 +95,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                 ?>
             </div>
             <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT1) { ?>
-                <div class="section__action">
+                <div class="section-action">
                     <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
                 </div>
             <?php }  ?>

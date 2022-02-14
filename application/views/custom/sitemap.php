@@ -4,7 +4,7 @@
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-8">
                     <div class="section-head mb-0">
-                        <div class="section__heading">
+                        <div class="section-heading">
                             <h2 class="mb-0"><?php echo Labels::getLabel('LBL_SITEMAP', $siteLangId); ?></h2>
                             <div class="breadcrumbs breadcrumbs--white">
                                 <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>

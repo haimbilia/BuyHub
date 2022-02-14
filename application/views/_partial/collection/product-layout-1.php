@@ -3,14 +3,20 @@
     <section class="section">
         <div class="container">
             <div class="section-head">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
                 </div>
-                <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                    <div class="section__action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
-                <?php } ?>
+                <div class="section-action">
+                    <div class="slider-controls">
+                        <button class="btn btn-prev" type="button" data-href="#product-listing"> <span class=""></span>
+                        </button>
+                        <button class="btn btn-next" type="button" data-href="#product-listing"> <span class=""></span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
-            <div class="product-listing" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-listing js-carousel" id="product-listing" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
@@ -24,7 +30,7 @@
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }
                 ?>
-                    <div class="items">
+                    <div class="item">
                         <?php
                         $displayProductNotAvailableLable = false;
                         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
@@ -33,7 +39,9 @@
                         include('product-layout-1-list.php'); ?>
                     </div>
                 <?php } ?>
-            </div>
+            </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+                <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+            <?php } ?>
         </div>
     </section>
 <?php }

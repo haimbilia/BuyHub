@@ -10,12 +10,12 @@ if (!empty($reviews)) {
 ?>
 <div class="detail-content">
     <!-- <div class="section-head">
-        <div class="section__heading">
+        <div class="section-heading">
             <h2>
                 <?php echo Labels::getLabel('LBl_Rating_&_Reviews', $siteLangId); ?>
             </h2>
         </div>
-        <div class="section__action">
+        <div class="section-action">
             <?php if ($canSubmitFeedback || $totReviews > 0) { ?>
                 <div class="row">
                     <?php if ($canSubmitFeedback) { ?>

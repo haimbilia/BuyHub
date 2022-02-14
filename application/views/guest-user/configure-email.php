@@ -3,7 +3,7 @@
     <section class="bg-brand-light pt-3 pb-3">
         <div class="container">
             <div class="section-head section-head-center mb-0">
-                <div class="section__heading">
+                <div class="section-heading">
                     <h2 class="mb-0 pageTitle-js">
                         <?php echo Labels::getLabel('LBL_CONFIGURE_YOUR_DETAILS', $siteLangId); ?></h2>
                 </div>

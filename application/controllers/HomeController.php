@@ -4,7 +4,7 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-        
+
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
@@ -95,6 +95,7 @@ class HomeController extends MyAppController
         }
 
         $this->_template->addJs('js/slick.min.js');
+        $this->_template->addJs('js/slick-carousels.js');
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId . '-' . $apiCall . '-' . serialize($geoAddress);
@@ -123,7 +124,7 @@ class HomeController extends MyAppController
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('bannerLayout1', $collection['banners']);
-                       
+
                         $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
                     }
@@ -700,10 +701,10 @@ class HomeController extends MyAppController
                             }
                         }
                     }
-                    
+
 
                     $collections[$ind]['banners'] = empty($banners) && (true === MOBILE_APP_API_CALL) ? (object) [] : $banners;
-                    
+
                     break;
                 case Collections::COLLECTION_TYPE_PRODUCT:
                     $tempObj = clone $collectionObj;
@@ -822,7 +823,7 @@ class HomeController extends MyAppController
                             /* ] */
                             $counter++;
                         }
-                    }  else if($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1){
+                    } else if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) {
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Product data[ */
                             $productShopSrchTempObj = clone $productSrchObj;

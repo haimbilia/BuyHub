@@ -4,8 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 $bCount = 1;
 
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-    <section class="section poster-layout-1">
-
+    <section class="poster-layout-1">
         <?php foreach ($bannerLayout1['banners'] as $val) {
             /* if($bCount%2==0)
         {
@@ -23,30 +22,30 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                 continue;
             } else {
                 $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId);
-              
+
                 foreach ($slideArr as $slideScreen) {
                     $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                     switch ($slideScreen['afile_screen']) {
                         case applicationConstants::SCREEN_MOBILE:
                             $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_MOBILE, 'MOBILE')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
-                            $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], $siteLangId,applicationConstants::SCREEN_MOBILE, 'WEBPMOBILE')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp') . ",";
+                            $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, 'WEBPMOBILE')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp') . ",";
                             break;
                         case applicationConstants::SCREEN_IPAD:
                             $tabletUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_IPAD, 'TABLET')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
-                            $tabletWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], $siteLangId,applicationConstants::SCREEN_IPAD, 'WEBPTABLET')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp') . ",";
+                            $tabletWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, 'WEBPTABLET')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp') . ",";
                             break;
                         case applicationConstants::SCREEN_DESKTOP:
-                           $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId,applicationConstants::SCREEN_DESKTOP, 'DESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                           $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId,applicationConstants::SCREEN_DESKTOP, 'WEBPDESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                     
+                            $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_DESKTOP, 'DESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_DESKTOP, 'WEBPDESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+
                             break;
                     }
                 }
             }
 
             if ($desktopUrl == '') {
-                $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId,applicationConstants::SCREEN_DESKTOP,  'DESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId,applicationConstants::SCREEN_DESKTOP,  'WEBPDESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+                $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_DESKTOP,  'DESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT1, $siteLangId, applicationConstants::SCREEN_DESKTOP,  'WEBPDESKTOP')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
             }
 
             if ($val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
@@ -59,12 +58,12 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
             <div class="poster <?php /* echo $bannerClass; */ ?>">
                 <a target="<?php echo $val['banner_target']; ?>" href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" title="<?php echo $val['banner_title']; ?>">
                     <?php
-                    $bannerDimension = ImageDimension::getBannerData('',Collections::TYPE_BANNER_LAYOUT1);
-                   
+                    $bannerDimension = ImageDimension::getBannerData('', Collections::TYPE_BANNER_LAYOUT1);
+
                     $pictureAttr = [
                         'webpImageUrl' => $mobileWebpUrl . $tabletWebpUrl . $desktopWebpUrl,
                         'jpgImageUrl' => $mobileUrl . $tabletUrl . $desktopUrl,
-                        'imageUrl' =>$desktopUrl,
+                        'imageUrl' => $desktopUrl,
                         'ratio' => $bannerDimension['aspectRatio'],
                         'alt' => $val['banner_title'],
                         'siteLangId' => $siteLangId,
@@ -76,7 +75,6 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
             </div>
         <?php $bCount++;
         } ?>
-
     </section>
 <?php
 }     ?>

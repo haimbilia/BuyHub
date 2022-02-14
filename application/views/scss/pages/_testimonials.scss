@@ -24,9 +24,9 @@
                 left: 0;
                 top: 0;
                 z-index: 0;
-                width: 236px;
-                height: 236px;
-                background: $brand-color;
+                width: 12.9rem;
+                height: 12.9rem;
+                background: var(--brand-color);
                 border-top-left-radius: 100px;
             }
         }
@@ -38,17 +38,19 @@
             height: 100px;
         }
         @include media-breakpoint-up(lg) {
-            width: 300px;
-            height: 300px;
+            width: 17.5rem;
+            height: 17.5rem;
             position: relative;
-            margin-left: 70px;
+            margin-#{$start-direction}: 70px;
             margin-top: 70px;
         }
     }
     &-data {
-        margin-left: 2rem;
+        margin-#{$start-direction}: 6.25rem;
+        margin-top: 6.25rem;
         text-align: left;
         flex: 1;
+        font-size: 1.3rem;
     }
     &-text {
         max-width: 512px;
@@ -57,8 +59,8 @@
     &-from {
         margin-top: 2rem;
         .name {
+            font-size: 1.3rem;
             display: block;
-            font-size: 1rem;
             font-weight: 600;
         }
     }
