@@ -49,6 +49,8 @@ class MetaTagsController extends ListingBaseController
         }
 
         $fields = $this->getFormColumns($metaType);
+        $this->setCustomColumnWidth($metaType);
+        
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
@@ -762,6 +764,55 @@ class MetaTagsController extends ListingBaseController
 
         CacheHelper::create('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
+    }
+
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(string $metaType): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'action' => [
+                'width' => '5%'
+            ],   
+        ];
+
+        switch ($metaType) {
+            case MetaTag::META_GROUP_PRODUCT_DETAIL:
+                $arr['selprod_title'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_SHOP_DETAIL:
+                $arr['shop_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_CMS_PAGE:
+                $arr['cpage_title'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BRAND_DETAIL:
+                $arr['brand_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_CATEGORY_DETAIL:
+                $arr['prodcat_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BLOG_CATEGORY:
+                $arr['bpcategory_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BLOG_POST:
+                $arr['post_title'] = ['width' => '45%'];
+                break;
+        }
+
+        if(count($arr) == 3 ){
+            $arr['meta_title'] = ['width' => '45%'];
+        }else{
+            $arr['meta_title'] = ['width' => '90%'];
+        }
+        
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function getDefaultColumns(): array
