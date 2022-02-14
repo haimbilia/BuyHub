@@ -60,9 +60,10 @@ $(document).ready(function () {
 		}
 		/*]*/
 
-		$("#usersListing").html(fcom.getLoader());
+		$("#usersListing").prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Affiliate', 'userSearch'), data, function (res) {
+            fcom.removeLoader();
 			$("#usersListing").html(res);
 		});
 	};
