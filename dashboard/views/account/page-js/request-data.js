@@ -15,8 +15,9 @@ $(document).ready(function(){
 	};
 	
 	requestDataForm = function(){				
-		$(dv).html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function(t) {			
+		$(dv).prepend(fcom.getloader());
+		fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function(t) {
+            fcom.removeLoader();
 			$(dv).html(t);
 		});
 	};

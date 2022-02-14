@@ -52,10 +52,11 @@ $(function () {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $(dv).prepend(fcom.getloader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };

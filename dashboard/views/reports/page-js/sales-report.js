@@ -31,10 +31,11 @@ $(function () {
 	searchRecords = function (frm, withloader) {
 		setColumnsData(frm);
 		if (typeof withloader == 'undefined' || withloader != false) {
-			$(dv).html(fcom.getLoader());
+			$(dv).prepend(fcom.getloader());
 		}
 		var data = fcom.frmData(frm);
 		fcom.ajax(fcom.makeUrl('Reports', 'searchSalesReport'), data, function (t) {
+            fcom.removeLoader();
 			$(dv).html(t);
 		});
 	};

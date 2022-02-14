@@ -10,6 +10,7 @@ $(document).ready(function () {
 
 		$("#ordersListing").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'orderSearchListing'), data, function (res) {
+            fcom.removeLoader();
 			$("#ordersListing").html(res);
 		});
 	};

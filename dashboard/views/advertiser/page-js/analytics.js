@@ -15,9 +15,10 @@ $(document).ready(function(){
 			data = fcom.frmData(form);
 		}
 		
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getloader());
 		
 		fcom.ajax(fcom.makeUrl('Advertiser','searchAnalyticsData'),data,function(res){
+            fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};

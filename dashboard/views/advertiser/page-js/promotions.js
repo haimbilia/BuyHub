@@ -65,8 +65,9 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		if (form) {
 			data = fcom.frmData(form);
 		}
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getloader());
 		fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotions'), data, function (t) {
+            fcom.removeLoader();
 			$(dv).html(t);
 			if (!$(dv).hasClass('card-body')) {
 				$(dv).addClass('card-body')
@@ -208,12 +209,10 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 			contentType: false,
 			processData: false,
 			beforeSend: function () {
-				$('#loader-js').html(fcom.getLoader());
-			},
-			complete: function () {
-				$('#loader-js').html(fcom.getLoader());
+				$('#loader-js').prepend(fcom.getloader());
 			},
 			success: function (ans) {
+				fcom.removeLoader();
 				$.mbsmessage.close();
 				if (ans.status == true) {
 					$.mbsmessage(ans.msg, '', 'alert--success');

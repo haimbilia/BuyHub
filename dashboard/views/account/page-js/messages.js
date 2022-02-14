@@ -11,9 +11,10 @@ $(document).ready(function () {
 			data = fcom.frmData(frm);
 		}
 		/*]*/
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getloader());
 
 		fcom.ajax(fcom.makeUrl('Account', 'messageSearch'), data, function (res) {
+            fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
@@ -39,6 +40,7 @@ $(document).ready(function () {
 		currEle.addClass('is-active');
 		$('.threadJs').prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Account', "viewThread", [threadId]), '', function (t) {
+            fcom.removeLoader();
 			$('.userJs').remove();
 			$('.threadJs').replaceWith(t.html);
 		});

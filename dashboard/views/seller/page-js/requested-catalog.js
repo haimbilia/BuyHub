@@ -60,12 +60,10 @@ $(document).ready(function(){
 		
 		var dv = $("#messagesList");
 		var data = fcom.frmData(frm);
-		if( append == 1 ){
-			$(dv).prepend(fcom.getLoader());
-		} else {
-			$(dv).html(fcom.getLoader());
-		}
+		
+		$(dv).prepend(fcom.getloader());
 		fcom.updateWithAjax(fcom.makeUrl('Seller','catalogRequestMessageSearch'), data, function(ans){
+            fcom.removeLoader();
 			$.mbsmessage.close();
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();

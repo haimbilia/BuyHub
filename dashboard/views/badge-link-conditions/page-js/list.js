@@ -29,13 +29,14 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
-        console.log(data);
+        
         fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };

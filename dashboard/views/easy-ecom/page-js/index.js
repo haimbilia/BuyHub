@@ -7,15 +7,17 @@ $(document).ready(function () {
 (function () {
     var dv = '#landingpage-js';
     landingPage = function () {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
         fcom.ajax(fcom.makeUrl(keyName, 'landingPage'), '', function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
 
     register = function () {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
         fcom.ajax(fcom.makeUrl(keyName, 'register'), '', function (res) {
+            fcom.removeLoader();
             res = $.parseJSON(res);
             if (1 > res.status) {
                 $.systemMessage(res.msg, 'alert--danger', false);

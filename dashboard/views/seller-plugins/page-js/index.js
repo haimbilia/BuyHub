@@ -2,8 +2,9 @@
 
     searchPlugin = function (type) {
         var dv = $("#Listing");
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
         fcom.ajax(fcom.makeUrl('SellerPlugins', 'search', [type]), '', function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
@@ -24,7 +25,7 @@
                 $.mbsmessage(ans.msg, true, 'alert--success');
             } else {
                 $.mbsmessage(ans.msg, true, 'alert--danger');
-            }            
+            }
             searchPlugin(type);
         });
     };
@@ -36,21 +37,21 @@
             fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
                 try {
                     res = jQuery.parseJSON(t);
-                    $.facebox(res.msg );
+                    $.facebox(res.msg);
                 } catch (e) {
-                    $.facebox(t );
+                    $.facebox(t);
                 }
                 fcom.resetFaceboxHeight();
             });
         });
 
-    };    
-    
+    };
+
     setupPluginsSettings = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
-        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) { 
+        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
             $(document).trigger('close.facebox');
         });
     };

@@ -16,10 +16,11 @@ $(document).ready(function(){
 		if( append == 1 ){
 			$(dv).find('.loader-yk').remove();
 		} else {
-			$(dv).html(fcom.getLoader());
+			$(dv).prepend(fcom.getloader());
 		}
 		
 		fcom.updateWithAjax(fcom.makeUrl('Account','threadMessageSearch'), data, function(ans){
+            fcom.removeLoader();
 			$.mbsmessage.close();
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();

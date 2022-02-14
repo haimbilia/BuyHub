@@ -19,6 +19,7 @@ $(document).ready(function () {
 
 		$("#ordersListing").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'orderSearchListing'), data, function (res) {
+            fcom.removeLoader();
 			$("#ordersListing").html(res);
 		});
 	};

@@ -4,13 +4,10 @@ $(document).ready(function(){
 (function() {
 	searchOrderReturnRequestMessages = function(frm, append = 0){
 		var dv = $("#messagesList");
-		if( append == 1 ){
-			$(dv).prepend(fcom.getLoader());
-		} else {
-			$(dv).html(fcom.getLoader());
-		}
+		$(dv).prepend(fcom.getloader());
 		var data = fcom.frmData(frm);
 		fcom.ajax(fcom.makeUrl('Account','orderReturnRequestMessageSearch'), data, function(ans){
+            fcom.removeLoader();
 			ans = $.parseJSON(ans);
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();

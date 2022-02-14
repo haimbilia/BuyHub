@@ -7,9 +7,10 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$("#returnOrderRequestsListing").html(fcom.getLoader());
+		$("#returnOrderRequestsListing").prepend(fcom.getloader());
 
 		fcom.ajax(fcom.makeUrl('Buyer', 'orderReturnRequestSearch'), data, function (res) {
+            fcom.removeLoader();
 			$("#returnOrderRequestsListing").html(res);
 		});
 	};

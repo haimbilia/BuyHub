@@ -125,12 +125,13 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         }
         /*]*/
         var dv = $("#listing");
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
 
         fcom.ajax(
             fcom.makeUrl("Seller", "searchSpecialPriceProducts"),
             data,
             function (res) {
+                fcom.removeLoader();
                 $("#listing").html(res);
                 $(".date_js").datepicker("option", { minDate: new Date() });
             }

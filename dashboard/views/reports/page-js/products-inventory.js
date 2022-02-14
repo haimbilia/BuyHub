@@ -41,10 +41,11 @@ $(function () {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $(dv).prepend(fcom.getloader());
         }
 
         fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function (t) {
+            fcom.removeLoader();
             $(dv).html(t);
         });
     };

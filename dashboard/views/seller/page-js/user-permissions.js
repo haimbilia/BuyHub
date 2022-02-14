@@ -15,8 +15,9 @@ $(document).ready(function () {
         if (form) {
             data = fcom.frmData(form);
         }
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getloader());
         fcom.ajax(fcom.makeUrl('Seller', 'userRoles'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
