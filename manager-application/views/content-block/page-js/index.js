@@ -26,5 +26,11 @@
 
     mediaForm = function(recordId, imageType, langId, slideScreen) {
         backgroundImage(recordId, 'THUMB' ,langId);
-    }
+    };
+
+    resetToDefaultContent =  function(){
+		var agree  = confirm(langLbl.confirmReplaceCurrentToDefault);
+		if( !agree ){ return false; }		
+		oUtil.obj.putHTML( $("#editor_default_content").html() );
+	};
 })();
