@@ -1,7 +1,7 @@
 (function () {
 	var dv = '#payoutsSection';
     pluginForm = function (keyName) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         $("ul.tabs-js li").removeClass("is-active");
         $("#tab-" + keyName).addClass("is-active");
         fcom.ajax(fcom.makeUrl(keyName, 'form'), '', function (t) {

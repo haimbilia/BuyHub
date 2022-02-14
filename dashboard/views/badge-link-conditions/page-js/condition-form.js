@@ -56,7 +56,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         }
 
         $('.listingSection--js, .searchform_filter').hide();
-        $('#otherTopForm--js').prepend(fcom.getloader());
+        $('#otherTopForm--js').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {
             fcom.removeLoader();
             $('#otherTopForm--js').html(t);
@@ -93,7 +93,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
     ribbonForm = function (blinkcond_id, badgeId) {
         $('.listingSection--js, .searchform_filter').hide();
-        $('#otherTopForm--js').prepend(fcom.getloader());
+        $('#otherTopForm--js').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_RIBBON, badgeId, blinkcond_id]), '', function (t) {
             fcom.removeLoader();
             $('#otherTopForm--js').html(t);
@@ -238,7 +238,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     }
 
     searchRecords = function (form) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
         fcom.ajax(fcom.makeUrl(controller, recordsMethod, [$('.formSearch--js input[name="blinkcond_id"]').val()]), fcom.frmData(form), function (res) {
             fcom.removeLoader();
@@ -252,7 +252,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     reloadRecordsList = function (blinkcond_id, page) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         var data = 'page=' + page;
         var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
         fcom.ajax(fcom.makeUrl(controller, recordsMethod, [blinkcond_id]), data, function (t) {

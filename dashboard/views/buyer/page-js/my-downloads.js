@@ -10,7 +10,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadSearch'), data, function (res) {
             fcom.removeLoader();
 			$(dv).html(res);
@@ -26,7 +26,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadLinksSearch'), data, function (res) {
             fcom.removeLoader();
 			$(dv).html(res);

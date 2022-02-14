@@ -11,7 +11,7 @@ $(document).ready(function () {
 			data = fcom.frmData(frm);
 		}
 		/*]*/
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Account', 'messageSearch'), data, function (res) {
             fcom.removeLoader();

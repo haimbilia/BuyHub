@@ -6,7 +6,7 @@ var financialSummary = '.summary-listing-js';
 $("document").ready(function () {
     //$('.step').removeClass("is-current");
     if (!isUserLogged()) {
-        $(loginDiv).prepend(fcom.getloader());
+        $(loginDiv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'login'), '', function (ans) {
             fcom.removeLoader();
             $(loginDiv).html(ans);
@@ -30,14 +30,14 @@ $("document").ready(function () {
     };
 
     loadSubscriptionCartReviewDiv = function () {
-        $(loginDiv).prepend(fcom.getloader());
+        $(loginDiv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'loginDetails'), '', function (ans) {
             fcom.removeLoader();
             $(loginDiv).html(ans);
             //$(loginDiv).show();
 
         });
-        $(sCartReviewDiv).prepend(fcom.getloader());
+        $(sCartReviewDiv).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'reviewScart'), '', function (ans) {
             fcom.removeLoader();
@@ -49,7 +49,7 @@ $("document").ready(function () {
     };
     getReviewSCart = function () {
         $(sCartReviewDiv).find('.section-head').attr('onClick', 'loadCartReviewDiv()');
-        $(sCartReviewDiv).prepend(fcom.getloader());
+        $(sCartReviewDiv).prepend(fcom.getLoader());
         $(paymentDiv).html('<div class="selected-panel">4. Make payment</div>');
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getReviewScart'), '', function (ans) {
             fcom.removeLoader();
@@ -72,7 +72,7 @@ $("document").ready(function () {
         loadPaymentBlankDiv();
     });
     loadPaymentBlankDiv = function () {
-        $(paymentDiv).prepend(fcom.getloader());
+        $(paymentDiv).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'PaymentBlankDiv'), '', function (ans) {
             fcom.removeLoader();
@@ -81,7 +81,7 @@ $("document").ready(function () {
         });
     }
     loadPaymentSummary = function () {
-        $(paymentDiv).prepend(fcom.getloader());
+        $(paymentDiv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'PaymentSummary'), '', function (ans) {
             fcom.removeLoader();
             $(paymentDiv).html(ans);
@@ -90,7 +90,7 @@ $("document").ready(function () {
         });
     };
     loadFinancialSummary = function () {
-        $(financialSummary).prepend(fcom.getloader());
+        $(financialSummary).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getFinancialSummary'), '', function (ans) {
             fcom.removeLoader();
             $(financialSummary).html(ans);

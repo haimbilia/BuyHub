@@ -125,7 +125,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         }
         /*]*/
         var dv = $("#listing");
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
 
         fcom.ajax(
             fcom.makeUrl("Seller", "searchSpecialPriceProducts"),

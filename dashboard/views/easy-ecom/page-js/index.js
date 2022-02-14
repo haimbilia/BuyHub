@@ -7,7 +7,7 @@ $(document).ready(function () {
 (function () {
     var dv = '#landingpage-js';
     landingPage = function () {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'landingPage'), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -15,7 +15,7 @@ $(document).ready(function () {
     };
 
     register = function () {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'register'), '', function (res) {
             fcom.removeLoader();
             res = $.parseJSON(res);

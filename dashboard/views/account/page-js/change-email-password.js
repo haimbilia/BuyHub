@@ -19,7 +19,7 @@ $(document).ready(function(){
 	};
 
 	changePasswordForm = function(){
-		$(passdv).prepend(fcom.getloader());
+		$(passdv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'changePasswordForm'), '', function(t) {
             fcom.removeLoader();
 			$(passdv).html(t);
@@ -27,7 +27,7 @@ $(document).ready(function(){
 	};
 
 	changeEmailForm = function(){
-		$(emaildv).prepend(fcom.getloader());
+		$(emaildv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'changeEmailForm'), '', function(t) {
             fcom.removeLoader();
 			$(emaildv).html(t);
@@ -51,7 +51,7 @@ $(document).ready(function(){
     };
 
     changePhoneNumberForm = function(){
-		$(phoneNumberdv).prepend(fcom.getloader());
+		$(phoneNumberdv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'changePhoneForm'), '', function(t) {
             fcom.removeLoader();
             t = $.parseJSON(t);

@@ -5,7 +5,7 @@ $(document).ready(function() {
 (function() {
     var runningAjaxReq = false;
     searchBatches = function(frm) {
-        $('#listing').prepend(fcom.getloader());
+        $('#listing').prepend(fcom.getLoader());
         var data = fcom.frmData(document.frmBatchSearch);
         fcom.ajax(fcom.makeUrl('BatchProducts', 'search'), data, function(t) {
             fcom.removeLoader();
@@ -89,7 +89,7 @@ $(document).ready(function() {
     }
 
     reloadBatchProducts = function(prodgroup_id) {
-        $("#productsList").prepend(fcom.getloader());
+        $("#productsList").prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('BatchProducts', 'loadBatchProducts', [prodgroup_id]), '', function(t) {
             fcom.removeLoader();
             $("#productsList").html(t);

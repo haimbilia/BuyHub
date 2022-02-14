@@ -39,7 +39,7 @@ $(document).ready(function () {
             data = fcom.frmData(form);
         }
 
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     searchProductsSection = function (profileId) {
         var dv = '#product-section--js';
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -88,7 +88,7 @@ $(document).ready(function () {
 
     searchZone = function (profileId, scrollToNew = false) {
         var dv = '#listing-zones';
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -127,7 +127,7 @@ $(document).ready(function () {
             preSelectedCheckbox = 1;
         }
         var dv = '#state_list_' + countryId;
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ShippingZones', 'searchStates', [countryId, zoneId, shipZoneId, profileId, preSelectedCheckbox]), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);

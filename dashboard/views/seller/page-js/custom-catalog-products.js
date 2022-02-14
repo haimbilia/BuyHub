@@ -92,7 +92,7 @@ $(document).on('change','.option-js',function(){
 		$inputs.each(function() { data.append( this.name,$(this).val());});
 
 		$.each( $('#prod_image')[0].files, function(i, file) {
-				$('#imageupload_div').prepend(fcom.getloader());
+				$('#imageupload_div').prepend(fcom.getLoader());
 				data.append('prod_image', file);
 				$.ajax({
 					url : fcom.makeUrl('Seller', 'setupCustomCatalogProductImages'),

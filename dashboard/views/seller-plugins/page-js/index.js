@@ -2,7 +2,7 @@
 
     searchPlugin = function (type) {
         var dv = $("#Listing");
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SellerPlugins', 'search', [type]), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);

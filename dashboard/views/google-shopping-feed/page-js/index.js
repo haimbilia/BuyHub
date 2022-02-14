@@ -12,7 +12,7 @@ $(document).ready(function () {
         if (1 > $(dv).length) {
             return false;
         }
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'search'), '', function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -23,7 +23,7 @@ $(document).ready(function () {
         if (1 > $(batchSetup).length) {
             return false;
         }
-        $(batchSetup).prepend(fcom.getloader());
+        $(batchSetup).prepend(fcom.getLoader());
         $('html, body').animate({ scrollTop: $(batchSetup).offset().top - 150 }, 'slow');
         fcom.ajax(fcom.makeUrl(keyName, 'batchForm', [adsBatchId]), '', function (res) {
             fcom.removeLoader();

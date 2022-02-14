@@ -10,7 +10,7 @@ $(document).ready(function () {
     var runningAjaxReq = false;
 
     loadForm = function (formType) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
 
             $(dv).html(t);
@@ -21,7 +21,7 @@ $(document).ready(function () {
     };
     generalInstructions = function (frmType) {
         fcom.resetEditorInstance();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Configurations', 'generalInstructions', [frmType]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -29,7 +29,7 @@ $(document).ready(function () {
     };
     updateSettings = function (frm) {
         var data = fcom.frmData(frm);
-        $(settingDv).prepend(fcom.getloader());
+        $(settingDv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
             fcom.removeLoader();
             loadForm('settings');
@@ -104,7 +104,7 @@ $(document).ready(function () {
         }
         $.each($('#import_file')[0].files, function (i, file) {
             $.mbsmessage(langLbl.processing, false, 'alert--process');
-            $('#fileupload_div').prepend(fcom.getloader());
+            $('#fileupload_div').prepend(fcom.getLoader());
             data.append('import_file', file);
             $.ajax({
                 url: fcom.makeUrl('ImportExport', method, [actionType]),

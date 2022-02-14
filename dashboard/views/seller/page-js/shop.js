@@ -69,7 +69,7 @@ $(document).on("change", ".state", function () {
     };
 
     categoryBanners = function () {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -94,7 +94,7 @@ $(document).on("change", ".state", function () {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
         var data = fcom.frmData(frm);
         /*]*/
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), data, function (res) {
             fcom.removeLoader();
             $(dv).html(res);
@@ -118,7 +118,7 @@ $(document).on("change", ".state", function () {
 
     shopForm = function (tab = '') {
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopForm', [tab]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -155,7 +155,7 @@ $(document).on("change", ".state", function () {
         }
 
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopLangForm', [shopId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -183,7 +183,7 @@ $(document).on("change", ".state", function () {
             return;
         }
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopMediaForm'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -206,7 +206,7 @@ $(document).on("change", ".state", function () {
     };
 
     shopTemplates = function (el) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopTemplate'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -245,7 +245,7 @@ $(document).on("change", ".state", function () {
             return;
         }
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'searchShopCollections'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -253,7 +253,7 @@ $(document).on("change", ".state", function () {
     };
 
     shopCollectionProducts = function (el) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         // console.log($(el).parent());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollection'), '', function (t) {
             fcom.removeLoader();
@@ -270,7 +270,7 @@ $(document).on("change", ".state", function () {
             scollection_id = 0;
         }
         markSubTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -316,7 +316,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         markSubTabActive();
-        $(dvt).prepend(fcom.getloader());
+        $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $(dvt).html(t);
@@ -329,7 +329,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         markSubTabActive();
-        $(dvt).prepend(fcom.getloader());
+        $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
             $(dvt).html(t);
@@ -350,7 +350,7 @@ $(document).on("change", ".state", function () {
             return;
         }
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatforms'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -388,7 +388,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         markSubTabActive();
-        $(dvt).prepend(fcom.getloader());
+        $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $(dvt).html(t);
@@ -445,7 +445,7 @@ $(document).on("change", ".state", function () {
             return;
         }
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -462,7 +462,7 @@ $(document).on("change", ".state", function () {
 
     returnAddressLangForm = function (langId, autoFillLangData = 0) {
         markSubTabActive();
-        $(dvt).prepend(fcom.getloader());
+        $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $(dvt).html(t);
@@ -486,7 +486,7 @@ $(document).on("change", ".state", function () {
             return;
         }
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddress'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -494,7 +494,7 @@ $(document).on("change", ".state", function () {
     };
 
     pickupAddressForm = function (id) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -533,7 +533,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         markSubTabActive();
-        $(dvt).prepend(fcom.getloader());
+        $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
             $(dvt).html(t);
@@ -761,10 +761,10 @@ $(document).on("change", ".state", function () {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $('#loader-js').prepend(fcom.getloader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             complete: function () {
-                $('#loader-js').prepend(fcom.getloader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             success: function (ans) {
                 fcom.removeLoader();
@@ -791,7 +791,7 @@ $(document).on("change", ".state", function () {
 
     pluginPlatform = function (el) {
         markMainTabActive();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         var platformUrl = $(el).data('platformurl');
         fcom.ajax(platformUrl, '', function (t) {
             fcom.removeLoader();
@@ -807,7 +807,7 @@ $(document).on("change", ".state", function () {
     requiredFieldsForm = function () {
         var businessType = $("select[name='business_type']").val();
         var contentDv = dv + " .requiredFieldsForm-js";
-        $(contentDv).prepend(fcom.getloader());
+        $(contentDv).prepend(fcom.getLoader());
         var data = 'businessType=' + businessType;
         fcom.ajax(fcom.makeUrl(keyName, 'requiredFieldsForm'), data, function (res) {
             fcom.removeLoader();

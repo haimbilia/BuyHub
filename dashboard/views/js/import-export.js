@@ -58,7 +58,7 @@
 		$inputs.each(function() { data.append( this.name,$(this).val());});
 		$.mbsmessage(langLbl.processing,false,'alert--process');
 		$.each( $('#import_file')[0].files, function(i, file) {
-			$('#fileupload_div').prepend(fcom.getloader());
+			$('#fileupload_div').prepend(fcom.getLoader());
 			data.append('import_file', file);
 			$.ajax({
 				url : fcom.makeUrl('ImportExport', method,[actionType]),

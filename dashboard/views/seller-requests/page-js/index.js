@@ -26,7 +26,7 @@
 
     searchCustomCatalogProducts = function () {
         checkRunningAjax();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.customCatalogReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchCustomCatalogProducts'), '', function (res) {
             fcom.removeLoader();
@@ -54,7 +54,7 @@
 
     searchBrandRequests = function () {
         checkRunningAjax();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.brandReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBrandRequests'), '', function (res) {
             fcom.removeLoader();
@@ -74,7 +74,7 @@
 
     searchProdCategoryRequests = function () {
         checkRunningAjax();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.catReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchProdCategoryRequests'), '', function (res) {
             fcom.removeLoader();
@@ -210,10 +210,10 @@
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $('#loader-js').prepend(fcom.getloader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             complete: function () {
-                $('#loader-js').prepend(fcom.getloader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             success: function (ans) {
                 fcom.removeLoader();
@@ -344,7 +344,7 @@
 
     searchBadgeRequests = function () {
         checkRunningAjax();
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.badgeReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), '', function (res) {
             fcom.removeLoader();
@@ -474,7 +474,7 @@
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").prepend(fcom.getloader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl('SellerRequests', 'records', [badgeReqId]), data, function (t) {
             fcom.removeLoader();

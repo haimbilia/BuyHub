@@ -8,7 +8,7 @@ searchPromotionCharges = function(form){
     if (form) {
         data = fcom.frmData(form);
     }
-    $(dv).prepend(fcom.getloader());
+    $(dv).prepend(fcom.getLoader());
     fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotionCharges'), data , function(t) {
         fcom.removeLoader();
         $(dv).html(t);

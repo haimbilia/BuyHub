@@ -41,7 +41,7 @@ $(function () {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).prepend(fcom.getloader());
+            $(dv).prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function (t) {

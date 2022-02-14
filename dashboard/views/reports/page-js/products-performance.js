@@ -52,7 +52,7 @@ $(function () {
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
-			$(dv).prepend(fcom.getloader());
+			$(dv).prepend(fcom.getLoader());
 		}
 
 		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsPerformance'), data, function (res) {

@@ -7,7 +7,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$("#returnOrderRequestsListing").prepend(fcom.getloader());
+		$("#returnOrderRequestsListing").prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Buyer', 'orderReturnRequestSearch'), data, function (res) {
             fcom.removeLoader();

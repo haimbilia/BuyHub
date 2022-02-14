@@ -15,7 +15,7 @@ $(document).ready(function(){
 	};
 	
 	requestDataForm = function(){				
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function(t) {
             fcom.removeLoader();
 			$(dv).html(t);

@@ -68,7 +68,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	sellerProductForm = function (product_id, selprod_id) {
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductForm', [product_id, selprod_id]), '', function (t) {
             fcom.removeLoader();
 			$(dv).html(t);

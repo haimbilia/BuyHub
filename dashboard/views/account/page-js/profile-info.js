@@ -8,7 +8,7 @@ $(document).ready(function () {
 	var imgdv = '#profileImageFrmBlock';
 
 	profileInfoForm = function () {
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		$("#tab-myaccount").parents().children().removeClass("is-active");
 		$("#tab-myaccount").addClass("is-active");
 		fcom.ajax(fcom.makeUrl('Account', 'profileInfoForm'), '', function (t) {
@@ -19,7 +19,7 @@ $(document).ready(function () {
 	};
 
 	profileImageForm = function () {
-		$(imgdv).prepend(fcom.getloader());
+		$(imgdv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'profileImageForm'), '', function (t) {
 			fcom.removeLoader();
 			location.reload();
@@ -40,7 +40,7 @@ $(document).ready(function () {
 	};
 
 	settingsForm = function () {
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'settingsInfo'), '', function (t) {
 			fcom.removeLoader();
 			$(dv).html(t);
@@ -136,7 +136,7 @@ $(document).ready(function () {
 			contentType: false,
 			processData: false,
 			beforeSend: function () {
-				$('#loader-js').prepend(fcom.getloader());
+				$('#loader-js').prepend(fcom.getLoader());
 			},
 			success: function (ans) {
 				fcom.removeLoader();

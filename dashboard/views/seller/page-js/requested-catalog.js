@@ -61,7 +61,7 @@ $(document).ready(function(){
 		var dv = $("#messagesList");
 		var data = fcom.frmData(frm);
 		
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Seller','catalogRequestMessageSearch'), data, function(ans){
             fcom.removeLoader();
 			$.mbsmessage.close();

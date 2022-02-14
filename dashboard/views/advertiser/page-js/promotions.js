@@ -65,7 +65,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		if (form) {
 			data = fcom.frmData(form);
 		}
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotions'), data, function (t) {
             fcom.removeLoader();
 			$(dv).html(t);
@@ -209,7 +209,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 			contentType: false,
 			processData: false,
 			beforeSend: function () {
-				$('#loader-js').prepend(fcom.getloader());
+				$('#loader-js').prepend(fcom.getLoader());
 			},
 			success: function (ans) {
 				fcom.removeLoader();

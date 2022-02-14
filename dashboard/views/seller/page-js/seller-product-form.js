@@ -31,7 +31,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 
 
 	sellerProductForm = function (product_id, selprod_id) {
-		$("#tabs_001").prepend(fcom.getloader());
+		$("#tabs_001").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductGeneralForm', [product_id, selprod_id]), '', function (t) {
 			fcom.removeLoader();
 			$(".tabs_panel").html('');
@@ -184,7 +184,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	sellerProductDownloadFrm = function (product_id, selprod_id) {
-		$("#tabs_002").prepend(fcom.getloader());
+		$("#tabs_002").prepend(fcom.getLoader());
 		// fcom.ajax(fcom.makeUrl('Seller', 'sellerProductDownloadFrm', [ product_id, selprod_id ]), '', function(t) {
 		$(".tabs_panel").html('');
 		$(".tabs_panel").hide();
@@ -225,7 +225,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		data.append('selprod_id', selprod_id);
 		if (DIGITAL_DOWNLOAD_FILE == type) {
 			$.each($('#downloadable_file' + selprod_id)[0].files, function (i, file) {
-				$(dv).prepend(fcom.getloader());
+				$(dv).prepend(fcom.getLoader());
 				data.append('downloadable_file', file);
 				$.ajax({
 					url: fcom.makeUrl('Seller', 'uploadDigitalFile'),
@@ -253,7 +253,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			var data = fcom.frmData(document.frmDownload);
 			data = data + '&' + 'selprod_id' + "=" + selprod_id;
 			/*if (!$('#frmDownload').validate()) return;*/
-			$(dv).prepend(fcom.getloader());
+			$(dv).prepend(fcom.getLoader());
 			fcom.ajax(fcom.makeUrl('Seller', 'uploadDigitalFile'), data, function (t) {
 				fcom.removeLoader();
 				var ans = $.parseJSON(t);
@@ -295,7 +295,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			splprice_display_dis_type = FLAT;
 		}
 		var data = 'splprice_display_list_price=' + splprice_display_list_price + '&splprice_display_dis_val=' + splprice_display_dis_val + '&splprice_display_dis_type=' + splprice_display_dis_type;
-		$("#special-price-discounted-string").prepend(fcom.getloader());
+		$("#special-price-discounted-string").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'getSpecialPriceDiscountString'), data, function (res) {
             fcom.removeLoader();
 			$("#special-price-discounted-string").html(res);

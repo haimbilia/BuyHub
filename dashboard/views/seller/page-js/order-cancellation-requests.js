@@ -5,7 +5,7 @@ $(document).ready(function () {
 (function () {
 	searchRecords = function (frm) {
 		var data = fcom.frmData(frm);
-		$("#cancelOrderRequestsListing").prepend(fcom.getloader());
+		$("#cancelOrderRequestsListing").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'orderCancellationRequestSearch'), data, function (res) {
             fcom.removeLoader();
 			$("#cancelOrderRequestsListing").html(res);

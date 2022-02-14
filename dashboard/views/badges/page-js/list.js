@@ -27,7 +27,7 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);
@@ -268,7 +268,7 @@ $(document).on('change', '.icon-language-js', function () {
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").prepend(fcom.getloader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl(controller, 'records', [badgeReqId]), data, function (t) {
             fcom.removeLoader();

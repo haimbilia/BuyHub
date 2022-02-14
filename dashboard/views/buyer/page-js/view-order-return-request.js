@@ -4,7 +4,7 @@ $(document).ready(function(){
 (function() {
 	searchOrderReturnRequestMessages = function(frm, append = 0){
 		var dv = $("#messagesList");
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		var data = fcom.frmData(frm);
 		fcom.ajax(fcom.makeUrl('Account','orderReturnRequestMessageSearch'), data, function(ans){
             fcom.removeLoader();

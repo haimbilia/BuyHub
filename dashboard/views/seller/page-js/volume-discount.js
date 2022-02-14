@@ -137,7 +137,7 @@ $(document).on("blur", ".js--volDiscountCol", function () {
         }
         /*]*/
         var dv = $("#listing");
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
 
         fcom.ajax(
             fcom.makeUrl("Seller", "searchVolumeDiscountProducts"),

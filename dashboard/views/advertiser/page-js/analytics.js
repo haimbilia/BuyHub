@@ -15,7 +15,7 @@ $(document).ready(function(){
 			data = fcom.frmData(form);
 		}
 		
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		
 		fcom.ajax(fcom.makeUrl('Advertiser','searchAnalyticsData'),data,function(res){
             fcom.removeLoader();

@@ -31,7 +31,7 @@ $(document).on('change', '.language-js', function () {
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
 		var data = fcom.frmData(frm);
 		/*]*/
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'searchCatalogProduct'), data, function (res) {
             fcom.removeLoader();
@@ -76,7 +76,7 @@ $(document).on('change', '.language-js', function () {
 	};
 
 	sellerShippingForm = function (productId) {
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerShippingForm', [productId]), '', function (res) {
             fcom.removeLoader();
@@ -145,7 +145,7 @@ $(document).on('change', '.language-js', function () {
 		$inputs.each(function () { data.append(this.name, $(this).val()); });
 
 		$.each($('#prod_image')[0].files, function (i, file) {
-			$('#imageupload_div').prepend(fcom.getloader());
+			$('#imageupload_div').prepend(fcom.getLoader());
 			data.append('prod_image', file);
 			$.ajax({
 				url: fcom.makeUrl('Seller', 'setupCustomProductImages'),
@@ -346,7 +346,7 @@ $(document).on('change', '.language-js', function () {
 			contentType: false,
 			processData: false,
 			beforeSend: function () {
-				$('#loader-js').prepend(fcom.getloader());
+				$('#loader-js').prepend(fcom.getLoader());
 			},
 			success: function (ans) {
 				fcom.removeLoader();

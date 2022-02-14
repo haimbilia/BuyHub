@@ -14,7 +14,7 @@ $(document).ready(function () {
 		if (form) {
 			data = fcom.frmData(form);
 		}
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformSearch'), data, function (res) {
 			fcom.removeLoader();
 			$('.btn-back').addClass('d-none');
@@ -44,7 +44,7 @@ $(document).ready(function () {
 	};
 
 	addLangForm = function (splatformId, langId, autoFillLangData = 0) {
-		$(dv).prepend(fcom.getloader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
 			$(dv).html(t);

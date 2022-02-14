@@ -82,7 +82,7 @@ $(document).on("keyup", "input[name='google_product_category']", function () {
       return;
     }
 
-    $(bindProductForm).prepend(fcom.getloader());
+    $(bindProductForm).prepend(fcom.getLoader());
     var adsBatchId = $("input[name='adsBatchId']").val();
     fcom.ajax(
       fcom.makeUrl(keyName, "bindProductForm", [adsBatchId, selProdId]),
@@ -99,7 +99,7 @@ $(document).on("keyup", "input[name='google_product_category']", function () {
   };
 
   searchproducts = function () {
-    $(dv).prepend(fcom.getloader());
+    $(dv).prepend(fcom.getLoader());
     var adsBatchId = $("input[name='adsBatchId']").val();
     fcom.ajax(
       fcom.makeUrl(keyName, "searchProducts", [adsBatchId]),

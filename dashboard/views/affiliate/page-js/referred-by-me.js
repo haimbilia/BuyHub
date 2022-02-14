@@ -60,7 +60,7 @@ $(document).ready(function () {
 		}
 		/*]*/
 
-		$("#usersListing").prepend(fcom.getloader());
+		$("#usersListing").prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Affiliate', 'userSearch'), data, function (res) {
             fcom.removeLoader();

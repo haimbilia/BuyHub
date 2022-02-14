@@ -31,7 +31,7 @@ $(function () {
 	searchRecords = function (frm, withloader) {
 		setColumnsData(frm);
 		if (typeof withloader == 'undefined' || withloader != false) {
-			$(dv).prepend(fcom.getloader());
+			$(dv).prepend(fcom.getLoader());
 		}
 		var data = fcom.frmData(frm);
 		fcom.ajax(fcom.makeUrl('Reports', 'searchSalesReport'), data, function (t) {

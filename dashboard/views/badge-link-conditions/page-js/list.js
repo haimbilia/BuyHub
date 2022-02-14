@@ -29,7 +29,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).prepend(fcom.getloader());
+        $(dv).prepend(fcom.getLoader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);

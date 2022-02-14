@@ -16,7 +16,7 @@ $(document).ready(function(){
 		if( append == 1 ){
 			$(dv).find('.loader-yk').remove();
 		} else {
-			$(dv).prepend(fcom.getloader());
+			$(dv).prepend(fcom.getLoader());
 		}
 		
 		fcom.updateWithAjax(fcom.makeUrl('Account','threadMessageSearch'), data, function(ans){
