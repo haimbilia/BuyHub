@@ -59,7 +59,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                     </div>
                     <div class="my-addresses__footer">
                         <div class="actions">
-                            <a href="javascript:void(0)" onclick="pickupAddressForm(<?php echo $address['addr_id']; ?>)">
+                            <a href="javascript:void(0)" onclick="pickupAddressForm(<?php echo $address['addr_id']; ?>, <?php echo $address['addr_lang_id']; ?>)">
                                 <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                             </a>
                             <a href="javascript:void(0)" onclick="removeAddress(<?php echo $address['addr_id']; ?>, <?php echo Address::TYPE_SHOP_PICKUP; ?>)">

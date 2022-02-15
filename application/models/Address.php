@@ -99,7 +99,6 @@ class Address extends MyAppModel
         }
         if (0 < $this->mainTableRecordId) {
             $srch->addCondition(self::tblFld('id'), '=', $this->mainTableRecordId);
-
             $rs = $srch->getResultSet();
             return (array) FatApp::getDb()->fetch($rs);
         }
