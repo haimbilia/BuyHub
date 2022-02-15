@@ -11,8 +11,7 @@ $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#editorLangFormJs"));
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
+if (!empty($translatorSubscriptionKey) && $lang_id != CommonHelper::getDefaultFormLangId()) {
     $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
     $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangData(' . $recordId . ', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                         <svg class="svg" width="18" height="18">
@@ -23,7 +22,16 @@ if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
 } 
 
 $fld = $langFrm->getField('epage_content');
-$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onclick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $siteLangId) . '</a>';
+$htmlFld = $langFrm->addHTML('','epage_content_html', '<div class="col-md-12"><div class="form-group"><label class="label lbl-link">'.$fld->getCaption().'<a class="link" href="javascript:void(0)" onclick="resetToDefaultContent();">'.Labels::getLabel('LBL_RESET_TO_DEFAULT_CONTENT', $siteLangId).'</a></label>'.$fld->getHtml().'</div></div>');
+$langFrm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+$langFrm->removeField($fld);
+
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
 ?>
 <!-- editor's default content[ -->
 

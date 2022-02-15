@@ -2,8 +2,10 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'editMetaTagForm(' . $metaId . ', "' . $metaType . '", ' . $metaTagRecordId . ')');
-$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupMetaTag(this); return(false);');
+
+$formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--'.$formLayout);
 
 $fld = $frm->getField('url');
 $fld->addFieldTagAttribute('class', 'metaUrlJs');

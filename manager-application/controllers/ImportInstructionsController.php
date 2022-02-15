@@ -106,13 +106,13 @@ class ImportInstructionsController extends ListingBaseController
         $langFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Extrapage::getAttributesByLangId($langId, $recordId);
+            $langData = Extrapage::getAttributesByLangId($langId, $recordId, ['ln.*','IFNULL(epage_label,epage_identifier) as epage_label','IFNULL(epage_content,epage_default_content) as epage_content'], true);           
         }
 
         if ($langData) {
@@ -167,7 +167,7 @@ class ImportInstructionsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -201,13 +201,10 @@ class ImportInstructionsController extends ListingBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('FRM_SECTION_TITLE', $langId), 'epage_label');
-
         $frm->addHtmlEditor(Labels::getLabel('FRM_SECTION_CONTENT', $langId), 'epage_content');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
+        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 

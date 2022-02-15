@@ -2,9 +2,11 @@
 HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('data-onclear', 'attributeForm(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'frmImgAttributeJs');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
+
+$formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--'.$formLayout);
 
 $langFld = $frm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'languageJs');

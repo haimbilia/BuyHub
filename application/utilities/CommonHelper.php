@@ -2104,7 +2104,7 @@ class CommonHelper extends FatUtility
 
     public static function getDefaultFormLangId()
     {
-        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        return CommonHelper::getLangId();
     }
 
     public static function isSetCookie($cookieName)

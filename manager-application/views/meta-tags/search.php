@@ -11,8 +11,6 @@ $havingOtherTable = [
 
 require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
 
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-
 $serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -37,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")":"editMetaTagLangForm(" . $metaId . "," . $siteDefaultLangId . ",'" . $metaType . "'," . $metaRecordId . ")",
+                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")":"editMetaTagLangForm(" . $metaId . "," . CommonHelper::getDefaultFormLangId() . ",'" . $metaType . "'," . $metaRecordId . ")",
                                 'title' => Labels::getLabel('BTN_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">

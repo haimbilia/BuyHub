@@ -111,7 +111,7 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'brand_name'), true);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'IFNULL(brand_name,brand_identifier) as brand_name'), true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -183,7 +183,7 @@ class BrandsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
