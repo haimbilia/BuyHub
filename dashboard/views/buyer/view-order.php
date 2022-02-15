@@ -280,7 +280,7 @@ if (!$print) { ?>
                                                     </td>
                                                     <td>
                                                         <div class="text-break">
-                                                            <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                                            <a target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
                                                                 <?php echo $link; ?>
                                                             </a>
                                                         </div>

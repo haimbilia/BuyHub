@@ -14,7 +14,7 @@ $langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotion_id 
         <div class="tabs tabs-sm clearfix">
             <ul>
                 <li><a href="javascript:void(0)"
-                        onClick="promotionGeneralForm(<?php echo $promotion_id ?>)"><?php echo Labels::getLabel('LBL_General',$siteLangId); ?></a>
+                        onclick="promotionGeneralForm(<?php echo $promotion_id ?>)"><?php echo Labels::getLabel('LBL_General',$siteLangId); ?></a>
                 </li>
                 <?php $inactive = ($promotion_id==0)?'fat-inactive':'';?>
                 <li class="<?php echo (0 < $formLangId) ? 'is-active' : ''; echo $inactive; ?>">
@@ -26,11 +26,11 @@ $langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotion_id 
 						/* foreach($language as $langId => $langName){?>
                 <li class="<?php echo ($formLangId == $langId)?'is-active':'' ; ?>"><a href="javascript:void(0)"
                         <?php if($promotion_id>0){ ?>
-                        onClick="promotionLangForm(<?php echo $promotion_id;?>,<?php echo $langId;?>)" <?php }?>>
+                        onclick="promotionLangForm(<?php echo $promotion_id;?>,<?php echo $langId;?>)" <?php }?>>
                         <?php echo $langName;?></a></li>
                 <?php } */ ?>
                 <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)"
-                        onClick="promotionMediaForm(<?php echo $promotion_id;?>)"><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a>
+                        onclick="promotionMediaForm(<?php echo $promotion_id;?>)"><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a>
                 </li>
             </ul>
         </div>
@@ -44,7 +44,7 @@ $langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotion_id 
                 <div class="col-auto mb-4">
                     <input class="btn btn-brand" type="button"
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                        onClick="promotionLangForm(<?php echo $promotion_id; ?>, <?php echo $formLangId; ?>, 1)">
+                        onclick="promotionLangForm(<?php echo $promotion_id; ?>, <?php echo $formLangId; ?>, 1)">
                 </div>
             </div>
             <?php } ?>

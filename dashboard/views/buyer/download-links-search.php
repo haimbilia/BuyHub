@@ -87,7 +87,7 @@ if (null != $fld) {
 						$ul = $td->appendElement("ul", array("class" => "actions"), '', true);
 						$li = $ul->appendElement("li");
 
-						$li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'target' => '_blank', 'onClick' => $linkOnClick, 'class' => '', 'title' => Labels::getLabel('LBL_Click_to_download', $siteLangId)), '<i class="fa fa-download"></i>', true);
+						$li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'target' => '_blank', 'onclick' => $linkOnClick, 'class' => '', 'title' => Labels::getLabel('LBL_Click_to_download', $siteLangId)), '<i class="fa fa-download"></i>', true);
 
 						// $li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'class'=>'', 'title'=>Labels::getLabel('LBL_Click_to_open', $siteLangId)), '<i class="fa fa-download"></i>', true);
 

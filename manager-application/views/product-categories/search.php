@@ -57,7 +57,7 @@ if (0 < $recordId) {
                             $("#" + rootCat).removeClass('sortableListsClosed').addClass(
                                 'sortableListsOpen');
                             $("#" + rootCat).children('div').append(
-                                '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i></span>'
+                                '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i></span>'
                             );
                         });
                         $("#" + catId).parent('ul').addClass('append-ul');
@@ -69,8 +69,8 @@ if (0 < $recordId) {
                 opener: {
                     active: true,
                     as: 'html', // if as is not set plugin uses background image
-                    close: '<i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i>',
-                    open: '<i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i>',
+                    close: '<i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i>',
+                    open: '<i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i>',
                     openerCss: {}
                 },
                 ignoreClass: 'clickable'

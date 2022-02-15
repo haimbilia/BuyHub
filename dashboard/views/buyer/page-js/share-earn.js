@@ -110,7 +110,7 @@ function fbSubmit() {
                     //$(window.parent.document).find("#facebook_btn2").trigger("click");;
 
                     /* window.parent.$('#facebook_btn2').trigger('click'); */
-                    //window.parent.document.getElementById("facebook_btn2").onClick();
+                    //window.parent.document.getElementById("facebook_btn2").onclick();
                     //window.parent.fbSubmit();
                     facebook_redirect(response);
                 }

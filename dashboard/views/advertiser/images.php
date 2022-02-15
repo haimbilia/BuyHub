@@ -12,7 +12,7 @@
 				break;
 		}
 
-		$htmlAfterField .= '<li><p>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '</p><p>' . $screenTypeArr[$bannerImg['afile_screen']] . '</p><img src="' . $imgUrl . '"> <a href="javascript:void(0);" onClick="removePromotionBanner(' . $promotionId . ',' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ',' . $bannerImg['afile_screen'] . ')" class="closeimg">x</a>';
+		$htmlAfterField .= '<li><p>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '</p><p>' . $screenTypeArr[$bannerImg['afile_screen']] . '</p><img src="' . $imgUrl . '"> <a href="javascript:void(0);" onclick="removePromotionBanner(' . $promotionId . ',' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ',' . $bannerImg['afile_screen'] . ')" class="closeimg">x</a>';
 	}
 	$htmlAfterField .= '</li></ul>';
 	echo $htmlAfterField;

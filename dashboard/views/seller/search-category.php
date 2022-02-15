@@ -18,7 +18,7 @@
             } else {
                 $function = 'categorySearchByCode(\''.$category['prodrootcat_code'].'\')';
             }
-            $str.= '<li class="'.$class.'" onClick="'.$function.'"><a class="selectCategory" href="javascript:void(0)">'.strip_tags($category['prodcat_name']).'('.$totalRecord.')</a> </li>';
+            $str.= '<li class="'.$class.'" onclick="'.$function.'"><a class="selectCategory" href="javascript:void(0)">'.strip_tags($category['prodcat_name']).'('.$totalRecord.')</a> </li>';
         }
     }
     $str.= "</ul>";
@@ -28,7 +28,7 @@
     $str.= "<ul>";
     if (!empty($childCategories[$prodRootCatCode])) {
         foreach ($childCategories[$prodRootCatCode] as $catId=>$category) {
-            $str.= "<li onClick='customCatalogProductForm(0,".$catId.")'><a class='selectCategory' href='javascript:void(0)'>".strip_tags($category['prodcat_name'])."</a></li>
+            $str.= "<li onclick='customCatalogProductForm(0,".$catId.")'><a class='selectCategory' href='javascript:void(0)'>".strip_tags($category['prodcat_name'])."</a></li>
             <li>".html_entity_decode($category['structure'], ENT_QUOTES, 'utf-8')."</li>
             ";
         }

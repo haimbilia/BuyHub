@@ -67,7 +67,7 @@ $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 
 $fld = $inventoryForm->getField('btn_clear');
 $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block clearBtn--js');
-$fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
+$fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
 ?>
 <div class="row">
     <div class="col-md-12">

@@ -18,7 +18,7 @@ $langFld->setfieldTagAttribute('onChange', "batchLangForm(" . $prodgroup_id . ",
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
         </li>
-		<li><a href="javascript:void(0)" onClick="batchMediaForm(<?php echo $prodgroup_id; ?>)"><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
+		<li><a href="javascript:void(0)" onclick="batchMediaForm(<?php echo $prodgroup_id; ?>)"><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
 	</ul>
     <?php
             $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -29,7 +29,7 @@ $langFld->setfieldTagAttribute('onChange', "batchLangForm(" . $prodgroup_id . ",
                         <input class="btn btn-brand" 
                             type="button" 
                             value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                            onClick="batchLangForm(<?php echo $prodgroup_id; ?>,<?php echo $prodgroup_lang_id; ?>, 1)">
+                            onclick="batchLangForm(<?php echo $prodgroup_id; ?>,<?php echo $prodgroup_lang_id; ?>, 1)">
                     </div>
                 </div>
             <?php } ?>

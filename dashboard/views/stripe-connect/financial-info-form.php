@@ -9,6 +9,6 @@ $btnFld->addFieldTagAttribute('class', 'btn btn-brand');
 
 $btnFld = $frm->getField('btn_clear');
 $btnFld->addFieldTagAttribute('class', 'btn btn-outline-brand');
-$btnFld->addFieldTagAttribute('onClick', 'clearFinancialInfoForm();');
+$btnFld->addFieldTagAttribute('onclick', 'clearFinancialInfoForm();');
 
 echo $frm->getFormHtml();

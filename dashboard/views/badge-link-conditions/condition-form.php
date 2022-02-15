@@ -31,7 +31,7 @@ if (!empty($frmSearch)) {
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-        $fld->setFieldTagAttribute('onClick', 'clearSearch()');
+        $fld->setFieldTagAttribute('onclick', 'clearSearch()');
         $fld->developerTags['col'] = 2;
     }
 }

@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['selprod_user_id'] . ')'), $row['user_name'], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectUser(' . $row['selprod_user_id'] . ')'), $row['user_name'], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row['user_name'], true);
                 }

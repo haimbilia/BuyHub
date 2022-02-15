@@ -2815,7 +2815,7 @@ class AccountController extends LoggedUserController
     private function getProfileImageForm()
     {
         $frm = new Form('frmProfile', array('id' => 'frmProfile'));
-        $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onClick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
+        $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onclick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
         return $frm;
     }
 

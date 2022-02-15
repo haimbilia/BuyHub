@@ -23,7 +23,7 @@ $catCode = $row['prodcat_code'];
                     </label>
 
                     <?php if ($canEdit) { ?>
-                        <button onClick="editRecord('<?php echo $row['prodcat_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
+                        <button onclick="editRecord('<?php echo $row['prodcat_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
                             <svg class="svg clickable" width="18" height="18">
                                 <use class="clickable" xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                 </use>
@@ -40,7 +40,7 @@ $catCode = $row['prodcat_code'];
             </div>
         </div>
         <?php if ($row['subcategory_count'] > 0) { ?>
-            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
+            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
         <?php } ?>
     </div>
 </li>

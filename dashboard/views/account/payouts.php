@@ -18,7 +18,7 @@ $firstKey = key($payouts); ?>
                         <nav class="nav nav-tabs">
                             <?php foreach ($payouts as $type => $name) { 
                                 $active = ($type == $firstKey ? 'active' : ''); ?>
-                                <a class="nav-link <?php echo $active; ?>" id="tab-<?php echo $type; ?>" href="javascript:void(0);" onClick="pluginForm('<?php echo $type; ?>')">
+                                <a class="nav-link <?php echo $active; ?>" id="tab-<?php echo $type; ?>" href="javascript:void(0);" onclick="pluginForm('<?php echo $type; ?>')">
                                     <?php echo $name; ?>
                                 </a>
                             <?php } ?>
