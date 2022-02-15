@@ -58,53 +58,120 @@ class Importexport extends ImportexportCommon
 
     public static function getImportExportTypeArr($type, $langId, $sellerDashboard = false)
     {
+        $cacheKey = $type . '-' . $langId . '-' . $sellerDashboard;
+        $importExportTypeArr = CacheHelper::get('importExportTypeArr' . $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
+        if ($importExportTypeArr) {
+            return json_decode($importExportTypeArr);
+        }
+
         switch (strtoupper($type)) {
             case 'EXPORT':
-                $arr[static::TYPE_CATEGORIES] = Labels::getLabel('LBL_Categories', $langId);
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Marketplace_Products', $langId);
-                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_Seller_Products', $langId);
-                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('LBL_Seller_Inventories', $langId);
-                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('LBL_INVENTORY_UPDATE', $langId);
-                $arr[static::TYPE_BRANDS] = Labels::getLabel('LBL_Brands', $langId);
-                $arr[static::TYPE_OPTIONS] = Labels::getLabel('LBL_Options', $langId);
-                $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('LBL_Option_Values', $langId);
-                //$arr[static::TYPE_TAG] = Labels::getLabel('LBL_Tags', $langId);
-                $arr[static::TYPE_ZONES] = Labels::getLabel('LBL_ZONES', $langId);
-                $arr[static::TYPE_COUNTRY] = Labels::getLabel('LBL_Countries', $langId);
-                $arr[static::TYPE_STATE] = Labels::getLabel('LBL_States', $langId);
-                //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('LBL_Policy_Points', $langId);
-                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('LBL_Tax_Categories', $langId);
+                $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MARKETPLACE_PRODUCTS', $langId);
+                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_SELLER_INVENTORIES', $langId);
+                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
+                $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
+                $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
+                $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
+                $arr[static::TYPE_ZONES] = Labels::getLabel('NAV_ZONES', $langId);
+                $arr[static::TYPE_COUNTRY] = Labels::getLabel('NAV_COUNTRIES', $langId);
+                $arr[static::TYPE_STATE] = Labels::getLabel('NAV_STATES', $langId);
+                //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('NAV_POLICY_POINTS', $langId);
+                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('NAV_TAX_CATEGORIES', $langId);
                 if (!$sellerDashboard) {
-                    $arr[static::TYPE_USERS] = Labels::getLabel('LBL_users', $langId);
-                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);
-                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                    $arr[static::TYPE_USERS] = Labels::getLabel('NAV_USERS', $langId);
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 } else {
-                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 }
                 break;
             case 'IMPORT':
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_Marketplace_Products', $langId);
-                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_Seller_Products', $langId);
-                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('LBL_Seller_Inventories', $langId);
-                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('LBL_INVENTORY_UPDATE', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MARKETPLACE_PRODUCTS', $langId);
+                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_SELLER_INVENTORIES', $langId);
+                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 if (!$sellerDashboard) {
-                    $arr[static::TYPE_CATEGORIES] = Labels::getLabel('LBL_Categories', $langId);
-                    $arr[static::TYPE_BRANDS] = Labels::getLabel('LBL_Brands', $langId);
-                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('LBL_Options', $langId);
-                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('LBL_Option_Values', $langId);
-                    //$arr[static::TYPE_TAG] = Labels::getLabel('LBL_Tags', $langId);
-                    $arr[static::TYPE_ZONES] = Labels::getLabel('LBL_ZONES', $langId);
-                    $arr[static::TYPE_COUNTRY] = Labels::getLabel('LBL_Countries', $langId);
-                    $arr[static::TYPE_STATE] = Labels::getLabel('LBL_States', $langId);
-                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);
-                    //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('LBL_Policy_Points', $langId);
-                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                    $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
+                    $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
+                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
+                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                    //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
+                    $arr[static::TYPE_ZONES] = Labels::getLabel('NAV_ZONES', $langId);
+                    $arr[static::TYPE_COUNTRY] = Labels::getLabel('NAV_COUNTRIES', $langId);
+                    $arr[static::TYPE_STATE] = Labels::getLabel('NAV_STATES', $langId);
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);
+                    //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('NAV_POLICY_POINTS', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 } else {
                     unset($arr[static::TYPE_PRODUCTS]);
-                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('LBL_My_Products', $langId);
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 }
                 break;
         }
+        CacheHelper::create('importExportTypeArr' . $cacheKey, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    public static function getImportExportTypeMsgArr($type, $langId, $sellerDashboard = false)
+    {
+        $cacheKey = $type . '-' . $langId . '-' . $sellerDashboard;
+        $importExportTypeMsgArr = CacheHelper::get('importExportTypeMsgArr' . $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
+        if ($importExportTypeMsgArr) {
+            return json_decode($importExportTypeMsgArr);
+        }
+
+        switch (strtoupper($type)) {
+            case 'EXPORT':
+                $arr[static::TYPE_CATEGORIES] = Labels::getLabel('MSG_EXPORT_PRODUCT_CATEGORIES_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('MSG_EXPORT_MARKETPLACE_PRODUCTS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('MSG_EXPORT_SELLER_PRODUCTS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('MSG_EXPORT_PRODUCT_INVENTORIES_DATA_THROUGH_CSV_FILE', $langId);
+                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
+                $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_EXPORT_PRODUCT_BRANDS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTIONS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
+                $arr[static::TYPE_ZONES] = Labels::getLabel('MSG_EXPORT_ZONES_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_COUNTRY] = Labels::getLabel('MSG_EXPORT_COUNTRIES_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_STATE] = Labels::getLabel('MSG_EXPORT_STATES_DATA_THROUGH_CSV_FILE', $langId);
+                //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('NAV_POLICY_POINTS', $langId);
+                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('MSG_EXPORT_TAX_CATEGIRIES_DATA_THROUGH_CSV_FILE', $langId);
+                if (!$sellerDashboard) {
+                    $arr[static::TYPE_USERS] = Labels::getLabel('MSG_EXPORT_USERS_DATA_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('MSG_EXPORT_LANGUAGE_LABELS_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('MSG_EXPORT_PRODUCT_CATALOG_DATA_THROUGH_CSV_FILE', $langId);
+                } else {
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('MSG_EXPORT_PRODUCT_CATALOG_DATA_THROUGH_CSV_FILE', $langId);
+                }
+                break;
+            case 'IMPORT':
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('MSG_IMPORT_MARKETPLACE_PRODUCTS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('MSG_IMPORT_SELLER_PRODUCTS_DATA_THROUGH_CSV_FILE', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('MSG_IMPORT_PRODUCT_INVENTORIES_DATA_THROUGH_CSV_FILE', $langId);
+                // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
+                if (!$sellerDashboard) {
+                    $arr[static::TYPE_CATEGORIES] = Labels::getLabel('MSG_IMPORT_CATEGORIES_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_IMPORT_BRAND_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTIONS_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                    //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
+                    $arr[static::TYPE_ZONES] = Labels::getLabel('MSG_IMPORT_ZONES_DATA_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_COUNTRY] = Labels::getLabel('MSG_IMPORT_COUNTRIES_DATA_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_STATE] = Labels::getLabel('MSG_IMPORT_STATES_DATA_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('MSG_IMPORT_LANGUAGE_LABELS_THROUGH_CSV_FILE', $langId);
+                    //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('NAV_POLICY_POINTS', $langId);
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('MSG_IMPORT_PRODUCT_CATALOG_DATA_THROUGH_CSV_FILE', $langId);
+                } else {
+                    unset($arr[static::TYPE_PRODUCTS]);
+                    $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('MSG_IMPORT_PRODUCT_CATALOG_DATA_THROUGH_CSV_FILE', $langId);
+                }
+                break;
+        }
+
+        CacheHelper::create('importExportTypeMsgArr' . $cacheKey, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
@@ -112,8 +179,8 @@ class Importexport extends ImportexportCommon
     public static function getOptionContentTypeArr($langId)
     {
         $arr = array(
-            static::LABEL_OPTIONS => Labels::getLabel('LBL_Options', $langId),
-            static::LABEL_OPTIONS_VALUES => Labels::getLabel('LBL_Option_Values', $langId),
+            static::LABEL_OPTIONS => Labels::getLabel('LBL_OPTIONS', $langId),
+            static::LABEL_OPTIONS_VALUES => Labels::getLabel('LBL_OPTION_VALUES', $langId),
         );
         return $arr;
     }
@@ -121,11 +188,11 @@ class Importexport extends ImportexportCommon
     public static function getProductCatalogContentTypeArr($langId)
     {
         $arr = array(
-            static::PRODUCT_CATALOG => Labels::getLabel('LBL_Product_Catalog', $langId),
-            static::PRODUCT_OPTION => Labels::getLabel('LBL_Product_Options', $langId),
-            //static::PRODUCT_TAG => Labels::getLabel('LBL_Product_Tags', $langId),
-            static::PRODUCT_SPECIFICATION => Labels::getLabel('LBL_Product_Specifications', $langId),
-            // static::PRODUCT_SHIPPING => Labels::getLabel('LBL_Product_Shipping', $langId),
+            static::PRODUCT_CATALOG => Labels::getLabel('LBL_PRODUCT_CATALOG', $langId),
+            static::PRODUCT_OPTION => Labels::getLabel('LBL_PRODUCT_OPTIONS', $langId),
+            //static::PRODUCT_TAG => Labels::getLabel('LBL_PRODUCT_TAGS', $langId),
+            static::PRODUCT_SPECIFICATION => Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS', $langId),
+            // static::PRODUCT_SHIPPING => Labels::getLabel('LBL_PRODUCT_SHIPPING', $langId),
         );
         return $arr;
     }
@@ -133,14 +200,14 @@ class Importexport extends ImportexportCommon
     public static function getSellerProductContentTypeArr($langId)
     {
         $arr = array(
-            static::SELLER_PROD_GENERAL_DATA => Labels::getLabel('LBL_General_Data', $langId),
+            static::SELLER_PROD_GENERAL_DATA => Labels::getLabel('LBL_GENERAL_DATA', $langId),
             static::SELLER_PROD_OPTION => Labels::getLabel('LBL_INVENTORY_OPTIONS', $langId),
-            static::SELLER_PROD_SEO => Labels::getLabel('LBL_SEO_Data', $langId),
-            static::SELLER_PROD_SPECIAL_PRICE => Labels::getLabel('LBL_Special_Price', $langId),
-            static::SELLER_PROD_VOLUME_DISCOUNT => Labels::getLabel('LBL_Volume_Discount', $langId),
-            static::SELLER_PROD_BUY_TOGTHER => Labels::getLabel('LBL_Buy_togther', $langId),
-            static::SELLER_PROD_RELATED_PRODUCT => Labels::getLabel('LBL_Related_products', $langId),
-            //static::SELLER_PROD_POLICY => Labels::getLabel('LBL_Seller_Product_Policy', $langId),
+            static::SELLER_PROD_SEO => Labels::getLabel('LBL_SEO_DATA', $langId),
+            static::SELLER_PROD_SPECIAL_PRICE => Labels::getLabel('LBL_SPECIAL_PRICE', $langId),
+            static::SELLER_PROD_VOLUME_DISCOUNT => Labels::getLabel('LBL_VOLUME_DISCOUNT', $langId),
+            static::SELLER_PROD_BUY_TOGTHER => Labels::getLabel('LBL_BUY_TOGTHER', $langId),
+            static::SELLER_PROD_RELATED_PRODUCT => Labels::getLabel('LBL_RELATED_PRODUCTS', $langId),
+            //static::SELLER_PROD_POLICY => Labels::getLabel('LBL_SELLER_PRODUCT_POLICY', $langId),
         );
         return $arr;
     }
@@ -148,8 +215,8 @@ class Importexport extends ImportexportCommon
     public static function getDataRangeArr($langId)
     {
         $arr = array(
-            static::BY_ID_RANGE => Labels::getLabel('LBL_By_id_range', $langId),
-            static::BY_BATCHES => Labels::getLabel('LBL_By_batches', $langId),
+            static::BY_ID_RANGE => Labels::getLabel('LBL_BY_ID_RANGE', $langId),
+            static::BY_BATCHES => Labels::getLabel('LBL_BY_BATCHES', $langId),
         );
         return $arr;
     }
@@ -195,7 +262,7 @@ class Importexport extends ImportexportCommon
                 $i++;
             }
         );
-        
+
         array_walk(
             $coloumArr,
             function (&$string1) use (&$j) {
@@ -906,7 +973,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
         }
-        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES); 
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
@@ -1767,7 +1834,7 @@ class Importexport extends ImportexportCommon
                         case 'product_approved':
                         case 'product_active':
                         case 'product_deleted':
-                        case 'product_attachements_with_inventory':    
+                        case 'product_attachements_with_inventory':
                             if ($this->settings['CONF_USE_O_OR_1']) {
                                 $colValue = (FatUtility::int($colValue) == 1) ? applicationConstants::YES : applicationConstants::NO;
                             } else {
@@ -1807,14 +1874,14 @@ class Importexport extends ImportexportCommon
                             $columnKey = 'product_brand_id';
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $brandIdentifierArr)) {
-                                if($isBrandMand || !empty($colValue)){
+                                if ($isBrandMand || !empty($colValue)) {
                                     $res = $this->array_change_key_case_unicode($this->getAllBrandsArr(false, $colValue), CASE_LOWER);
                                     if (!$res) {
                                         $invalid = true;
                                     } else {
                                         $brandIdentifierArr = $brandIdentifierArr + $res;
                                     }
-                                }                                
+                                }
                             }
                             $colValue = isset($brandIdentifierArr[$colValue]) ? $brandIdentifierArr[$colValue] : 0;
                             break;
@@ -3030,7 +3097,7 @@ class Importexport extends ImportexportCommon
 
         $errInSheet = false;
         $breakForeach = false;
-        
+
         if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $allowed_images = SellerPackages::getAllowedLimit($userId, $langId, 'ossubs_products_allowed');
             $optionLangCombinationImgCount = [];
@@ -3160,7 +3227,7 @@ class Importexport extends ImportexportCommon
                 }
             }
 
-            if (false === $errorInRow && count($prodCatalogMediaArr)) {                
+            if (false === $errorInRow && count($prodCatalogMediaArr)) {
                 if (0 < $userId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                     $combinationkey = $prodCatalogMediaArr['afile_record_id'] . "-" . $prodCatalogMediaArr['afile_lang_id'] . "-" . $prodCatalogMediaArr['afile_record_subid'];
                     $optionLangCombinationImgCount[$combinationkey] = isset($optionLangCombinationImgCount[$combinationkey]) ? $optionLangCombinationImgCount[$combinationkey] + 1 : 1;
@@ -5240,7 +5307,7 @@ class Importexport extends ImportexportCommon
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
-    
+
     public function exportZones($langId, $userId = 0)
     {
         $userId = FatUtility::int($userId);
@@ -5290,7 +5357,7 @@ class Importexport extends ImportexportCommon
 
         $languageCodes = Language::getAllCodesAssoc(true);
         $currencyCodes = Currency::getCurrencyAssoc(true);
-        
+
         $useCountryId = false;
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
             $useCountryId = true;
@@ -5327,7 +5394,7 @@ class Importexport extends ImportexportCommon
         }
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
-    
+
     public function importZones($csvFilePointer, $post, $langId)
     {
         $rowIndex = 1;
@@ -5435,7 +5502,7 @@ class Importexport extends ImportexportCommon
 
 
         $coloumArr = $this->getCountryColoumArr($langId);
-        
+
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;
@@ -5702,8 +5769,8 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
         }
-        
-        CacheHelper::clear(CacheHelper::TYPE_ZONE);        
+
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
@@ -5957,16 +6024,16 @@ class Importexport extends ImportexportCommon
         }
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
-    
+
     public function getOrderProductColoumArr($langId)
-    {   
+    {
         /* column which taxjar need while import */
         $arr = array(
             'provider' => 'provider',
             'op_invoice_number' => 'order_id',
             'transaction_type' => 'transaction_type',
             'transaction_reference_id' => 'transaction_reference_id',
-            'op_completion_date'=>'completed_at',
+            'op_completion_date' => 'completed_at',
             'buyer_name' => 'customer_name',
             'shiptostreet' => 'shiptostreet',
             'shiptocity' => 'shiptocity',
@@ -5985,12 +6052,12 @@ class Importexport extends ImportexportCommon
             'sales_tax' => 'sales_tax',
             'exemption_type' => 'exemption_type',
         );
-        
+
         return $arr;
     }
 
     public function exportOrderProducts($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
-    {        
+    {
         /* for now only dealing for plugin taxjar */
         $userId = FatUtility::int($userId);
         $ocDiscountSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
@@ -6026,8 +6093,8 @@ class Importexport extends ImportexportCommon
             $srch->addCondition('op_id', '>=', $minId);
             $srch->addCondition('op_id', '<=', $maxId);
         }
-        
-        if(0 < $userId){
+
+        if (0 < $userId) {
             $srch->addCondition('op_selprod_user_id', '=', $userId);
         }
 
