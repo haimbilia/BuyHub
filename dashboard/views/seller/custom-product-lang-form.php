@@ -1,15 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
 <div class="tabs ">
-    <?php require_once(CONF_THEME_PATH.'seller/sellerCustomProductTop.php');?>
+    <?php require_once(CONF_THEME_PATH . 'seller/sellerCustomProductTop.php'); ?>
 </div>
 <div class="card">
     <div class="card-body ">
         <div class="tabs__content form">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="tabs tabs-sm tabs--scroll clearfix">
+                    <div class="nav nav-pills nav-fill tabs--scroll clearfix">
                         <ul>
-                            <li><a href="javascript:void(0);" onclick="customProductForm(<?php echo $product_id ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId);?></a></li>
+                            <li><a href="javascript:void(0);" onclick="customProductForm(<?php echo $product_id ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
                             <li class="is-active">
                                 <a href="javascript:void(0);">
                                     <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
@@ -26,18 +26,15 @@
                         <?php
                         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
                         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-                        if (!empty($translatorSubscriptionKey) && $product_lang_id != $siteDefaultLangId) { ?> 
-                            <div class="row justify-content-end"> 
+                        if (!empty($translatorSubscriptionKey) && $product_lang_id != $siteDefaultLangId) { ?>
+                            <div class="row justify-content-end">
                                 <div class="col-auto mb-4">
-                                    <input class="btn btn-brand" 
-                                        type="button" 
-                                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                        onclick="customProductLangForm(<?php echo $product_id; ?>, <?php echo $product_lang_id; ?>, 1)">
+                                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="customProductLangForm(<?php echo $product_id; ?>, <?php echo $product_lang_id; ?>, 1)">
                                 </div>
                             </div>
                         <?php } ?>
                         <?php
-                        $customProductLangFrm->setFormTagAttribute('class', 'form form--horizontal layout--'.$formLayout);
+                        $customProductLangFrm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
                         $customProductLangFrm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-';
                         $customProductLangFrm->developerTags['fld_default_col'] = 6;
                         //$customProductLangFrm->setFormTagAttribute('onsubmit', 'setupCustomProductLang(this); return(false);');

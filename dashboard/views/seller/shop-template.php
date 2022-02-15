@@ -5,7 +5,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 
 ?>
 
-<div class="tabs tabs-sm tabs--scroll clearfix">
+<div class="nav nav-pills nav-fill tabs--scroll clearfix">
     <ul>
         <li class="is-active">
             <a href="javascript:void(0)"><?php echo Labels::getLabel('TXT_Template', $siteLangId); ?></a>

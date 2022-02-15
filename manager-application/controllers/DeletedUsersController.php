@@ -201,7 +201,7 @@ class DeletedUsersController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['type'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_type'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

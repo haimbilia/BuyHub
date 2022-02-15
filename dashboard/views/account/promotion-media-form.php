@@ -9,7 +9,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
     <div class="row">
         <div class="col-md-12">
 
-            <div class="tabs tabs-sm tabs--scroll clearfix">
+            <div class="nav nav-pills nav-fill tabs--scroll clearfix">
                 <ul>
                     <li><a href="javascript:void(0)" onclick="promotionGeneralForm(<?php echo $promotion_id ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                     <li class="<?php echo (0 == $promotion_id) ? 'fat-inactive' : ''; ?>">

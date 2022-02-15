@@ -3,11 +3,10 @@
     <h4><?php echo Labels::getLabel('LBL_Product_Listing', $siteLangId); ?></h4>
 </div>
 <div class="box__body">
-    <div class="tabs tabs--small   tabs--scroll clearfix">
+    <div class="tabs tabs--small tabs--scroll clearfix">
         <?php require_once('sellerCatalogProductTop.php'); ?>
     </div>
     <div class="tabs__content form">
-
         <div class="row">
             <div class="col-md-12">
                 <div class="form__subcontent js-scrollable table-wrap">

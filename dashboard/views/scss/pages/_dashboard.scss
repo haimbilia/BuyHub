@@ -552,6 +552,17 @@
             flex-direction: column;
             align-items: inherit;
         }
+        &-toolbar {
+            > ul {
+                display: flex;
+                grid-gap: 5px;
+                li {
+                    a {
+                        //border-color: transparent;
+                    }
+                }
+            }
+        }
         &-title {
             h2 {
                 color: $body-color;
@@ -690,7 +701,6 @@
     .msg__date {
         font-size: 0.75rem;
         color: $txt-gray;
-        font-style: italic;
     }
     .msg__title {
         color: $body-color;
@@ -988,7 +998,6 @@
     font-size: 0.8em;
     margin-bottom: 0;
     opacity: 0.6;
-    font-style: italic;
     display: inline-block;
     width: 100%;
 }

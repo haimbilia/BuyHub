@@ -98,7 +98,7 @@
         $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
         echo $frm->getFormTag();
         echo $tbl->getHtml(); ?>
-    </form>
+        </form>
 </div>
 <?php $postedData['page'] = $page;
         echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProfileSearchPaging'));

@@ -528,7 +528,6 @@
             opacity: 0.8;
         }
         .item__brand {
-            font-style: italic;
         }
         .item__location {
             margin-bottom: 5px;
@@ -629,7 +628,7 @@
             }
 
             &.icn-highlighted {
-                border: none;
+                border-color: $brand-color;
                 color: $brand-color;
                 background: #f0f0f0;
                 &:hover {

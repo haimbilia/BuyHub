@@ -3,7 +3,7 @@ $frm->setFormTagAttribute('class', 'form form--horizontal');
 $frm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-';
 $frm->developerTags['fld_default_col'] = 6;
 $frm->setFormTagAttribute('onSubmit', 'exportData(this,' . $actionType . '); return false;');
-$actionTypeArr = array(Importexport::TYPE_PRODUCTS, Importexport::TYPE_SELLER_PRODUCTS, Importexport::TYPE_INVENTORIES,Importexport::TYPE_USERS);
+$actionTypeArr = array(Importexport::TYPE_PRODUCTS, Importexport::TYPE_SELLER_PRODUCTS, Importexport::TYPE_INVENTORIES, Importexport::TYPE_USERS);
 
 if (in_array($actionType, $actionTypeArr)) {
     $startIdFld = $frm->getField('start_id');
@@ -30,16 +30,14 @@ $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
 <?php if (in_array($actionType, $tabsAllowedFor)) { ?>
-    <div class="tabs tabs-sm tabs--scroll clearfix">
+    <div class="nav nav-pills nav-fill tabs--scroll clearfix">
         <ul>
-            <li class="is-active"><a class="is-active" href="javascript:void(0);"
-                    onclick="exportForm('<?php echo $actionType;?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a>
+            <li class="is-active"><a class="is-active" href="javascript:void(0);" onclick="exportForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a>
             </li>
             <?php if ($displayMediaTab) { ?>
-            <li>
-                <a href="javascript:void(0);"
-                    onclick="exportMediaForm('<?php echo $actionType;?>');"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
-            </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="exportMediaForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+                </li>
             <?php } ?>
         </ul>
     </div>
