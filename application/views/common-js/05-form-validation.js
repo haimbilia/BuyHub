@@ -311,7 +311,7 @@
                 types = s[0];
             }
 
-            errors = [];
+            errors = new Set();
             jQuery.each(types, function (rname, rval) {
                 if (rname != 'customMessage') {
                     var rule = $.Validation.getRule(rname);
@@ -374,12 +374,12 @@
                             msg = msg.replace("{maxval}", rval.maxval);
                         }
 
-                        errors.push(msg);
+                        errors.add(msg);
                     }
                 }
             });
 
-            if (errors.length) {
+            if (errors.size) {
                 if (this.settings.errordisplay != 0 && this.settings.errordisplay != 1) {
                     obj.field.unbind("keyup");
                     obj.attach("keyup");
@@ -409,13 +409,13 @@
 
                         break;
                 }
-                for (error in errors) {
+                for (let error of errors) {
                     if (this.settings.errordisplay == 0) {
-                        alert(errors[error]);
+                        alert(error);
                         return;
                     }
                     else {
-                        var li = $(document.createElement('li')).append($(document.createElement('a')).html(errors[error]).attr({ 'href': 'javascript:void(0);' }).bind('click', function () { $(field).focus(); }));
+                        var li = $(document.createElement('li')).append($(document.createElement('a')).html(error).attr({ 'href': 'javascript:void(0);' }).bind('click', function () { $(field).focus(); }));
                         li.appendTo(errorlist);
                     }
                 }
