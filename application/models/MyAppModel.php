@@ -54,7 +54,7 @@ class MyAppModel extends FatModel {
 
     public function updateLangData($lang_id, $data) {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

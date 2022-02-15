@@ -87,7 +87,7 @@ class Cronjob extends FatModel
             FatApp::getDb()->deleteRecords(RecommendationActivityBrowsing::DB_TBL, array('smt' => 'rab_session_id = ? and rab_record_type = ?', 'vals' => array($val['rab_session_id'], SmartUserActivityBrowsing::TYPE_PRODUCT)));
             //echo FatApp::getDb()->getError();
         }
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function remindBuyerForPendingReviews()
@@ -104,7 +104,7 @@ class Cronjob extends FatModel
 
         $orderProductsNotReviewedYet = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($orderProductsNotReviewedYet)) {
-            return Labels::getLabel('MSG_No_Record_Found', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_NO_RECORD_FOUND', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
         $emailNotificationObj = new EmailHandler();
@@ -125,7 +125,7 @@ class Cronjob extends FatModel
             return $obj->getError();
             } */
         }
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function firstTimeBuyerDiscount($userId, $orderId)
@@ -143,7 +143,7 @@ class Cronjob extends FatModel
         $orderSrch->addCondition('order_user_id', '=', $userId);
         $orderProductsData = FatApp::getDb()->fetchAll($orderSrch->getResultSet());
         if ($orderProductsData == false) {
-            return Labels::getLabel('MSG_No_Record_Found', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_NO_RECORD_FOUND', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
         $completedOrder = 0;
@@ -185,7 +185,7 @@ class Cronjob extends FatModel
         $couponValidaity = FatApp::getConfig('CONF_FIRST_TIME_BUYER_COUPON_VALIDITY', FatUtility::VAR_INT, 0);
        
         $couponData = array(
-        'coupon_identifier' => Labels::getLabel('LBL_Discount_On_First_Purchase', $orderLangId),
+        'coupon_identifier' => Labels::getLabel('LBL_DISCOUNT_ON_FIRST_PURCHASE', $orderLangId),
         'coupon_type' => DiscountCoupons::TYPE_DISCOUNT,
         'coupon_code' => uniqid() . base64_encode($userId),
         'coupon_discount_in_percent' => FatApp::getConfig('CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT'),
@@ -214,7 +214,7 @@ class Cronjob extends FatModel
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
                 $langData = array(
-                'coupon_title' => Labels::getLabel('LBL_Discount_On_First_Purchase', $langId),
+                'coupon_title' => Labels::getLabel('LBL_DISCOUNT_ON_FIRST_PURCHASE', $langId),
                 'couponlang_coupon_id' => $couponId,
                 'couponlang_lang_id' => $langId
                 );
@@ -238,13 +238,13 @@ class Cronjob extends FatModel
             $emailNotificationObj->sendDiscountCouponNotification($couponId, $userId, $orderLangId);
         }
 
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function birthdayRewardPoints()
     {
         if (!FatApp::getConfig('CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS')) {
-            return Labels::getLabel('MSG_Disabled_Birthday_Discount_Rewards', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_DISABLED_BIRTHDAY_DISCOUNT_REWARDS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
         $currentDay = date('d');
@@ -276,10 +276,10 @@ class Cronjob extends FatModel
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'user_id');
         if (empty($row)) {
-            return Labels::getLabel('MSG_No_Record_Found', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_NO_RECORD_FOUND', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
-        $urpComments = Labels::getLabel("LBL_Earned_Reward_Points_On_Birthday", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        $urpComments = Labels::getLabel("MSG_EARNED_REWARD_POINTS_ON_BIRTHDAY", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         $expiryDate = date('Y-m-d', strtotime(date('Y-m-d') . ' +' . FatApp::getConfig('CONF_BIRTHDAY_REWARD_POINTS_VALIDITY') . 'days'));
         foreach ($row as $userId => $user) {
             $rewardsRecord = new UserRewards();
@@ -310,13 +310,13 @@ class Cronjob extends FatModel
                 return $rewardsRecord->getError();
             }
         }
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function rewardsOnPurchase($orderId)
     {
         if (!FatApp::getConfig('CONF_ENABLE_REWARDS_ON_PURCHASE', FatUtility::VAR_INT, 0)) {
-            return Labels::getLabel('MSG_Rewards_on_purchase_module_is_disabled', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_REWARDS_ON_PURCHASE_MODULE_IS_DISABLED', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
         $srch = new OrderProductSearch(0, true);
@@ -361,7 +361,7 @@ class Cronjob extends FatModel
             return false;
         }
 
-        $urpComments = CommonHelper::replaceStringData(Labels::getLabel("LBL_EARNED_REWARD_POINTS_ON_PURCHASE_OF_ORDER_ID_{ORDER-ID}", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)), ['{ORDER-ID}' => $orderId]);
+        $urpComments = CommonHelper::replaceStringData(Labels::getLabel("MSG_EARNED_REWARD_POINTS_ON_PURCHASE_OF_ORDER_ID_{ORDER-ID}", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)), ['{ORDER-ID}' => $orderId]);
         $expiryDate = date('Y-m-d', strtotime(date('Y-m-d') . ' +' . FatApp::getConfig('CONF_REWARDS_VALIDITY_ON_PURCHASE') . 'days'));
 
         $rewardsRecord = new UserRewards();
@@ -384,14 +384,14 @@ class Cronjob extends FatModel
 
             $emailObj = new EmailHandler();
             $emailObj->sendRewardPointsNotification(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $urpId);
-            return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
     }
 
     public static function buyingInAnYearRewards()
     {
         if (!FatApp::getConfig('CONF_ENABLE_BUYING_IN_AN_YEAR_REWARDS', FatUtility::VAR_INT, 0)) {
-            return Labels::getLabel('MSG_Module_Disabled', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_MODULE_DISABLED', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
         $prevYear = date('Y') - 1;
@@ -432,10 +432,10 @@ class Cronjob extends FatModel
         $row = FatApp::getDb()->fetchAll($rs, 'order_user_id');
 
         if (empty($row)) {
-            return Labels::getLabel('MSG_No_Record_Found', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return Labels::getLabel('MSG_NO_RECORD_FOUND', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
 
-        $urpComments = Labels::getLabel("LBL_Earned_Reward_Points_On_Last_Year_Buying.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        $urpComments = Labels::getLabel("MSG_EARNED_REWARD_POINTS_ON_LAST_YEAR_BUYING.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         $expiryDate = date('Y-m-d', strtotime(date('Y-m-d') . ' +' . FatApp::getConfig('CONF_BUYING_IN_AN_YEAR_REWARD_POINTS_VALIDITY') . 'days'));
         foreach ($row as $userId => $user) {
             $rewardsRecord = new UserRewards();
@@ -464,7 +464,7 @@ class Cronjob extends FatModel
                 $emailObj->sendRewardPointsNotification(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $urpId);
             }
         }
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function chargeWalletForPromotions()
@@ -769,7 +769,7 @@ class Cronjob extends FatModel
             FatApp::getDb()->updateFromArray(AttachedFile::DB_TBL_TEMP, $imgArr, $where);
         }
 
-        return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
     public static function remindBuyerForProductsInCart()
@@ -811,7 +811,7 @@ class Cronjob extends FatModel
 
 
             if (!FatApp::getDb()->updateFromArray('tbl_user_cart', array( 'usercart_sent_reminder' => 'mysql_func_usercart_sent_reminder + 1', 'usercart_reminder_date' => date('Y-m-d H:i:s') ), array('smt' => 'usercart_user_id = ?', 'vals' => array($val['usercart_user_id']) ), true)) {
-                return Labels::getLabel("MSG_Can_not_be_updated", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                return Labels::getLabel("MSG_CAN_NOT_BE_UPDATED", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
             }
         }
     }
@@ -857,7 +857,7 @@ class Cronjob extends FatModel
             }
 
             if (!FatApp::getDb()->query('UPDATE tbl_user_wish_list_products uwlp, tbl_user_wish_lists uwl SET uwlp.uwlp_sent_reminder = uwlp_sent_reminder + 1, uwlp.uwlp_reminder_date = NOW() WHERE uwl.uwlist_user_id = ' . $val['user_id'])) {
-                return Labels::getLabel("MSG_Can_not_be_updated", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                return Labels::getLabel("MSG_CAN_NOT_BE_UPDATED", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
             }
         }
     }

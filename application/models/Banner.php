@@ -35,8 +35,8 @@ class Banner extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
-            static::TYPE_PPC => Labels::getLabel('LBL_Promotion', $langId),
+            static::TYPE_BANNER => Labels::getLabel('LBL_BANNER', $langId),
+            static::TYPE_PPC => Labels::getLabel('LBL_PROMOTION', $langId),
         );
     }
     

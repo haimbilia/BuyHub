@@ -71,7 +71,7 @@ class Navigations extends MyAppModel
     public function updateContent($data = array())
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

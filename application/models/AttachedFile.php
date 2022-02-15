@@ -142,11 +142,11 @@ class AttachedFile extends MyAppModel
     public static function getFileTypeArray($langId)
     {
         return $arr = array(
-            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_Product_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_Category_Icon', $langId),
-            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
+            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_PRODUCT_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_CATEGORY_ICON', $langId),
+            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_CATEGORY_BANNER_SELLER', $langId),
         );
         return $arr;
     }
@@ -192,7 +192,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (!is_uploaded_file($fileTmpName)) {
-            $this->error = Labels::getLabel('ERR_Unable_To_Upload_File', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_UPLOAD_FILE', CommonHelper::getLangId());
             return false;
         }
 
@@ -1210,29 +1210,29 @@ class AttachedFile extends MyAppModel
     {
         switch ($code) {
             case UPLOAD_ERR_INI_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
                 break;
             case UPLOAD_ERR_FORM_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
                 break;
             case UPLOAD_ERR_PARTIAL:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_FILE:
-                $message = Labels::getLabel("MSG_NO_FILE_WAS_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_NO_FILE_WAS_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
-                $message = Labels::getLabel("MSG_MISSING_A_TEMPORARY_FOLDER", $langId);
+                $message = Labels::getLabel("ERR_MISSING_A_TEMPORARY_FOLDER", $langId);
                 break;
             case UPLOAD_ERR_CANT_WRITE:
-                $message = Labels::getLabel("MSG_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
+                $message = Labels::getLabel("ERR_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
                 break;
             case UPLOAD_ERR_EXTENSION:
-                $message = Labels::getLabel("MSG_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
+                $message = Labels::getLabel("ERR_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
                 break;
 
             default:
-                $message = Labels::getLabel("MSG_UNKNOWN_UPLOAD_ERROR", $langId);
+                $message = Labels::getLabel("ERR_UNKNOWN_UPLOAD_ERROR", $langId);
                 break;
         }
         return $message;

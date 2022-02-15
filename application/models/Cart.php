@@ -316,7 +316,7 @@ class Cart extends FatModel
 
                 $sellerProductRow = $cartProdsData[$selprod_id];
                 if (!$sellerProductRow) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $siteLangId));
                     $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
                 }
@@ -483,7 +483,7 @@ class Cart extends FatModel
                 if ($selprod_id > 0) {
                     $sellerProductRow =  $cartProdsData[$selprod_id];
                     if (!$sellerProductRow) {
-                        Message::addErrorMessage(Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $siteLangId));
+                        Message::addErrorMessage(Labels::getLabel('ERR_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $siteLangId));
                         $this->removeCartKey($key, $selprod_id, $quantity);
                         continue;
                     }
@@ -957,7 +957,7 @@ class Cart extends FatModel
                     if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
                         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
                         if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', commonHelper::getLangId()), $this->cart_user_id);
+                            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_PRODUCT_DETAIL', commonHelper::getLangId()), $this->cart_user_id);
                             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
                             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
                             $et->sendRequest();
@@ -972,7 +972,7 @@ class Cart extends FatModel
         }
         $this->updateUserCart();
         if (false === $found) {
-            $this->error = Labels::getLabel('ERR_Invalid_Product', $this->cart_lang_id);
+            $this->error = Labels::getLabel('ERR_INVALID_PRODUCT', $this->cart_lang_id);
         }
         return $found;
     }
@@ -1021,7 +1021,7 @@ class Cart extends FatModel
                         /* minimum quantity check[ */
                         $minimum_quantity = ($product['selprod_min_order_qty']) ? $product['selprod_min_order_qty'] : 1;
                         if ($quantity < $minimum_quantity) {
-                            $str = Labels::getLabel('LBL_Please_add_minimum_{minimumquantity}', $this->cart_lang_id);
+                            $str = Labels::getLabel('MSG_PLEASE_ADD_MINIMUM_{minimumquantity}', $this->cart_lang_id);
                             $str = str_replace("{minimumquantity}", $minimum_quantity, $str);
                             $this->warning = $str . " " . FatUtility::decodeHtmlEntities($product['product_name']);
                             break;
@@ -1035,7 +1035,7 @@ class Cart extends FatModel
 
                         if ($quantity > $userTempHoldStock) {
                             if ($availableStock == 0 || ($availableStock < ($quantity - $userTempHoldStock))) {
-                                $this->warning = Labels::getLabel('MSG_Requested_quantity_more_than_stock_available', $this->cart_lang_id);
+                                $this->warning = Labels::getLabel('MSG_REQUESTED_QUANTITY_MORE_THAN_STOCK_AVAILABLE', $this->cart_lang_id);
                                 $quantity = $userTempHoldStock + $availableStock;
                             }
                         }
@@ -1057,11 +1057,11 @@ class Cart extends FatModel
             }
             $this->updateUserCart();
         } else {
-            $this->error = Labels::getLabel('ERR_Quantity_should_be_greater_than_0', $this->cart_lang_id);
+            $this->error = Labels::getLabel('ERR_QUANTITY_SHOULD_BE_GREATER_THAN_0', $this->cart_lang_id);
             return false;
         }
         if (false === $found) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->cart_lang_id);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->cart_lang_id);
         }
         return $found;
     }
@@ -1087,7 +1087,7 @@ class Cart extends FatModel
                             $userTempHoldStock = Product::tempHoldStockCount($pgproduct['selprod_id'], $cart_user_id, $product['prodgroup_id'], true);
 
                             if ($availableStock == 0 || ($availableStock < ($quantity - $userTempHoldStock))) {
-                                $this->warning = Labels::getLabel('MSG_Requested_quantity_more_than_stock_available', $this->cart_lang_id);
+                                $this->warning = Labels::getLabel('MSG_REQUESTED_QUANTITY_MORE_THAN_STOCK_AVAILABLE', $this->cart_lang_id);
                                 $quantity = $userTempHoldStock + $availableStock;
                                 $inStock = false;
                                 break;
@@ -1105,7 +1105,7 @@ class Cart extends FatModel
                     $maxAvailableQty = min($prodGroupQtyArr);
                     if ($quantity > $maxAvailableQty) {
                         /* $msgString = str_replace("{n}", $maxAvailableQty, "MSG_One_of_the_product_in_combo_is_not_available_in_requested_quantity,_you_can_buy_upto_max_{n}_quantity."); */
-                        $this->warning = Labels::getLabel("MSG_One_of_the_product_in_combo_is_not_available_in_requested_quantity,_you_can_buy_upto_max_{n}_quantity.", $this->cart_lang_id);
+                        $this->warning = Labels::getLabel("MSG_ONE_OF_THE_PRODUCT_IN_COMBO_IS_NOT_AVAILABLE_IN_REQUESTED_QUANTITY,_YOU_CAN_BUY_UPTO_MAX_{n}_QUANTITY.", $this->cart_lang_id);
                         $this->warning = str_replace("{n}", $maxAvailableQty, $this->warning);
                         return true;
                     }
@@ -1236,15 +1236,6 @@ class Cart extends FatModel
                     return false;
                 }
 
-
-                /* if (isset($this->SYSTEM_ARR['shopping_cart']['product_shipping_methods']['product'][$product['selprod_id']]['mshipapi_id'])) {
-                    $shipapi_id = $this->SYSTEM_ARR['shopping_cart']['product_shipping_methods']['product'][$product['selprod_id']]['mshipapi_id'];
-                    $ShipingApiRow = ShippingApi::getAttributesById($shipapi_id, 'shippingapi_id');
-
-                    if (!$ShipingApiRow) {
-                        return false;
-                    }
-                } */
             }
         }
         return true;
@@ -1474,14 +1465,7 @@ class Cart extends FatModel
 
                 if (!empty($productIdsArr)) {
                     $couponInfo['grouped_coupon_products'] = array_merge($couponInfo['grouped_coupon_products'], $productIdsArr);
-                    /*
-                    if (empty($couponInfo['grouped_coupon_products']) || $this->cart_user_id == $couponInfo['grouped_coupon_users']) {
-                        $couponInfo['grouped_coupon_products'] = $productIdsArr;
-                    } else {
-                        $couponInfo['grouped_coupon_products'] = array_merge($couponInfo['grouped_coupon_products'], $productIdsArr);
-                    }
-                     * 
-                     */
+                   
                 }
             }
             /* ] */

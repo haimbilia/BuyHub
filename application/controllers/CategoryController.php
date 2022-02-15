@@ -49,7 +49,7 @@ class CategoryController extends MyAppController
 
         if (false == $category) {
             if (true === MOBILE_APP_API_CALL) {
-                $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+                $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
             FatUtility::exitWithErrorCode(404);
@@ -400,10 +400,10 @@ class CategoryController extends MyAppController
         $categoryName = $post['categoryName'];
         $categoryId = FatUtility::int($post['categoryId']);
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('LBL_Lang_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANG_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (1 > $categoryId) {
-            trigger_error(Labels::getLabel('LBL_Brand_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_BRAND_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = productCategory::getSearchObject($langId);
         $srch->addOrder('m.prodcat_active', 'DESC');
@@ -414,7 +414,7 @@ class CategoryController extends MyAppController
         $rs = $srch->getResultSet();
         $records = $srch->recordCount();
         if ($records > 0) {
-            FatUtility::dieJsonError(sprintf(Labels::getLabel('LBL_%s_not_available', $this->siteLangId), $categoryName));
+            FatUtility::dieJsonError(sprintf(Labels::getLabel('ERR_%S_NOT_AVAILABLE', $this->siteLangId), $categoryName));
         }
         FatUtility::dieJsonSuccess(array());
     }

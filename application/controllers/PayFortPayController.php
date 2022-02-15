@@ -69,13 +69,13 @@ class PayFortPayController extends PaymentController
             $orderId = $_REQUEST['merchant_reference'];
         }
         if (!$orderId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $paymentChargeUrl = UrlHelper::generateUrl('PayFortPay', 'charge', array($orderId));
         if (!(isset($_REQUEST['signature']) and !empty($_REQUEST['signature']))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser($paymentChargeUrl);
         }
 
@@ -125,7 +125,7 @@ class PayFortPayController extends PaymentController
     private function generatePaymentFormParams($orderId, $orderPaymentObj, &$orderInfo, &$paymentGatewayCharge = 0.00, $returnParams = true)
     {
         if (!$orderId || !$orderPaymentObj) {
-            $this->error = Labels::getLabel('ERR_Invalid_order_request', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_REQUEST', $this->siteLangId);
             return false;
         }
 
@@ -140,7 +140,7 @@ class PayFortPayController extends PaymentController
             return false;
         }
 
-        $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+        $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
 
         if ($returnParams) {
             $return_url = UrlHelper::generateFullUrl('PayFortPay', 'doPayment', array($orderId), '', false);
@@ -185,8 +185,8 @@ class PayFortPayController extends PaymentController
         foreach ($requestParams as $a => $b) {
             $frm->addHiddenField('', htmlentities($a), htmlentities($b));
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
-        $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_CANCEL', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
+        $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $this->siteLangId));
         return $frm;
     }
 }

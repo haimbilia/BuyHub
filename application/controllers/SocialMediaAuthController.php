@@ -35,7 +35,7 @@ class SocialMediaAuthController extends PluginBaseController
             }
         }
         if (false === $referredRedirection) {
-            $message = Labels::getLabel('MSG_LOGGEDIN_SUCCESSFULLY', $this->siteLangId);
+            $message = Labels::getLabel('SUC_LOGGEDIN_SUCCESSFULLY', $this->siteLangId);
             $this->set('url', $referredUrl);
             $this->set('msg', $message);
             $this->_template->render(false, false, 'json-success.php');
@@ -62,7 +62,7 @@ class SocialMediaAuthController extends PluginBaseController
             $userId = $userInfo['user_id'];
             $userObj = new User($userId);
             if (!$token = $userObj->setMobileAppToken()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             $this->set('token', $token);
             $this->set('userInfo', $userInfo);
@@ -71,9 +71,9 @@ class SocialMediaAuthController extends PluginBaseController
         
         if (empty($userInfo['credential_email']) && empty($userInfo['user_phone'])) {
             if (true == SmsArchive::canSendSms()) {
-                $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
+                $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
             } else {
-                $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
+                $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
             }
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);

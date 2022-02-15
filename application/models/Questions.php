@@ -55,11 +55,11 @@ class Questions extends MyAppModel
         }
 
         return array(
-        static::TYPE_TEXT => Labels::getLabel('LBL_Question_Type_Text', $langId),
-        static::TYPE_SINGLE_CHOICE => Labels::getLabel('LBL_Question_Type_Single_Choice', $langId),
-        static::TYPE_MULTIPLE_CHOICE => Labels::getLabel('LBL_Question_Type_Multiple_Choice', $langId),
-        static::TYPE_RATING_5 => Labels::getLabel('LBL_Question_Type_Rating_5', $langId),
-        static::TYPE_RATING_10 => Labels::getLabel('LBL_Question_Type_Rating_10', $langId),
+        static::TYPE_TEXT => Labels::getLabel('LBL_QUESTION_TYPE_TEXT', $langId),
+        static::TYPE_SINGLE_CHOICE => Labels::getLabel('LBL_QUESTION_TYPE_SINGLE_CHOICE', $langId),
+        static::TYPE_MULTIPLE_CHOICE => Labels::getLabel('LBL_QUESTION_TYPE_MULTIPLE_CHOICE', $langId),
+        static::TYPE_RATING_5 => Labels::getLabel('LBL_QUESTION_TYPE_RATING_5', $langId),
+        static::TYPE_RATING_10 => Labels::getLabel('LBL_QUESTION_TYPE_RATING_10', $langId),
         );
     }
 }

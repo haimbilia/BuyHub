@@ -67,8 +67,8 @@ class PolicyPoint extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::PPOINT_TYPE_WARRANTY => Labels::getLabel('LBL_Warranty', $langId),
-            static::PPOINT_TYPE_RETURN => Labels::getLabel('LBL_Return', $langId),
+            static::PPOINT_TYPE_WARRANTY => Labels::getLabel('LBL_WARRANTY', $langId),
+            static::PPOINT_TYPE_RETURN => Labels::getLabel('LBL_RETURN', $langId),
         );
     }
 

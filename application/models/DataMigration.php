@@ -974,13 +974,13 @@ class DataMigration
                     $countryId = Countries::getCountryByCode($countryCode, 'country_id');
                     $this->countryIdArrByCode[$countryCode] = $countryId;
                 } else {
-                    $countryId = $thiscountryIdArrByCode[$countryCode];
+                    $countryId = $this->countryIdArrByCode[$countryCode];
                 }
             }
 
             if (empty($countryId) && !empty($countryName)) {
                 if (!isset($this->countryIdArrByName[$countryName])) {
-                    $countryId = Countries::getCountryAttributeByName($countryName, 'country_id');
+                    $countryId = Countries::getCountryAttributeByName($countryName, $langId, 'country_id');
                     $this->countryIdArrByName[$countryName] = $countryId;
                 } else {
                     $countryId = $this->countryIdArrByName[$countryName];
