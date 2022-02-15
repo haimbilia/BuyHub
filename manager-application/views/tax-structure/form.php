@@ -1,8 +1,12 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+?>
+<script>
+    var placeholder = '<?php echo Labels::getLabel('FRM_TITLE', $siteLangId) ?>';
+</script>
+<?php
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 
 $fld = $frm->getField('taxstr_is_combined');
 if ($fld != null) {
@@ -10,7 +14,7 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
-$delBtn = '<button type="button" data-id="' . $firstCompontentId . '" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
+$delBtn = '<button type="button" data-id="' . $firstCompontentId . '" class="invisible btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
         <svg class="svg" width="18" height="18">
             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
@@ -37,15 +41,19 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
         }
         <?php
         if (!empty($combinedTaxes)) {
+            $count = 2;
             foreach ($combinedTaxes as $key => $tax) {
         ?>
                 $('.component_link').find('.component-row--js').last().after($('.component_link').find('.component-row--js').last().clone());
                 $('.component_link').find('.component-row--js').last().find('input[type=text]').val('<?php echo $tax; ?>');
+                $('.component_link').find('.component-row--js').last().find('input[type=text]').attr('placeholder', placeholder + ' ' + '<?php echo $count++; ?>');
                 $('.component_link').find('.component-row--js').last().find('.remove-combined-form--js').removeClass('hide');
                 $('.component_link').find('.component-row--js').last().find('.remove-combined-form--js').attr('data-id', '<?php echo $key; ?>');
+                $('.component_link').find('.component-row--js').last().find('.remove-combined-form--js').removeClass('invisible');
         <?php
             }
         }
         ?>
+        setVisibliltyForAddBtn();
     });
 </script>

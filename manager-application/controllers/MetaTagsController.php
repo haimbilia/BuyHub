@@ -49,6 +49,8 @@ class MetaTagsController extends ListingBaseController
         }
 
         $fields = $this->getFormColumns($metaType);
+        $this->setCustomColumnWidth($metaType);
+        
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
@@ -56,7 +58,7 @@ class MetaTagsController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (empty($sortBy)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = $allowedKeysForSorting[2] ?? current($allowedKeysForSorting);
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -66,6 +68,7 @@ class MetaTagsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $this->postedData = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        $this->postedData['metaType'] = $metaType;
 
         $this->controller = FatUtility::convertToType($this->tabsArr[$metaType]['controller'], FatUtility::VAR_STRING);
         $this->action = FatUtility::convertToType($this->tabsArr[$metaType]['action'], FatUtility::VAR_STRING);
@@ -102,26 +105,20 @@ class MetaTagsController extends ListingBaseController
                 $srch = $this->renderTemplateForMetaType();
                 break;
         }
-
+        MetaTag::META_GROUP_BLOG_POST;
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $this->postedData,(MetaTag::META_GROUP_BLOG_POST==$metaType)?true:false);
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        $srch->setPageSize($pageSize); 
         $arrListing = $db->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $arrListing);
-
+        $this->set("arrListing", $arrListing); 
         $searchForm->fill($this->postedData);
-        $this->set('frmSearch', $searchForm);
-
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $this->postedData);
-
+        $this->set('frmSearch', $searchForm); 
+        $this->set('postedData', $this->postedData); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -358,6 +355,7 @@ class MetaTagsController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'meta_title');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -372,7 +370,7 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -388,11 +386,11 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_DOESN\'T_MATTER', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
-
-        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-light', 'clearSearch(true)');
+        $frm->addHiddenField('', 'total_record_count'); 
+        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(false)');
         $frm->addHtml('', 'btn_clear', $clearBtnHtm);
         return $frm;
     }
@@ -447,7 +445,8 @@ class MetaTagsController extends ListingBaseController
         $this->set('metaId', $metaId);
         $this->set('metaType', $metaType);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langForm($metaId = 0, $langId = 0, $metaType = 'default', $metaTagRecordId = 0, $autoFillLangData = 0)
@@ -456,7 +455,7 @@ class MetaTagsController extends ListingBaseController
         $langId = FatUtility::int($langId);
 
         if ($langId == 0) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $langFrm = $this->getLangForm($metaId, $langId, $metaType, $metaTagRecordId);
@@ -482,7 +481,8 @@ class MetaTagsController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -517,9 +517,12 @@ class MetaTagsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
+           
             LibHelper::exitWithError($record->getError(), true);
         }
 
+        CacheHelper::clear(CacheHelper::TYPE_META_TAGS);
+        
         $newTabLangId = 0;
         if ($metaId > 0) {
             $languages = Language::getAllNames();
@@ -641,7 +644,7 @@ class MetaTagsController extends ListingBaseController
     {
         $this->objPrivilege->canEditMetaTags();
 
-        $metaId = FatApp::getPostedData('metaId', FatUtility::VAR_INT, 0);
+        $metaId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($metaId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -726,7 +729,7 @@ class MetaTagsController extends ListingBaseController
     {
         $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTblHeadingCols) {
-            return json_decode($metaTagsTblHeadingCols);
+            return json_decode($metaTagsTblHeadingCols, true);
         }
 
         $arr = [
@@ -761,6 +764,55 @@ class MetaTagsController extends ListingBaseController
 
         CacheHelper::create('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
+    }
+
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(string $metaType): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'action' => [
+                'width' => '5%'
+            ],   
+        ];
+
+        switch ($metaType) {
+            case MetaTag::META_GROUP_PRODUCT_DETAIL:
+                $arr['selprod_title'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_SHOP_DETAIL:
+                $arr['shop_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_CMS_PAGE:
+                $arr['cpage_title'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BRAND_DETAIL:
+                $arr['brand_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_CATEGORY_DETAIL:
+                $arr['prodcat_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BLOG_CATEGORY:
+                $arr['bpcategory_name'] = ['width' => '45%'];
+                break;
+            case MetaTag::META_GROUP_BLOG_POST:
+                $arr['post_title'] = ['width' => '45%'];
+                break;
+        }
+
+        if(count($arr) == 3 ){
+            $arr['meta_title'] = ['width' => '45%'];
+        }else{
+            $arr['meta_title'] = ['width' => '90%'];
+        }
+        
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function getDefaultColumns(): array

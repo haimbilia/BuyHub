@@ -27,10 +27,10 @@
 $dark-color: #888;
 //dynamic theme colors
 $brand-color: #0073cf;
-//$brand-color-inverse:#FFFFFF;
+$brand-color-inverse: #ffffff;
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
-// $secondary-color: #6DCDEF;
+//$secondary-color: #6DCDEF;
 // $secondary-color-inverse: #FFFFFF;
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
@@ -43,6 +43,7 @@ $border-color: #dee2e6;
 $border: solid 1px $border-color;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
+$focus-outline :1px solid #888;
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;

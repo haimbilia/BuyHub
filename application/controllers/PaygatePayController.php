@@ -170,7 +170,7 @@ class PaygatePayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->payWeb3::$process_url;
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 

@@ -4,7 +4,7 @@ class FilterGroupsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;
-    
+
     public function __construct($action)
     {
         $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
@@ -26,41 +26,31 @@ class FilterGroupsController extends ListingBaseController
         $this->set("search", $search);
         $this->_template->render();
     }
-    
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-    
+
     public function search()
     {
         $this->objPrivilege->canViewFilterGroups();
-        
+
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        
+
         $filterGroupObj = new FilterGroup();
         $srch = $filterGroupObj->getSearchObject();
         $srch->addFld('fg.*');
-        
-        if (!empty($post['keyword'])) {
+
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('fg.filtergroup_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('fgl.filtergroup_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        
+
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        
+
         $srch->joinTable(
             FilterGroup::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
@@ -68,47 +58,46 @@ class FilterGroupsController extends ListingBaseController
             'fgl'
         );
         $srch->addMultipleFields(array("fgl.filtergroup_name"));
-        
+
         $rs = $srch->getResultSet();
-        
+
         $pageCount = $srch->pages();
         $records = array();
         if ($rs) {
             $records = FatApp::getDb()->fetchAll($rs);
         }
-        
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $pageCount);
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function setup()
     {
         $this->objPrivilege->canEditFilterGroups();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        
+
         $filtergroup_id = $post['filtergroup_id'];
         unset($post['filtergroup_id']);
-        
+
         $record = new FilterGroup($filtergroup_id);
         $record->assignValues($post);
-        
+
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
-        
+
         $newTabLangId = 0;
         if ($filtergroup_id > 0) {
             $filterGroupId = $filtergroup_id;
@@ -123,48 +112,45 @@ class FilterGroupsController extends ListingBaseController
             $filterGroupId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        
+
         $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
         $this->set('filterGroupId', $filterGroupId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function langSetup()
     {
         $this->objPrivilege->canEditFilterGroups();
         $post = FatApp::getPostedData();
-        
+
         $filtergroup_id = FatUtility::int($post['filtergroup_id']);
         $lang_id = FatUtility::int($post['lang_id']);
-        
+
         if ($filtergroup_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $frm = $this->getLangForm($filtergroup_id, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['filtergroup_id']);
         unset($post['lang_id']);
         $data = array(
-        'filtergrouplang_lang_id' => $lang_id,
-        'filtergrouplang_filtergroup_id' => $filtergroup_id,
-        'filtergroup_name' => $post['filtergroup_name'],
+            'filtergrouplang_lang_id' => $lang_id,
+            'filtergrouplang_filtergroup_id' => $filtergroup_id,
+            'filtergroup_name' => $post['filtergroup_name'],
         );
-        
+
         $filterGroupObj = new FilterGroup($filtergroup_id);
         if (!$filterGroupObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($filterGroupObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($filterGroupObj->getError(), true);
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(FilterGroup::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($filtergroup_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -176,125 +162,124 @@ class FilterGroupsController extends ListingBaseController
                 break;
             }
         }
-    
+
         $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
         $this->set('filterGroupId', $filtergroup_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function form($filtergroup_id = 0)
     {
         $this->objPrivilege->canEditFilterGroups();
-        
+
         $filtergroup_id = FatUtility::int($filtergroup_id);
         $filterGroupsFrm = $this->getForm($filtergroup_id);
 
         if (0 < $filtergroup_id) {
             $data = FilterGroup::getAttributesById($filtergroup_id, array('filtergroup_id', 'filtergroup_identifier', 'filtergroup_active'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $filterGroupsFrm->fill($data);
         }
-    
+
         $this->set('languages', Language::getAllNames());
         $this->set('filtergroup_id', $filtergroup_id);
         $this->set('filterGroupsFrm', $filterGroupsFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     private function getForm($filtergroup_id = 0)
     {
         $this->objPrivilege->canEditFilterGroups();
         $filtergroup_id = FatUtility::int($filtergroup_id);
 
-        $action = Labels::getLabel('LBL_Add_New', $this->siteLangId);
+        $action = Labels::getLabel('FRM_ADD_NEW', $this->siteLangId);
         if ($filtergroup_id > 0) {
-            $action = Labels::getLabel('LBL_Update', $this->siteLangId);
+            $action = Labels::getLabel('FRM_UPDATE', $this->siteLangId);
         }
         $filterGroupObj = new FilterGroup();
         $frm = new Form('frmFilterGroups', array('id' => 'frmFilterGroups'));
         $frm->addHiddenField('', 'filtergroup_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Filter_Group_Identifier', $this->siteLangId), 'filtergroup_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_FILTER_GROUP_IDENTIFIER', $this->siteLangId), 'filtergroup_identifier');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Filter_Group_Active', $this->siteLangId), 'filtergroup_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_FILTER_GROUP_ACTIVE', $this->siteLangId), 'filtergroup_active', $activeInactiveArr, '', array(), '');
         $frm->addSubmitButton('', 'btn_submit', $action);
         return $frm;
     }
-    
+
     public function langForm($filtergroup_id = 0, $lang_id = 0, $autoFillLangData = 0)
     {
         $this->objPrivilege->canEditFilterGroups();
-        
+
         $filtergroup_id = FatUtility::int($filtergroup_id);
         $lang_id = FatUtility::int($lang_id);
-        
+
         if ($filtergroup_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         $filterGroupLangFrm = $this->getLangForm($filtergroup_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(FilterGroup::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($filtergroup_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
             $langData = FilterGroup::getAttributesByLangId($lang_id, $filtergroup_id);
         }
-        
+
         if ($langData) {
             $filterGroupLangFrm->fill($langData);
         }
-        
+
         $this->set('languages', Language::getAllNames());
         $this->set('filtergroup_id', $filtergroup_id);
         $this->set('filtergroup_lang_id', $lang_id);
         $this->set('filterGroupLangFrm', $filterGroupLangFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     private function getLangForm($filtergroup_id = 0, $lang_id = 0)
     {
         $frm = new Form('frmFilterGroupLang', array('id' => 'frmFilterGroupLang'));
         $frm->addHiddenField('', 'filtergroup_id', $filtergroup_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->siteLangId), 'filtergroup_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'filtergroup_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-                
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
         return $frm;
     }
-    
+
     public function deleteRecord()
     {
         $this->objPrivilege->canEditFilterGroups();
-        
+
         $filtergroup_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($filtergroup_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $filterGroupObj = new FilterGroup($filtergroup_id);
         if (!$filterGroupObj->canRecordMarkDelete($filtergroup_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $filterGroupObj->assignValues(array(FilterGroup::tblFld('deleted') => 1));
         if (!$filterGroupObj->save()) {
-            Message::addErrorMessage($filterGroupObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($filterGroupObj->getError(), true);
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }

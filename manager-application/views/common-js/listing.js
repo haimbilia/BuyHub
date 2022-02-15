@@ -48,7 +48,7 @@ $(function() {
         stop: function() {
             reloadList();
         }
-    }).disableSelection();
+    });
 });
 
 /* Reset result on clear(cross) icon on keyword search field. */
@@ -57,8 +57,12 @@ $(document).on("search", "input[name='keyword']", function() {
         searchRecords(document.frmRecordSearch);
     }
 });
+/* Reset result on clear(cross) icon on keyword search field. */
 
-$(document).on("click", ".resetModalFormJs", function(e) {
+$(document).on("click", ".resetModalFormJs", function (e) {
+    if ($.ykmodal.isSideBarView()) {
+        $.ykmodal(fcom.getLoader());
+    }
     if (0 > $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
     } else {
@@ -103,9 +107,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         }
         var frm = document.frmRecordSearchPaging;
         $(frm.page).val(page);
-        if ("undefined" != typeof document.frmRecordSearch.page) {
-            document.frmRecordSearch.page.value = page;
-        }
+        /* if ("undefined" != typeof document.frmRecordSearch.page) {
+            document.frmRecordSearch.page.value = 1;
+        } */
         searchRecords(frm);
     };
 
@@ -116,34 +120,33 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
         var frm = document.frmLoadMoreRecordsPaging;
         var page = 1;
-        if (
-            "undefined" != typeof frm.page.value &&
-            "" != frm.page.value &&
-            0 < frm.page.value
-        ) {
+        if ("undefined" != typeof frm.page.value && "" != frm.page.value && 0 < frm.page.value) {
             page += parseInt(frm.page.value);
         }
 
         $(frm.page).val(page);
         var reference = $(".appendRowsJs .rowJs:last").data("reference");
-        if (
-            "undefined" != typeof reference &&
-            "undefined" != typeof frm.reference
-        ) {
+        if ("undefined" != typeof reference && "undefined" != typeof frm.reference) {
             $(frm.reference).val(reference);
         }
 
         var data = fcom.frmData(frm);
 
-        $(".appendRowsJs .rowJs:last")
-            .clone()
-            .removeAttr("class")
-            .addClass("rowJs")
-            .appendTo(".appendRowsJs")
-            .html(fcom.getRowSpinner());
-        fcom.ajax(fcom.makeUrl(controllerName, "getRows"), data, function(rows) {
-            $(".appendRowsJs .rowJs:last").remove();
-            $(".appendRowsJs").append(rows);
+        var loadMoreBtn = $('.loadMoreBtnJs');
+        var btnText = loadMoreBtn.text();
+        loadMoreBtn.html(fcom.getRowSpinner());
+
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "getRows"), data, function (rows) {
+            $(".appendRowsJs").append(rows.html);
+            loadMoreBtn.html(btnText);
+
+            var similarElement = '.appendRowsJs [data-reference="' + reference + '"]';
+            var lastSimilar = $(similarElement + ':last');
+            if (1 < $(similarElement).length) {
+                var li = lastSimilar.find('.ulJs').html();
+                lastSimilar.remove();
+                $(similarElement + ':last ul.ulJs').append(li);
+            }
 
             if (page == frm.pageCount.value) {
                 $(".loadMorePaginationJs").remove();
@@ -151,10 +154,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         });
     };
 
-    setPageSize = function(pageSize) {
-        var frm = document.frmRecordSearchPaging;
-        $(frm.pageSize).val(pageSize);
-        reloadList();
+    setPageSize = function (pageSize) {
+        var frm = document.frmRecordSearch;
+        $(frm.pageSize).val(pageSize);     
+        searchRecords(frm);
     };
 
     redirectBack = function(redirecrt) {
@@ -165,13 +168,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         searchRecords(document.frmRecordSearchPaging);
     };
 
-    /* exportReport = function () {
-        setColumnsData(document.frmRecordSearch);
-        document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
-        document.frmRecordSearch.submit();
-    } */
-
-    searchRecords = function(frm) {
+    searchRecords = function (frm) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -181,11 +178,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         if (frm) {
             data = fcom.frmData(frm);
         }
-
         $(listingTableJs).prepend(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function(res) {
-            var res = JSON.parse(res);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
             if (res.headSection) {
                 $('.tableHeadJs').replaceWith(res.headSection);
             }
@@ -214,7 +209,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
     clearSearch = function(loadRowsOnly = false) {
         document.frmRecordSearch.reset();
-        $("input:checkbox[name=listingFld]:checked").each(function() {
+        $('input', document.frmRecordSearch).not(':hidden').val('');
+        $("input:checkbox[name=listingFld]:checked").each(function () {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
             }
@@ -273,9 +269,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function(t) {
-            $.ykmodal(t, displayInPopup, dialogClass);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+            $.ykmodal(t.html, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -285,10 +280,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             return false;
         }
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function(t) {
-            $.ykmodal(t, displayInPopup, dialogClass);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -298,13 +292,15 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             return false;
         }
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         data = "recordId=" + recordId + "&langId=" + langId;
-        fcom.ajax(
+        var isPopupView = ($.ykmodal.isAdded() && !$.ykmodal.isSideBarView());
+
+        $.ykmodal(fcom.getLoader(), isPopupView);
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
-            function(t) {
-                $.ykmodal(t, !$.ykmodal.isSideBarView());
+            function (t) {
+                $.ykmodal(t.html, isPopupView);
                 fcom.removeLoader();
             }
         );
@@ -314,7 +310,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         if (false === checkControllerName()) {
             return false;
         }
-
+        fcom.displayProcessing();
         e.stopPropagation();
         /* if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
@@ -333,7 +329,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
-            function(res) {
+            function (res) {
+                fcom.closeProcessing();
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
@@ -359,16 +356,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function(res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
-            $.ykmsg.success(t.msg);
-
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
@@ -391,14 +381,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function(res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
-            $.ykmsg.success(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();
@@ -422,8 +406,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             obj.removeAttr("disabled");
         }
 
-        var parentForm = obj.closest("form").attr("id");
-        $("#" + parentForm + " .selectItemJs").each(function() {
+        $(".listingRecordJs .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
@@ -449,20 +432,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
         data = fcom.frmData(frm);
 
-        fcom.displayProcessing();
-        fcom.ajax(frm.action, data, function(res) {
+        fcom.updateWithAjax(frm.action, data, function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
-
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-            } else {
-                $.ykmsg.success(t.msg);
-            }
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };
@@ -496,21 +470,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             return false;
         }
 
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "images", [
-                recordId,
-                fileType,
-                langId,
-                slide_screen,
-            ]),
-            "",
-            function(t) {
+        fcom.updateWithAjax(
+            fcom.makeUrl(controllerName, "images", [recordId, fileType, langId, slide_screen]), "",
+            function (t) {
+                fcom.removeLoader();
                 if (fileType == "logo") {
-                    $("#logoListingJs").html(t);
+                    $("#logoListingJs").html(t.html);
                     return;
                 }
 
-                $("#imageListingJs").html(t);
+                $("#imageListingJs").html(t.html);
             }
         );
     };
@@ -520,15 +489,12 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             return false;
         }
 
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]),
-            "",
-            function(t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
+            function (t) {
                 fcom.removeLoader();
                 loadImages(recordId, "logo", slide_screen, langId);
                 loadImages(recordId, "image", slide_screen, langId);
-                $.ykmodal(t, !$.ykmodal.isSideBarView());
+                $.ykmodal(t.html, !$.ykmodal.isSideBarView());
             }
         );
     };
@@ -571,37 +537,36 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function(t) {
-                t = $.parseJSON(t);
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
 
                 var frmName = $(inputBtn).closest('form').attr('name');
-                var minWidth = document[frmName].min_width.value;
-                var minHeight = document[frmName].min_height.value;
-
-                var aspectRatio = minWidth / minHeight;
-
-                // if (minWidth == minHeight) {
-                //     var aspectRatio = 1 / 1;
-                // } else {
-                //     var aspectRatio = 16 / 9;
-                // }
-                var options = {
-                    aspectRatio: aspectRatio,
-                    data: {
-                        width: minWidth,
-                        height: minHeight,
-                    },
-                    minCropBoxWidth: minWidth,
-                    minCropBoxHeight: minHeight,
+                var options = {                    
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: "high",
                     imageSmoothingEnabled: true,
                 };
+
+                if(document[frmName].min_width != undefined && document[frmName].min_height != undefined){
+                    var minWidth = document[frmName].min_width.value;
+                    var minHeight = document[frmName].min_height.value;
+                    options['aspectRatio'] = minWidth / minHeight;
+                    options['minCropBoxWidth'] = minWidth;
+                    options['minCropBoxHeight'] = minHeight;
+                    options['data'] = {
+                        width: minWidth,
+                        height: minHeight,
+                    };
+                }else{
+                    options['initialAspectRatio'] = 1;                    
+                }              
+                
                 $(inputBtn).val("");
-                setTimeout(function() { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                setTimeout(function () {
+                    cropImage(file, options, "uploadImages", inputBtn);
+                }, 100);
                 return;
             });
         }
@@ -611,6 +576,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         if (false === checkControllerName()) {
             return false;
         }
+
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
         var langId = 0;
@@ -632,6 +598,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             formData.append(input.name, input.value);
         });
 
+        formData.append('fOutMode', 'json');
         $.ajax({
             url: fcom.makeUrl(controllerName, action),
             type: "post",
@@ -640,8 +607,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function() {
-                $.ykmodal(fcom.getLoader());
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
             success: function(ans) {
                 fcom.removeLoader();
@@ -724,7 +691,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
         $('.listingTableJs .tableHeadJs th').each(function() {
             var arr = {
-                'width': $(this).width(),
+                'width': $(this).outerWidth(true),
                 'element': $(this)
             };
             thWidthArr.push(arr);
@@ -733,11 +700,31 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
             /* Sort By width */
 
-        $.each(thWidthArr, function(index, value) {
+        /* let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; */
+
+        $.each(thWidthArr, function (index, value) {
             var width = value.width;
             var element = value.element;
-            $(element).css({ 'width': width });
+            $(element).attr('width', width);
+
+            /* Not required for drag drop functionality. */
+            /* if (isSortableTable) {
+                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1) + ")").attr('width', width);
+            } */
         });
+    }
+
+    fixWidthHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    }
+
+    fixPlaceholderStyle = function (e, ui) {
+        ui.placeholder.height(ui.item.height());
+        ui.placeholder.css("visibility", "visible");
+        ui.placeholder.css('background-color', '#f3f6f9');
     }
 })();
 

@@ -1,12 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="content-header">
-    <div class="content-header-title"> 
-        <?php $this->includeTemplate('_partial/dashboardTop.php');
-        
+    <div class="content-header-title">
+        <?php
         if (isset($headingLabel)) { ?>
-                <h2><?php echo $headingLabel; ?></h2>
-        <?php } ?>
+            <h2><?php echo $headingLabel; ?></h2>
+        <?php }
+        
+        $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
     </div>
     <?php $this->includeTemplate('_partial/header/content-header-buttons.php', $this->variables, false); ?>
 </div>

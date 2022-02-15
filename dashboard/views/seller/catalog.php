@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php 
         $title = ($type == 1) ? Labels::getLabel('LBL_Seller_Products', $siteLangId) : Labels::getLabel('LBL_Marketplace_Products', $siteLangId);
         $data = [
-            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>',
+            'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>',
             'siteLangId' => $siteLangId,
             'controllerName' => $controllerName,
             'action' => $action,
@@ -75,7 +75,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <script>
     $(document).ready(function() {
         searchCatalogProducts(document.frmSearchCatalogProduct);

@@ -20,7 +20,7 @@ $proFld->htmlAfterField = "<span class='form-text text-muted text-danger'>" . La
 $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Product...', $siteLangId));
 
 ?>
-<div class="card-header">
+<div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></h5>
 </div>
 <div class="card-body">

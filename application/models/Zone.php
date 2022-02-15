@@ -18,7 +18,7 @@ class Zone extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'zone');
 
         if ($isActive == true) {
-            $srch->addCondition('zone.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('zone.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -89,19 +89,19 @@ class Zone extends MyAppModel
         }
         return $zoneContryArray;
     }
-    
+
     public static function getZoneWithCountriesStates($langId, $isActive = true)
     {
         $srch = static::getSearchObject($isActive, $langId);
-        $srch->joinTable(Countries::DB_TBL, 'INNER  JOIN', 'c.country_zone_id = zone.zone_id and c.' . Countries::tblFld('active') . ' = '.applicationConstants::ACTIVE, 'c');
+        $srch->joinTable(Countries::DB_TBL, 'INNER  JOIN', 'c.country_zone_id = zone.zone_id and c.' . Countries::tblFld('active') . ' = ' . applicationConstants::ACTIVE, 'c');
 
         $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.' . Countries::DB_TBL_LANG_PREFIX . 'country_id = c.' . Countries::tblFld('id') . ' and c_l.' . Countries::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'c_l');
-        $srch->joinTable(States::DB_TBL, 'INNER JOIN', 's.state_country_id = c.country_id  and s.' . States::tblFld('active') . ' = '.applicationConstants::ACTIVE, 's');
-        $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND s_l.statelang_lang_id = ' . $langId, 's_l');        
+        $srch->joinTable(States::DB_TBL, 'INNER JOIN', 's.state_country_id = c.country_id  and s.' . States::tblFld('active') . ' = ' . applicationConstants::ACTIVE, 's');
+        $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND s_l.statelang_lang_id = ' . $langId, 's_l');
         $srch->addMultipleFields(
             array(
                 'zone_id',
-                'if(zone_name is null, zone_identifier, zone_name) as zone_name', 'country_id', 'if(country_name is null, country_code, country_name) as country_name','if(state_name is null, state_identifier, state_name) as  state_name,state_id'
+                'if(zone_name is null, zone_identifier, zone_name) as zone_name', 'country_id', 'if(country_name is null, country_code, country_name) as country_name', 'if(state_name is null, state_identifier, state_name) as  state_name,state_id'
             )
         );
 
@@ -113,10 +113,10 @@ class Zone extends MyAppModel
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $zoneCountryStateArray = []; 
+        $zoneCountryStateArray = [];
         if (!empty($records)) {
             foreach ($records as $record) {
-                $zone_id = $record['zone_id'];                
+                $zone_id = $record['zone_id'];
                 $zoneCountryStateArray[$zone_id]['zone_name'] = $record['zone_name'];
                 $zoneCountryStateArray[$zone_id]['zone_id'] = $record['zone_id'];
                 $countryId = $record['country_id'];
@@ -127,21 +127,23 @@ class Zone extends MyAppModel
                 $zoneCountryStateArray[$zone_id]['countries'][$countryId]['states'][$state_id]['state_name'] = $record['state_name'];
                 $zoneCountryStateArray[$zone_id]['countries'][$countryId]['states'][$state_id]['state_id'] = $record['state_id'];
             }
-        }      
+        }
         return $zoneCountryStateArray;
     }
 
     public static function getExcludeLocations($profileId, $zoneId)
     {
+        $profileId = FatUtility::int($profileId);
+        $zoneId = FatUtility::int($zoneId);
         $srch = ShippingProfileZone::getSearchObject();
         $srch->joinTable(ShippingZone::DB_SHIP_LOC_TBL, 'LEFT OUTER JOIN', 'zoneLoc.shiploc_shipzone_id = spzone.shipprozone_shipzone_id', 'zoneLoc');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $cnd = $srch->addCondition('shipprozone_shipprofile_id', '=', $profileId);
-        $cnd->attachCondition('shipprozone_shipzone_id', '!=', $zoneId, 'AND', false);
+        $srch->addCondition('shipprozone_shipprofile_id', '=', 'mysql_func_' . $profileId, 'AND', true);
+        $srch->addCondition('shipprozone_shipzone_id', '!=', 'mysql_func_' . $zoneId, 'AND', true);
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
-    
+
     public static function requiredFields()
     {
         return array(
@@ -160,5 +162,4 @@ class Zone extends MyAppModel
         $requiredFields = static::requiredFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
-
 }

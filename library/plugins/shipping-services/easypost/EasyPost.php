@@ -621,6 +621,7 @@ class EasyPost extends ShippingServicesBase
      * @param  int $qty
      * @return bool
      */
+    /*
     public function returnShipment(string $rateId, int $qty): bool
     {
         if (false === $this->loadOrder($rateId)) {
@@ -660,6 +661,7 @@ class EasyPost extends ShippingServicesBase
         $this->resp = $resp;
         return true;
     }
+    */
 
     /**
      * refundShipment

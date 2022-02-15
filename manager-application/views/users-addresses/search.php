@@ -33,20 +33,15 @@ foreach ($arrListing as $sn => $row) {
                 break; 
             case 'user_address':
                 $address1 = (!empty($row['addr_address1'])) ? $row['addr_address1'] . ', ' : '';
-                $address2 = (!empty($row['add_address2'])) ? $row['addr_address2'] : '';
+                $address2 = (!empty($row['addr_address2'])) ? $row['addr_address2'] : '';
 
                 $city = (!empty($row['addr_city'])) ? $row['addr_city'] . ', ' : '';
                 $state = (!empty($row['state_name'])) ? $row['state_name'] . ', ' : '';
                 $country = (!empty($row['country_name'])) ? $row['country_name'] . ', ' : '';
                 $zip = (!empty($row['addr_zip'])) ? $row['addr_zip'] : '';
-                
-                $addrPhone = (!empty($row['addr_phone'])) ? $row['addr_phone'] : '';
-                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
-                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
-                }
 
-                $address = '<ul class="list-text users-addresses">
-                                <li class="full">
+                $address = '<ul class="list-stats">
+                                <li class="list-stats-item">
                                     <span class="lable">' . Labels::getLabel('LBL_Name_&_Address', $siteLangId) . ':</span>
                                     <span class="value">' . 
                                         $row['addr_name'] . '<br/>' . 
@@ -54,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                                         $address2 . ' ' .
                                         '</span>
                                 </li>
-                                <li><span class="lable">' . Labels::getLabel('LBL_ADDRESS_LOCATION', $siteLangId) . ':</span>
+                                <li class="list-stats-item"><span class="lable">' . Labels::getLabel('LBL_ADDRESS_LOCATION', $siteLangId) . ':</span>
                                     <span class="value">' . 
                                         $city . ' ' . 
                                         $state . ' ' . 
@@ -62,15 +57,19 @@ foreach ($arrListing as $sn => $row) {
                                         $zip . ' ' . 
                                         '</span>
                                 </li>';
-                                if (!empty($addrPhone)) {
-                                    $address .= '<li><span class="lable">' . Labels::getLabel('LBL_PHONE', $siteLangId) . ':</span>
-                                                    <span class="value">' . $addrPhone . '</span>
-                                                </li>';
-                                }
+                                
                 $address .= '</ul>';
 
                 $td->appendElement('plaintext', array(), $address, true);
                 break;
+            case 'addr_phone':
+                $addrPhone = (!empty($row['addr_phone'])) ? $row['addr_phone'] : '';
+                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
+                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
+                }
+                $td->appendElement('plaintext', $tdAttr, $addrPhone, true);
+                break;
+
             case 'addr_is_default':
                 $str = ($row['addr_is_default'] == 1) ? Labels::getLabel('LBL_Yes', $siteLangId) : Labels::getLabel('LBL_No', $siteLangId);
                 $statusHtm = Address::getStatusHtml($siteLangId, $row[$key]);
@@ -100,16 +99,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

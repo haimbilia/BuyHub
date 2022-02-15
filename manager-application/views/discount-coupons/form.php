@@ -1,4 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if (!empty($onClear)) {
+    $frm->setFormTagAttribute('data-onclear', $onClear);
+}
+
 $fld = $frm->getField('coupon_title');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
@@ -39,6 +44,12 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('coupon_active');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
+if (true === $isExpired) {
+    /* $fld->addFieldTagAttribute('disabled', 'disabled');
+    $fld->addFieldTagAttribute('data-bs-toggle', 'tooltip');
+    $fld->addFieldTagAttribute('data-bs-placement', 'top');
+    $fld->addFieldTagAttribute('title', Labels::getLabel("LBL_EXPIRED", $siteLangId)); */
+}
 
 $otherButtons = [
     [

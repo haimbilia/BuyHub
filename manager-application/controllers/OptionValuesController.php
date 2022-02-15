@@ -135,7 +135,7 @@ class OptionValuesController extends ListingBaseController
         $srch->addMultipleFields(['ov.*', 'ov_l.optionvalue_name']);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ov.optionvalue_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ov_l.optionvalue_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -210,7 +210,8 @@ class OptionValuesController extends ListingBaseController
 
         $this->set('frm', $optionValueFrm);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -240,12 +241,16 @@ class OptionValuesController extends ListingBaseController
             }
         }
 
+        $post['optionvalue_identifier'] = $post['optionvalue_name'];
         $optionValueObj = new OptionValue($recordId);
         $optionValueObj->assignValues($post);
 
-        $post['optionvalue_identifier'] = $post['optionvalue_name'];
         if (!$optionValueObj->save()) {
-            LibHelper::exitWithError($optionValueObj->getError(), true);
+            $msg = $optionValueObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $optionValueObj->getMainTableRecordId();
@@ -278,7 +283,7 @@ class OptionValuesController extends ListingBaseController
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
         $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -422,7 +427,7 @@ class OptionValuesController extends ListingBaseController
     {
         $optionsTblHeadingCols = CacheHelper::get('optionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($optionsTblHeadingCols) {
-            return json_decode($optionsTblHeadingCols);
+            return json_decode($optionsTblHeadingCols, true);
         }
 
         $arr = [

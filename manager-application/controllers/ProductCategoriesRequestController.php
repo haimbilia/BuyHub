@@ -65,6 +65,7 @@ class ProductCategoriesRequestController extends ListingBaseController
                 'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
             ]
         );
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -102,30 +103,32 @@ class ProductCategoriesRequestController extends ListingBaseController
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = prodcat_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }        
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $prodcatId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $prodcatId) {
+            $srch->addCondition('prodcat_id', '=', $prodcatId);
         }
-        if (!empty($post['prodcat_id'])) {
-            $srch->addCondition('prodcat_id', '=', $post['prodcat_id']);
-        }
+
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
             $srch->addCondition('prodcat_seller_id', '=', $user_id);
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
+        $srch->addOrder($sortBy, $sortOrder); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -149,7 +152,8 @@ class ProductCategoriesRequestController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -175,7 +179,11 @@ class ProductCategoriesRequestController extends ListingBaseController
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {
-            LibHelper::exitWithError($cat->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
         $record->updateCatCode();
@@ -196,7 +204,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $categories = array(0 => Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'prodcat_status', ProductCategory::getStatusArr($this->siteLangId), '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -211,7 +219,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $frm = new Form('frmProdCategoryLang', array('id' => 'frmProdCategoryLang'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $langId), 'prodcat_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $langId), 'prodcat_name');
         return $frm;
     }
 
@@ -242,7 +250,8 @@ class ProductCategoriesRequestController extends ListingBaseController
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $file_type, $lang_id = 0, $slide_screen = 0)
@@ -267,7 +276,8 @@ class ProductCategoriesRequestController extends ListingBaseController
 
         $this->set('file_type', $file_type);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function requestMedia($brand_id = 0)
@@ -280,7 +290,8 @@ class ProductCategoriesRequestController extends ListingBaseController
         $this->set('brand_id', $brand_id);
         $this->set('brandLogoFrm', $brandLogoFrm);
         $this->set('brandImageFrm', $brandImageFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()
@@ -397,7 +408,7 @@ class ProductCategoriesRequestController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('productCatRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [

@@ -65,8 +65,7 @@ class AdminBaseController extends FatController
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);
-        $this->adminLangId = CommonHelper::getLangId();
-        $this->layoutDirection = CommonHelper::getLayoutDirection();
+        $this->adminLangId = CommonHelper::getLangId();       
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
@@ -213,11 +212,10 @@ class AdminBaseController extends FatController
         $this->set('notifyCount', $notifyCount);
         $this->set('languages', Language::getAllNames(false));
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
-        $this->set('layoutDirection', $this->layoutDirection);
-
+       
         $this->includeDatePickerLangJs();
 
-        if ($this->layoutDirection == 'rtl') {
+        if (CommonHelper::getLayoutDirection() == 'rtl') {
             $this->_template->addCss('css/style--arabic.css');
         }
         if (CommonHelper::demoUrl() == true) {
@@ -336,7 +334,7 @@ class AdminBaseController extends FatController
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
 
         $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_id', '');
+        $frm->addHiddenField('', 'user_id', ''); 
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);

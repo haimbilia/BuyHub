@@ -2,6 +2,7 @@
 
 class BadgeLinkConditionsController extends ListingBaseController
 {
+    protected string $modelClass = 'OrderStatus';
     protected string $pageKey = 'MANAGE_LINK_CONDITIONS';
     protected string $objectType;
     protected string $objectTypeName;
@@ -46,7 +47,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         }
 
         $this->objectType = $this->badgeData['badge_type'];
-        switch ($this->badgeData['badge_type']) {
+        switch ($this->objectType) {
             case Badge::TYPE_BADGE:
                 $this->objectTypeName = Labels::getLabel('LBL_BADGE', $this->siteLangId);
                 $this->objectCtrlName = 'Badges';
@@ -73,6 +74,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $this->getListingData($objectId);
         $fields = $this->getFormColumns();
+
         $frmSearch = $this->getSearchForm($fields);
         $frmSearch->fill(['blinkcond_badge_id' => $objectId]);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -99,10 +101,10 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('objectCtrlName', $this->objectCtrlName);
 
-
-        $this->_template->addJs(['js/select2.js', 'badge-link-conditions/page-js/list.js']);
-        $this->_template->addCss(['css/select2.min.css']);
+        $this->_template->addJs(['js/select2.js', 'js/jquery.datetimepicker.js', 'badge-link-conditions/page-js/list.js']);
+        $this->_template->addCss(['css/select2.min.css', 'css/jquery.datetimepicker.css']);
 
         $this->_template->render();
     }
@@ -117,13 +119,14 @@ class BadgeLinkConditionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData($objectId = 0)
+    private function getListingData(int $objectId = 0)
     {
         $objectId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, $objectId);
         $this->validateBadge($objectId);
         $this->checkEditPrivilege(true);
 
         $fields = $this->getFormColumns();
+
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
@@ -137,7 +140,9 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (Badge::COND_AUTO == $this->badgeData['badge_trigger_type']) {
             unset(
                 $fields['cond_seller_name'],
-                $fields[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']
+                $fields[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'],
+                $fields[BadgeLinkCondition::DB_TBL_PREFIX . 'from_date'],
+                $fields[BadgeLinkCondition::DB_TBL_PREFIX . 'to_date'],
             );
         } else {
             unset(
@@ -164,7 +169,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blnku.user_id = shp.shop_user_id', 'shp');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = shp_l.shoplang_shop_id AND shp_l.shoplang_lang_id = ' . $this->siteLangId, 'shp_l');
         $srch->addFld('shop_id, COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
-        $srch->addCondition('blinkcond_badge_id', '=', $objectId);
+        $srch->addCondition('blinkcond_badge_id', '=', 'mysql_func_' . $objectId, 'AND', true);
 
         if (!empty($badgeType)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
@@ -198,12 +203,22 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         $fromDate = FatApp::getPostedData('blinkcond_from_date');
         if (!empty($fromDate)) {
-            $srch->addCondition('blnk.blinkcond_from_date', '>=', $fromDate);
+            $srch->addCondition('blnk.blinkcond_from_date', '>=', $fromDate . ' 00:00:00');
         }
 
         $toDate = FatApp::getPostedData('blinkcond_to_date');
         if (!empty($toDate)) {
-            $srch->addCondition('blnk.blinkcond_to_date', '<=', $toDate);
+            $srch->addCondition('blnk.blinkcond_to_date', '<=', $toDate . ' 23:59:59');
+        }
+
+        $conditionFrom = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
+        if (!empty($conditionFrom)) {
+            $srch->addCondition('blnk.blinkcond_condition_from', '=', $conditionFrom);
+        }
+
+        $conditionTo = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_FLOAT, 0);
+        if (!empty($conditionTo)) {
+            $srch->addCondition('blnk.blinkcond_condition_to', '=', $conditionTo);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -293,6 +308,7 @@ class BadgeLinkConditionsController extends ListingBaseController
             if (!empty($dataToFill['blinkcond_to_date']) && 0 < strtotime($dataToFill['blinkcond_to_date'])) {
                 $toDate = date('Y-m-d H:i', strtotime($dataToFill['blinkcond_to_date']));
             }
+
             $dataToFill['blinkcond_from_date'] = $fromDate;
             $dataToFill['blinkcond_to_date'] = $toDate;
             $this->recordData = $dataToFill;
@@ -312,12 +328,13 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('badgeId', $objectId);
         $this->set('triggerType', $this->badgeData['badge_trigger_type']);
         $this->set('includeTabs', false);
-        
+
         $str = Labels::getLabel('LBL_{OBJECT-TYPE}_CONDITION_SETUP', $this->siteLangId);
         $this->set('formTitle', CommonHelper::replaceStringData($str, ['{OBJECT-TYPE}' => $this->objectTypeName]));
 
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm(int $triggerType)
@@ -330,8 +347,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         $frm->addHiddenField('', 'badge_trigger_type');
 
         if (Badge::COND_MANUAL == $triggerType) {
-            $frm->addDateField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
-            $frm->addDateField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
+            $frm->addDateTimeField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
+            $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
 
             if (1 > $this->badgeLinkCondId) {
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_SELLER', $this->siteLangId)]);
@@ -352,10 +369,10 @@ class BadgeLinkConditionsController extends ListingBaseController
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId), 'blinkcond_condition_type', $conditionTypesArr, '', [], '');
             $fld->requirement->setRequired(true);
 
-            $fld = $frm->addTextBox(Labels::getLabel('FRM_FROM', $this->siteLangId), 'blinkcond_condition_from');
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_FROM(DECIMAL)', $this->siteLangId), 'blinkcond_condition_from');
             $fld->requirement->setRequired(true);
 
-            $frm->addTextBox(Labels::getLabel('FRM_TO', $this->siteLangId), 'blinkcond_condition_to');
+            $frm->addTextBox(Labels::getLabel('FRM_TO(DECIMAL)', $this->siteLangId), 'blinkcond_condition_to');
         }
         return $frm;
     }
@@ -415,7 +432,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
 
         if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', true, $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', true, $this->siteLangId), true);
         }
 
         $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
@@ -424,13 +441,12 @@ class BadgeLinkConditionsController extends ListingBaseController
             $msg = Labels::getLabel('ERR_BADGE_CONDITION_ALREADY_BOUND_FOR_CONDITION_TYPE.', $this->siteLangId);
             LibHelper::exitWithError($msg, true);
         } else if (false === BadgeLinkCondition::isUnique($objectId, $sellerId, $recordType, $position, $blinkCondId)) {
-            $msg = Labels::getLabel('ERR_BADGE_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE.', $this->siteLangId);
-            if (Badge::TYPE_RIBBON == $badgeType) {
-                $msg = Labels::getLabel('ERR_RIBBON_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE_AND_SAME_POSITION.', $this->siteLangId);
-            }
+            $str = Labels::getLabel('ERR_{OBJECT-TYPE}_CONDITION_ALREADY_BOUND_FOR_SAME_RECORD_CONDITIONS', $this->siteLangId);
+            $msg = CommonHelper::replaceStringData($str, ['{OBJECT-TYPE}' => $this->objectTypeName]);
             LibHelper::exitWithError($msg, true);
         }
 
+        $msg = '';
         if (Badge::COND_AUTO == $triggerType) {
             $records = []; /* Records Binding Not Required. */
             switch ($conditionType) {
@@ -438,9 +454,19 @@ class BadgeLinkConditionsController extends ListingBaseController
                 case BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD:
                 case BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP:
                 case BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE:
-                    $type = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS == $conditionType) ? FatUtility::VAR_INT : FatUtility::VAR_FLOAT;
-                    $fromCond = FatApp::getPostedData('blinkcond_condition_from', $type, 0);
-                    $toCond = FatApp::getPostedData('blinkcond_condition_to', $type, 0);
+                    $fromCond = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
+                    $toCond = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_FLOAT, 0);
+
+                    if (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS == $conditionType) {
+                        if (floor($fromCond) != $fromCond || floor($toCond) != $toCond) {
+                            $msg = Labels::getLabel('MSG_COMPLETED_ORDERS_CANNOT_BE_IN_DECIMAL._SO_IT_WAS_CONVERTED_TO_CLOSEST_INTEGER_VALUE', $this->siteLangId);
+                        }
+
+                        $fromCond = intval($fromCond);
+                        $toCond = intval($toCond);
+                        $post['blinkcond_condition_from'] = $fromCond;
+                        $post['blinkcond_condition_to'] = $toCond;
+                    }
                     $rateCondition = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $conditionType && 100 < $toCond);
                     if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond || $rateCondition) {
                         LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->siteLangId), true);
@@ -471,7 +497,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         if ($newRecord) {
             $post['blinkcond_user_id'] = $sellerId;
         }
-        
+
+        /* No need to as for position. */
         if (Badge::TYPE_RIBBON == $badgeType) {
             $post['blinkcond_position'] = Badge::RIBB_POS_TRIGHT;
         }
@@ -484,7 +511,6 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         $blinkCondId = $record->getMainTableRecordId();
 
-        $msg = '';
         if (Badge::COND_MANUAL == $triggerType && !empty($records)) {
             $db = FatApp::getDb();
             foreach ($records as $recordId) {
@@ -544,16 +570,18 @@ class BadgeLinkConditionsController extends ListingBaseController
         $frm->addHiddenField('', 'badge_trigger_type', $this->badgeData['badge_trigger_type']);
 
         if (Badge::COND_MANUAL == $this->badgeData['badge_trigger_type']) {
-            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_SELLER', $this->siteLangId)]);
+            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
             $frm->addSelectBox(Labels::getLabel('FRM_RECORD_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
+            $frm->addDateField(Labels::getLabel('FRM_VALID_FROM', $this->siteLangId), 'blinkcond_from_date', '', ['placeholder' => Labels::getLabel('FRM_VALID_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender']);
+            $frm->addDateField(Labels::getLabel('FRM_VALID_TO', $this->siteLangId), 'blinkcond_to_date', '', ['placeholder' => Labels::getLabel('FRM_VALID_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender']);
         } else {
             $frm->addSelectBox(Labels::getLabel('FRM_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId));
-            $frm->addDateField(Labels::getLabel('FRM_CONDITION_FROM', $this->siteLangId), 'blinkcond_from_date');
-            $frm->addDateField(Labels::getLabel('FRM_CONDITION_TO', $this->siteLangId), 'blinkcond_from_to');
+            $frm->addTextBox(Labels::getLabel('FRM_CONDITION_FROM', $this->siteLangId), 'blinkcond_condition_from', '', ['placeholder' => Labels::getLabel('FRM_CONDITION_FROM', $this->siteLangId)]);
+            $frm->addTextBox(Labels::getLabel('FRM_CONDITION_TO', $this->siteLangId), 'blinkcond_condition_to', '', ['placeholder' => Labels::getLabel('FRM_CONDITION_TO', $this->siteLangId)]);
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -579,7 +607,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
 
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('badgeLinkIds'));
+        $recordIdsArr = FatApp::getPostedData('badgeLinkIds', FatUtility::VAR_INT, []);
         if (empty($recordIdsArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -600,7 +628,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
+        
         $obj = new BadgeLinkCondition($recordId);
         if (!$obj->deleteRecord(false)) {
             LibHelper::exitWithError($obj->getError(), true);
@@ -630,7 +658,6 @@ class BadgeLinkConditionsController extends ListingBaseController
         )) {
             LibHelper::exitWithError($db->getError(), true);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 
     public function isUnique(int $badgeType, int $recordType, int $record_id, int $position = 0)
@@ -646,7 +673,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('badgesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

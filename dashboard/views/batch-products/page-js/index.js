@@ -5,9 +5,10 @@ $(document).ready(function() {
 (function() {
     var runningAjaxReq = false;
     searchBatches = function(frm) {
-        $('#listing').html(fcom.getLoader());
+        $('#listing').prepend(fcom.getLoader());
         var data = fcom.frmData(document.frmBatchSearch);
         fcom.ajax(fcom.makeUrl('BatchProducts', 'search'), data, function(t) {
+            fcom.removeLoader();
             $('#listing').html(t);
         });
     }
@@ -88,8 +89,9 @@ $(document).ready(function() {
     }
 
     reloadBatchProducts = function(prodgroup_id) {
-        $("#productsList").html(fcom.getLoader());
+        $("#productsList").prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('BatchProducts', 'loadBatchProducts', [prodgroup_id]), '', function(t) {
+            fcom.removeLoader();
             $("#productsList").html(t);
         });
     }
@@ -179,10 +181,10 @@ $(document).on('click', '.prodgroup-Js', function() {
                     $('#input-field' + fileType).html(ans.msg);
                     if (ans.status == true) {
                         $('#input-field' + fileType).removeClass('text-danger');
-                        $('#input-field' + fileType).addClass('text-success');
+                        $('#input-field' + fileType).addClass('badge-success');
                         batchMediaForm(prodgroup_id);
                     } else {
-                        $('#input-field' + fileType).removeClass('text-success');
+                        $('#input-field' + fileType).removeClass('badge-success');
                         $('#input-field' + fileType).addClass('text-danger');
                     }
 

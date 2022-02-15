@@ -860,6 +860,7 @@ class ImportexportCommon extends FatModel
         }
 
         $arr['country_name'] = Labels::getLabel('LBL_COUNTRY_NAME', $langId);
+        $arr['country_code_alpha3'] = Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $langId);
 
         if (!$userId) {
             if ($this->isDefaultSheetData($langId)) {

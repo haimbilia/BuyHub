@@ -20,6 +20,9 @@ class BadgesController extends SellerBaseController
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeType", $badgeType);
 
+        $placeholder = (Badge::TYPE_BADGE == $badgeType ? 'LBL_SEARCH_BY_BADGE_NAME' : 'LBL_SEARCH_BY_RIBBON_NAME');
+        $this->set("keywordPlaceholder", Labels::getLabel($placeholder));
+
         $this->_template->addJs(array('js/jscolor.js', 'js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
@@ -79,26 +82,26 @@ class BadgesController extends SellerBaseController
                     ) > 0
                 THEN 1
                 ELSE 0
-            END) as canAccess', 
+            END) as canAccess',
             BadgeRequest::DB_TBL_PREFIX . 'id',
             BadgeRequest::DB_TBL_PREFIX . 'status',
             BadgeLinkCondition::DB_TBL_PREFIX . 'id',
             BadgeLinkCondition::DB_TBL_PREFIX . 'user_id',
         ]);
-        
-        $srch->addMultipleFields($attr);
+        $srch->addFld(Badge::DB_TBL_PREFIX . 'id');
         $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields($attr);
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
+        $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
-        
+
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->_template->render(false, false);
@@ -108,15 +111,16 @@ class BadgesController extends SellerBaseController
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr,'',[],Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -144,5 +148,22 @@ class BadgesController extends SellerBaseController
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $badgeType = current(FatApp::getParameters());
+        $className = Badge::TYPE_BADGE == $badgeType ? Labels::getLabel('LBL_BADGES', $this->siteLangId) : Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
+        $url = UrlHelper::generateUrl(LibHelper::getControllerName(), 'list', [$badgeType]);
+        if ($action == 'list') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
     }
 }

@@ -59,7 +59,7 @@ var fcom = {
         var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
         var dvdebug = $('<div />').append(dbmsg);
         dvdebug.appendTo($('#dv-bg-processes'));
-
+       
         $.ajax({
             method: "POST",
             url: url,
@@ -125,9 +125,10 @@ var fcom = {
 
     updateWithAjax: function (url, data, fn, options, autoClose = true) {
         fcom.displayProcessing();
+        let processingClass = fcom.processingCounter;        
         var o = $.extend(true, { fOutMode: 'json' }, options);
         this.ajax(url, data, function (ans) {
-            $.ykmsg.close();
+            fcom.closeProcessing(processingClass);
             fcom.removeLoader();
             if (ans.status != 1) {
                 $.ykmsg.error(ans.msg);

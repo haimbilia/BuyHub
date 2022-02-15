@@ -12,7 +12,10 @@ class WalletPayController extends MyAppController
     {
         $isAjaxCall = FatUtility::isAjaxCall();
 
-        if (!$orderId || ((isset($_SESSION['shopping_cart']) && $orderId != $_SESSION['shopping_cart']["order_id"]) && (isset($_SESSION['subscription_shopping_cart'])) && $orderId != $_SESSION['subscription_shopping_cart']["order_id"])) {
+        $sessionOrderId = $_SESSION['shopping_cart']["order_id"] ?? '';
+        $subsSessionOrderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
+
+        if (!$orderId || (false === MOBILE_APP_API_CALL && ((!empty($sessionOrderId) && $orderId != $sessionOrderId) || (!empty($subsSessionOrderId)) && $orderId != $subsSessionOrderId))) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
@@ -45,7 +48,7 @@ class WalletPayController extends MyAppController
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
-        if (isset($_SESSION['subscription_shopping_cart']["order_id"]) && $orderId == $_SESSION['subscription_shopping_cart']["order_id"]) {
+        if (!empty($subsSessionOrderId)) {
             $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         } else {
             $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
@@ -70,11 +73,11 @@ class WalletPayController extends MyAppController
             $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);
         }
 
-        if (!empty($_SESSION['subscription_shopping_cart']["order_id"]) && $orderId == $_SESSION['subscription_shopping_cart']["order_id"]) {
+        if (!empty($subsSessionOrderId)) {
             $scartObj = new SubscriptionCart();
             $scartObj->clear();
             $scartObj->updateUserSubscriptionCart();
-        } elseif (!empty($_SESSION['shopping_cart']["order_id"]) && $orderId == $_SESSION['shopping_cart']["order_id"]) {
+        } else {
             $cartObj = new Cart();
             $cartObj->clear();
             $cartObj->updateUserCart();
@@ -175,7 +178,7 @@ class WalletPayController extends MyAppController
         $pmRs = $pmSrch->getResultSet();
         $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
-        
+
         $this->set('paymentMethods', $paymentMethods);
         $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
         $this->set('headerData', $headerData);

@@ -1,7 +1,8 @@
 
 backgroundImage = function (recordId, imageType, langId) {
-    fcom.ajax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId}, function (t) {	
-        $('#imageListingJs').html(t);
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images'), { recordId, imageType, langId }, function (t) {
+        fcom.removeLoader();
+        $('#imageListingJs').html(t.html);
     });
 };
 

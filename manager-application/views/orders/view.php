@@ -20,17 +20,15 @@
                                 echo CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' => $order['order_number']])
                                 ?>
                             </h3>
-                        </div>
-                        <?php if (1 < count($sellers)) { ?>
-                            <div class="card-toolbar">
-                                <select class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
-                                    <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
-                                    <?php foreach ($sellers as $sellerId => $shopName) { ?>
-                                        <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        <?php } ?>
+                        </div> 
+                        <div class="card-toolbar <?php echo (1 >= count($sellers) ?'hide': ''  ) ?>">
+                            <select id='allSellerJs' class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
+                                <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
+                                <?php foreach ($sellers as $sellerId => $shopName) { ?>
+                                    <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>        
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
@@ -81,6 +79,13 @@
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
+                                    </li>
+                                <?php } ?>
+
+                                <?php if (!empty($order['buyer_phone'])) { ?>
+                                    <li class="list-stats-item">
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>:</span>
+                                        <span class="value"><?php echo ValidateElement::formatDialCode($order['buyer_phone_dcode']) . $order['buyer_phone']; ?></span>
                                     </li>
                                 <?php } ?>
                             </ul>

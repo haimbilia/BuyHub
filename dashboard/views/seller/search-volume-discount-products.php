@@ -1,78 +1,86 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-<?php $arr_flds = array(
-    'select_all' => '',
-    'product_name' => Labels::getLabel('LBL_Name', $siteLangId),
-    'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $siteLangId),
-    'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $siteLangId) . ' (%)'
-);
-if ($canEdit) {
-    $arr_flds['action'] = '';
-}
-if (!$canEdit || 1 > count($arrListing)) {
-    unset($arr_flds['select_all']);
-}
-$tableClass = '';
-if (0 < count($arrListing)) {
-	$tableClass = "table-justified";
-}
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered volDiscountList-js '.$tableClass));
-$thead = $tbl->appendElement('thead');
-$th = $thead->appendElement('tr', array('class' => ''));
-
-foreach ($arr_flds as $key => $val) {
-    if ('select_all' == $key) {
-        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll($(this))" class="selectAll-js"></label>', true);
-    } else {
-        $th->appendElement('th', array(), $val);
+    <?php $arr_flds = array(
+        'select_all' => '',
+        'product_name' => Labels::getLabel('LBL_Name', $siteLangId),
+        'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $siteLangId),
+        'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $siteLangId) . ' (%)'
+    );
+    if ($canEdit) {
+        $arr_flds['action'] = '';
     }
-}
+    if (!$canEdit || 1 > count($arrListing)) {
+        unset($arr_flds['select_all']);
+    }
+    $tableClass = '';
+    if (0 < count($arrListing)) {
+        $tableClass = "table-justified";
+    }
+    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered volDiscountList-js ' . $tableClass));
+    $thead = $tbl->appendElement('thead');
+    $th = $thead->appendElement('tr', array('class' => ''));
 
-foreach ($arrListing as $sn => $row) {
-    $tr = $tbl->appendElement('tr', array());
-    $volDiscountId = $row['voldiscount_id'];
-    $selProdId = $row['selprod_id'];
     foreach ($arr_flds as $key => $val) {
-        $tr->setAttribute('id', 'row-' . $volDiscountId);
-        $td = $tr->appendElement('td');
-        switch ($key) {
-            case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $volDiscountId . ']" value=' . $selProdId . '></label>', true);
-                break;
-            case 'product_name':               
-                $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
-                $td->appendElement('plaintext', array(), $str, true);
-                break;
-            case 'voldiscount_min_qty':
-            case 'voldiscount_percentage':
-                $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="js--volDiscountCol hidden vd-input" data-oldval="' . $row[$key] . '"/>';
-                $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::numberFormat($row[$key]), true);
-                $td->appendElement('plaintext', array(), $input, true);
-                break;
-            case 'action':
-                $ul = $td->appendElement("ul", array("class" => "actions actions--centered"), '', true);
-
-                $li = $ul->appendElement('li');
-                $li->appendElement(
-                    'a',
-                    array('href' => 'javascript:void(0)', 'class' => '',
-                    'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductVolumeDiscount(" . $volDiscountId . ")"),
-                    '<i class="fa fa-trash"></i>',
-                    true
-                );
-                break;
-            default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
-                break;
+        if ('select_all' == $key) {
+            $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll($(this))" class="selectAll-js"></label>', true);
+        } else {
+            $th->appendElement('th', array(), $val);
         }
     }
-}
 
-$frm = new Form('frmVolDiscountListing', array('id' => 'frmVolDiscountListing'));
-$frm->setFormTagAttribute('class', 'form');
-echo $frm->getFormTag();
-echo $tbl->getHtml(); ?>
-</form>
+    foreach ($arrListing as $sn => $row) {
+        $tr = $tbl->appendElement('tr', array());
+        $volDiscountId = $row['voldiscount_id'];
+        $selProdId = $row['selprod_id'];
+        foreach ($arr_flds as $key => $val) {
+            $tr->setAttribute('id', 'row-' . $volDiscountId);
+            $td = $tr->appendElement('td');
+            switch ($key) {
+                case 'select_all':
+                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $volDiscountId . ']" value=' . $selProdId . '></label>', true);
+                    break;
+                case 'product_name':
+                    $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row, 'siteLangId' => $siteLangId], false, true);
+                    $td->appendElement('plaintext', array(), $str, true);
+                    break;
+                case 'voldiscount_min_qty':
+                case 'voldiscount_percentage':
+                    $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="js--volDiscountCol hidden vd-input" data-oldval="' . $row[$key] . '"/>';
+                    $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::numberFormat($row[$key]), true);
+                    $td->appendElement('plaintext', array(), $input, true);
+                    break;
+                case 'action':
+                    $ul = $td->appendElement("ul", array("class" => "actions actions--centered"), '', true);
+
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        array(
+                            'href' => 'javascript:void(0)', 'class' => '',
+                            'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductVolumeDiscount(" . $volDiscountId . ")"
+                        ),
+                        '<i class="icn">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                        </use>
+                    </svg>
+                </i>',
+                        true
+                    );
+                    break;
+                default:
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                    break;
+            }
+        }
+    }
+
+    $frm = new Form('frmVolDiscountListing', array('id' => 'frmVolDiscountListing'));
+    $frm->setFormTagAttribute('class', 'form');
+    echo $frm->getFormTag();
+    echo $tbl->getHtml(); ?>
+    </form>
 </div>
 <?php
 

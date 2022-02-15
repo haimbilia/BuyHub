@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="card-header">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Withdrawal', $siteLangId);?></h5>
+<div class="card-head">
+    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Withdrawal', $siteLangId); ?></h5>
 </div>
 <div class="card-body ">
     <?php $frm->setFormTagAttribute('class', 'form');
@@ -49,58 +49,58 @@
     $submitBtnFld->developerTags['col'] = 3;
 
     $cancelBtnFld = $frm->getField('btn_cancel');
-    $cancelBtnFld->setFieldTagAttribute('onClick', 'closeForm()');
+    $cancelBtnFld->setFieldTagAttribute('onclick', 'closeForm()');
     $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
     $cancelBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
     $cancelBtnFld->developerTags['col'] = 3;
     //$submitBtnFld->attachField($cancelBtnFld);
 
-    echo $frm->getFormHtml();?> </div>
-    <?php if (User::isAffiliate()) { ?>
-        <script type="text/javascript">
-            $("document").ready(function() {
-                var AFFILIATE_PAYMENT_METHOD_CHEQUE = '<?php echo User::AFFILIATE_PAYMENT_METHOD_CHEQUE; ?>';
-                var AFFILIATE_PAYMENT_METHOD_BANK = '<?php echo User::AFFILIATE_PAYMENT_METHOD_BANK; ?>';
-                var AFFILIATE_PAYMENT_METHOD_PAYPAL = '<?php echo User::AFFILIATE_PAYMENT_METHOD_PAYPAL; ?>';
-                var uextra_payment_method = '<?php echo $uextra_payment_method ?>';
-                $("input[name='uextra_payment_method']").change(function() {
-                    if ($(this).val() == AFFILIATE_PAYMENT_METHOD_CHEQUE) {
-                        callChequePaymentMethod();
-                    }
-                    if ($(this).val() == AFFILIATE_PAYMENT_METHOD_BANK) {
-                        callBankPaymentMethod();
-                    }
-                    if ($(this).val() == AFFILIATE_PAYMENT_METHOD_PAYPAL) {
-                        callPayPalPaymentMethod();
-                    }
-                });
-                if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_CHEQUE) {
+    echo $frm->getFormHtml(); ?> </div>
+<?php if (User::isAffiliate()) { ?>
+    <script type="text/javascript">
+        $("document").ready(function() {
+            var AFFILIATE_PAYMENT_METHOD_CHEQUE = '<?php echo User::AFFILIATE_PAYMENT_METHOD_CHEQUE; ?>';
+            var AFFILIATE_PAYMENT_METHOD_BANK = '<?php echo User::AFFILIATE_PAYMENT_METHOD_BANK; ?>';
+            var AFFILIATE_PAYMENT_METHOD_PAYPAL = '<?php echo User::AFFILIATE_PAYMENT_METHOD_PAYPAL; ?>';
+            var uextra_payment_method = '<?php echo $uextra_payment_method ?>';
+            $("input[name='uextra_payment_method']").change(function() {
+                if ($(this).val() == AFFILIATE_PAYMENT_METHOD_CHEQUE) {
                     callChequePaymentMethod();
                 }
-                if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_BANK) {
+                if ($(this).val() == AFFILIATE_PAYMENT_METHOD_BANK) {
                     callBankPaymentMethod();
                 }
-                if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_PAYPAL) {
+                if ($(this).val() == AFFILIATE_PAYMENT_METHOD_PAYPAL) {
                     callPayPalPaymentMethod();
                 }
             });
-
-            function callChequePaymentMethod() {
-                $(".cheque_payment_method_fld").show();
-                $(".bank_payment_method_fld").hide();
-                $(".paypal_payment_method_fld").hide();
+            if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_CHEQUE) {
+                callChequePaymentMethod();
             }
-
-            function callBankPaymentMethod() {
-                $(".cheque_payment_method_fld").hide();
-                $(".bank_payment_method_fld").show();
-                $(".paypal_payment_method_fld").hide();
+            if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_BANK) {
+                callBankPaymentMethod();
             }
-
-            function callPayPalPaymentMethod() {
-                $(".cheque_payment_method_fld").hide();
-                $(".bank_payment_method_fld").hide();
-                $(".paypal_payment_method_fld").show();
+            if (uextra_payment_method == AFFILIATE_PAYMENT_METHOD_PAYPAL) {
+                callPayPalPaymentMethod();
             }
-        </script>
-    <?php } ?>
+        });
+
+        function callChequePaymentMethod() {
+            $(".cheque_payment_method_fld").show();
+            $(".bank_payment_method_fld").hide();
+            $(".paypal_payment_method_fld").hide();
+        }
+
+        function callBankPaymentMethod() {
+            $(".cheque_payment_method_fld").hide();
+            $(".bank_payment_method_fld").show();
+            $(".paypal_payment_method_fld").hide();
+        }
+
+        function callPayPalPaymentMethod() {
+            $(".cheque_payment_method_fld").hide();
+            $(".bank_payment_method_fld").hide();
+            $(".paypal_payment_method_fld").show();
+        }
+    </script>
+<?php } ?>

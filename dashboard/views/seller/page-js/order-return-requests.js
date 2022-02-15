@@ -1,26 +1,23 @@
-$(document).ready(function(){
-	searchOrderReturnRequests(document.frmOrderReturnRequest);
+$(document).ready(function () {
+	searchRecords(document.frmRecordSearch);
 });
-(function() {
-	searchOrderReturnRequests = function(frm){
+(function () {
+	searchRecords = function (frm) {
 		var data = fcom.frmData(frm);
-		$("#returnOrderRequestsListing").html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Seller','orderReturnRequestSearch'), data, function(res){
+		$("#returnOrderRequestsListing").html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Seller', 'orderReturnRequestSearch'), data, function (res) {
 			$("#returnOrderRequestsListing").html(res);
-		}); 
+			fcom.removeLoader();
+		});
 	};
-	
-	goToOrderReturnRequestSearchPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page =1;
+
+	goToOrderReturnRequestSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
 		}
-		var frm = document.frmOrderReturnRequestSrchPaging;		
+		var frm = document.frmOrderReturnRequestSrchPaging;
 		$(frm.page).val(page);
-		searchOrderReturnRequests(frm);
+		searchRecords(frm);
 	}
-	
-	clearOrderReturnRequestSearch = function(){
-		document.frmOrderReturnRequest.reset();
-		searchOrderReturnRequests(document.frmOrderReturnRequest);
-	};
+
 })();

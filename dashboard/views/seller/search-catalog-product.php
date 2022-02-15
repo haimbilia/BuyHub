@@ -53,10 +53,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                     break;
                 case 'product_approved':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $approveUnApproveClassArr[$row[$key]]), $approveUnApproveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_active':
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                     break;
                 case 'product_shipped_by':
                     $active = "";
@@ -84,7 +84,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                             $li = $ul->appendElement("li");
                             $li->appendElement(
                                 'a',
-                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onClick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
+                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
                                 '<i class="fa fa-plus-square"></i>',
                                 true
                             );
@@ -92,7 +92,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
                         if (0 != $row['product_seller_id']) {
                             $li = $ul->appendElement("li");
-                            $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('seller', 'customProductForm', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
+                            $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('products', 'form', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
 
                             $li = $ul->appendElement("li");
                             $li->appendElement("a", array('title' => Labels::getLabel('LBL_Product_Images', $siteLangId), 'onclick' => 'customProductImages(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="fas fa-images"></i>', true);
@@ -119,7 +119,13 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'onclick' => 'catalogInfo(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_product_Info', $siteLangId), true),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 
@@ -139,7 +145,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         if (User::canAddCustomProductAvailableToAllSellers()) {
             $linkArr = array(
                 0 => array(
-                    'href' => UrlHelper::generateUrl('Seller', 'CustomCatalogProductForm'),
+                    'href' => UrlHelper::generateUrl('CustomProducts', 'form'),
                     'label' => Labels::getLabel('LBL_Request_New_Product', $siteLangId),
                 )
             );

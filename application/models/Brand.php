@@ -25,10 +25,10 @@ class Brand extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'b');
 
         if ($isDeleted == true) {
-            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
+            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
         if ($isActive == true) {
-            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -121,7 +121,7 @@ class Brand extends MyAppModel
     public function canRecordMarkDelete($id)
     {
         $srch = $this->getSearchObject();
-        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('b.' . static::DB_TBL_PREFIX . 'id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -197,7 +197,7 @@ class Brand extends MyAppModel
     public static function getBrandName(int $brandId, int $langId, bool $isActive = true)
     {
         $srch = static::getListingObj($langId, null, $isActive);
-        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $brandId);
+        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $brandId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();

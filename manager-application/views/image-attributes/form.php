@@ -2,7 +2,7 @@
 HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('data-onclear', 'attributeForm(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'frmImgAttributeJs');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 
@@ -14,8 +14,6 @@ if ($optionIdFld !== null) {
     $optionIdFld->addFieldTagAttribute('class', 'optionJs');
 }
 
-echo $frm->getFormTag();
-HtmlHelper::renderHiddenFields($frm);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -26,6 +24,7 @@ HtmlHelper::renderHiddenFields($frm);
     <div class="form-edit-body loaderContainerJs">
         <?php
         echo $frm->getFormTag();
+        HtmlHelper::renderHiddenFields($frm);
             echo $frm->getFieldHtml('module_type');
             echo $frm->getFieldHtml('record_id');
             if (1 == count($languages)) {

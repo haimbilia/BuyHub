@@ -1,11 +1,13 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
+?>
 <div class="card-body p-0 itemSummaryJs">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <table class="table table-orders">
             <thead class="tableHeadJs">
                 <tr>
                     <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
-                    <th><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?></th>
+                    <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_UNIT_PRICE', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?></th>
                     <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId); ?></th>
@@ -16,6 +18,9 @@
                 $store = "";
                 foreach ($order['products'] as $op) {
                     $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($op['op_selprod_user_id'], $op['opshipping_by_seller_user_id']);
+                    $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $op['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+                    $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($op['op_id']) : NULL;
+
                     $displayShippingUserForm = (
                         (
                             (in_array(strtolower($op['plugin_code']), ['cashondelivery', 'payatstore'])) ||
@@ -45,7 +50,6 @@
                     if (!empty($op['opship_tracking_url'])) {
                         $opStatusLbl = Labels::getLabel('LBL_SHIPPED', $siteLangId);
                     }
-                    $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $op['opshipping_by_seller_user_id'] : 0)) ?? NULL;
 
                     if ($store != $op['op_shop_name']) {
                         if (!empty($store)) { ?>
@@ -54,7 +58,7 @@
             <?php } ?>
 
             <tr>
-                <td colspan="4">
+                <td colspan="5">
                     <div class="sold_by">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
@@ -86,7 +90,7 @@
             </td>
 
             <td>
-                <div class="text-nowrap">
+                <div class="text-nowrap unit-price">
                     <span>
                         <?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?>
                     </span>
@@ -108,7 +112,7 @@
                     $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
 
                     $data = ['siteLangId' => $siteLangId];
-                    $data['dropdownButtons']['otherButtons'] = [
+                    $data['otherButtons'] = [
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
@@ -116,13 +120,33 @@
                                 'title' => Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId),
                             ],
                             'label' => '<i class="icn">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                                                        </use>
-                                                    </svg>
-                                                </i>' . Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId),
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                            </use>
+                                                        </svg>
+                                                    </i>',
                         ],
+                    ];
+
+                    if (Orders::canUpdateStatus($op)) {
+                        $data['otherButtons'][] = [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => $fn,
+                                'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                            ],
+                            'label' => '<i class="icn">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                                            </use>
+                                                        </svg>
+                                                    </i>',
+                        ];
+                    }
+
+                    $data['dropdownButtons']['otherButtons'] = [
                         [
                             'attr' => [
                                 'href' => Fatutility::generateUrl('Orders', 'viewInvoice', [$op['op_id']]),
@@ -130,12 +154,12 @@
                                 'title' => Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
                             ],
                             'label' => '<i class="icn">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
-                                                        </use>
-                                                    </svg>
-                                                </i>' . Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                            </use>
+                                                        </svg>
+                                                    </i>' . Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
                         ],
                         [
                             'attr' => [
@@ -144,12 +168,12 @@
                                 'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
                             ],
                             'label' => '<i class="icn">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
-                                                        </use>
-                                                    </svg>
-                                                </i>' . Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                            </use>
+                                                        </svg>
+                                                    </i>' . Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
                         ],
                         [
                             'attr' => [
@@ -158,26 +182,12 @@
                                 'title' => Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
                             ],
                             'label' => '<i class="icn">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#history">
-                                                        </use>
-                                                    </svg>
-                                                </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
-                        ],
-                        [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => $fn,
-                                'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
-                            ],
-                            'label' => '<i class="icn">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
-                                                        </use>
-                                                    </svg>
-                                                </i>' . Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#history">
+                                                            </use>
+                                                        </svg>
+                                                    </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
                         ]
                     ];
 
@@ -190,7 +200,7 @@
                             Orders::ORDER_PAYMENT_PAID == $op['order_payment_status']
                         )
                     ) {
-                        $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
+                        //$allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
 
                         if (
                             1 < $op['opshipping_rate_id'] &&
@@ -207,16 +217,16 @@
                                     'title' => Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId)
                                 ],
                                 'label' => '<i class="icn">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#list-paper">
-                                                            </use>
-                                                        </svg>
-                                                    </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#list-paper">
+                                                                </use>
+                                                            </svg>
+                                                        </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
                             ];
                         } else {
                             if ($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']) {
-                                if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && !$allowedForPlugin) {
+                                if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && $shippingApiObj->canGenerateLabelSeparately()) {
                                     $data['dropdownButtons']['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -224,12 +234,12 @@
                                             'title' => Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId)
                                         ],
                                         'label' => '<i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use
-                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print-label">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>' . Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId),
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print-label">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i>' . Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId),
                                     ];
                                 } elseif (!empty($op['opr_response'])) {
                                     $method = ($returnRequestApproved == $op["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
@@ -241,17 +251,16 @@
                                             'title' => Labels::getLabel($title, $siteLangId)
                                         ],
                                         'label' => '<i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use
-                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#export">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>' . Labels::getLabel($title, $siteLangId),
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#export">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i>' . Labels::getLabel($title, $siteLangId),
                                     ];
                                 }
-
-                                if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || $allowedForPlugin) && empty($op['opship_order_number'])) {
-                                    if ('EasyPost' == $shippingApiObj->keyName) {
+                                if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']))) && empty($op['opship_order_number'])) {
+                                    if (true == $shippingApiObj->canGenerateLabelFromShipment()) {
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                     } else {
                                         $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);
@@ -263,12 +272,12 @@
                                             'title' => $label
                                         ],
                                         'label' => '<i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use
-                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-shipping-pickup">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>' . $label,
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-shipping-pickup">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i>' . $label,
                                     ];
                                 }
 
@@ -281,12 +290,12 @@
                                                 'title' => Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId)
                                             ],
                                             'label' => '<i class="icn">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#pickup">
-                                                                        </use>
-                                                                    </svg>
-                                                                </i>' . Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId),
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#pickup">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i>' . Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId),
                                         ];
                                     } else {
                                         $data['dropdownButtons']['otherButtons'][] = [
@@ -296,12 +305,12 @@
                                                 'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId)
                                             ],
                                             'label' => '<i class="icn">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
-                                                                        </use>
-                                                                    </svg>
-                                                                </i>' . Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId),
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </i>' . Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId),
                                         ];
                                     }
                                 }
@@ -313,8 +322,7 @@
                 ?>
             </td>
         </tr>
-    <?php
-                    $store = $op['op_shop_name'];
+    <?php $store = $op['op_shop_name'];
                 } ?>
             </tbody>
         </table>

@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 
 $fld = $frm->getField('brand_name');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');

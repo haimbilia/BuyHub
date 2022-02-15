@@ -17,10 +17,8 @@ $commonHeadData = array(
     'action' => $action,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
-    'cacheTimeStamp' => $cacheTimeStamp,
     'currencySymbolLeft' => $currencySymbolLeft,
-    'currencySymbolRight' => $currencySymbolRight,
-    'isUserDashboard' => $isUserDashboard,
+    'currencySymbolRight' => $currencySymbolRight,    
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 
@@ -42,7 +40,10 @@ if ($controllerName == 'Products' && $actionName == 'view') {
 $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'direction="rtl" style="direction: rtl;"' : '';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo strtolower($siteLangCode); ?>" data-version="<?php echo CONF_WEB_APP_VERSION; ?>" data-theme="light" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" prefix="og: http://ogp.me/ns#" <?php echo $additionalAttributes; ?> class="<?php echo $htmlClass; ?> <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) { echo "sticky-demo-header";} ?>">
+<html lang="<?php echo strtolower($siteLangCode); ?>" data-version="<?php echo CONF_WEB_APP_VERSION; ?>" data-theme="light" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" prefix="og: http://ogp.me/ns#" <?php echo $additionalAttributes; ?> class="<?php echo $htmlClass; ?> <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
+                                                                                                                                                                                                                                                                                                echo "sticky-demo-header";
+                                                                                                                                                                                                                                                                                            } ?>">
+
 <head>
     <!-- Yo!Kart -->
     <meta charset="utf-8">
@@ -95,5 +96,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     /* ] */
 
     $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, false);
-
-    $this->includeTemplate('_partial/topHeaderDashboard.php', $commonHeadData, false);
+    // $this->includeTemplate('_partial/topHeaderDashboard.php', $commonHeadData, false);
+    if ($controllerName != 'SubscriptionCheckout') { ?>
+        <div class="wrapper">
+        <?php } ?>

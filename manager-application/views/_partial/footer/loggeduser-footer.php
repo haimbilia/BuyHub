@@ -34,7 +34,6 @@
     </div>
 </div>
 <div class="footer-action">
-
     <div class="footer-action__item">
         <a class="footer-action__trigger" href="javascript:void(0);">
             <span class="icon">
@@ -77,7 +76,7 @@
         </a>
     </div>
     <div class="footer-action__item dropdown">
-        <a class="footer-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
+        <a class="footer-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)" onclick="getNotifications();">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -85,7 +84,6 @@
                 </svg>
             </span>
         </a>
-
     </div>
     <div class="footer-action__item dropdown header-account">
         <a class=" dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">

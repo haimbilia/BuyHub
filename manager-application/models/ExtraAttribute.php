@@ -4,6 +4,7 @@ class ExtraAttribute extends MyAppModel
 {
     public const DB_TBL = 'tbl_extra_attributes';
     public const DB_TBL_PREFIX = 'eattribute_';
+    public const DB_TBL_LANG = 'tbl_extra_attributes_lang';
     private $db;
 
     public function __construct($id = 0)

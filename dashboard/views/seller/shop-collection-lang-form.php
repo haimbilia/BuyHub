@@ -10,7 +10,7 @@
             <input class="btn btn-brand"
                    type="button"
                    value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                   onClick="editShopCollectionLangForm(<?php echo $scollection_id; ?>, <?php echo $langId; ?>, 1)">
+                   onclick="editShopCollectionLangForm(<?php echo $scollection_id; ?>, <?php echo $langId; ?>, 1)">
         </div>
         <?php
     }

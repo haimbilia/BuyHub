@@ -5,7 +5,7 @@ define('CONF_FORM_REQUIRED_STAR_POSITION', Form::FORM_REQUIRED_STAR_POSITION_AFT
 
 FatApplication::getInstance()->setControllersForStaticFileServer(array('images', 'fonts', 'js', 'img', 'innovas','assetmanager'));
 
-$innova_settings  =  array('width'=>'650', 'height'=>'400','arrStyle'=>'[["body",false,"","min-height:250px;"]]',  'groups'=>' [
+$innova_settings  =  array(/* 'width'=>'100%', */ 'height'=>'400','arrStyle'=>'[["body",false,"","min-height:250px;"]]',  'groups'=>' [
     ["group1", "", ["Bold", "Italic", "Underline", "FontName", "ForeColor", "TextDialog", "RemoveFormat"]],
     ["group2", "", ["Bullets", "Numbering", "JustifyLeft", "JustifyCenter", "JustifyRight"]],
     ["group3", "", ["LinkDialog", "ImageDialog", "YoutubeDialog", "Table", "TableDialog"]],
@@ -15,5 +15,5 @@ $innova_settings  =  array('width'=>'650', 'height'=>'400','arrStyle'=>'[["body"
     /* 'css'=>'"' . UrlHelper::generateFullUrl ( 'JsCss', 'cssCommon', array (), '', false ) . '&f=' . rawurlencode ( 'style.css' ) */ );
     /*["group5", "", ["Undo", "Redo", "FullScreen", "SourceDialog"]]]', */
     /* $innova_settings  =  array('width'=>'650', 'height'=>'400','arrStyle'=>'[["body",false,"","min-height:250px;"]]','fileBrowser'=> '"'.CONF_WEBROOT_URL.'innova/assetmanager/asset.php"', 'css'=> '"'.CONF_WEBROOT_URL.'innovas/styles/default.css"' ); */
-FatApp::setViewDataProvider('_partial/header/left-navigation.php', array('Navigation', 'setLeftNavigationVals'));
+FatApp::setViewDataProvider('_partial/navigation/left-navigation.php', array('Navigation', 'setLeftNavigationVals'));
 FatApp::setViewDataProvider('_partial/header/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));

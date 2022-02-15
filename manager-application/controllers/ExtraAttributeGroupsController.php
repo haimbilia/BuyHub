@@ -42,7 +42,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $srch = $extraAttrGroupObj->getSearchObject();
         $srch->addFld('eag.*');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('eattrgroup_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('eattrgroup_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -70,7 +70,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($eattrgroup_id = 0)
@@ -82,7 +83,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         if (0 < $eattrgroup_id) {
             $data = ExtraAttributeGroup::getAttributesById($eattrgroup_id, array('eattrgroup_id', 'eattrgroup_identifier'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $extraAttrGroupsFrm->fill($data);
         }
@@ -90,7 +91,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('extraAttrGroupsFrm', $extraAttrGroupsFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -101,8 +103,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $eattrgroup_id = $post['eattrgroup_id'];
@@ -112,8 +113,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -144,8 +144,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $ExtraAttrGroupObj = new ExtraAttributeGroup();
         $frm = new Form('frmExtraAttributeGroup', array('id' => 'frmExtraAttributeGroup'));
         $frm->addHiddenField('', 'eattrgroup_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Extra_Attribute_Group_Identifier', $this->siteLangId), 'eattrgroup_identifier');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel('FRM_EXTRA_ATTRIBUTE_GROUP_IDENTIFIER', $this->siteLangId), 'eattrgroup_identifier');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -157,7 +157,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($eattrgroup_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $extraAttrGroupLangFrm = $this->getLangForm($eattrgroup_id, $lang_id);
@@ -165,8 +165,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
             $translatedData = $updateLangDataobj->getTranslatedData($eattrgroup_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -181,7 +180,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('eattrgroup_lang_id', $lang_id);
         $this->set('extraAttrGroupLangFrm', $extraAttrGroupLangFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -193,8 +193,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($eattrgroup_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($eattrgroup_id, $lang_id);
@@ -209,16 +208,14 @@ class ExtraAttributeGroupsController extends ListingBaseController
 
         $extraAttributeGroupObj = new ExtraAttributeGroup($eattrgroup_id);
         if (!$extraAttributeGroupObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($extraAttributeGroupObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($extraAttributeGroupObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
             if (false === $updateLangDataobj->updateTranslatedData($eattrgroup_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -242,20 +239,17 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->objPrivilege->canEditExtraAttributes();
         $eattrgroup_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($eattrgroup_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $extraAttrGroupObj = new ExtraAttributeGroup($eattrgroup_id);
         if (!$extraAttrGroupObj->canRecordMarkDelete($eattrgroup_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $extraAttrGroupObj->assignValues(array(ExtraAttributeGroup::tblFld('deleted') => 1));
         if (!$extraAttrGroupObj->save()) {
-            Message::addErrorMessage($optionObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($extraAttrGroupObj->getError(), true);
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -264,27 +258,15 @@ class ExtraAttributeGroupsController extends ListingBaseController
     {
         $frm = new Form('frmExtraAttributeGroupLang', array('id' => 'frmExtraAttributeGroupLang'));
         $frm->addHiddenField('', 'eattrgroup_id', $eattrgroup_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Extra_Attribute_Group_Name', $this->siteLangId), 'eattrgroup_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_EXTRA_ATTRIBUTE_GROUP_NAME', $this->siteLangId), 'eattrgroup_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 }

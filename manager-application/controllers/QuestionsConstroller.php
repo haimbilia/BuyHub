@@ -47,7 +47,7 @@ class QuestionsController extends ListingBaseController
         
         $qbank_id = FatUtility::int($post['qbank_id']);
         $srch->addCondition('question_qbank_id', '=', $qbank_id);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('q_l.question_title', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('q.question_identifier', 'like', '%' . $post['keyword'] . '%');
         }
@@ -61,6 +61,7 @@ class QuestionsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 }

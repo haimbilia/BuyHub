@@ -48,6 +48,7 @@ class NavigationsController extends ListingBaseController
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->addJs(['js/jquery-sortable-lists.js']);
         $this->_template->render();
     }
@@ -55,7 +56,8 @@ class NavigationsController extends ListingBaseController
     public function search()
     {
         $this->getListingData();
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getListingData()
@@ -100,13 +102,14 @@ class NavigationsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $includeWrapper = FatApp::getPostedData('includeWrapper', FatUtility::VAR_INT, applicationConstants::YES);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $records = $this->getNavLinks();
         $this->set("includeWrapper", $includeWrapper);
         $this->set("arrListing", $records);
         $this->set("navId", $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getNavLinks(): array
@@ -158,7 +161,8 @@ class NavigationsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -191,7 +195,11 @@ class NavigationsController extends ListingBaseController
         $post['nav_identifier'] = $post['nav_name'];
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($record, [
@@ -270,7 +278,7 @@ class NavigationsController extends ListingBaseController
         $navId = FatApp::getPostedData('nav_id', FatUtility::VAR_INT, 0);
         $nlinkId = FatApp::getPostedData('nlink_id', FatUtility::VAR_INT, 0);
         if (!$navId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm = $this->getLinksForm();
         if (!$nlinkId) {
@@ -289,7 +297,8 @@ class NavigationsController extends ListingBaseController
         $this->set('nlink_id', $nlinkId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupLink()
@@ -342,7 +351,11 @@ class NavigationsController extends ListingBaseController
         $navLinkObj = new NavigationLinks($nlinkId);
         $navLinkObj->assignValues($post);
         if (!$navLinkObj->save()) {
-            LibHelper::exitWithError($navLinkObj->getError(), true);
+            $msg = $navLinkObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $nlinkId = $navLinkObj->getMainTableRecordId();
@@ -408,7 +421,8 @@ class NavigationsController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupLinksLang()
@@ -499,7 +513,7 @@ class NavigationsController extends ListingBaseController
         $frm->addHiddenField('', 'nav_id');
         $frm->addHiddenField('', 'nlink_id');
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Caption', $this->siteLangId), 'nlink_caption');
+        $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $this->siteLangId), 'nlink_caption');
         return $frm;
     }
 

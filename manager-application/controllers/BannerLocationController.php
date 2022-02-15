@@ -3,15 +3,15 @@
 class BannerLocationController extends ListingBaseController
 {
     protected $modelClass = 'BannerLocation';
-    protected $pageKey = 'MANAGE_BANNER_LOCATION_BLOCK';
-   
+    protected $pageKey = 'MANAGE_BANNER_LOCATIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewBanners();
     }
 
-     /**
+    /**
      * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
      *
      * @param  bool $setVariable
@@ -78,11 +78,11 @@ class BannerLocationController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = BannerLocation::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields([
-            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 
+            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height',
             'blocation_id', 'blocation_promotion_cost', 'blocation_active', 'IFNULL(blocation_name,blocation_identifier) as blocation_name'
         ]);
-        $srch->addCondition('blocation_collection_id', '=', '0');
-        if (!empty($post['keyword'])) {
+        $srch->addCondition('blocation_collection_id', '=', 'mysql_func_0', 'AND', true);
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('blocation_name', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('blocation_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -128,26 +128,26 @@ class BannerLocationController extends ListingBaseController
         return $frm;
     }
 
-    public function Form()
+    public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getForm($recordId);
         $srch = BannerLocation::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields([
-            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 'blocation_id', 
+            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 'blocation_id',
             'blocation_id', 'blocation_promotion_cost', 'blocation_active', 'IFNULL(blocation_name,blocation_identifier) as blocation_name'
         ]);
-        $srch->addCondition('blocation_id', '=', $recordId);
+        $srch->addCondition('blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
-        
+
         if (empty($data)) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm->fill($data);
 
@@ -157,7 +157,8 @@ class BannerLocationController extends ListingBaseController
         $this->set('lang_id', $this->siteLangId);
         $this->set('activeInactiveArr', $activeInactiveArr);
         $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -167,22 +168,22 @@ class BannerLocationController extends ListingBaseController
         $recordId = $data['blocation_id'];
         $frm = $this->getForm($recordId);
         if (false === $data) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $data = [
             'blocation_identifier' => $post['blocation_name'],
             'blocation_promotion_cost' => $post['blocation_promotion_cost'],
             'blocation_active' => $post['blocation_active'],
             'blocation_id' => $recordId,
-        ] ;
+        ];
 
         $bannerObj = new Banner();
         if (!$bannerObj->updateLocationData($data)) {
-            LibHelper::exitWithError($bannerObj->getError());
+            LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
         $langId = $this->siteLangId;
@@ -194,14 +195,14 @@ class BannerLocationController extends ListingBaseController
 
         $bannerObj = new BannerLocation($recordId);
         if (!$bannerObj->updateLangData($this->siteLangId, $langData)) {
-            LibHelper::exitWithError($bannerObj->getError());
+            LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(BannerLocation::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -220,14 +221,14 @@ class BannerLocationController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0) 
+    public function langForm($autoFillLangData = 0)
     {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || $langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $langId);
@@ -236,7 +237,7 @@ class BannerLocationController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(BannerLocation::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -253,7 +254,8 @@ class BannerLocationController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/lang-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($recordId, $langId)
@@ -274,7 +276,7 @@ class BannerLocationController extends ListingBaseController
         $langId = $post['lang_id'];
 
         if ($langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($recordId, $langId);
@@ -287,7 +289,7 @@ class BannerLocationController extends ListingBaseController
 
         $bannerObj = new BannerLocation($recordId);
         if (!$bannerObj->updateLangData($langId, $data)) {
-            LibHelper::exitWithError($bannerObj->getError());
+            LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -308,7 +310,8 @@ class BannerLocationController extends ListingBaseController
 
     public function layouts()
     {
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**
@@ -320,7 +323,7 @@ class BannerLocationController extends ListingBaseController
     {
         $bannerLocationTblHeadingCols = CacheHelper::get('bannerLocationTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($bannerLocationTblHeadingCols) {
-            return json_decode($bannerLocationTblHeadingCols);
+            return json_decode($bannerLocationTblHeadingCols, true);
         }
 
         $arr = [
@@ -366,5 +369,4 @@ class BannerLocationController extends ListingBaseController
     {
         return array_diff($fields, ['blocation_active'], Common::excludeKeysForSort());
     }
-    
 }

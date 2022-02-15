@@ -117,7 +117,7 @@ class SellerPackagePlansController extends ListingBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('spp.spplan_price', 'like', $post['keyword'] . '%');
         }
 
@@ -187,7 +187,8 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('spPlanId', $spPlanId);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($spackageId)
@@ -260,7 +261,7 @@ class SellerPackagePlansController extends ListingBaseController
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
-            return json_decode($subsPkgTblHeadingCols);
+            return json_decode($subsPkgTblHeadingCols, true);
         }
 
         $arr = [

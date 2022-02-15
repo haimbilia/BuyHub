@@ -20,17 +20,19 @@ class ShopReport extends MyAppModel
 
     public static function getReportDetail($shopId, $userId = 0, $attr = '')
     {
+        $shopId = FatUtility::int($shopId);
+        $userId = FatUtility::int($userId);
         if (empty($attr)) {
             $attr = ['sreport_id'];
         } elseif (is_string($attr)) {
             $attr = [$attr];
         }
-        
+
         $srch = static::getSearchObject();
         $srch->addMultipleFields($attr);
-        $srch->addCondition('sreport_shop_id', '=', $shopId);
+        $srch->addCondition('sreport_shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         if (0 < $userId) {
-            $srch->addCondition('sreport_user_id', '=', $userId);
+            $srch->addCondition('sreport_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
         $srch = $srch->getResultSet();
         return FatApp::getDb()->fetch($srch);

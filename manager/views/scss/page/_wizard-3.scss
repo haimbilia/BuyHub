@@ -28,7 +28,7 @@ $wizard:'wizard';
                         margin-bottom: 0.5rem;
                         span {
                             font-size: 2rem;
-                            margin-right: 0.5rem;
+                            margin-#{$end-direction}: 0.5rem;
                         }
                     }
                     .#{$wizard}-v3__nav-bar {
@@ -105,7 +105,7 @@ $wizard:'wizard';
                 flex-direction: row;
                 justify-content: space-between;
                 [data-ktwizard-type="action-prev"] {
-                    margin-right: auto;
+                    margin-#{$end-direction}: auto;
                 }
                 [data-ktwizard-type="action-next"] {
                     margin: auto 0 auto auto;
@@ -233,7 +233,7 @@ $wizard:'wizard';
                         margin: 0 0.5rem 1rem;
                     }
                     [data-ktwizard-type="action-prev"] {
-                        margin-right: 0.5rem;
+                        margin-#{$end-direction}: 0.5rem;
                     }
                     [data-ktwizard-type="action-next"] {
                         margin: 0 0 1rem;

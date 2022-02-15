@@ -116,7 +116,7 @@ class Labels extends MyAppModel
         $srch->addMultipleFields($attr);
 
         if ($langId > 0) {
-            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .$langId, 'AND', true);
         }
         return $srch;
     }

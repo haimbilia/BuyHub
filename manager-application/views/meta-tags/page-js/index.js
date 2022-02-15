@@ -15,16 +15,14 @@ $(document).on('blur', '.metaUrlJs', function () {
     var dv = '#metaTagsListing';
     var listingTableJs = '.listingTableJs';
 
-    reloadList = function () {
-        searchRecords(document.frmRecordSearchPaging);
+    tabSearchRecords = function (object) {
+        $(':input', document.frmRecordSearch).not(':hidden').val('');
+        searchRecords(object);
     };
 
     setTabActive = function (type) {
         $('ul.metaTypesJs li.is-active').removeClass('is-active');
         $('ul.metaTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
-            scrollTop: $("#metaTagsListing").offset().top
-        }, 800);
     }
 
     searchRecords = function (object, replaceRowsOnly = false) {
@@ -59,33 +57,30 @@ $(document).on('blur', '.metaUrlJs', function () {
             data += '&loadRows=' + 1;
         }
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             fcom.removeLoader();
             setTabActive(type);
 
-            var res = JSON.parse(res);
             if (true === replaceRowsOnly) {
                 $(listingTableJs).html(res.listingHtml);
             } else {
-                $(dv).html(res.listingHtml);
+                $(dv).replaceWith(res.listingHtml);
             }
         });
     };
 
 
     metaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
     editMetaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
@@ -93,7 +88,6 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            $.ykmsg.close();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, t.metaType, t.metaTagRecordId);
@@ -103,10 +97,9 @@ $(document).on('blur', '.metaUrlJs', function () {
     }
 
     editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
@@ -114,7 +107,6 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
-            $.ykmsg.close();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, metaType);

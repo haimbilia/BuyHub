@@ -1,47 +1,38 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php'); 
+$this->includeTemplate('_partial/dashboardNavigation.php');
+
+$isWishList = (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1));
 
 $label = Labels::getLabel("LBL_FAVORITES", $siteLangId);
-if (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
+$function = 'searchFavouriteListItems()';
+if ($isWishList) {
     $label = Labels::getLabel("LBL_WISHLIST", $siteLangId);
-}
-if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-    $function = 'viewFavouriteItems()';
-} else {
     $function = 'searchWishList()';
 }
 ?>
-<main id="main-area" class="main"   >
-    <div class="content-wrapper content-space">
-        <?php 
-        $data = [
-            'headingLabel' => $label,
-            'siteLangId' => $siteLangId,
-        ];
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => $label,
+        'siteLangId' => $siteLangId,
+    ];
 
-        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-        <div class="content-body">
-            <div class="card">
-                <div class="card-body">
-                    <div class="tabs">
-                        <ul>
-                            <li class="is-active" id="tab-wishlist">
-                                <a onClick="<?php echo $function; ?>" href="javascript:void(0);">
-                                    <?php echo $label; ?>
-                                </a>
-                            </li>
-                            <li id="tab-fav-shop"><a onClick="searchFavoriteShop();"
-                                    href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="listingDiv" ></div>
-                    <div id="loadMoreBtnDiv"></div>
-                </div>
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body" id="listingDiv">
+        <div class="card card-tabs">
+            <div class="card-head">
+                <nav class="nav nav-tabs">
+                    <a class="nav-link active navLinkJs favtProductsJs" onclick="<?php echo $function; ?>" href="javascript:void(0);" id="tab-wishlist">
+                        <?php echo Labels::getLabel("LBL_PRODUCTS", $siteLangId); ?>
+                    </a>
+                    <a class="nav-link navLinkJs favtShopsJs" onclick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
+                </nav>
+                <div class="card-toolbar"></div>
             </div>
+            <div class="card-body"></div>
         </div>
     </div>
-</main>
+</div>
 <script>
-<?php echo $function; ?> ;
+    <?php echo $function; ?>;
 </script>

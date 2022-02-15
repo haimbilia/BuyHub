@@ -13,7 +13,6 @@ $(document).ready(function () {
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
-            $.ykmsg.close();
             location.href = t.redirectUrl;
         });
     };

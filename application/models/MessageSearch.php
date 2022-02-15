@@ -31,6 +31,7 @@ class MessageSearch extends SearchBase
         $srch->addGroupBy(Thread::DB_TBL_THREAD_MESSAGES_PREFIX . 'id');
         $srch->addOrder(Thread::DB_TBL_THREAD_MESSAGES_PREFIX . 'id', 'desc');
         $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'tth.thread_id = ttm.message_thread_id', 'ttm');
         /* $this->joinTable(Thread::DB_TBL_THREAD_MESSAGES, 'LEFT OUTER JOIN', 'tth.thread_id = ttm.message_thread_id', 'ttm'); */
     }

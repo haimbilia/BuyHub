@@ -4,7 +4,7 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
 ?>
 <?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
     <div class="alert alert--success">
-        <a href="javascript:void(0)" class="btn-close" onClick="removePromoCode()"></a>
+        <a href="javascript:void(0)" class="btn-close" onclick="removePromoCode()"></a>
         <p><?php echo Labels::getLabel('LBL_Promo_Code', $siteLangId); ?>
             <strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong>
             <?php echo Labels::getLabel('LBL_Successfully_Applied', $siteLangId); ?>
@@ -39,7 +39,7 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
                     <?php $counter = 1;
                     foreach ($couponsList as $coupon_id => $coupon) { ?>
                         <li>
-                            <div class="coupon-code" onClick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
+                            <div class="coupon-code" onclick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
                                 <?php echo $coupon['coupon_code']; ?></div>
                             <?php if ($coupon['coupon_description'] != '') { ?>
                                 <p><?php echo $coupon['coupon_description']; ?> </p>

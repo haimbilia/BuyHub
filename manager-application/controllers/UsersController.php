@@ -75,9 +75,10 @@ class UsersController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        $recordId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if ($recordId > 0) {
-            $srch->addCondition('user_id', '=', $recordId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $userId) {
+            $srch->addCondition('user_id', '=', $userId);
         }
 
         $userActive = FatApp::getPostedData('user_active');
@@ -128,24 +129,16 @@ class UsersController extends ListingBaseController
             $srch->addCondition('user_regdate', '<=', $user_regdate_to . ' 23:59:59');
         }
 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
         $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on', 'shop_updated_on'));
-
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -188,7 +181,8 @@ class UsersController extends ListingBaseController
         $this->set('stateId', $stateId);
         $this->set('displayLangTab', false);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -316,7 +310,7 @@ class UsersController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -334,7 +328,7 @@ class UsersController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $userObj = new User($recordId);
         $userObj->assignValues(array('user_deleted' => applicationConstants::YES));
@@ -366,12 +360,13 @@ class UsersController extends ListingBaseController
             $fld->requirements()->setRequired();
         }
         $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-
-
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
@@ -423,7 +418,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupBankInfo()
@@ -471,7 +467,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()
@@ -535,8 +532,9 @@ class UsersController extends ListingBaseController
 
         $post = FatApp::getPostedData();
 
+        $deletedOnly = FatApp::getPostedData('deletedOnly', FatUtility::VAR_INT, 0);
         $skipDeletedUser = true;
-        if (isset($post['deletedUser']) && $post['deletedUser'] == true) {
+        if ((isset($post['deletedUser']) && $post['deletedUser'] == 1) || 0 < $deletedOnly) {
             $skipDeletedUser = false;
         }
 
@@ -573,7 +571,7 @@ class UsersController extends ListingBaseController
             }
         }
 
-        if (!$skipDeletedUser) {
+        if (0 < $deletedOnly) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
         }
         $srch->addOrder('credential_email', 'ASC');
@@ -630,7 +628,8 @@ class UsersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($users as $key => $user) {
             $userName = (0 < $joinShop) ? $user['shop_name'] : $user['credential_username'];
@@ -674,7 +673,7 @@ class UsersController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -693,7 +692,7 @@ class UsersController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $userObj = new User($recordId);
@@ -717,7 +716,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sendMail()
@@ -820,7 +820,7 @@ class UsersController extends ListingBaseController
         $frm->addHiddenField('', 'user_id', $recordId);
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_New_Password', $this->siteLangId),
+            Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
             'new_password',
             '',
             array('id' => 'new_password')
@@ -830,7 +830,7 @@ class UsersController extends ListingBaseController
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
 
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),
+            Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId),
             'conf_new_password',
             '',
             array('id' => 'conf_new_password')
@@ -838,7 +838,6 @@ class UsersController extends ListingBaseController
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->siteLangId));
         return $frm;
     }
 
@@ -848,8 +847,8 @@ class UsersController extends ListingBaseController
         $frm = new Form('sendMailFrm');
         $frm->addHiddenField('', 'user_id', $recordId);
 
-        $frm->addTextBox(Labels::getLabel('FRM_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('FRM_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_SUBJECT', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
 
         return $frm;
     }
@@ -859,11 +858,11 @@ class UsersController extends ListingBaseController
     {
         $frm = new Form('frmBankInfo');
         $frm->addHiddenField('', 'user_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Account_Number', $this->siteLangId), 'ub_account_number', '');
-        $frm->addRequiredField(Labels::getLabel('FRM_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
-        $frm->addTextArea(Labels::getLabel('FRM_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $this->siteLangId), 'ub_account_holder_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
         return $frm;
     }
 
@@ -886,7 +885,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCookiesPreferencesForm()
@@ -905,21 +905,16 @@ class UsersController extends ListingBaseController
     {
         $usersTblHeadingCols = CacheHelper::get('usersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($usersTblHeadingCols) {
-            return json_decode($usersTblHeadingCols);
+            return json_decode($usersTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
-            'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
-            'user_registered_initially_for' => Labels::getLabel('LBL_INITIALLY_REGISTERED_AS', $this->siteLangId),
-            'user_is_buyer' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
-            'user_is_supplier' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
-            'user_is_advertiser' => Labels::getLabel('LBL_ADVERTISER', $this->siteLangId),
-            'user_is_affiliate' => Labels::getLabel('LBL_AFFILIATE', $this->siteLangId),
+            'user_registered_initially_for' => Labels::getLabel('LBL_REGISTERED_AS', $this->siteLangId),
+            'user_type' => Labels::getLabel('LBL_USER_TYPE', $this->siteLangId),
             'user_regdate' => Labels::getLabel('LBL_REG._Date', $this->siteLangId),
-            'credential_verified' => Labels::getLabel('LBL_VERIFIED', $this->siteLangId),
             'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -934,14 +929,9 @@ class UsersController extends ListingBaseController
             'select_all',
             'user_id',
             'user_name',
-            'shop_name',
             'user_registered_initially_for',
-            'user_is_buyer',
-            'user_is_supplier',
-            'user_is_advertiser',
-            'user_is_affiliate',
+            'user_type',
             'user_regdate',
-            'credential_verified',
             'credential_active',
             'action',
         ];
@@ -949,6 +939,6 @@ class UsersController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, ['user_type'], Common::excludeKeysForSort());
     }
 }

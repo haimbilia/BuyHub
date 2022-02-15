@@ -72,8 +72,8 @@ class SystemLog extends MyAppModel
     }
 
     public static function set(string $content = '', string $response = '', int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $title = '', string &$error = ''): bool
-    {
-        if (!in_array($module_type, self::getModuleTypes()) || !in_array($type, self::getTypes())) {
+    {        
+        if (!array_key_exists($module_type, self::getModuleTypes()) || !array_key_exists($type, self::getTypes())) {
             $error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }

@@ -2,7 +2,7 @@
 
 $otherButtons = [
     [
-       'attr' => [
+        'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -10,7 +10,7 @@ $otherButtons = [
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => false
     ]
-]; 
+];
 $fld = $langFrm->getField('lang_id');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $langFrm->getField('shop_name');

@@ -19,8 +19,8 @@ foreach ($arrListing as $sn => $row) {
 
             case 'shop_name':
                 $shop = $row['shop_name'];
-                $shop .= '<br/>Created On: ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
-
+                $shop .= '<br/>'.Labels::getLabel('LBL_Created_On', $siteLangId).': ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
+                $shop = "<div class='info-wrap'>".$shop."</div>";
                 $td->appendElement('plaintext', $tdAttr, $shop, true);
                 break;
 
@@ -73,16 +73,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

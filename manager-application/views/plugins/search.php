@@ -29,7 +29,8 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
-                $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                $div = $td->appendElement('div', ['class' => 'handleJs']);
+                $div->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                             <use
                                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
                                                             </use>
@@ -119,16 +120,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 $formAction = isset($formAction) ? $formAction : 'toggleBulkStatuses';
 $attr = [

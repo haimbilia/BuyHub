@@ -9,9 +9,9 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
-<main id="main-area" class="main"   >
+
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId),
             'siteLangId' => $siteLangId,
@@ -20,8 +20,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId);?></h5>
+                <div class="card-head">
+                    <h5 class="card-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId); ?></h5>
                 </div>
                 <div class="card-body ">
                     <?php echo $approvalFrm->getFormHtml(); ?>
@@ -29,4 +29,3 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>

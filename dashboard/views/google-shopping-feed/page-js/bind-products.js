@@ -82,12 +82,13 @@ $(document).on("keyup", "input[name='google_product_category']", function () {
       return;
     }
 
-    $(bindProductForm).html(fcom.getLoader());
+    $(bindProductForm).prepend(fcom.getLoader());
     var adsBatchId = $("input[name='adsBatchId']").val();
     fcom.ajax(
       fcom.makeUrl(keyName, "bindProductForm", [adsBatchId, selProdId]),
       "",
       function (res) {
+        fcom.removeLoader();
         $(bindProductForm).html(res);
       }
     );
@@ -98,12 +99,13 @@ $(document).on("keyup", "input[name='google_product_category']", function () {
   };
 
   searchproducts = function () {
-    $(dv).html(fcom.getLoader());
+    $(dv).prepend(fcom.getLoader());
     var adsBatchId = $("input[name='adsBatchId']").val();
     fcom.ajax(
       fcom.makeUrl(keyName, "searchProducts", [adsBatchId]),
       "",
       function (res) {
+        fcom.removeLoader();
         $(dv).html(res);
       }
     );

@@ -27,29 +27,27 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId,'shopName'=>$row['shop_name']], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
-                break;
-            case 'credential_username':
-                $href = "javascript:void(0)";
-                $onclick = 'redirectUser(' . $row['user_id'] . ')';
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
-                    'user' => $row,
-                    'extraClass' => 'user-profile-sm',
-                    'displayEmail' => false,
-                    'userTitleClass' => 'text-muted',
-                    'siteLangId' => $siteLangId,
-                    'href' => $href,
-                    'onclick' => $onclick,
-                ], false, true);
-                $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':
-                $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
-                $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="volDiscountColJs hide vd-input" data-oldval="' . $row[$key] . '"/>';
-                $div->appendElement('div', array("class" => 'editColJs', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
-                $div->appendElement('plaintext', array(), $input, true);
+                $editable = $canEdit ? 'true' : 'false';
+
+                $td->appendElement('div', [
+                    "class" => 'click-to-edit',
+                    'name' => $key,
+                    'data-selprod-id' => $selProdId,
+                    'data-id' => $volDiscountId,
+                    'data-value' => $row[$key],
+                    'data-formated-value' => $row[$key],
+                    'contentEditable' => $editable,
+                    'data-bs-toggle' => 'tooltip',
+                    'data-placement' => 'top',
+                    'onblur' => 'updateValues(this)',
+                    'onfocus' => 'showOrignal(this)',
+                    'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
+                ], $row[$key], true);
                 break;
             case 'action':
                 $data = [
@@ -70,16 +68,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

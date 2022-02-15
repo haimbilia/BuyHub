@@ -6,6 +6,10 @@
             background-color: transparent;
             border: none;
             font-size: 1em;
+            margin-#{$end-direction}:20px;
+        }
+        .select2-selection__placeholder {
+            color: $txt-gray;
         }
         .select2-selection__arrow {
             display: none;

@@ -66,14 +66,14 @@
                     $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($column), true);
                     break;
                 case 'splprice_price':
-                    $input = '<input type="text" data-id="' . $splPriceId . '" value="' . $row[$column] . '" data-selprodid="' . $selProdId . '" name="' . $column . '" data-oldval="' . $row[$column] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$column], true, true) . '" class="js--splPriceCol hidden sp-input"/>';
+                    $input = '<input type="text" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$column] . '" data-selprodid="' . $selProdId . '" name="' . $column . '" data-oldval="' . $row[$column] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$column], true, true) . '" class="js--splPriceCol hidden sp-input"/>';
                     $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$column], true, true), true);
                     $td->appendElement('plaintext', array(), $input, true);
                     if ($row['selprod_price'] > $row[$column]) {
                         $discountPrice = $row['selprod_price'] - $row[$column];
                         $discountPercentage = CommonHelper::numberFormat(round(($discountPrice / $row['selprod_price']) * 100, 2));
                         $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $siteLangId);
-                        $td->appendElement('div', array("class" => 'ml-3'), $discountPercentage, true);
+                        $td->appendElement('div', array("class" => 'ml-3 percentValJs badge badge-success'), $discountPercentage, true);
                     }
                     break;
                 case 'action':
@@ -86,7 +86,12 @@
                             'href' => 'javascript:void(0)', 'class' => '',
                             'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $splPriceId . ")"
                         ),
-                        '<i class="fa fa-trash"></i>',
+                        '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="'.CONF_WEBROOT_URL. 'images/retina/sprite-actions.svg#delete">
+                                                </use>
+                                            </svg>
+                                        </i>',
                         true
                     );
                     break;

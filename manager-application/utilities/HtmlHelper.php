@@ -76,7 +76,7 @@ class HtmlHelper
         /* For Labels Fields */
 
         /* Group Label and Input field. */
-        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = $frm->developerTags['fieldWrapperRowExtraClassDefault'] ?? 'form-group';
         /* Group Label and Input field. */
     }
 
@@ -98,8 +98,90 @@ class HtmlHelper
                 return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
                 break;
             default:
-                return date('d-m-Y', $theDate);
+                return FatDate::format($date);
                 break;
+        }
+    }
+
+    private static function normalizeDatetimeValue($value)
+    {
+        try {
+
+            if (
+                ($timestamp = DateTime::createFromFormat(
+                    'Y-m-d|',
+                    $value
+                )
+                ) !== false
+            ) {
+                // try Y-m-d format (support invalid dates like 2012-13-01)
+                return  $timestamp;
+            }
+            if (
+                ($timestamp = DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $value
+                )
+                ) !== false
+            ) {
+                // try Y-m-d H:i:s format (support invalid dates like 2012-13-01 12:63:12)
+                return  $timestamp;
+            }
+
+            return new DateTime($value);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException("'$value' is not a valid date time value: " . $e->getMessage()
+                . "\n" . print_r(DateTime::getLastErrors(), true), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Formats the value as the time interval between a date and now in human readable form. 
+     * @return string the formatted result.
+     * @throws InvalidArgumentException if the input value can not be evaluated as a date value.
+     */
+
+    public static function getRelativeTime($datetime, $langId)
+    {
+        $timestamp = self::normalizeDatetimeValue($datetime);
+        $dateNow = new DateTime('now');
+        $interval = $timestamp->diff($dateNow);
+
+        if ($interval->y >= 1 || $interval->m >= 1 || $interval->d >= 1) {
+            return FatDate::format($datetime);
+        }
+        if ($interval->invert) {
+            if ($interval->h >= 1) {
+                $str =  $interval->h == 1 ? Labels::getLabel('LBL_IN_AN_HOUR', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_HOURS', $langId);
+                return str_replace("{interval}", $interval->h, $str);
+            }
+            if ($interval->i >= 1) {
+                $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_MINUTE', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_MINUTES', $langId);
+                return str_replace("{interval}", $interval->i, $str);
+            }
+
+            if ($interval->s == 0) {
+                return Labels::getLabel('LBL_JUST_NOW', $langId);
+            }
+
+            $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS', $langId);
+            return str_replace("{interval}", $interval->i, $str);
+        } else {
+
+            if ($interval->h >= 1) {
+                $str =  $interval->h == 1 ? Labels::getLabel('LBL_AN_HOUR_AGO', $langId) :  Labels::getLabel('LBL_{INTERVAL}_HOURS_AGO', $langId);
+                return str_replace("{interval}", $interval->h, $str);
+            }
+            if ($interval->i >= 1) {
+                $str =  $interval->i == 1 ? Labels::getLabel('LBL_A_MINUTE_AGO', $langId) :  Labels::getLabel('LBL_{INTERVAL}_MINUTES_AGO', $langId);
+                return str_replace("{interval}", $interval->i, $str);
+            }
+            if ($interval->s == 0) {
+                return Labels::getLabel('LBL_JUST_NOW', $langId);
+            }
+
+            $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS_AGO', $langId);
+            return str_replace("{interval}", $interval->i, $str);
         }
     }
 
@@ -208,7 +290,14 @@ class HtmlHelper
                     </div>
                 </div>
                 <script>
-                $.initDropZone("' . $url . '").on("sending", function(file, xhr, formData){';
+                $.initDropZone("' . $url . '")
+                .on("addedfile",function(event){                                 
+                    $(".upload_cover").addClass("hidden"); 
+                })
+                .on("queuecomplete",function(event){                                 
+                    $(".upload_cover").removeClass("hidden"); 
+                })
+                    .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {
             $str .= $callbackfn . '(file, xhr, formData)';;
         }
@@ -225,6 +314,7 @@ class HtmlHelper
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+        $fld->developerTags['noCaptionTag'] = true;
     }
 
     public static function configureSwitchForRadio($fld, $msg = '')
@@ -251,11 +341,9 @@ class HtmlHelper
         }
         $str .= '</div>';
 
-        $oldFldPostion = $fld->getFormIndex();
-
-        $frm->removeField($fld);
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
-        $htmlFld->setFormIndex($oldFldPostion);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
         $htmlFld->developerTags = $fld->developerTags;
         return $htmlFld;
     }
@@ -265,11 +353,9 @@ class HtmlHelper
         $str = self::getFieldHtml($frm, $fldName, 6, $setFieldTagAttrs, '', $msg, [], true);
         $fld = $frm->getField($fldName);
 
-        $oldFldPostion = $fld->getFormIndex();
-        $frm->removeField($fld);
-
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
-        $htmlFld->setFormIndex($oldFldPostion);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
         $htmlFld->developerTags = $fld->developerTags;
         return $htmlFld;
     }
@@ -371,11 +457,11 @@ class HtmlHelper
 
             if ($count > 2) {
                 $str .= ' 
-                <a href="javascript:void(0)" class="media media-sm media-circle"
+                <span class="media media-sm media-circle"
                     data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="">
                     <span>3+</span>
-                </a>';
+                </span>';
                 break;
             }
             if ($updatedOn) {
@@ -383,26 +469,26 @@ class HtmlHelper
                 $imgSrc  = UrlHelper::getCachedUrl($imgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             }
             $str .= '
-                <a href="javascript:void(0)" class="media media-sm media-circle"
+                <span class="media media-sm media-circle"
                     data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <img data-aspect-ratio="1:1"
                         src="' . $imgSrc . '"
                         alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
-                </a>';
+                </span>';
             $count++;
         }
         if (!count($images)) {
             $str .= '
-            <a href="javascript:void(0)" class="media media-sm media-circle"
+            <span class="media media-sm media-circle"
                 data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
                 <img data-aspect-ratio="1:1"
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
                     alt="' . $defaultImageName . '">
-            </a>';
+            </span>';
         }
 
         $str .= '</div>';
@@ -496,7 +582,7 @@ class HtmlHelper
             $label->appendElement('i', [
                 'class' => 'fas fa-exclamation-circle',
                 'data-bs-toggle' => 'tooltip',
-                'data-original-title' => $labelInfoText,
+                'title' => $labelInfoText,
             ]);
         }
 
@@ -524,9 +610,7 @@ class HtmlHelper
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">' . $title . '</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    
-                                </button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="cms">
@@ -544,12 +628,10 @@ class HtmlHelper
         $statusClass = ($canEdit) ? '' : 'disabled';
         $disabled = ($disabled) ? 'disabled' : '';
         $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
-        return '<span class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
-                    <label>
-                        <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                        <span class="input-helper"></span>
-                    </label>
-                </span>';
+        return '<label class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
+                    <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                    <span class="input-helper"></span>
+                </label>';
     }
 
     /**
@@ -574,7 +656,7 @@ class HtmlHelper
             return '<p class="date">' . $formattedDT . '</p>';
         }
 
-        $time = date($timeFormat, strtotime($formattedDT));
+        $time = date($timeFormat, strtotime($dateTime));
         $date = FatDate::format($dateTime, false, $usetimezone, $timezone);
         return '<p class="date">' . $date . '
                     <time>' . $time . '</time>

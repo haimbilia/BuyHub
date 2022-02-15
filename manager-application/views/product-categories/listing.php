@@ -62,13 +62,18 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
-    'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
+            </div>';
+    $tbl->appendElement('tr')->appendElement('td', array(
+        'colspan' => count($arr_flds),
+        'class' => 'noRecordFoundJs'
+    ), $img, true);
 }
 echo $tbl->getHtml();
-/* echo FatUtility::createHiddenFormFromData ( $postedData, array (
-        'name' => 'frmUserSearchPaging','id'=>'pretend_search_form'
-) ); */
+
 echo isset($pagination) ? html_entity_decode($pagination) : '';
 ?>
 <script>
@@ -80,7 +85,7 @@ echo isset($pagination) ? html_entity_decode($pagination) : '';
                 var order = $.tableDnD.serialize('id');
                 order += '&pcat_id=' + pcat_id;
                 fcom.ajax(fcom.makeUrl('productCategories', 'update_order'), order, function(res) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     var ans = JSON.parse(res);
                     if (ans.status == 1) {
                         $.ykmsg.success(ans.msg);

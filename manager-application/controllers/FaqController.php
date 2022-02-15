@@ -142,7 +142,7 @@ class FaqController extends ListingBaseController
         if ($faqCatId && $faqCatId > 0) {
             $srch->addCondition('faq_faqcat_id', '=', $faqCatId);
         }
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('f.faq_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('f_l.faq_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -164,8 +164,6 @@ class FaqController extends ListingBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
     }
-
-
 
     public function form()
     {
@@ -199,7 +197,8 @@ class FaqController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm(int $faqCatId = 0)
@@ -211,7 +210,7 @@ class FaqController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_FAQ_TITLE', $this->siteLangId), 'faq_title');
         $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'faq_content');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'faq_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'faq_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
@@ -259,29 +258,32 @@ class FaqController extends ListingBaseController
 
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
+        $recordId = $record->getMainTableRecordId();
+
 
         if (!$record->updateLangData($langId, $langData)) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $newTabLangId = $this->siteLangId;
-        if ($recordId > 0) {
-            $faqId = $recordId;
-        } else {
-            $faqId = $record->getMainTableRecordId();
-        }
-        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Faq::getAttributesByLangId($langId, $faqId)) {
-                $newTabLangId = $langId;
-                break;
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $langId => $langName) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                    $newTabLangId = $langId;
+                    break;
+                }
             }
         }
 
         $this->set('msg', Labels::getLabel('MSG_CATEGORY_SETUP_SUCCESSFUL', $this->siteLangId));
-        $this->set('recordId', $faqId);
+        $this->set('recordId', $recordId);
         $this->set('faqCatId', $faqCatId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -322,7 +324,8 @@ class FaqController extends ListingBaseController
         $this->set('langFrm', $faqLangFrm);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**
@@ -445,7 +448,7 @@ class FaqController extends ListingBaseController
         $srch = Faq::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('faq_id, IFNULL(faq_title, faq_identifier) as faq_title'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('faq_title', 'LIKE', '%' . $post['keyword'] . '%');
             $cond->attachCondition('faq_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -458,9 +461,11 @@ class FaqController extends ListingBaseController
 
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $posts = $db->fetchAll($rs, 'faq_id');
-        $json = array();
+        $posts = FatApp::getDb()->fetchAll($rs, 'faq_id');
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($posts as $key => $post) {
             $json['results'][] = array(
                 'id' => $key,
@@ -497,7 +502,7 @@ class FaqController extends ListingBaseController
     {
         $faqTblHeadingCols = CacheHelper::get('faqTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($faqTblHeadingCols) {
-            return json_decode($faqTblHeadingCols);
+            return json_decode($faqTblHeadingCols, true);
         }
 
         $arr = [

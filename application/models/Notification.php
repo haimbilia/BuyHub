@@ -77,7 +77,7 @@ class Notification extends MyAppModel
     public static function getLabelKeyString($langId)
     {
         $brandRequestApproval = FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL');
-        $brandRequestUrl = ($brandRequestApproval) ? 'brands/brand-requests' : 'brands';
+        $brandRequestUrl = ($brandRequestApproval) ? 'brand-requests' : 'brands';
 
         $labelArr = array(
             Notification::NEW_USER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_USER_REGISTRATION_NOTIFICATION', $langId), 'users'),
@@ -120,12 +120,16 @@ class Notification extends MyAppModel
     {
         $srch = new SearchBase(static::DB_TBL, 'n');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.' . User::DB_TBL_PREFIX . 'id = n.notification_user_id', 'u');
-        //$srch->joinTable( User::DB_TBL_CRED,'LEFT OUTER JOIN','uc.'.User::DB_TBL_CRED_PREFIX.'user_id = u.user_id', 'uc' );
+        $srch->joinTable( User::DB_TBL_CRED,'LEFT OUTER JOIN','uc.'.User::DB_TBL_CRED_PREFIX.'user_id = u.user_id', 'uc' );
 
         $srch->addMultipleFields(
             array(
             'n.*',
             'u.' . User::DB_TBL_PREFIX . 'name',
+            'u.' . User::DB_TBL_PREFIX . 'id',
+            'u.' . User::DB_TBL_PREFIX . 'updated_on',
+            'uc.'. User::DB_TBL_CRED_PREFIX .'username',
+            'uc.'. User::DB_TBL_CRED_PREFIX .'email',
             )
         );
 
@@ -141,9 +145,12 @@ class Notification extends MyAppModel
         return true;
     }
 
-    public function changeNotifyStatus($status, $recordId)
+    public function changeReadStatus($status, $recordId)
     {
         $db = FatApp::getDb();
+        if(is_array($recordId)){
+            $recordId = implode(",",$recordId);
+        }     
         if (!$db->query("UPDATE tbl_notifications SET notification_marked_read = " . $status . " WHERE notification_id in (" . $recordId . ")")) {
             return false;
         }

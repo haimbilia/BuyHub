@@ -1,24 +1,24 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-	searchUsers(document.frmUserSearch);
+	searchRecords(document.frmRecordSearch);
 
-	$(document).on('click',function(){
+	$(document).on('click', function () {
 		$('.autoSuggest').empty();
 	});
 
 	$('input[name=\'keyword\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-		'source': function(request, response) {
+		'classes': {
+			"ui-autocomplete": "custom-ui-autocomplete"
+		},
+		'source': function (request, response) {
 			$.ajax({
 				url: fcom.makeUrl('Affiliate', 'autoCompleteJson'),
-				data: {keyword: request['term'], fIsAjax:1},
+				data: { keyword: request['term'], fIsAjax: 1 },
 				dataType: 'json',
 				type: 'post',
-				success: function(json) {
-					response($.map(json, function(item) {
-						return { label: item['name'] +'(' + item['username'] + ')', value: item['username'], name: item['id'] };
+				success: function (json) {
+					response($.map(json, function (item) {
+						return { label: item['name'] + '(' + item['username'] + ')', value: item['username'], name: item['id'] };
 					}));
 				},
 			});
@@ -28,27 +28,27 @@ $(document).ready(function(){
 		}
 	});
 
-	$('input[name=\'keyword\']').keyup(function(){
+	$('input[name=\'keyword\']').keyup(function () {
 		$('input[name=\'user_id\']').val('');
 	});
 
 });
 
-(function() {
+(function () {
 	var currentPage = 1;
 	var transactionUserId = 0;
 	var rewardUserId = 0;
 
-	goToSearchPage = function(page) {
-		if(typeof page == undefined || page == null){
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
 		var frm = document.frmUserSearchPaging;
 		$(frm.page).val(page);
-		searchUsers(frm);
+		searchRecords(frm);
 	};
 
-	searchUsers = function(form,page){
+	searchRecords = function (form, page) {
 		if (!page) {
 			page = currentPage;
 		}
@@ -60,27 +60,28 @@ $(document).ready(function(){
 		}
 		/*]*/
 
-		$("#usersListing").html(fcom.getLoader());
+		$("#usersListing").prepend(fcom.getLoader());
 
-		fcom.ajax(fcom.makeUrl('Affiliate','userSearch'),data,function(res){
+		fcom.ajax(fcom.makeUrl('Affiliate', 'userSearch'), data, function (res) {
+            fcom.removeLoader();
 			$("#usersListing").html(res);
 		});
 	};
-    goToUserSearchPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page =1;
+	goToUserSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
 		}
 		var frm = document.frmUserSrchPaging;
 		$(frm.page).val(page);
-		searchUsers(frm);
+		searchRecords(frm);
 	}
 
-	reloadUserList = function() {
-		searchUsers(document.frmUserSearchPaging, currentPage);
+	reloadUserList = function () {
+		searchRecords(document.frmUserSearchPaging, currentPage);
 	};
-    clearSearch = function(){
-		document.frmUserSearch.reset();
-        $("input[name='user_id']").val("");
-		searchUsers(document.frmUserSearch);
+	clearSearch = function () {
+		document.frmRecordSearch.reset();
+		$("input[name='user_id']").val("");
+		searchRecords(document.frmRecordSearch);
 	};
 })();

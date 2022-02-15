@@ -78,7 +78,7 @@ class SmsTemplatesController extends ListingBaseController
         $srch = SmsTemplate::getSearchObject($this->siteLangId);
         $srch->addGroupBy(SmsTemplate::DB_TBL_PREFIX . 'code');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('stpl_code', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('stpl_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -109,7 +109,7 @@ class SmsTemplatesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if (empty($stplCode) || 1 > $lang_id) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $tempFrm = $this->getTemplateForm($stplCode, $lang_id);
@@ -134,7 +134,8 @@ class SmsTemplatesController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('tempFrm', $tempFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getTemplateForm($stplCode, $langId)
@@ -223,7 +224,7 @@ class SmsTemplatesController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $stplCodesArr = FatApp::getPostedData('stpl_codes');
         if (empty($stplCodesArr) || 0 > $status) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         foreach ($stplCodesArr as $stplCode) {
@@ -241,11 +242,11 @@ class SmsTemplatesController extends ListingBaseController
         $obj = new SmsTemplate($stplCode);
         if (applicationConstants::ACTIVE == $status) {
             if (false == $obj->makeActive()) {
-                FatUtility::dieJsonError($obj->getError());
+                LibHelper::exitWithError($obj->getError(), true);
             }
         } else if (applicationConstants::INACTIVE == $status) {
             if (false == $obj->makeInActive()) {
-                FatUtility::dieJsonError($obj->getError());
+                LibHelper::exitWithError($obj->getError(), true);
             }
         }
     }
@@ -254,7 +255,7 @@ class SmsTemplatesController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('smsTemplatesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

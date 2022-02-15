@@ -881,4 +881,22 @@ class Collections extends MyAppModel
         $res = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAllAssoc($res);
     }
+
+    /**
+     * getMaxDisplayOrder
+     * 
+     * @return integer
+     */
+    public static function getMaxDisplayOrder(): int
+    {
+        $maxDisplayOrder = 0;
+        $srch = static::getSearchObject(false);
+        $srch->addFld('MAX(collection_display_order) AS max_display_order');
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (!empty($row)) {
+            $maxDisplayOrder = $row['max_display_order'];
+        }
+        return $maxDisplayOrder;
+    }
 }

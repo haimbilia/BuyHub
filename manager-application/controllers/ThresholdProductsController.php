@@ -35,11 +35,12 @@ class ThresholdProductsController extends ListingBaseController
     public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_id');
         }
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -80,25 +81,22 @@ class ThresholdProductsController extends ListingBaseController
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'cred.credential_user_id = selprod_user_id', 'cred');
         $srch->joinTable(SentEmail::DB_TBL, 'LEFT OUTER JOIN', 'arch.earch_to_email = cred.credential_email', 'arch');
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $condition->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
         $srch->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
         $srch->addDirectCondition('selprod_track_inventory = ' . Product::INVENTORY_TRACK);
+        $srch->addGroupBy('selprod_id'); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords(); 
         $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on', 'credential_username'));
-
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addGroupBy('selprod_id');
+        $srch->setPageSize($pageSize); 
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -115,12 +113,12 @@ class ThresholdProductsController extends ListingBaseController
         $userObj = new User($user_id);
         $user = $userObj->getUserInfo(null, false, false);
         if (!$user) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendProductStockAlert($selprod_id, $this->siteLangId)) {
-            LibHelper::exitWithError($emailNotificationObj->getError());
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
@@ -131,7 +129,7 @@ class ThresholdProductsController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('productsthresholdTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [

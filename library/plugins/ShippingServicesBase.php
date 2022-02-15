@@ -95,7 +95,7 @@ class ShippingServicesBase extends PluginBase
 
         $adminAddress = (array) Admin::getAddress($this->langId);
         $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
-        $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
+        $adminAddress['shop_name'] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         $adminAddress['shop_id'] = 0;
         return $adminAddress;
 
@@ -164,11 +164,11 @@ class ShippingServicesBase extends PluginBase
     }
     
     /**
-     * canGenerateLabelSeprately
+     * canGenerateLabelSeparately
      *
      * @return bool
      */
-    public function canGenerateLabelSeprately(): bool
+    public function canGenerateLabelSeparately(): bool
     {
         return false;
     }

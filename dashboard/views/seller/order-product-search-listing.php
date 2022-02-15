@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+    <?php
     $arr_flds = array(
         'order_id'  =>    Labels::getLabel('LBL_Order_Id_Date', $siteLangId),
         'product'   =>    Labels::getLabel('LBL_Ordered_Product', $siteLangId),
@@ -38,7 +38,7 @@
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':                      
+                case 'product':
                     $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
@@ -49,9 +49,10 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'opshipping_by_seller_user_id':
-                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
-                    $class = (0 == $order[$key] ? 'label-warning' : 'label-success');
-                    $htm = '<span class="label label-inline ' . $class . '">' . $label . '</span>';
+                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
+                    $class = (0 == $order[$key] ? 'badge-warning' : 'badge-success');
+                    $htm = '<span class="badge ' . $class . '">' . $label . '</span>';
+                    
                     $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'status':
@@ -65,7 +66,7 @@
                         }
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
                     }
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $labelClass), $txt . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $txt . '<br>', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
@@ -77,7 +78,13 @@
                             'href' => $orderDetailUrl, 'class' => '',
                             'title' => Labels::getLabel('LBL_View_Order', $siteLangId)
                         ),
-                        '<i class="fa fa-eye"></i>',
+                        '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>',
                         true
                     );
 
@@ -89,7 +96,13 @@
                                 'href' => UrlHelper::generateUrl('seller', 'cancelOrder', array($order['op_id'])), 'class' => '',
                                 'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
                             ),
-                            '<i class="fas fa-times"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }

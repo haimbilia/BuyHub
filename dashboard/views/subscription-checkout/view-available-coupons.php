@@ -7,7 +7,7 @@
         <?php $counter = 1; foreach( $couponsList as $coupon_id=>$coupon ){
 				?>
         <li>
-            <div class="coupon-code" onClick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');"
+            <div class="coupon-code" onclick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');"
                 title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon",$siteLangId); ?>">
                 <?php echo $coupon['coupon_code']; ?></div>
             <?php if( $coupon['coupon_description'] != '' ){ ?>

@@ -56,8 +56,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         }
 
         $('.listingSection--js, .searchform_filter').hide();
-        $('#otherTopForm--js').html(fcom.getLoader());
+        $('#otherTopForm--js').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {
+            fcom.removeLoader();
             $('#otherTopForm--js').html(t);
 
             bindRecordsSelect2();
@@ -92,8 +93,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
     ribbonForm = function (blinkcond_id, badgeId) {
         $('.listingSection--js, .searchform_filter').hide();
-        $('#otherTopForm--js').html(fcom.getLoader());
+        $('#otherTopForm--js').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_RIBBON, badgeId, blinkcond_id]), '', function (t) {
+            fcom.removeLoader();
             $('#otherTopForm--js').html(t);
 
             bindRecordsSelect2();
@@ -221,7 +223,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
                 bindLink(badgeType, badgeLinkCondId, record.id, position);
             } else {
                 var recordName = (record.name || record.value);
-                var htm = '<tr class="recordRow--js"><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + record.id + ');"><i class="fa fa-times"></i></a></id><td>' + recordName + '</td></tr>';
+                var htm = '<tr class="recordRow--js"><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onclick="removeRecordRow(this, ' + record.id + ');"><i class="fa fa-times"></i></a></id><td>' + recordName + '</td></tr>';
                 var tbl = "";
                 if (1 > $('table.recordListing--js').length) {
                     var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
@@ -236,9 +238,10 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     }
 
     searchRecords = function (form) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
         fcom.ajax(fcom.makeUrl(controller, recordsMethod, [$('.formSearch--js input[name="blinkcond_id"]').val()]), fcom.frmData(form), function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
@@ -249,10 +252,11 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     reloadRecordsList = function (blinkcond_id, page) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         var data = 'page=' + page;
         var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
         fcom.ajax(fcom.makeUrl(controller, recordsMethod, [blinkcond_id]), data, function (t) {
+            fcom.removeLoader();
             $(dv).html(t);
             if (1 > $('.recordListing--js .recordRow--js').length) {
                 $(".searchform_filter").hide();

@@ -44,7 +44,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set("arrListing", $records);
         $this->set("policyPointTypeArr", PolicyPoint::getPolicyPointTypesArr($this->siteLangId));
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -60,7 +61,7 @@ class PolicyPointsController extends ListingBaseController
             $data = PolicyPoint::getAttributesById($ppointId, array('ppoint_id', 'ppoint_identifier', 'ppoint_type', 'ppoint_active'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -68,7 +69,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('ppoint_id', $ppointId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -78,8 +80,7 @@ class PolicyPointsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $ppointId = $post['ppoint_id'];
@@ -90,8 +91,7 @@ class PolicyPointsController extends ListingBaseController
         $record = new PolicyPoint($ppointId);
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -120,7 +120,7 @@ class PolicyPointsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($ppointId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($ppointId, $lang_id);
@@ -128,8 +128,7 @@ class PolicyPointsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(PolicyPoint::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($ppointId, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -145,7 +144,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -157,8 +157,7 @@ class PolicyPointsController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($ppointId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($ppointId, $lang_id);
@@ -176,16 +175,14 @@ class PolicyPointsController extends ListingBaseController
         $obj = new PolicyPoint($ppointId);
 
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(PolicyPoint::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($ppointId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -204,20 +201,18 @@ class PolicyPointsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditPolicyPoints();
         $ppointId = FatApp::getPostedData('ppointId', FatUtility::VAR_INT, 0);
         if (0 >= $ppointId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = PolicyPoint::getAttributesById($ppointId, array('ppoint_id', 'ppoint_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['ppoint_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
@@ -234,8 +229,8 @@ class PolicyPointsController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $ppointIdsArr = FatUtility::int(FatApp::getPostedData('ppoint_ids'));
         if (empty($ppointIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
@@ -255,15 +250,12 @@ class PolicyPointsController extends ListingBaseController
         $status = FatUtility::int($status);
         $ppointId = FatUtility::int($ppointId);
         if (1 > $ppointId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $obj = new PolicyPoint($ppointId);
         if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
@@ -273,8 +265,7 @@ class PolicyPointsController extends ListingBaseController
 
         $ppoint_id = FatApp::getPostedData('ppointId', FatUtility::VAR_INT, 0);
         if ($ppoint_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $this->markAsDeleted($ppoint_id);
 
@@ -287,9 +278,7 @@ class PolicyPointsController extends ListingBaseController
         $ppointIdsArr = FatUtility::int(FatApp::getPostedData('ppoint_ids'));
 
         if (empty($ppointIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($ppointIdsArr as $ppoint_id) {
@@ -306,19 +295,15 @@ class PolicyPointsController extends ListingBaseController
     {
         $ppoint_id = FatUtility::int($ppoint_id);
         if (1 > $ppoint_id) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $ppointObj = new PolicyPoint($ppoint_id);
         if (!$ppointObj->canRecordMarkDelete($ppoint_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $ppointObj->assignValues(array(PolicyPoint::tblFld('deleted') => 1));
         if (!$ppointObj->save()) {
-            Message::addErrorMessage($ppointObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($ppointObj->getError(), true);
         }
     }
 
@@ -329,14 +314,14 @@ class PolicyPointsController extends ListingBaseController
 
         $frm = new Form('frmPolicyPoint');
         $frm->addHiddenField('', 'ppoint_id', $ppointId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Identifier', $this->siteLangId), 'ppoint_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_POLICY_POINT_IDENTIFIER', $this->siteLangId), 'ppoint_identifier');
 
         $policyPointTypeArr = PolicyPoint::getPolicyPointTypesArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'ppoint_type', $policyPointTypeArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'ppoint_type', $policyPointTypeArr, '', array(), '');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'ppoint_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'ppoint_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -345,17 +330,17 @@ class PolicyPointsController extends ListingBaseController
         $this->objPrivilege->canViewPolicyPoints();
         $frm = new Form('frmPolicyPointLang');
         $frm->addHiddenField('', 'ppoint_id', $ppointId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Title', $this->siteLangId), 'ppoint_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_POLICY_POINT_TITLE', $this->siteLangId), 'ppoint_title');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 }

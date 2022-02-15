@@ -74,13 +74,15 @@ class ShippingProfileController extends ListingBaseController
         $srch = ShippingProfile::getSearchObject($this->siteLangId);
         $srch->addCondition('sprofile.shipprofile_user_id', '=', 0); /* only admin added profiles */
         $srch->joinTable('(' . $prodCountQuery . ')', 'LEFT OUTER JOIN', 'sproduct.shippro_shipprofile_id = sprofile.shipprofile_id', 'sproduct');
-
-        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
-
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('sprofile_l.shipprofile_name', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');
         }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -90,10 +92,6 @@ class ShippingProfileController extends ListingBaseController
         }
         $this->set("arrListing", $records);
         $this->set("zones", $zones ?? []);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -109,27 +107,26 @@ class ShippingProfileController extends ListingBaseController
         $frm = $this->getForm($profileId);
         $data = [];
         $productCount = 0;
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+
+        $pageTitle = Labels::getLabel('LBL_SHIPPING_PROFILE_FORM', $this->siteLangId);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesById($profileId);
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier', 'shipprofile_default'], true);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
+
             if ($data['shipprofile_user_id'] != 0) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
 
-            $spObj = new ShippingProfile();
-            foreach (Language::getAllNames() as $langId => $langName) {
-                $profileName = $spObj->getAttributesByLangId($langId, $profileId, 'shipprofile_name');
-                if (!empty($profileName)) {
-                    $data['shipprofile_name'][$langId] = $profileName;
-                }
-            }
-            if (empty($data['shipprofile_name'][$siteDefaultLangId])) {
-                $data['shipprofile_name'][$siteDefaultLangId] = $data['shipprofile_identifier'];
-            }
+            $name = !empty($data['shipprofile_name']) ? $data['shipprofile_name'] : $data['shipprofile_identifier'];
+            $str  = Labels::getLabel('LBL_{PROFILE-NAME}_PROFILE_FORM', $this->siteLangId);
+            $pageTitle = CommonHelper::replaceStringData($str, ['{PROFILE-NAME}' => $name]);
 
             $frm->fill($data);
             $prodCountSrch = new SearchBase(ShippingProfileProduct::DB_TBL, 'selsppro');
@@ -139,13 +136,63 @@ class ShippingProfileController extends ListingBaseController
             $rs = $prodCountSrch->getResultSet();
             $productCount = FatApp::getDb()->totalRecords($rs);
         }
+
+        $this->set('langId', $langId);
+        $this->set('pageTitle', $pageTitle);
         $this->set('profile_id', $profileId);
         $this->set('profileData', $data);
         $this->set('productCount', $productCount);
         $this->set('frm', $frm);
-        $this->set('siteDefaultLangId', $siteDefaultLangId);
+        $this->set('siteDefaultLangId', CommonHelper::getDefaultFormLangId());
         $this->set('languages', Language::getAllNames());
+
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
+    }
+
+    public function profileNameForm()
+    {
+        $this->objPrivilege->canEditShippingManagement();
+        $profileId = FatApp::getPostedData('shipprofile_id', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($profileId);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (0 < $profileId) {
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier'], true);
+            if (empty($data)) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+
+            if ($langId == $this->siteLangId) {
+                $data['shipprofile_name'] = empty($data['shipprofile_name']) ? $data['shipprofile_identifier'] : $data['shipprofile_name'];
+            }
+
+            if ($data['shipprofile_user_id'] != 0) {
+                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
+            }
+
+            $autoFillLangData = FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0);
+            if (0 < $autoFillLangData) {
+                $updateLangDataobj = new TranslateLangData(ShippingProfile::DB_TBL_LANG);
+                $translatedData = $updateLangDataobj->getTranslatedData($profileId, $langId);
+                if (false === $translatedData) {
+                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
+                }
+                $langData = current($translatedData);
+                if (!empty($langData)) {
+                    $data['shipprofile_name'] = $langData['shipprofile_name'];
+                }
+            }
+
+            $frm->fill($data);
+        }
+        $this->set('langId', $langId);
+        $this->set('siteDefaultLangId', CommonHelper::getDefaultFormLangId());
+        $this->set('profile_id', $profileId);
+        $this->set('frm', $frm);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -154,26 +201,27 @@ class ShippingProfileController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            FatUtility::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? '';
+        $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
+        if ($post['lang_id'] == $siteDefaultLangId) {
+            $post['shipprofile_identifier'] = $post['shipprofile_name'];
+        }
+
         $spObj = new ShippingProfile($profileId);
         $spObj->assignValues($post);
         if (!$spObj->save()) {
-            LibHelper::exitWithError($spObj->getError(), true);
+            $msg = $spObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
-        $languages = Language::getAllNames();
-        foreach ($post['shipprofile_name'] as $langId => $profileName) {
-            if (empty($profileName)) {
-                continue;
-            }
-            if (!$spObj->updateLangData($langId, ['shipprofile_name' => $profileName])) {
-                LibHelper::exitWithError($spObj->getError(), true);
-            }
+        if (!$spObj->updateLangData($post['lang_id'], ['shipprofile_name' => $post['shipprofile_name']])) {
+            LibHelper::exitWithError($spObj->getError(), true);
         }
 
         if (1 > $profileId) {
@@ -247,21 +295,19 @@ class ShippingProfileController extends ListingBaseController
     private function getForm($profileId = 0)
     {
         $profileId = FatUtility::int($profileId);
-        $frm = new Form('frmShippingProfile');
+        $frm = new Form('frmShippingProfile', array('id' => 'frmShippingProfile'));
         $frm->addHiddenField('', 'shipprofile_id', $profileId);
         $frm->addHiddenField('', 'shipprofile_user_id', 0);
-        $languages = Language::getAllNames();
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-
-        foreach ($languages as $langId => $langName) {
-            if ($langId == $siteDefaultLangId) {
-                $frm->addRequiredField(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId), 'shipprofile_name[' . $langId . ']');
-            } else {
-                $frm->addTextBox(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId) . ' ' . $langName, 'shipprofile_name[' . $langId . ']');
-            }
+        if (0 < $profileId) {
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), '', [], '');
+        } else {
+            $fld = $frm->addHiddenField('', 'lang_id', $siteDefaultLangId);
+            $fld->requirements()->setRequired();
         }
+        $frm->addRequiredField(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId), 'shipprofile_name');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -269,11 +315,12 @@ class ShippingProfileController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', ['sdsd' => 'dsasdsd']);
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shippack_name');
         }
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }

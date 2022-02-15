@@ -42,14 +42,16 @@ class MetaTag extends MyAppModel
         $metaGroups = array(
             static::META_GROUP_ALL_PRODUCTS => array(
                 'serial' => 2,
-                'name' => Labels::getLabel('LBL_ALL_PRODUCTS', $langId),
+                'name' => Labels::getLabel('NAV_ALL_PRODUCTS', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_LISTING_PAGE', $langId),
                 'controller' => 'Products',
                 'action' => 'index',
                 'isEntity' => false
             ),
             static::META_GROUP_PRODUCT_DETAIL => array(
                 'serial' => 3,
-                'name' => Labels::getLabel('LBL_PRODUCT_DETAIL', $langId),
+                'name' => Labels::getLabel('NAV_PRODUCT_DETAIL', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_DETAIL_PAGE', $langId),
                 'controller' => 'Products',
                 'action' => 'view',
                 'Entity Caption' => Labels::getLabel('LBL_PRODUCT', $langId),
@@ -57,14 +59,16 @@ class MetaTag extends MyAppModel
             ),
             static::META_GROUP_ALL_SHOPS => array(
                 'serial' => 4,
-                'name' => Labels::getLabel('LBL_ALL_SHOPS', $langId),
+                'name' => Labels::getLabel('NAV_ALL_SHOPS', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_SHOPS_LISTING_PAGE', $langId),
                 'controller' => 'Shops',
                 'action' => 'index',
                 'isEntity' => false
             ),
             static::META_GROUP_SHOP_DETAIL => array(
                 'serial' => 5,
-                'name' => Labels::getLabel('LBL_SHOP_DETAIL', $langId),
+                'name' => Labels::getLabel('NAV_SHOP_DETAIL', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_SHOP_DETAIL_PAGE', $langId),
                 'controller' => 'Shops',
                 'action' => 'view',
                 'Entity Caption' => Labels::getLabel('LBL_SHOP', $langId),
@@ -72,59 +76,67 @@ class MetaTag extends MyAppModel
             ),
             static::META_GROUP_CMS_PAGE => array(
                 'serial' => 6,
-                'name' => Labels::getLabel('LBL_CMS_PAGE', $langId),
+                'name' => Labels::getLabel('NAV_CMS_PAGE', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_ALL_THE_CMS_CONTENT_PAGES', $langId),
                 'controller' => 'Cms',
                 'action' => 'view',
                 'isEntity' => false
             ),
             static::META_GROUP_DEFAULT => array(
                 'serial' => 0,
-                'name' => Labels::getLabel('LBL_DEFAULT', $langId),
+                'name' => Labels::getLabel('NAV_DEFAULT', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_DEFAULT_PAGE', $langId),
                 'controller' => '',
                 'action' => '',
                 'isEntity' => false
             ),
             static::META_GROUP_ADVANCED => array(
                 'serial' => 99,
-                'name' => Labels::getLabel('LBL_ADVANCED_SETTING', $langId),
+                'name' => Labels::getLabel('NAV_ADVANCED_SETTING', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_EXTERNAL_PAGES_CREATED_IF_ANY', $langId),
                 'controller' => '',
                 'action' => '',
                 'isEntity' => false
             ),
             static::META_GROUP_ALL_BRANDS => array(
                 'serial' => 7,
-                'name' => Labels::getLabel('LBL_ALL_BRANDS', $langId),
+                'name' => Labels::getLabel('NAV_ALL_BRANDS', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_META_TAGS_FOR_BRANDS_LISTING_PAGE', $langId),
                 'controller' => 'Brands',
                 'action' => 'index',
                 'isEntity' => false
             ),
             static::META_GROUP_BRAND_DETAIL => array(
                 'serial' => 8,
-                'name' => Labels::getLabel('LBL_BRAND_DETAIL', $langId),
+                'name' => Labels::getLabel('NAV_BRAND_DETAIL', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_EACH_BRAND_DETAIL_PAGE', $langId),
                 'controller' => 'Brands',
                 'action' => 'view',
-                'Entity Caption' => Labels::getLabel('LBL_BRAND_DETAIL', $langId),
+                'Entity Caption' => Labels::getLabel('LBL_BRAND', $langId),
                 'isEntity' => true
             ),
             static::META_GROUP_CATEGORY_DETAIL => array(
                 'serial' => 9,
-                'name' => Labels::getLabel('LBL_CATEGORY_DETAIL', $langId),
+                'name' => Labels::getLabel('NAV_CATEGORY_DETAIL', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_PRODUCT_CATEGORY_DETAIL_PAGE', $langId),
                 'controller' => 'Category',
                 'action' => 'view',
-                'Entity Caption' => Labels::getLabel('LBL_CATEGORY_DETAIL', $langId),
+                'Entity Caption' => Labels::getLabel('LBL_CATEGORY', $langId),
                 'isEntity' => true
             ),
             static::META_GROUP_BLOG_PAGE => array(
                 'serial' => 10,
-                'name' => Labels::getLabel('LBL_BLOG_PAGE', $langId),
+                'name' => Labels::getLabel('NAV_BLOG_PAGE', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_BLOGS_DETAIL_PAGE', $langId),
                 'controller' => 'Blog',
                 'action' => 'index',
-                'Entity Caption' => Labels::getLabel('LBL_BLOG_PAGE', $langId),
+                'Entity Caption' => Labels::getLabel('LBL_BLOG', $langId),
                 'isEntity' => true
             ),
             static::META_GROUP_BLOG_CATEGORY => array(
                 'serial' => 11,
-                'name' => Labels::getLabel('LBL_BLOG_CATEGORY', $langId),
+                'name' => Labels::getLabel('NAV_BLOG_CATEGORY', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_BLOG_CATEGORIES_DETAIL_PAGE', $langId),
                 'controller' => 'Blog',
                 'action' => 'category',
                 'Entity Caption' => Labels::getLabel('LBL_BLOG_CATEGORY', $langId),
@@ -132,7 +144,8 @@ class MetaTag extends MyAppModel
             ),
             static::META_GROUP_BLOG_POST => array(
                 'serial' => 12,
-                'name' => Labels::getLabel('LBL_BLOG_POST', $langId),
+                'name' => Labels::getLabel('NAV_BLOG_POST', $langId),
+                'msg' => Labels::getLabel('MSG_MANAGE_METATAGS_FOR_EACH_BLOG_POSTS', $langId),
                 'controller' => 'Blog',
                 'action' => 'postDetail',
                 'Entity Caption' => Labels::getLabel('LBL_BLOG_POST', $langId),

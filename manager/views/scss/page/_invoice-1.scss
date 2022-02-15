@@ -25,7 +25,7 @@ $invoice:'invoice';
             .#{$invoice}__title {
                 font-weight: 700;
                 font-size: 2.7rem;
-                margin-right: 10px;
+                margin-#{$end-direction}: 10px;
                 margin-top: 5px;
                 color: #fff;
                 vertical-align: top;
@@ -58,10 +58,10 @@ $invoice:'invoice';
                 flex-direction: column;
                 flex: 1;
                 color: #fff;
-                margin-right: 10px;
+                margin-#{$end-direction}: 10px;
                 margin-top: 20px;
                 &:last-child {
-                    margin-right: 0;
+                    margin-#{$end-direction}: 0;
                 }
                 .#{$invoice}__subtitle {
                     font-weight: 500;
@@ -126,7 +126,7 @@ $invoice:'invoice';
             flex-wrap: wrap;
         }
         .#{$invoice}__bank {
-            margin-right: 10px;
+            margin-#{$end-direction}: 10px;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
@@ -144,7 +144,7 @@ $invoice:'invoice';
                 .#{$invoice}__label {
                     font-size: 1.1rem;
                     font-weight: 500;
-                    margin-right: 40px;
+                    margin-#{$end-direction}: 40px;
                     color: #595d6e;
                     text-align: left;
                 }
@@ -239,7 +239,7 @@ $invoice:'invoice';
             .#{$invoice}__bank {
                 .#{$invoice}__item {
                     .#{$invoice}__label {
-                        margin-right: 20px;
+                        margin-#{$end-direction}: 20px;
                     }
                 }
             }

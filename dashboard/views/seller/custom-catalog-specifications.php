@@ -19,7 +19,7 @@
                                     <input class="btn btn-brand" 
                                         type="button" 
                                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                        onClick="autofillLangData($(this), $('form#frm_fat_id_frmProductSpec'))"
+                                        onclick="autofillLangData($(this), $('form#frm_fat_id_frmProductSpec'))"
                                         data-action="<?php echo UrlHelper::generateUrl('seller', 'getTranslatedData'); ?>">
                                 </div>
                             </div>
@@ -176,5 +176,5 @@
     </div>
 </div>
 <script>
-    var buttonClick = <?php echo $totalSpec; ?>;
+    var buttonclick = <?php echo $totalSpec; ?>;
 </script>

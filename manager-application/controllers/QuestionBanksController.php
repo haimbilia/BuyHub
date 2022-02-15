@@ -42,7 +42,7 @@ class QuestionBanksController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('qb_l.qbank_name', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('qb.qbank_identifier', 'like', '%' . $post['keyword'] . '%');
         }
@@ -57,7 +57,8 @@ class QuestionBanksController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -68,8 +69,7 @@ class QuestionBanksController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $qbank_id = $post['qbank_id'];
@@ -79,8 +79,7 @@ class QuestionBanksController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $newTabLangId = 0;
@@ -117,7 +116,7 @@ class QuestionBanksController extends ListingBaseController
         if ($qbank_id > 0) {
             $data = QuestionBanks::getAttributesById($qbank_id);
             if ($data == false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
         
@@ -126,7 +125,8 @@ class QuestionBanksController extends ListingBaseController
         $this->set('qbank_id', $qbank_id);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setupLang()
@@ -138,8 +138,7 @@ class QuestionBanksController extends ListingBaseController
         $lang_id = $post['lang_id'];
         
         if ($qbank_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getLangForm($qbank_id, $lang_id);
@@ -154,16 +153,14 @@ class QuestionBanksController extends ListingBaseController
         
         $obj = new QuestionBanks($qbank_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(QuestionBanks::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($qbank_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -190,7 +187,7 @@ class QuestionBanksController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($qbank_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $langFrm = $this->getLangForm($qbank_id, $lang_id);
@@ -198,8 +195,7 @@ class QuestionBanksController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(QuestionBanks::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($qbank_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -215,7 +211,8 @@ class QuestionBanksController extends ListingBaseController
         $this->set('qbank_lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function deleteRecord()
@@ -224,32 +221,30 @@ class QuestionBanksController extends ListingBaseController
         
         $qbank_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($qbank_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = QuestionBanks::getAttributesById($qbank_id);
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $obj = new QuestionBanks($qbank_id);
         $obj->assignValues(array(QuestionBanks::tblFld('deleted') => 1));
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $this->objPrivilege->canViewQuestionBanks();
         $frm = new Form('frmQuestionBankSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -261,10 +256,10 @@ class QuestionBanksController extends ListingBaseController
         
         $frm = new Form('frmQuestionBank');
         $frm->addHiddenField('', 'qbank_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'qbank_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'qbank_identifier');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'qbank_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'qbank_active', $activeInactiveArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
     
@@ -272,17 +267,17 @@ class QuestionBanksController extends ListingBaseController
     {
         $frm = new Form('frmQuestionBankLang');
         $frm->addHiddenField('', 'qbank_id', $qbank_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Question_Bank_Name', $this->siteLangId), 'qbank_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_QUESTION_BANK_NAME', $this->siteLangId), 'qbank_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
                 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
         return $frm;
     }
 }

@@ -41,17 +41,17 @@ class AdminAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_username', '=', $username);        
+        $srch->addCondition('admin_username', '=', $username);
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {
-            $objUserAuthentication->logFailedAttempt($ip, $username);           
+            $objUserAuthentication->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_Invalid_Username', $this->siteLangId);
             return false;
         }
-        
+
         /* [To Do - need to remove admin_password_old in next release */
-        if (empty($row['admin_password'])) {    
+        if (empty($row['admin_password'])) {
             $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->siteLangId));
             $this->error = $emailErrorMsg;
             if (FatUtility::isAjaxCall()) {
@@ -59,7 +59,7 @@ class AdminAuthentication extends FatModel
                 $json['errorMsg'] = $this->error;
                 $json['autoClose'] = 0;
                 die(json_encode($json));
-            }                
+            }
             return false;
         }
         if (false == password_verify($password, $row['admin_password'])) {
@@ -111,11 +111,11 @@ class AdminAuthentication extends FatModel
     public function setAdminSession($row)
     {
         $_SESSION[static::SESSION_ELEMENT_NAME] = array(
-        'admin_id' => $row['admin_id'],
-        'admin_name' => $row['admin_name'],
-        'admin_username' => $row['admin_username'],
-        'admin_email' => $row['admin_email'],
-        'admin_ip' => $row['admin_ip']
+            'admin_id' => $row['admin_id'],
+            'admin_name' => $row['admin_name'],
+            'admin_username' => $row['admin_username'],
+            'admin_email' => $row['admin_email'],
+            'admin_ip' => $row['admin_ip']
         );
     }
 
@@ -140,7 +140,7 @@ class AdminAuthentication extends FatModel
     }
 
     public function checkAdminEmailOrUsername($emailOrUsername)
-    {      
+    {
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
         $srch->addCondition('admin_email', '=', $emailOrUsername);
@@ -152,7 +152,7 @@ class AdminAuthentication extends FatModel
         if (!$row = $db->fetch($rs)) {
             $this->error = Labels::getLabel('ERR_Invalid_email_address_or_username!', $this->siteLangId);
             return false;
-        }      
+        }
         return $row;
     }
     public function checkAdminEmail($email)
@@ -163,7 +163,7 @@ class AdminAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_email', '=', $email);       
+        $srch->addCondition('admin_email', '=', $email);
         $srch->addMultipleFields(array('admin_id', 'admin_name', 'admin_email'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -181,9 +181,10 @@ class AdminAuthentication extends FatModel
 
     public function checkAdminPwdResetRequest($admin_id)
     {
+        $admin_id = FatUtility::int($admin_id);
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin_password_reset_requests');
-        $srch->addCondition('aprr_admin_id', '=', $admin_id);
+        $srch->addCondition('aprr_admin_id', '=', 'mysql_func_' . $admin_id, 'AND', true);
         $srch->addCondition('aprr_expiry', '>', date('Y-m-d H:i:s'));
         $srch->addFld('aprr_admin_id');
         $srch->doNotCalculateRecords();
@@ -207,7 +208,7 @@ class AdminAuthentication extends FatModel
         if (!$db->deleteRecords('tbl_admin_password_reset_requests', $condition)) {
             $this->error = $db->getError();
             return false;
-        }  
+        }
         return true;
     }
 
@@ -220,16 +221,16 @@ class AdminAuthentication extends FatModel
         if ($db->insertFromArray(
             'tbl_admin_password_reset_requests',
             array(
-            'aprr_admin_id' => intval($data['admin_id']),
-            'aprr_token' => $data['token'],
-            'aprr_expiry' => date('Y-m-d H:i:s', strtotime("+1 DAY"))
+                'aprr_admin_id' => intval($data['admin_id']),
+                'aprr_token' => $data['token'],
+                'aprr_expiry' => date('Y-m-d H:i:s', strtotime("+1 DAY"))
             )
         )) {
             $db->deleteRecords(
                 'tbl_admin_auth_token',
                 array(
-                'smt' => 'admauth_admin_id = ?',
-                'vals' => array($data['admin_id'])
+                    'smt' => 'admauth_admin_id = ?',
+                    'vals' => array($data['admin_id'])
                 )
             );
             return true;
@@ -247,7 +248,7 @@ class AdminAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_admin_password_reset_requests');
-        $srch->addCondition('aprr_admin_id', '=', $aId);
+        $srch->addCondition('aprr_admin_id', '=', 'mysql_func_' . $aId, 'AND', true);
         $srch->addCondition('aprr_token', '=', $token);
         $srch->addCondition('aprr_expiry', '>', date('Y-m-d H:i:s'));
         $srch->doNotCalculateRecords();
@@ -270,13 +271,13 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->siteLangId);
+            $this->error = $this->str_invalid_request;
             return false;
         }
         $db = FatApp::getDb();
         $aId = intval($aId);
         $srch = new SearchBase('tbl_admin');
-        $srch->addCondition('admin_id', '=', $aId);
+        $srch->addCondition('admin_id', '=', 'mysql_func_' . $aId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
@@ -291,7 +292,7 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->siteLangId);
+            $this->error = $this->str_invalid_request;
             return false;
         }
 
@@ -335,8 +336,8 @@ class AdminAuthentication extends FatModel
             $db->deleteRecords(
                 'tbl_admin_auth_token',
                 array(
-                'smt' => 'admauth_token = ?',
-                'vals' => array($_COOKIE[static::ADMIN_REMEMBER_ME_COOKIE_NAME])
+                    'smt' => 'admauth_token = ?',
+                    'vals' => array($_COOKIE[static::ADMIN_REMEMBER_ME_COOKIE_NAME])
                 )
             );
         }

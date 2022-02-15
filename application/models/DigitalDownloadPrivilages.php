@@ -35,7 +35,7 @@ class DigitalDownloadPrivilages extends FatModel
                 return false;
             }
 
-            $this->product = json_decode($this->productRequest['preq_content'], true);
+            $this->product = $this->productRequest + json_decode($this->productRequest['preq_content'], true);
             
             if (!is_array($this->product) || 1 > count($this->product)) {
                 $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
@@ -96,6 +96,8 @@ class DigitalDownloadPrivilages extends FatModel
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventory */
                 $recordOwnerId = $this->sellerProduct['selprod_user_id'];
+            }elseif(Product::CATALOG_TYPE_REQUEST == $recordType){
+                $recordOwnerId = $this->product['preq_user_id'];
             } else { /* Catalog product */
                 $recordOwnerId = $this->product['product_seller_id'];
             }

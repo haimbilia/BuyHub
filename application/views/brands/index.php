@@ -25,8 +25,8 @@
                         <?php if (!empty($allBrands)) {
                             $firstCharacter = '';
                             foreach ($allBrands as $brands) {
-
                                 /* if($layoutDirection == 'rtl'){
+
 							$str = substr(strtolower($brands['brand_name']), -1);
 						}else{
 							$str = substr(strtolower($brands['brand_name']), 0, 1);

@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'swsetting_weightage':
                 $editable = $canEdit ? 'contentEditable="true"' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div ' . $editable . ' data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) . '" onblur="updateWeightage(' . $row['swsetting_key'] . ',this.textContent)">' . $row[$key] . '</div>', true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="click-to-edit" ' . $editable . ' data-id="' .  $row['swsetting_key'] . '" data-value="' . $row[$key] .  '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) . '" onblur="updateWeightage(this)">' . $row[$key] . '</div>', true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key]);
@@ -33,16 +33,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

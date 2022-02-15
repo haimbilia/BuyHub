@@ -33,7 +33,7 @@ if (!empty($zones)) {
                     <div class="col-auto">
                         <ul class="actions">
                             <li>
-                                <a class="" href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone['shipzone_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
+                                <a class="" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone['shipzone_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                     <svg class="svg" width="18" height="18">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#edit">
                                         </use>
@@ -41,7 +41,7 @@ if (!empty($zones)) {
                                 </a>
                             </li>
                             <li>
-                                <a class="" href="javascript:void(0);" onClick="deleteZone(<?php echo $shipProZoneId ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
+                                <a class="" href="javascript:void(0);" onclick="deleteZone(<?php echo $shipProZoneId ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
                                     <svg class="svg" width="18" height="18">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#delete">
                                         </use>
@@ -97,7 +97,7 @@ if (!empty($zones)) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="" href="javascript:void(0);" onClick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
+                                                <a class="" href="javascript:void(0);" onclick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>">
                                                     <svg class="svg" width="18" height="18">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#delete">
                                                         </use>
@@ -120,5 +120,5 @@ if (!empty($zones)) {
 <?php
     }
 } else {
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+    $this->includeTemplate('_partial/no-record-found.php');
 }

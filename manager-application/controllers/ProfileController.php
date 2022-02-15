@@ -43,7 +43,8 @@ class ProfileController extends ListingBaseController
         }
         $this->set('isNewImage', $isNewImage);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateProfileInfo()
@@ -54,7 +55,8 @@ class ProfileController extends ListingBaseController
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
+        }        
+        unset($post['admin_id']);
                 
         $this->_adminProfileObj->assignValues($post);
         if (!$this->_adminProfileObj->save()) {
@@ -77,9 +79,10 @@ class ProfileController extends ListingBaseController
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'admin_email');
         $fld->setUnique('tbl_admin', 'admin_email', 'admin_id', 'admin_id', 'admin_id');
-
+        $frm->addHiddenField('', 'admin_id', '', array('id' => 'admin_id'));
         $frm->addRequiredField(Labels::getLabel('FRM_FULL_NAME', $this->siteLangId), 'admin_name');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+
         return $frm;
     }
 
@@ -169,7 +172,8 @@ class ProfileController extends ListingBaseController
     public function changePassword()
     {
         $this->set('frm', $this->getPwdFrm());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()

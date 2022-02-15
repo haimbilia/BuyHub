@@ -76,7 +76,8 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BADGE_REQUEST = 62;
     public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 63;
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
-    public const FILETYPE_CATEGORY_THUMB = 65; /* Used in category detail page */
+    public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
+    public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -208,29 +209,29 @@ class AttachedFile extends MyAppModel
         return true;
     }
 
-    
+
     public static function getMultipleAttachments($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0, $size = 0, $haveSubIdZero = false)
     {
         $fileType = FatUtility::int($fileType);
         $recordId = FatUtility::int($recordId);
         $recordSubid = FatUtility::int($recordSubid);
-        $langId = FatUtility::int($langId);
+        $langId = FatUtility::int($langId); 
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
-        $srch->addCondition('afile_type', '=', $fileType);
-        $srch->addCondition('afile_record_id', '=', $recordId);
+        $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
+        $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
                 /* -1, becoz, needs to show, products universal image as well, in that case, value passed is as -1 */
                 $recordSubid = 0;
             }
-            $srch->addCondition('afile_record_subid', '=', $recordSubid);
+            $srch->addCondition('afile_record_subid', '=', 'mysql_func_' . $recordSubid, 'AND', true);
         }
-                
+
         if ($langId > 0) {
-            $cnd = $srch->addCondition('afile_lang_id', '=', $langId);
+            $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
                 $srch->addOrder('afile_lang_id', 'DESC');
@@ -248,14 +249,15 @@ class AttachedFile extends MyAppModel
         }
 
         if ($langId == 0) {
-            $srch->addCondition('afile_lang_id', '=', 0);
+            $srch->addCondition('afile_lang_id', '=', 'mysql_func_0', 'AND', true);
         }
 
         if ($size > 0) {
             $srch->setPageSize($size);
         }
-        
+
         $rs = $srch->getResultSet();
+        //echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 
@@ -457,8 +459,9 @@ class AttachedFile extends MyAppModel
                 $path .= self::FILETYPE_PRODCAT_IMAGE_PATH;
                 break;
             case self::FILETYPE_PRODUCT_IMAGE:
-                case self::FILETYPE_PRODUCT_IMAGE_TEMP:    
+            case self::FILETYPE_PRODUCT_IMAGE_TEMP:
             case self::FILETYPE_CUSTOM_PRODUCT_IMAGE:
+            case self::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP:
                 $path .= self::FILETYPE_PRODUCT_IMAGE_PATH;
                 break;
             case self::FILETYPE_BLOG_POST_IMAGE:
@@ -623,6 +626,7 @@ class AttachedFile extends MyAppModel
             $imageName = substr($imageName, 5);
             self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
         }
+
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -960,7 +964,7 @@ class AttachedFile extends MyAppModel
     public static function getTempImages($limit = false)
     {
         $srch = new SearchBase(AttachedFile::DB_TBL_TEMP, 'aft');
-        $srch->addCondition('aft.afile_downloaded', '=', applicationConstants::NO);
+        $srch->addCondition('aft.afile_downloaded', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         //$srch->addOrder('aft.afile_id', 'asc');
         $srch->addOrder('rand()');
         if ($limit > 0) {
@@ -1154,9 +1158,9 @@ class AttachedFile extends MyAppModel
         if (0 < $fileId) {
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
-        }         
+        }
 
-        $db = FatApp::getDb();        
+        $db = FatApp::getDb();
         if (!$db->deleteRecords(static::DB_TBL, $deleteStatementArr)) {
             $this->error = $db->getError();
             return false;
@@ -1339,4 +1343,5 @@ class AttachedFile extends MyAppModel
         }
         return false;
     }
+    
 }

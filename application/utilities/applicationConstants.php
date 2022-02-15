@@ -74,10 +74,10 @@ class applicationConstants
     public const LOCATION_COUNTRY = 0;
     public const LOCATION_STATE = 1;
     public const LOCATION_ZIP = 2;
-    public const CLASS_INFO = 'label-info';
-    public const CLASS_SUCCESS = 'label-success';
-    public const CLASS_DANGER = 'label-danger';
-    public const CLASS_WARNING = 'label-warning';
+    public const CLASS_INFO = 'badge-info';
+    public const CLASS_SUCCESS = 'badge-success';
+    public const CLASS_DANGER = 'badge-danger';
+    public const CLASS_WARNING = 'badge-warning';
     public const CURRENCY_SEPARATOR_DECIMAL = '.';
     public const CURRENCY_SEPARATOR_COMMA = ',';
 
@@ -349,8 +349,8 @@ class applicationConstants
     public static function getCatalogTypeArr($langId)
     {
         return array(
-            static::CUSTOM_CATALOG => Labels::getLabel('LBL_Custom_Products', $langId),
-            static::SYSTEM_CATALOG => Labels::getLabel('LBL_Catalog_Products', $langId)
+            static::CUSTOM_CATALOG => Labels::getLabel('LBL_SELLER_PRODUCTS', $langId),
+            static::SYSTEM_CATALOG => Labels::getLabel('LBL_MY_PRODUCTS', $langId)
         );
     }
 

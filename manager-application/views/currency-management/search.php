@@ -16,7 +16,8 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
-                $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                $div = $td->appendElement('div', ['class' => 'handleJs']);
+                $div->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                             <use
                                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
                                                             </use>
@@ -24,6 +25,12 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
+                break;
+            case 'currency_name':
+                $default = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_DEFAULT', $siteLangId));
+                $name = $row[$key];
+                $name .= ($row['currency_code'] == $siteDefaultCurrencyCode ? ' ' . $default : '');
+                $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
             case 'currency_symbol_left':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
@@ -67,16 +74,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 
 if ($printData) {

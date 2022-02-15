@@ -42,12 +42,14 @@ class TransactionsController extends ListingBaseController {
 
     public function shippingTransactionSearch() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function getRows() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getListingData($customSortBy = false, $customOrder = false) {
@@ -61,7 +63,7 @@ class TransactionsController extends ListingBaseController {
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
@@ -84,9 +86,12 @@ class TransactionsController extends ListingBaseController {
         if (0 < $userId) {
             $srch->addCondition('utxn.utxn_user_id', '=', $userId);
         }
+        $srch->addGroupBy('utxn.utxn_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
-        $srch->addGroupBy('utxn.utxn_id');
         if ($customSortBy != false && $customOrder != false) {
             $srch->addOrder($customSortBy, $customOrder);
         } else {
@@ -95,18 +100,9 @@ class TransactionsController extends ListingBaseController {
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -118,11 +114,11 @@ class TransactionsController extends ListingBaseController {
     protected function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
+            $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -135,7 +131,8 @@ class TransactionsController extends ListingBaseController {
         $this->set('includeTabs', false);
         $this->set('userId', $userId);
         $this->set('formTitle', Labels::getLabel('LBL_USER_TRANSACTIONS_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($userId = 0) {
@@ -148,9 +145,9 @@ class TransactionsController extends ListingBaseController {
         }
 
         $typeArr = Transactions::getCreditDebitTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
-        $frm->addTextArea(Labels::getLabel('FRM_Description', $this->siteLangId), 'description')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'description')->requirements()->setRequired();
         return $frm;
     }
 
@@ -208,13 +205,13 @@ class TransactionsController extends ListingBaseController {
     protected function getFormColumns(): array {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
-            return json_decode($transactionsTblHeadingCols);
+            return json_decode($transactionsTblHeadingCols, true);
         }
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
             'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
@@ -230,8 +227,8 @@ class TransactionsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'listSerial',
-            'user_name',
             'utxn_id',
+            'user_name',
             'utxn_date',
             'utxn_credit',
             'utxn_debit',
@@ -257,6 +254,13 @@ class TransactionsController extends ListingBaseController {
                 ];
         }
         return $this->nodes;
+    }
+
+    public function getDescription() {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('description', Transactions::getAttributesById($recordId, 'utxn_comments'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 }

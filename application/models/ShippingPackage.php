@@ -35,4 +35,26 @@ class ShippingPackage extends MyAppModel
     {
         return applicationConstants::getLengthUnitsArr($langId);
     }
+    
+    public static function getUnitTypeHtml(int $langId, int $status): string
+    {
+        $arr = self::getUnitTypes($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case applicationConstants::LENGTH_CENTIMETER:
+                $status = HtmlHelper::INFO;
+                break;
+            case applicationConstants::LENGTH_INCH:
+                $status = HtmlHelper::WARNING;
+                break;
+            case applicationConstants::LENGTH_METER:
+                $status = HtmlHelper::DANGER;
+                break;
+
+            default:
+                $status = HtmlHelper::SUCCESS;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

@@ -181,7 +181,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 		if(typeof page==undefined || page == null){
 			page =1;
 		}
-		var frm = document.frmSearchUpsellProductsPaging;
+		var frm = document.frmSearchVolumeDiscountPaging;
 		$(frm.page).val(page);
 		searchUpsellProducts(frm);
 	}

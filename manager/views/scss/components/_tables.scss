@@ -36,6 +36,10 @@
                 border-bottom: none;
             }
         }
+
+        a {
+            color: currentColor;
+        }
     }
     tfoot {
     }
@@ -58,25 +62,12 @@
                     height: 24px;
                 }
             }
-            .verified {
-                color: $brand-color;
-                filter: grayscale(1);
-                opacity: 0.5;
-                &.is-verified {
-                    filter: none;
-                    opacity: 1;
-                }
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    fill: currentColor;
-                }
-            }
+
             &:first-child {
                 padding-#{$start-direction}: 0;
             }
             &:last-child {
-                padding-#{$end-direction}: 0;
+                padding-#{$end-direction}: 5px;
             }
         }
         &.selected {
@@ -579,7 +570,7 @@
         display: block;
         width: 100%;
         overflow-x: auto;
-        position: relative;
+        position: static !important;
         > &-bordered {
             border: 0;
         }
@@ -682,7 +673,7 @@
     display: flex;
     align-items: center;
     &-select {
-        max-width: 70px;
+        max-width: 80px;
         margin-#{$end-direction}: 1.5rem;
     }
 }
@@ -709,7 +700,6 @@
             position: relative;
             z-index: 0;
             color: $txt-gray;
-
             text-align: center;
             display: flex;
             align-items: center;
@@ -717,7 +707,8 @@
             text-decoration: none;
             //border: $input-border;
             height: $input-height;
-            padding: $input-padding;
+            width: $input-height;
+            padding: 0.5rem;
             font-size: $input-font-size;
             line-height: $input-line-height;
             border-radius: $input-border-radius;
@@ -779,11 +770,11 @@
         }
         &:before {
             content: "\2191";
-            right: -12px;
+            #{$end-direction}: -12px;
         }
         &:after {
             content: "\2193";
-            right: -17px;
+            #{$end-direction}: -17px;
         }
     }
     &_asc {
@@ -812,7 +803,7 @@
 .table-processing {
     background-color: rgba(255, 255, 255, 0.55);
     position: absolute;
-    z-index: 1;
+    z-index: 1024;
     top: 0;
     bottom: 0;
     #{$start-direction}: 0;
@@ -835,4 +826,11 @@
 
 .date {
     white-space: nowrap;
+    time {
+        display: block;
+    }
+}
+
+.info-wrap{
+    min-width: 200px;
 }

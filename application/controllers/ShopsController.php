@@ -830,7 +830,7 @@ class ShopsController extends MyAppController
             //send notification to admin
             $notificationData = array(
                 'notification_record_type' => Notification::TYPE_SHOP,
-                'notification_record_id' => $shop_id,
+                'notification_record_id' => $sreport_id,
                 'notification_user_id' => $loggedUserId,
                 'notification_label_key' => Notification::REPORT_SHOP_NOTIFICATION,
                 'notification_added_on' => date('Y-m-d H:i:s'),

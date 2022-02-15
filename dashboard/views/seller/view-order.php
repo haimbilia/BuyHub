@@ -22,7 +22,7 @@ $daysSpent = round($datediff / (60 * 60 * 24));
 
 $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php if (!$print) {
             $orderObj = new Orders();
@@ -41,9 +41,9 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                         ],
                         'label' => '<i class="fas fa-arrow-left"></i>'
                     ]
-                ], 
+                ],
             ];
-            
+
             if ($canCancelOrder && $canEdit) {
                 $data['otherButtons'][] = [
                     'attr' => [
@@ -57,13 +57,13 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         } ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title">
                         <div class="order-number">
                             <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
                             <span class="numbers">
                                 <?php echo $orderDetail['op_invoice_number'] ?>
-                                <?php 
+                                <?php
                                 if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
                                     $statusName = isset($orderDetail['orderstatus_name']) ? $orderDetail['orderstatus_name'] : $orderDetail['orderstatus_identifier']; ?>
                                     <span class="notice">
@@ -85,7 +85,6 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 <i class="fas fa-print"></i>
                             </a>
                             <?php
-
                             if (!in_array($orderDetail['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
 
                                 $opId = $orderDetail['op_id'];
@@ -96,7 +95,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                     <?php
                                 } else {
                                     if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
-                                        if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeprately()) {
+                                        if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
                                             $orderId = $orderDetail['order_id'];
                                     ?>
                                             <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
@@ -110,11 +109,11 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                             <?php } ?>
                                         <?php
                                         }
-
-                                        if (
-                                            (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response'])) ||
-                                            (false === $shippingApiObj->canGenerateLabelSeprately() && empty($orderDetail['opship_order_number']))
-                                        ) {
+                                        if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']))) && empty($orderDetail['opship_order_number'])) {
+                                            // if (
+                                            //     (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response'])) ||
+                                            //     (false === $shippingApiObj->canGenerateLabelSeparately() && empty($orderDetail['opship_order_number']))
+                                            // ) {
                                             if (true === $shippingApiObj->canGenerateLabelFromShipment()) {
                                                 $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                             } else {
@@ -151,16 +150,16 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                     <div class="row">
                         <?php
                         $data = $this->variables + ['childOrderDetail' => $orderDetail];
-                        $this->includeTemplate('_partial/order/right-side-block.php', $data, false); 
+                        $this->includeTemplate('_partial/order/right-side-block.php', $data, false);
 
                         $data = $this->variables + [
                             'canViewShippingCharges' => true,
                             'canViewTaxCharges' => true,
                             'childOrderDetail' => $orderDetail
                         ];
-                        $this->includeTemplate('_partial/order/left-side-block.php', $data, false); 
+                        $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
                         ?>
-                        
+
                     </div>
 
                     <div class="row">
@@ -333,17 +332,11 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 </table>
                             </div>
                         <?php } ?>
-                    </div>`
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
-<?php if ($print) { ?>
-    <script>
-        $(".sidebar-is-expanded").addClass('sidebar-is-reduced').removeClass('sidebar-is-expanded');
-    </script>
-<?php } ?>
 
 <script>
     $(document).ready(function() {

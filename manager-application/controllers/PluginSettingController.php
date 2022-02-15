@@ -38,14 +38,16 @@ class PluginSettingController extends ListingBaseController
         $settings = $pluginSetting->get();
         if (false === $settings) {
             $msg = empty($pluginSetting->getError()) ? Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId) : $pluginSetting->getError();
-            FatUtility::dieJsonError($msg);
+            LibHelper::exitWithError($msg, true);
         }
         $this->frmObj->fill($settings);
         $identifier = isset($settings['plugin_identifier']) ? $settings['plugin_identifier'] : '';
         $this->set('frm', $this->frmObj);
         $this->set('identifier', $identifier);
         $this->set('keyName', $this->keyName);
-        $this->_template->render(false, false, 'plugins/settings.php');
+
+        $this->set('html', $this->_template->render(false, false, 'plugins/settings.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -53,12 +55,12 @@ class PluginSettingController extends ListingBaseController
         $this->setFormObj();
         $post = $this->frmObj->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            FatUtility::dieJsonError(current($this->frmObj->getValidationErrors()));
+            LibHelper::exitWithError(current($this->frmObj->getValidationErrors()), true);
         }
         
         $pluginSetting = new PluginSetting($post["plugin_id"]);
         if (!$pluginSetting->save($post)) {
-            FatUtility::dieWithError($pluginSetting->getError());
+            LibHelper::exitWithError($pluginSetting->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -72,7 +74,7 @@ class PluginSettingController extends ListingBaseController
             $requirements = $class::getConfigurationKeys();
         } catch (\Error $e) {
             if (false == method_exists($class, 'form')) {
-                FatUtility::dieJsonError($e->getMessage());
+                LibHelper::exitWithError($e->getMessage());
             }
             $frm = $class::form($this->siteLangId);
         }
@@ -103,7 +105,7 @@ class PluginSettingController extends ListingBaseController
         }
         $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }
         $labelsArr = $plugin->getFormFieldsArr();
 
@@ -116,7 +118,7 @@ class PluginSettingController extends ListingBaseController
         $frm = new Form('frm' . $keyName);
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
         foreach ($labelsArr as $colName => $colLabel) {
             $htmlAfterField = "";

@@ -1,5 +1,8 @@
 $(document).ready(function () {
     bindSortable();
+    $(document).on('change', '.orderStatusClassJs', function () {
+        $(this).css("color", $('option:selected', this).css("color"));
+    });
 });
 
 $(document).ajaxComplete(function () {
@@ -12,7 +15,10 @@ $(document).ajaxComplete(function () {
             return;
         }
 
-        $("#orderStatuses > tbody").sortable({
+        $("#listingTableJs > tbody").sortable({
+            handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -32,7 +38,7 @@ $(document).ajaxComplete(function () {
                     function (value) {
                         fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function (res) {
                             fcom.removeLoader();
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             var ans = JSON.parse(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);
@@ -43,11 +49,25 @@ $(document).ajaxComplete(function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
-        }).disableSelection();
+        });
     }
 
+    editRecord = function (recordId) {
+        data = "recordId=" + recordId;
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html, false);
+            fcom.removeLoader();
+
+            if (0 < $('.orderStatusClassJs').length) {
+                $('.orderStatusClassJs option').each(function () {
+                    $(this).attr('class', 'label ' + $(this).text());
+                });
+                $('.orderStatusClassJs').css("color", $('.orderStatusClassJs option:selected').css("color"));
+            }
+        });
+    };
 })();

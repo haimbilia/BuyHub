@@ -1,7 +1,7 @@
 <?php
 class RecomendedTagProductsController extends ListingBaseController
 {
-    protected $pageKey = 'RECOMENDED_TAG_PRODUCTS_WEIGHTAGES';
+    protected $pageKey = 'RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES';
 
     public function __construct($action)
     {
@@ -67,35 +67,30 @@ class RecomendedTagProductsController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT,$this->siteLangId);
 
         $srch = new SearchBase('tbl_tag_product_recommendation', 'tpr');
-        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id and t.tag_lang_id = ' . $this->siteLangId, 't');
+        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id', 't');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->addMultipleFields(array('tpr.*', 't.tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
-
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
+        
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
             $cnd->attachCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
-
-        $srch->addCondition('t.tag_lang_id', '=', $this->siteLangId);
-        $srch->addOrder($sortBy, $sortOrder);
-
+        if (!empty($langId)) {
+            $srch->addCondition('t.tag_lang_id', '=', $langId); 
+        }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(array('tpr.*', 't.tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();       
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -111,27 +106,32 @@ class RecomendedTagProductsController extends ListingBaseController
         $tag_id = FatUtility::int($post['tag_id']);
 
         $data = array();
+        $value = '';
         if (isset($post['tpr_custom_weightage'])) {
-            $data['tpr_custom_weightage'] = $post['tpr_custom_weightage'];
+            $value = $data['tpr_custom_weightage'] = $post['tpr_custom_weightage'];
         }
 
         if (isset($post['tpr_custom_weightage_valid_till'])) {
-            $data['tpr_custom_weightage_valid_till'] = $post['tpr_custom_weightage_valid_till'];
+            $value = $data['tpr_custom_weightage_valid_till'] = $post['tpr_custom_weightage_valid_till'];
         }
 
         if (!FatApp::getDb()->updateFromArray('tbl_tag_product_recommendation', $data, array('smt' => 'tpr_product_id = ? and tpr_tag_id = ?', 'vals' => array($product_id, $tag_id)))) {
             LibHelper::exitWithError(FatApp::getDb()->getError(), true);
         }
 
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
+        $json = array(
+            'status' => true,
+            'msg' => $this->str_setup_successful,
+            'data' => ['value' => $value]
+        );
+        FatUtility::dieJsonSuccess($json);
     }
 
     protected function getFormColumns(): array
     {
         $recTagProdsTblHeadingCols = CacheHelper::get('recTagProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($recTagProdsTblHeadingCols) {
-            return json_decode($recTagProdsTblHeadingCols);
+            return json_decode($recTagProdsTblHeadingCols, true);
         }
 
         $arr = [
@@ -166,5 +166,21 @@ class RecomendedTagProductsController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'tag_name');
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), $this->siteLangId ,[], '');
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
+        return $frm;
     }
 }

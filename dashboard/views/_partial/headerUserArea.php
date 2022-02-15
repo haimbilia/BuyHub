@@ -1,80 +1,66 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
-if (!UserAuthentication::isUserLogged()) {
-    if (UserAuthentication::isGuestUserLogged()) { ?>
-        <li>
-            <div class="dropdown">
-                <a href="javascript:void(0)" class="dropdown-toggle no-after" data-bs-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
-                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
-                    <ul class="nav nav-block">
-                        <?php $userName = User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?>
-                        <li class="nav__item">
-                            <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
-                                <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
-                            </a>
-                        </li>
-                        <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], 'CONF_WEBROOT_FRONTEND'); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
-                            </a>
-                        </li>
-                    </ul>
+global $dashboardOrgUrl;
+$userActiveTab = false;
+if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
+    $userActiveTab = true;
+    $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD);
+    $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
+} elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
+    $userActiveTab = true;
+    $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD);
+    $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
+} elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
+    $userActiveTab = true;
+    $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD);
+    $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
+} elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
+    $userActiveTab = true;
+    $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD);
+    $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
+}
+if (!$userActiveTab) {
+    $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
+    $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
+} ?>
+<li class="short-links-item">
+    <div class="dropdown my-account">
+        <button class="my-account-btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+            <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="">
+        </button>
+        <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+            <div class="profile">
+                <div class="profile-img">
+                    <img alt="" src="<?php echo $profilePicUrl; ?>">
+                </div>
+                <div class="profile-detail">
+                    <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></h6>
+                    <span class="text-muted">
+                        <a href=""><?php echo $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_email']; ?></a>
+                    </span>
                 </div>
             </div>
-        </li><?php
-            } else {
-                ?>
-        <li>
-            <div class="dropdown dropdown--user">
-                <a href="javascript:void(0)" class="sign-in sign-in-popup-js">
-                    <i class="icn icn--login"><svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#login"></use>
-                        </svg></i> <span>
-                        <strong><?php echo Labels::getLabel('LBL_Login_/_Sign_Up', $siteLangId); ?></strong></span></a>
-            </div>
-        </li> <?php
-            }
-        } else {
-            $userActiveTab = false;
-            if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
-                $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD);
-                $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
-            } elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
-                $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD);
-                $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
-            } elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
-                $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD);
-                $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
-            } elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
-                $userActiveTab = true;
-                $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD);
-                $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
-            }
-            if (!$userActiveTab) {
-                $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
-                $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
-            } ?>
-    <li class="">
-        <div class="dropdown">
-            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-display="static" data-bs-toggle="dropdown">
-                <img class="my-account__avatar" src="<?php echo $profilePicUrl; ?>" alt="">
-            </a>
-            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
-                <ul class="nav nav-block">
-                    <?php
-                    $userName = User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name");
-                    ?>
-                    <li class="nav__item">
-                        <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
-                            <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
-                        </a>
-                    </li>
-                    <li class="nav__item "><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a></li>
-                    <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
-                        </a></li>
-                </ul>
-            </div>
+            <div class="divider"></div>
+            <nav class="nav my-account-nav">
+                <a class="my-account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"> <svg class="svg" width="14" height="14">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-dashboard"></use>
+                    </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?></a>
+                <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
+                    <svg class="svg" width="14" height="14">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-user"></use>
+                    </svg><?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?></a>
+
+                <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>"> <svg class="svg" width="14" height="14">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-update"></use>
+                    </svg>
+                    <?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a>
+                <div class="divider"></div>
+                <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
+                    <svg class="svg" width="14" height="14">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
+                    </svg>
+                    <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
+            </nav>
         </div>
-    </li>
-<?php } ?>
+    </div>
+</li>

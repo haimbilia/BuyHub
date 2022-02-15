@@ -6,19 +6,19 @@ $sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
 $sharingFrm->developerTags['fld_default_col'] = 12;
 
 $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
-            'headingLabel' => Labels::getLabel('LBL_Sharing',$siteLangId),
-            'siteLangId' => $siteLangId,         
+            'headingLabel' => Labels::getLabel('LBL_Sharing', $siteLangId),
+            'siteLangId' => $siteLangId,
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Sharing_Information', $siteLangId); ?></h5>
                         </div>
 
@@ -81,7 +81,7 @@ $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php'); ?
             </div>
         </div>
     </div>
-</main>
+
 
 <script type="text/javascript">
     (function(d, s, id) {

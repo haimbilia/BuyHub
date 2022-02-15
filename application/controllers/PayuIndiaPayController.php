@@ -116,7 +116,7 @@ class PayuIndiaPayController extends PaymentController
             $actionUrl = 'https://sandboxsecure.payu.in/_payment';
         }
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : $actionUrl;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
 
         $frm = new Form('frmPayuIndia', array('id' => 'frmPayuIndia', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');

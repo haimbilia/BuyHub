@@ -42,7 +42,7 @@ $langFld->setfieldTagAttribute('onChange', "addTagLangForm(" . $tag_id . ", this
                             <input class="btn btn-brand" 
                                 type="button" 
                                 value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                onClick="addTagLangForm( <?php echo $tag_id; ?>, <?php echo $tag_lang_id; ?>, 1)">
+                                onclick="addTagLangForm( <?php echo $tag_id; ?>, <?php echo $tag_lang_id; ?>, 1)">
                         </div>
                     </div>
                 <?php } ?>

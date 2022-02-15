@@ -10,6 +10,8 @@ foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
 
+    $tagId = $row['tpr_tag_id'];
+    $editListingFrm = new Form('editListingFrm-' . $tagId, array('id' => 'editListingFrm-' . $tagId));
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
@@ -23,21 +25,39 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $product_name, true);
                 break;
             case 'tpr_custom_weightage':
-                $editable = $canEdit ? 'contentEditable="true"' : '';
-                $onblur = 'onblur="saveData(' . $row['tpr_tag_id'] . ', ' . $row['tpr_product_id'] . ', \'' . "tpr_custom_weightage" . '\', this.textContent)"';
-                $element = "<div " . $editable . " data-bs-toggle='tooltip' data-placement='top' title='" . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) . "' " . $onblur . ">" . $row[$key] . "</div>";
-
-                $td->appendElement('plaintext', $tdAttr, $element, true);
+                $editable = $canEdit ? 'true' : 'false';
+                $td->appendElement('div', [
+                    "class" => 'click-to-edit',
+                    'name' => $key,
+                    'data-id' => $tagId,
+                    'data-product-id' => $row['tpr_product_id'],
+                    'data-value' => $row[$key],
+                    'data-formated-value' => $row[$key],
+                    'contentEditable' => $editable,
+                    'data-bs-toggle' => 'tooltip',
+                    'data-placement' => 'top',
+                    'onblur' => 'updateValues(this)',
+                    'onfocus' => 'showOrignal(this)',
+                    'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
+                ], $row[$key], true);
                 break;
             case 'tpr_custom_weightage_valid_till':
-                $tillDateFrm = new Form('tillDateFrm');
-                $tillDateFrm->setFormTagAttribute('onSubmit', 'return false;');
-                $tillDateFrm->addDateField('', 'tpr_custom_weightage_valid_till', $row[$key], array('onchange' => 'saveData(' . $row['tpr_tag_id'] . ', ' . $row['tpr_product_id'] . ', "tpr_custom_weightage_valid_till", this.value)', 'readonly' => 'readonly'));
-                if (!$canEdit) {
-                    $fld = $tillDateFrm->getField('tpr_custom_weightage_valid_till');
-                    $fld->setFieldTagAttribute('disabled', 'disabled');
-                }
-                $td->appendElement('plaintext', $tdAttr, $tillDateFrm->getFormHtml(), true);
+                $date = date('Y-m-d', strtotime($row[$key]));
+                $fldAttr = array(
+                    'placeholder' => $val,
+                    'readonly' => 'readonly',
+                    'class' => 'field--calender inputDateJs hide',
+                    'name' => $key,
+                    'data-product-id' => $row['tpr_product_id'],
+                    'data-id' => $tagId,
+                    'data-value' => $date,
+                    'data-formated-value' => $date,
+                );
+
+                $attr = ['class' => 'dateJs contenteditable click-to-edit', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)];
+                $td->appendElement('div', $attr, $date, true);
+                $editListingFrm->addDateField($val, $key, $date, $fldAttr);
+                $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($key), true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key]);
@@ -47,16 +67,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

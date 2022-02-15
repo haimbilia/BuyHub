@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => "editMetaTagLangForm(" . $metaId . "," . $siteDefaultLangId . ",'" . $metaType . "'," . $metaRecordId . ")",
+                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")":"editMetaTagLangForm(" . $metaId . "," . $siteDefaultLangId . ",'" . $metaType . "'," . $metaRecordId . ")",
                                 'title' => Labels::getLabel('BTN_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
@@ -63,29 +63,14 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
 
-$keyWordFld = $frmSearch->getField('keyword');
-if (1 > $loadRows) {
-    if (null != $keyWordFld) {
-        echo '<div class="card">';
-    }
-    $onSubmit = 'searchRecords(this, true); return(false);';
-    require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
-    if (null != $keyWordFld) {
-        echo '</div>';
-    }
-} ?>
-<div class="card listingTableJs">
+<div id="metaTagsListing" class="card listingTableJs">
+    <?php $keyWordFld = $frmSearch->getField('keyword');
+    if (1 > $loadRows) {
+        $onSubmit = 'searchRecords(this, true); return(false);';
+        require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
+    } ?>
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
@@ -102,17 +87,16 @@ if (1 > $loadRows) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'class' => 'btn btn-icon btn-light btn-add',
+                                'class' => 'btn btn-icon btn-outline-brand btn-add',
                                 'title' => Labels::getLabel('BTN_ADD_META_TAG', $siteLangId),
                                 'onclick' => "metaTagForm(0,'" . $metaType . "',0)",
                             ],
-                            'label' => '<i class="icn">
-                                            <svg class="svg">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
-                                                </use>
-                                            </svg>
-                                        </i><span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
+                            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                            <use 
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                            </use>
+                                        </svg>
+                                        <span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
                         ]
                     ]
                 ];

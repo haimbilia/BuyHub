@@ -41,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
                                                 </use>
                                             </svg>
                                         </i>'
@@ -58,16 +58,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('MSG_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

@@ -102,7 +102,7 @@ class SellerPackagesController extends ListingBaseController
         $srch = SellerPackages::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array("sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name"));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition("sp." . SellerPackages::DB_TBL_PREFIX . "identifier", 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition("spl." . SellerPackages::DB_TBL_PREFIX . "name", 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -151,7 +151,8 @@ class SellerPackagesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -170,7 +171,11 @@ class SellerPackagesController extends ListingBaseController
         $post['spackage_identifier'] = $post['spackage_name'];
         $recordObj->assignValues($post);
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
@@ -207,7 +212,7 @@ class SellerPackagesController extends ListingBaseController
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_DISPLAY_ORDER', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
         $fld->requirements()->setIntPositive();
 
-        $frm->addCheckBox(Labels::getLabel('FRM_PACKAGE_STATUS', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_PACKAGE_STATUS', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -253,7 +258,7 @@ class SellerPackagesController extends ListingBaseController
 
         $srch->addMultipleFields(array('spplan_id', "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spplan_interval", "spplan_frequency"));
         $srch->addCondition('spackage_active', '=', applicationConstants::YES);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('spackage_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('spackage_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -268,7 +273,10 @@ class SellerPackagesController extends ListingBaseController
         $rs = $srch->getResultSet();
 
         $plans = FatApp::getDb()->fetchAll($rs, 'spplan_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($plans as $key => $plan) {
             $json['results'][] = array(
                 'id' => $plan['spplan_id'],
@@ -282,7 +290,7 @@ class SellerPackagesController extends ListingBaseController
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
-            return json_decode($subsPkgTblHeadingCols);
+            return json_decode($subsPkgTblHeadingCols, true);
         }
 
         $arr = [

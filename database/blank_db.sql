@@ -28701,7 +28701,7 @@ ALTER TABLE `tbl_order_product_charges`
 -- AUTO_INCREMENT for table `tbl_order_product_digital_download_links`
 --
 ALTER TABLE `tbl_order_product_digital_download_links`
-  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_order_prod_charges_logs`
@@ -28785,13 +28785,13 @@ ALTER TABLE `tbl_product_groups`
 -- AUTO_INCREMENT for table `tbl_product_requests`
 --
 ALTER TABLE `tbl_product_requests`
-  MODIFY `preq_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `preq_id` bigint NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_product_saved_search`
 --
 ALTER TABLE `tbl_product_saved_search`
-  MODIFY `pssearch_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `pssearch_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_product_shipping_rates`
@@ -28851,7 +28851,7 @@ ALTER TABLE `tbl_promotion_item_charges`
 -- AUTO_INCREMENT for table `tbl_push_notifications`
 --
 ALTER TABLE `tbl_push_notifications`
-  MODIFY `pnotification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `pnotification_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_questionnaires`
@@ -29139,7 +29139,7 @@ ALTER TABLE `tbl_upc_codes`
 -- AUTO_INCREMENT for table `tbl_updated_record_log`
 --
 ALTER TABLE `tbl_updated_record_log`
-  MODIFY `urlog_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `urlog_id` bigint NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_url_rewrite`
@@ -29217,7 +29217,7 @@ ALTER TABLE `tbl_user_supplier_request_values`
 -- AUTO_INCREMENT for table `tbl_user_temp_token_requests`
 --
 ALTER TABLE `tbl_user_temp_token_requests`
-  MODIFY `uttr_user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `uttr_user_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_user_transactions`

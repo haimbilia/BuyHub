@@ -51,12 +51,12 @@ class RewardsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'urp_date_added');
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
@@ -72,28 +72,19 @@ class RewardsController extends ListingBaseController
 
         $srch = new UserRewardSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
-
         if (0 < $userId) {
             $srch->addCondition('urp.urp_user_id', '=', $userId);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -105,11 +96,11 @@ class RewardsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
+            $this->addSortingElements($frm, 'urp_date_added', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -121,7 +112,8 @@ class RewardsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_USER_REWARDS_POINT_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm()
@@ -181,11 +173,19 @@ class RewardsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function getComments()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('comments', UserRewards::getAttributesById($recordId, 'urp_comments'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     protected function getFormColumns(): array
     {
         $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsTblHeadingCols) {
-            return json_decode($rewardsTblHeadingCols);
+            return json_decode($rewardsTblHeadingCols, true);
         }
 
         $arr = [
@@ -194,7 +194,7 @@ class RewardsController extends ListingBaseController
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
             'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
-            'urp_comments' => Labels::getLabel('LBL_Comments', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
         CacheHelper::create('rewardsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -209,7 +209,7 @@ class RewardsController extends ListingBaseController
             'urp_date_added',
             'urp_date_expiry',
             'urp_points',
-            'urp_comments',
+            'action',
         ];
     }
 

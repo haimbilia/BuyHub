@@ -55,7 +55,7 @@ if (!empty($order['payments'])) { ?>
                             ?>
                             <span class="badge <?php echo $cls; ?>"><?php echo $msg; ?></span>
                         </td>
-                        <td class="align-right">
+                        <td>
                             <div class="modal fade" id="modal<?php echo $key; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -79,7 +79,7 @@ if (!empty($order['payments'])) { ?>
                                 <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal<?php echo $key; ?>">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#comment">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#comment">
                                             </use>
                                         </svg>
                                     </a>

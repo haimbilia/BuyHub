@@ -166,7 +166,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 		if(typeof page==undefined || page == null){
 			page =1;
 		}
-		var frm = document.frmSearchRelatedProductsPaging;
+		var frm = document.frmSearchVolumeDiscountPaging;
 		$(frm.page).val(page);
 		searchRelatedProducts(frm);
 	}
@@ -182,7 +182,9 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 			return false;
 		}
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteSelprodRelatedProduct', [selProdId, relProdId] ), '', function(t) {
-            searchRelatedProducts(document.frmRelatedSellerProduct);
+                    var frm = document.frmSearchVolumeDiscountPaging;
+		$(frm.total_record_count).val('');
+            searchRelatedProducts(document.frmSearchVolumeDiscountPaging);
 		});
 	}
 

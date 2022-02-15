@@ -48,7 +48,7 @@ echo $frm->getFormTag();
     </div>
     <div class="row">
         <div class="col">
-            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_CANCEL', $siteLangId), 'button', 'btn_cancel', 'btn btn-outline-brand clearFormJs'); ?>
+            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_CLEAR', $siteLangId), 'button', 'btn_cancel', 'btn btn-outline-brand clearFormJs'); ?>
         </div>
         <div class="col-auto">
             <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button', 'btn_submit', 'btn btn-brand gb-btn gb-btn-primary submitFormBtnJs'); ?>

@@ -201,7 +201,7 @@ class MpesaPayController extends PaymentController
      */
     private function getPaymentForm($orderId): object
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('MpesaPay', 'charge', array($orderId)), 'class' => "form form--normal"));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('MpesaPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
         $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'customerPhone');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REQUEST', $this->siteLangId));
 

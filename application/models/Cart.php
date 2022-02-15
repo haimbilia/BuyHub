@@ -412,7 +412,7 @@ class Cart extends FatModel
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
-            
+
             $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION", FatUtility::VAR_INT, 0);
 
             /* $db = FatApp::getDb();
@@ -1031,8 +1031,8 @@ class Cart extends FatModel
 
                         $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                         $availableStock = $cartProducts[$cartKey]['selprod_stock'] - $tempHoldStock;
-                        $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
-
+                        $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);  
+                        
                         if ($quantity > $userTempHoldStock) {
                             if ($availableStock == 0 || ($availableStock < ($quantity - $userTempHoldStock))) {
                                 $this->warning = Labels::getLabel('MSG_REQUESTED_QUANTITY_MORE_THAN_STOCK_AVAILABLE', $this->cart_lang_id);
@@ -1774,17 +1774,19 @@ class Cart extends FatModel
     /* ] */
 
     public function clear($includeAbandonedCart = false)
-    {
-        if ($includeAbandonedCart == true) {
-            $cartProducts = $this->getProducts($this->cart_lang_id);
-            if (is_array($cartProducts)) {
-                foreach ($cartProducts as $cartKey => $product) {
-                    if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
+    {        
+        $cartProducts = $this->getProducts($this->cart_lang_id);    
+        if (is_array($cartProducts)) {
+            foreach ($cartProducts as $cartKey => $product) {
+                $this->updateTempStockHold($product['selprod_id'], 0, 0);
+                if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {                    
+                    if ($includeAbandonedCart == true) {
                         AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $product['quantity'], AbandonedCart::ACTION_DELETED);
                     }
                 }
             }
         }
+        
 
         $this->products = array();
         $this->basketProducts = [];

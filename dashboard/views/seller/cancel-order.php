@@ -1,16 +1,16 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_Cancel_Order', $siteLangId),
-                'siteLangId' => $siteLangId,
-            ];
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        <?php
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Cancel_Order', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
         ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title "><?php echo Labels::getLabel('LBL_Order_Details', $siteLangId); ?></h5>
                     <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Seller', 'sales'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?></a></div>
                 </div>
@@ -64,11 +64,11 @@
 
                                         <th><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></th>
                                     </tr>
-                                  </thead>
-                                <tbody>                                    
-                                    <tr>                                        
-                                        <td>                                           
-                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $orderDetail ,'siteLangId'=> $siteLangId], false, true);?>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $orderDetail, 'siteLangId' => $siteLangId], false, true); ?>
                                         </td>
                                         <?php if (!empty($orderDetail['shippingAddress'])) { ?>
                                             <td>
@@ -214,15 +214,15 @@
                                 <h5><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
                                 <table class="table table-justified">
                                     <thead>
-                                    <tr class="hide--mobile">
+                                        <tr class="hide--mobile">
                                             <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Customer_Notified', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></th>
-                                    </tr>
-                                  </thead>
-                                    
-                                    <tbody>                                        
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
                                         <?php
                                         foreach ($orderDetail['comments'] as $row) { ?>
                                             <tr>
@@ -256,4 +256,3 @@
             </div>
         </div>
     </div>
-</main>

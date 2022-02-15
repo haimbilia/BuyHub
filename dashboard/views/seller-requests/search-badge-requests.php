@@ -46,7 +46,7 @@
                 case 'breq_status':
                     $class = (BadgeRequest::REQUEST_PENDING == $row[$key]) ? 'label-info' : ((BadgeRequest::REQUEST_APPROVED == $row[$key]) ? 'label-success' : 'label-danger');
 
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $class), $statusArr[$row[$key]] . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $class), $statusArr[$row[$key]] . '<br>', true);
                     $td->appendElement('small', array('class' => 'ml-1'), (isset($row['breq_status_updated_on']) && $row['breq_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['breq_status_updated_on']) : '', true);
                     break;
                 case 'breq_requested_on':
@@ -59,14 +59,26 @@
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
                             array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId)),
-                            '<i class="fa fa-trash"></i>',
+                            '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>
+                        </i>',
                             true
                         );
                     }

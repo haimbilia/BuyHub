@@ -15,7 +15,7 @@
             </div>
             <div class="setting__detail">
                 <h6><?php echo $val; ?></h6>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+                <span><?php echo $optionsMessages[$key];?></span>
             </div>
         </a>
         <?php } ?>

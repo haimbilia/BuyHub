@@ -10,12 +10,13 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadSearch'), data, function (res) {
+            fcom.removeLoader();
 			$(dv).html(res);
 			if ('undefined' != typeof el) {
-				$(el).parent().siblings().removeClass('is-active');
-				$(el).parent().addClass('is-active');
+				$(".navTabsJs .active").removeClass('active');
+				$(el).addClass('active');
 			}
 		});
 	};
@@ -25,11 +26,12 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		/*]*/
 
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadLinksSearch'), data, function (res) {
+            fcom.removeLoader();
 			$(dv).html(res);
-			$(el).parent().siblings().removeClass('is-active');
-			$(el).parent().addClass('is-active');
+			$(".navTabsJs .active").removeClass('active');
+			$(el).addClass('active');
 		});
 	};
 
@@ -81,7 +83,7 @@ $(document).ready(function () {
 		$('.opId--js').val(opId);
 		searchBuyerDownloads(document.frmSrch);
 	}
-	
+
 	showLinks = function (opId) {
 		$('.opId--js').val(opId);
 		searchBuyerDownloadLinks(document.frmSrch);

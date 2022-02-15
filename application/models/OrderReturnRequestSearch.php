@@ -98,6 +98,11 @@ class OrderReturnRequestSearch extends SearchBase
         $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_id = op.op_selprod_id and op.op_is_batch = 0', 'sp');
     }
 
+    public function joinShippingCharges()
+    {        
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+    }
+
     public function addOrderProductCharges()
     {
         if (!$this->isJoinedOrderProducts) {

@@ -21,7 +21,7 @@
                             <div class="card-body">
                                 <div class="empty-stats">
                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                                    <div class="data data--cms">
+                                    <div class="cms">
                                         <?php echo $pageData['plang_helping_text']; ?>
                                     </div>
                                 </div>

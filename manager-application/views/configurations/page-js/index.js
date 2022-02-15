@@ -22,7 +22,7 @@ $(document).ready(function () {
         $('.formBodyJs form').submit();
     });
 
-    $(document).on('change', '.prefRatio-js', function() {
+    $(document).on('change', '.prefRatio-js', function () {
         var inputElement = $(this).closest('.form-group').find('input[type="file"]');
         var selectedVal = $(this).val();
         if (selectedVal == ratioTypeSquare) {
@@ -33,7 +33,7 @@ $(document).ready(function () {
             inputElement.attr('data-min_height', 85)
         }
     });
-    $(document).on('change', '.defaultLocationGeoFilter', function() {
+    $(document).on('change', '.defaultLocationGeoFilter', function () {
         if ($(this).val() == 1) {
             $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
             $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
@@ -44,7 +44,7 @@ $(document).ready(function () {
             $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
         }
     });
-    $(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
+    $(document).on('keyup', 'form[name="frmConfiguration"]', function (e) {
         e.stopImmediatePropagation();
         if (e.keyCode === 13) {
             $('.formBodyJs form').submit();
@@ -52,18 +52,18 @@ $(document).ready(function () {
     });
 });
 
-(function () { 
+(function () {
     var dv = '#frmBlockJs';
     getForm = function (frmType, langId = 0) {
         fcom.resetEditorInstance();
         $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {          
+        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
-            $(dv).html(t);
+            $(dv).replaceWith(t.html);
             setTabActive(frmType);
+            window.history.pushState('', '', fcom.makeUrl('Configurations', 'index', [frmType]));
         });
-    };  
+    };
 
     setTabActive = function (type) {
         $('ul.confTypesJs li.is-active').removeClass('is-active');
@@ -76,9 +76,10 @@ $(document).ready(function () {
         if (!$(frm).validate()) {
             return;
         }
+        $(dv).prepend(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
-            $.ykmsg.close();
+            fcom.removeLoader();
         });
     }
 
@@ -86,49 +87,68 @@ $(document).ready(function () {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
+        $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
-            $.ykmsg.close();
+            fcom.removeLoader();
             getForm(document.frmConfiguration.form_type.value, lang_id);
         });
     };
 
     changedMessageAutoCloseSetting = function (val) {
         if (val == YES) {
-
+            $("input[name='CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES']").val(MESSAGE_AUTOCLOSE_TIME);
         }
+
         if (val == NO) {
             $("input[name='CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES']").val(0);
         }
-    };    
+    };
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            loadCropperSkeleton();      
+            loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
-                t = $.parseJSON(t);         
+            fcom.updateWithAjax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
-                
+
                 var file = inputBtn.files[0];
                 var minWidth = $(inputBtn).attr('data-min_width');
-                var minHeight = $(inputBtn).attr('data-min_height');              
+                var minHeight = $(inputBtn).attr('data-min_height');
                 var options = {
-                    aspectRatio: minWidth / minHeight,
-                    data: {
-                        width: minWidth,
-                        height: minHeight,
-                    },
-                    minCropBoxWidth: minWidth,
-                    minCropBoxHeight: minHeight,
-                    minContainerHeight: 350,
+                    // minContainerHeight: 350,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
                     imageSmoothingEnabled: true,
                 };
+
+                if (minWidth != undefined && minHeight != undefined) {
+                    options['aspectRatio'] = minWidth / minHeight;
+                    options['minCropBoxWidth'] = minWidth;
+                    options['minCropBoxHeight'] = minHeight;
+                    options['data'] = {
+                        width: minWidth,
+                        height: minHeight,
+                    };
+                } else {
+
+                    /*
+                    let maxCroppedWidth = 300;
+                    let maxCroppedHeight = 300;
+                    //options['initialAspectRatio'] = 1;                      
+                    options['crop'] = function (event) {
+                        let boxData = cropper.getCropBoxData();                   
+                        console.log(boxData);                       
+                        boxData['width'] = Math.min((maxCroppedWidth -10) , boxData['width']);
+                        boxData['height'] = Math.min((maxCroppedHeight -10), boxData['height']);
+                        cropper.setCropBoxData( boxData); 
+                    } ;     
+                    */
+                }
+
                 $(inputBtn).val('');
-                setTimeout(function(){ cropImage(file, options, 'uploadConfImages', inputBtn) }, 100);
-                return ;
+                setTimeout(function () { cropImage(file, options, 'uploadConfImages', inputBtn) }, 200);
+                return;
             });
         }
     };
@@ -155,12 +175,12 @@ $(document).ready(function () {
             },
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
-            },           
+            },
             success: function (ans) {
                 fcom.removeLoader();
                 if (!ans.status) {
                     $.ykmsg.error(ans.msg);
-                    return false;                  
+                    return false;
                 }
                 $.ykmsg.success(ans.msg);
                 getForm(formType, langId);
@@ -181,8 +201,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'deleteVerificationFile', [fileType]), '', function (t) {
-            $.ykmsg.close();
-            getForm(document.frmConfiguration.form_type.value,document.frmConfiguration.lang_id.value);
+            getForm(document.frmConfiguration.form_type.value, document.frmConfiguration.lang_id.value);
         });
     };
 

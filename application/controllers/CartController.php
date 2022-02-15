@@ -916,7 +916,10 @@ class CartController extends MyAppController
         if (1 > $loggedUserId) {
             $loggedUserId = session_id();
         }
-        FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
+        $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);    
+        $cartObj->clear(true);
+        $cartObj->updateUserCart();        
+        //FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
         FatUtility::dieJsonSuccess(Labels::getLabel('SUC_SUCCESS', $this->siteLangId));
     }
 }

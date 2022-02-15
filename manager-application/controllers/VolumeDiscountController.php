@@ -75,24 +75,20 @@ class VolumeDiscountController extends ListingBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
-        $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId, false);
-
+        $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
+	'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name']
+        ); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $srch->setPageSize($pageSize); 
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $this->set("arrListing", $arrListing);  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -113,6 +109,7 @@ class VolumeDiscountController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -123,7 +120,8 @@ class VolumeDiscountController extends ListingBaseController
         $this->set('frm', $this->getForm());
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_BIND_VOLUME_DISCOUNT', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm()
@@ -145,13 +143,13 @@ class VolumeDiscountController extends ListingBaseController
         $data = FatApp::getPostedData();
 
         if (empty($data)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $selprod_id = FatUtility::int($data['voldiscount_selprod_id']);
 
         if (1 > $selprod_id) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $volDiscountId = $this->updateSelProdVolDiscount($selprod_id, 0, $data['voldiscount_min_qty'], $data['voldiscount_percentage']);
@@ -184,19 +182,19 @@ class VolumeDiscountController extends ListingBaseController
     {
         $volDiscountId = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
         if (1 > $volDiscountId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $attribute = FatApp::getPostedData('attribute', FatUtility::VAR_STRING, '');
 
         $columns = array('voldiscount_min_qty', 'voldiscount_percentage');
         if (!in_array($attribute, $columns)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
         $otherColumnsValue = SellerProductVolumeDiscount::getAttributesById($volDiscountId, $otherColumns);
         if (empty($otherColumnsValue)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
@@ -298,7 +296,7 @@ class VolumeDiscountController extends ListingBaseController
         }
 
         $srch->addOrder('product_name');
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd = $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -396,7 +394,7 @@ class VolumeDiscountController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -414,13 +412,13 @@ class VolumeDiscountController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $volumeDiscountRow = SellerProductVolumeDiscount::getAttributesById($recordId);
         $sellerProductRow = SellerProduct::getAttributesById($volumeDiscountRow['voldiscount_selprod_id'], array('selprod_user_id'), false);
         if (!$volumeDiscountRow || !$sellerProductRow) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $volumeDiscountSelprodId = $volumeDiscountRow['voldiscount_selprod_id'];
 
@@ -434,14 +432,13 @@ class VolumeDiscountController extends ListingBaseController
     {
         $volumeDiscountTblHeadingCols = CacheHelper::get('volumeDiscountTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($volumeDiscountTblHeadingCols) {
-            return json_decode($volumeDiscountTblHeadingCols);
+            return json_decode($volumeDiscountTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
-            'credential_username' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'voldiscount_min_qty' => Labels::getLabel('LBL_MINIMUM_QUANTITY', $this->siteLangId),
             'voldiscount_percentage' => Labels::getLabel('LBL_DISCOUNT', $this->siteLangId) . ' (%)',
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -457,7 +454,6 @@ class VolumeDiscountController extends ListingBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'credential_username',
             'voldiscount_min_qty',
             'voldiscount_percentage',
             'action',

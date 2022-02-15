@@ -22,15 +22,15 @@ class BannerSearch extends SearchBase
         }
 
         if ($isActive) {
-            $this->addCondition('b.banner_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('b.banner_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
     }
-    
+
     public function setDefinedCriteria()
     {
-        $this->addCondition('promotion_deleted', '=', applicationConstants::NO);
+        $this->addCondition('promotion_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
     }
-    
+
     public function joinLocations($langId = 0, $joinCollection = false)
     {
         $langId = FatUtility::int($langId);
@@ -42,10 +42,10 @@ class BannerSearch extends SearchBase
         if ($langId > 0) {
             $this->joinTable(Banner::DB_TBL_LANG_LOCATIONS, 'LEFT OUTER JOIN', 'bl_l.blocationlang_blocation_id = bl.blocation_id AND bl_l.blocationlang_lang_id = ' . $langId, 'bl_l');
         }
-		
-		if ($joinCollection) {
-			$this->joinTable(Collections::DB_TBL, 'LEFT OUTER JOIN', 'c.collection_id = bl.blocation_collection_id', 'c');
-		}
+
+        if ($joinCollection) {
+            $this->joinTable(Collections::DB_TBL, 'LEFT OUTER JOIN', 'c.collection_id = bl.blocation_collection_id', 'c');
+        }
     }
 
     public function joinCollectionToRecords()
@@ -145,33 +145,33 @@ class BannerSearch extends SearchBase
 
     public function addActiveLocationCondition()
     {
-        $this->addCondition('bl.blocation_active', '=', applicationConstants::ACTIVE);
+        $this->addCondition('bl.blocation_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
     }
 
     public function addActivePromotionCondition()
     {
-        $this->addCondition('pr.promotion_active', '=', applicationConstants::ACTIVE);
+        $this->addCondition('pr.promotion_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
     }
 
     public function addApprovedPromotionCondition()
     {
-        $this->addCondition('pr.promotion_approved', '=', applicationConstants::ACTIVE);
+        $this->addCondition('pr.promotion_approved', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
     }
     public function addPromotionTypeCondition()
     {
-        $cnd = $this->addCondition('pr.promotion_type', '=', Promotion::TYPE_BANNER);
-        $cnd->attachCondition('banner_type', '=', Banner::TYPE_BANNER, 'OR');
-    }    
-        
+        $cnd = $this->addCondition('pr.promotion_type', '=', 'mysql_func_' . Promotion::TYPE_BANNER, 'AND', true);
+        $cnd->attachCondition('banner_type', '=', 'mysql_func_' . Banner::TYPE_BANNER, 'OR', true);
+    }
+
     public function joinUserWallet($excludePendingWidrawReq = true, $excludePromotion = true, $excludeProcessedWidrawReq = true)
     {
-        $this->joinedUserWallet = true;  
+        $this->joinedUserWallet = true;
         $srch = Transactions::getSearchObject();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addGroupBy('utxn.utxn_user_id');
-        $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit - utxn_debit) as walletAmount'));        
-        $srch->addCondition('utxn_status', '=', Transactions::STATUS_COMPLETED);
+        $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit - utxn_debit) as walletAmount'));
+        $srch->addCondition('utxn_status', '=', 'mysql_func_' . Transactions::STATUS_COMPLETED, 'AND', true);
 
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = tqub.utxn_user_id', 'tqub');
 
@@ -185,17 +185,17 @@ class BannerSearch extends SearchBase
             $this->includePromotionWalletToBeCharged();
             $userBalance .= ' - IFNULL(pmCharge.pendingPromotionCost,0)';
         }
-        
-        $this->addFld(array('IF(pr.promotion_id > 0, '.$userBalance.' ,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE') . ') AS userBalance'));
+
+        $this->addFld(array('IF(pr.promotion_id > 0, ' . $userBalance . ' ,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE') . ') AS userBalance'));
         $this->addHaving('userBalance', '>=', FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));
     }
-    
+
     public function includePromotionWalletToBeCharged()
     {
         $srch = new PromotionSearch();
         $srch->joinPromotionCharge();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();        
+        $srch->doNotLimitRecords();
         $srch->addGroupBy('pr.promotion_id');
         $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(MAX(pcharge_end_piclick_id),0) as endClickId', 'IFNULL(MAX(pcharge_end_date),"0000-00-00") as chargeTillDate']);
 
@@ -208,7 +208,7 @@ class BannerSearch extends SearchBase
         $prChargeSummary->addMultipleFields(['p.promotion_user_id', 'sum(picharge_cost) as pendingPromotionCost']);
         $prChargeSummary->doNotLimitRecords();
         $prChargeSummary->doNotCalculateRecords();
-       
+
         $this->joinTable('(' . $prChargeSummary->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = pmCharge.promotion_user_id', 'pmCharge');
     }
 
@@ -218,14 +218,14 @@ class BannerSearch extends SearchBase
         $wrSrch->doNotCalculateRecords();
         $wrSrch->doNotLimitRecords();
         $wrSrch->addGroupBy('tuwr.withdrawal_user_id');
-        $wrSrch->addMultipleFields(array('tuwr.withdrawal_user_id', 'SUM(withdrawal_amount) as pendingWithdrawalAmount'));        
-        $cnd = $wrSrch->addCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PENDING);
+        $wrSrch->addMultipleFields(array('tuwr.withdrawal_user_id', 'SUM(withdrawal_amount) as pendingWithdrawalAmount'));
+        $cnd = $wrSrch->addCondition('withdrawal_status', '=', 'mysql_func_' . Transactions::WITHDRAWL_STATUS_PENDING, 'AND', true);
         if (true == $excludeProcessedWidrawReq) {
-            $cnd->attachCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PROCESSED);
+            $cnd->attachCondition('withdrawal_status', '=', 'mysql_func_' . Transactions::WITHDRAWL_STATUS_PROCESSED, 'OR', true);
         }
         $this->joinTable('(' . $wrSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = wrqb.withdrawal_user_id', 'wrqb');
     }
-    
+
     public function joinBudget()
     {
         $srch = new SearchBase(Promotion::DB_TBL_ITEM_CHARGES, 'tpic');
@@ -235,11 +235,11 @@ class BannerSearch extends SearchBase
         $srch->addGroupBy('tpc.' . Promotion::DB_TBL_CLICKS_PREFIX . 'promotion_id');
         $srch->addMultipleFields(
             array(
-            'tpc.pclick_promotion_id',
-            "SUM(IF(date(`picharge_datetime`)>CURRENT_DATE - INTERVAL 1 DAY,`picharge_cost`,0)) daily_cost,
+                'tpc.pclick_promotion_id',
+                "SUM(IF(date(`picharge_datetime`)>CURRENT_DATE - INTERVAL 1 DAY,`picharge_cost`,0)) daily_cost,
 			SUM(IF(date(`picharge_datetime`)>CURRENT_DATE - INTERVAL 1 WEEK,`picharge_cost`,0)) weekly_cost,
 			SUM(IF(date(`picharge_datetime`)>CURRENT_DATE - INTERVAL 1 MONTH,`picharge_cost`,0)) monthly_cost",
-            "SUM(picharge_cost) as total_cost"
+                "SUM(picharge_cost) as total_cost"
             )
         );
 
@@ -249,6 +249,6 @@ class BannerSearch extends SearchBase
     public function joinAttachedFile()
     {
         $this->joinTable(AttachedFile::DB_TBL, 'INNER  JOIN', 'af.afile_record_id = b.banner_id and afile_type =' . AttachedFile::FILETYPE_BANNER, 'af');
-        $this-> addGroupBy('banner_id');
+        $this->addGroupBy('banner_id');
     }
 }

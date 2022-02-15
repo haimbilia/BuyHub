@@ -18,30 +18,14 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr,  '#' . str_pad($row["withdrawal_id"], 6, '0', STR_PAD_LEFT));
                 break;
-            case 'user_details':
+            case 'user_name':
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser('. $row['user_id'] . ')' : '');
-                $arr = User::getUserTypesArr($siteLangId);
-                $userType = [];
-                if ($row['user_is_buyer']) {
-                    $userType[] = $arr[User::USER_TYPE_BUYER];
-                }
-                if ($row['user_is_supplier']) {
-                    $userType[] = $arr[User::USER_TYPE_SELLER];
-                }
-                if ($row['user_is_advertiser']) {
-                    $userType[] = $arr[User::USER_TYPE_ADVERTISER];
-                }
-                if ($row['user_is_affiliate']) {
-                    $userType[] = $arr[User::USER_TYPE_AFFILIATE] ;
-                }
-
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
-                    'userType' => implode('/',$userType)
                 ], false, true);
 
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
@@ -81,7 +65,12 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'viewDetails('.$row['withdrawal_id'].','.$siteLangId.')' ,
                             'title' => Labels::getLabel('LBL_VIEW_DETAILS', $siteLangId),
                         ],
-                        'label' => "<i class='far fa-eye icon'></i>"
+                        'label' => '<i class="icn">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                            </use>
+                        </svg>
+                    </i>'
                     ]
                 ];	                    
 
@@ -95,16 +84,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

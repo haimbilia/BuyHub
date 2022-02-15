@@ -50,8 +50,8 @@
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':                   
-                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order ,'siteLangId'=> $siteLangId], false, true);
+                case 'product':
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':
@@ -75,7 +75,7 @@
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
                     }
 
-                    $td->appendElement('span', array('class' => 'label label-inline ' . $labelClass), $orderStatus . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $orderStatus . '<br>', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
@@ -143,7 +143,7 @@
                     $li->appendElement(
                         'a',
                         array(
-                            'href' => 'javascript:void(0)', 'onClick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                            'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
                             'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
                         ),
                         '<i class="fa fa-cart-plus"></i>',
@@ -176,6 +176,6 @@
     } ?>
 </div>
 <?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmOrderSrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToOrderSearchPage');
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmRecordSearchPaging'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

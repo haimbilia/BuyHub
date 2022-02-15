@@ -6,34 +6,16 @@
         });
     };
     exportForm = function (actionType) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
-            $.ykmsg.close();
-            try {
-                res = jQuery.parseJSON(t);
-                if (0 == res.status) {
-                    $.ykmsg.error(res.msg);
-                    return;
-                }
-            } catch (e) {
-                $.ykmodal(t);
-            }
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     }
 
     exportMediaForm = function (actionType) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
-            $.ykmsg.close();
-            try {
-                res = jQuery.parseJSON(t);
-                if (0 == res.status) {
-                    $.ykmsg.error(res.msg);
-                    return;
-                }
-            } catch (e) {
-                $.ykmodal(t);
-            }
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
@@ -59,65 +41,30 @@
     };
 
     importForm = function (actionType) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
-            $.ykmsg.close();
-            try {
-                res = jQuery.parseJSON(t);
-                if (0 == res.status) {
-                    $.ykmsg.error(res.msg);
-                    return;
-                }
-            } catch (e) {
-                $.ykmodal(t);
-            }
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     }
 
     getImportInstructions = function (actionType) {
-        fcom.displayProcessing();
         if (actionType == 13) {
-            fcom.ajax(fcom.makeUrl('ImportExport', 'importLabelsForm'), '', function (t) {
-                $.ykmsg.close();
-                try {
-                    res = jQuery.parseJSON(t);
-                    if (0 == res.status) {
-                        $.ykmsg.error(res.msg);
-                        return;
-                    }
-                } catch (e) {
-                    $.ykmodal(t);
-                }
+            fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importLabelsForm'), '', function (t) {
+                $.ykmodal(t.html);
+                fcom.removeLoader();
             });
         } else {
-            fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
-                $.ykmsg.close();
-                try {
-                    res = jQuery.parseJSON(t);
-                    if (0 == res.status) {
-                        $.ykmsg.error(res.msg);
-                        return;
-                    }
-                } catch (e) {
-                    $.ykmodal(t);
-                }
+            fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
+                $.ykmodal(t.html);
+                fcom.removeLoader();
             });
         }
     }
 
     importMediaForm = function (actionType) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
-            $.ykmsg.close();
-            try {
-                res = jQuery.parseJSON(t);
-                if (0 == res.status) {
-                    $.ykmsg.error(res.msg);
-                    return;
-                }
-            } catch (e) {
-                $.ykmodal(t);
-            }
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
@@ -138,7 +85,7 @@
                 processData: false,
                 contentType: false,
                 success: function (t) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {

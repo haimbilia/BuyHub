@@ -63,11 +63,11 @@ $(document).ready(function () {
             }
 
             if ($(this).hasClass('themeColorJs')) {
-                $("[data-jscolorSelector]:not(text)").attr('fill', hex);
+                $("[data-colorselector-js]:not(text)").attr('fill', hex);
             }
 
             if ($(this).hasClass('themeColorInverseJs')) {
-                $("text[data-jscolorSelector]").attr('fill', hex);
+                $("text[data-colorselector-js]").attr('fill', hex);
             }
         });
     }
@@ -88,11 +88,11 @@ $(document).ready(function () {
             }
 
             if ($(this).hasClass('themeColorJs')) {
-                $("[data-jsSecondarycolor]:not(text)").attr('fill', hex);
+                $("[data-secondarycolor-js]:not(text)").attr('fill', hex);
             }
-
+            
             if ($(this).hasClass('themeColorInverseJs')) {
-                $("text[data-jsSecondarycolor]").attr('fill', hex);
+                $("text[data-secondarycolor-js]").attr('fill', hex);
             }
         });
     }
@@ -196,6 +196,9 @@ $(document).ready(function () {
 
         tagify = new Tagify(input, {
             whitelist: [],
+            dropdown: {          
+                enabled: 0 // show suggestions dropdown after 1 typed character
+            },
         }).on('input', getVariants).on('focus', getVariants).on('add', addElement);
     };
     tagifyElement();

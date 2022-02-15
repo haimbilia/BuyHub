@@ -13,7 +13,7 @@
 }
 
 table.dataTable {
-    width: 100%!important;
+    width: 100% !important;
     clear: both;
     margin-top: 6px !important;
     margin-bottom: 6px !important;
@@ -34,31 +34,31 @@ table.dataTable {
         text-align: center;
     }
     thead {
-        >tr {
-            >td.sorting {
+        > tr {
+            > td.sorting {
                 padding-#{$end-direction}: 30px;
             }
-            >td.sorting_asc {
+            > td.sorting_asc {
                 padding-#{$end-direction}: 30px;
             }
-            >td.sorting_desc {
+            > td.sorting_desc {
                 padding-#{$end-direction}: 30px;
             }
-            >th.sorting {
+            > th.sorting {
                 padding-#{$end-direction}: 30px;
             }
-            >th.sorting_asc {
+            > th.sorting_asc {
                 padding-#{$end-direction}: 30px;
             }
-            >th.sorting_desc {
+            > th.sorting_desc {
                 padding-#{$end-direction}: 30px;
             }
-            >td {
+            > td {
                 &:active {
                     outline: 0;
                 }
             }
-            >th {
+            > th {
                 &:active {
                     outline: 0;
                 }
@@ -69,17 +69,17 @@ table.dataTable {
             position: relative;
             &:after {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
-                right: .5em;
+                opacity: 0.3;
+                right: 0.5em;
                 content: "\2193";
             }
             &:before {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
+                opacity: 0.3;
                 right: 1em;
                 content: "\2191";
             }
@@ -89,17 +89,17 @@ table.dataTable {
             position: relative;
             &:after {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
-                right: .5em;
+                opacity: 0.3;
+                right: 0.5em;
                 content: "\2193";
             }
             &:before {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
+                opacity: 0.3;
                 right: 1em;
                 content: "\2191";
                 opacity: 1;
@@ -110,17 +110,17 @@ table.dataTable {
             position: relative;
             &:after {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
-                right: .5em;
+                opacity: 0.3;
+                right: 0.5em;
                 content: "\2193";
             }
             &:before {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
+                opacity: 0.3;
                 right: 1em;
                 content: "\2191";
                 opacity: 0;
@@ -131,18 +131,18 @@ table.dataTable {
             position: relative;
             &:after {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
-                right: .5em;
+                opacity: 0.3;
+                right: 0.5em;
                 content: "\2193";
                 opacity: 1;
             }
             &:before {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
+                opacity: 0.3;
                 right: 1em;
                 content: "\2191";
             }
@@ -152,18 +152,18 @@ table.dataTable {
             position: relative;
             &:after {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
-                right: .5em;
+                opacity: 0.3;
+                right: 0.5em;
                 content: "\2193";
                 opacity: 0;
             }
             &:before {
                 position: absolute;
-                bottom: .9em;
+                bottom: 0.9em;
                 display: block;
-                opacity: .3;
+                opacity: 0.3;
                 right: 1em;
                 content: "\2191";
             }
@@ -177,9 +177,9 @@ table.dataTable {
         outline: 3px solid #0275d8;
         outline-offset: -1px;
     }
-    >tbody {
+    > tbody {
         .child {
-            padding: .5em 1em;
+            padding: 0.5em 1em;
             &:hover {
                 background: 0 0 !important;
             }
@@ -188,9 +188,9 @@ table.dataTable {
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
-                >li {
+                > li {
                     border-bottom: 1px solid #efefef;
-                    padding: .5em 0;
+                    padding: 0.5em 0;
                     &:first-child {
                         padding-top: 0;
                     }
@@ -217,11 +217,11 @@ table.dataTable {
         cursor: move;
     }
     tbody {
-        >tr.selected {
+        > tr.selected {
             background-color: #0275d8;
         }
-        >tr {
-            >.selected {
+        > tr {
+            > .selected {
                 background-color: #0275d8;
             }
         }
@@ -246,7 +246,7 @@ table.dataTable {
                 height: 12px;
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
-                content: ' ';
+                content: " ";
                 margin-top: -6px;
                 margin-#{$start-direction}: -6px;
                 border: 1px solid #000;
@@ -274,7 +274,7 @@ table.dataTable {
                 height: 12px;
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
-                content: ' ';
+                content: " ";
                 margin-top: -6px;
                 margin-#{$start-direction}: -6px;
                 border: 1px solid #000;
@@ -303,7 +303,7 @@ table.dataTable {
     tr.selected {
         td.select-checkbox {
             &:after {
-                content: '\2714';
+                content: "\2714";
                 margin-top: -11px;
                 margin-#{$start-direction}: -4px;
                 text-align: center;
@@ -312,7 +312,7 @@ table.dataTable {
         }
         th.select-checkbox {
             &:after {
-                content: '\2714';
+                content: "\2714";
                 margin-top: -11px;
                 margin-#{$start-direction}: -4px;
                 text-align: center;
@@ -351,13 +351,13 @@ div.dataTables_wrapper {
             text-align: left;
         }
         input {
-            margin-#{$start-direction}: .5em;
+            margin-#{$start-direction}: 0.5em;
             display: inline-block;
             width: auto;
         }
     }
     div.dataTables_info {
-        padding-top: .85em;
+        padding-top: 0.85em;
         white-space: nowrap;
     }
     div.dataTables_paginate {
@@ -383,10 +383,10 @@ div.dataTables_wrapper {
         padding: 1em 0;
     }
     span.select-info {
-        margin-#{$start-direction}: .5em;
+        margin-#{$start-direction}: 0.5em;
     }
     span.select-item {
-        margin-#{$start-direction}: .5em;
+        margin-#{$start-direction}: 0.5em;
     }
 }
 
@@ -437,10 +437,10 @@ div.dataTables_scrollBody {
 }
 
 div.dataTables_scrollFoot {
-    >.dataTables_scrollFootInner {
+    > .dataTables_scrollFootInner {
         -webkit-box-sizing: content-box;
         box-sizing: content-box;
-        >table {
+        > table {
             margin-top: 0 !important;
             border-top: none;
         }
@@ -448,9 +448,9 @@ div.dataTables_scrollFoot {
 }
 
 table.dataTable.table-sm {
-    >thead {
-        >tr {
-            >th {
+    > thead {
+        > tr {
+            > th {
                 padding-#{$end-direction}: 20px;
             }
         }
@@ -458,7 +458,7 @@ table.dataTable.table-sm {
     .sorting {
         &:before {
             top: 5px;
-            right: .85em;
+            right: 0.85em;
         }
         &:after {
             top: 5px;
@@ -467,7 +467,7 @@ table.dataTable.table-sm {
     .sorting_asc {
         &:before {
             top: 5px;
-            right: .85em;
+            right: 0.85em;
         }
         &:after {
             top: 5px;
@@ -476,7 +476,7 @@ table.dataTable.table-sm {
     .sorting_desc {
         &:before {
             top: 5px;
-            right: .85em;
+            right: 0.85em;
         }
         &:after {
             top: 5px;
@@ -508,10 +508,10 @@ table.table-bordered.dataTable {
 }
 
 div.table-responsive {
-    >div.dataTables_wrapper {
-        >div.row {
+    > div.dataTables_wrapper {
+        > div.row {
             margin: 0;
-            >div[class^=col-] {
+            > div[class^="col-"] {
                 &:first-child {
                     padding-#{$start-direction}: 0;
                 }
@@ -532,19 +532,19 @@ div.dt-button-info {
     margin-#{$start-direction}: -200px;
     background-color: #fff;
     border: 2px solid #111;
-    -webkit-box-shadow: 3px 3px 8px rgba(0, 0, 0, .3);
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
     text-align: center;
     z-index: 21;
     h2 {
-        padding: .5em;
+        padding: 0.5em;
         margin: 0;
         font-weight: 400;
         border-bottom: 1px solid #ddd;
         background-color: #f3f3f3;
     }
-    >div {
+    > div {
         padding: 1em;
     }
 }
@@ -556,7 +556,7 @@ ul.dt-button-collection.dropdown-menu {
     -ms-column-gap: 8px;
     -o-column-gap: 8px;
     column-gap: 8px;
-    >* {
+    > * {
         -webkit-column-break-inside: avoid;
         break-inside: avoid;
     }
@@ -617,7 +617,7 @@ ul.dt-button-collection {
     -ms-column-gap: 8px;
     -o-column-gap: 8px;
     column-gap: 8px;
-    >* {
+    > * {
         -webkit-column-break-inside: avoid;
         break-inside: avoid;
     }
@@ -691,7 +691,7 @@ div.dt-button-background {
 
 div.dt-buttons {
     a.btn.processing {
-        color: rgba(0, 0, 0, .2);
+        color: rgba(0, 0, 0, 0.2);
         &:after {
             position: absolute;
             top: 50%;
@@ -702,7 +702,7 @@ div.dt-buttons {
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
             display: block;
-            content: ' ';
+            content: " ";
             border: 2px solid #282828;
             border-radius: 50%;
             border-left-color: transparent;
@@ -715,7 +715,7 @@ div.dt-buttons {
         }
     }
     button.btn.processing {
-        color: rgba(0, 0, 0, .2);
+        color: rgba(0, 0, 0, 0.2);
         &:after {
             position: absolute;
             top: 50%;
@@ -726,7 +726,7 @@ div.dt-buttons {
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
             display: block;
-            content: ' ';
+            content: " ";
             border: 2px solid #282828;
             border-radius: 50%;
             border-left-color: transparent;
@@ -739,7 +739,7 @@ div.dt-buttons {
         }
     }
     div.btn.processing {
-        color: rgba(0, 0, 0, .2);
+        color: rgba(0, 0, 0, 0.2);
         &:after {
             position: absolute;
             top: 50%;
@@ -750,7 +750,7 @@ div.dt-buttons {
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
             display: block;
-            content: ' ';
+            content: " ";
             border: 2px solid #282828;
             border-radius: 50%;
             border-left-color: transparent;
@@ -779,7 +779,7 @@ div.dt-autofill-select {
     position: absolute;
     z-index: 1001;
     background-color: #0275d8;
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255, 255, 255, .5) 5px, rgba(255, 255, 255, .5) 10px);
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255, 255, 255, 0.5) 5px, rgba(255, 255, 255, 0.5) 10px);
 }
 
 div.dt-autofill-select.bottom {
@@ -840,9 +840,9 @@ div.dt-autofill-list {
     }
     div.dt-autofill-question {
         display: table-cell;
-        padding: .5em 0;
+        padding: 0.5em 0;
         border-bottom: 1px solid #ccc;
-        input[type=number] {
+        input[type="number"] {
             padding: 6px;
             width: 30px;
             margin: -2px 0;
@@ -850,7 +850,7 @@ div.dt-autofill-list {
     }
     div.dt-autofill-button {
         display: table-cell;
-        padding: .5em 0;
+        padding: 0.5em 0;
         border-bottom: 1px solid #ccc;
     }
 }
@@ -861,14 +861,14 @@ div.dt-autofill-background {
     #{$start-direction}: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .7);
-    background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, .3) 0, rgba(0, 0, 0, .7) 100%);
+    background: rgba(0, 0, 0, 0.7);
+    background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0.7) 100%);
     z-index: 10;
 }
 
 table.DTCR_clonedTable.dataTable {
     position: absolute !important;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     z-index: 202;
 }
 
@@ -1014,29 +1014,29 @@ table.dataTable.fixedHeader-locked {
 }
 
 table.dataTable.dtr-inline.collapsed {
-    >tbody {
-        >tr {
-            >td.child {
+    > tbody {
+        > tr {
+            > td.child {
                 cursor: default !important;
                 &:before {
                     display: none !important;
                 }
             }
-            >td.dataTables_empty {
+            > td.dataTables_empty {
                 cursor: default !important;
                 &:before {
                     display: none !important;
                 }
             }
-            >th.child {
+            > th.child {
                 cursor: default !important;
                 &:before {
                     display: none !important;
                 }
             }
         }
-        >tr[role=row] {
-            >td {
+        > tr[role="row"] {
+            > td {
                 &:first-child {
                     position: relative;
                     padding-#{$start-direction}: 30px;
@@ -1052,12 +1052,12 @@ table.dataTable.dtr-inline.collapsed {
                         position: absolute;
                         color: #fff;
                         border-radius: 50%;
-                        content: '+';
+                        content: "+";
                         background-color: #0275d8;
                     }
                 }
             }
-            >th {
+            > th {
                 &:first-child {
                     position: relative;
                     padding-#{$start-direction}: 30px;
@@ -1078,27 +1078,27 @@ table.dataTable.dtr-inline.collapsed {
                         box-sizing: content-box;
                         text-align: center;
                         text-indent: 0 !important;
-                        font-family: 'Courier New', Courier, monospace;
+                        font-family: "Courier New", Courier, monospace;
                         line-height: 14px;
-                        content: '+';
+                        content: "+";
                         background-color: #0275d8;
                     }
                 }
             }
         }
-        >tr.parent {
-            >td {
+        > tr.parent {
+            > td {
                 &:first-child {
                     &:before {
-                        content: '-';
+                        content: "-";
                         background-color: #d33333;
                     }
                 }
             }
-            >th {
+            > th {
                 &:first-child {
                     &:before {
-                        content: '-';
+                        content: "-";
                         background-color: #d33333;
                     }
                 }
@@ -1108,9 +1108,9 @@ table.dataTable.dtr-inline.collapsed {
 }
 
 table.dataTable.dtr-inline.collapsed.compact {
-    >tbody {
-        >tr {
-            >td {
+    > tbody {
+        > tr {
+            > td {
                 &:first-child {
                     padding-#{$start-direction}: 27px;
                     &:before {
@@ -1124,7 +1124,7 @@ table.dataTable.dtr-inline.collapsed.compact {
                     }
                 }
             }
-            >th {
+            > th {
                 &:first-child {
                     padding-#{$start-direction}: 27px;
                     &:before {
@@ -1143,9 +1143,9 @@ table.dataTable.dtr-inline.collapsed.compact {
 }
 
 table.dataTable.dtr-column {
-    >tbody {
-        >tr {
-            >td.control {
+    > tbody {
+        > tr {
+            > td.control {
                 position: relative;
                 cursor: pointer;
                 &:before {
@@ -1166,13 +1166,13 @@ table.dataTable.dtr-column {
                     box-sizing: content-box;
                     text-align: center;
                     text-indent: 0 !important;
-                    font-family: 'Courier New', Courier, monospace;
+                    font-family: "Courier New", Courier, monospace;
                     line-height: 14px;
-                    content: '+';
+                    content: "+";
                     background-color: #0275d8;
                 }
             }
-            >th.control {
+            > th.control {
                 position: relative;
                 cursor: pointer;
                 &:before {
@@ -1193,23 +1193,23 @@ table.dataTable.dtr-column {
                     box-sizing: content-box;
                     text-align: center;
                     text-indent: 0 !important;
-                    font-family: 'Courier New', Courier, monospace;
+                    font-family: "Courier New", Courier, monospace;
                     line-height: 14px;
-                    content: '+';
+                    content: "+";
                     background-color: #0275d8;
                 }
             }
         }
-        >tr.parent {
+        > tr.parent {
             td.control {
                 &:before {
-                    content: '-';
+                    content: "-";
                     background-color: #d33333;
                 }
             }
             th.control {
                 &:before {
-                    content: '-';
+                    content: "-";
                     background-color: #d33333;
                 }
             }
@@ -1241,9 +1241,9 @@ div.dtr-modal {
         overflow: auto;
         background-color: #f5f5f7;
         border: 1px solid #000;
-        border-radius: .5em;
-        -webkit-box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+        border-radius: 0.5em;
+        -webkit-box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
     }
     div.dtr-modal-content {
         position: relative;
@@ -1272,7 +1272,7 @@ div.dtr-modal {
         #{$end-direction}: 0;
         bottom: 0;
         z-index: 101;
-        background: rgba(0, 0, 0, .6);
+        background: rgba(0, 0, 0, 0.6);
     }
 }
 
@@ -1290,7 +1290,7 @@ div.dtr-bs-modal {
 
 table.dt-rowReorder-float {
     position: absolute !important;
-    opacity: .8;
+    opacity: 0.8;
     table-layout: fixed;
     outline: 2px solid #0275d8;
     outline-offset: -2px;
@@ -1336,49 +1336,49 @@ div.DTS {
 
 table.dataTable.display {
     tbody {
-        >tr.odd.selected {
+        > tr.odd.selected {
             background-color: #0172d2;
-            >.sorting_1 {
+            > .sorting_1 {
                 background-color: #016ecc;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #016fcd;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0170cf;
             }
         }
-        >tr.odd {
-            >.selected {
+        > tr.odd {
+            > .selected {
                 background-color: #0172d2;
                 background-color: #016ecc;
             }
         }
-        >tr.selected {
+        > tr.selected {
             &:hover {
                 background-color: #0170d0;
-                >.sorting_1 {
+                > .sorting_1 {
                     background-color: #016bc6;
                 }
-                >.sorting_2 {
+                > .sorting_2 {
                     background-color: #016cc7;
                 }
-                >.sorting_3 {
+                > .sorting_3 {
                     background-color: #016dca;
                 }
             }
-            >.sorting_1 {
+            > .sorting_1 {
                 background-color: #0172d3;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #0172d3;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0172d3;
             }
         }
-        >tr {
-            >.selected {
+        > tr {
+            > .selected {
                 &:hover {
                     background-color: #0170d0;
                     background-color: #016bc6;
@@ -1386,24 +1386,24 @@ table.dataTable.display {
                 background-color: #0172d3;
             }
             &:hover {
-                >.selected {
+                > .selected {
                     background-color: #016bc6;
                 }
             }
         }
-        >tr.even.selected {
-            >.sorting_1 {
+        > tr.even.selected {
+            > .sorting_1 {
                 background-color: #0172d3;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #0173d5;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0174d7;
             }
         }
-        >tr.even {
-            >.selected {
+        > tr.even {
+            > .selected {
                 background-color: #0172d3;
             }
         }
@@ -1412,11 +1412,11 @@ table.dataTable.display {
 
 table.dataTable.stripe {
     tbody {
-        >tr.odd.selected {
+        > tr.odd.selected {
             background-color: #0172d2;
         }
-        >tr.odd {
-            >.selected {
+        > tr.odd {
+            > .selected {
                 background-color: #0172d2;
             }
         }
@@ -1425,13 +1425,13 @@ table.dataTable.stripe {
 
 table.dataTable.hover {
     tbody {
-        >tr.selected {
+        > tr.selected {
             &:hover {
                 background-color: #0170d0;
             }
         }
-        >tr {
-            >.selected {
+        > tr {
+            > .selected {
                 &:hover {
                     background-color: #0170d0;
                 }
@@ -1442,19 +1442,19 @@ table.dataTable.hover {
 
 table.dataTable.order-column {
     tbody {
-        >tr.selected {
-            >.sorting_1 {
+        > tr.selected {
+            > .sorting_1 {
                 background-color: #0172d3;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #0172d3;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0172d3;
             }
         }
-        >tr {
-            >.selected {
+        > tr {
+            > .selected {
                 background-color: #0172d3;
             }
         }
@@ -1463,35 +1463,35 @@ table.dataTable.order-column {
 
 table.dataTable.order-column.stripe {
     tbody {
-        >tr.odd.selected {
-            >.sorting_1 {
+        > tr.odd.selected {
+            > .sorting_1 {
                 background-color: #016ecc;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #016fcd;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0170cf;
             }
         }
-        >tr.even.selected {
-            >.sorting_1 {
+        > tr.even.selected {
+            > .sorting_1 {
                 background-color: #0172d3;
             }
-            >.sorting_2 {
+            > .sorting_2 {
                 background-color: #0173d5;
             }
-            >.sorting_3 {
+            > .sorting_3 {
                 background-color: #0174d7;
             }
         }
-        >tr.odd {
-            >.selected {
+        > tr.odd {
+            > .selected {
                 background-color: #016ecc;
             }
         }
-        >tr.even {
-            >.selected {
+        > tr.even {
+            > .selected {
                 background-color: #0172d3;
             }
         }
@@ -1500,26 +1500,26 @@ table.dataTable.order-column.stripe {
 
 table.dataTable.order-column.hover {
     tbody {
-        >tr.selected {
+        > tr.selected {
             &:hover {
-                >.sorting_1 {
+                > .sorting_1 {
                     background-color: #016bc6;
                 }
-                >.sorting_2 {
+                > .sorting_2 {
                     background-color: #016cc7;
                 }
-                >.sorting_3 {
+                > .sorting_3 {
                     background-color: #016dca;
                 }
             }
         }
-        >tr {
+        > tr {
             &:hover {
-                >.selected {
+                > .selected {
                     background-color: #016bc6;
                 }
             }
-            >.selected {
+            > .selected {
                 &:hover {
                     background-color: #016bc6;
                 }
@@ -1528,7 +1528,7 @@ table.dataTable.order-column.hover {
     }
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
     div.dataTables_wrapper {
         div.dataTables_filter {
             text-align: center;
@@ -1547,7 +1547,7 @@ table.dataTable.order-column.hover {
         float: none;
         width: 100%;
         text-align: center;
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
         a.btn {
             float: none;
         }
@@ -1565,7 +1565,7 @@ table.dataTable.order-column.hover {
     }
 }
 
-@media screen and (max-width:640px) {
+@media screen and (max-width: 640px) {
     div.dataTables_wrapper {
         span.select-info {
             margin-#{$start-direction}: 0;

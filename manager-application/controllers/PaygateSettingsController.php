@@ -7,32 +7,32 @@ class PaygateSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmPaygate');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_PAYGATE_ID', $langId), 'paygate_id');
-        $fld1 = new FormFieldRequirement('paygate_id', Labels::getLabel('LBL_PAYGATE_ID', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_PAYGATE_ID', $langId), 'paygate_id');
+        $fld1 = new FormFieldRequirement('paygate_id', Labels::getLabel('FRM_PAYGATE_ID', $langId));
         $fld1->setRequired(false);
-        $reqFld1 = new FormFieldRequirement('paygate_id', Labels::getLabel('LBL_PAYGATE_ID', $langId));
+        $reqFld1 = new FormFieldRequirement('paygate_id', Labels::getLabel('FRM_PAYGATE_ID', $langId));
         $reqFld1->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_ENCRYPTION_KEY', $langId), 'encryption_key');
-        $fld2 = new FormFieldRequirement('encryption_key', Labels::getLabel('LBL_ENCRYPTION_KEY', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_ENCRYPTION_KEY', $langId), 'encryption_key');
+        $fld2 = new FormFieldRequirement('encryption_key', Labels::getLabel('FRM_ENCRYPTION_KEY', $langId));
         $fld2->setRequired(false);
-        $reqFld2 = new FormFieldRequirement('encryption_key', Labels::getLabel('LBL_ENCRYPTION_KEY', $langId));
+        $reqFld2 = new FormFieldRequirement('encryption_key', Labels::getLabel('FRM_ENCRYPTION_KEY', $langId));
         $reqFld2->setRequired(true);
 
 
-        $frm->addTextBox(Labels::getLabel('LBL_PAYGATE_ID', $langId), 'live_paygate_id');
-        $liveFld1 = new FormFieldRequirement('live_paygate_id', Labels::getLabel('LBL_PAYGATE_ID', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_PAYGATE_ID', $langId), 'live_paygate_id');
+        $liveFld1 = new FormFieldRequirement('live_paygate_id', Labels::getLabel('FRM_PAYGATE_ID', $langId));
         $liveFld1->setRequired(false);
-        $reqLiveFld1 = new FormFieldRequirement('live_paygate_id', Labels::getLabel('LBL_PAYGATE_ID', $langId));
+        $reqLiveFld1 = new FormFieldRequirement('live_paygate_id', Labels::getLabel('FRM_PAYGATE_ID', $langId));
         $reqLiveFld1->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_ENCRYPTION_KEY', $langId), 'live_encryption_key');
-        $liveFld2 = new FormFieldRequirement('live_encryption_key', Labels::getLabel('LBL_ENCRYPTION_KEY', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_ENCRYPTION_KEY', $langId), 'live_encryption_key');
+        $liveFld2 = new FormFieldRequirement('live_encryption_key', Labels::getLabel('FRM_ENCRYPTION_KEY', $langId));
         $liveFld2->setRequired(false);
-        $reqLiveFld2 = new FormFieldRequirement('live_encryption_key', Labels::getLabel('LBL_ENCRYPTION_KEY', $langId));
+        $reqLiveFld2 = new FormFieldRequirement('live_encryption_key', Labels::getLabel('FRM_ENCRYPTION_KEY', $langId));
         $reqLiveFld2->setRequired(true);
 
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', 'paygate_id', $reqFld1);

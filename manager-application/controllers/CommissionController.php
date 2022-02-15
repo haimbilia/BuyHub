@@ -83,7 +83,7 @@ class CommissionController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(tu.user_parent > 0, user_parent, tu.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('tuc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -140,7 +140,7 @@ class CommissionController extends ListingBaseController
 
             if ($data['commsetting_product_id'] > 0) {
                 $prodObj = Product::getSearchObject($this->siteLangId);
-                $prodObj->addCondition('product_id', '=', $data['commsetting_product_id']);
+                $prodObj->addCondition('product_id', '=', 'mysql_func_' . $data['commsetting_product_id'], 'AND', true);
                 $prodObj->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name'));
                 $prodObj->doNotCalculateRecords();
                 $prodObj->setPageSize(1);
@@ -163,7 +163,8 @@ class CommissionController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -226,7 +227,7 @@ class CommissionController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $srch = Commission::getCommissionHistorySettingsObj($this->siteLangId);
-        $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
+        $srch->addCondition('tcsh.csh_commsetting_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -243,13 +244,15 @@ class CommissionController extends ListingBaseController
     public function viewLog()
     {
         $this->rowsData();
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getRows()
     {
         $this->rowsData();
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteRecord()
@@ -316,7 +319,7 @@ class CommissionController extends ListingBaseController
         $srch = Product::getSearchObject($this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->setPageNumber($page);
@@ -347,12 +350,12 @@ class CommissionController extends ListingBaseController
         $frm->addHiddenField('', 'commsetting_id', $recordId);
 
         if (!$isMandatory) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'commsetting_prodcat_id', $catArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Seller', $this->siteLangId), 'commsetting_user_id', $userArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'commsetting_product_id', $prodArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'commsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'commsetting_user_id', $userArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'commsetting_product_id', $prodArr, '', [], '');
         }
 
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Commission_fees_(%)', $this->siteLangId), 'commsetting_fees');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_COMMISSION_FEES_(%)', $this->siteLangId), 'commsetting_fees');
         $fld->requirements()->setRange('0', '100');
         return $frm;
     }
@@ -361,7 +364,7 @@ class CommissionController extends ListingBaseController
     {
         $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($commissionTblHeadingCols) {
-            return json_decode($commissionTblHeadingCols);
+            return json_decode($commissionTblHeadingCols, true);
         }
 
         $arr = [

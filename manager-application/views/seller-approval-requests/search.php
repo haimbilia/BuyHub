@@ -44,7 +44,11 @@ foreach ($arrListing as $sn => $row) {
                             'onclick' => 'viewSellerRequest('.$row['usuprequest_id'].')',
                             'title' => Labels::getLabel('LBL_View', $siteLangId)
                         ],
-                        'label' => "<i class='far fa-eye icon'></i>"
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                        </use>
+                                    </svg>',
                     ]
                 ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
@@ -58,16 +62,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

@@ -32,7 +32,7 @@
                                     <input class="btn btn-brand" 
                                         type="button" 
                                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                        onClick="customProductLangForm(<?php echo $product_id; ?>, <?php echo $product_lang_id; ?>, 1)">
+                                        onclick="customProductLangForm(<?php echo $product_id; ?>, <?php echo $product_lang_id; ?>, 1)">
                                 </div>
                             </div>
                         <?php } ?>

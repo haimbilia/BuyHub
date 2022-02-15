@@ -76,9 +76,9 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-<div class="form-edit-body loaderContainerJs">
-    <?php echo $imageFrm->getFormHtml(); ?>
-</div>
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $imageFrm->getFormHtml(); ?>
+    </div>
 </div>
 
 
@@ -119,7 +119,6 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
         let slideScreen = $(this).val();
         let recordId = $(this).closest("form").find('input[name="slide_id"]').val();
         let langId = $("#imageLanguageJs").val();
-        console.log(recordId, 'THUMB', langId, slideScreen);
         loadImages(recordId, 'THUMB', slideScreen, langId);
     });
 </script>

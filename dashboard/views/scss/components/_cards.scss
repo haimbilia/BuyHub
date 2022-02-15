@@ -1,31 +1,44 @@
+$card-space: 1.5rem;
+$card-radius: 4px;
+$card-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
+$card-bg: #fff;
 .card {
-    box-shadow: 0 0 10px 0 rgba(76, 87, 125, 0.1);
-    background: #fff;
+    //box-shadow: $card-shadow;
+    background-color: $card-bg;
+    box-shadow: $shadow-theme;
     //border: $border;
     border: none;
     position: relative;
-    border-radius: $radius4;
-    margin-bottom: 0;
-    height: 100%;
+    border-radius: $card-radius;
+    margin-bottom: 1rem;
+    //height: 100%;
     //animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     display: flex;
     flex-direction: column;
     @include media-breakpoint-down(md) {
         word-break: normal;
     }
-    &-header {
+    &-tabs {
+        .card-head {
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-bottom: $border;
+        }
+    }
+    &-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem;
+        padding: $card-space;
         margin-bottom: 0.5rem;
         color: $txt-body;
         background: none;
-        border: none;
+        border-bottom: solid 1px lighten($border-color, 03);
+        //border-bottom: $border;
         & ~ .card-body {
-            padding-top: 0;
+            //padding-top: 0;
         }
-
         &-label {
             color: $txt-body;
             font-size: 1.2rem;
@@ -36,35 +49,76 @@
             //margin-#{$end-direction}: 8rem;
         }
         &-title {
-            font-size: 1.1rem;
-            font-weight: inherit;
-            line-height: 1.5;
-            margin: 0;
-            padding: 0;
-            > i {
-                margin-#{$end-direction}: 0.5rem;
-            }
+            font-size: 1rem;
         }
         .text-muted {
             font-size: 0.8rem;
             color: $txt-gray;
         }
     }
+    &-toolbar {
+        display: flex;
+        align-items: flex-start;
+        align-content: flex-start;
+        @include media-breakpoint-up(md) {
+            align-items: center;
+            align-content: flex-end;
+            margin-#{$start-direction}: 2rem;
+        }
+        .btn {
+            border: $border;
+            border-radius: 4px;
+        }
+
+        .btn-add ~ .actions {
+            margin-#{$start-direction}: 2rem;
+        }
+        > .actions {
+            li {
+                margin: 0;
+                a {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+            .selected {
+                color: $brand-color;
+                .svg {
+                    fill: currentColor;
+                }
+            }
+        }
+        ul {
+            display: flex;
+            li {
+                list-style: none;
+                margin-#{$start-direction}: 0.5rem;
+                &:first-child {
+                    margin-#{$start-direction}: 0;
+                }
+                &:last-child {
+                    margin-#{$end-direction}: 0;
+                }
+            }
+        }
+    }
     &-body {
         flex: 1 1 0;
-        padding: 1rem;
+        padding: $card-space;
+        position: relative;
     }
-    &-footer {
-        padding: 1rem;
+    &-foot {
+        padding: $card-space;
         background: none;
         border-top: $border;
     }
     &-title {
         margin-bottom: 0;
-        font-weight: 400;
+        font-weight: 500;
         font-size: 1.1rem;
         a {
-            color: $txt-body;
+            color: currentColor;
         }
     }
 }

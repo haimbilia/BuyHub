@@ -9,7 +9,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 $btnSubmit->setFieldTagAttribute('disabled', "disabled");
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -205,7 +205,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $(document).on('click', '.rating-action svg', function() {

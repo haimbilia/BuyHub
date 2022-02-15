@@ -131,6 +131,8 @@ class AdminPrivilege
     public const SECTION_SYSTEMLOG = 123;
     public const SECTION_SETTINGS = 124;
     public const SECTION_PAGES_LANGUAGE_DATA = 125;
+    public const SECTION_CATEGORY_REQUEST = 126;
+    public const SECTION_GETTING_STARTED = 127;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -188,6 +190,7 @@ class AdminPrivilege
                 static::SECTION_CATALOG_REQUESTS => Labels::getLabel('NAV_CATALOG_REQUESTS', $langId),
                 static::SECTION_CUSTOM_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_REQUESTS', $langId),
                 static::SECTION_CUSTOM_CATALOG_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_PRODUCT_REQUESTS', $langId),
+                static::SECTION_CATEGORY_REQUEST => Labels::getLabel('NAV_CATEGORY_REQUEST', $langId),
 
                 static::SECTION_CONTENT_PAGES => Labels::getLabel('NAV_CONTENT_PAGES', $langId),
                 static::SECTION_CONTENT_BLOCKS => Labels::getLabel('NAV_CONTENT_BLOCKS', $langId),
@@ -295,6 +298,7 @@ class AdminPrivilege
                 static::SECTION_BADGE_REQUESTS => Labels::getLabel('NAV_BADGE_REQUESTS', $langId),
                 static::SECTION_SETTINGS => Labels::getLabel('NAV_SYSTEM_SETTINGS', $langId),
                 static::SECTION_PAGES_LANGUAGE_DATA => Labels::getLabel('NAV_PAGES_LANGUAGE_DATA_SETTINGS', $langId),
+                static::SECTION_GETTING_STARTED => Labels::getLabel('NAV_GETTING_STARTED', $langId),
 
                 /* static::SECTION_Languages => Labels::getLabel('NAV_LANGUAGES',$langId),
                 static::SECTION_Languages => Labels::getLabel('NAV_ORDER_STATUS',$langId), */
@@ -342,10 +346,10 @@ class AdminPrivilege
         /* ] */
 
         $srch = new SearchBase('tbl_admin_permissions');
-        $srch->addCondition('admperm_admin_id', '=', $adminId);
+        $srch->addCondition('admperm_admin_id', '=', 'mysql_func_' . $adminId, 'AND', true);
         $srch->doNotCalculateRecords();
         if (0 < $sectionId) {
-            $srch->addCondition('admperm_section_id', '=', $sectionId);
+            $srch->addCondition('admperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND', true);
         }
 
         $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));
@@ -1652,12 +1656,17 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewSystemLog($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_READ, $returnResult);
     }
-    
+
+    public function canEditSystemLog($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
     public function canViewSettings($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SETTINGS, static::PRIVILEGE_READ, $returnResult);
@@ -1671,5 +1680,20 @@ class AdminPrivilege
     public function canEditPagesLanguageData($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_PAGES_LANGUAGE_DATA, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewGettingStarted($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_GETTING_STARTED, static::PRIVILEGE_READ, $returnResult);
     }
 }

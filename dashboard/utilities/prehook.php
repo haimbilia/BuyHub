@@ -23,7 +23,7 @@ FatApp::setViewDataProvider('_partial/topHeaderDashboard.php', array('Navigation
 
 FatApp::setViewDataProvider('_partial/headerUserArea.php', array('Common', 'headerUserArea'));
 FatApp::setViewDataProvider('_partial/dashboardLanguageArea.php', array('Common', 'headerLanguageArea'));
-FatApp::setViewDataProvider('_partial/dashboardTop.php', array('Navigation', 'dashboardTop'));
+FatApp::setViewDataProvider('_partial/header/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
 // FatApp::setViewDataProvider('_partial/userDashboardMessages.php', array('Common', 'userMessages'));
 FatApp::setViewDataProvider('_partial/footerNavigation.php', array('Navigation', 'footerNavigation'));
 FatApp::setViewDataProvider('_partial/seller/sellerSalesGraph.php', array('Statistics', 'sellerSalesGraph'));

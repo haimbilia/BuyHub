@@ -784,7 +784,7 @@ class ProductsController extends MyAppController
         $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
         /* End of Prmotional Banner  ]*/
 
-        /* Get Product Specifications */
+        /* Get Product Specifications */        
         $this->set('productSpecifications', $this->getProductSpecifications($product['product_id'], $this->siteLangId));
         /* End of Product Specifications */
 
@@ -967,8 +967,10 @@ class ProductsController extends MyAppController
         $specSrchObj->doNotLimitRecords();
         $specSrchObj->joinTable(Product::DB_PRODUCT_SPECIFICATION, 'LEFT OUTER JOIN', 'product_id = tcps.prodspec_product_id', 'tcps');
         $specSrchObj->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'INNER JOIN', 'tcps.prodspec_id = tcpsl.prodspeclang_prodspec_id and   prodspeclang_lang_id  = ' . $langId, 'tcpsl');
-        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value'));
+        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value','prodspec_group'));
         $specSrchObj->addGroupBy('prodspec_id');
+        $specSrchObj->addOrder('prodspec_group');
+        $specSrchObj->addOrder('prodspec_name');
         $specSrchObj->addCondition('prodspec_product_id', '=', $product_id);
         $specSrchObjRs = $specSrchObj->getResultSet();
         return FatApp::getDb()->fetchAll($specSrchObjRs);
@@ -1945,14 +1947,16 @@ class ProductsController extends MyAppController
 
     public function linksAutocomplete()
     {
-        $prodCatObj = new ProductCategory();
-        $post = FatApp::getPostedData();
-        $arr_options = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $post['keyword']);
+        $prodCatObj = new ProductCategory();        
+        $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $search_keyword = urldecode($search_keyword);
+        //$categories = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $search_keyword);
+        $categories = $prodCatObj->getProdCatAutoSuggest($search_keyword, 20, $this->siteLangId);
         $json = array();
-        foreach ($arr_options as $key => $product) {
-            $json[] = array(
+        foreach ($categories as $key => $product) {
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
@@ -2129,7 +2133,11 @@ class ProductsController extends MyAppController
 
     public function autoCompleteTaxCategories()
     {
-        $pagesize = 10;
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
         $post = FatApp::getPostedData();
         $srch = Tax::getSearchObject($this->siteLangId, true);
         $srch->addCondition('taxcat_deleted', '=', 0);
@@ -2148,21 +2156,20 @@ class ProductsController extends MyAppController
                 ->attachCondition('taxcat_identifier', 'LIKE', '%' . $post['keyword'] . '%')
                 ->attachCondition('taxcat_code', 'LIKE', '%' . $post['keyword'] . '%');
         }
+        $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $taxCategories = $db->fetchAll($rs, 'taxcat_id');
-        $json = array();
-        $defaultStringLength = applicationConstants::DEFAULT_STRING_LENGTH;
+
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($taxCategories as $key => $taxCategory) {
             $taxCatName = strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'));
-            $taxCatName1 = substr($taxCatName, 0, $defaultStringLength);
-            if ($defaultStringLength < strlen($taxCatName)) {
-                $taxCatName1 .= '...';
-            }
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => $taxCatName1
+                'text' => $taxCatName
             );
         }
         die(json_encode($json));

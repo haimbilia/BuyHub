@@ -220,7 +220,7 @@ class OrderSubscription extends MyAppModel
         return $activeSusbscriptions;
     }
 
-    public static function getSubscriptionTitle($plan, $langId = 0)
+    public static function getSubscriptionTitle($plan, $langId = 0, $includeAmount = true)
     {
         if (!$langId) {
             $langId = CommonHelper::getLangId();
@@ -228,13 +228,14 @@ class OrderSubscription extends MyAppModel
         $price = $plan['ossubs_price'];
 
         $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($langId);
+        $price = (true === $includeAmount ? CommonHelper::displayMoneyFormat($price) . " /  " : '');
 
         if ($plan['ossubs_frequency'] == SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED) {
-            return CommonHelper::displayMoneyFormat($price) . " /  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
+            return $price . $subcriptionPeriodArr[$plan['ossubs_frequency']];
         }
         $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_PER", $langId) : Labels::getLabel("LBL_FOR", $langId);
 
-        return $plan['ossubs_subscription_name'] . " - " . CommonHelper::displayMoneyFormat($price) . $planText . " " . (($plan['ossubs_interval'] > 0) ? $plan['ossubs_interval'] : '')
+        return $plan['ossubs_subscription_name'] . " - " . $price . $planText . " " . (($plan['ossubs_interval'] > 0) ? $plan['ossubs_interval'] : '')
             . "  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
     }
 }

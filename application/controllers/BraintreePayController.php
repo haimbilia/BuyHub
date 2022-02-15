@@ -110,7 +110,7 @@ class BraintreePayController extends PaymentController
 
     private function getPaymentForm($orderId)
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('BraintreePay', 'charge', array($orderId)), 'class' => "form form--normal"));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('BraintreePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
         $frm->addButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId), array("disabled" => "disabled", "id" => "submit-button"));
         return $frm;
     }

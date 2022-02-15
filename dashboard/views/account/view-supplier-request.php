@@ -1,23 +1,22 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php $this->includeTemplate('_partial/header/content-header.php'); ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="message message--success align--center cms">
                         <?php if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_PENDING) { ?>
                             <i class="fa fa-hourglass-1"></i>
-                            <div class="section-head  section--head--center">
+                            <div class="section-head section-head-center">
                                 <div class="section__heading">
-                                    <h2><span><?php //echo /* Labels::getLabel('LBL_Oops',$siteLangId); */
-                                                ?></span></h2>
+                                    <h2> <?php //echo /* Labels::getLabel('LBL_Oops',$siteLangId); */
+                                            ?> </h2>
                                 </div>
                             </div>
                             <div class="block--empty text-center">
-                            <img class="block__img"
-                                src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
+                                <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
                             </div>
 
                             <h4><?php echo Labels::getLabel('LBL_Hello', $siteLangId), ' ', $supplierRequest["user_name"] ?> , <?php echo Labels::getLabel('LBL_Thank_you_for_submitting_your_application', $siteLangId) ?></h4>
@@ -26,7 +25,7 @@
 
                         <?php } elseif ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_APPROVED) { ?>
                             <i class="fa fa-check-circle"></i>
-                            <div class="section-head  section--head--center">
+                            <div class="section-head section-head-center">
                                 <div class="section__heading">
                                     <h2><?php echo /* Labels::getLabel('LBL_Approved',$siteLangId) */ Labels::getLabel('LBL_Congratulations', $siteLangId); ?></h2>
                                 </div>
@@ -57,4 +56,3 @@
             </div>
         </div>
     </div>
-</main>

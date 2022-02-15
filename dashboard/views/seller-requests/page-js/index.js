@@ -11,8 +11,8 @@
     };
 
     markActive = function (element) {
-        $('ul.tabs_nav-js li.is-active').removeClass('is-active');
-        $(element).closest('li').addClass('is-active');
+        $('.tabsNavJs a.active').removeClass('active');
+        $(element).addClass('active');
     }
 
     goToCustomCatalogProductSearchPage = function (page) {
@@ -26,9 +26,10 @@
 
     searchCustomCatalogProducts = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.customCatalogReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchCustomCatalogProducts'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -53,9 +54,10 @@
 
     searchBrandRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.brandReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBrandRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -72,9 +74,10 @@
 
     searchProdCategoryRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.catReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchProdCategoryRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -83,10 +86,10 @@
 
     /* Product Brand Request [ */
     addBrandReqForm = function (id) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
+            $.ykmodal(t);
+            fcom.closeAlertMessage();
         });
     };
 
@@ -94,22 +97,21 @@
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
             $.mbsmessage.close();
             searchBrandRequests(frm);
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
             }
-            $(document).trigger('close.facebox');
-        });
+            $.ykmodal(t);
+        }, { fOutMode: 'json' });
     };
 
     addBrandReqLangForm = function (brandReqId, langId, autoFillLangData = 0) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 
@@ -208,20 +210,21 @@
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $('#loader-js').html(fcom.getLoader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             complete: function () {
-                $('#loader-js').html(fcom.getLoader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             success: function (ans) {
+                fcom.removeLoader();
                 $('.text-danger').remove();
                 $('#input-field').html(ans.msg);
                 if (ans.status == true) {
                     $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('text-success');
+                    $('#input-field').addClass('badge-success');
                     brandMediaForm(ans.brandId);
                 } else {
-                    $('#input-field').removeClass('text-success');
+                    $('#input-field').removeClass('badge-success');
                     $('#input-field').addClass('text-danger');
                 }
             },
@@ -341,9 +344,10 @@
 
     searchBadgeRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.badgeReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -433,7 +437,7 @@
             setTimeout(function () {
                 selector.val('').trigger('change');
             }, 200);
-            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onclick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
             var tbl = "";
             if (1 > $('table.recordListing--js').length) {
                 var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
@@ -470,9 +474,10 @@
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").html(fcom.getLoader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl('SellerRequests', 'records', [badgeReqId]), data, function (t) {
+            fcom.removeLoader();
             $(".recordsContainer--js").html(t);
         });
     };

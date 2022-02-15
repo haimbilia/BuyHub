@@ -1,6 +1,4 @@
 @media print {
-
-
     body {
         margin: 0;
         padding: 0;
@@ -10,7 +8,7 @@
 
         table {
             overflow: visible !important;
-            table-layout: fixed  !important;
+            table-layout: fixed !important;
         }
 
         .content-space {
@@ -25,7 +23,6 @@
             text-align: right !important;
         }
     }
-
 
     .noprint,
     .no-print {

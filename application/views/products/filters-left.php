@@ -381,7 +381,7 @@
                                      },
                                      connect: true,
                                      tooltips: true,
-                                     direction: '<?php echo $layoutDirection; ?>',
+                                     direction: '<?php echo CommonHelper::getLayoutDirection(); ?>',
                                      pips: {
                                          mode: 'values',
                                          values: steps,

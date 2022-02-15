@@ -2,7 +2,6 @@
 
 class TransactionReportController extends SellerBaseController
 {
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -16,6 +15,7 @@ class TransactionReportController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('MSG_SEARCH_BY_ORDER_ID,_COMMENTS,_USER_NAME_OR_USER_EMAIL', $this->siteLangId));
         $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
@@ -70,6 +70,8 @@ class TransactionReportController extends SellerBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
         switch ($sortBy) {
             default:
                 $srch->addOrder($sortBy, $sortOrder);
@@ -125,15 +127,8 @@ class TransactionReportController extends SellerBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $srch->setPageSize($pagesize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -150,6 +145,7 @@ class TransactionReportController extends SellerBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
 
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -161,8 +157,8 @@ class TransactionReportController extends SellerBaseController
             $frm->addHiddenField('', 'reportColumns', '');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }

@@ -1,21 +1,21 @@
 
 (function () {
     mediaForm = function (banner_id, langId = 0, slide_screen = 1) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ProductCategoriesRequest', 'media', [banner_id, langId, slide_screen]), '', function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'media', [banner_id, langId, slide_screen]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
             images(banner_id, 'logo', slide_screen, langId);
             images(banner_id, 'image', slide_screen, langId);
-            fcom.removeLoader();
         });
     };
 
     images = function (recordId, fileType, slide_screen, langId) {
-        fcom.ajax(fcom.makeUrl('ProductCategoriesRequest', 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.removeLoader();
             if (fileType == 'logo') {
-                $('#logoListingJs').html(t);
+                $('#logoListingJs').html(t.html);
             } else {
-                $('#imageListingJs').html(t);
+                $('#imageListingJs').html(t.html);
             }
         });
     };
@@ -41,14 +41,14 @@
         var slide_screen = $("#slideScreenJs").val();
         images(recordId, 'image', slide_screen, lang_id);
     });
-     
+
 
     bindUserSelect2 = function (element) {
         select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
             clearSearch();
-        }); 
+        });
     };
-     
+
 })();
 $(document).ready(function () {
     bindUserSelect2('searchFrmUserIdJs');

@@ -34,6 +34,11 @@ class OrderStatusController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'editRecord(0)'
+            ],
+        ];
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
 
@@ -44,7 +49,8 @@ class OrderStatusController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData();
-
+        $this->setCustomColumnWidth();
+        $this->set('autoTableColumWidth', false);
         $this->_template->addJs(['js/jquery.tablednd.js', 'order-status/page-js/index.js']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -61,7 +67,7 @@ class OrderStatusController extends ListingBaseController
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -87,9 +93,9 @@ class OrderStatusController extends ListingBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_priority');
-        if (!array_key_exists($sortBy, $fields) && 'orderstatus_priority' != $sortBy) {
-            $sortBy = 'orderstatus_priority';
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_name');
+        if (!array_key_exists($sortBy, $fields) && 'orderstatus_name' != $sortBy) {
+            $sortBy = 'orderstatus_name';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -100,13 +106,9 @@ class OrderStatusController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $postedData = FatApp::getPostedData();
-        $post = $searchForm->getFormDataFromArray($postedData);
-
-        $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
-
-        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
-
-        if (!empty($post['keyword'])) {
+        $post = $searchForm->getFormDataFromArray($postedData); 
+        $srch = OrderStatus::getSearchObject(false, $this->siteLangId); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ostatus.orderstatus_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ostatus_l.orderstatus_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -117,24 +119,18 @@ class OrderStatusController extends ListingBaseController
         } else {
             $srch->addCondition('ostatus.orderstatus_type', '=', Orders::ORDER_PRODUCT);
         }
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        //CommonHelper::printArray($records,1);
-
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId)); 
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -162,7 +158,8 @@ class OrderStatusController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -183,7 +180,11 @@ class OrderStatusController extends ListingBaseController
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
@@ -203,7 +204,7 @@ class OrderStatusController extends ListingBaseController
 
         /* Please retain actual css class as option text. As that class used in JS to fill color of that option. */
         $classArr = applicationConstants::getClassArr();
-        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_COLOR_CLASS', $this->siteLangId), 'orderstatus_color_class', $classArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TEXT_COLOR', $this->siteLangId), 'orderstatus_color_class', $classArr, '', array(), '');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
 
@@ -211,7 +212,7 @@ class OrderStatusController extends ListingBaseController
 
         $frm->addCheckBox(Labels::getLabel('FRM_FOR_DIGITAL_ORDERS', $this->siteLangId), 'orderstatus_is_digital', applicationConstants::YES, [], false, applicationConstants::NO);
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orderstatus_is_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orderstatus_is_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -228,7 +229,7 @@ class OrderStatusController extends ListingBaseController
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_ORDERSTATUS_NAME', $langId), 'orderstatus_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ORDER_STATUS_NAME', $langId), 'orderstatus_name');
         return $frm;
     }
 
@@ -257,7 +258,7 @@ class OrderStatusController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('orderstatus_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -276,7 +277,7 @@ class OrderStatusController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $orderstatusObj = new OrderStatus($recordId);
@@ -306,7 +307,7 @@ class OrderStatusController extends ListingBaseController
     {
         $orderStatusTblHeadingCols = CacheHelper::get('orderStatusTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderStatusTblHeadingCols) {
-            return json_decode($orderStatusTblHeadingCols);
+            return json_decode($orderStatusTblHeadingCols, true);
         }
 
         $arr = [
@@ -336,8 +337,41 @@ class OrderStatusController extends ListingBaseController
         ];
     }
 
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'dragdrop' => [
+                'width' => '5%'
+            ],
+            'select_all' => [
+                'width' => '5%'
+            ],
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'orderstatus_name' => [
+                'width' => '50%'
+            ],
+            'orderstatus_priority' => [
+                'width' => '20%'
+            ],
+            'orderstatus_is_active' => [
+                'width' => '10%'
+            ],
+            'action' => [
+                'width' => '5%'
+            ],
+        ];
+        $this->set('tableHeadAttrArr', $arr);
+    }
+
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'orderstatus_name', 'orderstatus_is_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
     }
 }

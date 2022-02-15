@@ -35,15 +35,15 @@ class UserFavoriteProductSearch extends SearchBase
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
         }
         if ($isProductActive) {
-            $this->addCondition('product_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isProductApproved) {
-            $this->addCondition('product_approved', '=', Product::APPROVED);
+            $this->addCondition('product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
         }
 
         if ($isProductDeleted) {
-            $this->addCondition('product_deleted', '=', applicationConstants::NO);
+            $this->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         $this->productsJoined = true;
@@ -53,9 +53,9 @@ class UserFavoriteProductSearch extends SearchBase
         $this->sellerUserJoined = true;
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'selprod_user_id = seller_user.user_id', 'seller_user');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = seller_user.user_id', 'seller_user_cred');
-        $this->addCondition('seller_user.user_is_supplier', '=', applicationConstants::YES);
-        $this->addCondition('credential_active', '=', applicationConstants::ACTIVE);
-        $this->addCondition('credential_verified', '=', applicationConstants::YES);
+        $this->addCondition('seller_user.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $this->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $this->addCondition('credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
     }
 
     public function joinSellerProductSpecialPrice($forDate = '')
@@ -64,8 +64,7 @@ class UserFavoriteProductSearch extends SearchBase
             trigger_error(Labels::getLabel("ERR_joinSellerProductSpecialPrice_can_be_joined_only_if,_joinSellerProducts_is_joined.", $this->commonLangId), E_USER_ERROR);
         }
         if ('' == $forDate) {
-            $forDate = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
-            ;
+            $forDate = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');;
         }
         $this->joinTable(
             SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
@@ -85,10 +84,10 @@ class UserFavoriteProductSearch extends SearchBase
         $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'seller_user.user_id = shop.shop_user_id', 'shop');
 
         if ($isActive) {
-            $this->addCondition('shop.shop_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop.shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         if ($isDisplayStatus) {
-            $this->addCondition('shop.shop_supplier_display_status', '=', applicationConstants::ON);
+            $this->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
         }
 
         if ($langId) {
@@ -114,10 +113,10 @@ class UserFavoriteProductSearch extends SearchBase
         }
 
         if ($isActive) {
-            $this->addCondition(SellerProduct::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $this->addCondition(SellerProduct::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         if ($isDeleted) {
-            $this->addCondition(SellerProduct::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+            $this->addCondition(SellerProduct::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         $this->sellerProductsJoined = true;
@@ -132,7 +131,7 @@ class UserFavoriteProductSearch extends SearchBase
             $this->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_country.country_id = shop_country_l.countrylang_country_id AND shop_country_l.countrylang_lang_id = ' . $langId, 'shop_country_l');
         }
         if ($isActive) {
-            $this->addCondition('shop_country.country_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_country.country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
     }
 
@@ -145,7 +144,7 @@ class UserFavoriteProductSearch extends SearchBase
             $this->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_state.state_id = shop_state_l.statelang_state_id AND shop_state_l.statelang_lang_id = ' . $langId, 'shop_state_l');
         }
         if ($isActive) {
-            $this->addCondition('shop_state.state_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_state.state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
     }
 
@@ -156,11 +155,11 @@ class UserFavoriteProductSearch extends SearchBase
             $langId = $this->langId;
         }
         $this->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'p.product_brand_id = brand.brand_id', 'brand');
-        if ($isActive && FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1) ) {
-            $this->addCondition('brand.brand_active', '=', applicationConstants::ACTIVE);
+        if ($isActive && FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $this->addCondition('brand.brand_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         if ($isDeleted && FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $this->addCondition('brand.brand_deleted', '=', '0');
+            $this->addCondition('brand.brand_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($langId) {
@@ -177,8 +176,8 @@ class UserFavoriteProductSearch extends SearchBase
         $this->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = p.product_id', 'ptc');
         $this->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
-        $this->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
-        $this->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
+        $this->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $this->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
 
         if ($langId) {
@@ -193,13 +192,14 @@ class UserFavoriteProductSearch extends SearchBase
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'ufp.ufp_user_id = uf.user_id', 'uf');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uf_cred.credential_user_id = uf.user_id', 'uf_cred');
         if ($isActive) {
-            $this->addCondition('uf_cred.credential_active', '=', applicationConstants::ACTIVE);
-            $this->addCondition('uf_cred.credential_verified', '=', applicationConstants::YES);
+            $this->addCondition('uf_cred.credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('uf_cred.credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
     }
 
     public static function joinFavouriteUserProductsCount($userId = 0)
     {
+        $userId = FatUtility::int($userId);
         $srch = new UserFavoriteProductSearch(0, 'fpc');
         $srch->setDefinedCriteria();
         $srch->joinBrands();
@@ -208,9 +208,9 @@ class UserFavoriteProductSearch extends SearchBase
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription('', true);
         $srch->addSubscriptionValidCondition();
-        $srch->addCondition('ufp_user_id', '=', $userId);
+        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
 
-        $srch->addMultipleFields(array( 'selprod_id', 'ufp_user_id as userFavProductcount_user_id' ));
+        $srch->addMultipleFields(array('selprod_id', 'ufp_user_id as userFavProductcount_user_id'));
 
         $srch->addGroupBy('selprod_id');
 

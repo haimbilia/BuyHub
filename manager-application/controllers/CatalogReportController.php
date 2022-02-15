@@ -88,14 +88,12 @@ class CatalogReportController extends ListingBaseController
         $srch->joinBrands($this->siteLangId, false, true);
         $srch->joinProductToCategory($this->siteLangId);
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
-        $srch->addMultipleFields($selectedFlds);
-        $srch->addGroupBy('p.product_id');
-
+        $srch->addGroupBy('p.product_id'); 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
-
+        
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -105,7 +103,10 @@ class CatalogReportController extends ListingBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();  
+        
+        $srch->addMultipleFields($selectedFlds);
         $productTypeArr = Product::getProductTypes($this->siteLangId);
 
         if ($type == 'export') {
@@ -163,15 +164,8 @@ class CatalogReportController extends ListingBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-
-        $arrListing = $db->fetchAll($rs);
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -193,7 +187,7 @@ class CatalogReportController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

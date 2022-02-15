@@ -77,23 +77,23 @@ class SpecialPriceController extends ListingBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
-        $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId, false);
+        $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId);
+        $srch->addMultipleFields(
+            array(
+                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name'
+            )
+        );
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $srch->setPageSize($pageSize); 
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
-        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $this->set("arrListing", $arrListing);  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -114,6 +114,7 @@ class SpecialPriceController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -124,7 +125,8 @@ class SpecialPriceController extends ListingBaseController
         $this->set('frm', $this->getForm());
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_BIND_SPECIAL_PRICE', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm()
@@ -150,11 +152,11 @@ class SpecialPriceController extends ListingBaseController
     {
         $data = FatApp::getPostedData();
         if (empty($data)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $splPriceId = $this->updateSelProdSplPrice($data, true);
         if (!$splPriceId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         // last Param of getProductDisplayTitle function used to get title in html form.
         $productName = SellerProduct::getProductDisplayTitle($data['splprice_selprod_id'], $this->siteLangId, true);
@@ -184,20 +186,20 @@ class SpecialPriceController extends ListingBaseController
     {
         $splPriceId = FatApp::getPostedData('splprice_id', FatUtility::VAR_INT, 0);
         if (1 > $splPriceId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $attribute = FatApp::getPostedData('attribute', FatUtility::VAR_STRING, '');
 
         $columns = array('splprice_start_date', 'splprice_end_date', 'splprice_price');
         if (!in_array($attribute, $columns)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
         $otherColumnsValue = SellerProductSpecialPrice::getAttributesById($splPriceId, $otherColumns);
         if (empty($otherColumnsValue)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
@@ -220,7 +222,7 @@ class SpecialPriceController extends ListingBaseController
         $json = array(
             'status' => true,
             'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
-            'data' => array('value' => $value)
+            'data' => ['value' => $value]
         );
         FatUtility::dieJsonSuccess($json);
     }
@@ -231,7 +233,7 @@ class SpecialPriceController extends ListingBaseController
         $splprice_id = !empty($post['splprice_id']) ? FatUtility::int($post['splprice_id']) : 0;
 
         if (1 > $selprod_id) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (strtotime($post['splprice_start_date']) > strtotime($post['splprice_end_date'])) {
@@ -318,7 +320,7 @@ class SpecialPriceController extends ListingBaseController
         }
 
         $srch->addOrder('product_name');
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd = $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -416,7 +418,7 @@ class SpecialPriceController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -433,7 +435,7 @@ class SpecialPriceController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $specialPriceRow = SellerProduct::getSellerProductSpecialPriceById($recordId);
         if (empty($specialPriceRow) || 1 > count($specialPriceRow)) {
@@ -450,14 +452,13 @@ class SpecialPriceController extends ListingBaseController
     {
         $splPriceTblHeadingCols = CacheHelper::get('splPriceTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($splPriceTblHeadingCols) {
-            return json_decode($splPriceTblHeadingCols);
+            return json_decode($splPriceTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
-            'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
             'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
@@ -475,7 +476,6 @@ class SpecialPriceController extends ListingBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'credential_username',
             'selprod_price',
             'splprice_price',
             'splprice_start_date',

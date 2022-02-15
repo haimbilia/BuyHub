@@ -93,16 +93,6 @@ class AffiliateController extends AffiliateBaseController
     {
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $frm = $this->getPaymentInfoForm($this->siteLangId);
-        /* $userExtraData = User::getUserExtraData( $loggedUserId, array(
-        'uextra_tax_id',
-        'uextra_payment_method',
-        'uextra_cheque_payee_name',
-        'uextra_bank_name',
-        'uextra_bank_branch_number',
-        'uextra_bank_swift_code',
-        'uextra_bank_account_name',
-        'uextra_bank_account_number',
-        'uextra_paypal_email_id') ); */
         $userExtraData = User::getUserExtraData(
             $loggedUserId,
             array(
@@ -124,7 +114,7 @@ class AffiliateController extends AffiliateBaseController
         $frm->fill($frmData);
         $this->set('userExtraData', $frmData);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->_template->render();
     }
 
     public function setUpPaymentInfo()
@@ -467,6 +457,7 @@ class AffiliateController extends AffiliateBaseController
         $this->set('user_listing', $user_listing);
         $this->set('frmSearch', $frmSearch);
         $this->set('user_listing', $user_listing);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_NAME_OR_EMAIL', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -474,7 +465,6 @@ class AffiliateController extends AffiliateBaseController
     {
         $frm = new Form('frmUserSearch');
         $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        //$keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
 
         $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
         $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
@@ -484,8 +474,10 @@ class AffiliateController extends AffiliateBaseController
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addHiddenField('', 'total_record_count', '');
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }
@@ -506,7 +498,6 @@ class AffiliateController extends AffiliateBaseController
 
         $userObj = new User();
         $srch = $userObj->referredByAffilates($loggedUserId);
-
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
         if ($user_id > 0) {
             $srch->addCondition('user_id', '=', $user_id);
@@ -529,17 +520,12 @@ class AffiliateController extends AffiliateBaseController
             $srch->addCondition('uc.credential_verified', '=', $user_verified);
         }
 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'user_id');
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet(), 'user_id'));
         $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
         $this->_template->render(false, false);
     }
 

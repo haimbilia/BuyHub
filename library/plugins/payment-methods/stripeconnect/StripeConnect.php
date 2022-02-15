@@ -413,11 +413,10 @@ class StripeConnect extends PaymentMethodBase
                 'card_payments',
                 'transfers',
             ],
-            'settings' => $this->getPayoutSettingsArr()
+            'settings' => $this->getPayoutSettingsArr(),
+            'default_currency' => $this->systemCurrencyCode
         ];
-
-        $data['default_currency'] = $this->systemCurrencyCode;
-
+        
         $this->resp = $this->create($data);
         if (false === $this->resp) {
             return false;

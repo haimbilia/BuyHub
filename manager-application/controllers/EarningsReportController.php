@@ -92,7 +92,7 @@ class EarningsReportController extends ListingBaseController
         $sSrch->joinSubscription();
         $sSrch->joinOrderUser();
         $sSrch->joinOtherCharges();
-        $sSrch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $sSrch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
         $sSrch->addGroupBy('DATE(o.order_date_added)');
         $sSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
         $sSrch->doNotCalculateRecords();
@@ -192,8 +192,8 @@ class EarningsReportController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'date', applicationConstants::SORT_DESC);
         }
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
 

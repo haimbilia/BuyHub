@@ -13,11 +13,11 @@ $("document").ready(function () {
 (function () {
     var dv = "#listingDiv";
     searchWishList = function () {
-        $("#loadMoreBtnDiv").html("");
         $("#tab-wishlist").parents().children().removeClass("is-active");
         $("#tab-wishlist").addClass("is-active");
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Account", "wishListSearch"), "", function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
@@ -52,44 +52,7 @@ $("document").ready(function () {
         );
     };
 
-    viewWishListItems = function (uwlist_id, append) {
-        if (typeof append == undefined || append == null) {
-            append = 0;
-        }
-        $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl("Account", "viewWishListItems"), "uwlist_id=" + uwlist_id,
-            function (ans) {
-                if (append == 1) {
-                    $(dv).find(".loader-yk").remove();
-                    $(dv).append(ans);
-                } else {
-                    $(dv).find(".loader-yk").remove();
-                    $(dv).html(ans);
-                }
-            }
-        );
-    };
-
-    viewFavouriteItems = function (append) {
-        if (typeof append == undefined || append == null) {
-            append = 0;
-        }
-        $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl("Account", "viewFavouriteItems"), "",
-            function (ans) {
-                if (append == 1) {
-                    $(dv).find(".loader-yk").remove();
-                    $(dv).append(ans);
-                } else {
-                    $(dv).find(".loader-yk").remove();
-                    $(dv).html(ans);
-                }
-            }
-        );
-    };
-
     searchFavouriteListItems = function (frm, append) {
-        var dv2 = "#favListItems";
         if (typeof append == undefined || append == null) {
             append = 0;
         }
@@ -98,24 +61,14 @@ $("document").ready(function () {
         }
 
         data = fcom.frmData(frm);
-
-        if (append == 1) {
-            $(dv2).prepend(fcom.getLoader());
-        } else {
-            $(dv2).html(fcom.getLoader());
-        }
+        $(dv).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl("Account", "searchFavouriteListItems"), data,
             function (ans) {
+                fcom.removeLoader();
                 ans = $.parseJSON(ans);
                 $.mbsmessage.close();
-                if (append == 1) {
-                    $(dv2).find(".loader-yk").remove();
-                    $(dv2).append(ans.html);
-                } else {
-                    $(dv2).html(ans.html);
-                }
-                $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
+                $(dv).replaceWith(ans.html);
             }
         );
     };
@@ -124,27 +77,13 @@ $("document").ready(function () {
         var dv2 = "#favListItems";
         append = append == "undefined" ? 0 : append;
         page = page == "undefined" ? 0 : page;
-        if (append == 1) {
-            $(dv2).append(fcom.getLoader());
-        } else {
-            $(dv2).html(fcom.getLoader());
-        }
 
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Account", "searchWishListItems"), "uwlist_id=" + uwlist_id + "&page=" + page,
             function (ans) {
+                fcom.removeLoader();
                 ans = $.parseJSON(ans);
-                $(dv).find(".loader-yk").remove();
-                
-                if (append == 1) {
-                    $(dv2).find(".loader-Js").remove();
-                    $(dv2).append(ans.html);
-                } else {
-                    $(dv2).html(ans.html);
-                }
-
-                /* for LoadMore[ */
-                $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
-                /* ] */
+                $(dv).replaceWith(ans.html);
             }
         );
     };
@@ -153,9 +92,6 @@ $("document").ready(function () {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        /* var frm = document.frmProductSearchPaging;
-            $(frm.page).val(page);
-            $("form[name='frmProductSearchPaging']").remove(); */
         var uwlist_id = $("input[name='uwlist_id']").val();
         searchWishListItems(uwlist_id, 0, page);
         $(".selectAll-js").prop("checked", false);
@@ -166,7 +102,7 @@ $("document").ready(function () {
         if (typeof page == "undefined" || page == null) {
             page = 1;
         }
-        var frm = document.favtlistForm;
+        var frm = document.frmProductSearchPaging;
         $(frm.page).val(page);
 
         searchFavouriteListItems(frm, 0, page);
@@ -176,14 +112,16 @@ $("document").ready(function () {
         if (typeof frm == undefined || frm == null) {
             frm = document.frmFavShopSearchPaging;
         }
+        $('.actionBtnsSectionJs').hide();
         data = fcom.frmData(frm);
-        $("#tab-fav-shop").parents().children().removeClass("is-active");
-        $("#tab-fav-shop").addClass("is-active");
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(
             fcom.makeUrl("Account", "favoriteShopSearch"),
             data,
             function (res) {
+                fcom.removeLoader();
+                $('.navLinkJs.active').removeClass('active');
+                $('.navLinkJs.favtShopsJs').addClass('active');
                 $(dv).html(res);
             }
         );
@@ -219,7 +157,7 @@ $("document").ready(function () {
             return false;
         }
         addRemoveWishListProduct(selprod_id, wish_list_id, event);
-        viewWishListItems(wish_list_id);
+        searchWishList();
     };
 
     removeSelectedFromWishlist = function (wish_list_id, event) {
@@ -228,7 +166,7 @@ $("document").ready(function () {
             return false;
         }
         updateWishlist();
-        viewWishListItems(wish_list_id);
+        searchWishList();
     };
 
     removeSelectedFromFavtlist = function (event, moveToCart = false) {
@@ -248,7 +186,7 @@ $("document").ready(function () {
             data,
             function (ans) {
                 if (false === moveToCart) {
-                    viewFavouriteItems();
+                    searchFavouriteListItems();
                     if (ans.status) {
                         $.mbsmessage.close();
                         $.systemMessage(ans.msg, "alert--success");

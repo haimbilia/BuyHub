@@ -1,14 +1,14 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?> <main id="main-area" class="main"   >
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?> 
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
-            'headingLabel' => Labels::getLabel('LBL_My_Offers',$siteLangId),
-            'siteLangId' => $siteLangId,         
+            'headingLabel' => Labels::getLabel('LBL_My_Offers', $siteLangId),
+            'siteLangId' => $siteLangId,
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
-                <!-- <div class="card-header">
+                <!-- <div class="card-head">
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Offers', $siteLangId); ?></h5>
                 </div> -->
                 <div class="card-body">
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-</main>
+
 <script>
     var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
     var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';

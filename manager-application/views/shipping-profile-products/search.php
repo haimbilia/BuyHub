@@ -19,11 +19,11 @@ if (!empty($productsData)) {
     }
     echo '</ul></div>';
 } else {
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+    $this->includeTemplate('_partial/no-record-found.php');
 }
 
 $frm = new Form('frmProductListing', array('id' => 'frmProductListing'));
-$frm->setFormTagAttribute('class', 'web_form last_td_nowrap');
+$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadListProduct); return(false);');
 echo $frm->getFormTag();
 ?>

@@ -11,19 +11,16 @@ class ShippingDurations extends MyAppModel
     public const SHIPPING_DURATION_DAYS = 1;
     public const SHIPPING_DURATION_WEEK = 2;
 
-    private $db;
-
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($langId = 0, $isDeleted = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'sd');
         if ($isDeleted == true) {
-            $srch->addCondition('sd.' . static::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+            $srch->addCondition('sd.' . static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -44,8 +41,8 @@ class ShippingDurations extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
         $arr = array(
-        static::SHIPPING_DURATION_DAYS => Labels::getLabel('LBL_Business_Days', $langId),
-        static::SHIPPING_DURATION_WEEK => Labels::getLabel('LBL_Weeks', $langId),
+            static::SHIPPING_DURATION_DAYS => Labels::getLabel('LBL_Business_Days', $langId),
+            static::SHIPPING_DURATION_WEEK => Labels::getLabel('LBL_Weeks', $langId),
         );
         return $arr;
     }
@@ -64,7 +61,7 @@ class ShippingDurations extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'IFNULL(sd_l.sduration_name,sd.sduration_identifier) as sduration_name'
+                'IFNULL(sd_l.sduration_name,sd.sduration_identifier) as sduration_name'
             )
         );
 
@@ -81,8 +78,9 @@ class ShippingDurations extends MyAppModel
 
     public function canRecordMarkDelete($id)
     {
+        $id = FatUtility::int($id);
         $srch = self::getSearchObject();
-        $srch->addCondition('sd.' . static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition('sd.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('sd.' . static::DB_TBL_PREFIX . 'id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -106,9 +104,9 @@ class ShippingDurations extends MyAppModel
         $str = Labels::getLabel('LBL_Shipping_Duration_Range_Label', $siteLangId);
 
         $replacementArr = array(
-        '{from}' => $sdurationRow['sduration_from'],
-        '{to}' => $sdurationRow['sduration_to'],
-        '{day_or_week}' => $day_or_week
+            '{from}' => $sdurationRow['sduration_from'],
+            '{to}' => $sdurationRow['sduration_to'],
+            '{day_or_week}' => $day_or_week
         );
         foreach ($replacementArr as $key => $val) {
             $str = str_replace($key, $val, $str);

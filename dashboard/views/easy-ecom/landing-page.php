@@ -33,7 +33,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                                     </a>
                                     <iframe id="easyEcomLogin" class='d-none' frameborder="5" width="500" height="300"></iframe>
                                 <?php } else { ?>
-                                    <a class="btn btn-primary btn-lg" href="javascript:void(0)" onClick="register(this)" style="background-color: #27ae60; border-color: #27ae60;">
+                                    <a class="btn btn-primary btn-lg" href="javascript:void(0)" onclick="register(this)" style="background-color: #27ae60; border-color: #27ae60;">
                                         <?php echo Labels::getLabel('LBL_CONNECT', $siteLangId); ?>
                                     </a>
                                 <?php } ?>

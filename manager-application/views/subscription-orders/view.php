@@ -72,6 +72,12 @@
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
                                     </li>
                                 <?php } ?>
+                                <?php if (!empty($order['buyer_phone'])) { ?>
+                                    <li class="list-stats-item">
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>:</span>
+                                        <span class="value"><?php echo ValidateElement::formatDialCode($order['buyer_phone_dcode']) . $order['buyer_phone']; ?></span>
+                                    </li>
+                                <?php } ?>
                             </ul>
 
                         </div>
@@ -89,11 +95,14 @@
                     <div class="card-body">
                         <ul class="list-stats">
                             <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_PAYMENT_STATUS', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo Orders::getPaymentStatusHtml($siteLangId, $order['order_payment_status']);; ?></span>
+                            </li>
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_PAYMENT_MODE', $siteLangId); ?>:</span>
                                 <span class="value"><?php echo $paymentMethodName; ?></span>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </div>

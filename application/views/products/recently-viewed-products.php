@@ -60,6 +60,7 @@ if ($recentViewedProducts) {
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name'],
                                         ];
 
+
                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                         ?>
                                     </a>

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchReport(document.frmReportSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
@@ -14,7 +14,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         $(frm.sortOrder).val('ASC');
         document.getElementById("sortOrder").value = 'ASC';
     }
-    searchReport(frm, false);
+    searchRecords(frm, false);
 });
 
 $(function () {
@@ -30,10 +30,10 @@ $(function () {
 
     reloadList = function (withloader) {
         var frm = document.frmReportSearchPaging;
-        searchReport(frm, withloader);
+        searchRecords(frm, withloader);
     };
 
-    searchReport = function (frm, withloader) {
+    searchRecords = function (frm, withloader) {
         setColumnsData(frm);
         var data = '';
         if (frm) {
@@ -41,10 +41,11 @@ $(function () {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $(dv).prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl('Reports', 'searchProductsInventory'), data, function (t) {
+            fcom.removeLoader();
             $(dv).html(t);
         });
     };
@@ -55,23 +56,23 @@ $(function () {
         }
         var frm = document.frmReportSearchPaging;
         $(frm.page).val(page);
-        searchReport(frm);
+        searchRecords(frm);
     }
 
     clearSearch = function () {
-        document.frmReportSearch.reset();
+        document.frmRecordSearch.reset();
         $("input:checkbox[name=reportColumns]:checked").each(function () {
             if ($(this).attr('disabled') != 'disabled') {
                 $(this).prop('checked', false);
             }
         });
-        searchReport(document.frmReportSearch);
+        searchRecords(document.frmRecordSearch);
     };
 
     exportReport = function () {
-        setColumnsData(document.frmReportSearch);
-        document.frmReportSearch.action = fcom.makeUrl('Reports', 'exportProductsInventoryReport');
-        document.frmReportSearch.submit();
+        setColumnsData(document.frmRecordSearch);
+        document.frmRecordSearch.action = fcom.makeUrl('Reports', 'exportProductsInventoryReport');
+        document.frmRecordSearch.submit();
     };
 
     setColumnsData = function (frm) {

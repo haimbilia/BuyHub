@@ -58,7 +58,7 @@
                 <div class="caption-wraper"><label class="field_label"></label></div>
                 <div class="field-wraper">
                     <div class="field_cover">
-                        <input type="button" class="btn btn-outline-brand" onClick= "productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
+                        <input type="button" class="btn btn-outline-brand" onclick= "productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class="field-wraper">
                     <div class="field_cover">
                         <input type="hidden" name="preq_id" value="<?php echo $preqId; ?>">
-                        <input type="button" class="btn btn-brand" onClick= "<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> customCatalogProductImages(<?php echo $preqId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
+                        <input type="button" class="btn btn-brand" onclick= "<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> customCatalogProductImages(<?php echo $preqId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
@@ -157,8 +157,8 @@
                 var ans = $.parseJSON(t);
                 for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                        "id" : ans['results'][i].id,
+                        "value" : ans['results'][i].text,
                     });
                 }            
                 tagifyOption.settings.whitelist = listOptions;

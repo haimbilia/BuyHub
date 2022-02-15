@@ -158,6 +158,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                             $txt = '<span class="text-danger">' . Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId) . '</span>';
                                         } else {
                                             if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) {
+
                                                 //$txt ='<div> <a data-id="'.$moresellers['selprod_id'].'" data-min-qty="'.$moresellers['selprod_min_order_qty'].'"  href="javascript:void(0)" class="btn btn-brand btn-sm ripplelink block-on-mobile btnProductBuy--js">  '.Labels::getLabel('LBL_Buy_Now', $siteLangId).'</a> <a data-id="'.$moresellers['selprod_id'].'" data-min-qty="'.$moresellers['selprod_min_order_qty'].'"  href="javascript:void(0)" class="btn btn-outline-brand btn-sm ripplelink block-on-mobile btnAddToCart--js">  '.Labels::getLabel('LBL_Add_To_Cart', $siteLangId).'</a> </div>';
                                                 $txt = '<div> <a data-id="' . $moresellers['selprod_id'] . '" data-min-qty="' . $moresellers['selprod_min_order_qty'] . '"  href="javascript:void(0)" class="btn btn-outline-brand btn-sm btnAddToCart--js">  ' . Labels::getLabel('LBL_Add_To_Cart', $siteLangId) . '</a> </div>';
                                             } else {

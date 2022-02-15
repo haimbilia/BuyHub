@@ -16,8 +16,8 @@ class EmailTemplates extends MyAppModel
     public static function getLogoRatioArr()
     {
         return array(
-        static::LOGO_RATIO_SQUARE => '1:1',
-        static::LOGO_RATIO_RECTANGLE => '16:5'
+            static::LOGO_RATIO_SQUARE => '1:1',
+            static::LOGO_RATIO_RECTANGLE => '16:5'
         );
     }
 
@@ -40,7 +40,7 @@ class EmailTemplates extends MyAppModel
         $srch = static::getSearchObject($langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'code', 'LIKE', $etpl_code);
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .  $langId, 'AND', true);
         }
         $srch->addOrder(static::DB_TBL_PREFIX . 'lang_id', 'ASC');
         $srch->addGroupby(static::DB_TBL_PREFIX . 'code');
@@ -52,7 +52,7 @@ class EmailTemplates extends MyAppModel
         return false;
     }
 
-    public static function getSearchObject($langId = 0)
+    public static function getSearchObject($langId = 0, $addOrderBy = true)
     {
         $langId = FatUtility::int($langId);
         /*
@@ -62,20 +62,22 @@ class EmailTemplates extends MyAppModel
          * 
          */
         $srch = new SearchBase(static::DB_TBL);
-        $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
+        if (true === $addOrderBy) {
+            $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
+        }
         $srch->addMultipleFields(
             array(
-            static::DB_TBL_PREFIX . 'code',
-            static::DB_TBL_PREFIX . 'lang_id',
-            static::DB_TBL_PREFIX . 'name',
-            static::DB_TBL_PREFIX . 'subject',
-            static::DB_TBL_PREFIX . 'body',
-            static::DB_TBL_PREFIX . 'replacements',
-            static::DB_TBL_PREFIX . 'status',
+                static::DB_TBL_PREFIX . 'code',
+                static::DB_TBL_PREFIX . 'lang_id',
+                static::DB_TBL_PREFIX . 'name',
+                static::DB_TBL_PREFIX . 'subject',
+                static::DB_TBL_PREFIX . 'body',
+                static::DB_TBL_PREFIX . 'replacements',
+                static::DB_TBL_PREFIX . 'status',
             )
         );
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         }
         return $srch;
     }
@@ -83,12 +85,12 @@ class EmailTemplates extends MyAppModel
     public function addUpdateData($data = array())
     {
         $assignValues = array(
-         static::DB_TBL_PREFIX . 'code' => $data['etpl_code'],
-         static::DB_TBL_PREFIX . 'lang_id' => $data['etpl_lang_id'],
-         static::DB_TBL_PREFIX . 'name' => $data['etpl_name'],
-         static::DB_TBL_PREFIX . 'subject' => $data['etpl_subject'],
-         static::DB_TBL_PREFIX . 'body' => $data['etpl_body'],
-                        );
+            static::DB_TBL_PREFIX . 'code' => $data['etpl_code'],
+            static::DB_TBL_PREFIX . 'lang_id' => $data['etpl_lang_id'],
+            static::DB_TBL_PREFIX . 'name' => $data['etpl_name'],
+            static::DB_TBL_PREFIX . 'subject' => $data['etpl_subject'],
+            static::DB_TBL_PREFIX . 'body' => $data['etpl_body'],
+        );
 
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $assignValues, false, array(), $assignValues)) {
             $this->error = FatApp::getDb()->getError();
@@ -108,13 +110,13 @@ class EmailTemplates extends MyAppModel
         if (!$db->updateFromArray(
             static::DB_TBL,
             array(
-            static::DB_TBL_PREFIX . 'status' => $v
+                static::DB_TBL_PREFIX . 'status' => $v
             ),
             array(
-            'smt' => static::DB_TBL_PREFIX . 'code = ?',
-            'vals' => array(
-                        $etplCode
-            )
+                'smt' => static::DB_TBL_PREFIX . 'code = ?',
+                'vals' => array(
+                    $etplCode
+                )
             )
         )) {
             $this->error = $db->getError();

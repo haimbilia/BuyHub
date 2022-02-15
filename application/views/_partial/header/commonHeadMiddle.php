@@ -62,6 +62,13 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
 </style>
 <script>
     <?php
+
+    $productSearchUrl = CacheHelper::get('productSearchUrl', CONF_DEF_CACHE_TIME, '.txt');
+    if (!$productSearchUrl) {
+        $productSearchUrl = UrlHelper::generateUrl('products', 'search');
+        CacheHelper::create('productSearchUrl', $productSearchUrl, CacheHelper::TYPE_META_TAGS);
+    }
+
     echo $str = 'var langLbl = ' . FatUtility::convertToJson($jsVariables, JSON_UNESCAPED_UNICODE) . ';
     var CONF_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 0) . ';
     var CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 3) . ';
@@ -71,6 +78,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var currencySymbolRight = "' . $currencySymbolRight . '";   
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";
+    var productSearchUrl = "' . $productSearchUrl . '";   
     if( CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES <= 0  ){
         CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = 3;
     }';

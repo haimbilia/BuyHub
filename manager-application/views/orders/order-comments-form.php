@@ -6,7 +6,17 @@ $frm->setFormTagAttribute('data-onclear', 'getOrderCommentForm(' . $op['order_id
 
 $manualFld = $frm->getField('manual_shipping');
 
+if($manualFld != null){
+    if ($manualFld->fldType == 'checkbox') {
+        HtmlHelper::configureSwitchForCheckbox($manualFld);
+        $manualFld->developerTags['noCaptionTag'] = true;
+    }else{
+        $manualFld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
+    }
+}
+
 $statusFld = $frm->getField('op_status_id');
+$statusFld->setFieldTagAttribute('data-old-value', $statusFld->value);
 $statusFld->setFieldTagAttribute('class', 'statusJs fieldsVisibilityJs');
 $statusFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 

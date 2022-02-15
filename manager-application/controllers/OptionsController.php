@@ -1,11 +1,10 @@
 <?php
 
-class OptionsController extends ListingBaseController
-{
+class OptionsController extends ListingBaseController {
+
     protected string $modelClass = 'Option';
 
-    public function __construct($action)
-    {
+    public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewOptions();
     }
@@ -16,8 +15,7 @@ class OptionsController extends ListingBaseController
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void
-    {
+    protected function checkEditPrivilege(bool $setVariable = false): void {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditOptions($this->admin_id, true));
         } else {
@@ -31,16 +29,14 @@ class OptionsController extends ListingBaseController
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void
-    {
+    protected function setLangTemplateData(array $constructorArgs = []): void {
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_OPTION_SETUP', $this->siteLangId));
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -64,8 +60,7 @@ class OptionsController extends ListingBaseController
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search()
-    {
+    public function search() {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'options/search.php', true),
@@ -74,16 +69,15 @@ class OptionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
-    {
+    private function getListingData() {
         $this->checkEditPrivilege(true);
 
         $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
@@ -104,37 +98,32 @@ class OptionsController extends ListingBaseController
 
         $srch = Option::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = option_seller_id', 'u');
-
-        $srch->addMultipleFields(["o.*", "IFNULL( ol.option_name, o.option_identifier ) as option_name", "u.user_name"]);
-
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('o.option_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ol.option_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $condition->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            if (strtolower($post['keyword']) == strtolower(Labels::getLabel('LBL_Admin', $this->siteLangId))) {
+                $condition->attachCondition('u.user_name', 'is', 'mysql_func_NULL', 'OR', true);
+            } else {
+                $condition->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            }
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(["o.*", "IFNULL( ol.option_name, o.option_identifier ) as option_name", "u.user_name"]);
         $srch->addOrder($sortBy, $sortOrder);
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-
         $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
     }
 
-    public function form()
-    {
+    public function form() {
         $this->objPrivilege->canEditOptions();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -154,11 +143,11 @@ class OptionsController extends ListingBaseController
         $this->set('hideListBox', $hideListBox);
         $this->set('langId', $this->siteLangId);
         $this->set('formTitle', Labels::getLabel('LBL_OPTION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup()
-    {
+    public function setup() {
         $this->objPrivilege->canEditOptions();
 
         $frm = $this->getForm();
@@ -175,7 +164,11 @@ class OptionsController extends ListingBaseController
         $post['option_identifier'] = $post['option_name'];
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
-            LibHelper::exitWithError($optionObj->getError(), true);
+            $msg = $optionObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $optionObj->getMainTableRecordId();
@@ -194,8 +187,7 @@ class OptionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($recordId = 0)
-    {
+    private function getForm($recordId = 0) {
         $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmOptions');
@@ -206,17 +198,17 @@ class OptionsController extends ListingBaseController
 
         // $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
         $frm->addCheckBox(
-            Labels::getLabel('FRM_HAVE_SEPARATE_IMAGE', $this->siteLangId),
-            'option_is_separate_images',
-            applicationConstants::YES,
-            array(),
-            false,
-            applicationConstants::NO
-        )->requirements()->setRequired();
+                Labels::getLabel('FRM_HAVE_SEPARATE_IMAGE', $this->siteLangId),
+                'option_is_separate_images',
+                applicationConstants::YES,
+                array(),
+                false,
+                applicationConstants::NO
+        );
 
-        $frm->addCheckBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', applicationConstants::YES, array(), false, applicationConstants::NO);
 
-        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter',applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter', applicationConstants::YES, array(), false, applicationConstants::NO);
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -226,8 +218,7 @@ class OptionsController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $langId = 0)
-    {
+    protected function getLangForm($recordId = 0, $langId = 0) {
         $this->checkEditPrivilege();
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
@@ -238,8 +229,7 @@ class OptionsController extends ListingBaseController
         return $frm;
     }
 
-    public function deleteRecord()
-    {
+    public function deleteRecord() {
         $this->objPrivilege->canEditOptions();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -253,13 +243,12 @@ class OptionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSelected()
-    {
+    public function deleteSelected() {
         $this->objPrivilege->canEditOptions();
         $optionIdsArr = FatUtility::int(FatApp::getPostedData('option_ids'));
 
         if (empty($optionIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($optionIdsArr as $recordId) {
@@ -274,8 +263,7 @@ class OptionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($recordId)
-    {
+    protected function markAsDeleted($recordId) {
         $optionObj = new Option($recordId);
         if (!$optionObj->canRecordMarkDelete($recordId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
@@ -291,8 +279,7 @@ class OptionsController extends ListingBaseController
         }
     }
 
-    public function autoComplete()
-    {
+    public function autoComplete() {
         $post = FatApp::getPostedData();
         $this->objPrivilege->canViewOptions();
 
@@ -306,9 +293,9 @@ class OptionsController extends ListingBaseController
 
         $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as option_name', 'option_identifier','option_is_separate_images'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -329,19 +316,27 @@ class OptionsController extends ListingBaseController
 
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 
+        $results = [];
+        foreach($options as $option){
+            $optionName = $option['option_name'];       
+            if($option['option_name']  != $option['option_identifier'] ){
+                $optionName.="(".$option['option_identifier'] .")"; 
+            }
+            $results[]= ['id'=> $option['id'],'text'=> $optionName,'option_is_separate_images' => $option['option_is_separate_images']];
+        }
+
         $json = array(
             'pageCount' => $srch->pages(),
-            'results' => $options
+            'results' => $results
         );
 
         die(FatUtility::convertToJson($json));
     }
 
-    protected function getFormColumns(): array
-    {
+    protected function getFormColumns(): array {
         $optionsTblHeadingCols = CacheHelper::get('optionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($optionsTblHeadingCols) {
-            return json_decode($optionsTblHeadingCols);
+            return json_decode($optionsTblHeadingCols, true);
         }
 
         $arr = [
@@ -355,8 +350,7 @@ class OptionsController extends ListingBaseController
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',
@@ -366,8 +360,8 @@ class OptionsController extends ListingBaseController
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array
-    {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, Common::excludeKeysForSort());
     }
+
 }

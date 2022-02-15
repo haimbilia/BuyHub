@@ -173,7 +173,7 @@ class StripePayController extends PaymentController
 
     private function getPaymentForm($orderId)
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('StripePay', 'charge', array($orderId)), 'class' => "form form--normal"));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('StripePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
         $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
         $frm->addRequiredField(Labels::getLabel('FRM_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
@@ -186,7 +186,7 @@ class StripePayController extends PaymentController
         $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
         $frm->addPasswordField(Labels::getLabel('FRM_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired();
         /* $frm->addCheckBox(Labels::getLabel('LBL_SAVE_THIS_CARD_FOR_FASTER_CHECKOUT',$this->siteLangId), 'cc_save_card','1'); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Pay_Now', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
 
         return $frm;
     }

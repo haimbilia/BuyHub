@@ -54,11 +54,6 @@ class RibbonsController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
-        $actionItemsData['newRecordBtnAttrs'] = [
-            'attr' => [
-                'onclick' => 'addNew(true)'
-            ]
-        ];
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -178,7 +173,8 @@ class RibbonsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_RIBBON_SETUP', $this->siteLangId));
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -344,7 +340,7 @@ class RibbonsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new Badge($recordId);
         if (!$obj->deleteRecord(true)) {
@@ -361,7 +357,7 @@ class RibbonsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('badgesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

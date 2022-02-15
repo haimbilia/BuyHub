@@ -3,7 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', "editRecord(" . $addressId . ", " . $siteLangId . ");");
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'setup($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 
 $frm->setFormTagAttribute('dir', $formLayout);
@@ -15,10 +15,10 @@ $addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My
 
 $countryFld = $frm->getField('addr_country_id');
 $countryFld->setFieldTagAttribute('id', 'addr_country_id');
-$countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#shop_state\',' . $langId . ')');
+$countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $stateId . ',\'#addrStateJs\',' . $langId . ')');
 
 $stateFld = $frm->getField('addr_state_id');
-$stateFld->setFieldTagAttribute('id', 'shop_state');
+$stateFld->setFieldTagAttribute('id', 'addrStateJs');
 
 $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-radio');
@@ -73,7 +73,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                 $dayFld->setFieldTagAttribute('class', 'slotDays-js');
 
                                 $addRowFld = $frm->getField('btn_add_row[' . $i . ']');
-                                $addRowFld->setFieldTagAttribute('onClick', 'addTimeSlotRow(' . $i . ')');
+                                $addRowFld->setFieldTagAttribute('onclick', 'addTimeSlotRow(' . $i . ')');
                                 $addRowFld->setFieldTagAttribute('class', 'js-slot-add-' . $i);
                                 if (!empty($slotData) && isset($slotData['tslot_day'][$i])) {
                                     $dayFld->setFieldTagAttribute('checked', 'true');
@@ -189,17 +189,17 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
         </div>
     </div>
 </div>
+<?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 
-<?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+
 
 <script language="javascript">
     var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
     <?php if ($addressId > 0) { ?>
         $(document).ready(function() {
             $('.availabilityType-js:checked').trigger('change');
-            getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#shop_state', <?php echo $langId; ?>);
-
+            getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#addrStateJs', <?php echo $langId; ?>);
         });
     <?php } ?>
 </script>

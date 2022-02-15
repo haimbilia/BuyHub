@@ -27,7 +27,7 @@
             border-radius: 1px;
             position: relative;
             overflow: hidden;
-            margin: 0 3px;
+            margin: 3px;
             &:hover {
                 // background-color: $brand-color;
                 // color:  lighten($brand-color, 55%);
@@ -61,7 +61,7 @@
         }
     }
     [dir="rtl"] & {
-        i {
+        i, svg {
             transform: rotate(180deg);
         }
     }

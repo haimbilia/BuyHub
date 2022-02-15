@@ -58,6 +58,7 @@ class BrandRequestsController extends ListingBaseController
                 'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
             ]
         );
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -102,31 +103,34 @@ class BrandRequestsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
-        $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
-        $srch->addCondition('brand_status', '=', applicationConstants::NO);
-        $srch->addCondition('brand_seller_id', '>', 0);
-        if (!empty($post['keyword'])) {
+        $srch->addCondition('brand_status', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('brand_seller_id', '>', 'mysql_func_0', 'AND', true); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        if (!empty($post['brand_id'])) {
-            $srch->addCondition('b.brand_id', '=', $post['brand_id']);
-        }
+        
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
-            $srch->addCondition('brand_seller_id', '=', $user_id);
+            $srch->addCondition('brand_seller_id', '=', 'mysql_func_' . $user_id, 'AND', true);
         }
+        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1); 
+        $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, $recordId);    
+        if (0 < $brandId) {
+            $srch->addCondition('brand_id', '=', $brandId);
+        }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -167,7 +171,8 @@ class BrandRequestsController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -196,7 +201,11 @@ class BrandRequestsController extends ListingBaseController
         $brand = new Brand($recordId);
         $brand->assignValues($data);
         if (!$brand->save()) {
-            LibHelper::exitWithError($brand->getError(), true);
+            $msg = $brand->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($brand, [$brand::tblFld('name') => $post[$brand::tblFld('name')]]);
@@ -221,11 +230,11 @@ class BrandRequestsController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
 
-        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $frm->addCheckBox(Labels::getLabel('FRM_BRAND_APPROVAL', $this->siteLangId), 'brand_status', applicationConstants::YES, [], false, applicationConstants::NO);
 
         $languageArr = Language::getDropDownList();
@@ -273,7 +282,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
@@ -299,7 +309,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function requestMedia($brand_id = 0)
@@ -312,7 +323,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('brand_id', $brand_id);
         $this->set('brandLogoFrm', $brandLogoFrm);
         $this->set('brandImageFrm', $brandImageFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()
@@ -382,14 +394,14 @@ class BrandRequestsController extends ListingBaseController
         $frm->addHTML('', 'heading', '');
 
         if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+        $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
 
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         $frm->addHiddenField('', 'min_width');
@@ -424,7 +436,7 @@ class BrandRequestsController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [

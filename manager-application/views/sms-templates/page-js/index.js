@@ -10,11 +10,10 @@ $(document).ready(function () {
 
 (function () {
     editStplData = function (stplCode, langId, autoFillLangData = 0) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "editTemplate", [stplCode, langId, autoFillLangData]), '',
             function (t) {
-                $.ykmodal(t);
+                $.ykmodal(t.html);
                 fcom.removeLoader();
             }
         );

@@ -23,12 +23,13 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'shippack_units':
-                $unitType = (isset($unitTypeArray[$row['shippack_units']])) ? $unitTypeArray[$row['shippack_units']] : '';
-
-                $dimension = $row['shippack_length'] . ' x ' . $row['shippack_width'] . ' x ' . $row['shippack_height'] . ' ' . $unitType;
-
+            case 'dimensions':
+                $dimension = $row['shippack_length'] . ' x ' . $row['shippack_width'] . ' x ' . $row['shippack_height'];
                 $td->appendElement('plaintext', array(), $dimension, true);
+                break; 
+            case 'shippack_units':
+                $unitTypeHtm = ShippingPackage::getUnitTypeHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $unitTypeHtm, true);
                 break; 
             case 'action':
                 $data = [
@@ -51,16 +52,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

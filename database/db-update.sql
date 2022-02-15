@@ -1476,5 +1476,159 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
 
-UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size'
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_ACTION_BUTTONS', '1', 'Action', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- -------------------TV-9.4.0.20211223-----------------------
+
+update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',');
+ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
+-- -------------------TV-9.4.0.20211228-----------------------
+
+UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
+
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_CPC', 1, 'CPC', 1),
+('FRM_CPC', 1, 'CPC', 1),
+('LBL_PPC_cost_per_click_for_Product',1,'PPC cost per click for product',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SHOP',1,'PPC cost per click for shop',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SLIDES',1,'PPC cost per click for slides',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_PURCHASE', 1, 'Purchase', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_PURCHAHSE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_SETUP_REAL-TIME_CURRENCY_EXCHANGE_RATES', 1, 'Setup real-time currency exchange rates', 1),
+('MSG_SETUP_SOCIAL_LOGIN_FOR_FASTER_LOGIN/REGISTRATION',1,'Setup social login such as Facebook, Google, Instagram, Apple for faster login or easy registration. ',1),
+('MSG_SETUP_CLOUD_MESSAGING_NOTIFICATION',1,'Setup default Firebase Cloud Messaging push notifications to drive user re-engagement and retention.',1),
+('MSG_SETUP_GOOGLE_FEED_TO_ADD_PRODUCT',1,'Setup google feed to add your products to Google Shopping.',1),
+('MSG_SETUP_SMS_NOTIFICATIONS_FOR_YOUR_CUSTOMERS',1,'Setup Twilio SMS Notifications to reach your customers over SMS.',1),
+('MSG_SETUP_PAYMENT_METHOD_TO_WITHDRAW_MONEY',1,'Setup payment method for seller to withdraw money.',1),
+('MSG_SETUP_API_FOR_AUTOMATIC_TAX_CALCULATIONS',1,'Setup Avalara or TaxJar for automatic tax calculations.',1),
+('MSG_SETUP_TO_SPLIT_PAYMENT_BETWEEN_SELLERS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_MULTI_CHANNEL_INVENTORY',1,'Setup EasyEcom for easy management of multi-channel inventory.',1),
+('MSG_SETUP_REGULAR_PAYMENT_METHODS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_SHIPPING_API_FOR_SHIPPING_SERVICES',1,'Setup shipping API to integrate USPS, UPS, FedEx, DHL and many more.',1),
+('MSG_SETUP_AUTOMATIC_SHIPMENT_TRACKING',1,'Setup automatic shipment tracking using AfterShip.',1),
+('MSG_MIGRATE_DATA_FROM_THIRD-PARTIES',1,'Migrate data from Shopify.',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_LISTING_PAGE', 1, 'Create and manage meta tags for products\' catalog listing page.', 1),
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_DETAIL_PAGE',1,'Create and manage meta tags for each product\'s detail page. ',1),
+('MSG_MANAGE_META_TAGS_FOR_SHOPS_LISTING_PAGE',1,'Create and manage meta tags for \'All Shops\'  listing page.',1),
+('MSG_MANAGE_METATAGS_FOR_SHOP_DETAIL_PAGE',1,'Create and manage metatags for each shop detail page.',1),
+('MSG_MANAGE_META_TAGS_FOR_ALL_THE_CMS_CONTENT_PAGES',1,'Create and manage meta tags for all the cms content pages.',1),
+('MSG_MANAGE_META_TAGS_FOR_DEFAULT_PAGE',1,'Create and manage meta tags for the default page title bar located at the top left of your browser window.',1),
+('MSG_MANAGE_METATAGS_FOR_EXTERNAL_PAGES_CREATED_IF_ANY',1,'Create and manage metatags for external pages created if any.',1),
+('MSG_MANAGE_META_TAGS_FOR_BRANDS_LISTING_PAGE',1,'Create and manage meta tags for all brands listing detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BRAND_DETAIL_PAGE',1,'Create and manage metatags for each brand detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_PRODUCT_CATEGORY_DETAIL_PAGE',1,'Create and manage metatags for product category detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOGS_DETAIL_PAGE',1,'Create and manage metatags for blogs\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOG_CATEGORIES_DETAIL_PAGE',1,'Create and manage metatags for blog categories\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BLOG_POSTS',1,'Create and manage metatags for each blog posts',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_SMART_RECOMENDED_WEIGHTAGES';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
+('LBL_SMART_RECOMMENDED_WEIGHTAGES', 1, 'Smart Recommended Weightages', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_NOT_AVAILABLE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_NOT_SERVICEABLE', 1, 'Not serviceable at your location', 1),
+('LBL_NOT_AVAILABLE', 1, 'Not Available', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- -------------------TV-9.4.0.20210107-----------------
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) 
+VALUES ('CONF_AUTO_CLOSE_SYSTEM_MESSAGES', 1, '0'),
+('CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES', 3, '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+-- -------------------TV-9.4.0.20220112-----------------
+
+ALTER TABLE `tbl_order_payments` DROP INDEX `op_gateway_txn_id`;
+ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
+
+ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);
+-- --------------------TV-9.4.0.20220120-----------------
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_TITLE_OR_CODE', 1, 'Search by title or code', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_TITLE";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_CODE";
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_USER_NAME_OR_EMAIL";
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', 1, 'Search by user name or email', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.', 1, 'Coupon expired!! "Date To" must be greater than current date.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- --------------------TV-9.4.0.20220201-----------------
+
+/* Update all stripe connect standard account users default form submited to 1. Because no form required. */
+INSERT IGNORE INTO tbl_user_meta (usermeta_user_id, usermeta_key, usermeta_value)
+  SELECT usermeta_user_id, 'stripe_form_submitted', '1' 
+  FROM tbl_user_meta WHERE usermeta_key LIKE 'stripe_account_type' AND usermeta_value LIKE 'standard';
+/* Update all stripe connect standard account users default form submited to 1. Because no form required. */ 
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('NAV_USERS_REPORT', 1, 'Users report', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+DELETE FROM tbl_language_labels WHERE label_key = "NAV_BUYERS_REPORTS";
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_SELLER";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_SELLER_NAME_OR_EMAIL";
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SELLER_NAME_OR_EMAIL', 1, 'Seller name or email', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+UPDATE `tbl_language_labels` SET `label_caption`='Action buttons' WHERE `label_key` = 'LBL_ACTION_BUTTONS' AND `label_lang_id` = 1;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_BACKUP_AND_BULK_EXPORT_THROUGH_CSV_FILE', 1, 'Backup and bulk prepare data through a single .csv file including products, catalogue, categories etc.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_BULK_UPDATE_USING_EXPORTED_CSV_FILE', 1, 'Bulk import and update data using exported .csv file including  products, catalogue, categories etc.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_ADD_BULK_IMAGES_INTO_THE_SERVER', 1, 'Add images to products, categories etc from media files that are stored on the server.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CONFIGURE_SETTINGS_BEFORE_IMPORT_EXPORT', 1, 'Configure the settings before importing and exporting data.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_comments`;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SOLD_BY', 1, 'Sold by', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE";
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_AUTHOR_NAME_EMAIL_AND_PHONE_WITHOUT_CODE', 1, 'Search by author name email and phone without code', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'CONF_ADMIN_PAGESIZE';

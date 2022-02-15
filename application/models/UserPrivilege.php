@@ -3,7 +3,7 @@ class UserPrivilege
 {
     public const SECTION_SHOP = 1;
     public const SECTION_PRODUCTS = 2;
-    public const SECTION_PRODUCT_TAGS = 3;
+    // public const SECTION_PRODUCT_TAGS = 3;
     public const SECTION_IMPORT_EXPORT = 4;
     public const SECTION_META_TAGS = 5;
     public const SECTION_URL_REWRITING = 6;
@@ -109,7 +109,7 @@ class UserPrivilege
             static::SECTION_SELLER_DASHBOARD => Labels::getLabel('LBL_Seller_Dashboard', $langId),
             static::SECTION_SHOP => Labels::getLabel('LBL_Shop', $langId),
             static::SECTION_PRODUCTS => Labels::getLabel('LBL_Products', $langId),
-            static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),
+            /*static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),*/
             static::SECTION_IMPORT_EXPORT => Labels::getLabel('LBL_Import_Export', $langId),
             static::SECTION_META_TAGS => Labels::getLabel('LBL_Meta_Tags', $langId),
             static::SECTION_URL_REWRITING => Labels::getLabel('LBL_Url_Rewriting', $langId),
@@ -150,7 +150,7 @@ class UserPrivilege
             array(
                 static::SECTION_SHOP => Labels::getLabel('LBL_Shop', $langId),
                 static::SECTION_PRODUCTS => Labels::getLabel('LBL_Products', $langId),
-                static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),
+               /* static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),*/
                 static::SECTION_PRODUCT_OPTIONS => Labels::getLabel('LBL_Product_Options', $langId),
                 static::SECTION_TAX_CATEGORY => Labels::getLabel('LBL_Tax_Categories', $langId),
                 static::SECTION_SELLER_REQUESTS => Labels::getLabel('LBL_Seller_Requests', $langId),
@@ -234,9 +234,9 @@ class UserPrivilege
         /* ] */
 
         $srch = UserPermission::getSearchObject();
-        $srch->addCondition('userperm_user_id', '=', $sellerId);
+        $srch->addCondition('userperm_user_id', '=', 'mysql_func_' . $sellerId, 'AND', true);
         if (0 < $sectionId) {
-            $srch->addCondition('userperm_section_id', '=', $sectionId);
+            $srch->addCondition('userperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND' . true);
         }
 
         $srch->addMultipleFields(array('userperm_section_id', 'userperm_value'));
@@ -280,7 +280,7 @@ class UserPrivilege
 
         $user = new User($sellerId);
         $srch = $user->getUserSearchObj();
-        $srch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $rs = $srch->getResultSet();
         $userData = FatApp::getDb()->fetch($rs);
         if (empty($userData)) {
@@ -288,8 +288,8 @@ class UserPrivilege
         }
 
         $srch = UserPermission::getSearchObject();
-        $srch->addCondition('userperm_user_id', '=', $sellerId);
-        $srch->addCondition('userperm_section_id', '=', $secId);
+        $srch->addCondition('userperm_user_id', '=', 'mysql_func_' . $sellerId, 'AND', true);
+        $srch->addCondition('userperm_section_id', '=', 'mysql_func_' . $secId, 'AND', true);
 
         $srch->addFld('userperm_value');
         $rs = $srch->getResultSet();
@@ -611,7 +611,7 @@ class UserPrivilege
     {
         return $this->checkPermission($sellerId, static::SECTION_PRODUCTS, static::PRIVILEGE_WRITE, $returnResult);
     }
-
+    /*
     public function canViewProductTags($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_PRODUCT_TAGS, static::PRIVILEGE_READ, $returnResult);
@@ -621,6 +621,7 @@ class UserPrivilege
     {
         return $this->checkPermission($sellerId, static::SECTION_PRODUCT_TAGS, static::PRIVILEGE_WRITE, $returnResult);
     }
+    */
 
     public function canViewImportExport($sellerId = 0, $returnResult = false)
     {
@@ -938,12 +939,12 @@ class UserPrivilege
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_READ, $returnResult);
     }
-    
+
     public function canEditBadgeLinks($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_READ, $returnResult);

@@ -29,14 +29,16 @@ class ProductTempImagesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         if ($post == false) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new ProductTempImageSearch();
         $srch->joinProduct();
         $srch->addMultipleFields(
-            array('afile_id', 'afile_downloaded', 'afile_record_id', 'afile_physical_path',
-            'afile_name', 'IFNULL(tp.product_identifier,tp_l.product_name) as product_name')
+            array(
+                'afile_id', 'afile_downloaded', 'afile_record_id', 'afile_physical_path',
+                'afile_name', 'IFNULL(tp.product_identifier,tp_l.product_name) as product_name'
+            )
         );
 
         $srch->addOrder('af.' . ProductTempImage::DB_TBL_PREFIX . 'id', 'DESC');
@@ -71,21 +73,22 @@ class ProductTempImagesController extends ListingBaseController
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmProductTempImages');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
 
         $options = applicationConstants::getYesNoArr($this->siteLangId);
-        $is_downloaded = array( -1 => Labels::getLabel('LBL_Does_not_matter', $this->siteLangId)) + $options;
+        $is_downloaded = array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $options;
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Is_Downloaded', $this->siteLangId), 'is_downloaded', $is_downloaded, -1, array(), '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addSelectBox(Labels::getLabel('FRM_IS_DOWNLOADED', $this->siteLangId), 'is_downloaded', $is_downloaded, -1, array(), '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         return $frm;
     }
 
@@ -95,7 +98,7 @@ class ProductTempImagesController extends ListingBaseController
         $this->objPrivilege->canEditProductTempImages();
 
         if (1 > $afile_id) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $afile_id = FatUtility::int($afile_id);
@@ -110,22 +113,23 @@ class ProductTempImagesController extends ListingBaseController
         $data = FatApp::getDb()->fetch($rs, 'afile_id');
 
         if ($data === false) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frmImage->fill($data);
 
         $this->set('afile_id', $afile_id);
         $this->set('frmImage', $frmImage);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     // Edit Form Structure
     private function getForm()
     {
         $frm = new Form('frmImage');
-        $frm->addRequiredField(Labels::getLabel('LBL_File_Name', $this->siteLangId), 'afile_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_File_Path', $this->siteLangId), 'afile_physical_path');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel('FRM_FILE_NAME', $this->siteLangId), 'afile_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_FILE_PATH', $this->siteLangId), 'afile_physical_path');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -138,21 +142,18 @@ class ProductTempImagesController extends ListingBaseController
         $post = $updateForm->getFormDataFromArray($data);
 
         if ($post == false) {
-            Message::addErrorMessage(current($updateForm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($updateForm->getValidationErrors()), true);
         }
 
         $afile_id = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (1 > $afile_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $imageObj = new ProductTempImage($afile_id);
         $imageObj->assignValues($post);
         if (!$imageObj->save()) {
-            Message::addErrorMessage($imageObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($imageObj->getError(), true);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');

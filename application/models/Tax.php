@@ -61,7 +61,7 @@ class Tax extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 't');
 
         if ($isActive == true) {
-            $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -88,7 +88,7 @@ class Tax extends MyAppModel
         $langId = FatUtility::int($langId);
 
         $srch = static::getSearchObject($langId, $isActive);
-        $srch->addCondition('taxcat_deleted', '=', 0);
+        $srch->addCondition('taxcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
@@ -100,7 +100,7 @@ class Tax extends MyAppModel
         } else {
             $srch->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name');
         }
-        $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
+        $srch->addCondition('taxcat_plugin_id', '=', 'mysql_func_' . $activatedTaxServiceId, 'AND', true);
 
         $res = $srch->getResultSet();
         if (!$res) {
@@ -126,8 +126,8 @@ class Tax extends MyAppModel
             'ptt'
         );
 
-        $srch->addCondition('taxcat_deleted', '=', 0);
-        $srch->addCondition('ptt_product_id', '=', FatUtility::int($productId));
+        $srch->addCondition('taxcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('ptt_product_id', '=', 'mysql_func_' . FatUtility::int($productId), 'AND', true);
         return $srch;
     }
 
@@ -191,8 +191,9 @@ class Tax extends MyAppModel
      */
     public function canRecordMarkDelete(int $id): bool
     {
+        $id = FatUtility::int($id);
         $srch = $this->getSearchObject(0, false);
-        $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->joinTable(static::DB_TBL_PRODUCT_TO_TAX, 'INNER JOIN', 'tpt.ptt_taxcat_id = t.taxcat_id', 'tpt');
         $srch->addFld('t.' . static::DB_TBL_PREFIX . 'id');
         $rs = $srch->getResultSet();
@@ -209,47 +210,47 @@ class Tax extends MyAppModel
      * @return array
      */
     public function getTaxRates(int $productId, int $userId, int $langId): array
-    {                
+    {
         $productId = Fatutility::int($productId);
         $userId = Fatutility::int($userId);
         $langId = Fatutility::int($langId);
         $activatedTaxServiceId = static::getActivatedServiceId();
         $taxRates = array();
         $srch = self::getTaxCatObjByProductId($productId, $langId);
-        $srch->addCondition('ptt_product_id', '=', $productId, 'AND');
+        $srch->addCondition('ptt_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
 
         if (0 == $activatedTaxServiceId) {
             $srch->joinTable(TaxRuleLocation::DB_TBL, 'LEFT JOIN', 'taxLoc.taxruleloc_taxcat_id = ptt_taxcat_id', 'taxLoc');
             $srch->joinTable(TaxRule::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_id = taxLoc.taxruleloc_taxrule_id', 'taxRule');
             $srch->joinTable(TaxRule::DB_RATES_TBL, 'LEFT JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id'));
-            $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_taxstr_id = ts.taxstr_id','ts');
+            $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxRule.taxrule_taxstr_id = ts.taxstr_id', 'ts');
             $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'ts.taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
             if ($this->fromCountryId > 0 && $this->fromStateId <= 0) {
-                $cond = $srch->addCondition('taxruleloc_from_country_id', '=', $this->fromCountryId, 'AND');
-                $cond->attachCondition('taxruleloc_from_country_id', '=', -1, 'OR');
+                $cond = $srch->addCondition('taxruleloc_from_country_id', '=', 'mysql_func_' . $this->fromCountryId, 'AND', true);
+                $cond->attachCondition('taxruleloc_from_country_id', '=', 'mysql_func_-1', 'OR', true);
             }
-            
-            $cond = $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', $userId, 'AND');
-            $cond->attachCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', 0, 'OR');
+
+            $cond = $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+            $cond->attachCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', 'mysql_func_0', 'OR', true);
 
             if ($this->fromStateId > 0) {
                 $srch->addDirectCondition('(taxruleloc_from_country_id = -1 or (taxruleloc_from_country_id = ' . $this->fromCountryId . ' and (taxruleloc_from_state_id = ' . $this->fromStateId . ' OR taxruleloc_from_state_id = -1)))', 'AND');
             }
 
             if ($this->toCountryId > 0 && $this->toStateId <= 0) {
-                $cond = $srch->addCondition('taxruleloc_to_country_id', '=', $this->toCountryId, 'AND');
-                $cond->attachCondition('taxruleloc_to_country_id', '=', -1, 'OR');
+                $cond = $srch->addCondition('taxruleloc_to_country_id', '=', 'mysql_func_' . $this->toCountryId, 'AND', true);
+                $cond->attachCondition('taxruleloc_to_country_id', '=', 'mysql_func_-1', 'OR', true);
             }
 
             if ($this->toStateId > 0) {
                 $srch->addDirectCondition('(taxruleloc_to_country_id = -1 or (taxruleloc_to_country_id = ' . $this->toCountryId . ' and ((taxruleloc_type = ' . TaxRule::TYPE_INCLUDE_STATES . ' AND taxruleloc_to_state_id = ' . $this->toStateId . ') OR (taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' AND taxruleloc_to_state_id = -1) OR (taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' AND taxruleloc_to_state_id != ' . $this->toStateId . ' and (select count(*) from ' . TaxRuleLocation::DB_TBL . ' where taxruleloc_type = ' . TaxRule::TYPE_EXCLUDE_STATES . ' and taxruleloc_to_state_id = ' . $this->toStateId . ' and taxruleloc_taxcat_id = ptt.ptt_taxcat_id) = 0))))', 'AND');
             }
-            $srch->addMultipleFields(array('*','ts.taxstr_is_combined','taxRule.taxrule_taxstr_id','taxstr_name', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = ' . $this->toCountryId . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
+            $srch->addMultipleFields(array('*', 'ts.taxstr_is_combined', 'taxRule.taxrule_taxstr_id', 'taxstr_name', '(CASE WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = -1 THEN 99 WHEN taxruleloc_type = ' . TaxRule::TYPE_ALL_STATES . ' and taxruleloc_to_country_id = ' . $this->toCountryId . ' THEN 98 ELSE taxruleloc_type END) AS displayOrder'));
             //$srch->addGroupBy('taxrule_id');
-            $srch->addOrder(TaxRule::DB_RATES_TBL_PREFIX.'user_id','DESC');
+            $srch->addOrder(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', 'DESC');
             $srch->addOrder('displayOrder', 'ASC');
         }
-        
+
         $srch->setPageSize(1);
         //echo $srch->getQuery().PHP_EOL.PHP_EOL; 
         $row = FatApp::getDb()->fetch($srch->getResultSet());
@@ -377,14 +378,14 @@ class Tax extends MyAppModel
         $this->setToStateId($shipToStateId);
         $taxCategoryRow = $this->getTaxRates($productId, $sellerId, $langId);
 
-        if (empty($taxCategoryRow)) {           
-            $taxDetail = self::getTaxCatByProductId($productId,0,1,['taxcat_code','taxcat_name','taxcat_identifier']); 
+        if (empty($taxCategoryRow)) {
+            $taxDetail = self::getTaxCatByProductId($productId, 0, 1, ['taxcat_code', 'taxcat_name', 'taxcat_identifier']);
             $taxCatCode = "";
             if (!empty($taxDetail)) {
                 $taxCatName = !empty($taxDetail['taxcat_name']) ? $taxDetail['taxcat_name'] : $taxDetail['taxcat_identifier'];
                 $taxCatCode = !empty($taxDetail['taxcat_code']) ? $taxDetail['taxcat_code'] : $taxCatName;
             }
-            
+
             $data = [
                 'status' => true,
                 'tax' => 0,
@@ -392,7 +393,7 @@ class Tax extends MyAppModel
                 'rate' => 0,
                 'taxCode' => $taxCatCode,
                 'options' => []
-            ];         
+            ];
             return $data;
             /*
             $message = Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId);
@@ -417,10 +418,10 @@ class Tax extends MyAppModel
         $taxCatName = !empty($taxCategoryRow['taxcat_name']) ? $taxCategoryRow['taxcat_name'] : $taxCategoryRow['taxcat_identifier'];
         $taxCatCode = !empty($taxCategoryRow['taxcat_code']) ? $taxCategoryRow['taxcat_code'] : $taxCatName;
         $taxCategoryRow['taxcat_code'] = $taxCatCode;
-      
+
         if (0 < $activatedTaxServiceId && !empty($extraInfo) && !empty($extraInfo['shippingAddress'])) {
-            global $taxRatesArr; 
-            
+            global $taxRatesArr;
+
             $arr  = [
                 'productId' => $productId,
                 'prodPrice' => $prodPrice,
@@ -431,12 +432,12 @@ class Tax extends MyAppModel
                 'shipToStateId' => $shipToStateId,
                 'extraInfo' => $extraInfo,
                 'taxCategoryRow' => $taxCategoryRow,
-                'plugin_id' => $activatedTaxServiceId, 
+                'plugin_id' => $activatedTaxServiceId,
             ];
             $cacheKey = self::TAX_RATE_CACHE_KEY_NAME . md5(json_encode($arr));
             if (true == $useCache) {
-                $rates = CacheHelper::get('taxCharges' . $cacheKey, CONF_API_REQ_CACHE_TIME, '.txt'); 
-                if ($rates) {   
+                $rates = CacheHelper::get('taxCharges' . $cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+                if ($rates) {
                     return unserialize($rates);
                 }
             }
@@ -554,7 +555,7 @@ class Tax extends MyAppModel
                 }
             }
             $taxRatesArr[$cacheKey]['values'] = $data;
-            
+
             CacheHelper::create('taxCharges' . $cacheKey, serialize($data), CacheHelper::TYPE_TAX_API);
             return $data;
         }
@@ -579,14 +580,14 @@ class Tax extends MyAppModel
         $data['rate'] = $taxCategoryRow['trr_rate'];
         $data['optionsSum'] = $tax;
         $optionsSum = 0;
-        $data['taxCode'] = $taxCategoryRow['taxcat_code'];       
-        
+        $data['taxCode'] = $taxCategoryRow['taxcat_code'];
+
         if ($taxCategoryRow['taxstr_is_combined'] == applicationConstants::YES) {
             $srch = TaxRule::getCombinedTaxSearchObject();
             $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id');
             $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
-            $srch->addCondition('taxruledet_taxrule_id', '=', $taxCategoryRow['taxrule_id']);
-            $srch->addCondition('taxruledet_user_id', '=', $taxCategoryRow['trr_user_id']);
+            $srch->addCondition('taxruledet_taxrule_id', '=', 'mysql_func_' . FatUtility::int($taxCategoryRow['taxrule_id']), 'AND', true);
+            $srch->addCondition('taxruledet_user_id', '=', 'mysql_func_' . $taxCategoryRow['trr_user_id'], 'AND', true);
             $srch->addMultipleFields(array('taxstr_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -708,7 +709,7 @@ class Tax extends MyAppModel
             $this->error = $taxRates['msg'];
             return false;
         }
-        
+
         if (!FatApp::getDb()->insertFromArray(OrderProduct::DB_TBL_PLUGIN_SPECIFICS, array('opps_op_id' => $childOrderInfo['op_id'], 'opps_plugin_id' => $activatedTaxServiceId, 'opps_synced' => applicationConstants::YES))) {
             $this->error = FatApp::getDb()->getError();
             return false;
@@ -730,7 +731,7 @@ class Tax extends MyAppModel
     {
         $taxData = array();
         $taxObj = static::getTaxCatObjByProductId($productId, $langId);
-        $taxObj->addCondition('ptt_seller_user_id', '=', $userId);
+        $taxObj->addCondition('ptt_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         if ($fields) {
             $taxObj->addMultipleFields($fields);
         }
@@ -833,7 +834,7 @@ class Tax extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition(static::tblFld('code'), '=', $code);
-        $srch->addCondition(static::tblFld('plugin_id'), '=', $plugInId);
+        $srch->addCondition(static::tblFld('plugin_id'), '=', 'mysql_func_' . $plugInId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {

@@ -38,7 +38,7 @@ class Navigation
             $template->set('userName', ucfirst(CommonHelper::getUserFirstName(UserAuthentication::getLoggedUserAttribute('user_name'))));
         }
 
-        $headerTopNavigation = CacheHelper::create('headerTopNavigations_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, CacheHelper::TYPE_NAVIGATION);
+        $headerTopNavigation = CacheHelper::get('headerTopNavigations_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, CacheHelper::TYPE_NAVIGATION);
 
         if ($headerTopNavigation) {
             $headerTopNavigation = unserialize($headerTopNavigation);

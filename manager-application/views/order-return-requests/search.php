@@ -14,19 +14,39 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'listSerial':
-                $td->appendElement('plaintext', $tdAttr, $serialNo, true);
-                break;
             case 'orrequest_id':
                 $td->appendElement('plaintext', $tdAttr, $row['orrequest_reference']);
                 break;
             case 'buyer_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectUser(' . $row['order_user_id'] . ')">' . $row['buyer_name'] . ' <br>( <strong>' . $row['buyer_username'] . '</strong> )</a>';
-                $td->appendElement('plaintext', $tdAttr, $txt, true);
+                $href = "javascript:void(0)";
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                    'extraClass' => 'user-profile-sm'
+                ], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'vendor_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectToShop(' . $row['op_shop_id'] . ')">' . $row['op_shop_name'] . '<br> ( <strong>' . $row['seller_username'] . '</strong> )</a>';
-                $td->appendElement('plaintext', $tdAttr, $txt, true);
+                $onclick = $canViewShops && !empty($row['op_shop_id']) ? 'redirectToShop(' . $row['op_shop_id'] . ')' : '';
+                $data = [
+                    'user_updated_on' => $row['seller_updated_on'],
+                    'user_id' => $row['seller_id'],
+                    'user_name' => $row['seller_name'],
+                    'credential_username' => $row['seller_username'],
+                    'credential_email' => $row['seller_email']
+                ];
+                $title = '';
+                if (!empty($row['op_shop_name'])) {
+                    $str = Labels::getLabel('LBL_SHOP:_{SHOP}', $siteLangId);
+                    $data['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['op_shop_name']]);
+                    $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
+                }
+
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $data, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title, 'extraClass' => 'user-profile-sm', 'displayProfileImage' => false], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'product':
                 $html = $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $row, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false, true);
@@ -84,6 +104,22 @@ foreach ($arrListing as $sn => $row) {
                         ]
                     ];
                 }
+
+                if ($row['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED && !empty($row['orrequest_admin_comment'])) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'viewAdminComment(' . $row['orrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_ADMIN_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#admin-reply">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ];
+                }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
@@ -95,16 +131,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

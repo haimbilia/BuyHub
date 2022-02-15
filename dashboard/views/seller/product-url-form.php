@@ -7,7 +7,11 @@ $frm->developerTags['fld_default_col'] = 12;
 $btnSubmit = $frm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<h5 class="card-title mb-2"><?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?></h5>
-<div class="form__subcontent">
-    <?php echo $frm->getFormHtml();?>
-</div>    
+<div id="dvForm">
+    <div class="card-head">
+        <h5 class="card-title mb-2"><?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?></h5>
+    </div>
+    <div class="card-body">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+</div>

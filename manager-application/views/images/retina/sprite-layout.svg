@@ -1,7 +1,100 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
     <defs>
-        <symbol id="product1" viewBox="0 0 16 16">
+        <symbol id="product1" viewBox="0 0 32 32">
             <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-1" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_11" d="M6,24.5H0v-17h6V24.5z M1,23.5h4v-15H1V23.5z"/>
+                <path id="Path_12" d="M14.7,24.5h-6v-17h6V24.5z M9.7,23.5h4v-15h-4V23.5z"/>
+                <path id="Path_13" d="M32,24.5h-6v-17h6V24.5z M27,23.5h4v-15h-4V23.5z"/>
+                <path id="Path_14" d="M23.3,24.5h-6v-17h6V24.5z M18.3,23.5h4v-15h-4V23.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-2" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_15" d="M10.9,24.5h-7v-17h7V24.5z M4.9,23.5h5v-15h-5V23.5z"/>
+                <path id="Path_16" d="M19.5,24.5h-7v-17h7V24.5z M13.5,23.5h5v-15h-5V23.5z"/>
+                <path id="Path_17" d="M28.1,24.5h-7v-17h7V24.5z M22.1,23.5h5v-15h-5V23.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-3" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_21" d="M15,9.5v13H1v-13H15 M16,8.5H0v15h16V8.5z"/>
+                <path id="Path_22" d="M31,9.5v5H18v-5H31 M32,8.5H17v7h15V8.5z"/>
+                <path id="Path_23" d="M31,17.5v5H18v-5H31 M32,16.5H17v7h15V16.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-4" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_24" d="M14,18v5H1v-5H14 M15,17H0v7h15V17z"/>
+                <path id="Path_25" d="M31,18v5H18v-5H31 M32,17H17v7h15V17z"/>
+                <path id="Path_26" d="M14,9v5H1V9H14 M15,8H0v7h15V8z"/>
+                <path id="Path_27" d="M31,9v5H18V9H31 M32,8H17v7h15V8z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-5" viewBox="0 0 32 32">
+            <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-6" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_15" d="M10.9,24.5h-7v-17h7V24.5z M4.9,23.5h5v-15h-5V23.5z"/>
+                <path id="Path_16" d="M19.5,24.5h-7v-17h7V24.5z M13.5,23.5h5v-15h-5V23.5z"/>
+                <path id="Path_17" d="M28.1,24.5h-7v-17h7V24.5z M22.1,23.5h5v-15h-5V23.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-7" viewBox="0 0 42 42">
+            <g>
+                <path id="Path_28" d="M0.9,29.5h7v-17h-7L0.9,29.5z M1.9,13.5h5v15h-5L1.9,13.5z"/>
+                <path id="Path_29" d="M9.4,29.5h7v-17h-7V29.5z M10.4,13.5h5v15h-5V13.5z"/>
+                <path id="Path_30" d="M26.1,29.5h7v-17h-7L26.1,29.5z M27.1,13.5h5v15h-5V13.5z"/>
+                <path id="Path_31" d="M34.1,12.5v17h7v-17H34.1z M40.1,28.5h-5v-15h5V28.5z"/>
+                <path id="Path_32" d="M18.1,29.5h7v-17h-7V29.5z M19.1,13.5h5v15h-5V13.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-8" viewBox="0 0 32 32">
+            <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-9" viewBox="0 0 32 32">
+            <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-10" viewBox="0 0 32 32">
+            <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-11" viewBox="0 0 32 32">
+            <path d="M0,10v12h32V10H0z M31,21H1V11h30V21z"/>
+        </symbol>
+        <symbol id="collection-layout-12" viewBox="0 0 32 32">
+            <g>
+                <path d="M0,10v12h18V10H0z M17,21H1V11h16V21z"/>
+                <path d="M20,10v12h12V10H20z M31,21H21V11h10V21z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-13" viewBox="0 0 32 32">
+            <path d="M6 1H1v14h5V1zm9 0h-5v5h5V1zm0 9v5h-5v-5h5zM0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V1zm1 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1h-5z"/>
+        </symbol>
+        <symbol id="collection-layout-14" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_33" d="M31,9.9v4.3H1V9.9H31 M32,9H0v6h32V9z"/>
+                <path id="Path_34" d="M31,17.9v4.3H1v-4.3H31 M32,17H0v6h32V17z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-15" viewBox="0 0 32 32">
+            <g>
+                <path d="M0,9.5v13h32v-13H0z M31,21.5H1v-11h30V21.5z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-17" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_33" d="M31,9.9v4.3H1V9.9H31 M32,9H0v6h32V9z"/>
+                <path id="Path_34" d="M31,17.9v4.3H1v-4.3H31 M32,17H0v6h32V17z"/>
+            </g>
+        </symbol>
+        <symbol id="collection-layout-18" viewBox="0 0 32 32">
+            <g>
+                <path id="Path_33" d="M31,9.9v4.3H1V9.9H31 M32,9H0v6h32V9z"/>
+                <path id="Path_34" d="M31,17.9v4.3H1v-4.3H31 M32,17H0v6h32V17z"/>
+            </g>
         </symbol>
     </defs>
 </svg>
