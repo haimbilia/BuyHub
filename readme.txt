@@ -502,6 +502,7 @@ Updates/Fixes :
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
     => 062456 - Admin UI: "Language Data" option is showing while editing the advanced setting on the meta-tag management page under the SEO section
     => 062454 - Admin UI: Columns alignment is changing while admin clicks on the sorting option under the meta-tag section and double options are selected on the side menu while clicking on the View HTML and XML option
+    => 062498 - Admin UI: Spacing issue while editing the shop details under the Manage Shop section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
