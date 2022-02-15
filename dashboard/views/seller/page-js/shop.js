@@ -706,12 +706,12 @@ $(document).on("change", ".state", function () {
                 if (ans.status == true) {
                     $.mbsmessage(ans.msg, true, 'alert--success');
                     $('#input-field' + fileType).removeClass('text-danger');
-                    $('#input-field' + fileType).addClass('text-success');
+                    $('#input-field' + fileType).addClass('badge-success');
                     $('#form-upload').remove();
                     shopImages(imageType, slideScreen, langId);
                 } else {
                     $.mbsmessage(ans.msg, true, 'alert--danger');
-                    $('#input-field' + fileType).removeClass('text-success');
+                    $('#input-field' + fileType).removeClass('badge-success');
                     $('#input-field' + fileType).addClass('text-danger');
                 }
             },
@@ -774,11 +774,11 @@ $(document).on("change", ".state", function () {
                 if (ans.status == true) {
                     $.mbsmessage(ans.msg, true, 'alert--success');
                     $(dv).removeClass('text-danger');
-                    $(dv).addClass('text-success');
+                    $(dv).addClass('badge-success');
                     shopCollectionImages(scollection_id, lang_id);
                 } else {
                     $.mbsmessage(ans.msg, true, 'alert--danger');
-                    $(dv).removeClass('text-success');
+                    $(dv).removeClass('badge-success');
                     $(dv).addClass('text-danger');
                 }
                 $(document).trigger('close.facebox');
@@ -916,10 +916,10 @@ $(document).on("change", ".state", function () {
             }
         });
     };
+
     markMainTabActive = function () {
-        let currentTabEle = $(mtabId + ' li').find("a[onclick^='" + markMainTabActive.caller.name + "']").closest('li');
-        currentTabEle.siblings().removeClass('is-active');
-        currentTabEle.addClass('is-active');
+        $(mtabId + ' a.active').removeClass('active');
+        $(mtabId).find("a[onclick^='" + markMainTabActive.caller.name + "']").addClass('active');
     }
 
     markSubTabActive = function () {
@@ -1019,12 +1019,12 @@ $(document).on('click', '.catFile-Js', function () {
                     if (ans.status == true) {
                         $.mbsmessage(ans.msg, true, 'alert--success');
                         $(dv).removeClass('text-danger');
-                        $(dv).addClass('text-success');
+                        $(dv).addClass('badge-success');
                         reloadCategoryBannerList();
                         addCategoryBanner(prodcat_id);
                     } else {
                         $.mbsmessage(ans.msg, true, 'alert--danger');
-                        $(dv).removeClass('text-success');
+                        $(dv).removeClass('badge-success');
                         $(dv).addClass('text-danger');
                     }
                 },

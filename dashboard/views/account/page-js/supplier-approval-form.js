@@ -48,9 +48,9 @@ $(document).on('click','.fileType-Js',function(){
 						$('#sformfield_'+fieldId).val(ans.file);						
 						if(ans.status == true){
 							$('#input-sformfield'+fieldId).removeClass('text-danger');
-							$('#input-sformfield'+fieldId).addClass('text-success');
+							$('#input-sformfield'+fieldId).addClass('badge-success');
 						}else{
-							$('#input-sformfield'+fieldId).removeClass('text-success');
+							$('#input-sformfield'+fieldId).removeClass('badge-success');
 							$('#input-sformfield'+fieldId).addClass('text-danger');
 						}												
 					},

@@ -1,7 +1,3 @@
-<?php /*require_once('sellerProductSeoTop.php');*/ ?>
-<h5 class="card-title mb-2">
-    <?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?></h5>
-
 <?php
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -39,10 +35,22 @@ $exitBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest(
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
 
+HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
+
 end($languages);
 if (key($languages) == $selprod_lang_id) {
     $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
     $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
     $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
-}
-echo $productSeoLangForm->getFormHtml(); ?>
+} ?>
+
+<div id="dvForm">
+    <div class="card-head">
+        <h5 class="card-title mb-2">
+            <?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <?php echo $productSeoLangForm->getFormHtml(); ?>
+    </div>
+</div>

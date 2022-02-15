@@ -221,10 +221,10 @@
                 $('#input-field').html(ans.msg);
                 if (ans.status == true) {
                     $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('text-success');
+                    $('#input-field').addClass('badge-success');
                     brandMediaForm(ans.brandId);
                 } else {
-                    $('#input-field').removeClass('text-success');
+                    $('#input-field').removeClass('badge-success');
                     $('#input-field').addClass('text-danger');
                 }
             },

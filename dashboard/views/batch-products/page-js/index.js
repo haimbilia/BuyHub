@@ -181,10 +181,10 @@ $(document).on('click', '.prodgroup-Js', function() {
                     $('#input-field' + fileType).html(ans.msg);
                     if (ans.status == true) {
                         $('#input-field' + fileType).removeClass('text-danger');
-                        $('#input-field' + fileType).addClass('text-success');
+                        $('#input-field' + fileType).addClass('badge-success');
                         batchMediaForm(prodgroup_id);
                     } else {
-                        $('#input-field' + fileType).removeClass('text-success');
+                        $('#input-field' + fileType).removeClass('badge-success');
                         $('#input-field' + fileType).addClass('text-danger');
                     }
 
