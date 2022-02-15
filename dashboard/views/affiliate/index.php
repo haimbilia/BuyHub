@@ -295,8 +295,8 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     <div class="card-body ">
                         <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
                             <ul>
-                                <li class="is-active"><a href="javascript:void(0);" onClick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
-                                <li><a href="javascript:void(0);" onClick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
+                                <li class="is-active"><a href="javascript:void(0);" onclick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
+                                <li><a href="javascript:void(0);" onclick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
                             </ul>
                         </div>
                         <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>

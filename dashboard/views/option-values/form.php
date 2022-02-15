@@ -7,7 +7,7 @@ if (!empty($translatorSubscriptionKey)) { ?>
             <input class="btn btn-brand"
                 type="button"
                 value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $langId); ?>"
-                onClick="autofillLangData($(this), $('form#frmOptionValues'))"
+                onclick="autofillLangData($(this), $('form#frmOptionValues'))"
                 data-action="<?php echo UrlHelper::generateUrl('OptionValues', 'getTranslatedData'); ?>">
         </div>
     </div>

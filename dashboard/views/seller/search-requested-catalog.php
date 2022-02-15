@@ -3,7 +3,7 @@
 	<h4><?php echo Labels::getLabel('LBL_Catalog_Listing',$siteLangId); ?></h4>
 	<div class="">
 		<a href="<?php echo UrlHelper::generateUrl('seller','products');?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products',$siteLangId); ?></a>
-		<a href="javascript:void(0);" onClick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog',$siteLangId); ?></a>
+		<a href="javascript:void(0);" onclick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog',$siteLangId); ?></a>
 	</div>
 </div>
 <div class="box__body">
@@ -45,7 +45,7 @@
 					case 'action':
 						$ul = $td->appendElement("ul",array('class'=>'actions'),'',true);
 						$li = $ul->appendElement("li");
-						$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'viewRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_View',$siteLangId)),
+						$li->appendElement('a', array('href'=>'javascript:void(0)','onclick'=>'viewRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_View',$siteLangId)),
 						'<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use
@@ -55,7 +55,7 @@
                     </i>', true);
 						if($row['scatrequest_status'] == User::CATALOG_REQUEST_PENDING){
 							$li = $ul->appendElement("li");
-							$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'deleteRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Delete',$siteLangId)),
+							$li->appendElement('a', array('href'=>'javascript:void(0)','onclick'=>'deleteRequestedCatalog('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Delete',$siteLangId)),
 						'<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use
@@ -65,7 +65,7 @@
                     </i>', true);
 						}
 						$li = $ul->appendElement("li");
-						$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'messageForm('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Messages',$siteLangId)),
+						$li->appendElement('a', array('href'=>'javascript:void(0)','onclick'=>'messageForm('.$row['scatrequest_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Messages',$siteLangId)),
 						'<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use

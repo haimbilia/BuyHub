@@ -127,13 +127,13 @@ startOtpInterval = function (parent = "", callback = "", params = []) {
     element.text(counter);
     $(parent + ".getOtpBtnBlock--js").addClass("d-none");
     var resendOtpEle = $(parent + ".resendOtp-js");
-    var onClickFn = resendOtpEle.attr("onclick");
+    var onclickFn = resendOtpEle.attr("onclick");
     resendOtpEle.removeAttr("onclick");
     otpIntervalObj = setInterval(function () {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
-            resendOtpEle.attr("onclick", onClickFn).removeClass("disabled");
+            resendOtpEle.attr("onclick", onclickFn).removeClass("disabled");
             element.parent().parent().hide();
             if ("" != callback && eval("typeof " + callback) == "function") {
                 window[callback](params);

@@ -44,7 +44,7 @@ $langFld->addFieldTagAttribute('autocomplete', "off"); ?>
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_PRODUCTS', $siteLangId); ?></h3>
                         </div>
                         <div class="card-toolbar">
-                            <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onClick="profileProductForm(<?php echo $profile_id; ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
+                            <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onclick="profileProductForm(<?php echo $profile_id; ?>)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                 <svg class="svg btn-icon-start" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                                 </use>
@@ -66,7 +66,7 @@ $langFld->addFieldTagAttribute('autocomplete', "off"); ?>
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?></h3>
                         </div>
                         <div class="card-toolbar">
-                            <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
+                            <a class="btn btn-icon btn-outline-brand btn-add" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                 <svg class="svg btn-icon-start" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                                 </use>

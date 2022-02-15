@@ -12,7 +12,7 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
 		 
 			<div class="tabs tabs-sm clearfix">
 				<ul class="setactive-js">
-					<li ><a href="javascript:void(0)" onClick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General',$siteLangId); ?></a></li>
+					<li ><a href="javascript:void(0)" onclick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General',$siteLangId); ?></a></li>
                     <li class="<?php echo (0 < $formLangId) ? 'is-active' : ''; ?>">
                         <a href="javascript:void(0);">
                             <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
@@ -32,7 +32,7 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
                         <input class="btn btn-brand" 
                             type="button" 
                             value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                            onClick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
+                            onclick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
                     </div>
                 </div>
             <?php } ?>

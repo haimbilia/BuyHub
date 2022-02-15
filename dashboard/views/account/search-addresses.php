@@ -15,7 +15,7 @@ if (!empty($addresses)) {
                             $action = 'return false';
                         }
                         ?>
-                        <input type="radio" <?php echo ($address['addr_is_default'] == 1) ? 'checked=""' : ''; ?> name="1" onClick="<?php echo $action; ?>">
+                        <input type="radio" <?php echo ($address['addr_is_default'] == 1) ? 'checked=""' : ''; ?> name="1" onclick="<?php echo $action; ?>">
                     </span>
                     <address class="delivery-address">
                         <h5><?php echo $address['addr_name']; ?><span class="tag"><?php echo $address['addr_title']; ?></span>
@@ -41,10 +41,10 @@ if (!empty($addresses)) {
                 </label>
                 <div class="my-addresses__footer">
                     <div class="actions">
-                        <a href="javascript:void(0)" onClick="addAddressForm(<?php echo $address['addr_id']; ?>)">
+                        <a href="javascript:void(0)" onclick="addAddressForm(<?php echo $address['addr_id']; ?>)">
                             <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                         </a>
-                        <a href="javascript:void(0)" onClick="removeAddress(<?php echo $address['addr_id']; ?>)">
+                        <a href="javascript:void(0)" onclick="removeAddress(<?php echo $address['addr_id']; ?>)">
                             <?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
                         </a>
                     </div>

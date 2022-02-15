@@ -296,7 +296,7 @@ $(function () {
         extra_li = total_li - limit;
         if (total_li > limit) {
             $(elem).children('ul').children('li:gt(' + (limit - 1) + ')').hide();
-            $(elem).append('<a class="read_more_toggle closed"  onClick="bindChangeToggle(this);"><span class="ink animate"></span> <span class="read_more">View More</span></a>');
+            $(elem).append('<a class="read_more_toggle closed"  onclick="bindChangeToggle(this);"><span class="ink animate"></span> <span class="read_more">View More</span></a>');
         }
     }
 });

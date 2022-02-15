@@ -48,7 +48,7 @@ echo $frm->getFormTag(); ?>
             </p>
         </div>
         <div class="col-auto d-none">
-            <a class="link resendOtp-js disabled" href="javascript:void(0);" onClick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
+            <a class="link resendOtp-js disabled" href="javascript:void(0);" onclick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
         </div>
     </div>
     <div class="row">

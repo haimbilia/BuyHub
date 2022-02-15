@@ -73,7 +73,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                 $dayFld->setFieldTagAttribute('class', 'slotDays-js');
 
                                 $addRowFld = $frm->getField('btn_add_row[' . $i . ']');
-                                $addRowFld->setFieldTagAttribute('onClick', 'addTimeSlotRow(' . $i . ')');
+                                $addRowFld->setFieldTagAttribute('onclick', 'addTimeSlotRow(' . $i . ')');
                                 $addRowFld->setFieldTagAttribute('class', 'js-slot-add-' . $i);
                                 if (!empty($slotData) && isset($slotData['tslot_day'][$i])) {
                                     $dayFld->setFieldTagAttribute('checked', 'true');

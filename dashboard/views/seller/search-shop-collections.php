@@ -135,7 +135,7 @@
                     0 => array(
                         'href' => 'javascript:void(0);',
                         'label' => Labels::getLabel('LBL_Add_Collection', $siteLangId),
-                        'onClick' => "getShopCollectionGeneralForm(0)",
+                        'onclick' => "getShopCollectionGeneralForm(0)",
                     )
                 );
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'linkArr' => $linkArr, 'message' => $message));

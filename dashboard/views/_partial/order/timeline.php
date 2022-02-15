@@ -77,7 +77,7 @@
                                             $trackingNumber = trim($trackingNumber);
                                             $trackingNumber = number_format($trackingNumber,0,null,'');                                        
                                         ?>                                    
-                                        <a class="link" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
+                                        <a class="link" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
                                             <?php echo $trackingNumber; ?>
                                         </a>
                                         <?php } ?>

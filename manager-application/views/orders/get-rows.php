@@ -56,7 +56,7 @@ foreach ($arrListing as $sn => $row) {
                     ?>
                         <span class="timeline-v4__item-text">
                             <b><?php echo Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId); ?>:</b>
-                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" class="link link--dark timeline-v4__item-link" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>','<?php echo $row["op_invoice_number"]; ?>','<?php echo $row["op_order_id"]; ?>','<?php echo $row["op_id"]; ?>')">
+                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" class="link link--dark timeline-v4__item-link" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>','<?php echo $row["op_invoice_number"]; ?>','<?php echo $row["op_order_id"]; ?>','<?php echo $row["op_id"]; ?>')">
                                 <?php echo $trackingNumber; ?>
                             </a>
                             <?php if(!empty($row["opshipping_label"])) { ?>

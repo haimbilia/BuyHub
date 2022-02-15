@@ -29,7 +29,7 @@
         <?php 
         $title = Labels::getLabel('LBL_Products_Request', $siteLangId);
         $data = [
-            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions('.  Extrapage::PRODUCT_REQUEST_INSTRUCTIONS . ')"></i>',
+            'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions('.  Extrapage::PRODUCT_REQUEST_INSTRUCTIONS . ')"></i>',
             'siteLangId' => $siteLangId,
             'controllerName' => $controllerName,
             'action' => $action,

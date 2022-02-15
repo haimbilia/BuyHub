@@ -36,7 +36,7 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
 <div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Pickup_Addresses', $siteLangId); ?></h5>
     <div class="btn-group">
-        <a href="javascript:void(0)" onClick="pickupAddress()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
+        <a href="javascript:void(0)" onclick="pickupAddress()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
     </div>
 </div>
 
@@ -317,13 +317,13 @@ $btnSubmit->developerTags['noCaptionTag'] = true;
                                                 </div>
                                                 <div class="field-wraper">
                                                     <div class="field_cover btn-group">
-                                                        <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none' : '' ?>" onClick="removeTimeSlotRow(this)" type="button">
+                                                        <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none' : '' ?>" onclick="removeTimeSlotRow(this)" type="button">
                                                             <i class="icn"><svg class="svg" width="16px" height="16px">
                                                                     <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use>
                                                                 </svg>
                                                             </i>
                                                         </button>
-                                                        <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button" onClick="addTimeSlotRow(this)">
+                                                        <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button" onclick="addTimeSlotRow(this)">
                                                             <i class="icn">
                                                                 <svg class="svg" width="16px" height="16px">
                                                                     <use xlink:href="/dashboard/images/retina/sprite.svg#plus">

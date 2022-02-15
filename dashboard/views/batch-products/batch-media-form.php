@@ -12,7 +12,7 @@ $mediaFrm->setFormTagAttribute("class", "form form--horizontal");
 				<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
 			</a>
 		</li>
-		<li class="is-active"><a href="javascript:void(0)" <?php if ($prodgroup_id > 0) { ?> onClick="batchMediaForm(<?php echo $prodgroup_id; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+		<li class="is-active"><a href="javascript:void(0)" <?php if ($prodgroup_id > 0) { ?> onclick="batchMediaForm(<?php echo $prodgroup_id; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
 	</ul>
 
 	<div class="col-md-12">

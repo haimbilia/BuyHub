@@ -17,7 +17,7 @@ $langFrm->setFormTagAttribute('onsubmit', 'setupLangRate(this); return(false);')
 //$langFrm->developerTags['fld_default_col'] = 12;
 /*
 $cancelFld = $langFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('onClick', 'clearForm(); return false;');
+$cancelFld->setFieldTagAttribute('onclick', 'clearForm(); return false;');
 $cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand');
 $cancelFld->developerTags['noCaptionTag'] = true;
 $cancelFld->developerTags['colClassBeforeWidth'] = 'col-auto';

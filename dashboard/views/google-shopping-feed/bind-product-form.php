@@ -11,7 +11,7 @@ $btnFld->developerTags['noCaptionTag'] = true;
 
 $btnFld = $frm->getField('btn_clear');
 $btnFld->addFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
-$btnFld->addFieldTagAttribute('onClick', 'clearForm();');
+$btnFld->addFieldTagAttribute('onclick', 'clearForm();');
 $btnFld->developerTags['noCaptionTag'] = true;
 
 $prodName = $frm->getField('product_name');

@@ -223,7 +223,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
                 bindLink(badgeType, badgeLinkCondId, record.id, position);
             } else {
                 var recordName = (record.name || record.value);
-                var htm = '<tr class="recordRow--js"><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + record.id + ');"><i class="fa fa-times"></i></a></id><td>' + recordName + '</td></tr>';
+                var htm = '<tr class="recordRow--js"><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onclick="removeRecordRow(this, ' + record.id + ');"><i class="fa fa-times"></i></a></id><td>' + recordName + '</td></tr>';
                 var tbl = "";
                 if (1 > $('table.recordListing--js').length) {
                     var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';

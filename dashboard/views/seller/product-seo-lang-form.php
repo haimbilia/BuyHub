@@ -4,7 +4,7 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 if (!empty($translatorSubscriptionKey) && $selprod_lang_id != $siteDefaultLangId) { ?>
     <div class="row justify-content-end">
         <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
+            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
         </div>
     </div>
 <?php } ?>
@@ -25,13 +25,13 @@ $mtagsFld->setfieldTagAttribute('class', "txtarea-height");
 $nextBtn = $productSeoLangForm->getField('btn_next');
 $nextBtn->developerTags['col'] = 6;
 $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
-$nextBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 0)");
+$nextBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 0)");
 $nextBtn->setWrapperAttribute('class', "text-right");
 $nextBtn->developerTags['noCaptionTag'] = true;
 
 $exitBtn = $productSeoLangForm->getField('btn_exit');
 $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
-$exitBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 1)");
+$exitBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 1)");
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
 

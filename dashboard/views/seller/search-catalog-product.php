@@ -84,7 +84,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                             $li = $ul->appendElement("li");
                             $li->appendElement(
                                 'a',
-                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onClick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
+                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
                                 '<i class="fa fa-plus-square"></i>',
                                 true
                             );

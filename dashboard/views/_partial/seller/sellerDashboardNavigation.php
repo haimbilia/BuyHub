@@ -607,7 +607,7 @@ $plugin = new Plugin();
                     <ul class="menu-sub menu-sub-accordion collapse" id="nav-import-export" aria-labelledby="" data-parent="#dashboard-menu">
                         <?php if (FatApp::getConfig('CONF_ENABLE_IMPORT_EXPORT', FatUtility::VAR_INT, 0)) { ?>
                             <li class="menu-sub-item">
-                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'importexport' && ($action == 'index')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Import_Export', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ImportExport', 'index'); ?>">
+                                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'importexport' && ($action == 'index')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_IMPORT_EXPORT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
                                     <span class="menu-sub-title"><?php echo Labels::getLabel('LBL_Import_Export', $siteLangId); ?>
                                     </span>
                                 </a>

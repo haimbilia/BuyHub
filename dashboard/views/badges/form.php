@@ -174,7 +174,7 @@ if (null != $iconFld) {
                 </div>
                 <?php if (!empty($otherLangData)) {
                     foreach ($otherLangData as $langId => $data) { ?>
-                        <div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
+                        <div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onclick="translateData(this)">
                             <div class="accordian_panel">
                                 <span class="accordian_title accordianhead accordian_title mt-4 mb-0" id="collapse_<?php echo $langId; ?>">
                                     <?php echo $data . " ";

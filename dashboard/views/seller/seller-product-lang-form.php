@@ -10,7 +10,7 @@
 				<div class="">
 					<div class="tabs tabs-sm tabs--scroll clearfix">
 						<ul>
-							<li><a href="javascript:void(0)" onClick="sellerProductForm(<?php echo $product_id,',',$selprod_id ?>)" ><?php echo Labels::getLabel('LBL_Basic',$siteLangId); ?></a></li>
+							<li><a href="javascript:void(0)" onclick="sellerProductForm(<?php echo $product_id,',',$selprod_id ?>)" ><?php echo Labels::getLabel('LBL_Basic',$siteLangId); ?></a></li>
                             <li class="<?php echo (0 < $formLangId) ? 'is-active' : ''; echo $inactive; ?>">
                                 <a href="javascript:void(0);">
                                     <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
@@ -18,11 +18,11 @@
                             </li>
 							<?php
 							/* foreach($language as $langId => $langName){?>
-							<li class="<?php echo ($formLangId == $langId)?'is-active':'' ; ?>"><a href="javascript:void(0)" onClick="sellerProductLangForm(<?php echo $langId;?>,<?php echo $selprod_id;?>)">
+							<li class="<?php echo ($formLangId == $langId)?'is-active':'' ; ?>"><a href="javascript:void(0)" onclick="sellerProductLangForm(<?php echo $langId;?>,<?php echo $selprod_id;?>)">
 							<?php echo $langName;?></a></li>
 							<?php } */?>
-							<li><a href="javascript:void(0)" onClick="linkPoliciesForm(<?php echo $product_id,',',$selprod_id,',',PolicyPoint::PPOINT_TYPE_WARRANTY ; ?>)"><?php echo Labels::getLabel('LBL_Link_Warranty_Policies',$siteLangId); ?></a></li>
-							<li><a href="javascript:void(0)" onClick="linkPoliciesForm(<?php echo $product_id,',',$selprod_id,',',PolicyPoint::PPOINT_TYPE_RETURN ; ?>)"><?php echo Labels::getLabel('LBL_Link_Return_Policies',$siteLangId); ?></a></li>
+							<li><a href="javascript:void(0)" onclick="linkPoliciesForm(<?php echo $product_id,',',$selprod_id,',',PolicyPoint::PPOINT_TYPE_WARRANTY ; ?>)"><?php echo Labels::getLabel('LBL_Link_Warranty_Policies',$siteLangId); ?></a></li>
+							<li><a href="javascript:void(0)" onclick="linkPoliciesForm(<?php echo $product_id,',',$selprod_id,',',PolicyPoint::PPOINT_TYPE_RETURN ; ?>)"><?php echo Labels::getLabel('LBL_Link_Return_Policies',$siteLangId); ?></a></li>
 						</ul>
 					</div>
 				</div>
@@ -36,7 +36,7 @@
                                 <input class="btn btn-brand" 
                                     type="button" 
                                     value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                    onClick="sellerProductLangForm(<?php echo $formLangId; ?>, <?php echo $selprod_id; ?>, 1)">
+                                    onclick="sellerProductLangForm(<?php echo $formLangId; ?>, <?php echo $selprod_id; ?>, 1)">
                             </div>
                         </div>
                     <?php } ?>

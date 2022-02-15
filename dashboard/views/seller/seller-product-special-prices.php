@@ -8,7 +8,7 @@
             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Special_price', $siteLangId); ?>
             </h5>
             <div class="action">
-                <a class="btn btn-brand btn-sm" href="javascript:void(0);" onClick='sellerProductSpecialPriceForm(<?php echo $selprod_id; ?>, 0);'>
+                <a class="btn btn-brand btn-sm" href="javascript:void(0);" onclick='sellerProductSpecialPriceForm(<?php echo $selprod_id; ?>, 0);'>
                     <?php echo Labels::getLabel('LBL_Add_New_Special_Price', $siteLangId); ?>
                 </a>
                 <!-- <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice', array($selprod_id)); ?>">
@@ -78,7 +78,7 @@
                             [
                                 'href' => 'javascript:void(0);',
                                 'label' => Labels::getLabel('LBL_Add_New_Special_Price', $siteLangId),
-                                'onClick' => 'sellerProductSpecialPriceForm(' . $selprod_id . ', 0);',
+                                'onclick' => 'sellerProductSpecialPriceForm(' . $selprod_id . ', 0);',
                             ]
                         ];
                         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'linkArr' => $linkArr, 'message' => $message));

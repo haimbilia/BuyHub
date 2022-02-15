@@ -37,10 +37,10 @@
 					$ul = new HtmlElement( 'ul', array('class'=>'actions'), ' ', true );
 
 					$li = $ul->appendElement( 'li', array(), '');
-					$li->appendElement( 'a', array('href'=>'javascript:void(0)', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), 'onClick' => 'batchForm(' .$row['prodgroup_id']. ')' ), '<i class="fa fa-edit"></i>', true );
+					$li->appendElement( 'a', array('href'=>'javascript:void(0)', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), 'onclick' => 'batchForm(' .$row['prodgroup_id']. ')' ), '<i class="fa fa-edit"></i>', true );
 
 					$li = $ul->appendElement('li', array(), '');
-					$li->appendElement( 'a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Products', $siteLangId), 'onClick' => 'batchProductsForm(' . $row['prodgroup_id'] . ')' ), '<i class="fa fa-external-link"></i>', true );
+					$li->appendElement( 'a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Products', $siteLangId), 'onclick' => 'batchProductsForm(' . $row['prodgroup_id'] . ')' ), '<i class="fa fa-external-link"></i>', true );
 					$td->appendElement('plaintext', array(), $ul->getHtml(), true);
 
 				break;
