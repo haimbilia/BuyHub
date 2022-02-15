@@ -4,63 +4,63 @@ $merchantId = isset($userData[$keyName . '_merchantId']) ? $userData[$keyName . 
 $serviceAccInfo = isset($userData['service_account']) ? $userData['service_account'] : '';
 ?>
 
-    <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' =>  $pluginName,
-                'siteLangId' => $siteLangId,
-            ];
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
-        ?>
-        <div class="content-body">
-            <div class="row ">
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' =>  $pluginName,
+        'siteLangId' => $siteLangId,
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data, false);
+    ?>
+    <div class="content-body">
+        <div class="row ">
+            <div class="col-lg-12">
+                <div class="card ">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h6 class="m-0">
+                            <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId); ?> :
+                            <?php echo $merchantId;
+                            if (empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
+                                <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'getAccessToken') ?>" title="<?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?>"><?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?></a>
+                            <?php }
+
+                            if (empty($merchantId) && !$userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) {
+                                echo Labels::getLabel('LBL_YOU_ARE_NOT_ALLOWED_TO_SETUP_ACCOUNT', $siteLangId);
+                            }
+                            ?>
+                        </h6>
+                        <?php if (!empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
+                            <a class="btn btn-brand btn-sm" href="javascript:void(0)" onclick="serviceAccountForm();" id="userAccInfoBtn"><?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?></a>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php if (!empty($merchantId) && !empty($serviceAccInfo)) { ?>
+            <div class="row">
                 <div class="col-lg-12">
-                    <div class="card ">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <h6 class="m-0">
-                                <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId);?> : 
-                                <?php echo $merchantId;
-                                if (empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
-                                    <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'getAccessToken')?>" title="<?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?>"><?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?></a>
-                                <?php }
-                                
-                                if (empty($merchantId) && !$userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) {
-                                    echo Labels::getLabel('LBL_YOU_ARE_NOT_ALLOWED_TO_SETUP_ACCOUNT', $siteLangId);
-                                }
-                                ?>
-                            </h6>
-                            <?php if (!empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
-                                <a class="btn btn-brand btn-sm" href="javascript:void(0)" onclick="serviceAccountForm();" id="userAccInfoBtn"><?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?></a>
-                            <?php } ?>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <?php echo Labels::getLabel('LBL_BATCH_SETUP', $siteLangId); ?>
+                            </h5>
+                            <div id="batchSetup"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php if (!empty($merchantId) && !empty($serviceAccInfo)) { ?>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title mb-3">
-                                    <?php echo Labels::getLabel('LBL_BATCH_SETUP', $siteLangId); ?>
-                                </h5>
-                                <div id="batchSetup"></div>
-                            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="listing"></div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="listing"></div>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
     </div>
+</div>
 
 
 <?php if (!empty($merchantId) && empty($serviceAccInfo) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>

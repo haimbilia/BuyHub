@@ -15,7 +15,7 @@ $img_fld->addFieldTagAttribute('onChange', 'popupImage(this)');
 ?>
 
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Product_Images', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Product_Images', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
     <div id="cropperBox-js"></div>
@@ -36,7 +36,7 @@ $img_fld->addFieldTagAttribute('onChange', 'popupImage(this)');
                                 productShipping(<?php echo $product_id; ?>);
                             <?php } else { ?>
                                 productOptionsAndTag(<?php echo $product_id; ?>);
-                            <?php } ?>" class="btn btn-outline-brand" type="button" name="btn_back" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
+                            <?php } ?>" class="btn btn-outline-gray" type="button" name="btn_back" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
                             </div>
                         </div>
                     </div>

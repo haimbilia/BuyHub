@@ -31,7 +31,7 @@ $btnBackFld = $productFrm->getField('btn_back');
 $btnBackFld->developerTags['col'] = 6;
 $btnBackFld->setFieldTagAttribute('onclick', 'productOptionsAndTag(' . $preqId . ');');
 $btnBackFld->value = Labels::getLabel('LBL_Back', $siteLangId);
-$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");
+$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-gray");
 
 $btnSubmitFld = $productFrm->getField('btn_submit');
 $btnSubmitFld->developerTags['col'] = 6;

@@ -31,7 +31,7 @@
                                             } ?>
                                         </div>
                                         <div class="wishlists__body">
-                                            <?php if ($wishlist['products']) {?>
+                                            <?php if ($wishlist['products']) { ?>
                                                 <ul class="media-wishlist">
                                                     <?php foreach ($wishlist['products'] as $product) {
                                                         $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
@@ -78,7 +78,7 @@
 
                                             <div class="wishlists__foot">
                                                 <div class="text-center">
-                                                    <a onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);" href="javascript:void(0)" class="btn btn-outline-brand btn-sm">
+                                                    <a onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);" href="javascript:void(0)" class="btn btn-outline-gray btn-sm">
                                                         <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
                                                         <i class="fa fa-eye"></i>
                                                     </a>

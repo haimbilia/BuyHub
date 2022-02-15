@@ -1506,7 +1506,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addHiddenField('', 'page');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 

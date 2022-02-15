@@ -77,7 +77,7 @@ class LoggedUserController extends DashboardBaseController
     }
 
     private function initCommonValues()
-    {       
+    {
         $this->userPrivilege = UserPrivilege::getInstance();
         $this->set('userPrivilege', $this->userPrivilege);
     }
@@ -92,14 +92,14 @@ class LoggedUserController extends DashboardBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $langId), 'ocrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
         $frm->addDateField(Labels::getLabel('LBL_FROM_DATE', $langId), 'ocrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('LBL_TO_DATE', $langId), 'ocrequest_date_to', '', array('readonly' => 'readonly'));
-        
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
     protected function getOrderReturnRequestsSearchForm($langId)
-    {   
+    {
         $frm = new Form('frmOrderReturnRequest');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'total_record_count');
@@ -113,9 +113,9 @@ class LoggedUserController extends DashboardBaseController
         }
         $frm->addDateField(Labels::getLabel('LBL_DATE_FORM', $langId), 'orrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'orrequest_date_to', '', array('readonly' => 'readonly'));
-        
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 

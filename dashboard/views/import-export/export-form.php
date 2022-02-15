@@ -30,7 +30,7 @@ $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
 <?php if (in_array($actionType, $tabsAllowedFor)) { ?>
-    <div class="nav nav-pills nav-fill tabs--scroll clearfix">
+    <div class="nav nav-pills nav-sm">
         <ul>
             <li class="is-active"><a class="is-active" href="javascript:void(0);" onclick="exportForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a>
             </li>

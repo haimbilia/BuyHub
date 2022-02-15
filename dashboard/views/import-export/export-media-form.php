@@ -22,7 +22,7 @@ if ($actionType == Importexport::TYPE_PRODUCTS || $actionType == Importexport::T
 $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<div class="nav nav-pills nav-fill tabs--scroll clearfix">
+<div class="nav nav-pills nav-sm">
     <ul>
         <li><a class="is-active" href="javascript:void(0);" onclick="exportForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a></li>
         <li class="is-active"><a href="javascript:void(0);" onclick="exportMediaForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>

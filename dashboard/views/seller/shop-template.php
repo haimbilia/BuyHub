@@ -5,7 +5,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 
 ?>
 
-<div class="nav nav-pills nav-fill tabs--scroll clearfix">
+<div class="nav nav-pills nav-sm">
     <ul>
         <li class="is-active">
             <a href="javascript:void(0)"><?php echo Labels::getLabel('TXT_Template', $siteLangId); ?></a>
@@ -14,7 +14,6 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 </div>
 
 <div class="tabs__content">
-
     <div class="row" id="shopFormBlock">
         <?php foreach ($shopTemplateLayouts as $k => $layout) { ?>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 ">

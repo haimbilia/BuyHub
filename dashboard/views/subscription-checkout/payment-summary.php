@@ -50,7 +50,7 @@
                                 <?php if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary["cartWalletSelected"]) { ?>
 
                                     <?php $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
-                                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-outline-brand');
+                                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-outline-gray');
 
                                     $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
                                     $WalletPaymentForm->developerTags['fld_default_col'] = 12;

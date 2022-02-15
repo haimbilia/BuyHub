@@ -15,7 +15,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
     <div class="card-head">
         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
         <div class="">
-            <a href="javascript:void(0)" onclick="shopCollections()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Collections', $siteLangId); ?></a>
+            <a href="javascript:void(0)" onclick="shopCollections()" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Collections', $siteLangId); ?></a>
         </div>
     </div>
     <div class="card-body">

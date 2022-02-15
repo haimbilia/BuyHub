@@ -589,9 +589,9 @@ class ReportsController extends SellerBaseController
         $frm->addHiddenField('', 'sortBy', 'product_name');
         $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
         $frm->addHiddenField('', 'reportColumns', '');
-        
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -778,9 +778,9 @@ class ReportsController extends SellerBaseController
         }
         $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox('', 'keyword', '');
-        
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -825,7 +825,7 @@ class ReportsController extends SellerBaseController
         }
         $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -890,7 +890,7 @@ class ReportsController extends SellerBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -959,7 +959,7 @@ class ReportsController extends SellerBaseController
         array_pop($arr);
         $urlController = implode('-', $arr);
         $className = ucwords(implode(' ', $arr));
-        
+
         if ($action == 'index') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
             $this->nodes[] = array('title' => $title);

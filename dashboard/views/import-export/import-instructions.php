@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="nav nav-pills nav-fill tabs--scroll clearfix">
+<div class="nav nav-pills nav-sm">
     <ul>
         <li class="is-active"><a class="is-active" href="javascript:void(0);" onclick="getInstructions('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Instructions', $siteLangId); ?></a></li>
 
