@@ -108,7 +108,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             </td>
             <td class="align-right">
                 <?php
-                    $fn = $displayShippingUserForm ? 'getShippingUsersForm' : 'getOrderCommentForm';
+                    $fn = ($displayShippingUserForm && 1 > $op['optsu_user_id']) ? 'getShippingUsersForm' : 'getOrderCommentForm';
                     $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
 
                     $data = ['siteLangId' => $siteLangId];
