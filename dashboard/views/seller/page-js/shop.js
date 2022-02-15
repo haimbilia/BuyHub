@@ -498,14 +498,14 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
             $.ykmodal(t, false, 'modal-dialog-vertical-md');
-            setTimeout(function () { $('.fromTimeJs').change(); }, 500);
+            setTimeout(function () { $('.fromTime-js').change(); }, 500);
         });
     };
 
     setPickupAddress = function (frm) {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
-            if (1 > $(".slotDaysJs:checked").length) {
+            if (1 > $(".slotDays-js:checked").length) {
                 $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
                 return false;
             }
