@@ -37,8 +37,8 @@
     <div class="card" id="basic-details">
         <div class="card-head">
             <div class="card-head-label">
-                <h3 class="card-head-title">Basic Details </h3>
-                <span class="text-muted">Add basic details about your product</span>
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_BASIC_DETAILS', $langId); ?></h3>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_BASIC_INFORMATIONS', $langId); ?></span>
             </div>
         </div>
         <div class="card-body">
@@ -90,10 +90,9 @@
     <div class="card card-toggle" id="variants-options">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
             <div class="card-head-label">
-                <h3 class="card-head-title">Variants and options
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
                 </h3>
-                <span class="text-muted">Add options like Color, size
-                    etc for your product</span>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
         <div class="card-body show" id="stock-block1">
@@ -117,7 +116,7 @@
             <div class="separator separator-dashed my-4"></div>
             <div class="form-group row justify-content-between">
                 <div class="col">
-                    <label class="label">This product has same EAN/UPC code for all variants</label>
+                    <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
                 </div>
                 <div class="col-auto">
                     <?php
@@ -136,8 +135,8 @@
     <div class="card card-toggle" id="media">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">
-                <h3 class="card-head-title">Media </h3>
-                <span class="text-muted">Attach media files for the product </span>
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_MEDIA', $langId); ?> </h3>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
             </div>
             <div class="card-toolbar">
 
@@ -147,31 +146,25 @@
         <div class="card-body show" id="stock-block2">
             <div>
                 <div class="d-flex justify-content-between mb-3">
-                    <h6 class="h6 ">Uploaded media </h6>
-                    <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                    <h6 class="h6 "><?php echo Labels::getLabel('LBL_UPLOADED_MEDIA', $langId); ?></h6>
+                    <a href="javascript:void(0)" onclick="imageForm();" class="link"><?php echo Labels::getLabel('LBL_ADVANCED_MEDIA', $langId); ?></a>
                 </div>
                 <!-- <h6 class="h6 mb-3">Uploaded media</h6> -->
                 <ul class="uploaded-stocks" id="productDefaultImagesJs">
                     <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
-                            <strong> Upload Images(s)</strong>
-                            <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
+                            <strong> <?php echo Labels::getLabel('LBL_UPLOAD_IMAGES(S)', $langId); ?></strong>
+                            <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG,&WEBP_ACCEPTED', $langId); ?></span></button></li>
                 </ul>
-                <div class="form-text text-muted pt-2">Pay attention to the quality of
-                    pictures
-                    you add, comply with the
-                    background color standards. Notice that the product shows all the
-                    details</div>
+                <div class="form-text text-muted pt-2"><?php echo Labels::getLabel('MSG_PAY_ATTENTION_TO_THE_PICTURE_QUALITY', $langId); ?></div>
             </div>
         </div>
     </div>
     <div class="card card-toggle" id="specifications">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
             <div class="card-head-label">
-                <h3 class="card-head-title">Specifications
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                 </h3>
-                <span class="text-muted">Product Specifications are added in this
-
-                    <span class="input-helper"></span>section</span>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
         <div class="card-body show" id="specifications-block">
@@ -183,8 +176,8 @@
                                 <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                             </label>
                             <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                            <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                amet consectetur adipisicing elit. </span>
+                            <?php  /* <span class="form-text text-muted">Lorem ipsum dolor sit,
+                                amet consectetur adipisicing elit. </span> */ ?>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -224,11 +217,9 @@
     <div class="card card-toggle" id="tax-shipping">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
             <div class="card-head-label">
-                <h3 class="card-head-title">Tax and Shipping
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                 </h3>
-                <span class="text-muted">Add Tax and Shipping details from
-                    this
-                    <span class="input-helper"></span>section</span>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
         <div class="card-body show" id="stock-block4">
@@ -250,8 +241,8 @@
         <div class="card card-toggle" id="digital-files">
             <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
                 <div class="card-head-label">
-                    <h3 class="card-head-title">Digital Files</h3>
-                    <span class="text-muted">Digital Files are added in this section </span>
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
+                    <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
                 </div>
                 <?php if ($displayDigitalDownloadAddBtn) { ?>
                     <div class="card-toolbar">
@@ -270,8 +261,8 @@
         <div class="card card-toggle" id="digital-links">
             <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
                 <div class="card-head-label">
-                    <h3 class="card-head-title">Digital Links</h3>
-                    <span class="text-muted">Digital Links are added in this section </span>
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
+                    <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
                 </div>
                 <?php if ($displayDigitalDownloadAddBtn) { ?>
                     <div class="card-toolbar">

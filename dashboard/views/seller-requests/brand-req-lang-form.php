@@ -39,7 +39,7 @@ $submitFld->developerTags['noCaptionTag'] = true;
             if (!empty($translatorSubscriptionKey) && $brandReqLangId != $siteDefaultLangId) { ?>
                 <div class="row justify-content-end">
                     <div class="col-auto mb-4">
-                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="addBrandReqLangForm(<?php echo $brandReqId; ?>, <?php echo $brandReqLangId; ?>, 1)">
+                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="addBrandReqLangForm(<?php echo $brandReqId; ?>, <?php echo $brandReqLangId; ?>, 1)">
                     </div>
                 </div>
             <?php } ?>

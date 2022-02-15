@@ -636,7 +636,7 @@ class CommonHelper extends FatUtility
             $currencySymbolLeft = $currencyData['currency_symbol_left'];
             $currencySymbolRight = $currencyData['currency_symbol_right'];
         }
-        
+
         $val = $val * $currencyValue;
 
         $sign = '';

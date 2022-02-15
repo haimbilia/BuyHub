@@ -28,14 +28,14 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
             <div class="col-md-12">
                 <div class="tabs tabs--small   tabs--scroll clearfix setactive-js rtl">
                     <ul>
-                        <li><a href="javascript:void(0);" onClick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                        <li><a href="javascript:void(0);" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                         <li class="is-active">
                             <a href="javascript:void(0);">
                                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onClick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>> <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+                            <li><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>> <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
                         <?php } ?>
                     </ul>
                 </div>
@@ -47,7 +47,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                             $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
                             if (!empty($translatorSubscriptionKey) && $promotion_lang_id != $siteDefaultLangId) { ?>
                                 <div class="col-auto mb-4">
-                                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
+                                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
                                 </div>
                             <?php } ?>
                             <?php echo $langFrm->getFormHtml(); ?>

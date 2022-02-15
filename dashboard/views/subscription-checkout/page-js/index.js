@@ -48,7 +48,7 @@ $("document").ready(function () {
         });
     };
     getReviewSCart = function () {
-        $(sCartReviewDiv).find('.section-head').attr('onClick', 'loadCartReviewDiv()');
+        $(sCartReviewDiv).find('.section-head').attr('onclick', 'loadCartReviewDiv()');
         $(sCartReviewDiv).prepend(fcom.getLoader());
         $(paymentDiv).html('<div class="selected-panel">4. Make payment</div>');
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getReviewScart'), '', function (ans) {

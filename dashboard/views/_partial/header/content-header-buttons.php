@@ -7,7 +7,7 @@ if ($canEdit) { ?>
         <ul>
             <?php if (User::canAddCustomProduct() && $action == 'products') { ?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                             </use>
@@ -15,7 +15,7 @@ if ($canEdit) { ?>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#test">
                             </use>
@@ -25,7 +25,7 @@ if ($canEdit) { ?>
             <?php } ?>
             <?php if (isset($adminCatalogs) && $adminCatalogs > 0) { ?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog', [0]); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog', [0]); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#test">
                             </use>
@@ -35,7 +35,7 @@ if ($canEdit) { ?>
             <?php } ?>
             <?php if (User::canAddCustomProduct() && $action == 'catalog' && $type == 1) { ?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#test">
                             </use>
@@ -46,7 +46,7 @@ if ($canEdit) { ?>
 
             <?php if ((isset($canAddCustomProduct) && $canAddCustomProduct == false) && (isset($canRequestProduct) && $canRequestProduct === true)) { ?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('Seller', 'requestedCatalog'); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('Seller', 'requestedCatalog'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#test">
                             </use>
@@ -57,7 +57,7 @@ if ($canEdit) { ?>
 
             <?php if (User::canAddCustomProduct() && ($action == 'catalog')) { ?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-outline-brand btn-icon">
+                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#test">
                             </use>

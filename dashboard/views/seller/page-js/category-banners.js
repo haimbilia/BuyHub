@@ -82,11 +82,11 @@ $(document).on('click','.catFile-Js',function(){
 						$(dv).html(ans.msg);						
 						if(ans.status == true){
 							$(dv).removeClass('text-danger');
-							$(dv).addClass('text-success');
+							$(dv).addClass('badge-success');
 							reloadList();
 							addCategoryBanner(ans.prodCatId);	
 						}else{
-							$(dv).removeClass('text-success');
+							$(dv).removeClass('badge-success');
 							$(dv).addClass('text-danger');
 						}												
 					},

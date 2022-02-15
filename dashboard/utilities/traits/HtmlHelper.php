@@ -182,7 +182,7 @@ class HtmlHelper
                     <span class="input-helper"></span>
                 </label>';
     }
-    
+
     public static function getTheDay(string $date, int $langId)
     {
         $currDate = strtotime(date("Y-m-d H:i:s"));
@@ -204,5 +204,13 @@ class HtmlHelper
                 return FatDate::format($date);
                 break;
         }
+    }
+    
+    public static function configureCheckboxLabel(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $fld->developerTags['noCaptionTag'] = true;
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
     }
 }

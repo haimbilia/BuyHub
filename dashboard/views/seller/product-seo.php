@@ -19,9 +19,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
             <div class="col-md-6">
                 <div class="card h-100">
-                    <div class="card-body">
-                        <div id="dvForm"></div>
-                        <div class="alert-aligned" id="dvAlert">
+                    <div id="dvForm"></div>
+                    <div class="alert-aligned" id="dvAlert">
+                        <div class="card-body">
                             <div class="cards-message">
                                 <div class="cards-message-icon"><i class="fas fa-exclamation-triangle"></i></div>
                                 <div class="cards-message-text"><?php echo Labels::getLabel('LBL_Select_a_product_to_add_/_edit_meta_tags_data', $siteLangId); ?></div>

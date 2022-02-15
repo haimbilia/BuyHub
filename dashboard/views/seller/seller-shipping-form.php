@@ -34,10 +34,10 @@ if (null != $submitFld) {
 }
 
 $cancelFld = $shippingFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('onClick', 'searchCatalogProducts(document.frmSearchCatalogProduct)');
+$cancelFld->setFieldTagAttribute('onclick', 'searchCatalogProducts(document.frmSearchCatalogProduct)');
 $cancelFld->developerTags['col'] = 2;
 $cancelFld->setWrapperAttribute('class', 'col-6');
-$cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+$cancelFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
 //$submitFld->attachField($cancelFld);
 
 echo $shippingFrm->getFormHTML();

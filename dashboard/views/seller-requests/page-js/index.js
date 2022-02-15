@@ -221,10 +221,10 @@
                 $('#input-field').html(ans.msg);
                 if (ans.status == true) {
                     $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('text-success');
+                    $('#input-field').addClass('badge-success');
                     brandMediaForm(ans.brandId);
                 } else {
-                    $('#input-field').removeClass('text-success');
+                    $('#input-field').removeClass('badge-success');
                     $('#input-field').addClass('text-danger');
                 }
             },
@@ -437,7 +437,7 @@
             setTimeout(function () {
                 selector.val('').trigger('change');
             }, 200);
-            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onclick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
             var tbl = "";
             if (1 > $('table.recordListing--js').length) {
                 var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';

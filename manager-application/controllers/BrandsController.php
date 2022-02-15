@@ -90,11 +90,11 @@ class BrandsController extends ListingBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -273,7 +273,7 @@ class BrandsController extends ListingBaseController
         }
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
-        
+
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
@@ -285,7 +285,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function images($brand_id, $file_type, $lang_id = 0,$slide_screen = 0)
+    public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
     {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);
@@ -356,17 +356,17 @@ class BrandsController extends ListingBaseController
         $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-                        $_FILES['cropped_image']['tmp_name'],
-                        $file_type,
-                        $brand_id,
-                        0,
-                        $_FILES['cropped_image']['name'],
-                        -1,
-                        false,
-                        $lang_id,
-                        $slide_screen,
-                        $aspectRatio
-                )) {
+            $_FILES['cropped_image']['tmp_name'],
+            $file_type,
+            $brand_id,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $lang_id,
+            $slide_screen,
+            $aspectRatio
+        )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -566,9 +566,9 @@ class BrandsController extends ListingBaseController
             $srch->addCondition('brand_id', 'NOT IN', $excludeRecords);
         }
 
-        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);  
+        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
         $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
-        if (0 < $doNotLimitRecords) {           
+        if (0 < $doNotLimitRecords) {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
         } else {
@@ -697,5 +697,4 @@ class BrandsController extends ListingBaseController
     {
         return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }
-
 }

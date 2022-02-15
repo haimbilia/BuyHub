@@ -20,7 +20,7 @@ if (null != $fld) {
 
 $fld = $frm->getField('btn_clear');
 if (null != $fld) {
-    $fld->addFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+    $fld->addFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
     $fld->addFieldTagAttribute('onclick', 'clearForm();');
 }
 

@@ -552,6 +552,17 @@
             flex-direction: column;
             align-items: inherit;
         }
+        &-toolbar {
+            > ul {
+                display: flex;
+                grid-gap: 5px;
+                li {
+                    a {
+                        //border-color: transparent;
+                    }
+                }
+            }
+        }
         &-title {
             h2 {
                 color: $body-color;
@@ -690,7 +701,6 @@
     .msg__date {
         font-size: 0.75rem;
         color: $txt-gray;
-        font-style: italic;
     }
     .msg__title {
         color: $body-color;
@@ -988,7 +998,6 @@
     font-size: 0.8em;
     margin-bottom: 0;
     opacity: 0.6;
-    font-style: italic;
     display: inline-block;
     width: 100%;
 }
@@ -1511,6 +1520,23 @@ input.sp-input {
             //box-shadow: $shadow1;
         }
     }
+    &-add {
+        border-style: dashed !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-add-address {
+        border-color: transparent;
+
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
     &__body {
         flex: 1;
         padding: 1rem;
@@ -1522,6 +1548,7 @@ input.sp-input {
             #{$end-direction}: 1rem;
         }
     }
+
     .actions {
         border-top: $border;
         display: flex;

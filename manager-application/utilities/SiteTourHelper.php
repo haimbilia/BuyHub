@@ -124,47 +124,47 @@ class SiteTourHelper
     {
         return [
             self::STEP_CONFIGURATION => [
-                'title' => 'Localization Settings',
+                'title' => Labels::getLabel('NAV_BUSINESS_PROFILE', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print',
             ],
             self::STEP_MEDIA => [
-                'title' => 'Media Settings',
+                'title' => Labels::getLabel('NAV_BUSINESS_LOGO', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_COMMISION => [
-                'title' => 'System Commision',
+                'title' => Labels::getLabel('NAV_WEBSITE_COMMISION', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_EMAIL_CONF => [
-                'title' => 'Email Configuration',
+                'title' => Labels::getLabel('NAV_EMAIL_CONFIGURATION', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_PAYMENT_METHOD => [
-                'title' => 'Payment Methods',
+                'title' => Labels::getLabel('NAV_PAYMENT_METHODS', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_TAX_SERVICE => [
-                'title' => 'Tax Services',
+                'title' => Labels::getLabel('NAV_SALES_TAX_PLUGINS', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_SHIPPING_SERVICE => [
-                'title' => 'Shipping Services',
+                'title' => Labels::getLabel('NAV_SHIPPING_SERVICES_PLUGINS', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_SOCIAL_LOGIN => [
-                'title' => 'Social Login',
+                'title' => Labels::getLabel('NAV_SOCIAL_LOGIN_PLUGINS', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_ADD_PRODUCT => [
-                'title' => 'Add Product',
+                'title' => Labels::getLabel('NAV_ADD_PRODUCT', $langId),
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],

@@ -235,7 +235,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </div>
                             <div class="card-body ">
                                 <div class="stats">
-                                    <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
+                                    <a href="javascript:void(0)" class="btn btn-outline-gray btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
                                 </div>
                             </div>
                         </div>
@@ -295,8 +295,8 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     <div class="card-body ">
                         <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
                             <ul>
-                                <li class="is-active"><a href="javascript:void(0);" onClick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
-                                <li><a href="javascript:void(0);" onClick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
+                                <li class="is-active"><a href="javascript:void(0);" onclick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
+                                <li><a href="javascript:void(0);" onclick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
                             </ul>
                         </div>
                         <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>

@@ -16,8 +16,8 @@ $codFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $codFld->developerTags['cbHtmlAfterCheckbox'] = ''; */
 
 $btnBackFld = $productFrm->getField('btn_back');
-$btnBackFld->setFieldTagAttribute('onClick', 'customCatalogProductForm(' . $preqId . ');');
-$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");
+$btnBackFld->setFieldTagAttribute('onclick', 'customCatalogProductForm(' . $preqId . ');');
+$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-gray");
 $btnBackFld->value = Labels::getLabel('LBL_Back', $siteLangId);
 
 $btnSubmit = $productFrm->getField('btn_submit');
@@ -115,7 +115,7 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                 <div class="accordion my-4" id="specification-accordion-<?php echo $langId; ?>">
 
                     <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>">
-                        <span onClick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
+                        <span onclick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
                             <?php echo $data . " ";
                             echo Labels::getLabel('LBL_Language_Specification', $siteLangId); ?>
                         </span>

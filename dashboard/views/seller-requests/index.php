@@ -10,7 +10,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
     if ($canEdit && !$noRecordFound) {
         $otherBtnHtml = '<div class="dropdown">
-                                <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-gray dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     ' . Labels::getLabel('LBL_New_Request', $siteLangId) . '
                                 </button>
                                 
@@ -25,7 +25,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
         if (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
-                                                <a class="dropdown-menu-link" href="javascript:void(0);" onClick="addBrandReqForm(0)">
+                                                <a class="dropdown-menu-link" href="javascript:void(0);" onclick="addBrandReqForm(0)">
                                                     ' . Labels::getLabel('LBL_Brand', $siteLangId) . '
                                                 </a>
                                             </li>';
@@ -33,7 +33,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
         if (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
-                                                <a class="dropdown-menu-link" href="javascript:void(0);" onClick="addCategoryReqForm(0)">
+                                                <a class="dropdown-menu-link" href="javascript:void(0);" onclick="addCategoryReqForm(0)">
                                                     ' . Labels::getLabel('LBL_Category', $siteLangId) . '
                                                 </a>
                                             </li>';
@@ -41,7 +41,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
         if ($canRequestBadge) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
-                                                <a class="dropdown-menu-link" href="javascript:void(0);" onClick="addBadgeReqForm(0)">
+                                                <a class="dropdown-menu-link" href="javascript:void(0);" onclick="addBadgeReqForm(0)">
                                                     ' . Labels::getLabel('LBL_BADGE_REQUEST', $siteLangId) . '
                                                 </a>
                                             </li>';
@@ -88,7 +88,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('CustomProducts', 'form'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('CustomProducts', 'form'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="addBrandReqForm(0)"><?php echo Labels::getLabel('LBL_New_Brand_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBrandReqForm(0)"><?php echo Labels::getLabel('LBL_New_Brand_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="addCategoryReqForm(0)"><?php echo Labels::getLabel('LBL_New_Category_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addCategoryReqForm(0)"><?php echo Labels::getLabel('LBL_New_Category_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>

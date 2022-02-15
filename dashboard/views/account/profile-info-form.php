@@ -24,7 +24,7 @@ if (!empty($data['user_phone'])) {
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
     $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
     $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
-    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onclick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
 
 
@@ -35,7 +35,7 @@ if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
     $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
-    $userDobFld->htmlAfterField = '<span toggle="#user-dob" onClick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+    $userDobFld->htmlAfterField = '<span toggle="#user-dob" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
 
 $userDobFld->setFieldTagAttribute('class', 'user_dob_js');
@@ -45,7 +45,7 @@ $emailFld->setFieldTagAttribute('disabled', 'disabled');
 $emailFld->setFieldTagAttribute('id', 'user-email');
 $emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
 $emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
-$emailFld->htmlAfterField = '<span toggle="#user-email" onClick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+$emailFld->htmlAfterField = '<span toggle="#user-email" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 
 
 $countryFld = $frm->getField('user_country_id');
@@ -84,19 +84,19 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 ?>
                 <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                 <?php echo $imgFrm->getFormTag(); ?>
-                    <?php if ($mode == 'Edit') { ?>
-                        <button class="btn btn-edit" type="button" onClick="popupImage()">
-                            <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                </use>
-                            </svg>
-                        </button>
-                    <?php } else { ?>
-                        <label class="btn" title="Upload image file">
-                            <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
-                            <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
-                        </label>
-                    <?php } ?>
+                <?php if ($mode == 'Edit') { ?>
+                    <button class="btn btn-edit" type="button" onclick="popupImage()">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                    </button>
+                <?php } else { ?>
+                    <label class="btn" title="Upload image file">
+                        <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
+                        <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
+                    </label>
+                <?php } ?>
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
                 <div id="dispMessage"></div>
@@ -108,7 +108,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 <ul class="user-type setactive-js">
                     <?php if (User::canViewBuyerTab() && (User::canViewSupplierTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
                         <li <?php echo (User::USER_BUYER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
-                            <button class="user-type-link" type="button" href="javascript:void(0)" onClick="setPreferredDashboad(<?php echo User::USER_BUYER_DASHBOARD; ?>)">
+                            <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_BUYER_DASHBOARD; ?>)">
                                 <svg class="svg" width="14" height="14">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
                                     </use>
@@ -119,7 +119,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                     <?php } ?>
                     <?php if (User::canViewSupplierTab() && (User::canViewBuyerTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
                         <li <?php echo (User::USER_SELLER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
-                            <button class="user-type-link" type="button" href="javascript:void(0)" onClick="setPreferredDashboad(<?php echo User::USER_SELLER_DASHBOARD; ?>)">
+                            <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_SELLER_DASHBOARD; ?>)">
                                 <svg class="svg" width="14" height="14">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
                                     </use>
@@ -132,7 +132,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
             </div>
 
         <?php }
-        
+
         echo $frm->getFormHtml(); ?>
 
         <div class="or"><span><?php echo Labels::getLabel('LBL_MORE_OPTIONS', $siteLangId); ?></span></div>

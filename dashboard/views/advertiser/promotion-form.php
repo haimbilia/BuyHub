@@ -69,7 +69,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                         </li>
                         <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
                         <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onClick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+                            <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
                         <?php } ?>
                     </ul>
                 </div>

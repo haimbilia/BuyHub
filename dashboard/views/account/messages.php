@@ -117,7 +117,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                                         $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
                                         $fldClear = $frmSearch->getField('btn_clear');
-                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
                                         echo $frmSearch->getFormHtml(); */
                                         ?>
                                     </div>

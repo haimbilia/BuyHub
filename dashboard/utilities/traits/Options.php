@@ -233,7 +233,7 @@ trait Options {
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         if (isset($product_id) && $product_id > 0) {
-            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CANCEL', $this->siteLangId), array('onClick' => 'productOptionsForm(' . $product_id . ')'));
+            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CANCEL', $this->siteLangId), array('onclick' => 'productOptionsForm(' . $product_id . ')'));
             $fld_submit->attachField($fld_cancel);
         }
 

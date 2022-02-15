@@ -477,8 +477,6 @@ class ShopsController extends ListingBaseController
 
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
-        $frm->addHtml('', 'space', '');
-        $frm->addHtml('', 'space', '');
         return $frm;
     }
 

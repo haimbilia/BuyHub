@@ -1,13 +1,16 @@
 <?php
 
-class CatalogReportController extends SellerBaseController {
+class CatalogReportController extends SellerBaseController
+{
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->userPrivilege->canViewCatalogReport(UserAuthentication::getLoggedUserId());
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns($this->siteLangId);
         $frmSearch = $this->getSearchForm($fields);
         $this->set('frmSearch', $frmSearch);
@@ -18,7 +21,8 @@ class CatalogReportController extends SellerBaseController {
         $this->_template->render();
     }
 
-    public function search($type = false) {
+    public function search($type = false)
+    {
         $db = FatApp::getDb();
         $fields = $this->getFormColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -83,10 +87,10 @@ class CatalogReportController extends SellerBaseController {
             default:
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
-        } 
+        }
         $srch->addFld('p.product_id');
         $srch->addGroupBy('p.product_id');
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields($selectedFlds);
         $productTypeArr = Product::getProductTypes($this->siteLangId);
@@ -144,7 +148,7 @@ class CatalogReportController extends SellerBaseController {
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-        $this->set("arrListing", $arrListing); 
+        $this->set("arrListing", $arrListing);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -152,11 +156,13 @@ class CatalogReportController extends SellerBaseController {
         $this->_template->render(false, false);
     }
 
-    public function export() {
+    public function export()
+    {
         $this->search("export");
     }
 
-    private function getSearchForm($fields = []) {
+    private function getSearchForm($fields = [])
+    {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'page');
@@ -167,11 +173,12 @@ class CatalogReportController extends SellerBaseController {
             $frm->addHiddenField('', 'reportColumns', '');
         }
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
-    private function getFormColumns(int $langId) {
+    private function getFormColumns(int $langId)
+    {
         $sellerCatalogReportCacheVar = CacheHelper::get('sellerCatalogReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerCatalogReportCacheVar) {
             $arr = [
@@ -202,8 +209,8 @@ class CatalogReportController extends SellerBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
-
 }

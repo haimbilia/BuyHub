@@ -17,7 +17,7 @@ $haveImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_
         </li>
         <?php
         /* foreach( $languages as $langId => $langName ){?>
-		<li class="<?php echo ($formLangId == $langId) ? 'is-active' : '' ?>"><a href="javascript:void(0)" onClick="categoryBannerLangForm(<?php echo $prodCatId ?>, <?php echo $langId;?>)">
+		<li class="<?php echo ($formLangId == $langId) ? 'is-active' : '' ?>"><a href="javascript:void(0)" onclick="categoryBannerLangForm(<?php echo $prodCatId ?>, <?php echo $langId;?>)">
 		<?php echo $langName;?></a></li>
 		<?php } */ ?>
     </ul>
@@ -28,7 +28,7 @@ $haveImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_
                     <?php if ($haveImage) { ?>
                         <div class="profile__pic"><img src="<?php echo UrlHelper::generateUrl('Category', 'sellerBanner', array($shop_id, $prodCatId, $formLangId, 'WIDE'), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?>"></div>
                     <?php
-                        $category_banner_fld->htmlAfterField = '<a class = "btn btn-brand btn-sm" href="javascript:void(0);" onClick="removeCategoryBanner(' . $prodCatId . ', ' . $formLangId . ')">' . Labels::getLabel('LBL_Remove', $siteLangId) . '</a>';
+                        $category_banner_fld->htmlAfterField = '<a class = "btn btn-brand btn-sm" href="javascript:void(0);" onclick="removeCategoryBanner(' . $prodCatId . ', ' . $formLangId . ')">' . Labels::getLabel('LBL_Remove', $siteLangId) . '</a>';
                     } ?>
 
                     <div class="btngroup--fix">

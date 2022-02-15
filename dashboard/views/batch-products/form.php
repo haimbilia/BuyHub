@@ -18,7 +18,7 @@ $frm->developerTags['fld_default_col'] = 12;
         </li>
 		<?php $inactive = ($prodgroup_id == 0) ? 'fat-inactive' : ''; ?>
 		
-		<li class="<?php echo $inactive;?>"><a href="javascript:void(0)" <?php if( $prodgroup_id >0){ ?> onClick="batchMediaForm(<?php echo $prodgroup_id; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
+		<li class="<?php echo $inactive;?>"><a href="javascript:void(0)" <?php if( $prodgroup_id >0){ ?> onclick="batchMediaForm(<?php echo $prodgroup_id; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
 	</ul>
 	<div class="col-md-12">
 		<?php echo $frm->getFormHtml(); ?>

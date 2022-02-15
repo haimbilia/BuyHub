@@ -492,6 +492,7 @@ Updates/Fixes :
     => 062354 - Admin UI: Search by Keyword is not working under the messages section and search fields UI is also not correct 
     => 062335 - Admin UI: The product's listing is not showing after adding the one product on the "Related products" page
     => 062352 - Admin UI: Address details of the buyer are not showing under the messages section and shop details are also missing(Receiver details)
+    => 062371 - Admin UI: Admin navigates to the other reports while clicking on the sorting on the seller's page
     => 062397 - Admin UI: Search is not working using "Username" and "Phone number" on the Blog Contribution page.
     => 062398 - Admin UI: "Contribution status" font is not correct and there is a spacing issue while editing the blog contribution details on the Blog Contributions page.
     => 062411 - Admin UI: Sorting is not working and display Order is showing zero in the table on the "Collection" pages.    
@@ -503,6 +504,8 @@ Updates/Fixes :
     => 062454 - Admin UI: Columns alignment is changing while admin clicks on the sorting option under the meta-tag section and double options are selected on the side menu while clicking on the View HTML and XML option
     => 062458 - Admin UI: Profile image and email address is not updated while clicking on the "My Profile" option
     => 062459 - Admin UI: "Double validation" messages are showing for the confirm password field while changing the admin's password
+    => 062498 - Admin UI: Spacing issue while editing the shop details under the Manage Shop section.
+    => 062510 - Admin UI: "Parse error" is showing while trying to sort the table according to the User Type column under the deleted users' table.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -19,6 +19,8 @@ class ImportExportController extends SellerBaseController
 
     public function index()
     {
+        $this->set('canEditImportExport', $this->userPrivilege->canEditImportExport(0, true));
+        $this->set('canUploadBulkImages', $this->userPrivilege->canUploadBulkImages(0, true));
         $this->_template->render(true, true);
     }
 
@@ -503,7 +505,7 @@ class ImportExportController extends SellerBaseController
             $options,
             '',
             array('class' => 'list-inline'),
-            array('onClick' => 'getInstructions(this.value)')
+            array('onclick' => 'getInstructions(this.value)')
         );
         $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Select_Above_option_to_import_data.", $langId) . "</small><br/><small>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</small>";
         return $frm;
@@ -519,7 +521,7 @@ class ImportExportController extends SellerBaseController
             $options,
             '',
             array('class' => 'list-inline'),
-            array('onClick' => 'exportForm(this.value)')
+            array('onclick' => 'exportForm(this.value)')
         );
         $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Select_Above_option_to_export_data.", $langId) . "</small>";
         return $frm;

@@ -14,10 +14,10 @@ if ($isWishList) {
     <div class="card card-tabs">
         <div class="card-head">
             <nav class="nav nav-tabs">
-                <a class="nav-link navLinkJs favtProductsJs" onClick="<?php echo $function; ?>" href="javascript:void(0);" id="tab-wishlist">
+                <a class="nav-link navLinkJs favtProductsJs" onclick="<?php echo $function; ?>" href="javascript:void(0);" id="tab-wishlist">
                     <?php echo $label; ?>
                 </a>
-                <a class="nav-link active navLinkJs favtShopsJs" onClick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
+                <a class="nav-link active navLinkJs favtShopsJs" onclick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
             </nav>
         </div>
         <div class="card-body">

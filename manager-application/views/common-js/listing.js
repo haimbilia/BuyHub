@@ -52,7 +52,7 @@ $(function () {
 });
 
 /* Reset result on clear(cross) icon on keyword search field. */
-$(document).on("search", "input[name='keyword']", function () {
+$(document).on("search", "input[type='search']", function () {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
     }
@@ -63,7 +63,8 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {
         $.ykmodal(fcom.getLoader());
     }
-    if (0 > $(".navTabsJs .nav-link").length) {
+
+    if (0 < $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
     } else {
         var onClear = $(".modalFormJs").data("onclear");
@@ -156,7 +157,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     setPageSize = function (pageSize) {
         var frm = document.frmRecordSearch;
-        $(frm.pageSize).val(pageSize);     
+        $(frm.pageSize).val(pageSize);
         searchRecords(frm);
     };
 
@@ -543,13 +544,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 var file = inputBtn.files[0];
 
                 var frmName = $(inputBtn).closest('form').attr('name');
-                var options = {                    
+                var options = {
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: "high",
                     imageSmoothingEnabled: true,
                 };
 
-                if(document[frmName].min_width != undefined && document[frmName].min_height != undefined){
+                if (document[frmName].min_width != undefined && document[frmName].min_height != undefined) {
                     var minWidth = document[frmName].min_width.value;
                     var minHeight = document[frmName].min_height.value;
                     options['aspectRatio'] = minWidth / minHeight;
@@ -559,10 +560,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                         width: minWidth,
                         height: minHeight,
                     };
-                }else{
-                    options['initialAspectRatio'] = 1;                    
-                }              
-                
+                } else {
+                    options['initialAspectRatio'] = 1;
+                }
+
                 $(inputBtn).val("");
                 setTimeout(function () {
                     cropImage(file, options, "uploadImages", inputBtn);

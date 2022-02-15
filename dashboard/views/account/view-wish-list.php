@@ -19,7 +19,7 @@ $btn->setFieldTagAttribute('class', 'btn btn-brand');
         <div class="collection__list">
             <ul class="listing--check">
                 <?php foreach ($wishLists as $list) { ?>
-                    <li onClick="addRemoveWishListProduct(<?php echo $selprod_id . ', ' . $list['uwlist_id']; ?>, event);" class="wishListCheckBox_<?php echo $list['uwlist_id']; ?> <?php echo array_key_exists($selprod_id, $list['products']) ? ' is-active' : ''; ?>">
+                    <li onclick="addRemoveWishListProduct(<?php echo $selprod_id . ', ' . $list['uwlist_id']; ?>, event);" class="wishListCheckBox_<?php echo $list['uwlist_id']; ?> <?php echo array_key_exists($selprod_id, $list['products']) ? ' is-active' : ''; ?>">
                         <a href="javascript:void(0)">
                             <?php echo ($list['uwlist_type'] == UserWishList::TYPE_DEFAULT_WISHLIST) ? Labels::getLabel('LBL_Default_list', $siteLangId) : $list['uwlist_title']; ?>
                         </a>

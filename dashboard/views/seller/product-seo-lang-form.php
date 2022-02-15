@@ -1,14 +1,10 @@
-<?php /*require_once('sellerProductSeoTop.php');*/ ?>
-<h5 class="card-title mb-2">
-    <?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?></h5>
-
 <?php
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 if (!empty($translatorSubscriptionKey) && $selprod_lang_id != $siteDefaultLangId) { ?>
     <div class="row justify-content-end">
         <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
+            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
         </div>
     </div>
 <?php } ?>
@@ -29,20 +25,32 @@ $mtagsFld->setfieldTagAttribute('class', "txtarea-height");
 $nextBtn = $productSeoLangForm->getField('btn_next');
 $nextBtn->developerTags['col'] = 6;
 $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
-$nextBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 0)");
+$nextBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 0)");
 $nextBtn->setWrapperAttribute('class', "text-right");
 $nextBtn->developerTags['noCaptionTag'] = true;
 
 $exitBtn = $productSeoLangForm->getField('btn_exit');
-$exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
-$exitBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 1)");
+$exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
+$exitBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 1)");
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
+
+HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
 
 end($languages);
 if (key($languages) == $selprod_lang_id) {
     $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
     $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
-    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
-}
-echo $productSeoLangForm->getFormHtml(); ?>
+    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
+} ?>
+
+<div id="dvForm">
+    <div class="card-head">
+        <h5 class="card-title mb-2">
+            <?php echo SellerProduct::getProductDisplayTitle($selprodId, $siteLangId, false); ?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <?php echo $productSeoLangForm->getFormHtml(); ?>
+    </div>
+</div>

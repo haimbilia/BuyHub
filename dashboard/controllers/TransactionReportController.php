@@ -127,8 +127,8 @@ class TransactionReportController extends SellerBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $srch->setPageSize($pagesize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -158,7 +158,7 @@ class TransactionReportController extends SellerBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
 
         return $frm;
     }

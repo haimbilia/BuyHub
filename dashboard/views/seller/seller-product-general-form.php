@@ -44,7 +44,7 @@ $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
 
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-inventory');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
 ?>
 <div class="row">
@@ -273,7 +273,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                                             <td class="optionFld-js fldSku"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_sku' . $optionKey . ']'); ?>
                                             </td>
                                             <td>
-                                                <button disabled="disabled" onClick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
+                                                <button disabled="disabled" onclick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
                                                     <i class="fas fa-paste"></i>
                                                 </button>
                                             </td>
@@ -511,7 +511,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
         e.preventDefault();
         var pastedData = e.originalEvent.clipboardData.getData('text');
         var pastedDataArr = pastedData.split('\t');
-        if(1 < pastedDataArr.length){
+        if (1 < pastedDataArr.length) {
             var count = 0;
             $(this).parent().parent().find('input').each(function() {
                 $(this).val('')
@@ -519,11 +519,11 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                 count = parseInt(count) + 1;
             });
             $(this).parent().parent().next().children().children().first().focus();
-        }else{
+        } else {
             $(this).val(pastedDataArr)
         }
         $(this).parent().parent().find('button').removeAttr("disabled");
         $('.js-copy-btn').attr('title', langLbl.copyToClipboard);
-        $('.js-copy-btn').removeClass('clicked');    
+        $('.js-copy-btn').removeClass('clicked');
     });
 </script>

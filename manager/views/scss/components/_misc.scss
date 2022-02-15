@@ -39,11 +39,11 @@ body {
 a {
     text-decoration: none;
     &:focus-visible {
-        outline: $focus-outline!important;
+        outline: $focus-outline !important;
         box-shadow: none;
     }
 }
-button{
+button {
     &:focus-visible {
         outline: $focus-outline;
         box-shadow: none;
@@ -2386,7 +2386,7 @@ $header-height: 65px;
     flex: 1;
     padding-top: 2rem;
     flex: 1;
-    &.isLoading{
+    &.isLoading {
         overflow: hidden;
         position: relative;
     }
@@ -3075,19 +3075,16 @@ $header-height: 65px;
     right: 0 !important;
     left: auto !important;
 }
-[dir="rtl"] .iti__country-list{
+[dir="rtl"] .iti__country-list {
     right: 0;
 }
 .ui-datepicker {
     // z-index: $zindex-dropdown !important;
 }
 
-
-
-
 .dropzone {
     .dz-preview {
-        margin: 0!important;
+        margin: 0 !important;
         padding: 1.25rem 0.5rem;
         min-height: 100px;
         background: linear-gradient(to bottom, #efefef, #c9c9c9);
@@ -3095,28 +3092,29 @@ $header-height: 65px;
         min-width: 160px;
         width: 160px;
         .dz-progress {
-            width: 100%!important;
-            left: 0!important;
+            width: 100% !important;
+            left: 0 !important;
             right: 0;
-            margin: auto!important;
-            height: 8px!important;
-            margin-top: 8px!important;
-            .dz-upload{
-                background: $brand-color!important;
+            margin: auto !important;
+            height: 8px !important;
+            margin-top: 8px !important;
+            .dz-upload {
+                background: $brand-color !important;
             }
         }
-        .dz-image{
-            display: none!important;
+        .dz-image {
+            display: none !important;
         }
-        .dz-details{
-            padding: 1rem!important;
+        .dz-details {
+            padding: 1rem !important;
         }
-        .dz-details, .dz-progress-text, .dz-progress {
-            position: relative!important;
+        .dz-details,
+        .dz-progress-text,
+        .dz-progress {
+            position: relative !important;
         }
-        .dz-remove{
+        .dz-remove {
             margin-top: 10px;
         }
-        
     }
 }

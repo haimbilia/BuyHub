@@ -24,7 +24,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
         echo $imgFrm->getFieldHtml('action');
         ?>
         <?php if ($mode == 'Edit') { ?>
-            <a class="btn btn-brand btn-sm" href="javascript:void(0)" onClick="removeProfileImage()"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
+            <a class="btn btn-brand btn-sm" href="javascript:void(0)" onclick="removeProfileImage()"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
         <?php } ?>
         </form>
         <?php echo $imgFrm->getExternalJS(); ?>

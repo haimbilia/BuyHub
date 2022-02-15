@@ -868,7 +868,7 @@ trait SellerProducts
         }
 
         $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $formLangId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $formLangId), array('onClick' => 'cancelForm(this)'));
+        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $formLangId), array('onclick' => 'cancelForm(this)'));
         $fld1->attachField($fld2);
         return $frm;
     }
@@ -1158,7 +1158,7 @@ trait SellerProducts
           $fld->addFieldTagAttribute( 'onChange', 'updateDiscountString()');
          */
         $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
+        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId), array('onclick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
         $fld1->attachField($fld2);
         return $frm;
     }
@@ -1530,7 +1530,7 @@ trait SellerProducts
         $discountFld->requirements()->setPositive();
         $discountFld->requirements()->setRange(1, 100);
         $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
+        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $langId), array('onclick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
         $fld1->attachField($fld2);
         return $frm;
     }

@@ -12,7 +12,7 @@ $(document).ready(function () {
     loadForm = function (formType) {
         $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
-
+            fcom.removeLoader();
             $(dv).html(t);
             if ('bulk_media' == formType) {
                 searchFiles();
@@ -218,9 +218,9 @@ $(document).ready(function () {
         }
         /*]*/
         var dv = $('#listing');
-        $(dv).html(fcom.getLoader());
-
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'uploadedBulkMediaList'), data, function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $("#listing").html(res);
         });

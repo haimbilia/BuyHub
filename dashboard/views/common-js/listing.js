@@ -6,6 +6,17 @@ $(document).on("search", "input[type='search']", function () {
 });
 /* Reset result on clear(cross) icon on keyword search field. */
 
+$(document).on("click", ".resetModalFormJs", function (e) {
+    if ($.ykmodal.isSideBarView()) {
+        $.ykmodal(fcom.getLoader());
+    }
+    if (0 < $(".navTabsJs .nav-link").length) {
+        $(".navTabsJs .nav-link.active").click();
+    } else {
+        var onClear = $(".modalFormJs").data("onclear");
+        eval(onClear);
+    }
+});
 
 
 (function () {
@@ -61,5 +72,14 @@ $(document).on("search", "input[type='search']", function () {
                 $(".loadMorePaginationJs").remove();
             }
         });
+    };
+
+    closeForm = function () {
+        $.ykmodal.close();
+    };
+
+    markPopTabActive = function () {
+        $('.navTabsJs a.active').removeClass('active');
+        $('.navTabsJs').find("a[onclick^='" + markPopTabActive.caller.name + "']").addClass('active');
     };
 })();
