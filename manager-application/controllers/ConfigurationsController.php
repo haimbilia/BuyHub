@@ -213,8 +213,8 @@ class ConfigurationsController extends ListingBaseController
         if (1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
-        if(empty(FatApp::getConfig('CONF_MAINTENANCE_TEXT_'.$langId, FatUtility::VAR_STRING, ''))){
+
+        if (empty(FatApp::getConfig('CONF_MAINTENANCE_TEXT_' . $langId, FatUtility::VAR_STRING, ''))) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_MAINTENANCE_MODE_TEXT_FIRST', $this->siteLangId), true);
         }
 
@@ -1175,8 +1175,8 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForRadio($fld);
 
                 if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
-                    $fld = $frm->addHTML('', 'sendmailhtml', '<div class="border p-3 text-center cms" role="alert"><p>' . Labels::getLabel("FRM_CLICK_BUTTON_TO_SEND_TEST_EMAIL_TO_SITE_OWNER_AT", $langId) . ' -<br><strong>'. FatApp::getConfig("CONF_SITE_OWNER_EMAIL").'</strong></p><a class="btn btn-secondary btn-sm" href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("FRM_CLICK_HERE", $langId) . '</a></div>');
-                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];                    
+                    $fld = $frm->addHTML('', 'sendmailhtml', '<div class="border p-3 text-center cms" role="alert"><p>' . Labels::getLabel("FRM_CLICK_BUTTON_TO_SEND_TEST_EMAIL_TO_SITE_OWNER_AT", $langId) . ' -<br><strong>' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL") . '</strong></p><a class="btn btn-secondary btn-sm" href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("FRM_CLICK_HERE", $langId) . '</a></div>');
+                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 }
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SEND_SMTP_EMAIL", $langId), 'CONF_SEND_SMTP_EMAIL', 1, array(), false, 0);
@@ -1548,18 +1548,18 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_ADMIN_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SETUP_LOGO_TO_APPEAR_ON_ADMIN_DASHBOARD", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_ADMIN_LOGO;
 
-                $imageArr = [];               
+                $imageArr = [];
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
-                }               
+                }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
                     ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_ADMIN_LOGO", $langId)],
@@ -1569,7 +1569,7 @@ class ConfigurationsController extends ListingBaseController
                     $imageArr,
                     'mt-3'
                 ));
-              
+
                 $fld = $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1577,7 +1577,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_DESKTOP_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>  ' . Labels::getLabel("MSG_SETUP_LOGO_FOR_WEBSITE_HEADER_AND_USER_DASHBOARD", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_FRONT_LOGO;
                 $imageArr = [];
@@ -1586,7 +1586,7 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                       
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
 
@@ -1597,7 +1597,7 @@ class ConfigurationsController extends ListingBaseController
                     '',
                     $imageArr,
                     'mt-3'
-                ));          
+                ));
                 $fld =  $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1605,7 +1605,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WEBSITE_FAVICON", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SETUP_LOGO_TO_APPEAR_ON_THE_BROWSER_TAB", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_FAVICON;
 
@@ -1632,7 +1632,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 160*240</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 160*240</span>');
 
                 $fileType = AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE;
 
@@ -1659,7 +1659,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong>' . Labels::getLabel("MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE", $langId) . ' </span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE", $langId) . ' </span>');
 
                 $fileType = AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
                 $imageArr = [];
@@ -1668,7 +1668,7 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
 
@@ -1679,7 +1679,7 @@ class ConfigurationsController extends ListingBaseController
                     '',
                     $imageArr,
                     'mt-3'
-                ));               
+                ));
                 $fld = $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1688,7 +1688,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WATERMARK_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_A_WATERMARK_TRANSPARENT_LOGO_ON_PHOTOGRAPH", $langId) . ' </span>');
 
                 $fileType = AttachedFile::FILETYPE_WATERMARK_IMAGE;
 
@@ -1716,7 +1716,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId) . ' </h6>
                      <span class="form-text text-muted">
-                         <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SHORTCUT_ICON_ON_MOBILE_APPS_WHEN_MARKED_AS_SHORTCUT", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_APPLE_TOUCH_ICON;
 
@@ -1745,7 +1745,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_LOGO", $langId) . ' </h6>
                       <span class="form-text text-muted">
-                          <strong> Image Disclaimer:</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 168*37</span>');
+                          <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 168*37</span>');
 
                 $fileType = AttachedFile::FILETYPE_MOBILE_LOGO;
 
@@ -1773,7 +1773,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_INVOICE_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_LOGO_APPEAR_ON_INVOICE_GENERATED_WITH_A_PURCHASE_ORDER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_INVOICE_LOGO;
                 $imageArr = [];
@@ -1782,10 +1782,10 @@ class ConfigurationsController extends ListingBaseController
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                         $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];                        
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
-            
+
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
                     ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_INVOICE_LOGO", $langId)],
                     $langId,
@@ -1794,7 +1794,7 @@ class ConfigurationsController extends ListingBaseController
                     $imageArr,
                     'mt-3'
                 ));
-           
+
                 $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
@@ -1803,7 +1803,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> Image Disclaimer:</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 120*120</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 120*120</span>');
 
                 $fileType = AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE;
 
@@ -1831,7 +1831,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_META_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                       <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+                       <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_METATAGS_IMAGE_USED_FOR_SHARING_ON_SOCIAL_MEDIA", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_META_IMAGE;
                 $imageArr = [];
