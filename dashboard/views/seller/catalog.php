@@ -5,7 +5,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <?php 
         $title = ($type == 1) ? Labels::getLabel('LBL_Seller_Products', $siteLangId) : Labels::getLabel('LBL_Marketplace_Products', $siteLangId);
         $data = [
-            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>',
+            'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>',
             'siteLangId' => $siteLangId,
             'controllerName' => $controllerName,
             'action' => $action,

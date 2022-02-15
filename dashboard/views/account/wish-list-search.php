@@ -3,10 +3,10 @@
     <div class="card card-tabs">
         <div class="card-head">
             <nav class="nav nav-tabs">
-                <a class="nav-link active navLinkJs favtProductsJs" onClick="searchWishList()" href="javascript:void(0);" id="tab-wishlist">
+                <a class="nav-link active navLinkJs favtProductsJs" onclick="searchWishList()" href="javascript:void(0);" id="tab-wishlist">
                     <?php echo Labels::getLabel("LBL_WISHLIST", $siteLangId); ?>
                 </a>
-                <a class="nav-link navLinkJs favtShopsJs" onClick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
+                <a class="nav-link navLinkJs favtShopsJs" onclick="searchFavoriteShop();" href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></a>
             </nav>
         </div>
         <div class="card-body">

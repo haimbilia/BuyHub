@@ -9,18 +9,14 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
 ?>
 <div class="row">
     <div class="col-md-8">
-
-        <div class="nav nav-pills nav-fill clearfix">
+        <div class="tabs tabs-sm clearfix">
             <ul class="setactive-js">
-                <li><a href="javascript:void(0)" onClick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                <li><a href="javascript:void(0)" onclick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                 <li class="<?php echo (0 < $formLangId) ? 'is-active' : ''; ?>">
                     <a href="javascript:void(0);">
                         <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                     </a>
                 </li>
-                <?php /* foreach($languages as $langId => $langName){?>
-					<li <?php echo ($formLangId == $langId)?'class="is-active"':'';?>><a href="javascript:void(0);" onclick="returnAddressLangForm(<?php echo $langId;?>);"><?php echo $langName;?></a></li>
-				<?php }  */ ?>
             </ul>
         </div>
         <?php
@@ -29,7 +25,7 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
         if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) { ?>
             <div class="row justify-content-end">
                 <div class="col-auto mb-4">
-                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
+                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
                 </div>
             </div>
         <?php } ?>

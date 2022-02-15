@@ -636,7 +636,7 @@ class CommonHelper extends FatUtility
             $currencySymbolLeft = $currencyData['currency_symbol_left'];
             $currencySymbolRight = $currencyData['currency_symbol_right'];
         }
-        
+
         $val = $val * $currencyValue;
 
         $sign = '';
@@ -2104,7 +2104,8 @@ class CommonHelper extends FatUtility
 
     public static function getDefaultFormLangId()
     {
-        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        return CommonHelper::getLangId();
+        // return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
 
     public static function isSetCookie($cookieName)

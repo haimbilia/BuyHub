@@ -1,10 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="box__head">
-    <h4><?php echo Labels::getLabel('LBL_Catalog_Listing', $siteLangId); ?></h4>
-    <div class="">
-        <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products', $siteLangId); ?></a>
-        <a href="javascript:void(0);" onClick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
-    </div>
+    <<<<<<< HEAD <h4><?php echo Labels::getLabel('LBL_Catalog_Listing', $siteLangId); ?></h4>
+        <div class="">
+            <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products', $siteLangId); ?></a>
+            <a href="javascript:void(0);" onClick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
+        </div>
+        =======
+        <h4><?php echo Labels::getLabel('LBL_Catalog_Listing', $siteLangId); ?></h4>
+        <div class="">
+            <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products', $siteLangId); ?></a>
+            <a href="javascript:void(0);" onclick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
+        </div>
+        >>>>>>> e42a45b9ad02de5db78ed55d89402b60a2dda071
 </div>
 <div class="box__body">
     <div class="js-scrollable table-wrap scroll scroll-x">
@@ -47,7 +54,7 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onClick' => 'viewRequestedCatalog(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => 'viewRequestedCatalog(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)),
                             '<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use
@@ -61,7 +68,7 @@
                             $li = $ul->appendElement("li");
                             $li->appendElement(
                                 'a',
-                                array('href' => 'javascript:void(0)', 'onClick' => 'deleteRequestedCatalog(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId)),
+                                array('href' => 'javascript:void(0)', 'onclick' => 'deleteRequestedCatalog(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId)),
                                 '<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use
@@ -75,7 +82,7 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onClick' => 'messageForm(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_Messages', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => 'messageForm(' . $row['scatrequest_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_Messages', $siteLangId)),
                             '<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use

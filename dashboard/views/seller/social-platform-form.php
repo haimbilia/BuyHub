@@ -3,7 +3,7 @@
 <div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
     <div class="">
-        <a href="javascript:void(0)" onClick="socialPlatforms()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Social_Platforms', $siteLangId); ?></a>
+        <a href="javascript:void(0)" onclick="socialPlatforms()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Social_Platforms', $siteLangId); ?></a>
     </div>
 </div>
 <div class="card-body">
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="nav nav-pills nav-fill">
                         <ul id="shopFormChildBlockTabsJs">
-                            <li class="is-active"><a href="javascript:void(0)" onClick="addForm(<?php echo $splatform_id; ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                            <li class="is-active"><a href="javascript:void(0)" onclick="addForm(<?php echo $splatform_id; ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                             <li class="<?php echo (0 == $splatform_id) ? 'fat-inactive' : ''; ?>">
                                 <a href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id; ?>,<?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>);">
                                     <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>

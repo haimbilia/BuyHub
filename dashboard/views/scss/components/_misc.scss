@@ -764,5 +764,31 @@ a:hover {
             flex: 0 0 50%;
             max-width: 50%;
         }
+
+.form-edit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    &-head {
+        padding: 0 2rem;
+        border-bottom: $border;
+    }
+    &-body {
+        flex: 1 1 auto;
+        padding: 1.5rem 2rem;
+        position: relative;
+        .h3 {
+            font-size: 1rem;
+            color: $txt-body; 
+        }
+    }
+    &-foot {
+        border-top: $border;
+        position: sticky;
+        bottom: 0;
+        z-index: 3;
+        background-color: $bg-white;
+        padding: 1.5rem 2rem;
     }
 }

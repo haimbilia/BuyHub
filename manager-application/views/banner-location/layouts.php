@@ -10,7 +10,7 @@
                     <div class="sectionbody row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div class="shop-template"> 
-                                <a rel="facebox" onClick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-1.jpg');" href="javascript:void(0)">
+                                <a rel="facebox" onclick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-1.jpg');" href="javascript:void(0)">
                                     <figure class="thumb--square"><img width="400px;" style="height:100%" src="<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-1.jpg" /></figure>
                                     <p><?php echo Labels::getLabel('LBL_Layout_1',$siteLangId);?></p>
                                 </a>
@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div class="shop-template">
-                                <a rel="facebox" onClick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-2.jpg');" href="javascript:void(0)">
+                                <a rel="facebox" onclick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-2.jpg');" href="javascript:void(0)">
                                     <figure class="thumb--square"><img width="400px;" style="height:100%" src="<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-2.jpg" /></figure>
                                     <p><?php echo Labels::getLabel('LBL_Layout_2',$siteLangId);?></p>
                                 </a>
@@ -26,7 +26,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div class="shop-template">
-                                <a rel="facebox" onClick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-3.jpg');" href="javascript:void(0)">
+                                <a rel="facebox" onclick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-3.jpg');" href="javascript:void(0)">
                                     <figure class="thumb--square"><img width="400px;"  style="height:100%" src="<?php echo CONF_WEBROOT_URL; ?>images/banner_layouts/layout-3.jpg" /></figure>
                                     <p><?php echo Labels::getLabel('LBL_Layout_3',$siteLangId);?></p>
                                 </a>

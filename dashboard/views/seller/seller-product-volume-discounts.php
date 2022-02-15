@@ -7,7 +7,7 @@
         <div class="card-head">
             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></h5>
             <div class="action">
-                <a class="btn btn-brand btn-sm" href="javascript:void(0); " onClick="sellerProductVolumeDiscountForm(<?php echo $selprod_id; ?>, 0);"><?php echo Labels::getLabel('LBL_Add_New_Volume_Discount', $siteLangId) ?></a>
+                <a class="btn btn-brand btn-sm" href="javascript:void(0); " onclick="sellerProductVolumeDiscountForm(<?php echo $selprod_id; ?>, 0);"><?php echo Labels::getLabel('LBL_Add_New_Volume_Discount', $siteLangId) ?></a>
                 <!-- <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount', array($selprod_id)); ?>" target="_blank"><?php echo Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId) ?></a> -->
             </div>
         <?php } ?>
@@ -68,7 +68,7 @@
                                 0 => array(
                                     'href' => 'javascript:void(0);',
                                     'label' => Labels::getLabel('LBL_Add_New_Volume_Discount', $siteLangId),
-                                    'onClick' => 'sellerProductVolumeDiscountForm(' . $selprod_id . ', 0);',
+                                    'onclick' => 'sellerProductVolumeDiscountForm(' . $selprod_id . ', 0);',
                                 )
                             );
                             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'linkArr' => $linkArr, 'message' => $message));

@@ -84,14 +84,8 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                             $li = $ul->appendElement("li");
                             $li->appendElement(
                                 'a',
-                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onClick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
-                                '<i class="icn">
-                        <svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
-                            </use>
-                        </svg>
-                    </i>',
+                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
+                                '<i class="fa fa-plus-square"></i>',
                                 true
                             );
                         }

@@ -143,7 +143,7 @@
                     $li->appendElement(
                         'a',
                         array(
-                            'href' => 'javascript:void(0)', 'onClick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                            'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
                             'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
                         ),
                         '<i class="fa fa-cart-plus"></i>',

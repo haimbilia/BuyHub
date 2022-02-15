@@ -258,6 +258,7 @@ if (!$print) { ?>
                                     </thead>
                                     <tbody>
 
+
                                         <?php $sr_no = 1;
                                         foreach ($digitalDownloadLinks as $key => $row) {
                                             $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
@@ -280,7 +281,7 @@ if (!$print) { ?>
                                                 </td>
                                                 <td>
                                                     <div class="text-break">
-                                                        <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                                        <a target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
                                                             <?php echo $link; ?>
                                                         </a>
                                                     </div>
@@ -300,44 +301,46 @@ if (!$print) { ?>
                                     </tbody>
                                 </table>
                             </div>
+                            >>>>>>> e42a45b9ad02de5db78ed55d89402b60a2dda071
                         </div>
-                    <?php } ?>
-
-                    <?php
-                    if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
-                        <div class="col-md-12 section--repeated mb-3">
-                            <h6>
-                                <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
-                            </h6>
-                            <div class="info--order">
-                                <?php
-                                $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
-                                $frm->setFormTagAttribute('class', 'form');
-                                $frm->developerTags['colClassPrefix'] = 'col-md-';
-                                $frm->developerTags['fld_default_col'] = 12;
-
-
-                                $paymentFld = $frm->getField('opayment_method');
-                                $paymentFld->developerTags['col'] = 4;
-
-                                $gatewayFld = $frm->getField('opayment_gateway_txn_id');
-                                $gatewayFld->developerTags['col'] = 4;
-
-                                $amountFld = $frm->getField('opayment_amount');
-                                $amountFld->developerTags['col'] = 4;
-
-                                $submitFld = $frm->getField('btn_submit');
-                                $submitFld->developerTags['col'] = 4;
-                                $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
-                                $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
-                                echo $frm->getFormHtml(); ?>
-                            </div>
-                        </div>
-                    <?php } ?>
                 </div>
+            <?php } ?>
+
+            <?php
+            if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
+                <div class="col-md-12 section--repeated mb-3">
+                    <h6>
+                        <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
+                    </h6>
+                    <div class="info--order">
+                        <?php
+                        $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
+                        $frm->setFormTagAttribute('class', 'form');
+                        $frm->developerTags['colClassPrefix'] = 'col-md-';
+                        $frm->developerTags['fld_default_col'] = 12;
+
+
+                        $paymentFld = $frm->getField('opayment_method');
+                        $paymentFld->developerTags['col'] = 4;
+
+                        $gatewayFld = $frm->getField('opayment_gateway_txn_id');
+                        $gatewayFld->developerTags['col'] = 4;
+
+                        $amountFld = $frm->getField('opayment_amount');
+                        $amountFld->developerTags['col'] = 4;
+
+                        $submitFld = $frm->getField('btn_submit');
+                        $submitFld->developerTags['col'] = 4;
+                        $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
+                        $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
+                        echo $frm->getFormHtml(); ?>
+                    </div>
+                </div>
+            <?php } ?>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <?php if ($print) { ?>

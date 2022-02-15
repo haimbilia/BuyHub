@@ -37,14 +37,14 @@ $uploadfld->htmlAfterField = $htmlAfterField;
             <div class="col-md-12">
                 <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
                     <ul>
-                        <li><a href="javascript:void(0);" onClick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                        <li><a href="javascript:void(0);" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                         <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
                                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li class="is-active"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onClick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+                            <li class="is-active"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
                         <?php } ?>
                     </ul>
                 </div>

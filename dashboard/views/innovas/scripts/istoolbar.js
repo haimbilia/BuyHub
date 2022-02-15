@@ -1,6 +1,6 @@
 /***********************************************************
 Live Editor 1.7.3
-© 2014, InnovaStudio (www.innovastudio.com). All rights reserved.
+ï¿½ 2014, InnovaStudio (www.innovastudio.com). All rights reserved.
 ************************************************************/
 var UA = navigator.userAgent.toLowerCase();
 var isIE = (UA.indexOf('msie') >= 0) ? true : false;
@@ -144,7 +144,7 @@ ISTbar.hide=function() {
 }
 
 ISTbar.changeState=function() {};
-ISTbar.onClick=function(e, s) {
+ISTbar.onclick=function(e, s) {
 };
 
 ISTbar.render=function() {
@@ -296,7 +296,7 @@ function ISDropdown(id) {
     return s.join("");
   };
   
-  this.onClick=function(itId) {}
+  this.onclick=function(itId) {}
   
   isDDs[id]=this;
 };
@@ -391,7 +391,7 @@ function $ddmsClick(ddId, id, t) {
   if(!isDDs[ddId].items[id].enable)return;
   isDDs[ddId].selectItem(id, true);
   hideDD(ddId);
-  isDDs[ddId].onClick(id);
+  isDDs[ddId].onclick(id);
 };
 
 /*end of floating functions*/
@@ -420,7 +420,7 @@ function $msUp(e, tbId, btnId) {
   if(btn.state==5) return false;
   if (btn.type=="STD") {
     btn.setState(2);
-    tbar.onClick(btnId);
+    tbar.onclick(btnId);
   } else if(btn.type=="TGL") { 
     if (btn.group!=null && btn.group!="") {
       //find all other button with the same group and set 
@@ -434,9 +434,9 @@ function $msUp(e, tbId, btnId) {
     //toggle button      
     btn.setState(btn.checked?2:4);
     btn.checked=!btn.checked;
-    tbar.onClick(btnId);
+    tbar.onclick(btnId);
   } else if(btn.type=="DD") {
-    tbar.onClick(btnId);
+    tbar.onclick(btnId);
     showDD(tbId, btnId, btn.ddId);
     btn.setState(2);
   }

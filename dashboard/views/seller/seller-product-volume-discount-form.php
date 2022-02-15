@@ -8,6 +8,6 @@
     $frmSellerProductVolDiscount->developerTags['fld_default_col'] = 6;
 
     $btnCancelFld = $frmSellerProductVolDiscount->getField('btn_cancel');
-    $btnCancelFld->setFieldTagAttribute('onClick', 'sellerProductVolumeDiscounts(' . $selprod_id . ');');
+    $btnCancelFld->setFieldTagAttribute('onclick', 'sellerProductVolumeDiscounts(' . $selprod_id . ');');
     echo $frmSellerProductVolDiscount->getFormHtml(); ?>
 </div>

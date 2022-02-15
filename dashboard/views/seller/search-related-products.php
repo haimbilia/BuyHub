@@ -52,7 +52,7 @@
                         $li = $ul->appendElement("li");
                         $removeIcon = '';
                         if ($canEdit) {
-                            $removeIcon = '<i class="remove_buyTogether remove_param fa fa-times" onClick="deleteSelprodRelatedProduct(' . $selProdId . ', ' . $relatedProd['selprod_id'] . ')"></i>';
+                            $removeIcon = '<i class="remove_buyTogether remove_param fa fa-times" onclick="deleteSelprodRelatedProduct(' . $selProdId . ', ' . $relatedProd['selprod_id'] . ')"></i>';
                         }
                         $li->appendElement('plaintext', array(), '<span>' . $productName . ' ' . $removeIcon . '</span>', true);
                         $li->appendElement('plaintext', array(), '<input type="hidden" name="product_related[]" value="' . $relatedProd['selprod_id'] . '">', true);

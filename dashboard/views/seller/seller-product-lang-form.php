@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="">
-                        <div class="nav nav-pills nav-fill tabs--scroll clearfix">
+                        <div class="tabs tabs-sm tabs--scroll clearfix">
                             <ul>
                                 <li><a href="javascript:void(0)" onClick="sellerProductForm(<?php echo $product_id, ',', $selprod_id ?>)"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
                                 <li class="<?php echo (0 < $formLangId) ? 'is-active' : '';
@@ -60,7 +60,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

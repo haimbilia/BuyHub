@@ -35,10 +35,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                             $td->appendElement('plaintext', array(), $serialNo);
                             break;
                         case 'user_name':
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
                             break;
                         case 'shop_identifier':
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
                             break;
                         default:
                             $td->appendElement('plaintext', array(), $row[$key], true);

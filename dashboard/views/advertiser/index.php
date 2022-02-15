@@ -200,7 +200,7 @@
                         </div>
                     <?php } ?>
                     <div class="widget widget-stats">
-                        <a href="javascript:void(0)" onClick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
+                        <a href="javascript:void(0)" onclick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
                             <div class="card">
                                 <div class="card-head">
                                     <h5 class="card-title">

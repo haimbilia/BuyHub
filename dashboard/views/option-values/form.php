@@ -4,7 +4,7 @@ $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY
 if (!empty($translatorSubscriptionKey)) { ?>
     <div class="row justify-content-end">
         <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $langId); ?>" onClick="autofillLangData($(this), $('form#frmOptionValues'))" data-action="<?php echo UrlHelper::generateUrl('OptionValues', 'getTranslatedData'); ?>">
+            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $langId); ?>" onclick="autofillLangData($(this), $('form#frmOptionValues'))" data-action="<?php echo UrlHelper::generateUrl('OptionValues', 'getTranslatedData'); ?>">
         </div>
     </div>
 <?php }

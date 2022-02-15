@@ -15,10 +15,9 @@ $stateFld->setFieldTagAttribute('id', 'ura_state_id');
 ?>
 <div class="row">
     <div class="col-md-8">
-
-        <div class="nav nav-pills nav-fill clearfix">
+        <div class="tabs tabs-sm clearfix">
             <ul class="setactive-js">
-                <li class="is-active"><a href="javascript:void(0)" onClick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
+                <li class="is-active"><a href="javascript:void(0)" onclick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                 <li>
                     <a href="javascript:void(0);" onclick="returnAddressLangForm(<?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>);">
                         <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>

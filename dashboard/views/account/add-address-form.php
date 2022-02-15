@@ -25,17 +25,17 @@ $submitFld->developerTags['noCaptionTag'] = true;
 <!-- <div class="tabs">
     <ul>
         <li>
-            <a href="javascript:void(0);" onClick="searchAddresses()"><?php echo Labels::getLabel('LBL_My_Addresses', $siteLangId);?></a>
+            <a href="javascript:void(0);" onclick="searchAddresses()"><?php echo Labels::getLabel('LBL_My_Addresses', $siteLangId);?></a>
         </li>
 <?php //if ($addr_id > 0) { ?>
         <li class="is-active">
-            <a href="javascript:void(0);" onClick="addAddressForm(<?php echo $addr_id; ?>)">
+            <a href="javascript:void(0);" onclick="addAddressForm(<?php echo $addr_id; ?>)">
             <?php echo Labels::getLabel('LBL_Update_Address', $siteLangId); ?>
             </a>
         </li>
 <?php //} else { ?>
         <li class="is-active">
-            <a href="javascript:void(0);" onClick="addAddressForm(0)">
+            <a href="javascript:void(0);" onclick="addAddressForm(0)">
                 <?php echo Labels::getLabel('LBL_Add_new_address', $siteLangId); ?>
             </a>
         </li>

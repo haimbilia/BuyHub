@@ -29,7 +29,7 @@
 
 
 	$btnCancelFld = $frmSellerProductSpecialPrice->getField('btn_cancel');
-	$btnCancelFld->setFieldTagAttribute('onClick', 'sellerProductSpecialPrices(' . $selprod_id . ');');
+	$btnCancelFld->setFieldTagAttribute('onclick', 'sellerProductSpecialPrices(' . $selprod_id . ');');
 	echo $frmSellerProductSpecialPrice->getFormHtml(); ?>
 </div>
 <script>

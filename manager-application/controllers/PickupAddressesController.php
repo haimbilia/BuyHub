@@ -116,6 +116,7 @@ class PickupAddressesController extends ListingBaseController
 
             $timeSlot = new TimeSlot();
             $timeSlots = $timeSlot->timeSlotsByAddrId($addressId);
+            
             $timeSlotsRow = current($timeSlots);
             $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : 0;
             $data['tslot_availability'] = $availability;
@@ -166,7 +167,9 @@ class PickupAddressesController extends ListingBaseController
         $data = $post;
         $data['addr_state_id'] = $addrStateId;
         $data['addr_lang_id'] = $post['lang_id'];
-        $data['addr_type'] = Address::TYPE_ADMIN_PICKUP;
+        if (1 > $addressId) {
+            $data['addr_type'] = Address::TYPE_ADMIN_PICKUP;
+        }
         $address->assignValues($data);
         if (!$address->save()) {
             LibHelper::exitWithError($address->getError(), true);
@@ -254,9 +257,7 @@ class PickupAddressesController extends ListingBaseController
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
             $frm->addSelectBox(Labels::getLabel('FRM_FROM', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
             $frm->addSelectBox(Labels::getLabel('FRM_TO', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-            $frm->addButton('', 'btn_add_row[' . $i . ']', '+');
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 

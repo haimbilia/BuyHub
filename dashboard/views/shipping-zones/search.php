@@ -30,7 +30,7 @@
                         <?php if ($canEdit) { ?>
                             <ul class="actions">
                                 <li>
-                                    <a href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone['shipzone_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Edit_Zone", $siteLangId); ?>"><i class="icn">
+                                    <a href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone['shipzone_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Edit_Zone", $siteLangId); ?>"><i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                 </use>
@@ -40,7 +40,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" onClick="deleteZone(<?php echo $shipProZoneId ?>)" title="<?php echo Labels::getLabel("LBL_Delete_Zone", $siteLangId); ?>"><i class="icn">
+                                    <a href="javascript:void(0);" onclick="deleteZone(<?php echo $shipProZoneId ?>)" title="<?php echo Labels::getLabel("LBL_Delete_Zone", $siteLangId); ?>"><i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                 </use>
@@ -104,7 +104,7 @@
                                         </i></a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript:void(0);" onClick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>"><i class="icn">
+                                                        <a href="javascript:void(0);" onclick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>"><i class="icn">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                 </use>

@@ -65,7 +65,7 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
 
                                     </div>
                                     <div class="col-lg-4">
-                                        <a href="javascript:void(0)" onClick="withdrawalReqForm()" class="btn btn-brand btn-block">
+                                        <a href="javascript:void(0)" onclick="withdrawalReqForm()" class="btn btn-brand btn-block">
                                             <?php echo Labels::getLabel('LBL_Withdraw', $siteLangId); ?>
                                         </a>
                                     </div>
