@@ -24,6 +24,7 @@
         .subnav {
             display: block;
             &-inner {
+                //border-top: solid 1px lighten($border-color, 02);
                 background: $bg-white;
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
                 top: 100%;
@@ -183,7 +184,6 @@
             }
             &-head {
                 color: $txt-body;
-                text-transform: uppercase;
                 font-weight: 600;
             }
         }

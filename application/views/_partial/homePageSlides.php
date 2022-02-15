@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <section class="">
-
     <div class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
         <?php foreach ($slides as $slide) {
             $desktopUrl = $desktopWebpUrl = '';

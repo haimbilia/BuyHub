@@ -1,8 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-
 <section class="">
     <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
-
         <div class="poster-layout-2">
             <?php
             foreach ($banners['banners'] as $val) {
@@ -40,7 +38,6 @@
                 </div>
             <?php } ?>
         </div>
-
     <?php }
     if (isset($val['banner_record_id']) && $val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
         Promotion::updateImpressionData($val['banner_record_id']);
