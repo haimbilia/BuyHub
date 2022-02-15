@@ -10,7 +10,7 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {
         $.ykmodal(fcom.getLoader());
     }
-    if (0 > $(".navTabsJs .nav-link").length) {
+    if (0 < $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
     } else {
         var onClear = $(".modalFormJs").data("onclear");
@@ -73,8 +73,13 @@ $(document).on("click", ".resetModalFormJs", function (e) {
             }
         });
     };
-    
+
     closeForm = function () {
         $.ykmodal.close();
-    }
+    };
+
+    markPopTabActive = function () {
+        $('.navTabsJs a.active').removeClass('active');
+        $('.navTabsJs').find("a[onclick^='" + markPopTabActive.caller.name + "']").addClass('active');
+    };
 })();
