@@ -84,19 +84,19 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 ?>
                 <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                 <?php echo $imgFrm->getFormTag(); ?>
-                    <?php if ($mode == 'Edit') { ?>
-                        <button class="btn btn-edit" type="button" onClick="popupImage()">
-                            <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                </use>
-                            </svg>
-                        </button>
-                    <?php } else { ?>
-                        <label class="btn" title="Upload image file">
-                            <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
-                            <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
-                        </label>
-                    <?php } ?>
+                <?php if ($mode == 'Edit') { ?>
+                    <button class="btn btn-edit" type="button" onClick="popupImage()">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                    </button>
+                <?php } else { ?>
+                    <label class="btn" title="Upload image file">
+                        <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
+                        <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
+                    </label>
+                <?php } ?>
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
                 <div id="dispMessage"></div>
@@ -132,7 +132,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
             </div>
 
         <?php }
-        
+
         echo $frm->getFormHtml(); ?>
 
         <div class="or"><span><?php echo Labels::getLabel('LBL_MORE_OPTIONS', $siteLangId); ?></span></div>

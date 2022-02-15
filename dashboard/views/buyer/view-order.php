@@ -47,298 +47,298 @@ if (!$print) { ?>
     <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
 
-    <div class="content-wrapper content-space">
-        <?php if (!$print) {
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_Order_Details', $siteLangId),
-                'siteLangId' => $siteLangId,
-                'otherButtons' => [
-                    [
-                        'attr' => [
-                            'href' => UrlHelper::generateUrl('Buyer', 'orders'),
-                            'title' => Labels::getLabel('LBL_Back_to_orders', $siteLangId)
-                        ],
-                        'label' => '<i class="fas fa-arrow-left"></i>'
-                    ]
-                ],
-            ];
+<div class="content-wrapper content-space">
+    <?php if (!$print) {
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Order_Details', $siteLangId),
+            'siteLangId' => $siteLangId,
+            'otherButtons' => [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Buyer', 'orders'),
+                        'title' => Labels::getLabel('LBL_Back_to_orders', $siteLangId)
+                    ],
+                    'label' => '<i class="fas fa-arrow-left"></i>'
+                ]
+            ],
+        ];
 
-            if (true == $primaryOrder && !$print) {
-                if ($canCancelOrder) {
-                    $data['otherButtons'][] = [
-                        'attr' => [
-                            'href' => UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])),
-                            'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
-                        ],
-                        'label' => Labels::getLabel('LBL_Cancel', $siteLangId)
-                    ];
-                }
-
-                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
-                    $data['otherButtons'][] = [
-                        'attr' => [
-                            'href' => UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])),
-                            'title' => Labels::getLabel('LBL_Feedback', $siteLangId)
-                        ],
-                        'label' => Labels::getLabel('LBL_Feedback', $siteLangId)
-                    ];
-                }
-
-                if ($canReturnRefund) {
-                    $data['otherButtons'][] = [
-                        'attr' => [
-                            'href' => UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])),
-                            'title' => Labels::getLabel('LBL_Refund', $siteLangId)
-                        ],
-                        'label' => Labels::getLabel('LBL_Refund', $siteLangId)
-                    ];
-                }
+        if (true == $primaryOrder && !$print) {
+            if ($canCancelOrder) {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])),
+                        'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Cancel', $siteLangId)
+                ];
             }
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
-        } ?>
-        <div class="content-body">
-            <div class="card">
-                <div class="card-head">
-                    <h5 class="card-title">
-                        <div class="order-number">
-                            <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
-                            <span class="numbers">
-                                <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']; ?>
-                                <?php
-                                if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
-                                    $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
-                                    <span class="notice">
-                                        <?php echo $statusName; ?>
-                                    </span>
-                                <?php } ?>
-                            </span>
-                        </div>
-                    </h5>
-                    <div class="btn-group orders-actions">
-                        <a href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
-                        <a href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
+
+            if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])),
+                        'title' => Labels::getLabel('LBL_Feedback', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Feedback', $siteLangId)
+                ];
+            }
+
+            if ($canReturnRefund) {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])),
+                        'title' => Labels::getLabel('LBL_Refund', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Refund', $siteLangId)
+                ];
+            }
+        }
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
+    } ?>
+    <div class="content-body">
+        <div class="card">
+            <div class="card-head">
+                <h5 class="card-title">
+                    <div class="order-number">
+                        <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
+                        <span class="numbers">
+                            <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']; ?>
+                            <?php
+                            if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+                                $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
+                                <span class="notice">
+                                    <?php echo $statusName; ?>
+                                </span>
+                            <?php } ?>
+                        </span>
                     </div>
+                </h5>
+                <div class="btn-group orders-actions">
+                    <a href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
+                    <a href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <?php
-                        $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <?php
+                    $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
 
-                        $data = $this->variables + [
-                            'canViewShippingCharges' => true,
-                            'canViewTaxCharges' => true,
-                        ];
-                        $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
-                        ?>
-                    </div>
+                    $data = $this->variables + [
+                        'canViewShippingCharges' => true,
+                        'canViewTaxCharges' => true,
+                    ];
+                    $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
+                    ?>
+                </div>
 
-                    <div class="row">
-                        <?php if (!empty($digitalDownloads)) { ?>
-                            <div class="col-md-12 section--repeated mb-3">
-                                <h6>
-                                    <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
-                                </h6>
-                                <div class="js-scrollable table-wrap scroll scroll-x">
-                                    <table class="table">
-                                        <thead>
-                                            <tr class="">
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_File', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Download_times', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Downloaded_count', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Expired_on', $siteLangId); ?>
-                                                </th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                <div class="row">
+                    <?php if (!empty($digitalDownloads)) { ?>
+                        <div class="col-md-12 section--repeated mb-3">
+                            <h6>
+                                <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
+                            </h6>
+                            <div class="js-scrollable table-wrap scroll scroll-x">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="">
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_File', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Download_times', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Downloaded_count', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Expired_on', $siteLangId); ?>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                            <?php $sr_no = 1;
-                                            foreach ($digitalDownloads as $key => $row) {
-                                                $lang_name = Labels::getLabel('LBL_All', $siteLangId);
-                                                if ($row['afile_lang_id'] > 0) {
-                                                    $lang_name = $languages[$row['afile_lang_id']];
-                                                }
+                                        <?php $sr_no = 1;
+                                        foreach ($digitalDownloads as $key => $row) {
+                                            $lang_name = Labels::getLabel('LBL_All', $siteLangId);
+                                            if ($row['afile_lang_id'] > 0) {
+                                                $lang_name = $languages[$row['afile_lang_id']];
+                                            }
 
-                                                if ($row['downloadable']) {
-                                                    $fileName = '<a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">' . $row['afile_name'] . '</a>';
-                                                } else {
-                                                    $fileName = $row['afile_name'];
-                                                }
-                                                $downloads = '<li>
+                                            if ($row['downloadable']) {
+                                                $fileName = '<a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">' . $row['afile_name'] . '</a>';
+                                            } else {
+                                                $fileName = $row['afile_name'];
+                                            }
+                                            $downloads = '<li>
                                                                 <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
                                                                 <i class="fa fa-download"></i>
                                                                 </a>
                                                             </li>';
 
-                                                $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
-                                                if ($row['expiry_date'] != '') {
-                                                    $expiry = FatDate::Format($row['expiry_date']);
-                                                }
+                                            $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
+                                            if ($row['expiry_date'] != '') {
+                                                $expiry = FatDate::Format($row['expiry_date']);
+                                            }
 
-                                                $downloadableCount = Labels::getLabel('LBL_N/A', $siteLangId);
-                                                if ($row['downloadable_count'] != -1) {
-                                                    $downloadableCount = $row['downloadable_count'];
-                                                } ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php echo $sr_no; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo '<div class="text-break">' . $fileName . '</div>'; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $lang_name; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $downloadableCount; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $row['afile_downloaded_times']; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $expiry; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($row['downloadable']) {
-                                                        ?>
-                                                            <ul class="actions">
-                                                                <?php echo $downloads; ?>
-                                                            </ul>
-                                                        <?php
-                                                        } ?>
-                                                    </td>
-                                                </tr>
-                                            <?php $sr_no++;
+                                            $downloadableCount = Labels::getLabel('LBL_N/A', $siteLangId);
+                                            if ($row['downloadable_count'] != -1) {
+                                                $downloadableCount = $row['downloadable_count'];
                                             } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        <?php } ?>
-
-
-                        <?php if (!empty($digitalDownloadLinks)) { ?>
-                            <div class="col-md-12 section--repeated mb-3">
-                                <h6>
-                                    <?php echo Labels::getLabel('LBL_Download_Links', $siteLangId); ?>
-                                </h6>
-                                <div class="js-scrollable table-wrap scroll scroll-x">
-                                    <table class="table">
-                                        <thead>
-                                            <tr class="">
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Link', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Download_times', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Downloaded_count', $siteLangId); ?>
-                                                </th>
-                                                <th>
-                                                    <?php echo Labels::getLabel('LBL_Expired_on', $siteLangId); ?>
-                                                </th>
+                                            <tr>
+                                                <td>
+                                                    <?php echo $sr_no; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo '<div class="text-break">' . $fileName . '</div>'; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $lang_name; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $downloadableCount; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $row['afile_downloaded_times']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $expiry; ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($row['downloadable']) {
+                                                    ?>
+                                                        <ul class="actions">
+                                                            <?php echo $downloads; ?>
+                                                        </ul>
+                                                    <?php
+                                                    } ?>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <?php $sr_no = 1;
-                                            foreach ($digitalDownloadLinks as $key => $row) {
-                                                $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
-                                                if ($row['expiry_date'] != '') {
-                                                    $expiry = FatDate::Format($row['expiry_date']);
-                                                }
-
-                                                $downloadableCount = Labels::getLabel('LBL_N/A', $siteLangId);
-                                                if ($row['downloadable_count'] != -1) {
-                                                    $downloadableCount = $row['downloadable_count'];
-                                                }
-
-                                                $link = ($row['downloadable'] != 1) ? Labels::getLabel('LBL_N/A', $siteLangId) : $row['opddl_downloadable_link'];
-                                                $linkUrl = ($row['downloadable'] != 1) ? 'javascript:void(0)' : $row['opddl_downloadable_link'];
-                                                $linkOnClick = ($row['downloadable'] != 1) ? '' : 'return increaseDownloadedCount(' . $row['opddl_link_id'] . ',' . $row['op_id'] . '); ';
-                                                $linkTitle = ($row['downloadable'] != 1) ? '' : Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php echo $sr_no; ?>
-                                                    </td>
-                                                    <td>
-                                                        <div class="text-break">
-                                                            <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
-                                                                <?php echo $link; ?>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $downloadableCount; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $row['opddl_downloaded_times']; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $expiry; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php $sr_no++;
-                                            } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php $sr_no++;
+                                        } ?>
+                                    </tbody>
+                                </table>
                             </div>
-                        <?php } ?>
-
-                        <?php
-                        if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
-                            <div class="col-md-12 section--repeated mb-3">
-                                <h6>
-                                    <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
-                                </h6>
-                                <div class="info--order">
-                                    <?php
-                                    $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
-                                    $frm->setFormTagAttribute('class', 'form');
-                                    $frm->developerTags['colClassPrefix'] = 'col-md-';
-                                    $frm->developerTags['fld_default_col'] = 12;
+                        </div>
+                    <?php } ?>
 
 
-                                    $paymentFld = $frm->getField('opayment_method');
-                                    $paymentFld->developerTags['col'] = 4;
+                    <?php if (!empty($digitalDownloadLinks)) { ?>
+                        <div class="col-md-12 section--repeated mb-3">
+                            <h6>
+                                <?php echo Labels::getLabel('LBL_Download_Links', $siteLangId); ?>
+                            </h6>
+                            <div class="js-scrollable table-wrap scroll scroll-x">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="">
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Link', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Download_times', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Downloaded_count', $siteLangId); ?>
+                                            </th>
+                                            <th>
+                                                <?php echo Labels::getLabel('LBL_Expired_on', $siteLangId); ?>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                    $gatewayFld = $frm->getField('opayment_gateway_txn_id');
-                                    $gatewayFld->developerTags['col'] = 4;
+                                        <?php $sr_no = 1;
+                                        foreach ($digitalDownloadLinks as $key => $row) {
+                                            $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
+                                            if ($row['expiry_date'] != '') {
+                                                $expiry = FatDate::Format($row['expiry_date']);
+                                            }
 
-                                    $amountFld = $frm->getField('opayment_amount');
-                                    $amountFld->developerTags['col'] = 4;
+                                            $downloadableCount = Labels::getLabel('LBL_N/A', $siteLangId);
+                                            if ($row['downloadable_count'] != -1) {
+                                                $downloadableCount = $row['downloadable_count'];
+                                            }
 
-                                    $submitFld = $frm->getField('btn_submit');
-                                    $submitFld->developerTags['col'] = 4;
-                                    $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
-                                    $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
-                                    echo $frm->getFormHtml(); ?>
-                                </div>
+                                            $link = ($row['downloadable'] != 1) ? Labels::getLabel('LBL_N/A', $siteLangId) : $row['opddl_downloadable_link'];
+                                            $linkUrl = ($row['downloadable'] != 1) ? 'javascript:void(0)' : $row['opddl_downloadable_link'];
+                                            $linkOnClick = ($row['downloadable'] != 1) ? '' : 'return increaseDownloadedCount(' . $row['opddl_link_id'] . ',' . $row['op_id'] . '); ';
+                                            $linkTitle = ($row['downloadable'] != 1) ? '' : Labels::getLabel('LBL_Click_to_download', $siteLangId); ?>
+                                            <tr>
+                                                <td>
+                                                    <?php echo $sr_no; ?>
+                                                </td>
+                                                <td>
+                                                    <div class="text-break">
+                                                        <a target="_blank" onClick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                                            <?php echo $link; ?>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <?php echo $downloadableCount; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $row['opddl_downloaded_times']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $expiry; ?>
+                                                </td>
+                                            </tr>
+                                        <?php $sr_no++;
+                                        } ?>
+                                    </tbody>
+                                </table>
                             </div>
-                        <?php } ?>
-                    </div>
+                        </div>
+                    <?php } ?>
+
+                    <?php
+                    if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
+                        <div class="col-md-12 section--repeated mb-3">
+                            <h6>
+                                <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
+                            </h6>
+                            <div class="info--order">
+                                <?php
+                                $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
+                                $frm->setFormTagAttribute('class', 'form');
+                                $frm->developerTags['colClassPrefix'] = 'col-md-';
+                                $frm->developerTags['fld_default_col'] = 12;
+
+
+                                $paymentFld = $frm->getField('opayment_method');
+                                $paymentFld->developerTags['col'] = 4;
+
+                                $gatewayFld = $frm->getField('opayment_gateway_txn_id');
+                                $gatewayFld->developerTags['col'] = 4;
+
+                                $amountFld = $frm->getField('opayment_amount');
+                                $amountFld->developerTags['col'] = 4;
+
+                                $submitFld = $frm->getField('btn_submit');
+                                $submitFld->developerTags['col'] = 4;
+                                $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
+                                $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
+                                echo $frm->getFormHtml(); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <?php if ($print) { ?>
 

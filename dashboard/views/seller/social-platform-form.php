@@ -11,7 +11,7 @@
         <div class="tabs__content">
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="tabs tabs-sm">
+                    <div class="nav nav-pills nav-fill">
                         <ul id="shopFormChildBlockTabsJs">
                             <li class="is-active"><a href="javascript:void(0)" onClick="addForm(<?php echo $splatform_id; ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                             <li class="<?php echo (0 == $splatform_id) ? 'fat-inactive' : ''; ?>">

@@ -13,7 +13,7 @@
 <div class="card-body">
     <div class="row ">
         <div class="col-md-12">
-            <div class="tabs tabs-sm">
+            <div class="nav nav-pills nav-fill">
                 <ul id="shopFormChildBlockTabsJs">
                     <?php $inactive = ($scollection_id == 0) ? 'fat-inactive' : ''; ?>
                     <li class="is-active"><a onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" href="javascript:void(0)"><?php echo Labels::getLabel('TXT_Basic', $siteLangId); ?></a></li>
