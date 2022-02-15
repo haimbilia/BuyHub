@@ -27,20 +27,7 @@ $submitBtnFld = $frm->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 $submitBtnFld->developerTags['testClass'] = 'testc';
 $submitBtnFld->setWrapperAttribute('class', 'col-auto');
-//$submitBtnFld->developerTags['col'] = 6;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-/*
-$cancelBtnFld = $frm->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('onClick', 'clearForm(); return false;');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-wide');
-//$cancelBtnFld->setWrapperAttribute('class', 'col-auto');
-//$cancelBtnFld->developerTags['col'] = 6;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
-$cancelBtnFld->setWrapperAttribute('class', 'text-right');
- * 
- */
-
-?>
+$submitBtnFld->developerTags['noCaptionTag'] = true; ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
 </div>
@@ -48,7 +35,7 @@ $cancelBtnFld->setWrapperAttribute('class', 'text-right');
     <div class="row">
         <div class="col-md-12">
             <div class="tabs">
-                <ul class="tabs_nav-js">
+                <ul class="tabsNavJs">
                     <li class="is-active">
                         <a href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                     </li>

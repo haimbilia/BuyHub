@@ -1940,7 +1940,7 @@ trait SellerProducts
         }
         $fld = $frm->addHTML('', '', '');
         //$fld = $frm->addRequiredField(Labels::getLabel('LBL_Custom_URL', $this->siteLangId), 'urlrewrite_custom');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</small>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</span>';
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }

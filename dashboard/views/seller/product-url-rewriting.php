@@ -21,12 +21,12 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
             <div class="col-md-6">
                 <div class="card h-100">
-                    <div class="card-body">
-                        <div id="dvForm"></div>
-                        <div class="alert-aligned" id="dvAlert">
+                    <div id="dvForm"></div>
+                    <div class="alert-aligned" id="dvAlert">
+                        <div class="card-body">
                             <div class="cards-message">
                                 <div class="cards-message-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                                <div class="cards-message-text"><?php echo Labels::getLabel('LBL_Select_a_product_to_update_url', $siteLangId); ?></div>
+                                <div class="cards-message-text"><?php echo Labels::getLabel('LBL_SELECT_A_PRODUCT_TO_UPDATE_URL', $siteLangId); ?></div>
                             </div>
                         </div>
                     </div>

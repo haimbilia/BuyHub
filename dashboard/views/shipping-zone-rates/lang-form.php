@@ -42,21 +42,19 @@ $btnSubmit->developerTags['colWidthValues'] = [null, null, null, null];
 <div class="modal-body">
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="tabs">
-				<ul class="tabs_nav-js">
-					<li>
-						<a href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
-					</li>
-					<?php
-					foreach ($languages as $key => $langName) {
-						$class = ($langId == $key) ? 'is-active' : ''; ?>
-						<li class="<?php echo $class; ?>">
-							<a href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>><?php echo $langName; ?></a>
-						</li>
-					<?php
-					} ?>
-				</ul>
-			</div>
+			<nav class="nav nav-tabs tabsNavJs">
+				<a class="nav-link" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);">
+					<?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
+				</a>
+				<?php
+				foreach ($languages as $key => $langName) {
+					$class = ($langId == $key) ? 'active' : ''; ?>
+					<a class="nav-link <?php echo $class; ?>" href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>>
+						<?php echo $langName; ?>
+					</a>
+				<?php
+				} ?>
+			</nav>
 			<div class="tabs__content" dir="<?php echo $formLayout; ?>">
 				<?php echo $langFrm->getFormHtml(); ?>
 			</div>

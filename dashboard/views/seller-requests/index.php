@@ -57,15 +57,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
 
     <div class="content-body">
-
-        <?php
-        if (!$noRecordFound) {
-            $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge);
-            $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false);
-        }
-        ?>
-
-        <div class="card">
+        <div class="card card-tabs">
+            <div class="card-head">
+                <?php
+                if (!$noRecordFound) {
+                    $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge);
+                    $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false);
+                }
+                ?>
+            </div>
             <div class="card-body">
                 <div class="pagebody--js">
                     <?php if ($noRecordFound) { ?>
