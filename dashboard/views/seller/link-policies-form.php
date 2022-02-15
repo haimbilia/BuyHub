@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="">
-                        <div class="tabs tabs-sm tabs--scroll clearfix">
+                        <div class="nav nav-pills nav-sm">
                             <ul>
                                 <li><a href="javascript:void(0)" onclick="sellerProductForm(<?php echo $product_id, ',', $selprod_id ?>)"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
                                 <li class="<?php echo (0 == $selprod_id) ? 'fat-inactive' : ''; ?>">

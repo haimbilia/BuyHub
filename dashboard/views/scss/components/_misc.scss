@@ -764,6 +764,8 @@ a:hover {
             flex: 0 0 50%;
             max-width: 50%;
         }
+    }
+}
 
 .form-edit {
     display: flex;
@@ -780,7 +782,7 @@ a:hover {
         position: relative;
         .h3 {
             font-size: 1rem;
-            color: $txt-body; 
+            color: $txt-body;
         }
     }
     &-foot {
