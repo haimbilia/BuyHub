@@ -493,12 +493,12 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    pickupAddressForm = function (id) {
-        $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id]), '', function (t) {
+    pickupAddressForm = function (id, langId = 0) {
+        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
+        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
-            $(dv).html(t);
-            setTimeout(function () { $('.fromTime-js').change(); }, 500);
+            $.ykmodal(t, false, 'modal-dialog-vertical-md');
+            setTimeout(function () { $('.fromTimeJs').change(); }, 500);
         });
     };
 
@@ -513,6 +513,7 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setPickupAddress'), data, function (t) {
             pickupAddress();
+            closeForm();
         });
     };
 
