@@ -58,7 +58,7 @@ class Configurations extends FatModel
         $arr =   array(
             Configurations::FORM_LOCAL => Labels::getLabel('NAV_BUSINESS_PROFILE', $langId),
             Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_USER_ACCOUNT', $langId),
-            Configurations::FORM_MEDIA => Labels::getLabel('NAV_MEDIA', $langId),
+            Configurations::FORM_MEDIA => Labels::getLabel('NAV_BUSINESS_LOGO', $langId),
             Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $langId),
             Configurations::FORM_PRODUCT => Labels::getLabel('NAV_PRODUCT', $langId),
             Configurations::FORM_CART_WISHLIST => Labels::getLabel('NAV_CART/Wishlist', $langId),
@@ -67,7 +67,7 @@ class Configurations extends FatModel
             Configurations::FORM_SHARING => Labels::getLabel('NAV_SHARING', $langId),
             Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
             Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $langId),
-            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_COMMISSION', $langId),
+            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_WEBSITE_COMMISION', $langId),
             Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
             Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
             Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),

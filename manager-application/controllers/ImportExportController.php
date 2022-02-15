@@ -723,6 +723,8 @@ class ImportExportController extends ListingBaseController
     {
         $options = Importexport::getImportExportTypeArr('export', $this->siteLangId, false);
         $this->set('options', $options);
+        $optionsMessages = Importexport::getImportExportTypeMsgArr('export', $this->siteLangId, false);
+        $this->set('optionsMessages', $optionsMessages);
         $this->set('html', $this->_template->render(false, false, 'import-export/export.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -731,6 +733,9 @@ class ImportExportController extends ListingBaseController
     {
         $options = Importexport::getImportExportTypeArr('import', $this->siteLangId, false);
         $this->set('options', $options);
+        $optionsMessages = Importexport::getImportExportTypeMsgArr('import', $this->siteLangId, false);
+        $this->set('optionsMessages', $optionsMessages);
+
         $this->set('html', $this->_template->render(false, false, 'import-export/import.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
