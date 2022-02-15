@@ -688,13 +688,13 @@ class ProductsController extends SellerBaseController
         $frm = $this->getCatalogForm($langId, $productType, $recordId);
         $shippingObj = new Shipping($this->userParentId);
         $profileFld = $frm->getField('shipping_profile');
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates'))) {
-            $frm->removeField($profileFld);
-        } else {
-            if (null != $profileFld) {
-                $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);
+        if(null != $profileFld){
+            if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates'))) {
+                $frm->removeField($profileFld);
+            } else {            
+                $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);            
             }
-        }
+        }        
         $fld = $frm->getField('product_approved');
         if (null != $fld) {
             $frm->removeField($fld);
