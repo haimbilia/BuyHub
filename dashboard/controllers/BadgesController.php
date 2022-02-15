@@ -120,7 +120,7 @@ class BadgesController extends SellerBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 

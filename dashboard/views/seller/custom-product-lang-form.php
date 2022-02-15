@@ -7,7 +7,7 @@
         <div class="tabs__content form">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="nav nav-pills nav-fill tabs--scroll clearfix">
+                    <div class="nav nav-pills nav-sm">
                         <ul>
                             <li><a href="javascript:void(0);" onclick="customProductForm(<?php echo $product_id ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
                             <li class="is-active">

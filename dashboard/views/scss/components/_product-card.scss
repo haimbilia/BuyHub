@@ -628,13 +628,6 @@
             }
 
             &.icn-highlighted {
-                border-color: $brand-color;
-                color: $brand-color;
-                background: #f0f0f0;
-                &:hover {
-                    background: $brand-color;
-                    color: $brand-color-inverse;
-                }
             }
             .svg {
                 width: 14px;

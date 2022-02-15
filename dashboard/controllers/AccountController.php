@@ -2637,7 +2637,7 @@ class AccountController extends LoggedUserController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -3265,7 +3265,7 @@ class AccountController extends LoggedUserController
         $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 

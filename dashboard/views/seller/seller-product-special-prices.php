@@ -11,7 +11,7 @@
                 <a class="btn btn-brand btn-sm" href="javascript:void(0);" onclick='sellerProductSpecialPriceForm(<?php echo $selprod_id; ?>, 0);'>
                     <?php echo Labels::getLabel('LBL_Add_New_Special_Price', $siteLangId); ?>
                 </a>
-                <!-- <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice', array($selprod_id)); ?>">
+                <!-- <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice', array($selprod_id)); ?>">
                     <?php echo Labels::getLabel('LBL_MANAGE_SPECIAL_PRICES', $siteLangId) ?>
                 </a> -->
             </div>

@@ -16,7 +16,7 @@ $img_fld->addFieldTagAttribute('onChange', 'popupImage(this)');
 ?>
 
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Custom_catalog_product_images',$siteLangId) ;?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Custom_catalog_product_images', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
     <div class="tabs_data">
@@ -35,7 +35,7 @@ $img_fld->addFieldTagAttribute('onChange', 'popupImage(this)');
                                 productShipping(<?php echo $preqId; ?>);
                             <?php } else { ?>
                                 productOptionsAndTag(<?php echo $preqId; ?>);
-                            <?php }?>" class="btn btn-outline-brand" type="button" name="btn_back" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
+                            <?php } ?>" class="btn btn-outline-gray" type="button" name="btn_back" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
                         </div>
                     </div>
                 </div>

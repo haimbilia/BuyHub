@@ -3,13 +3,13 @@
     <<<<<<< HEAD <h4><?php echo Labels::getLabel('LBL_Catalog_Listing', $siteLangId); ?></h4>
         <div class="">
             <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products', $siteLangId); ?></a>
-            <a href="javascript:void(0);" onClick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
+            <a href="javascript:void(0);" onClick="addNewCatalogRequest()" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
         </div>
         =======
         <h4><?php echo Labels::getLabel('LBL_Catalog_Listing', $siteLangId); ?></h4>
         <div class="">
             <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Products', $siteLangId); ?></a>
-            <a href="javascript:void(0);" onclick="addNewCatalogRequest()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
+            <a href="javascript:void(0);" onclick="addNewCatalogRequest()" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Request_to_add_catalog', $siteLangId); ?></a>
         </div>
         >>>>>>> e42a45b9ad02de5db78ed55d89402b60a2dda071
 </div>

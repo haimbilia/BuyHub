@@ -116,7 +116,7 @@ if (!$print) { ?>
                 </h5>
                 <div class="btn-group orders-actions">
                     <a href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
-                    <a href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
+                    <a href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" class="btn btn-outline-gray btn-sm" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
                 </div>
             </div>
             <div class="card-body">

@@ -9,7 +9,7 @@ $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);")
 ?>
 <div class="row">
     <div class="col-md-8">
-        <div class="tabs tabs-sm clearfix">
+        <div class="nav nav-pills nav-sm  clearfix">
             <ul class="setactive-js">
                 <li><a href="javascript:void(0)" onclick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                 <li class="<?php echo (0 < $formLangId) ? 'is-active' : ''; ?>">

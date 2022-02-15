@@ -149,7 +149,6 @@ trait SellerCollections
         $fld->requirements()->setRequired();
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'scollection_active', $activeInactiveArr, applicationConstants::YES, array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -257,7 +256,7 @@ trait SellerCollections
         }
         $scollection = new ShopCollection($scollectionId);
         if (!$scollection->changeStatus($status)) {
-            Message::addErrorMessage($sellerProdObj->getError());
+            Message::addErrorMessage($scollection->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
     }
@@ -322,7 +321,6 @@ trait SellerCollections
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -415,9 +413,6 @@ trait SellerCollections
         $this->set('collectionLinkFrm', $collectionLinkFrm);
         $this->set('scollection_id', $scollection_id);
         $this->set('products', $products);
-
-
-
         $this->set('activeTab', 'LINKS');
         $this->_template->render(false, false);
     }
@@ -425,12 +420,10 @@ trait SellerCollections
     private function getCollectionLinksFrm()
     {
         $frm = new Form('frmLinks1', array('id' => 'frmLinks1'));
-        $frm->addSelectBox(Labels::getLabel('LBL_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('LBL_Select', $this->siteLangId));
-        //$frm->addTextBox(Labels::getLabel('LBL_COLLECTION', $this->siteLangId), 'scp_selprod_id', '', array('id' => 'scp_selprod_id'));
-
-        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical" ></ul></div><div class="gap"></div>');
         $frm->addHiddenField('', 'scp_scollection_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('LBL_Select', $this->siteLangId));
+        
+        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div><div class="gap"></div>');
         return $frm;
     }
 
@@ -438,7 +431,6 @@ trait SellerCollections
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-        //print_r($post); die();
         $scollection_id = FatUtility::int($post['scp_scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));

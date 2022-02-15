@@ -8,7 +8,7 @@ $frm->setFormTagAttribute('onSubmit', 'importFile("importMedia",' . $actionType 
 $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<div class="nav nav-pills nav-fill tabs--scroll clearfix">
+<div class="nav nav-pills nav-sm">
     <ul>
         <li><a href="javascript:void(0);" onclick="getInstructions('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Instructions', $siteLangId); ?></a></li>
         <li><a href="javascript:void(0);" onclick="importForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a></li>

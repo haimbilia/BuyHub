@@ -8,7 +8,7 @@ $frmPromote->developerTags['fld_default_col'] = 12;
 <div class="row">
     <div class="col-md-12">
 
-        <div class="tabs tabs-sm tabs--scroll clearfix">
+        <div class="nav nav-pills nav-sm">
             <ul>
                 <li class="is-active"><a href="javascript:void(0)" onclick="promotionGeneralForm(<?php echo $promotion_id ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                 <li class="<?php echo (0 == $promotion_id) ? 'fat-inactive' : ''; ?>">

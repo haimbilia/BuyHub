@@ -8,7 +8,7 @@ $fld->htmlBeforeField = '<div class="btn-group">';
 $fld->htmlAfterField = '</div>';
 $fld->developerTags['noCaptionTag'] = true;
 $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm h-auto');
-$fld->htmlAfterField = ' <a class = "btn btn-outline-brand btn-sm" href="' . UrlHelper::generateUrl('ImportExport', 'exportInventory') . '">' . Labels::getLabel('LBL_Export_CSV_File', $siteLangId) . '</a>'; ?>
+$fld->htmlAfterField = ' <a class = "btn btn-outline-gray btn-sm" href="' . UrlHelper::generateUrl('ImportExport', 'exportInventory') . '">' . Labels::getLabel('LBL_Export_CSV_File', $siteLangId) . '</a>'; ?>
 
 <div class="card-head">
     <?php $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canEditImportExport' => $canEditImportExport, 'canUploadBulkImages' => $canUploadBulkImages);

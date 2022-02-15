@@ -24,7 +24,7 @@
                         </li>
                     </ul>
                     <div class="text-center">
-                        <a class="btn btn-outline-brand btn-sm me-2" onclick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
+                        <a class="btn btn-outline-gray btn-sm me-2" onclick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                             <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                         </a>
                     </div>
@@ -43,7 +43,7 @@
                                     ?>
                                 </a>
                             <?php } ?>
-                            <a class="btn btn-outline-brand btn-sm" onclick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
+                            <a class="btn btn-outline-gray btn-sm" onclick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
                                 <?php
                                 echo CommonHelper::replaceStringData(Labels::getLabel('LBL_UNLINK_ACCOUNT_FROM_{WEBSITE-NAME}', $siteLangId), [
                                     '{WEBSITE-NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId)
