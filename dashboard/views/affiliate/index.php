@@ -235,7 +235,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </div>
                             <div class="card-body ">
                                 <div class="stats">
-                                    <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
+                                    <a href="javascript:void(0)" class="btn btn-outline-gray btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
                                 </div>
                             </div>
                         </div>

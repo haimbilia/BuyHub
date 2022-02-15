@@ -50,7 +50,7 @@
 
     $cancelBtnFld = $frm->getField('btn_cancel');
     $cancelBtnFld->setFieldTagAttribute('onclick', 'closeForm()');
-    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+    $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
     $cancelBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
     $cancelBtnFld->developerTags['col'] = 3;
     //$submitBtnFld->attachField($cancelBtnFld);

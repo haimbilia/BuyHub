@@ -29,7 +29,7 @@ if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon',
+            'class' => 'btn btn-outline-gray btn-icon',
             'onclick' => $onclick
         ],
         $label,
@@ -45,7 +45,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon formActionBtn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon formActionBtn-js disabled',
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">
@@ -61,7 +61,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon formActionBtn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon formActionBtn-js disabled',
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">
@@ -79,7 +79,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon formActionBtn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon formActionBtn-js disabled',
             'onclick' => "deleteSelected()"
         ],
         '<svg class="svg btn-icon-start" width="18" height="18">

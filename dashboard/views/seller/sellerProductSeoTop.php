@@ -1,4 +1,4 @@
-<div class="nav nav-pills nav-fill tabs--scroll clearfix">
+<div class="nav nav-pills nav-sm">
     <ul>
         <li class="<?php echo ($seoActiveTab == 'GENERAL') ? 'is-active' : '' ?>">
             <a href="javascript:void(0)" onclick="getProductSeoGeneralForm(<?php echo "$selprod_id" ?>);">

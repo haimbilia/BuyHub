@@ -3,7 +3,7 @@
 <div class="card-head">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
     <div class="">
-        <a href="javascript:void(0)" onclick="socialPlatforms()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Social_Platforms', $siteLangId); ?></a>
+        <a href="javascript:void(0)" onclick="socialPlatforms()" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Social_Platforms', $siteLangId); ?></a>
     </div>
 </div>
 <div class="card-body">

@@ -30,7 +30,7 @@ $nextBtn->setWrapperAttribute('class', "text-right");
 $nextBtn->developerTags['noCaptionTag'] = true;
 
 $exitBtn = $productSeoLangForm->getField('btn_exit');
-$exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
+$exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
 $exitBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 1)");
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
@@ -41,7 +41,7 @@ end($languages);
 if (key($languages) == $selprod_lang_id) {
     $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
     $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
-    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
+    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
 } ?>
 
 <div id="dvForm">
