@@ -411,6 +411,7 @@ $(document).ready(function () {
                 fcom.makeUrl("PageLanguageData", "displayAlert"),
                 data,
                 function (t) {
+                    $(".alertWarningJs").remove();
                     $(".mainHeaderJs").append(t.html);
                 }
             );

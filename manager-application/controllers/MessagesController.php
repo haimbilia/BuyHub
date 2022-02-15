@@ -101,6 +101,7 @@ class MessagesController extends ListingBaseController
             $condition = $srch->addCondition('tth.thread_subject', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ttm.message_text', 'like', '%' . $post['keyword'] . '%');
         }
+
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
             $srch->addCondition('ttm.message_date', '>=', $date_from . ' 00:00:00');
@@ -113,12 +114,12 @@ class MessagesController extends ListingBaseController
 
         $messageBy = FatApp::getPostedData('message_by', FatUtility::VAR_INT, '');
         if (!empty($messageBy)) {
-            $condition = $srch->addCondition('tfr.user_id', '=', $messageBy);
+            $srch->addCondition('tfr.user_id', '=', $messageBy);
         }
 
         $messageTo = FatApp::getPostedData('message_to', FatUtility::VAR_INT, '');
         if (!empty($messageTo)) {
-            $condition = $srch->addCondition('tfto.user_id', '=', $messageTo);
+            $srch->addCondition('tfto.user_id', '=', $messageTo);
         }
 
         $srch->addOrder($sortBy, $sortOrder);

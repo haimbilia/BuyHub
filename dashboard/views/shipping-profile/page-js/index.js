@@ -24,8 +24,9 @@ $(document).ready(function () {
         if (form) {
             data = fcom.frmData(form);
         }
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ShippingProfile', 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     }

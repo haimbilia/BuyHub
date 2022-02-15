@@ -140,6 +140,10 @@ class ContentBlockController extends ListingBaseController
     public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+
+        if(1 > $recordId){
+            LibHelper::exitWithError($this->str_invalid_request); 
+        }
         $frm = $this->getForm($recordId);
 
         $languages = Language::getAllNames();
@@ -147,25 +151,23 @@ class ContentBlockController extends ListingBaseController
             $universalImage = true;
         } else {
             $universalImage = false;
-        }
-        if (0 < $recordId) {
-            $fieldsArray = [
-                'epage_id', 'epage_identifier', 'epage_active', 'epage_label', 'epage_content'
-            ];
-            $data = Extrapage::getAttributesByLangId($this->siteLangId, $recordId, $fieldsArray, true);
-            if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
+        } 
 
-            /* url data[ */
-            $urlRow = UrlRewrite::getDataByOriginalUrl(Extrapage::REWRITE_URL_PREFIX . $recordId);
-            if (!empty($urlRow)) {
-                $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
-            }
-            /*]*/
-            $frm->fill($data);
+        $fieldsArray = [
+            'epage_id', 'epage_identifier', 'epage_active', 'epage_label', 'epage_content','epage_default_content'
+        ];
+        $epageData = Extrapage::getAttributesByLangId($this->siteLangId, $recordId, $fieldsArray, true);
+        if ($epageData === false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        /* url data[ */
+        $urlRow = UrlRewrite::getDataByOriginalUrl(Extrapage::REWRITE_URL_PREFIX . $recordId);
+        if (!empty($urlRow)) {
+            $epageData['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+        }
+        /*]*/
+        $frm->fill($epageData);
 
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
@@ -189,7 +191,7 @@ class ContentBlockController extends ListingBaseController
         }
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $this->siteLangId, $universalImage);
         $this->set('image', $cbgImage);
-
+        $this->set('defaultContent', $epageData['epage_default_content'] ?? '');
         $this->set('imageFunction', 'cblockBackgroundImage');
         $this->checkEditPrivilege(true);
 

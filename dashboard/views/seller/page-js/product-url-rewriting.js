@@ -16,6 +16,7 @@ $(document).ready(function () {
 		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'searchUrlRewritingProducts'), data, function (res) {
+			fcom.removeLoader();
 			$("#listing").html(res);
 		});
 	};
@@ -42,7 +43,7 @@ $(document).ready(function () {
 
 	editUrlForm = function (selprod_id) {
 		fcom.ajax(fcom.makeUrl('seller', 'productUrlForm', [selprod_id]), '', function (t) {
-			$("#dvForm").html(t);
+			$("#dvForm").replaceWith(t);
 			$("#dvAlert").hide();
 		});
 

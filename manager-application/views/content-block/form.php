@@ -10,6 +10,12 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
+$fld = $frm->getField('epage_content');
+$htmlFld = $frm->addHTML('','epage_content_html', '<div class="col-md-12"><div class="form-group"><label class="label lbl-link">'.$fld->getCaption().'<a class="link" href="javascript:void(0)" onclick="resetToDefaultContent();">'.Labels::getLabel('LBL_RESET_TO_DEFAULT_CONTENT', $siteLangId).'</a></label>'.$fld->getHtml().'</div></div>');
+$frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+$frm->removeField($fld);
+
+
 $formTitle = Labels::getLabel('LBL_CONTENT_BLOCK_SETUP', $siteLangId);
 if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId))) {
     $imageLangFld = $frm->getField('lang_id');
@@ -62,3 +68,8 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
     $fld->value = $htm;
 }
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+?>
+
+<div id="editor_default_content" style="display:none;">
+    <?php echo (!empty($defaultContent)) ? html_entity_decode($defaultContent) : '';?>
+</div>

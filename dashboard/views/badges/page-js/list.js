@@ -27,12 +27,13 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
         fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
@@ -267,9 +268,10 @@ $(document).on('change', '.icon-language-js', function () {
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").html(fcom.getLoader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl(controller, 'records', [badgeReqId]), data, function (t) {
+            fcom.removeLoader();
             $(".recordsContainer--js").html(t);
         });
     };

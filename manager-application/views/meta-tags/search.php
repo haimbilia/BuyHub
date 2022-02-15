@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => "editMetaTagLangForm(" . $metaId . "," . $siteDefaultLangId . ",'" . $metaType . "'," . $metaRecordId . ")",
+                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")":"editMetaTagLangForm(" . $metaId . "," . $siteDefaultLangId . ",'" . $metaType . "'," . $metaRecordId . ")",
                                 'title' => Labels::getLabel('BTN_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">

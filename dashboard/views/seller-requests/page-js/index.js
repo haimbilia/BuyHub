@@ -11,8 +11,8 @@
     };
 
     markActive = function (element) {
-        $('ul.tabs_nav-js li.is-active').removeClass('is-active');
-        $(element).closest('li').addClass('is-active');
+        $('.tabsNavJs a.active').removeClass('active');
+        $(element).addClass('active');
     }
 
     goToCustomCatalogProductSearchPage = function (page) {
@@ -26,9 +26,10 @@
 
     searchCustomCatalogProducts = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.customCatalogReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchCustomCatalogProducts'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -53,9 +54,10 @@
 
     searchBrandRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.brandReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBrandRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -72,9 +74,10 @@
 
     searchProdCategoryRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.catReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchProdCategoryRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -102,7 +105,7 @@
                 return;
             }
             $.ykmodal(t);
-        },{ fOutMode: 'json'});
+        }, { fOutMode: 'json' });
     };
 
     addBrandReqLangForm = function (brandReqId, langId, autoFillLangData = 0) {
@@ -207,20 +210,21 @@
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $('#loader-js').html(fcom.getLoader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             complete: function () {
-                $('#loader-js').html(fcom.getLoader());
+                $('#loader-js').prepend(fcom.getLoader());
             },
             success: function (ans) {
+                fcom.removeLoader();
                 $('.text-danger').remove();
                 $('#input-field').html(ans.msg);
                 if (ans.status == true) {
                     $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('text-success');
+                    $('#input-field').addClass('badge-success');
                     brandMediaForm(ans.brandId);
                 } else {
-                    $('#input-field').removeClass('text-success');
+                    $('#input-field').removeClass('badge-success');
                     $('#input-field').addClass('text-danger');
                 }
             },
@@ -340,9 +344,10 @@
 
     searchBadgeRequests = function () {
         checkRunningAjax();
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         markActive('a.badgeReq--js');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), '', function (res) {
+            fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
         });
@@ -469,9 +474,10 @@
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").html(fcom.getLoader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl('SellerRequests', 'records', [badgeReqId]), data, function (t) {
+            fcom.removeLoader();
             $(".recordsContainer--js").html(t);
         });
     };

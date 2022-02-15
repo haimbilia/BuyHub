@@ -30,6 +30,7 @@ var advanceMedia = false; /* open via advance media*/
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
+            fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
             fcom.closeAlertMessage();  
         });
@@ -41,6 +42,7 @@ var advanceMedia = false; /* open via advance media*/
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
+            fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
             fcom.closeAlertMessage();  
         });
@@ -417,6 +419,7 @@ var advanceMedia = false; /* open via advance media*/
                 });
             }           
             fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions}, function (t) {
+                fcom.removeLoader();
                 $('#variantsListJs').html(t.html);
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
             },{ fOutMode: 'json'});

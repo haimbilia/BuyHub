@@ -108,7 +108,7 @@
 
                 </div>
             <?php
-                $doNotshowMessages = false;
+                $doNotshowMessages = true;
                 $threadListing = [current($arrListing)];
                 require_once(CONF_THEME_PATH . 'messages/view-thread.php');
             } ?>

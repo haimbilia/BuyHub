@@ -106,6 +106,7 @@ $card-bg: #fff;
     &-body {
         flex: 1 1 0;
         padding: $card-space;
+        position: relative;
     }
     &-foot {
         padding: $card-space;

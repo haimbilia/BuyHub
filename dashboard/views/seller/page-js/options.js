@@ -1,32 +1,32 @@
-$(document).ready(function(){
+$(document).ready(function () {
 	searchRecords(document.frmRecordSearch);
 });
 
-(function() {
+(function () {
 	var currentPage = 1;
 	var runningAjaxReq = false;
 
-	goToSearchPage = function(page) {
-		if(typeof page==undefined || page == null){
-			page =1;
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
 		}
 		var frm = document.frmOptionsSearchPaging;
 		$(frm.page).val(page);
 		searchRecords(frm);
 	}
 
-	reloadList = function() {
+	reloadList = function () {
 		var frm = document.frmOptionsSearchPaging;
 		searchRecords(frm);
 	}
 
-	optionForm = function(optionId){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function(t) {
-				try{
-					res= jQuery.parseJSON(t);
-					$.facebox(res.msg );
-				}catch (e){
+	optionForm = function (optionId) {
+		$.facebox(function () {
+			fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
+				try {
+					res = jQuery.parseJSON(t);
+					$.facebox(res.msg);
+				} catch (e) {
 					$.facebox(t, 'modal-lg');
 					addOptionForm(optionId);
 					optionValueListing(optionId);
@@ -36,107 +36,107 @@ $(document).ready(function(){
 		});
 	}
 
-	addOptionForm = function(optionId){
+	addOptionForm = function (optionId) {
 		var dv = $('#loadForm');
-		fcom.ajax(fcom.makeUrl('Seller', 'addOptionForm', [optionId]), '', function(t) {
+		fcom.ajax(fcom.makeUrl('Seller', 'addOptionForm', [optionId]), '', function (t) {
 			dv.html(t);
 		});
 	};
 
-	optionValueListing = function(optionId){
-		if(optionId == 0 ) { $('#showHideContainer').addClass('hide'); return ;}
-        if($("#optionValueListing").length == 0) {
-            var dv =$('#optionValuesListing');
-        }else{
-            var dv =$('#optionValueListing');
-        }
+	optionValueListing = function (optionId) {
+		if (optionId == 0) { $('#showHideContainer').addClass('hide'); return; }
+		if ($("#optionValueListing").length == 0) {
+			var dv = $('#optionValuesListing');
+		} else {
+			var dv = $('#optionValueListing');
+		}
 		dv.html('Loading....');
-		var data = 'option_id='+optionId;
-		fcom.ajax(fcom.makeUrl('OptionValues','search'),data,function(res){
+		var data = 'option_id=' + optionId;
+		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			dv.html(res);
 			fcom.resetFaceboxHeight();
 		});
 	};
 
-	optionValueForm = function (optionId,id){
+	optionValueForm = function (optionId, id) {
 		var dv = $('#loadForm');
-		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId,id]), '', function(t) {
+		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
 			dv.html(t);
-            optionValueListing(optionId);
+			optionValueListing(optionId);
 		});
 	};
 
-	setUpOptionValues = function(frm) {
+	setUpOptionValues = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
 			$.mbsmessage.close();
-			if (t.optionId > 0 ) {
-				optionValueForm(t.optionId,0);
-				return ;
+			if (t.optionId > 0) {
+				optionValueForm(t.optionId, 0);
+				return;
 			}
 			$(document).trigger('close.facebox');
 		});
 	};
 
-	deleteOptionValue = function(optionId,id){
-		if(!confirm(langLbl.confirmDelete)){return;}
-		data='id='+id+'&option_id='+optionId;
-		fcom.updateWithAjax(fcom.makeUrl('OptionValues','deleteRecord'),data,function(res){
+	deleteOptionValue = function (optionId, id) {
+		if (!confirm(langLbl.confirmDelete)) { return; }
+		data = 'id=' + id + '&option_id=' + optionId;
+		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), data, function (res) {
 			$.mbsmessage.close();
 			optionValueListing(optionId);
-			optionValueForm(optionId,0);
+			optionValueForm(optionId, 0);
 		});
 	}
 
-	optionValueSearchPage = function(page){
-		if(typeof page==undefined || page == null){
-			page =1;
+	optionValueSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
 		}
 		var frm = document.frmSearchOptionValuePaging;
 		$(frm.page).val(page);
 		searchOptionValueListing(frm);
 	};
 
-	searchOptionValueListing = function(form){
+	searchOptionValueListing = function (form) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
 		}
 		$("#optionValueListing").html('Loading....');
-		fcom.ajax(fcom.makeUrl('OptionValues','search'),data,function(res){
+		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			$("#optionValueListing").html(res);
 		});
 	};
 
-	showHideValues = function(obj){
+	showHideValues = function (obj) {
 
-		var type =obj.value;
-		var data ='optionType='+type;
-		fcom.ajax(fcom.makeUrl('Options','canSetValue'),data,function(t){
+		var type = obj.value;
+		var data = 'optionType=' + type;
+		fcom.ajax(fcom.makeUrl('Options', 'canSetValue'), data, function (t) {
 			var res = $.parseJSON(t);
-			if(res.hideBox == true){
-				$('#showHideContainer').addClass('hide'); return ;
+			if (res.hideBox == true) {
+				$('#showHideContainer').addClass('hide'); return;
 			}
 			$('#showHideContainer').removeClass('hide');
 		});
 	};
 
-	submitOptionForm=function(frm,fn){
+	submitOptionForm = function (frm, fn) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function (t) {
 			reloadList();
 			$.mbsmessage.close();
-			if(t.optionId > 0){
-                optionValueForm(t.optionId); return;
+			if (t.optionId > 0) {
+				optionValueForm(t.optionId); return;
 				/* optionForm(t.optionId); return; */
 			}
 			$(document).trigger('close.facebox');
 		});
 	};
 
-	searchRecords = function(form){
+	searchRecords = function (form) {
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
 		var data = '';
 		if (form) {
@@ -145,27 +145,28 @@ $(document).ready(function(){
 		/*]*/
 		$("#optionListing").prepend(fcom.getLoader());
 
-		fcom.ajax(fcom.makeUrl('seller','searchOptions'),data,function(res){
+		fcom.ajax(fcom.makeUrl('seller', 'searchOptions'), data, function (res) {
+			fcom.removeLoader();
 			$("#optionListing").html(res);
 		});
 	};
 
-	deleteOptionRecord=function(id){
-		if(!confirm(langLbl.confirmDelete)){return;}
-		data='id='+id;
-		fcom.ajax(fcom.makeUrl('seller','deleteSellerOption'),data,function(t){
+	deleteOptionRecord = function (id) {
+		if (!confirm(langLbl.confirmDelete)) { return; }
+		data = 'id=' + id;
+		fcom.ajax(fcom.makeUrl('seller', 'deleteSellerOption'), data, function (t) {
 			$res = $.parseJSON(t);
-			if($res.status == 0){
+			if ($res.status == 0) {
 				$.mbsmessage($res.msg, true, 'alert--danger');
-			}else{
+			} else {
 				$.mbsmessage($res.msg, true, 'alert--success');
 			}
 			reloadList();
 		});
 	};
 
-	deleteOptions = function(){
-		if( !confirm(langLbl.confirmDelete) ){ return; }
+	deleteOptions = function () {
+		if (!confirm(langLbl.confirmDelete)) { return; }
 		$("#frmOptionListing").submit();
 	};
 })();

@@ -170,7 +170,7 @@ class HtmlHelper
             return $mainDiv->getHtml();
         }
     }
-    
+
     public static function addStatusBtnHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '')
     {
         $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $recordId . ', ' . ((int) !$status) . ')' : 'return false;';
@@ -181,5 +181,36 @@ class HtmlHelper
                     <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                     <span class="input-helper"></span>
                 </label>';
+    }
+
+    public static function getTheDay(string $date, int $langId)
+    {
+        $currDate = strtotime(date("Y-m-d H:i:s"));
+        $theDate = strtotime($date);
+        $diff = floor(($currDate - $theDate) / (60 * 60 * 24));
+        switch ($diff) {
+            case 0:
+                return Labels::getLabel('LBL_TODAY', $langId);
+                break;
+            case 1:
+                return Labels::getLabel('LBL_YESTERDAY', $langId);
+                break;
+            case 2:
+            case 3:
+            case 4:
+                return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
+                break;
+            default:
+                return FatDate::format($date);
+                break;
+        }
+    }
+    
+    public static function configureCheckboxLabel(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $fld->developerTags['noCaptionTag'] = true;
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
     }
 }

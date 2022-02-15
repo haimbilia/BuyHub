@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 break; 
             case 'user_address':
                 $address1 = (!empty($row['addr_address1'])) ? $row['addr_address1'] . ', ' : '';
-                $address2 = (!empty($row['add_address2'])) ? $row['addr_address2'] : '';
+                $address2 = (!empty($row['addr_address2'])) ? $row['addr_address2'] : '';
 
                 $city = (!empty($row['addr_city'])) ? $row['addr_city'] . ', ' : '';
                 $state = (!empty($row['state_name'])) ? $row['state_name'] . ', ' : '';

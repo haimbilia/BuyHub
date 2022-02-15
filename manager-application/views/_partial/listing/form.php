@@ -8,11 +8,12 @@ HtmlHelper::formatFormFields($frm, $colWidthValuesDefault);
 if (!$frm->getFormTagAttribute('data-onclear')) {
     $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 }
-
-$frm->setFormTagAttribute('class', 'form modalFormJs ' . $formClassExtra);
+$formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--'.$formLayout .' '. $formClassExtra);
 if (!$frm->getFormTagAttribute('onsubmit')) {
     $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 }
+$frm->setFormTagAttribute('dir', $formLayout);
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {

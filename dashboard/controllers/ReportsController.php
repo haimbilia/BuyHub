@@ -976,6 +976,7 @@ class ReportsController extends SellerBaseController
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
         } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
