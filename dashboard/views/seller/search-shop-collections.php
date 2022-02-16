@@ -4,7 +4,6 @@
     <?php
     if ($canEdit) {
         $btnData = [
-            'newRecordBtn' => true,
             'statusButtons' => true,
             'deleteButton' => true,
             'siteLangId' => $siteLangId,
@@ -12,10 +11,18 @@
         ];
 
         if (count($arrListing) > 0) {
-            $btnData['newRecordBtnAttrs'] = [
-                'attr' => [
-                    'onclick' => "getShopCollectionGeneralForm(0)"
-                ]
+            $btnData['listTopButtons'] = [
+                [
+                    'attr' => [
+                        'class' => 'btn btn-outline-gray btn-icon',
+                        'onclick' => 'getShopCollectionGeneralForm(0)',
+                        'title' => Labels::getLabel('BTN_NEW_RECORD', $siteLangId)
+                    ],
+                    'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
+                ],
             ];
         }
         $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);

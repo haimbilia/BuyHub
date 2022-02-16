@@ -2,7 +2,6 @@
 
 trait SellerProducts
 {
-
     private $selProdRecordId = 0;
 
     protected function getSellerProductSearchForm($product_id = 0)

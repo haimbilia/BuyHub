@@ -104,6 +104,31 @@ if ($canEdit) { ?>
                     }
                 }
             } ?>
+
+            <?php $newRecordBtn = $newRecordBtn ?? false;
+            $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
+            if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
+                $href = "javascript:void(0)";
+                $onclick = "addNew()";
+                $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
+                $icon = '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>';
+                $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';
+                if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {
+                    $href = $newRecordBtnAttrs['attr']['href'] ?? $href;
+                    $onclick = $newRecordBtnAttrs['attr']['onclick'] ?? $onclick;
+                    $title = $newRecordBtnAttrs['attr']['title'] ?? $title;
+                    $label = $newRecordBtnAttrs['label'] ?? $label;
+                }
+            ?>
+                <li>
+                    <a href="<?php echo $href; ?>" class="btn btn-outline-gray btn-icon" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
+                        <?php echo $label; ?>
+                    </a>
+                </li>
+            <?php } ?>
         </ul>
     </div>
 <?php } ?>

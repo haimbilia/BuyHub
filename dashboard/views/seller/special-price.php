@@ -10,26 +10,11 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     $data = [
         'headingLabel' => Labels::getLabel('LBL_SELLER_PRODUCTS_SPECIAL_PRICE', $siteLangId),
         'siteLangId' => $siteLangId,
+        'newRecordBtn' => true
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
-        <?php if ($canEdit) { ?>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <?php foreach ($dataToEdit as $data) {
-                            $data['addMultiple'] = (1 > $selProd_id) ? 1 : 0;
-                            $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId, 'data' => $data), false);
-                        }
-                        if (1 > $selProd_id) {
-                            $this->includeTemplate('seller/add-special-price-form.php', array('siteLangId' => $siteLangId), false);
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">

@@ -2,7 +2,8 @@
 
 /* created this class to access direct functions of getAttributesById and save function for below mentioned DB table. */
 
-class SellerProduct extends MyAppModel {
+class SellerProduct extends MyAppModel
+{
 
     public const DB_TBL = 'tbl_seller_products';
     public const DB_TBL_PREFIX = 'selprod_';
@@ -30,40 +31,43 @@ class SellerProduct extends MyAppModel {
     public const OPTION_NAME_SEPARATOR = ':';
     public const MULTIPLE_OPTION_SEPARATOR = ' | ';
 
-    public function __construct($id = 0) {
+    public function __construct($id = 0)
+    {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
         $this->objMainTableRecord->setSensitiveFields(
-                array('selprod_id')
+            array('selprod_id')
         );
     }
 
-    public static function getSearchObject($langId = 0, $joinSpecifics = false) {
+    public static function getSearchObject($langId = 0, $joinSpecifics = false)
+    {
         $langId = FatUtility::int($langId);
         $srch = new SearchBase(static::DB_TBL, 'sp');
 
         if ($langId) {
             $srch->joinTable(
-                    static::DB_TBL_LANG,
-                    'LEFT JOIN',
-                    'sp_l.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = sp.' . static::tblFld('id') . ' and
+                static::DB_TBL_LANG,
+                'LEFT JOIN',
+                'sp_l.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = sp.' . static::tblFld('id') . ' and
 			sp_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
-                    'sp_l'
+                'sp_l'
             );
         }
 
         if (true === $joinSpecifics) {
             $srch->joinTable(
-                    SellerProductSpecifics::DB_TBL,
-                    'LEFT JOIN',
-                    'sps.' . SellerProductSpecifics::DB_TBL_PREFIX . 'selprod_id = sp.' . static::tblFld('id'),
-                    'sps'
+                SellerProductSpecifics::DB_TBL,
+                'LEFT JOIN',
+                'sps.' . SellerProductSpecifics::DB_TBL_PREFIX . 'selprod_id = sp.' . static::tblFld('id'),
+                'sps'
             );
         }
 
         return $srch;
     }
 
-    public static function requiredGenDataFields() {
+    public static function requiredGenDataFields()
+    {
         $arr = array(
             ImportexportCommon::VALIDATE_INT => array(
                 'selprod_max_download_times',
@@ -101,12 +105,14 @@ class SellerProduct extends MyAppModel {
         return $arr;
     }
 
-    public static function validateGenDataFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateGenDataFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredGenDataFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredOptionDataFields() {
+    public static function requiredOptionDataFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprodoption_selprod_id',
@@ -120,12 +126,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateOptionDataFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateOptionDataFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredOptionDataFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredSEODataFields() {
+    public static function requiredSEODataFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -133,12 +141,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateSEODataFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateSEODataFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredSEODataFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredSplPriceFields() {
+    public static function requiredSplPriceFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -151,12 +161,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateSplPriceFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateSplPriceFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredSplPriceFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredVolDiscountFields() {
+    public static function requiredVolDiscountFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -171,12 +183,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateVolDiscountFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateVolDiscountFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredVolDiscountFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredBuyTogetherFields() {
+    public static function requiredBuyTogetherFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -185,12 +199,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateBuyTogetherFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateBuyTogetherFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredBuyTogetherFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredRelatedProdFields() {
+    public static function requiredRelatedProdFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -199,12 +215,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateRelatedProdFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateRelatedProdFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredRelatedProdFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public static function requiredProdPolicyFields() {
+    public static function requiredProdPolicyFields()
+    {
         return array(
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'selprod_id',
@@ -216,12 +234,14 @@ class SellerProduct extends MyAppModel {
         );
     }
 
-    public static function validateProdPolicyFields($columnIndex, $columnTitle, $columnValue, $langId) {
+    public static function validateProdPolicyFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
         $requiredFields = static::requiredProdPolicyFields();
         return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
     }
 
-    public function addUpdateSellerUpsellProducts($selprod_id, $upsellProds = array(), $deletePreviousRecords = true) {
+    public function addUpdateSellerUpsellProducts($selprod_id, $upsellProds = array(), $deletePreviousRecords = true)
+    {
         if (!$selprod_id) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
@@ -248,7 +268,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public function addUpdateSellerRelatedProdcts($selprod_id, $relatedProds = array(), $deletePreviousRecords = true) {
+    public function addUpdateSellerRelatedProdcts($selprod_id, $relatedProds = array(), $deletePreviousRecords = true)
+    {
         if (!$selprod_id) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
@@ -275,7 +296,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public static function searchUpsellProducts($lang_id, $attr = []) {
+    public static function searchUpsellProducts($lang_id, $attr = [])
+    {
         $splPriceForDate = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
         $srch = new SearchBase(static::DB_TBL_UPSELL_PRODUCTS);
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'recommend_sellerproduct_id');
@@ -283,18 +305,18 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
         $srch->joinTable(
-                SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
-                'LEFT OUTER JOIN',
-                'm.splprice_selprod_id = selprod_id AND \'' . $splPriceForDate . '\' BETWEEN m.splprice_start_date AND m.splprice_end_date',
-                'm'
+            SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
+            'LEFT OUTER JOIN',
+            'm.splprice_selprod_id = selprod_id AND \'' . $splPriceForDate . '\' BETWEEN m.splprice_start_date AND m.splprice_end_date',
+            'm'
         );
 
         $srch->joinTable(
-                SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
-                'LEFT OUTER JOIN',
-                's.splprice_selprod_id = selprod_id AND s.splprice_price < m.splprice_price
+            SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
+            'LEFT OUTER JOIN',
+            's.splprice_selprod_id = selprod_id AND s.splprice_price < m.splprice_price
              AND \'' . $splPriceForDate . '\' BETWEEN s.splprice_start_date AND s.splprice_end_date',
-                's'
+            's'
         );
 
         $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
@@ -331,7 +353,8 @@ class SellerProduct extends MyAppModel {
         return $srch;
     }
 
-    public function getUpsellProducts($sellProdId, $lang_id, $userId = 0) {
+    public function getUpsellProducts($sellProdId, $lang_id, $userId = 0)
+    {
         $sellProdId = FatUtility::convertToType($sellProdId, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$sellProdId) {
@@ -360,7 +383,8 @@ class SellerProduct extends MyAppModel {
         return $data;
     }
 
-    public static function getAttributesById($recordId, $attr = null, $fetchOptions = true, $joinSpecifics = false) {
+    public static function getAttributesById($recordId, $attr = null, $fetchOptions = true, $joinSpecifics = false)
+    {
         $recordId = FatUtility::int($recordId);
 
         $db = FatApp::getDb();
@@ -372,10 +396,10 @@ class SellerProduct extends MyAppModel {
 
         if (true === $joinSpecifics) {
             $srch->joinTable(
-                    SellerProductSpecifics::DB_TBL,
-                    'LEFT OUTER JOIN',
-                    'ps.' . SellerProductSpecifics::DB_TBL_PREFIX . 'selprod_id = sp.' . static::tblFld('id'),
-                    'ps'
+                SellerProductSpecifics::DB_TBL,
+                'LEFT OUTER JOIN',
+                'ps.' . SellerProductSpecifics::DB_TBL_PREFIX . 'selprod_id = sp.' . static::tblFld('id'),
+                'ps'
             );
         }
 
@@ -409,7 +433,8 @@ class SellerProduct extends MyAppModel {
         return $row;
     }
 
-    public function addUpdateSellerProductOptions($selprod_id, $data) {
+    public function addUpdateSellerProductOptions($selprod_id, $data)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         if (!$selprod_id) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
@@ -435,7 +460,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public static function getSellerProductOptions($selprod_id, $withAllJoins = true, $lang_id = 0, $option_id = 0) {
+    public static function getSellerProductOptions($selprod_id, $withAllJoins = true, $lang_id = 0, $option_id = 0)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $lang_id = FatUtility::int($lang_id);
         $option_id = FatUtility::int($option_id);
@@ -469,7 +495,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetchAll($rs);
     }
 
-    public static function getSellerProductOptionsBySelProdCode($selprod_code = '', $langId = 0, $displayInFilterOnly = false) {
+    public static function getSellerProductOptionsBySelProdCode($selprod_code = '', $langId = 0, $displayInFilterOnly = false)
+    {
         if ($selprod_code == '') {
             return array();
         }
@@ -503,7 +530,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetchAll($rs, 'optionvalue_id');
     }
 
-    public static function getSellerProductSpecialPrices($selprod_id) {
+    public static function getSellerProductSpecialPrices($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_SPCL_PRICE);
         $srch->addCondition('splprice_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
@@ -515,7 +543,8 @@ class SellerProduct extends MyAppModel {
         return $db->fetchAll($rs);
     }
 
-    public static function getSellerProductSpecialPriceById($splprice_id) {
+    public static function getSellerProductSpecialPriceById($splprice_id)
+    {
         $splprice_id = FatUtility::int($splprice_id);
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_SPCL_PRICE, 'prodSp');
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', 'prodSp.splprice_selprod_id = slrPrd.selprod_id', 'slrPrd');
@@ -526,7 +555,8 @@ class SellerProduct extends MyAppModel {
         return $db->fetch($rs);
     }
 
-    public function deleteSellerProductSpecialPrice($splprice_id, $splprice_selprod_id, $userId = 0) {
+    public function deleteSellerProductSpecialPrice($splprice_id, $splprice_selprod_id, $userId = 0)
+    {
         $splprice_id = FatUtility::int($splprice_id);
         $splprice_selprod_id = FatUtility::int($splprice_selprod_id);
         if (!$splprice_id || !$splprice_selprod_id) {
@@ -549,7 +579,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public function addUpdateSellerProductSpecialPrice($data, $return = false) {
+    public function addUpdateSellerProductSpecialPrice($data, $return = false)
+    {
         $db = FatApp::getDb();
         if (!$db->insertFromArray(static::DB_TBL_SELLER_PROD_SPCL_PRICE, $data, false, array(), $data)) {
             $this->error = $db->getError();
@@ -564,7 +595,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public static function getProductCommission($selprod_id) {
+    public static function getProductCommission($selprod_id)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         if (!$selprod_id) {
             trigger_error(Labels::getLabel('ERR_Invalid_Arguments!', CommonHelper::getLangId()), E_USER_ERROR);
@@ -621,7 +653,8 @@ class SellerProduct extends MyAppModel {
         }
     }
 
-    public function getProductsToGroup($prodgroup_id, $lang_id = 0) {
+    public function getProductsToGroup($prodgroup_id, $lang_id = 0)
+    {
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $lang_id = FatUtility::int($lang_id);
         $now = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
@@ -636,9 +669,9 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
         $srch->joinTable(ProductGroup::DB_TBL, 'INNER JOIN', 'ptg.' . ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'prodgroup_id = pg.prodgroup_id', 'pg');
         $srch->joinTable(
-                SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
-                'LEFT OUTER JOIN',
-                'splprice_selprod_id = selprod_id AND \'' . $forDate . '\' BETWEEN splprice_start_date AND splprice_end_date'
+            SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
+            'LEFT OUTER JOIN',
+            'splprice_selprod_id = selprod_id AND \'' . $forDate . '\' BETWEEN splprice_start_date AND splprice_end_date'
         );
 
         $srch->addCondition(ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'prodgroup_id', '=', 'mysql_func_' . $prodgroup_id, 'AND', true);
@@ -669,7 +702,8 @@ class SellerProduct extends MyAppModel {
         return $products;
     }
 
-    public function getGroupsToProduct($lang_id = 0) {
+    public function getGroupsToProduct($lang_id = 0)
+    {
         if ($this->mainTableRecordId < 1) {
             return array();
         }
@@ -700,7 +734,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetchAll($rs);
     }
 
-    public function addPolicyPointToSelProd($data) {
+    public function addPolicyPointToSelProd($data)
+    {
         $record = new TableRecord(self::DB_TBL_SELLER_PROD_POLICY);
         $record->assignValues($data);
 
@@ -711,7 +746,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public static function searchRelatedProducts($lang_id, $criteria = array()) {
+    public static function searchRelatedProducts($lang_id, $criteria = array())
+    {
         $srch = new SearchBase(static::DB_TBL_RELATED_PRODUCTS);
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id');
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
@@ -729,7 +765,8 @@ class SellerProduct extends MyAppModel {
         return $srch;
     }
 
-    public function getRelatedProducts($lang_id = 0, $sellProdId = 0, $criteria = array()) {
+    public function getRelatedProducts($lang_id = 0, $sellProdId = 0, $criteria = array())
+    {
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         $sellProdId = FatUtility::convertToType($sellProdId, FatUtility::VAR_INT);
 
@@ -746,7 +783,8 @@ class SellerProduct extends MyAppModel {
         }
     }
 
-    public function deleteSellerProduct($selprodId) {
+    public function deleteSellerProduct($selprodId)
+    {
         if (!$selprodId) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
@@ -767,18 +805,19 @@ class SellerProduct extends MyAppModel {
           return true; */
     }
 
-    public static function getSelprodPolicies($selprod_id, $policy_type, $langId, $limit = null, $active = true, $deleted = false) {
+    public static function getSelprodPolicies($selprod_id, $policy_type, $langId, $limit = null, $active = true, $deleted = false)
+    {
         $selprod_id = FatUtility::int($selprod_id);
         $policy_type = FatUtility::int($policy_type);
         $limit = FatUtility::int($limit);
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_POLICY);
         $srch->joinTable(PolicyPoint::DB_TBL, 'left outer join', 'sppolicy_ppoint_id = ppoint_id', 'pp');
         $srch->joinTable(
-                PolicyPoint::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
-                'pp_l.ppointlang_ppoint_id = pp.ppoint_id
+            PolicyPoint::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'pp_l.ppointlang_ppoint_id = pp.ppoint_id
 			AND ppointlang_lang_id = ' . $langId,
-                'pp_l'
+            'pp_l'
         );
         $srch->addCondition('pp.ppoint_type', '=', 'mysql_func_' . $policy_type, 'AND', true);
         $srch->addCondition('sppolicy_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
@@ -799,7 +838,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
-    public static function getProductDisplayTitle($selProdId, $langId, $toHtml = false) {
+    public static function getProductDisplayTitle($selProdId, $langId, $toHtml = false)
+    {
         $prodSrch = new ProductSearch($langId, null, null, false, false);
         $prodSrch->joinSellerProducts(0, '', array(), false, false);
         if (is_array($selProdId) && 0 < count($selProdId)) {
@@ -828,7 +868,8 @@ class SellerProduct extends MyAppModel {
         return false;
     }
 
-    public static function getProductsOptionsString($products, $langId, $toHtml = false) {
+    public static function getProductsOptionsString($products, $langId, $toHtml = false)
+    {
         if (empty($products) || empty($langId)) {
             return false;
         }
@@ -853,7 +894,8 @@ class SellerProduct extends MyAppModel {
         return $optionsStringArr;
     }
 
-    public function getVolumeDiscounts() {
+    public function getVolumeDiscounts()
+    {
         if ($this->mainTableRecordId < 1) {
             return array();
         }
@@ -867,7 +909,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetchAll($rs);
     }
 
-    private function rewriteUrl($keyword, $type = 'product') {
+    private function rewriteUrl($keyword, $type = 'product')
+    {
         if ($this->mainTableRecordId < 1) {
             return false;
         }
@@ -879,7 +922,8 @@ class SellerProduct extends MyAppModel {
         return UrlRewrite::update($originalUrl, $customUrl);
     }
 
-    private function getRewriteOriginalUrl($type = 'product') {
+    private function getRewriteOriginalUrl($type = 'product')
+    {
         if ($this->mainTableRecordId < 1) {
             return false;
         }
@@ -898,7 +942,8 @@ class SellerProduct extends MyAppModel {
         return $originalUrl;
     }
 
-    public function sanitizeSeoUrl($keyword, $type = 'product') {
+    public function sanitizeSeoUrl($keyword, $type = 'product')
+    {
         $seoUrl = CommonHelper::seoUrl($keyword);
         switch (strtolower($type)) {
             case 'reviews':
@@ -915,23 +960,28 @@ class SellerProduct extends MyAppModel {
         return $seoUrl;
     }
 
-    public function rewriteUrlProduct($keyword) {
+    public function rewriteUrlProduct($keyword)
+    {
         return $this->rewriteUrl($keyword, 'product');
     }
 
-    public function getRewriteProductOriginalUrl() {
+    public function getRewriteProductOriginalUrl()
+    {
         return $this->getRewriteOriginalUrl('product');
     }
 
-    public function rewriteUrlReviews($keyword) {
+    public function rewriteUrlReviews($keyword)
+    {
         return $this->rewriteUrl($keyword, 'reviews');
     }
 
-    public function rewriteUrlMoreSellers($keyword) {
+    public function rewriteUrlMoreSellers($keyword)
+    {
         return $this->rewriteUrl($keyword, 'moresellers');
     }
 
-    public static function getActiveCount($userId, $selprodId = 0): int {
+    public static function getActiveCount($userId, $selprodId = 0): int
+    {
         $selprodId = FatUtility::int($selprodId);
         $userId = FatUtility::int($userId);
 
@@ -952,7 +1002,8 @@ class SellerProduct extends MyAppModel {
         return (int) $srch->recordCount();
     }
 
-    public function joinUserWishListProducts($srch, $user_id) {
+    public function joinUserWishListProducts($srch, $user_id)
+    {
         $user_id = FatUtility::int($user_id);
         $wislistPSrchObj = new UserWishListProductSearch();
         $wislistPSrchObj->joinWishLists();
@@ -964,12 +1015,19 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
     }
 
-    public function joinFavouriteProducts($srch, $user_id) {
+    public function joinFavouriteProducts($srch, $user_id)
+    {
         $srch->joinTable(Product::DB_TBL_PRODUCT_FAVORITE, 'LEFT OUTER JOIN', 'ufp.ufp_selprod_id = selprod_id and ufp.ufp_user_id = ' . $user_id, 'ufp');
     }
 
-    public static function specialPriceForm($langId) {
+    public static function specialPriceForm($langId)
+    {
         $frm = new Form('frmSellerProductSpecialPrice');
+        $frm->addHiddenField('', 'splprice_selprod_id');
+        $frm->addHiddenField('', 'splprice_id');
+        $prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $langId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $langId)));
+        $prodName->requirements()->setRequired();
+
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Special_Price', $langId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
         $fld->requirements()->setPositive();
         $fld = $frm->addDateField(Labels::getLabel('LBL_Price_Start_Date', $langId), 'splprice_start_date', '', array('readonly' => 'readonly'));
@@ -979,15 +1037,11 @@ class SellerProduct extends MyAppModel {
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('LBL_Price_Start_Date', $langId));
 
-        $frm->addHiddenField('', 'splprice_selprod_id');
-        $frm->addHiddenField('', 'splprice_id');
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
-        $fld1->attachField($fld2);
         return $frm;
     }
 
-    public static function volumeDiscountForm($langId) {
+    public static function volumeDiscountForm($langId)
+    {
         $frm = new Form('frmSellerProductSpecialPrice');
 
         $frm->addHiddenField('', 'voldiscount_selprod_id', 0);
@@ -1002,7 +1056,8 @@ class SellerProduct extends MyAppModel {
         return $frm;
     }
 
-    public static function searchSpecialPriceProductsObj($langId, $selProdId = 0, $keyword = '', $userId = 0) {
+    public static function searchSpecialPriceProductsObj($langId, $selProdId = 0, $keyword = '', $userId = 0)
+    {
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
@@ -1010,7 +1065,7 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(static::DB_TBL_SELLER_PROD_SPCL_PRICE, 'INNER JOIN', 'spp.splprice_selprod_id = sp.selprod_id', 'spp');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
         $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop.shop_user_id = sp.selprod_user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN','shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
 
         if (0 < $selProdId) {
             $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
@@ -1032,7 +1087,8 @@ class SellerProduct extends MyAppModel {
         return $srch;
     }
 
-    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0) {
+    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0)
+    {
 
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
@@ -1041,7 +1097,7 @@ class SellerProduct extends MyAppModel {
         $srch->joinTable(SellerProductVolumeDiscount::DB_TBL, 'INNER JOIN', 'vd.voldiscount_selprod_id = sp.selprod_id', 'vd');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
         $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop.shop_user_id = sp.selprod_user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN','shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $langId, 'shopLang');
 
         if (0 < $selProdId) {
             $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
@@ -1062,7 +1118,8 @@ class SellerProduct extends MyAppModel {
         return $srch;
     }
 
-    public static function getSelProdDataById($selProdId, $langId = 0, $joinProduct = false, $attr = []) {
+    public static function getSelProdDataById($selProdId, $langId = 0, $joinProduct = false, $attr = [])
+    {
         $selProdId = FatUtility::int($selProdId);
         $srch = static::getSearchObject($langId);
         $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
@@ -1082,7 +1139,8 @@ class SellerProduct extends MyAppModel {
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
-    public static function searchSellerProducts($langId, $userId, $keyword = '') {
+    public static function searchSellerProducts($langId, $userId, $keyword = '')
+    {
         $userId = FatUtility::int($userId);
         $srch = SellerProduct::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id and p.product_deleted = ' . applicationConstants::NO . ' and p.product_active = ' . applicationConstants::YES, 'p');
@@ -1097,7 +1155,8 @@ class SellerProduct extends MyAppModel {
         return $srch;
     }
 
-    public function saveMetaData() {
+    public function saveMetaData()
+    {
         if ($this->mainTableRecordId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
@@ -1148,7 +1207,8 @@ class SellerProduct extends MyAppModel {
         return true;
     }
 
-    public static function getCatelogFromProductId($productId) {
+    public static function getCatelogFromProductId($productId)
+    {
         $productId = FatUtility::int($productId);
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
@@ -1163,7 +1223,8 @@ class SellerProduct extends MyAppModel {
         return [];
     }
 
-    public static function prodShipByseller($productId) {
+    public static function prodShipByseller($productId)
+    {
         $productId = FatUtility::int($productId);
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $srch = new ProductSearch();
@@ -1181,11 +1242,13 @@ class SellerProduct extends MyAppModel {
      * @param  int $fulfillmentType
      * @return int
      */
-    public static function setSellerProdFulfillmentType(int $fulfillmentType): int {
+    public static function setSellerProdFulfillmentType(int $fulfillmentType): int
+    {
         return $fulfillmentType;
     }
 
-    public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int {
+    public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int
+    {
         $srch = new SearchBase(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
         $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', 'mysql_func_' . $pluginId, 'AND', true);
         $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', 'mysql_func_' . $pluginSelProdId, 'AND', true);
@@ -1198,7 +1261,8 @@ class SellerProduct extends MyAppModel {
         return $records['spps_selprod_id'];
     }
 
-    public static function getFormattedOptions(int $selProdId, int $langId) {
+    public static function getFormattedOptions(int $selProdId, int $langId)
+    {
         $productId = SellerProduct::getAttributesById($selProdId, 'selprod_product_id', false);
 
         $options = SellerProduct::getSellerProductOptions($selProdId, false);
@@ -1261,7 +1325,8 @@ class SellerProduct extends MyAppModel {
      *
      * @return object
      */
-    public static function rateObj(): object {
+    public static function rateObj(): object
+    {
         $avgRatingSrch = new SelProdReviewSearch();
         $avgRatingSrch->joinSelProdRating();
         $avgRatingSrch->doNotCalculateRecords();
@@ -1278,7 +1343,8 @@ class SellerProduct extends MyAppModel {
      * @param  int $recordId
      * @return float
      */
-    public static function getRating(int $recordId): float {
+    public static function getRating(int $recordId): float
+    {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
@@ -1295,7 +1361,8 @@ class SellerProduct extends MyAppModel {
      * @param  mixed $recordId
      * @return float
      */
-    public static function getProdRating(int $recordId): float {
+    public static function getProdRating(int $recordId): float
+    {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_product_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
@@ -1312,7 +1379,8 @@ class SellerProduct extends MyAppModel {
      * @param  int $recordId
      * @return float
      */
-    public static function getShopRating(int $recordId): float {
+    public static function getShopRating(int $recordId): float
+    {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_SHOP, true);
@@ -1326,7 +1394,8 @@ class SellerProduct extends MyAppModel {
     /**
      * $optionId int|array
      */
-    public static function isOptionLinked($optionId, int $productId = 0) {
+    public static function isOptionLinked($optionId, int $productId = 0)
+    {
         /* Get Linked Products [ */
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
@@ -1347,7 +1416,8 @@ class SellerProduct extends MyAppModel {
         return $row != false ? true : false;
     }
 
-    public static function isOptionValueLinked(int $optionId, int $optionValueId, int $productId) {
+    public static function isOptionValueLinked(int $optionId, int $optionValueId, int $productId)
+    {
         /* Get Linked Products [ */
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
@@ -1363,7 +1433,8 @@ class SellerProduct extends MyAppModel {
         return $row != false ? true : false;
     }
 
-    public static function getRelatedProduct($userId, $langId, $relatedProdIds = []) {
+    public static function getRelatedProduct($userId, $langId, $relatedProdIds = [])
+    {
         if (empty($relatedProdIds)) {
             return [];
         }
@@ -1380,7 +1451,8 @@ class SellerProduct extends MyAppModel {
         return $arrListing;
     }
 
-    public static function getBuyTogetherProduct($userId, $langId, $relatedProdIds = [], $selProdId) {
+    public static function getBuyTogetherProduct($userId, $langId, $relatedProdIds = [], $selProdId)
+    {
         if (empty($relatedProdIds)) {
             return [];
         }
@@ -1402,5 +1474,4 @@ class SellerProduct extends MyAppModel {
         }
         return $arrListing;
     }
-
 }

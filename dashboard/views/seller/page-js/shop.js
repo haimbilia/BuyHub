@@ -272,7 +272,7 @@ $(document).on("change", ".state", function () {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmodal(t, false, '');
+            $.ykmodal(t);
         });
     };
 
@@ -932,10 +932,11 @@ $(document).on("change", ".state", function () {
 
 function bindAutoComplete() {
     $("select[name='scp_selprod_id']").select2({
+        dropdownParent: $("select[name='scp_selprod_id']").closest('.modal'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
         allowClear: true,
-        //placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
+        placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
         ajax: {
             url: fcom.makeUrl('seller', 'autoCompleteProducts'),
             dataType: 'json',
