@@ -2369,105 +2369,6 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    /* public function viewMessages($threadId, $messageId = 0)
-    {
-        $this->userPrivilege->canViewMessages($this->userId);
-        $threadId = FatUtility::int($threadId);
-        $messageId = FatUtility::int($messageId);
-        if (1 > $threadId) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $threadData = Thread::getAttributesById($messageId, array('thread_id,thread_type'));
-        if ($threadData == false) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $attr = array(
-            'IFNULL(shop_name, shop_identifier) as shop_name',
-            'shop_id',
-            'shop_updated_on',
-        );
-        $shopDetails = Shop::getAttributesByUserId($this->userId, $attr, false, $this->siteLangId);
-        $srch = new MessageSearch();
-
-        $srch->joinThreadMessage();
-        $srch->joinMessagePostedFromUser();
-        $srch->joinMessagePostedToUser();
-        $srch->joinThreadStartedByUser();
-        if ($threadData['thread_type'] == Thread::THREAD_TYPE_SHOP) {
-            $srch->joinShops($this->siteLangId);
-        } elseif ($threadData['thread_type'] == Thread::THREAD_TYPE_PRODUCT) {
-            $srch->joinProducts($this->siteLangId);
-        }
-
-        $parentAndThierChildIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
-
-        $srch->joinOrderProducts();
-        $srch->joinOrderProductStatus();
-        $srch->addMultipleFields(array('tth.*', 'top.op_invoice_number'));
-        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
-        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
-        if ($messageId) {
-            $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
-        }
-
-        $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndThierChildIds);
-        $cnd->attachCondition('ttm.message_to', 'IN', $parentAndThierChildIds, 'OR');
-        $rs = $srch->getResultSet();
-        $threadDetails = FatApp::getDb()->fetch($rs);
-
-        if ($threadDetails == false) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        if (false === MOBILE_APP_API_CALL) {
-            $frmSrch = $this->getMsgSearchForm($this->siteLangId);
-            $frmSrch->fill(array('thread_id' => $threadId));
-            $frm = $this->sendMessageForm($this->siteLangId);
-            $frm->fill(array('message_thread_id' => $threadId, 'message_id' => $messageId));
-        }
-
-        $threadObj = new Thread($threadId);
-        if (!$threadObj->markMessageReadFromUserArr($threadId, $parentAndThierChildIds)) {
-            if (true === MOBILE_APP_API_CALL) {
-                Message::addErrorMessage(strip_tags(current($threadObj->getError())));
-            }
-            Message::addErrorMessage($threadObj->getError());
-            CommonHelper::redirectUserReferer();
-        }
-
-        if (false === MOBILE_APP_API_CALL) {
-            $this->set('frmSrch', $frmSrch);
-            $this->set('frm', $frm);
-        }
-        $this->set('canEditMessages', $this->userPrivilege->canEditMessages($this->userId, true));
-        $this->set('threadDetails', $threadDetails);
-        $this->set('threadTypeArr', Thread::getThreadTypeArr($this->siteLangId));
-        $this->set('loggedUserId', $this->userId);
-        $this->set('loggedUserName', ucfirst(UserAuthentication::getLoggedUserAttribute('user_name')));
-        $this->set('shopDetails', $shopDetails);
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-        $this->_template->render();
-    } */
-
     public function threadMessageSearch()
     {
         $this->userPrivilege->canViewMessages($this->userId);
@@ -3274,7 +3175,6 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmSendMessage');
         $frm->addHiddenField('', 'message_thread_id');
         $frm->addTextarea(Labels::getLabel('LBL_Comments', $langId), 'message_text', '')->requirements()->setRequired(true);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $langId));
         return $frm;
     }
 
