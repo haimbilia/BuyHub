@@ -94,7 +94,8 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                                     <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
-                    <?php }
+                            <div class="edit-div">
+                        <?php }
                         $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
                         $frm->setFormTagAttribute('class', 'form');
                         $frm->developerTags['colClassPrefix'] = 'col-md-12';
@@ -105,7 +106,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                         $fld = $frm->getField('message_text');
                         $fld->attachField($submitFld);
                         echo $frm->getFormHtml();
-                    } ?>
+                    } ?></div>
                 </div>
             </div>
         </div>

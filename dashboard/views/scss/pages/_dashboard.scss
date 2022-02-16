@@ -246,13 +246,14 @@
             }
             .h-badge {
                 position: absolute;
-                #{$end-direction}: -5px;
+                #{$end-direction}: -2px;
                 top: -5px;
                 text-align: center;
                 border-radius: 50%;
-                font-size: 0.75rem;
-                width: 20px;
-                height: 20px;
+                font-size: 9px;
+                width: 18px;
+                height: 18px;
+                line-height: 18px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1438,66 +1439,15 @@ input.sp-input {
 }
 
 .tax-rules {
-    > ul {
-        font-size: 0.85rem;
-        display: grid;
-        grid-gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        > li {
-            height: 100%;
-            border: $border;
-            border-radius: $radius4;
-            padding: 1rem;
-            .actions {
-                a {
-                    padding: 5px;
-                    width: 30px;
-                    height: 30px;
-                    color: #2e384d;
-                    font-size: 0.7rem !important;
-                    border: solid 1px #dee2e6;
-                    border-radius: 2px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    &:hover {
-                        background: $brand-color;
-                        color: $brand-color-inverse;
-                        border-color: $brand-color;
-                    }
-                }
-            }
-        }
-    }
-    .title {
-        font-size: 1rem;
-        font-weight: 500;
-        margin-bottom: 1rem;
-        span {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: $txt-gray;
-            display: block;
-            margin-top: 0.4rem;
-        }
-    }
-    .title-sub {
-        font-size: 0.85rem;
-        margin-top: 0.8rem;
-    }
-    p {
-        color: $txt-gray;
-        display: flex;
-    }
-    .stats {
-        margin: 5px 0;
-    }
-    .lable {
-        margin-#{$end-direction}: 0.5rem;
-        font-weight: 500;
-        color: $body-color;
-        min-width: 65px;
-        display: inline-block;
+    font-size: 0.85rem;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    > li {
+        height: 100%;
+        border: $border;
+        border-radius: $radius4;
+        padding: 1rem;
     }
 }
 
@@ -1877,7 +1827,8 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     .btn {
         position: static !important;
     }
-    .scroll {
+    .dropdown-menu {
+        overflow-y: auto;
         max-height: 300px;
     }
     .list-drag-drop {
