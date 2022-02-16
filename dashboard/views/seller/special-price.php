@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $keywordFld = $frmSearch->getField('keyword');
 if (0 < $selProd_id) {
     $keywordFld->setFieldTagAttribute('readonly', 'readonly');

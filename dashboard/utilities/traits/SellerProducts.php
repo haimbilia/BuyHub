@@ -2619,6 +2619,15 @@ trait SellerProducts
         $productId = SellerProduct::getAttributesById($selprodId, 'selprod_product_id', false);
         Product::updateMinPrices($productId);
     }
+    
+    public function addVolumeDiscountForm()
+    {
+        $this->set('frm', SellerProduct::volumeDiscountForm($this->siteLangId));
+        $this->set('includeTabs', false);
+        $this->set('formTitle', Labels::getLabel('LBL_BIND_VOLUME_DISCOUNT', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 
     public function volumeDiscount($selProd_id = 0)
     {
