@@ -2,7 +2,7 @@
 
 class EmailTemplatesController extends ListingBaseController
 {
-    protected string $pageKey = 'MANAGE_SMS_TEMPLATES';
+    protected string $pageKey = 'MANAGE_EMAIL_TEMPLATES';
     public function __construct($action)
     {
         parent::__construct($action);
