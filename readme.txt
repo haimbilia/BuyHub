@@ -502,6 +502,8 @@ Updates/Fixes :
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
     => 062456 - Admin UI: "Language Data" option is showing while editing the advanced setting on the meta-tag management page under the SEO section
     => 062454 - Admin UI: Columns alignment is changing while admin clicks on the sorting option under the meta-tag section and double options are selected on the side menu while clicking on the View HTML and XML option
+    => 062458 - Admin UI: Profile image and email address is not updated while clicking on the "My Profile" option
+    => 062459 - Admin UI: "Double validation" messages are showing for the confirm password field while changing the admin's password
     => 062498 - Admin UI: Spacing issue while editing the shop details under the Manage Shop section.
     => 062510 - Admin UI: "Parse error" is showing while trying to sort the table according to the User Type column under the deleted users' table.
     

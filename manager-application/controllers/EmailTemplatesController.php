@@ -143,7 +143,7 @@ class EmailTemplatesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(EmailTemplates::DB_TBL);
-            if (false === $updateLangDataobj->updateTranslatedData($etplCode)) {
+            if (false === $updateLangDataobj->updateTranslatedData($etplCode, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -169,11 +169,10 @@ class EmailTemplatesController extends ListingBaseController
         $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_Body', $this->siteLangId), 'etpl_body');
         $fld->requirements()->setRequired(true);
         $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $this->siteLangId), 'etpl_replacements', '');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+       
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $lang_id == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $lang_id == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -194,7 +193,7 @@ class EmailTemplatesController extends ListingBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(EmailTemplates::DB_TBL);
-            $translatedData = $updateLangDataobj->getTranslatedData($etplCode, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($etplCode, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -202,6 +201,12 @@ class EmailTemplatesController extends ListingBaseController
         } else {
             $etplObj = new EmailTemplates($etplCode);
             $langData = $etplObj->getEtpl($etplCode, $lang_id);
+            if (!$langData) {
+                $langData = $etplObj->getEtpl($etplCode, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+            }
+            if (!$langData) {
+                $langData = $etplObj->getEtpl($etplCode);
+            }
         }
         
         if ($langData) {

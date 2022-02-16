@@ -254,7 +254,6 @@ $(document).on("change", ".state", function () {
 
     shopCollectionProducts = function (el) {
         $(dv).prepend(fcom.getLoader());
-        // console.log($(el).parent());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollection'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -269,11 +268,11 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             scollection_id = 0;
         }
-        markSubTabActive();
-        $(dv).prepend(fcom.getLoader());
+        markPopTabActive();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dv).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -282,6 +281,7 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
             $(ctabId).data('collectionId', t.collection_id);
+            shopCollections();
             $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
@@ -315,7 +315,7 @@ $(document).on("change", ".state", function () {
         if (typeof (langId) == "undefined" || langId < 0) {
             return false;
         }
-        markSubTabActive();
+        markPopTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -328,7 +328,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markSubTabActive();
+        markPopTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -533,7 +533,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markSubTabActive();
+        markPopTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();

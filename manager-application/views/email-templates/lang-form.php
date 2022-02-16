@@ -12,8 +12,7 @@ $fld = $langFrm->getField('lang_id');
 $fld->setfieldTagAttribute('onChange', "editLangForm('" . $etplCode . "', this.value);");
 if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
     $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-    $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-    if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
+    if (!empty($translatorSubscriptionKey) && $lang_id != CommonHelper::getDefaultFormLangId()) {
         $fld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
         $fld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangForm(\'' . $etplCode . '\', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                             <svg class="svg" width="18" height="18">
@@ -40,6 +39,13 @@ foreach ($repVarArr as $rVar) {
 }
 $repVarHtml .= '</ul>';
 $fld->value = $repVarHtml;
+
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
 
 ?>
 <div class="modal-header">
