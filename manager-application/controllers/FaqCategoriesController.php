@@ -111,7 +111,7 @@ class FaqCategoriesController extends ListingBaseController
         $frm->fill(array('faqcat_id' => $recordId));
 
         if (0 < $recordId) {
-            $data = FaqCategory::getAttributesByLangId($this->siteLangId, $recordId, array('faqcat_id', 'faqcat_identifier', 'faqcat_active', 'faqcat_type', 'faqcat_featured', 'IFNULL(faqcat_name, faqcat_identifier) AS faqcat_name'), true);
+            $data = FaqCategory::getAttributesByLangId($this->siteLangId, $recordId, array('faqcat_id', 'faqcat_identifier', 'faqcat_active', 'faqcat_type', 'faqcat_featured', 'IFNULL(faqcat_name, faqcat_identifier) AS faqcat_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -188,7 +188,7 @@ class FaqCategoriesController extends ListingBaseController
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                if (!FaqCategory::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
@@ -216,7 +216,7 @@ class FaqCategoriesController extends ListingBaseController
         $faqCatLangFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(FaqCategory::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -299,7 +299,7 @@ class FaqCategoriesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(FaqCategory::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

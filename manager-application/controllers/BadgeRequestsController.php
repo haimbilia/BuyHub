@@ -137,7 +137,7 @@ class BadgeRequestsController extends ListingBaseController {
 
         $shop = [];
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $breqRecordType) {
-            $shop = Shop::getAttributesByLangId($this->siteLangId, key($this->recordData), ['shop_name', 'shop_id', 'shop_updated_on'], true);
+            $shop = Shop::getAttributesByLangId($this->siteLangId, key($this->recordData), ['shop_name','shop_id', 'shop_updated_on'], applicationConstants::JOIN_RIGHT);
         }
 
         $frm = $this->getForm($breqRecordType);

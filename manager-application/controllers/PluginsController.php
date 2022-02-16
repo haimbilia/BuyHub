@@ -179,7 +179,7 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+        $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(plugin_name,plugin_identifier) as plugin_name'], applicationConstants::JOIN_RIGHT);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
@@ -421,6 +421,12 @@ class PluginsController extends ListingBaseController
             $frm->addHTML('', 'plugin_logo', '');            
         }
 
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
         return $frm;
     }
 
@@ -433,14 +439,6 @@ class PluginsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $langId), 'plugin_name');
         $frm->addHtmlEditor(Labels::getLabel('FRM_EXTRA_INFO', $langId), 'plugin_description');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
         return $frm;
     }
 

@@ -164,7 +164,7 @@ class RibbonsController extends ListingBaseController
 
         $dataToFill = [];
         if ($recordId > 0) {
-            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, null, true);
+            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, ['*','IFNULL(badge_name,badge_identifier) as badge_name'], applicationConstants::JOIN_RIGHT);
         }
 
         $frm->fill($dataToFill);

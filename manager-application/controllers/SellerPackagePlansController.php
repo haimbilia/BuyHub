@@ -33,7 +33,7 @@ class SellerPackagePlansController extends ListingBaseController
 
     public function list(int $spackageId)
     {
-        $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
+        $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], applicationConstants::JOIN_RIGHT);
 
         if ($packageData === false) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -305,7 +305,7 @@ class SellerPackagePlansController extends ListingBaseController
                 $title = Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
                 if (isset($urlParts[2])) {
                     $attr = ['COALESCE(spackage_name, spackage_identifier) as spackage_name'];
-                    $data = SellerPackages::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, true);
+                    $data = SellerPackages::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, applicationConstants::JOIN_RIGHT);
                     $title = $data['spackage_name'];
                 }
 

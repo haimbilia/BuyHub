@@ -109,7 +109,7 @@ class ZonesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         if (0 < $recordId) {
-            $data = Zone::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = Zone::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(zone_name,zone_identifier) as zone_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

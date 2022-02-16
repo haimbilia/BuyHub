@@ -112,7 +112,7 @@ class ImportInstructionsController extends ListingBaseController
             }
             $langData = current($translatedData);
         } else {
-            $langData = Extrapage::getAttributesByLangId($langId, $recordId, ['ln.*','IFNULL(epage_label,epage_identifier) as epage_label','IFNULL(epage_content,epage_default_content) as epage_content'], true);           
+            $langData = Extrapage::getAttributesByLangId($langId, $recordId, ['*','IFNULL(epage_label,epage_identifier) as epage_label'], applicationConstants::JOIN_RIGHT);           
         }
 
         if ($langData) {

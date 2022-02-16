@@ -150,10 +150,10 @@ class ContentPagesController extends ListingBaseController
 
         if (0 < $recordId) {
             $arrayFlds = array(
-                'cpage_id', 'cpage_identifier', 'cpage_content', 'cpage_title', 'cpage_layout',
+                'cpage_id', 'cpage_identifier', 'cpage_content', 'IFNULL(cpage_title,cpage_identifier) as cpage_title', 'cpage_layout',
                 'cpage_image_content', 'cpage_image_title'
             );
-            $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, true);
+            $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -180,12 +180,9 @@ class ContentPagesController extends ListingBaseController
 
     public function setup()
     {
-
         $this->checkEditPrivilege();
-
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -200,6 +197,19 @@ class ContentPagesController extends ListingBaseController
             LibHelper::exitWithError($contentPage->getError(), true);
         }
 
+        $newTabLangId = CommonHelper::getDefaultFormLangId();
+        if(0 < $recordId){
+            $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+            if (0 < count($languages)) {
+                foreach ($languages as $langId => $langName) {
+                    if (!ContentPage::getAttributesByLangId($langId, $recordId)) {
+                        $newTabLangId = $langId;
+                        break;
+                    }
+                }
+            } 
+        }
+        
         $recordId = $contentPage->getMainTableRecordId();
         $this->setLangData($contentPage, [$contentPage::tblFld('title') => $post[$contentPage::tblFld('title')]]);
 
@@ -212,16 +222,7 @@ class ContentPagesController extends ListingBaseController
         }
         /* ] */
 
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList();
-        if (0 < count($languages)) {
-            foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
+             
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('pageId', $recordId);
@@ -267,10 +268,10 @@ class ContentPagesController extends ListingBaseController
             }
         } else {
             $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'cpage_content');
-        }
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        }     
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -292,7 +293,7 @@ class ContentPagesController extends ListingBaseController
         $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($this->mainTableRecordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($this->mainTableRecordId, $langId ,CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -404,7 +405,7 @@ class ContentPagesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ContentPage::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

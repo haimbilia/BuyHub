@@ -146,7 +146,7 @@ class OrderStatusController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = OrderStatus::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class', 'orderstatus_type'), true);
+            $data = OrderStatus::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class', 'orderstatus_type'), applicationConstants::JOIN_RIGHT);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);

@@ -12,7 +12,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'editLangData(' . $recordId . ',' . array_key_first($languages) . ');',
+            'onclick' => 'editLangData(' . $recordId . ',' . CommonHelper::getDefaultFormLangId() . ');',
             'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),

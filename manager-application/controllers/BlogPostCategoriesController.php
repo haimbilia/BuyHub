@@ -84,7 +84,7 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $isActive = 0;
         if (0 < $recordId) {
-            $data = BlogPostCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = BlogPostCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -164,7 +164,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(BlogPostCategory::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId,CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
