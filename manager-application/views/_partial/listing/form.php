@@ -16,10 +16,11 @@ if (!$frm->getFormTagAttribute('onsubmit')) {
 $frm->setFormTagAttribute('dir', $formLayout);
 
 $fld = $frm->getField('auto_update_other_langs_data');
-if ($fld != null) {
+if ($fld != null) {    
+    if(!isset($fld->developerTags['colWidthValues'])){
+        $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+    }
     HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;
-    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
 $activeGentab = $activeGentab ?? true;

@@ -46,7 +46,7 @@ class OptionValuesController extends ListingBaseController
 
     public function list(int $optionId)
     {
-        $optionData =  Option::getAttributesByLangId($this->siteLangId, $optionId, ['option_name', 'option_identifier'], true);
+        $optionData =  Option::getAttributesByLangId($this->siteLangId, $optionId, ['option_name', 'option_identifier'], applicationConstants::JOIN_RIGHT);
 
         if ($optionData === false) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -188,23 +188,21 @@ class OptionValuesController extends ListingBaseController
 
         if ($optionId <= 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        } else {
-            $option = new Option();
-            if (!$row = $option->getOption($optionId)) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), true);
-            }
-            $this->set('formTitle', Labels::getLabel('LBL_OPTION_VALUE_SETUP', $this->siteLangId));
         }
+
+        $option = new Option();
+        if (!$row = $option->getOption($optionId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), true);
+        }
+        $this->set('formTitle', Labels::getLabel('LBL_OPTION_VALUE_SETUP', $this->siteLangId));
 
         $optionValueFrm = $this->getForm($optionId, $recordId);
 
         if (0 < $recordId) {
-            $optionValueObj = new OptionValue($recordId);
-            $data = $optionValueObj->getOptionValue($optionId);
+            $data = OptionValue::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('m.*','IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-            $data['optionvalue_name'] = $data['optionvalue_name'][CommonHelper::getDefaultFormLangId()];
+            }           
             $optionValueFrm->fill($data);
         }
 
@@ -469,7 +467,7 @@ class OptionValuesController extends ListingBaseController
                 $title = Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
                 if (isset($urlParts[2])) {
                     $attr = ['COALESCE(option_name, option_identifier) as option_name'];
-                    $data =  Option::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, true);
+                    $data =  Option::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, applicationConstants::JOIN_RIGHT);
                     $title = $data['option_name'];
                 }
 

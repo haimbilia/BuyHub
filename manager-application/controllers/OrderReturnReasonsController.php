@@ -119,7 +119,7 @@ class OrderReturnReasonsController extends ListingBaseController {
         }
 
         if (0 < $recordId) {
-            $data = OrderReturnReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orreason_id', 'orreason_title'), true);
+            $data = OrderReturnReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orreason_id', 'IFNULL(orreason_title,orreason_identifier) as orreason_title'), applicationConstants::JOIN_RIGHT);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);

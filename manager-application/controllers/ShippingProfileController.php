@@ -116,7 +116,7 @@ class ShippingProfileController extends ListingBaseController
 
         $pageTitle = Labels::getLabel('LBL_SHIPPING_PROFILE_FORM', $this->siteLangId);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier', 'shipprofile_default'], true);
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier', 'shipprofile_default'], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -162,7 +162,7 @@ class ShippingProfileController extends ListingBaseController
         $frm = $this->getForm($profileId);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier'], true);
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier'], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

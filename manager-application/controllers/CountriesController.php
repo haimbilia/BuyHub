@@ -126,13 +126,12 @@ class CountriesController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = Countries::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = Countries::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(country_name,country_code) as country_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

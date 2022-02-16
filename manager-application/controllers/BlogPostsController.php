@@ -132,8 +132,8 @@ class BlogPostsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         $frm = $this->getForm($recordId);
-        if (0 < $recordId) {
-            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+        if (0 < $recordId) {           
+            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ln.*','IFNULL(post_title,post_identifier) as post_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -239,23 +239,28 @@ class BlogPostsController extends ListingBaseController
             FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
         } else {
             $record->rewriteUrl($post['urlrewrite_custom']);
-        }
+        } 
+              
         /* ] */
 
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(BlogPost::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
+
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $recordId = $recordId;
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!$row = BlogPost::getAttributesByLangId($langId, $recordId)) {
+                if (!BlogPost::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
+        }       
 
         $this->set('msg', Labels::getLabel('MSG_BLOG_POST_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
@@ -487,6 +492,11 @@ class BlogPostsController extends ListingBaseController
         
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);
         $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $languageArr = Language::getDropDownList();
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
 
@@ -502,11 +512,10 @@ class BlogPostsController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $langId), 'post_author_name');
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'post_description')->requirements()->setRequired(true);
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+       
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;

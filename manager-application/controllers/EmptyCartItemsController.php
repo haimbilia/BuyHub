@@ -113,16 +113,14 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
-
         if (0 < $recordId) {
-            $data = EmptyCartItems::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = EmptyCartItems::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(emptycartitem_title,emptycartitem_identifier) as emptycartitem_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-
-
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->siteLangId));

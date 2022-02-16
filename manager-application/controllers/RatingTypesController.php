@@ -121,11 +121,10 @@ class RatingTypesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = RatingType::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ratingtype_name', 'ratingtype_identifier', 'ratingtype_active'], true);
+            $data = RatingType::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['IFNULL(ratingtype_name,ratingtype_identifier) as ratingtype_name', 'ratingtype_identifier', 'ratingtype_active'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-            (empty($data['ratingtype_name'])) ? $data['ratingtype_name'] = $data['ratingtype_identifier'] : '';
+            }           
             $frm->fill($data);
         }
         $this->set('recordId', $recordId);

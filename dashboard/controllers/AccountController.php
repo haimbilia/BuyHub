@@ -201,7 +201,7 @@ class AccountController extends LoggedUserController
         //send notification to admin
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_USER,
-            'notification_record_id' => $userObj->getMainTableRecordId(),
+            'notification_record_id' => $supplier_request_id,
             'notification_user_id' => $this->userId,
             'notification_label_key' => ($approval_request) ? Notification::NEW_SUPPLIER_APPROVAL_NOTIFICATION : Notification::NEW_SELLER_APPROVED_NOTIFICATION,
             'notification_added_on' => date('Y-m-d H:i:s'),
