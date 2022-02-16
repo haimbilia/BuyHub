@@ -2,6 +2,8 @@
 
 class CountriesController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_COUNTRIES';
+
     public function __construct($action)
     {
         parent::__construct($action);
