@@ -316,12 +316,12 @@
                     $fld = $frm->getField('product_featured');
                     $codFld = $frm->getField('product_cod_enabled');
                     if (null !=  $fld) {
-                        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
+                        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PRODUCT_DISPLAYED_UNDER_FEATURED_ON_STOREFRONT', $langId));
                         echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                     }
 
                     if (null !=  $codFld && $codEnabled) {
-                        HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
+                        HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_AVAILABLE_FOR_CASH_ON_DELIVERY', $langId));
                         echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
                     }
                     ?>
