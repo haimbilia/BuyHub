@@ -2,25 +2,28 @@
 $htm = '';
 if (!empty($fields)) {
     $htm = '<div class="dropdown custom-drag-drop">
-                        <button class="btn btn-brand btn-sm dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-columns"></i>
+                        <button class="btn btn-outline-gray btn-icon dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg class="svg" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#columns">
+                        </use>
+                    </svg>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
                                 <ul class="list-drag-drop" id="sortable">';
-                foreach ($fields as $key => $label) {
-                    $isDef = (in_array($key, $defaultColumns));
-                    $disabled = ($isDef) ? 'disabled' : '';
-                    $checked = ($isDef) ? 'checked="checked"' : '';
+    foreach ($fields as $key => $label) {
+        $isDef = (in_array($key, $defaultColumns));
+        $disabled = ($isDef) ? 'disabled' : '';
+        $checked = ($isDef) ? 'checked="checked"' : '';
 
-                    $htm .= '<li>
+        $htm .= '<li>
                                         <label class="checkbox ' . $disabled . '">
                                             <input class="filterColumn-js" type="checkbox" name="reportColumns" value="' . $key . '" ' . $checked . $disabled . ' onclick=reloadList(false)>
                                             ' . $label . '
                                         </label>
                                         <i class="icn fas fa-grip-lines"></i>
                                     </li>';
-                }
-                $htm .= '</ul>
+    }
+    $htm .= '</ul>
                         </div>
                     </div>';
 }

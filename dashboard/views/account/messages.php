@@ -29,73 +29,71 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
             </div>
         <?php } else { ?>
             <div class="communication-nav">
-                <div class="communication-search">
-                    <?php
-                    $frmSearch->setFormTagAttribute('class', 'form');
-                    $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
+                <div class="card mb-0 h-100">
+                    <div class="communication-search">
+                        <?php
+                        $frmSearch->setFormTagAttribute('class', 'form');
+                        $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 
-                    $fld = $frmSearch->getField('keyword');
-                    $fld->addFieldtagAttribute('class', 'form-control omni-search');
-                    $fld->addFieldtagAttribute('title', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
-                    $fld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
+                        $fld = $frmSearch->getField('keyword');
+                        $fld->addFieldtagAttribute('class', 'form-control omni-search');
+                        $fld->addFieldtagAttribute('title', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
+                        $fld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
 
-                    echo $frmSearch->getFormTag();
-                    echo $frmSearch->getFieldHtml('page');
-                    ?>
-                    <div class="d-flex align-items-center">
-                        <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                        <div class="dropdown">
-                            <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
-                                <span class="icon">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
-                                        </use>
-                                    </svg>
-                                </span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
-                                <div class="form-group">
-                                    <label class="label">
-                                        <?php
-                                        $fld = $frmSearch->getField('date_from');
-                                        echo $fld->getCaption();;
-                                        ?>
-                                    </label>
-                                    <?php echo $frmSearch->getFieldHtml('date_from'); ?>
+                        echo $frmSearch->getFormTag();
+                        echo $frmSearch->getFieldHtml('page');
+                        ?>
+                        <div class="d-flex align-items-center">
+                            <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                            <div class="dropdown">
+                                <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+                                    <span class="icon">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('date_from');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('date_from'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('date_to');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('date_to'); ?>
+                                    </div>
+                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                                 </div>
-                                <div class="form-group">
-                                    <label class="label">
-                                        <?php
-                                        $fld = $frmSearch->getField('date_to');
-                                        echo $fld->getCaption();;
-                                        ?>
-                                    </label>
-                                    <?php echo $frmSearch->getFieldHtml('date_to'); ?>
-                                </div>
-                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                             </div>
                         </div>
+                        </form>
                     </div>
-                    </form>
+                    <?php
+                    $activeIndex = 0;
+                    require_once(CONF_THEME_PATH . '/account/message-search.php');
+
+                    $lastRecord = current(array_reverse($arrListing));
+                    $data = [
+                        'siteLangId' => $siteLangId,
+                        'postedData' => $postedData,
+                        'page' => $page,
+                        'pageCount' => $pageCount,
+                    ];
+                    $this->includeTemplate('_partial/load-more-pagination.php', $data);
+                    ?>
                 </div>
-
-
-                <?php
-                $activeIndex = 0;
-                require_once(CONF_THEME_PATH . '/account/message-search.php');
-
-                $lastRecord = current(array_reverse($arrListing));
-                $data = [
-                    'siteLangId' => $siteLangId,
-                    'postedData' => $postedData,
-                    'page' => $page,
-                    'pageCount' => $pageCount,
-                ];
-                $this->includeTemplate('_partial/load-more-pagination.php', $data);
-                ?>
-
-
             </div>
         <?php
             $doNotshowMessages = true;

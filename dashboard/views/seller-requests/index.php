@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -55,7 +54,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         ];
     }
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-
     <div class="content-body">
         <div class="card card-tabs">
             <div class="card-head">
@@ -146,7 +144,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         </div>
     </div>
 </div>
-
 <script>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;

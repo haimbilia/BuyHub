@@ -208,6 +208,24 @@ $sidebar-width: 250px;
                 font-weight: 500;
             }
         }
+        &-title {
+            display: flex;
+        }
+    }
+    .msg-count {
+        margin-#{$start-direction}: auto;
+        background-color: $brand-color;
+        color: $brand-color-inverse;
+        padding: 0;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 300;
+        font-size: 9px;
     }
     .divider {
         margin: 0px 0;
