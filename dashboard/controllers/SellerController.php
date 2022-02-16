@@ -5669,7 +5669,7 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function pickupAddressForm(int $addrId = 0, $langId = 0)
+    public function pickupAddressForm(int $addrId = 0, int $langId = 0)
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;

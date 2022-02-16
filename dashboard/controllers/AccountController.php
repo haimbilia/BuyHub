@@ -3228,18 +3228,18 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false);
     }
 
-    public function addAddressForm($addr_id)
+    public function addAddressForm(int $addr_id = 0, int $langId = 0)
     {
-        $addr_id = FatUtility::int($addr_id);
-        $addressFrm = $this->getUserAddressForm($this->siteLangId);
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+        $addressFrm = $this->getUserAddressForm($langId);
 
         $stateId = 0;
 
         if ($addr_id > 0) {
-            $address = new Address($addr_id, $this->siteLangId);
+            $address = new Address($addr_id, $langId);
             $data = $address->getData(Address::TYPE_USER, $this->userId);
             if (empty($data)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $langId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
             $stateId = $data['addr_state_id'];
@@ -3249,6 +3249,7 @@ class AccountController extends LoggedUserController
         $this->set('addr_id', $addr_id);
         $this->set('stateId', $stateId);
         $this->set('addressFrm', $addressFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 

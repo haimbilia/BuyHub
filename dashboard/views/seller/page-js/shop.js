@@ -272,7 +272,7 @@ $(document).on("change", ".state", function () {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmodal(t);
+            $.ykmodal(t, false, '');
         });
     };
 
@@ -494,7 +494,6 @@ $(document).on("change", ".state", function () {
     };
 
     pickupAddressForm = function (id, langId = 0) {
-        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
             $.ykmodal(t, false, 'modal-dialog-vertical-md');

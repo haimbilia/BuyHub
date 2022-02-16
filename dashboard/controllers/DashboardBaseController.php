@@ -523,6 +523,7 @@ class DashboardBaseController extends FatController
     {
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAddress');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $siteLangId), 'lang_id', Language::getAllNames(), $siteLangId, array(), '');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $siteLangId));
@@ -539,8 +540,6 @@ class DashboardBaseController extends FatController
         $frm->addRequiredField(Labels::getLabel('FRM_CITY', $siteLangId), 'addr_city');
 
         $zipFld = $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'addr_zip');
-        /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-        $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId)); */
 
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
@@ -548,13 +547,6 @@ class DashboardBaseController extends FatController
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
 
         $frm->addHiddenField('', 'addr_id');
-        if ($btnOrderFlip) {
-            $frm->addButton('', 'btn_cancel', Labels::getLabel('FRM_CANCEL', $siteLangId));
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE', $siteLangId));
-            return $frm;
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $siteLangId));
-        $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $siteLangId));
         return $frm;
     }
 

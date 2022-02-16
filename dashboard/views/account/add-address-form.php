@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($addressFrm, 6);
+$addressFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+$addressFrm->setFormTagAttribute('dir', $formLayout);
 $addressFrm->setFormTagAttribute('id', 'addressFrm');
-$addressFrm->setFormTagAttribute('class', 'form');
-$addressFrm->developerTags['colClassPrefix'] = 'col-sm-4 col-md-';
-$addressFrm->developerTags['fld_default_col'] = 4;
 $addressFrm->setFormTagAttribute('onsubmit', 'setupAddress(this); return(false);');
+$addressFrm->setFormTagAttribute('data-onclear', "addAddressForm(" . $addr_id . ");");
 
 $countryFld = $addressFrm->getField('addr_country_id');
 $countryFld->setFieldTagAttribute('id', 'addr_country_id');
@@ -11,41 +12,26 @@ $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $
 
 $stateFld = $addressFrm->getField('addr_state_id');
 $stateFld->setFieldTagAttribute('id', 'addr_state_id');
-$cancelFld = $addressFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('onclick', 'searchAddresses()');
-$cancelFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
-$cancelFld->developerTags['col'] = 2;
-$cancelFld->developerTags['noCaptionTag'] = true;
 
-$submitFld = $addressFrm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-$submitFld->developerTags['col'] = 2;
-$submitFld->developerTags['noCaptionTag'] = true;
+$langFld = $addressFrm->getField('lang_id');
+$langFld->setFieldTagAttribute('onChange', "addAddressForm(" . $addr_id . ", this.value);");
 ?>
-<!-- <div class="tabs">
-    <ul>
-        <li>
-            <a href="javascript:void(0);" onclick="searchAddresses()"><?php echo Labels::getLabel('LBL_My_Addresses', $siteLangId); ?></a>
-        </li>
-<?php //if ($addr_id > 0) { 
-?>
-        <li class="is-active">
-            <a href="javascript:void(0);" onclick="addAddressForm(<?php echo $addr_id; ?>)">
-            <?php echo Labels::getLabel('LBL_Update_Address', $siteLangId); ?>
-            </a>
-        </li>
-<?php //} else { 
-?>
-        <li class="is-active">
-            <a href="javascript:void(0);" onclick="addAddressForm(0)">
-                <?php echo Labels::getLabel('LBL_Add_new_address', $siteLangId); ?>
-            </a>
-        </li>
-<?php //} 
-?>
-    </ul>
-</div> -->
-<div class="container--addresses"> <?php echo $addressFrm->getFormHtml(); ?> </div>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_ADDRESS_SETUP'); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs sectionbody space">
+        <div class="row">
+            <div class="col-md-12">
+                <?php echo $addressFrm->getFormHtml(); ?>
+            </div>
+        </div>
+    </div>
+
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>
 <script language="javascript">
     $(document).ready(function() {
         getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
