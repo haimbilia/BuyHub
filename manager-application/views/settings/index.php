@@ -337,7 +337,7 @@
                                 </div>
                             </a>
                         <?php } ?>
-                        <?php if ($objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                        <?php if ($objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('EmailTemplates'); ?>">
                                 <div class="setting__icon">
                                     <span class="icon">
