@@ -94,13 +94,16 @@ class Language extends MyAppModel
         if ($getLayoutDirection) {
             return json_decode($getLayoutDirection, true);
         }
-        
+
         $langData = self::getAttributesById($langId, array('language_layout_direction'));
-        
+
         if (false != $langData) {
-            CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), CacheHelper::TYPE_LANGUAGE);
-            return $langData['language_layout_direction'];
+            $layoutDir = (!empty($langData['language_layout_direction'])) ? $langData['language_layout_direction'] : 'ltr';
+            CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($layoutDir), CacheHelper::TYPE_LANGUAGE);
+            return $layoutDir;
         }
+
+        return 'ltr';
     }
 
     /**

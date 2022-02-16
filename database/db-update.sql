@@ -1636,3 +1636,13 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 
 UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'CONF_ADMIN_PAGESIZE';
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CONFIGURE_AND_SETUP_E-COMMERCE_STORE', 1, 'Settings, Account, Product, Logos, Affiliate, Commission, Referals', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CUSTOMIZE_TEXT_OF_VARIOUS_ELEMENTS', 1, 'Customize labels to display text of various elements generated for your end users.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_MANAGE_HELPING_CONTENT_FOR_END_USERS', 1, 'Page Title, Alerts, Page content, Helping text', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

@@ -3,10 +3,9 @@ function setSiteDefaultLang(langId) {
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
         function (res) {
-            $.cookie('defaultAdminSiteLang', res.langId);
             setTimeout(function () {
                 window.location.reload(1);
-            }, 5000);
+            }, 6000);
         }
     );
 }

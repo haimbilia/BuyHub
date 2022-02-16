@@ -223,7 +223,7 @@ class BrandsController extends ListingBaseController
     {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
-
+        
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
