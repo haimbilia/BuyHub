@@ -2,6 +2,8 @@
 
 class ImportInstructionsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_IMPORT_INSTRUCTIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class ImportInstructionsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_IMPORT_INSTRUCTIONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->set('pageData', $pageData);
@@ -202,7 +204,7 @@ class ImportInstructionsController extends ListingBaseController
 
         $frm->addRequiredField(Labels::getLabel('FRM_SECTION_TITLE', $langId), 'epage_label');
         $frm->addHtmlEditor(Labels::getLabel('FRM_SECTION_CONTENT', $langId), 'epage_content');
-        
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
@@ -224,7 +226,7 @@ class ImportInstructionsController extends ListingBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('importInstructionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 

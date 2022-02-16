@@ -1,18 +1,21 @@
 <?php
 
-trait SellerUsers {
+trait SellerUsers
+{
 
-    protected function getUserSearchForm() {
+    protected function getUserSearchForm()
+    {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'page', 1);
         $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
-        
+
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
-    public function users() {
+    public function users()
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             $msg = Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId);
             if (FatUtility::isAjaxCall()) {
@@ -35,7 +38,8 @@ trait SellerUsers {
         $this->_template->render(true, true);
     }
 
-    public function searchUsers() {
+    public function searchUsers()
+    {
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -46,16 +50,17 @@ trait SellerUsers {
             $cnd->attachCondition('credential_email', 'LIKE', '%' . $keyword . '%');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('user_id', 'user_name', 'credential_username', 'credential_email', 'credential_active'));
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
-    private function getSubUserForm($userId = 0) {
+    private function getSubUserForm($userId = 0)
+    {
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'user_id', $userId);
         $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->siteLangId), 'user_name');
@@ -95,7 +100,8 @@ trait SellerUsers {
         return $frm;
     }
 
-    public function addSubUserForm($userId = 0) {
+    public function addSubUserForm($userId = 0)
+    {
         $userId = FatUtility::int($userId);
         $frm = $this->getSubUserForm($userId);
         $stateId = 0;
@@ -124,7 +130,8 @@ trait SellerUsers {
         $this->_template->render(false, false);
     }
 
-    public function setupSubUser() {
+    public function setupSubUser()
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -197,7 +204,8 @@ trait SellerUsers {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeUserStatus() {
+    public function changeUserStatus()
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -216,7 +224,8 @@ trait SellerUsers {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function toggleSellerUserStatus() {
+    public function toggleSellerUserStatus()
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -225,7 +234,7 @@ trait SellerUsers {
         $userIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
         if (empty($userIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -240,7 +249,8 @@ trait SellerUsers {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateUserStatus($userId, $status) {
+    private function updateUserStatus($userId, $status)
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -249,7 +259,7 @@ trait SellerUsers {
         $userId = FatUtility::int($userId);
         if (1 > $userId || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -261,7 +271,8 @@ trait SellerUsers {
         }
     }
 
-    public function subUserPasswordForm($userId = 0) {
+    public function subUserPasswordForm($userId = 0)
+    {
         $userId = FatUtility::int($userId);
         $frm = $this->getChangePasswordForm($userId);
 
@@ -269,7 +280,8 @@ trait SellerUsers {
         $this->_template->render(false, false);
     }
 
-    private function getChangePasswordForm($userId) {
+    private function getChangePasswordForm($userId)
+    {
         $frm = new Form('changePwdFrm');
         $frm->addHiddenField('', 'user_id', $userId);
         $newPwd = $frm->addPasswordField(Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId), 'new_password');
@@ -277,8 +289,8 @@ trait SellerUsers {
         $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         $conNewPwd = $frm->addPasswordField(
-                Labels::getLabel('LBL_CONFIRM_NEW_PASSWORD', $this->siteLangId),
-                'conf_new_password'
+            Labels::getLabel('LBL_CONFIRM_NEW_PASSWORD', $this->siteLangId),
+            'conf_new_password'
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
@@ -287,7 +299,8 @@ trait SellerUsers {
         return $frm;
     }
 
-    public function updateUserPassword() {
+    public function updateUserPassword()
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -322,13 +335,15 @@ trait SellerUsers {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function searchPermissionForm() {
+    private function searchPermissionForm()
+    {
         $frm = new Form('frmPrmSrchFrm');
         $frm->addHiddenField('', 'user_id');
         return $frm;
     }
 
-    private function getAllAccessForm() {
+    private function getAllAccessForm()
+    {
         $permissionArr = UserPrivilege::getPermissionArr($this->siteLangId);
         $frm = new Form('frmAllAccess');
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->siteLangId), 'permissionForAll', $permissionArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
@@ -337,7 +352,8 @@ trait SellerUsers {
         return $frm;
     }
 
-    public function userPermissions($userId = 0) {
+    public function userPermissions($userId = 0)
+    {
         $userId = FatUtility::int($userId);
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userId == UserAuthentication::getLoggedUserId() || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
@@ -356,7 +372,8 @@ trait SellerUsers {
         $this->_template->render();
     }
 
-    public function userRoles() {
+    public function userRoles()
+    {
         $frmSearch = $this->searchPermissionForm();
         $post = $frmSearch->getFormDataFromArray(FatApp::getPostedData());
         $userId = FatUtility::int($post['user_id']);
@@ -373,7 +390,8 @@ trait SellerUsers {
         $this->_template->render(false, false);
     }
 
-    public function updatePermission($moduleId, $permission) {
+    public function updatePermission($moduleId, $permission)
+    {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
             Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -418,5 +436,4 @@ trait SellerUsers {
         $this->set('moduleId', $moduleId);
         $this->_template->render(false, false, 'json-success.php');
     }
-
 }

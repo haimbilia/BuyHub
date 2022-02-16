@@ -5068,6 +5068,15 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
+    public function addSpecialPriceForm()
+    {
+        $this->set('frm', SellerProduct::specialPriceForm($this->siteLangId));
+        $this->set('includeTabs', false);
+        $this->set('formTitle', Labels::getLabel('LBL_BIND_SPECIAL_PRICE', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     public function specialPrice($selProd_id = 0)
     {
         $this->userPrivilege->canViewSpecialPrice(UserAuthentication::getLoggedUserId());
@@ -5669,7 +5678,7 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function pickupAddressForm(int $addrId = 0, $langId = 0)
+    public function pickupAddressForm(int $addrId = 0, int $langId = 0)
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;

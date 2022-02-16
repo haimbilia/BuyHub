@@ -81,7 +81,7 @@
         }
 
         if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass)
+            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass);
         }
     }
 

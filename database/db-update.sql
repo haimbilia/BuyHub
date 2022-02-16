@@ -1350,9 +1350,9 @@ INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_la
 (1, 'MANAGE_SHIPPING_ZONES', -1, 'Manage shipping zones', 'Shipping zones are the geographic areas where you offer shipping services', 'Zone must be linked with countries before setting shipping profiles', '', '{countriesPage}'),
 (2, 'MANAGE_STATES', -1, 'Manage states', 'Manage states of active countries where you want to do business', 'Note: For example, If USA is an active country, and California and Arizona are active states then you will be able to do business only in these two states within USA.', '', '');
 
-INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', '1', 'Checking this option will show this product in Featured products on the website.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Checking this option will show this product in Featured products on the website.';
-INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_COD_INFO', '1', 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.';
-INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_TAG_INFO', '1', 'This will be used by Buyer to search the product. Type the tag and click on enter to add another tag', '1') ON DUPLICATE KEY UPDATE label_caption = ' This will be used by Buyer to search the product. Type the tag and click on enter to add another tag';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DISPLAYED_UNDER_FEATURED_ON_STOREFRONT', '1', 'Checking this option will show this product in Featured products on the website.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Checking this option will show this product in Featured products on the website.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_AVAILABLE_FOR_CASH_ON_DELIVERY', '1', 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_CREATE_KEYWORD_TAGS_TO_MAKE_IT_EASIER_FOR_BUYERS', '1', 'This will be used by Buyer to search the product. Type the tag and click on enter to add another tag', '1') ON DUPLICATE KEY UPDATE label_caption = ' This will be used by Buyer to search the product. Type the tag and click on enter to add another tag';
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_BRANDS', '-1', 'Manage Brands', 'Add and manage product brands. Upload logos and banners to display on the brand detail page at the storefront.', 'Brands will be visible at storefront after they are linked with Product(s).', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_SHOPS', '-1', 'Manage Shops', 'View and manage sellers’ registered shops information.', 'Buyers look over shop details on the Shop detail page.', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_CATEGORIES', '-1', 'Manage Categories', 'Add and manage product categories. Upload category logos and banners to display on the category detail page at storefront.', 'Categories will be visible at storefront after they are linked with Product(s).', '', '');
@@ -1636,3 +1636,13 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 
 UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'CONF_ADMIN_PAGESIZE';
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CONFIGURE_AND_SETUP_E-COMMERCE_STORE', 1, 'Settings, Account, Product, Logos, Affiliate, Commission, Referals', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_CUSTOMIZE_TEXT_OF_VARIOUS_ELEMENTS', 1, 'Customize labels to display text of various elements generated for your end users.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_MANAGE_HELPING_CONTENT_FOR_END_USERS', 1, 'Page Title, Alerts, Page content, Helping text', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SYSTEM_CONFIGURATIONS', $siteLangId); ?></h6>
-                                    <span>Settings, Account, Product, Logos, Affiliate, Commission, Referals</span>
+                                    <span><?php echo Labels::getLabel('MSG_CONFIGURE_AND_SETUP_E-COMMERCE_STORE', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_PLUGINS', $siteLangId); ?></h6>
-                                    <span>Addons, Third party services</span>
+                                    <span><?php echo Labels::getLabel('MSG_ADDONS,_THIRD_PARTY_SERVICES', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_LABELS', $siteLangId); ?></h6>
-                                    <span>Manage application labels</span>
+                                    <span><?php echo Labels::getLabel('MSG_CUSTOMIZE_TEXT_OF_VARIOUS_ELEMENTS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -116,7 +116,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_PAGES_LANGUAGE_DATA', $siteLangId); ?></h6>
-                                    <span>Manage Pages Language Data</span>
+                                    <span><?php echo Labels::getLabel('MSG_MANAGE_HELPING_CONTENT_FOR_END_USERS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_THEME', $siteLangId); ?></h6>
-                                    <span>Fonts, color, styling</span>
+                                    <span><?php echo Labels::getLabel('MSG_ADJUST_COLORS,_FONTS,_STYLING,_LAYOUT', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_CURRENCIES', $siteLangId); ?></h6>
-                                    <span>Currency, Symbol, conversions</span>
+                                    <span><?php echo Labels::getLabel('MSG_MANAGE_CURRENCY_CONVERSION,SYMBOL,_BASE_CURRENCY', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SITE_COMMISSION', $siteLangId); ?></h6>
-                                    <span>Category, Seller, product, commision fees</span>
+                                    <span><?php echo Labels::getLabel('MSG_ADMIN_COMMISION_INCLUDING_PRODUCT,_CATEGORIES,_USERS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_AFFILIATE_COMMISSION', $siteLangId); ?></h6>
-                                    <span>Category, Users, Commision fees</span>
+                                    <span><?php echo Labels::getLabel('MSG_AFFILIATE_COMMISION_INCLUDING_PRODUCT_CATEGORY,_AFFILIATE_USERS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SELLER_PACKAGES', $siteLangId); ?></h6>
-                                    <span>Subscription, Packages for seller</span>
+                                    <span><?php echo Labels::getLabel('MSG_SUBSCRIPTION_PLANS_AVAILABLE_FOR_SELLERS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -218,7 +218,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_MANAGE_SHIPPING_ZONES', $siteLangId); ?></h6>
-                                    <span>Manage country zones</span>
+                                    <span><?php echo Labels::getLabel('MSG_SETUP_SHIPPING_ZONES_AS_PER_SHIPPING_OPTIONS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -234,7 +234,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_COUNTRIES', $siteLangId); ?></h6>
-                                    <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                    <span><?php echo Labels::getLabel('MSG_COUNTRIES_TO_OFFER_SHIPPING,_TAXES,_PRODUCTS_LISTING', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -251,7 +251,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_STATES', $siteLangId); ?></h6>
-                                    <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                    <span><?php echo Labels::getLabel('MSG_COVERING_COUNTRIES_TO_OFFER_SHIPPING,_TAXES,_PRODUCTS_LISTING', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -268,7 +268,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_ABUSIVE_KEYWORDS', $siteLangId); ?></h6>
-                                    <span>Configure Abusive keywords</span>
+                                    <span><?php echo Labels::getLabel('MSG_LIST_OF_WORDS_TO_MARK_SPAM', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -285,7 +285,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_EMPTY_CART', $siteLangId); ?></h6>
-                                    <span>Items for empty cart page</span>
+                                    <span><?php echo Labels::getLabel('MSG_MANAGE_LINKS_TO_EMPTRY_CART_SCREEN', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -301,7 +301,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS', $siteLangId); ?></h6>
-                                    <span>Shop report reasons management</span>
+                                    <span><?php echo Labels::getLabel('MSG_LIST_OF_REASONS_TO_REPORT_SHOP_ISSUES', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -317,7 +317,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></h6>
-                                    <span>Can be used while product reviews</span>
+                                    <span><?php echo Labels::getLabel('MSG_LIST_OF_RATINGS_AVAILABLE_FOR_BUYERS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -333,7 +333,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SMS_TEMPLATES', $siteLangId); ?></h6>
-                                    <span>Can be used while sending sms</span>
+                                    <span><?php echo Labels::getLabel('MSG_LIST_OF_SMS_NOTIFICATIONS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -349,7 +349,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_EMAIL_TEMPLATES', $siteLangId); ?></h6>
-                                    <span>Can be used while sending sms</span>
+                                    <span><?php echo Labels::getLabel('MSG_LIST_OF_EMAIL_NOTIFICATIONS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -366,7 +366,7 @@
                                 </div>
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $siteLangId); ?></h6>
-                                    <span>Seller Approval Form Settings</span>
+                                    <span><?php echo Labels::getLabel('MSG_SELLER_INFORMATION_FORM_FIELDS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>

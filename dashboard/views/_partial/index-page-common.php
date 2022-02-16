@@ -1,6 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $otherTabsData = isset($otherTabsData) && is_array($otherTabsData) ? $otherTabsData : [];
+$newRecordBtn = $newRecordBtn ?? false;
+$newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
 $otherButtons = isset($otherButtons) && is_array($otherButtons) ? $otherButtons : [];
 $listingLabel = isset($listingLabel) ? $listingLabel : "";
 $pagesTabsData = ([
@@ -10,6 +12,8 @@ $pagesTabsData = ([
     'canEdit' => $canEdit,
     'otherButtons' => $otherButtons,
     'headingLabel' => $headingLabel,
+    'newRecordBtn' => $newRecordBtn,
+    'newRecordBtnAttrs' => $newRecordBtnAttrs,
 ] + $otherTabsData);
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
