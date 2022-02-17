@@ -24,7 +24,7 @@ if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
 }
 
 $fld = $langFrm->getField('test_email');
-$fld->value = '<a class="btn btn-link btn-test" href="javascript:void(0)" onclick="sendTestEmail()">' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $siteLangId) . '</a>';
+$fld->value = '<a class="btn btn-outline-brand btn-test" href="javascript:void(0)" onclick="sendTestEmail()">' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $siteLangId) . '</a>';
 
 $fld = $langFrm->getField('etpl_replacements');
 $repVarArr = array_filter(explode("<br>", $fld->value));
