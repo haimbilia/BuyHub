@@ -51,7 +51,7 @@ class CustomProductsController extends SellerBaseController
         $productOptions = [];
         if (1 < $recordId) {
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
-                $productData = ProductRequest::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+                $productData = ProductRequest::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, applicationConstants::JOIN_RIGHT);
                 if (!empty($productData['preq_lang_data'])) {
                     $preqLangData = json_decode($productData['preq_lang_data'], true);
                     $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
@@ -62,7 +62,7 @@ class CustomProductsController extends SellerBaseController
                     $productData = array_merge($productData, current($translatedData));
                 }
             } else {
-                $productData = ProductRequest::getAttributesByLangId($langId, $recordId, null, true);
+                $productData = ProductRequest::getAttributesByLangId($langId, $recordId, null, applicationConstants::JOIN_RIGHT);
                 if ($productData && !empty($productData['preq_lang_data'])) {
                     $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
                 }
@@ -107,7 +107,7 @@ class CustomProductsController extends SellerBaseController
             $productData['product_tags'] = json_encode($tagData);
             if (1 < $productData['preq_brand_id']) {
                 $productData['product_brand_id'] = $productData['preq_brand_id'];
-                $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $brandData) {
                     $fld = $frm->getField('product_brand_id');
                     $fld->options = [$productData['preq_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
@@ -117,7 +117,7 @@ class CustomProductsController extends SellerBaseController
 
             if (!empty($productData['preq_prodcat_id'])) {
                 $productData['ptc_prodcat_id'] = $productData['preq_prodcat_id'];
-                $catData = ProductCategory::getAttributesByLangId($langId, $productData['preq_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                $catData = ProductCategory::getAttributesByLangId($langId, $productData['preq_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $catData) {
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
@@ -133,7 +133,7 @@ class CustomProductsController extends SellerBaseController
 
             //ptt_taxcat_id        
             if (!empty($productData['ptt_taxcat_id'])  && 0 < $productData['ptt_taxcat_id']) {
-                $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, true, applicationConstants::YES, applicationConstants::NO);
+                $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if ($catData) {
                     $fld = $frm->getField('ptt_taxcat_id');
                     $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
@@ -141,7 +141,7 @@ class CustomProductsController extends SellerBaseController
             }
 
             if (!empty($productData['ps_from_country_id'])  && 0 < $productData['ps_from_country_id']) {
-                $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
+                $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
                 if ($countryData) {
                     $fld = $frm->getField('ps_from_country_id');
                     $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];

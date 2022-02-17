@@ -139,7 +139,8 @@ class FaqCategoriesController extends ListingBaseController
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $langId), 'faqcat_type', $faqCatTypeArr, '', array(), '');
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
-        if (!empty($translatorSubscriptionKey)) {
+        $languageArr = Language::getAllNames();
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
@@ -246,7 +247,6 @@ class FaqCategoriesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
-
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
         if ($recordId == 0 || $langId == 0) {
@@ -256,11 +256,6 @@ class FaqCategoriesController extends ListingBaseController
         $frm->addHiddenField('', 'faqcat_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $langId), 'faqcat_name');
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
 
         return $frm;
     }

@@ -111,7 +111,7 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'IFNULL(brand_name,brand_identifier) as brand_name'), true);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -445,7 +445,7 @@ class BrandsController extends ListingBaseController
         $prodBrandLangFrm = $this->getLangForm($brand_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($brand_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($brand_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }

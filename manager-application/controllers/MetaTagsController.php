@@ -716,7 +716,7 @@ class MetaTagsController extends ListingBaseController
         $fld->htmlAfterField = '<small>' . Labels::getLabel('TXT_FOR_EXAMPLE:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
        
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 

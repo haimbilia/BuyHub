@@ -355,7 +355,7 @@ class SellerProductsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($recordObj::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($selProdId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($selProdId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

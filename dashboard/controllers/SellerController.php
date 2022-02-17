@@ -786,7 +786,7 @@ class SellerController extends SellerBaseController
 
         $oldStatus = OrderProduct::getAttributesById($op_id, 'op_status_id');
         if ($status == $oldStatus) {
-            $msg = current(OrderStatus::getAttributesByLangId($this->siteLangId, $status, ['COALESCE(orderstatus_name, orderstatus_identifier) as orderstatus_name'], true));
+            $msg = current(OrderStatus::getAttributesByLangId($this->siteLangId, $status, ['COALESCE(orderstatus_name, orderstatus_identifier) as orderstatus_name'], applicationConstants::JOIN_RIGHT));
             Message::addErrorMessage(sprintf(Labels::getLabel('MSG_ALREADY_%S', $this->siteLangId), $msg));
             FatUtility::dieJsonError(Message::getHtml());
         }

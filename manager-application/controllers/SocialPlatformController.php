@@ -121,7 +121,7 @@ class SocialPlatformController extends ListingBaseController
         $langFrm = $this->getLangForm($splatform_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -179,7 +179,7 @@ class SocialPlatformController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($splatform_id)) {
+            if (false === $updateLangDataobj->updateTranslatedData($splatform_id, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -425,12 +425,11 @@ class SocialPlatformController extends ListingBaseController
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
         
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
-        
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');        
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && $lang_id == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         

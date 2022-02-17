@@ -649,20 +649,21 @@ $(window).keydown(function (e) {
 
 $(document).on("click", "#quickSearchCtrlJs", function () {
     if ($(this).is(":checked")) {
-        $.cookie("quickSearchCtrlJs", 1);
+        $.cookie("quickSearchCtrlJs", 1, {expires: 30, path: siteConstants.webrootfront});
         $("#search-main").modal("hide");
     } else {
-        $.cookie("quickSearchCtrlJs", 0);
+        $.cookie("quickSearchCtrlJs", 0, {path: siteConstants.webrootfront});
     }
 });
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
     if ($(this).hasClass('active')) {
-        $.removeCookie("adminSidebar");
+        // $.removeCookie("adminSidebar");
+        $.cookie('adminSidebar', 0, { expires: 30, path: siteConstants.webrootfront });
         $("body").attr("data-sidebar-minimize", "on");
         $(this).removeClass("active");
     } else {
-        $.cookie('adminSidebar', true, { expires: 30 });
+        $.cookie('adminSidebar', true, { expires: 30, path: siteConstants.webrootfront });
         $("body").attr("data-sidebar-minimize", "off");
         $(this).addClass("active");
     }

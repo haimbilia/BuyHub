@@ -157,7 +157,7 @@ class LabelsController extends ListingBaseController
         $srch = Labels::getSearchObject();
         $srch->addCondition('lbl.label_key', '=', $labelKey);
         if (0 < $autoFillLangData) {
-            $srch->addCondition('lbl.label_lang_id', '=', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+            $srch->addCondition('lbl.label_lang_id', '=', CommonHelper::getDefaultFormLangId());
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -171,11 +171,11 @@ class LabelsController extends ListingBaseController
 
         if (0 < $autoFillLangData) {
             $languages = Language::getAllNames();
-            $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+            $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
             unset($languages[$siteDefaultLangId]);
             foreach (array_keys($languages) as $langId) {
                 $updateLangDataobj = new TranslateLangData(Labels::DB_TBL);
-                $translatedData = $updateLangDataobj->directTranslate(['label_caption' => $record[$siteDefaultLangId]['label_caption']], $langId);
+                $translatedData = $updateLangDataobj->directTranslate(['label_caption' => $record[$siteDefaultLangId]['label_caption']], $langId, CommonHelper::getDefaultFormLangId() );
                 if (false === $translatedData) {
                     LibHelper::exitWithError($updateLangDataobj->getError(), true);
                 }
