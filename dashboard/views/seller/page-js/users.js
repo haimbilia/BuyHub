@@ -34,7 +34,8 @@ $(document).ready(function () {
 
     addUserForm = function (id) {
         fcom.ajax(fcom.makeUrl('Seller', 'addSubUserForm', [id]), '', function (t) {
-            $.facebox(t);
+            fcom.removeLoader();
+            $.ykmodal(t);
             stylePhoneNumberFld();
         });
     };
@@ -44,9 +45,9 @@ $(document).ready(function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupSubUser'), data, function (t) {
-            $.mbsmessage.close();
-            $.facebox.close();
+            fcom.closeAlertMessage();
             reloadList();
+            closeForm();
         });
     };
 

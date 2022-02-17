@@ -30,7 +30,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
     $sr_no++;
     $tr = $tbl->appendElement('tr', array( 'id' => $row['adsbatch_id'], 'class' => '' ));
@@ -110,7 +110,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'href' => 'javascript:void(0)',
                             'title' => Labels::getLabel('LBL_EDIT', $siteLangId),
-                            'onclick' => "batchForm(" . $row['adsbatch_id'] . ")"
+                            'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
                         ],
                         '<i class="fa fa-edit"></i>',
                         true

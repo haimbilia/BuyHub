@@ -40,7 +40,7 @@ $identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_
             </a>
         </nav>
     </div>
-    <div class="form-edit-body loaderContainerJs sectionbody space">
+    <div class="form-edit-body loaderContainerJs">
         <div class="row" id="shopFormChildBlockJs">
             <div class="col-md-12">
                 <?php echo $colectionForm->getFormHtml(); ?>

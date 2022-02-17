@@ -20,12 +20,14 @@ $(document).ready(function(){
 		$("#ordersListing").html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Buyer','orderSearchListing'), data, function(res){
 			$("#ordersListing").html(res);
+			fcom.removeLoader();
 		}); 
 	};
 	
 	personalInfo = function(el){
 		$(tabListing).html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Account','personalInfo'), '', function(res){
+			fcom.removeLoader();
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');

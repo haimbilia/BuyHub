@@ -1,7 +1,12 @@
 /* Reset result on clear(cross) icon on keyword search field. */
 $(document).on("search", "input[type='search']", function () {
-    if ("" == $(this).val()) {
+    if ("" == $(this).val() && typeof searchRecords === 'function') {
         searchRecords(document.frmRecordSearch);
+    }
+    
+    var callback = $(this).data('callback');
+    if ("" == $(this).val() && typeof callback !== 'undefined') {
+        eval(callback);
     }
 });
 /* Reset result on clear(cross) icon on keyword search field. */

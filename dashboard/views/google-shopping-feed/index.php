@@ -8,8 +8,18 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
     <?php
     $data = [
         'headingLabel' =>  $pluginName,
-        'siteLangId' => $siteLangId,
+        'siteLangId' => $siteLangId
     ];
+
+    if (!empty($merchantId) && !empty($serviceAccInfo)) {
+        $data['newRecordBtn'] = true;
+        $data['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'batchForm(0)',
+                'title' => Labels::getLabel('BTN_NEW_BATCH', $siteLangId)
+            ],
+        ];
+    }
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
@@ -40,20 +50,12 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                        <?php
+                        if (!empty($frmSearch)) {
+                            require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
+                        } ?>
                         <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <?php echo Labels::getLabel('LBL_BATCH_SETUP', $siteLangId); ?>
-                            </h5>
-                            <div id="batchSetup"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="listing"></div>
+                            <div id="listing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
                         </div>
                     </div>
                 </div>
