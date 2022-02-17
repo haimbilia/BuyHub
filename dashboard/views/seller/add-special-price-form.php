@@ -2,8 +2,8 @@
 HtmlHelper::formatFormFields($frm);
 $selProdId = (!empty($data['splprice_selprod_id']) ? $data['splprice_selprod_id'] : 0);
 
-$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'updateSpecialPriceRow(this, ' . $selProdId . '); return(false);');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addNew()");
 
 $frm->setFormTagAttribute('id', 'frmAddSpecialPrice-' . $selProdId);

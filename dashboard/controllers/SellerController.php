@@ -5076,7 +5076,7 @@ class SellerController extends SellerBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
+    
     public function specialPrice($selProd_id = 0)
     {
         $this->userPrivilege->canViewSpecialPrice(UserAuthentication::getLoggedUserId());
