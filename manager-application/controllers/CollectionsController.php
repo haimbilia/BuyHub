@@ -754,7 +754,7 @@ class CollectionsController extends ListingBaseController
 
     private function saveBannerLocation($post)
     {
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
         $blocationId = 0;
         $bannerLocation = BannerLocation::getDataByCollectionId($post['collection_id'], 'blocation_id');
         if (!empty($bannerLocation)) {

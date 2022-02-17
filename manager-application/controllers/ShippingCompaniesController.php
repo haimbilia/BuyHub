@@ -115,7 +115,7 @@ class ShippingCompaniesController extends ListingBaseController
         $langFrm = $this->getLangForm($scompany_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(ShippingCompanies::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($scompany_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($scompany_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -169,7 +169,7 @@ class ShippingCompaniesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ShippingCompanies::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($scompany_id)) {
+            if (false === $updateLangDataobj->updateTranslatedData($scompany_id, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

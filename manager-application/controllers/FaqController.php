@@ -336,18 +336,17 @@ class FaqController extends ListingBaseController
      */
     private function getLangForm(int $langId = 0)
     {
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        
         $langId = 1 > $langId ? $siteLangId : $langId;
         $frm = new Form('frmFaqLang');
-        $frm->addHiddenField('', 'faq_id');
-        $siteLangId = $this->siteLangId;
+        $frm->addHiddenField('', 'faq_id');     
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'faq_title');
         $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'faq_content');
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
