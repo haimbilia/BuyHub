@@ -104,50 +104,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                         </div>
                     <?php } ?>
-                    <div id="top-filters" class="page-sort hide_on_no_product">
-                        <ul>
-                            <!-- <li>
-                            <?php if (!(UserAuthentication::isUserLogged()) || (UserAuthentication::isUserLogged() && (User::isBuyer()))) { ?>
-                                <a href="javascript:void(0)" onclick="saveProductSearch()" class="btn btn-brand btn--filters-control saveSearch-js">
-                                    <i class="icn fas fa-file-download d-md-none"></i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></a>
-                            <?php } ?>
-                        </li> -->
-                            <li><?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
-                            <li class="page-views">
-                                <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gridview">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </a>
-                            </li>
-                            <li class="page-views">
-                                <a href="javascript:void(0);" data-vtype="list" class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#listview">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </a>
-                            </li>
-                            <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
-                                <li class="page-views">
-                                    <a href="javascript:void(0);" data-vtype="map" class="listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>">
-                                        <i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mapview">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                    </a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                        <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
-                    </div>
                 </div>
                 <div class="collection-search-bottom">
                     <?php if (isset($pageTitle)) { ?>
@@ -174,6 +130,45 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         <button type="button" class="btn btn-clear-all" id="resetAll" onClick="resetListingFilter()" style="display:none;">
                             <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
                         </button>
+                    </div>
+                    <div id="top-filters" class="page-sort hide_on_no_product">
+                        <ul>
+                            <li>
+                                <?php if (!(UserAuthentication::isUserLogged()) || (UserAuthentication::isUserLogged() && (User::isBuyer()))) { ?>
+                                    <button class="btn btn-black btn-filters-control saveSearch-js" type="button" onclick="saveProductSearch()">
+                                        <i class="icn fas fa-file-download d-md-none"></i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></button>
+                                <?php } ?>
+                            </li>
+                            <li><?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
+                            <!-- <li class="page-views">
+                                <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
+                                    <i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gridview">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                </a>
+                            </li> -->
+                            <!-- <li class="page-views">
+                                <a href="javascript:void(0);" data-vtype="list" class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
+                                    <i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#listview">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                </a>
+                            </li> -->
+                            <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                                <li class="page-views">
+                                    <button class="btn btn-outline-black btn-map-view listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
+                                        Map view <span class="toggle-icon"></span>
+                                    </button>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                        <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                     </div>
 
                 </div>
@@ -206,7 +201,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     );
                     if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
                         <div class="interactive-stores">
-                            <div class="interactive-stores__map">
+                            <div class="interactive-stores-map">
                                 <div class="map-loader is-loading">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
                                         <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
@@ -220,7 +215,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                         </div>
                     <?php } else { ?>
-                        <div class="listing-products -listing-products">
+                        <div class="">
                             <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                         </div>
                     <?php } ?>

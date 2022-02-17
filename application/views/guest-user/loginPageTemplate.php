@@ -6,7 +6,7 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
 $popup = isset($popup) ? $popup : false;
 $formClass = true === $popup ? 'loginpopup--js' : '';
 
-$loginFrm->setFormTagAttribute('class', 'form form-otp ' . $formClass);
+$loginFrm->setFormTagAttribute('class', 'form form-login form-otp ' . $formClass);
 $loginFrm->setFormTagAttribute('id', 'formLoginPage');
 $loginFrm->setValidatorJsObjectName('loginFormObj');
 
@@ -37,30 +37,25 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">
-                <?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_Sign_in_to_your_Yokart_account', $siteLangId); ?>
             </h2>
         </div>
         <div class="card-sign_body">
             <?php
             $fldSubmit = $loginFrm->getField('btn_submit');
-            $fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block');
-
+            $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
             echo $loginFrm->getFormTag(); ?>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="field-set">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $loginFrm->getFieldHtml('username'); ?></div>
-                        </div>
+                    <div class="form-group">
+                        <?php echo $loginFrm->getFieldHtml('username'); ?>
                     </div>
                 </div>
             </div>
             <div class="row pwdField--js">
                 <div class="col-md-12">
-                    <div class="field-set">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $loginFrm->getFieldHtml('password'); ?></div>
-                        </div>
+                    <div class="form-group">
+                        <?php echo $loginFrm->getFieldHtml('password'); ?>
                     </div>
                 </div>
             </div>
@@ -80,22 +75,16 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                     <?php echo $loginFrm->getFieldHtml('loginWithOtp'); ?>
                 </div>
             <?php } ?>
-            <div class="row align-items-center">
-                <!-- Row 1st -->
+            <div class="row">
                 <div class="col remember--js">
-                    <div class="field-set">
-                        <div class="field-wraper">
-                            <div class="field_cover ">
-                                <label class="checkbox">
-                                    <?php
-                                    $fld = $loginFrm->getFieldHTML('remember_me');
-                                    $fld = str_replace("<label >", "", $fld);
-                                    $fld = str_replace("</label>", "", $fld);
-                                    echo $fld;
-                                    ?>
-                                </label> <?php if ($loginFrm->getField('remember_me')); ?>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <?php
+                        $fld = $loginFrm->getFieldHTML('remember_me');
+                        $fld = str_replace("<label >", "", $fld);
+                        $fld = str_replace("</label>", "", $fld);
+                        echo $fld;
+                        ?>
+                        <?php if ($loginFrm->getField('remember_me')); ?>
                     </div>
 
                 </div>
@@ -105,17 +94,13 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                             <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?>
                         </a>
                     </div>
-            </div> <!-- End Row 1st -->
+            </div>
             <div class="row">
                 <div class="col-md-12 d-none getOtpBtnBlock--js">
-                    <div class="field-set">
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <a href="javaScript:void(0)" onclick="getLoginOtp(this);" class="btn btn-brand btn-wide btn-block">
-                                    <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
-                                </a>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <a href="javaScript:void(0)" onclick="getLoginOtp(this);" class="btn btn-brand btn-wide btn-block">
+                            <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -140,12 +125,8 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     <?php } ?>
     <div class="row submitBtn--js">
         <div class="col-md-12">
-            <div class="field-set">
-                <div class="field-wraper">
-                    <div class="field_cover"><?php echo $loginFrm->getFieldHtml('btn_submit'); ?>
-                    <?php echo $loginFrm->getFieldHtml('fatpostsectkn'); ?>
-                    </div>
-                </div>
+            <div class="form-group"> <?php echo $loginFrm->getFieldHtml('btn_submit'); ?>
+                <?php echo $loginFrm->getFieldHtml('fatpostsectkn'); ?>
             </div>
         </div>
     </div>
@@ -175,23 +156,23 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     <?php } ?>
     </div>
     <div class="card-sign_foot">
-        <p class="more-links">
+        <h6>Don’t have an account?</h6>
+        <div class="more-links">
             <?php echo $loginFrm->getFieldHtml('forgot'); ?>
-
             <?php if (true === $popup) { ?>
-                <a class="" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="btn btn-outline-black btn-block" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                 </a>
             <?php } else { ?>
-                <a class="loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="btn btn-outline-black btn-block loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                 </a>
             <?php } ?>
             <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
 
-                <a class="" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
+                <a class="btn btn-outline-black btn-block" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
             <?php } ?>
-        </p>
+        </div>
     </div>
 </div>
 </div>

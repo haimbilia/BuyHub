@@ -12,7 +12,7 @@ $productsByShop = [];
 $productsBySelProdCode = [];
 if ($products) {
 ?>
-    <div class="interactive-stores__list stores">
+    <div class="interactive-stores-list stores">
         <div class="stores-body scroll scroll-y">
             <ul id="mapProducts--js">
                 <?php

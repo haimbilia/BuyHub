@@ -12,14 +12,15 @@ $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'sit
     <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">
-                <?php echo Labels::getLabel('LBL_Sign_Up', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_Create_your_Yokart_account', $siteLangId); ?>
             </h2>
         </div>
         <div class="card-sign_body">
             <?php $this->includeTemplate('guest-user/registerationFormTemplate.php', $registerdata, false); ?>
         </div>
         <div class="card-sign_foot">
-            <p class="more-links">
+            <h6>Don’t have an account?</h6>
+            <div class="more-links">
                 <?php if (isset($registerdata['signUpWithPhone']) && true === $smsPluginStatus) {
                     if (0 == $registerdata['signUpWithPhone']) { ?>
                         <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithPhone()"><?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?></a>
@@ -28,10 +29,10 @@ $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'sit
                     <?php } ?>
                 <?php } ?>
 
-                <a class="loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'LoginForm'); ?>">
+                <a class="btn btn-outline-black btn-block loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'LoginForm'); ?>">
                     <?php echo Labels::getLabel('LBL_SIGN_IN_NOW', $siteLangId); ?>
                 </a>
-            </p>
+            </div>
         </div>
     </div>
 </div>

@@ -58,7 +58,7 @@
         background: $brand-color;
         width: 30px;
         height: 2px;
-        content: "";
+        //content: "";
         position: absolute;
         bottom: -1px;
         #{$start-direction}: 0;
@@ -80,14 +80,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-#{$end-direction}: 20px;
+        padding-#{$start-direction}: 20px;
         position: relative;
         cursor: pointer;
         &:before {
             content: "";
             position: absolute;
             top: calc(50% - 6px);
-            #{$end-direction}: 0rem;
+            #{$start-direction}: 0;
             display: inline-block;
             border-right: 1px solid black;
             border-bottom: 1px solid black;

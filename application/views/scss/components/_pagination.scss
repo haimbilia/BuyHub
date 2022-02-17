@@ -1,14 +1,14 @@
 .pagination {
     display: flex;
-    background: $bg-white;
+    background: transparent;
     border-radius: $radius4;
     overflow: hidden;
     margin: 1rem 0;
-    &.pagination--center {
+    &.pagination-center {
         justify-content: center;
         width: 100%;
     }
-    &.pagination--right {
+    &.pagination-right {
         justify-content: flex-end;
     }
     li {

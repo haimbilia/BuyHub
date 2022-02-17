@@ -1629,4 +1629,13 @@ class HomeController extends MyAppController
         echo file_get_contents($manifestFile);
         exit;
     }
+
+    public function dummy()
+    {
+        $this->_template->render();
+    }
+    public function dummy2()
+    {
+        $this->_template->render();
+    }
 }

@@ -6,32 +6,29 @@
         display: flex;
         margin: 0;
         align-items: center;
-
         flex-wrap: wrap;
         li {
             position: relative;
             padding: 0;
             margin: 5px 0;
-            padding-#{$end-direction}: 25px;
-            font-size: 0.875rem;
+            margin-#{$end-direction}: 1rem;
+            font-size: 0.8125rem;
             display: block;
             font-weight: 400;
             line-height: 1.5;
             &:before {
+                line-height: inherit;
                 padding: 0 !important;
                 position: absolute;
-                #{$end-direction}: 10px;
-                top: calc(50% - 3px);
-                content: "" !important;
-                height: 7px;
-                width: 7px;
-                border: solid 1px darken($border-color, 50%);
-                border-width: 1px 1px 0 0;
-                transform: rotate(45deg);
-                [dir="rtl"] & {
-                    #{$end-direction}: 13px;
-                    transform: rotate(-136deg);
-                }
+                #{$end-direction}: -1rem;
+                content: "/" !important;
+                // border: solid 1px darken($border-color, 50%);
+                // border-width: 1px 1px 0 0;
+                // transform: rotate(45deg);
+                // [dir="rtl"] & {
+                //     #{$end-direction}: 13px;
+                //     transform: rotate(-136deg);
+                // }
             }
             &:last-child {
                 padding-#{$end-direction}: 0;
@@ -40,7 +37,7 @@
                 }
             }
             a {
-                color: lighten($txt-body, 30);
+                color: $txt-gray;
                 font-size: inherit;
                 display: block;
                 line-height: inherit;

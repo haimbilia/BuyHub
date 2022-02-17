@@ -38,57 +38,79 @@
     animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }
 
+$btn-padding: 0.6rem 0.75rem;
+$btn-height: auto;
+$btn-border: solid 1px transparent;
+$btn-radius: 0;
+$btn-font-size: 1rem;
+$btn-line-height: 1.5;
 .btn {
-    padding: 0.6rem 0.75rem;
-    height: auto;
-    border-radius: 0;
+    border: $btn-border;
+    padding: $btn-padding;
+    height: $btn-height;
+    border-radius: $btn-radius;
+    font-size: $btn-font-size;
+    line-height: $btn-line-height;
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
         &:hover {
-            color: currentColor;
+            color: var(--brand-color-inverse);
         }
     }
     &-outline-brand {
-        border-color: var(--brand-color);
-        color: var(--brand-color-inverse);
-        &:hover {
-            color: currentColor;
-        }
-    }
-    &-white {
-        background: #fff;
-        color: #000;
-        &:hover {
-            color: currentColor;
-        }
-    }
-    &-outline-brand {
-        background: none;
+        background-color: transparent;
         border-color: $brand-color;
         color: $brand-color;
         &:hover {
             color: currentColor;
         }
     }
-    &-outline-secondary {
-        background: none;
-        border-color: $secondary-color;
-        color: $secondary-color;
+
+    &-white {
+        background-color: #fff;
+        color: #000;
         &:hover {
             color: currentColor;
         }
     }
     &-outline-white {
-        background: none;
+        background-color: transparent;
         border-color: #fff;
         color: #fff;
         &:hover {
             color: currentColor;
         }
     }
+
+    &-secondary {
+        background-color: $secondary-color;
+        border-color: $secondary-color;
+        color: $secondary-color-inverse;
+        &:hover {
+            color: currentColor;
+        }
+    }
+
+    &-outline-secondary {
+        background-color: transparent;
+        border-color: $secondary-color;
+        color: $secondary-color;
+        &:hover {
+            color: currentColor;
+        }
+    }
+
+    &-black {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+        &:hover {
+            color: inherit;
+        }
+    }
     &-outline-black {
-        background: none;
+        background-color: transparent;
         border-color: #000;
         color: $txt-body;
         &:hover {
@@ -96,7 +118,7 @@
         }
     }
     &-outline-gray {
-        background: none;
+        background-color: transparent;
         border-color: $border-color;
         color: $txt-body;
         &:hover {
@@ -149,6 +171,9 @@
     &:focus {
         outline: none !important;
     }
+    &:hover {
+        color: inherit;
+    }
     .icn {
         svg {
             width: 16px;
@@ -195,7 +220,7 @@ a.link {
         bottom: -2px;
         #{$start-direction}: 0;
         #{$end-direction}: 0;
-        background: $brand-color;
+        background-color: $brand-color;
         color: $brand-color-inverse;
         transform-origin: bottom left;
         transform: scaleX(1);

@@ -188,7 +188,7 @@ $input-color: #474747;
         border-color: $danger;
     }
     input {
-        [type="submit"] {
+        &[type="submit"] {
             @include submit;
             &:hover,
             &:focus {

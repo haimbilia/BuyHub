@@ -2,7 +2,7 @@
 $markers = [];
 if (!empty($allShops)) {
 ?>
-    <div class="interactive-stores__list stores">
+    <div class="interactive-stores-list stores">
         <div class="d-flex align-items-center pb-3">
             <h4 class="block-heading"><?php echo Labels::getLabel('LBL_STORES', $siteLangId); ?></h4>
             <div class="stores-count ms-auto">
