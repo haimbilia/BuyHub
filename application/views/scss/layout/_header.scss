@@ -10,7 +10,11 @@ $header-height: 154px;
     background: $bg-white;
     border-bottom: $border;
     @include media-breakpoint-up(lg) {
-        min-height: $header-height;
+        //min-height: $header-height;
+    }
+    .container {
+        max-width: none;
+        padding: 0 3rem;
     }
     .top-bar {
         @include media-breakpoint-up(lg) {

@@ -1,4 +1,4 @@
- <section class="section">
+ <section class="">
      <div class="interactive-stores">
          <div class="interactive-stores-map">
              <div class="map-loader ccis-loading">
@@ -12,7 +12,6 @@
              <div class="canvas-map" id="productMap--jsx">
                  <iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d13727.153581462415!2d76.71911913274683!3d30.66808660655374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d30.6799346!2d76.7220969!4m5!1s0x390feef5b90fc51b%3A0x7541e61fcad7e6c4!2sablysoft%20map!3m2!1d30.6552491!2d76.726384!5e0!3m2!1sen!2sin!4v1645102385317!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
              </div>
-
          </div>
          <div class="interactive-stores-list stores">
              <div class="product-listing" data-view="3">
@@ -37,8 +36,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -64,8 +63,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -91,8 +90,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -118,8 +117,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -145,8 +144,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -172,8 +171,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -199,8 +198,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -226,8 +225,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>
@@ -253,8 +252,8 @@
                              <div class="products-price">
                                  <span class="products-price-new"> $250.00</span>
                              </div>
-                             <div class="">
-                                 <a class="link" href="#">More Sellers</a>
+                             <div class="seller-action">
+                                 <a class="link-underline" href="#">More Sellers</a>
                              </div>
                          </div>
                      </div>

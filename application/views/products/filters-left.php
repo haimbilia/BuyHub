@@ -46,6 +46,16 @@
 
 
  <div class="" id="filters_body--js">
+     <div class="selected-filters" id="filters">
+         <div class="selected-filters-head">
+             <h5> Filtered by:</h5>
+             <button type="button" class="btn btn-underline-black" id="resetAll" onClick="resetListingFilter()" style="display:none;">
+                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
+             </button>
+         </div>
+
+
+     </div>
      <?php if (isset($categoriesArr) && $categoriesArr) { ?>
          <div class="sidebar-widget">
              <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="true" aria-controls="category">

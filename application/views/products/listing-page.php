@@ -126,11 +126,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 
                         </div>
                     <?php } ?>
-                    <div class="selected-filters" id="filters">
-                        <button type="button" class="btn btn-clear-all" id="resetAll" onClick="resetListingFilter()" style="display:none;">
-                            <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
-                        </button>
-                    </div>
+
                     <div id="top-filters" class="page-sort hide_on_no_product">
                         <ul>
                             <li>

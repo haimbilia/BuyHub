@@ -9,8 +9,8 @@
     transition: all 0.2s linear;
     animation: slideRight 600ms ease both;
     a {
-        color: inherit;
-        font-size: inherit;
+        // color: inherit;
+        // font-size: inherit;
     }
     &:hover {
         border-color: $brand-color;
@@ -113,6 +113,19 @@
             &:after {
                 animation: shine 0.75s;
             }
+        }
+        img {
+            mix-blend-mode: multiply;
+            object-fit: cover;
+            max-width: 100%;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: all 0.5s linear;
         }
     }
     &-title {
@@ -444,87 +457,87 @@
     }
 }
 
-.item {
-    display: flex;
-    align-items: flex-start;
-    &__pic {
-        flex: 0 0 50px;
-        max-width: 50px;
-        border: $border;
-        border-radius: $radius4;
-        margin: 0;
-        margin-#{$end-direction}: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        &-seller {
-            flex: 0 0 100px;
-            max-width: 100px;
-            padding: 16px;
-        }
-    }
-    &__description {
-        font-size: 0.8rem;
-        min-width: 180px;
-        max-width: 400px;
-        .item__pic {
-            margin-#{$end-direction}: 10px;
-        }
-        .item__title {
-            color: $body-color;
-            margin: 0 0 4px 0;
-            font-weight: 600;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-all;
-            word-break: break-word;
-            hyphens: auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            a {
-                opacity: 1;
-                color: inherit;
-                font-weight: inherit;
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-        .item__sub_title {
-            display: block;
-            opacity: 0.8;
-        }
-        .item__brand {
-            //font-style: italic;
-        }
-        .item__location {
-            margin-bottom: 5px;
-            .svg {
-                width: 14px;
-                height: 14px;
-            }
-        }
-        .item__category {
-            opacity: 0.8;
-        }
-        .item__specification {
-            color: lighten($body-color, 20%);
-        }
-        .item__sold_by {
-        }
-        .item__shipping {
-        }
-        .item__date {
-            display: block;
-            opacity: 0.6;
-        }
-        p {
-            margin: 3px 0;
-        }
-    }
-}
+// .item {
+//     display: flex;
+//     align-items: flex-start;
+//     &__pic {
+//         flex: 0 0 50px;
+//         max-width: 50px;
+//         border: $border;
+//         border-radius: $radius4;
+//         margin: 0;
+//         margin-#{$end-direction}: 10px;
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         overflow: hidden;
+//         &-seller {
+//             flex: 0 0 100px;
+//             max-width: 100px;
+//             padding: 16px;
+//         }
+//     }
+//     &__description {
+//         font-size: 0.8rem;
+//         min-width: 180px;
+//         max-width: 400px;
+//         .item__pic {
+//             margin-#{$end-direction}: 10px;
+//         }
+//         .item__title {
+//             color: $body-color;
+//             margin: 0 0 4px 0;
+//             font-weight: 600;
+//             overflow-wrap: break-word;
+//             word-wrap: break-word;
+//             word-break: break-all;
+//             word-break: break-word;
+//             hyphens: auto;
+//             white-space: nowrap;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//             a {
+//                 opacity: 1;
+//                 color: inherit;
+//                 font-weight: inherit;
+//                 &:hover {
+//                     text-decoration: underline;
+//                 }
+//             }
+//         }
+//         .item__sub_title {
+//             display: block;
+//             opacity: 0.8;
+//         }
+//         .item__brand {
+//             //font-style: italic;
+//         }
+//         .item__location {
+//             margin-bottom: 5px;
+//             .svg {
+//                 width: 14px;
+//                 height: 14px;
+//             }
+//         }
+//         .item__category {
+//             opacity: 0.8;
+//         }
+//         .item__specification {
+//             color: lighten($body-color, 20%);
+//         }
+//         .item__sold_by {
+//         }
+//         .item__shipping {
+//         }
+//         .item__date {
+//             display: block;
+//             opacity: 0.6;
+//         }
+//         p {
+//             margin: 3px 0;
+//         }
+//     }
+// }
 
 .item__price {
     font-weight: 600;

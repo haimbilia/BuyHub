@@ -191,7 +191,7 @@
 
 .product-layout-1 {
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: 3rem;
     grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
     @include media-breakpoint-down(md) {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
