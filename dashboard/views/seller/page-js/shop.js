@@ -363,8 +363,6 @@ $(document).on("change", ".state", function () {
         }
         markSubTabActive();
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
-            // $('.btn-back').removeClass('d-none');
-            // $(dv).html(t);
             fcom.removeLoader();
             $.ykmodal(t);
         });
@@ -375,10 +373,11 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
             $.mbsmessage.close();
-            /*reloadSocialPlatformsList();*/
+            reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
-                return;
+            } else {
+                closeForm();
             }
 
         });

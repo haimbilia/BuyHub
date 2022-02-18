@@ -5,8 +5,6 @@ $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addForm(" . $splatform_id . ")");
 
-$fld = $frm->getField('splatform_active');
-HtmlHelper::configureSwitchForCheckbox($fld);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
