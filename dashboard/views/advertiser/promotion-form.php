@@ -1,9 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($frm, 6);
 $frm->setFormTagAttribute('class', 'form form--horizontal');
 $frm->setFormTagAttribute('onsubmit', 'setupPromotion(this); return(false);');
-
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 6;
 
 if (User::isSeller()) {
     $shopFld = $frm->getField('promotion_shop');
@@ -40,50 +38,38 @@ $urlFld = $frm->getField('banner_url');
 $urlFld->setWrapperAttribute('class', 'banner_url_fld');
 $urlFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_banner.', $siteLangId) . '</p>';
 
-
-$btnSubmitFld = $frm->getField('btn_submit');
-$btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
+/* $btnSubmitFld = $frm->getField('btn_submit');
+$btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
 ?>
-<div id="listing">
-    <div class="card-head">
-        <h5 class="card-title">
-            <a title="<?php echo Labels::getLabel('LBL_PROMOTION_LIST', $siteLangId); ?>" class="back" href="javascript:void(0)" onclick="searchRecords()" data-bs-toggle="tootip">
-                <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                    </use>
-                </svg>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_PROMOTION_SETUP'); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-head">
+        <nav class="nav nav-tabs navTabsJs">
+            <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
+
+            <a class="nav-link <?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
-            <?php echo Labels::getLabel('LBL_BACK_TO_PROMOTION_LIST', $siteLangId); ?>
-        </h5>
+            <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
+            <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
+                <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+            <?php } ?>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="row ">
+    <div class="form-edit-body loaderContainerJs sectionbody space">
+        <div class="row" id="shopFormChildBlockJs">
             <div class="col-md-12">
-                <div class="tabs">
-                    <ul>
-                        <li class="is-active"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                        <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
-                            <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
-                        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="tabs__content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?php echo $frm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
+                <?php echo $frm->getFormHtml(); ?>
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
+
 <script type="text/javascript">
     jQuery('.time').datetimepicker({
         datepicker: false,
