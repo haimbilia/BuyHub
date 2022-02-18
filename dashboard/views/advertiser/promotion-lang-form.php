@@ -10,6 +10,11 @@ $langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotionId .
 
 $btnSubmitFld = $langFrm->getField('btn_submit');
 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
+
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 ?>
 <div id="listing">
     <div class="card-head">
@@ -46,8 +51,10 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                             $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
                             $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
                             if (!empty($translatorSubscriptionKey) && $promotion_lang_id != $siteDefaultLangId) { ?>
-                                <div class="col-auto mb-4">
-                                    <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
+                                    </div>
                                 </div>
                             <?php } ?>
                             <?php echo $langFrm->getFormHtml(); ?>

@@ -1,10 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$fld = $optionValueFrm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 if (!empty($translatorSubscriptionKey)) { ?>
     <div class="row justify-content-end">
-        <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $langId); ?>" onclick="autofillLangData($(this), $('form#frmOptionValues'))" data-action="<?php echo UrlHelper::generateUrl('OptionValues', 'getTranslatedData'); ?>">
+        <div class="col-auto">
+            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $langId); ?>" onclick="autofillLangData($(this), $('form#frmOptionValues'))" data-action="<?php echo UrlHelper::generateUrl('OptionValues', 'getTranslatedData'); ?>">
         </div>
     </div>
 <?php }
@@ -22,7 +27,10 @@ $btnClear = $optionValueFrm->getField('btn_clear');
 $btnClear->developerTags['col'] = '3';
 $btnClear->addWrapperAttribute('class', 'col-6');
 $btnClear->setFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
-?><div class="box__head">
+
+
+?>
+<div class="box__head">
     <h4><?php echo isset($optionName) ? Labels::getLabel('LBL_CONFIGURE_OPTION_VALUES_FOR', $langId) . ' ' . $optionName : Labels::getLabel('LBL_CONFIGURE_OPTION_VALUES', $langId); ?></h4>
 </div>
 <div class="box__body">
