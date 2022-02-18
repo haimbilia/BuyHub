@@ -1,12 +1,32 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="card-head">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
-    <div class="">
-        <?php if ($canEdit) { ?>
-            <a href="javascript:void(0)" class="btn btn-outline-gray btn-sm" onclick="addForm(0)"><?php echo Labels::getLabel('LBL_Add_Social_Platform', $siteLangId); ?></a>
-        <?php } ?>
-    </div>
+    <h5 class="card-title"><?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS', $siteLangId); ?></h5>
+    <?php
+    if ($canEdit) {
+        $btnData = [
+            'siteLangId' => $siteLangId,
+            'canEdit' => $canEdit
+        ];
+
+        if ($canEdit) {
+            $btnData['listTopButtons'] = [
+                [
+                    'attr' => [
+                        'class' => 'btn btn-outline-gray btn-icon',
+                        'onclick' => 'addForm(0)',
+                        'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
+                    ],
+                    'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
+                ],
+            ];
+        }
+        $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
+    }
+    ?>
 </div>
 <div class="card-body">
     <div class="js-scrollable table-wrap scroll scroll-x">

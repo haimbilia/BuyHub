@@ -1,36 +1,31 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('id', 'adsBatchForm');
 $frm->setFormTagAttribute('onsubmit', 'setupBatch(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 2;
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('dir', $formLayout);
+$frm->setFormTagAttribute('data-onclear', "batchForm(" . $adsBatchId . ")");
 
 $adsbatch_name = $frm->getField('adsbatch_name');
-$adsbatch_name->developerTags['col'] = 2;
 $adsbatch_name->addFieldTagAttribute('placeholder', $adsbatch_name->getCaption());
-$adsbatch_name->developerTags['noCaptionTag'] = true;
-
-$fld = $frm->getField('adsbatch_lang_id');
-$fld->developerTags['noCaptionTag'] = true;
-
-$fld = $frm->getField('adsbatch_target_country_id');
-$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('adsbatch_expired_on');
-$fld->addFieldTagAttribute('class', 'field--calender');
-$fld->addFieldTagAttribute('placeholder', $fld->getCaption());
-$fld->developerTags['noCaptionTag'] = true;
+$fld->addFieldTagAttribute('class', 'field--calender date_js');
+$fld->addFieldTagAttribute('placeholder', $fld->getCaption()); 
 
-$btnFld = $frm->getField('btn_submit');
-$btnFld->developerTags['noCaptionTag'] = true;
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-brand');
+$langFld = $frm->getField('adsbatch_lang_id');
+$langFld->setFieldTagAttribute('onChange', "batchForm(" . $adsBatchId . ", this.value);");
+?>
 
-$btnFld = $frm->getField('btn_clear');
-$btnFld->developerTags['noCaptionTag'] = true;
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
-
-$fld = $frm->getField('adsbatch_expired_on');
-$fld->addFieldTagAttribute('class', 'date_js');
-
-echo $frm->getFormHtml();
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_BATCH_SETUP', $langId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>

@@ -269,9 +269,9 @@ class ContentPagesController extends ListingBaseController
         } else {
             $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'cpage_content');
         }     
-
+        $languages = Language::getAllNames();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId()) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 

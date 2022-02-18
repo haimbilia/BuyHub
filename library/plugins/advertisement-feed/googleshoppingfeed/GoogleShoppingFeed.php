@@ -172,6 +172,39 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
     }
 
     /**
+     * getProductCategoryAutocomplete
+     *
+     * @param  string $keyword
+     * @return array
+     */
+    public function getProductCategoryAutocomplete(string $keyword = ''): array
+    {
+        $arr = [];
+        if ($fh = fopen(__DIR__ . '/googleProductCategory.txt', 'r')) {
+            $rowIndex = 1;
+            while (!feof($fh)) {
+                $line = fgets($fh);
+                if ('' == $keyword || false !== stripos($line, $keyword)) {
+                    $lineContentArr = explode('-', $line, 2);
+                    if (!empty($lineContentArr) && 1 < count($lineContentArr)) {
+                        $arr['results'][] = [
+                            'id' => trim($lineContentArr[0]),
+                            'text' => trim($lineContentArr[1])
+                        ];
+                    }
+                    $rowIndex++;
+                }
+
+                if ($rowIndex == self::PAGE_SIZE) {
+                    break;
+                }
+            }
+            fclose($fh);
+        }
+        return $arr;
+    }
+
+    /**
      * publishBatch
      *
      * @param  mixed $data

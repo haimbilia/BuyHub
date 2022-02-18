@@ -47,7 +47,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                             $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
                             if (!empty($translatorSubscriptionKey) && $promotion_lang_id != $siteDefaultLangId) { ?>
                                 <div class="col-auto mb-4">
-                                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
+                                    <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
                                 </div>
                             <?php } ?>
                             <?php echo $langFrm->getFormHtml(); ?>

@@ -42,7 +42,7 @@ if (!empty($data) && 0 < count($data)) {
     </h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs sectionbody space">
+    <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>

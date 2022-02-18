@@ -164,10 +164,12 @@ class BannersController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'banner_target', $linkTargetsArr, '', array(), '');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+       
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'banner_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey)) {
+        $languageArr = Language::getDropDownList();
+        
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 

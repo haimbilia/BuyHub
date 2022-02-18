@@ -34,9 +34,6 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         </div>
     </div>
 </div>
-</div>
-</div>
-
 
 <script language="javascript">
     $(document).ready(function() {
