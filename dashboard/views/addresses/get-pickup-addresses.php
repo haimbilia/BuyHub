@@ -3,16 +3,17 @@ if (!empty($addresses)) { ?>
     <div class="modal-header">
         <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Pick_Up', $siteLangId); ?></h5>
     </div>
-    <div class="modal-body">
-        <div class="pick-section">
-            <div class="pickup-option">
-                <ul class="pickup-option__list">
-                    <?php foreach ($addresses as $key => $address) { ?>
-                        <li class="addrListJs">
-                            <label class="radio" for="<?php echo 'p-'.$address['addr_id']?>">
-                                <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>" id="<?php echo 'p-'.$address['addr_id']?>">
-                                
-                                <span class="lb-txt js-addr">
+    <div class="modal-body form-edit">
+        <div class="form-edit-body loaderContainerJs">
+            <div class="pick-section">
+                <div class="pickup-option">
+                    <ul class="pickup-option__list">
+                        <?php foreach ($addresses as $key => $address) { ?>
+                            <li class="addrListJs">
+                                <label class="radio" for="<?php echo 'p-' . $address['addr_id'] ?>">
+                                    <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>" id="<?php echo 'p-' . $address['addr_id'] ?>">
+
+                                    <span class="lb-txt js-addr">
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
                                             <?php if (strlen($address['addr_address2']) > 0) {
                                                 echo ", " . $address['addr_address2']; ?>
@@ -20,26 +21,28 @@ if (!empty($addresses)) { ?>
                                         </p>
                                         <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                         <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                        <?php if (strlen($address['addr_phone']) > 0) { 
-                                                $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                            ?>
+                                        <?php if (strlen($address['addr_phone']) > 0) {
+                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                        ?>
                                             <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                         <?php } ?>
-                                </span>
-                            </label>
-                        </li>
-                    <?php } ?>
-                </ul>
-
-                <div class="pickup-time">
-                    <div class="calendar">
-                        <div class="js-datepicker calendar-pickup"></div>
-                    </div>
-                    <ul class="time-slot js-time-slots">
+                                    </span>
+                                </label>
+                            </li>
+                        <?php } ?>
                     </ul>
+
+                    <div class="pickup-time">
+                        <div class="calendar">
+                            <div class="js-datepicker calendar-pickup"></div>
+                        </div>
+                        <ul class="time-slot js-time-slots">
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+        <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
     </div>
 <?php } else { ?>
     <div class="modal-header">
@@ -138,6 +141,6 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
         var html = addrHtml + '<p class="time-txt"><i class="fas fa-calendar-day"></i>' + calendarSelectedDate + ' ' + slot_time + '</p>';
         $(".pickupAddressBtn-" + pickUpBy + "-js").text(langLbl.changePickup);
         $(".js-slot-addr_" + pickUpBy).html(html);
-        $.facebox.close();
+        $.ykmodal.close();
     }
 </script>

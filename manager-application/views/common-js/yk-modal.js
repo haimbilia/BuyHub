@@ -80,7 +80,12 @@
             $("." + $.ykmodal.element).addClass('fixed-right');
         }
 
-        $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', 'modal-dialog ' + dialogClass);
+        /* Cannot worked if wider class not sent in case of other tabs data. */
+        // $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', 'modal-dialog ' + dialogClass);
+
+        if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {
+            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass);
+        }
     }
 
     function fillYKModalFromHref(href) {

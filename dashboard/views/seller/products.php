@@ -33,7 +33,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <script>
     jQuery(document).ready(function($) {
         $(".initTooltip").click(function() {
-            $.facebox({
+            $.ykmodal({
                 div: '#inventoryToolTip'
             }, 'catalog-bg');
         });

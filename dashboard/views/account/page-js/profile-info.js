@@ -89,9 +89,9 @@ $(document).ready(function () {
 	popupImage = function (inputBtn) {
 		if (inputBtn) {
 			if (inputBtn.files && inputBtn.files[0]) {
-				$.facebox(fcom.getLoader(), '', 'cropper-body');
+				$.ykmodal(fcom.getLoader(), '', 'cropper-body');
 				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
-					$.facebox(t);
+					$.ykmodal(t);
 					var file = inputBtn.files[0];
 					var options = {
 						aspectRatio: 1 / 1,
@@ -107,9 +107,9 @@ $(document).ready(function () {
 				});
 			}
 		} else {
-			$.facebox(fcom.getLoader(), '', 'cropper-body');
+			$.ykmodal(fcom.getLoader(), '', 'cropper-body');
 			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
-				$.facebox(t);
+				$.ykmodal(t);
 				var container = document.querySelector('.img-container');
 				var image = container.getElementsByTagName('img').item(0);
 				var options = {
@@ -151,29 +151,25 @@ $(document).ready(function () {
 	}
 
 	truncateDataRequestPopup = function () {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Account', 'truncateDataRequestPopup'), '', function (t) {
-				$.facebox(t);
-			});
+		fcom.ajax(fcom.makeUrl('Account', 'truncateDataRequestPopup'), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
 	sendTruncateRequest = function () {
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendTruncateRequest'), '', function (t) {
 			profileInfoForm();
-			$.facebox.close();
+			$.ykmodal.close();
 		});
 	};
 
 	cancelTruncateRequest = function () {
-		$.facebox.close();
+		$.ykmodal.close();
 	};
 
 	requestData = function () {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function (t) {
-				$.facebox(t);
-			});
+		fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
@@ -181,7 +177,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestData'), data, function (t) {
-			$.facebox.close();
+			$.ykmodal.close();
 		});
 	};
 

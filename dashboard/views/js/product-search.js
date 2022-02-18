@@ -283,11 +283,8 @@ function brandFilters() {
         data = data + "&brand=" + [brands];
     }
     $('body').removeClass('collection-sidebar--on');
-    $.facebox(function () {
-        fcom.ajax(url, data, function (ans) {
-            $.facebox(ans);
-
-        });
+    fcom.ajax(url, data, function (ans) {
+        $.ykmodal(ans);
     });
 }
 
@@ -736,13 +733,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             loginPopUpBox();
             return false;
         }
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function (ans) {
-                $.facebox(ans);
-                if (ans.status) {
-                    $.facebox.close();
-                }
-            });
+        fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function (ans) {
+            $.ykmodal(ans);
         });
         return false;
     };
@@ -755,7 +747,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         data = data + "&curr_page=" + $currentPageUrl;
         fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup'), data, function (ans) {
             if (ans.status) {
-                $.facebox.close();
+                $.ykmodal.close();
             }
         });
     };

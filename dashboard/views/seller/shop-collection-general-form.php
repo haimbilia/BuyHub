@@ -26,7 +26,7 @@ $identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs" id="shopFormChildBlockTabsJs">
-            <a class="nav-link active" href="javascript:void(0);" onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" title="<?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>">
+            <a class="nav-link active" href="javascript:void(0);" onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
             </a>
             <a class="nav-link" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">

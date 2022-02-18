@@ -130,6 +130,8 @@ class OptionValuesController extends LoggedUserController
 
         $this->set('optionValueFrm', $optionValueFrm);
         $this->set('langId', $this->siteLangId);
+        $this->set('option_id', $option_id);
+        $this->set('optionvalue_id', $optionvalue_id);
         $this->_template->render(false, false);
     }
 
@@ -166,16 +168,6 @@ class OptionValuesController extends LoggedUserController
             $fld = $frm->addTextBox(Labels::getLabel('LBL_Option_Value_Color', $this->siteLangId), 'optionvalue_color_code');
             $fld->addFieldTagAttribute('class', 'jscolor');
         }
-
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $lang_id));
-        $fld_cancel = $frm->addButton(
-            "",
-            "btn_clear",
-            Labels::getLabel('LBL_CANCEL', $lang_id),
-            array('onclick' => 'optionForm(' . $option_id . ');')
-        );
-
-        //$fld->attachField($fld_cancel);
         return $frm;
     }
 

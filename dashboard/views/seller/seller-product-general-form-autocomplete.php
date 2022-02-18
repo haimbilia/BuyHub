@@ -718,11 +718,9 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
         }
 
         viewProdOptions = function(productId) {
-            $.facebox(function() {
-                fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
-                    var res = $.parseJSON(t);
-                    fcom.updateFaceboxContent(res.html);
-                });
+            fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
+                var res = $.parseJSON(t);
+                $.ykmodal(res.html);
             });
         };
 

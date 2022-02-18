@@ -67,7 +67,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		}
 		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotions'), data, function (t) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(t);
 			if (!$(dv).hasClass('card-body')) {
 				$(dv).addClass('card-body')
@@ -153,12 +153,10 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 
 	viewWrieFrame = function (locationId) {
 		if (locationId) {
-			$.facebox(function () {
-				fcom.ajax(fcom.makeUrl('Banner', 'locationFrames', [locationId]), '', function (t) {
-					$.facebox(t);
-				});
+			fcom.ajax(fcom.makeUrl('Banner', 'locationFrames', [locationId]), '', function (t) {
+				$.ykmodal(t);
 			});
-			fcom.resetFaceboxHeight();
+			
 		} else {
 			alert(langLbl.selectLocation);
 		}
@@ -166,9 +164,9 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 
 	popupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
-			$.facebox(fcom.getLoader(), '', 'cropper-body');
+			$.ykmodal(fcom.getLoader(), '', 'cropper-body');
 			fcom.ajax(fcom.makeUrl('Advertiser', 'imgCropper'), '', function (t) {
-				$.facebox(t);
+				$.ykmodal(t);
 				var file = inputBtn.files[0];
 				var minWidth = document.frmPromotionMedia.banner_min_width.value;
 				var minHeight = document.frmPromotionMedia.banner_min_height.value;
