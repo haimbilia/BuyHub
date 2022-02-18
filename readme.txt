@@ -507,6 +507,7 @@ Updates/Fixes :
     => 062498 - Admin UI: Spacing issue while editing the shop details under the Manage Shop section.
     => 062510 - Admin UI: "Parse error" is showing while trying to sort the table according to the User Type column under the deleted users' table.
     => 062336 - iOS: When the user tries to remove the reward points, Incorrect message is coming. [APP]
+    => 062606 - on checkout app page base payment current amount not coming [9.3.1]
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

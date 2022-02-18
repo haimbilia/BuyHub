@@ -69,6 +69,7 @@ class OrderPayment extends Orders
             "customer_phone_dcode" => isset($userInfo["user_phone_dcode"]) ? $userInfo["user_phone_dcode"] : '',
             "customer_phone" => isset($userInfo["user_phone"]) ? $userInfo["user_phone"] : '',
             "order_currency_code" => $orderCurrencyCode,
+            "order_currency_id" => $orderInfo["order_currency_id"],
             "order_type" => $orderInfo['order_type'],
             "order_tax_charged" => $orderInfo["order_tax_charged"],
             "order_payment_status" => $orderInfo["order_payment_status"],
