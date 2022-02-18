@@ -61,7 +61,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
         </nav>
     </div>
     <div class="form-edit-body loaderContainerJs sectionbody space">
-        <div class="row" id="shopFormChildBlockJs">
+        <div class="row" id="promotionsChildBlockJs">
             <div class="col-md-12">
                 <?php echo $frm->getFormHtml(); ?>
             </div>

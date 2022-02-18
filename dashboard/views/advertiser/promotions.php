@@ -16,13 +16,7 @@ $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php');
             'label' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
         ];
     }
-    $data['otherButtons'][] = [
-        'attr' => [
-            'onclick' => 'reloadList()',
-            'title' => Labels::getLabel('LBL_My_promotions', $siteLangId)
-        ],
-        'label' => Labels::getLabel('LBL_My_promotions', $siteLangId)
-    ];
+    
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
     <div class="content-body">
         <div class="row">

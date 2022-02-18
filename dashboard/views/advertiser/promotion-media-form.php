@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($mediaFrm, 6);
 $mediaFrm->setFormTagAttribute('class', 'form form--horizontal');
-$mediaFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-$mediaFrm->developerTags['fld_default_col'] = 12;
 $mediaFrm->setFormTagAttribute('onsubmit', 'setupPromotionMedia(this); return(false);');
 
 $uploadfld = $mediaFrm->getField('banner_image');
@@ -20,46 +19,9 @@ $htmlAfterField .= '<div id="image-listing-js"></div>';
 $uploadfld->htmlAfterField = $htmlAfterField;
 
 ?>
-<div id="listing">
-    <div class="card-head">
-        <h5 class="card-title">
-            <a title="<?php echo Labels::getLabel('LBL_PROMOTION_LIST', $siteLangId); ?>" class="back" href="javascript:void(0)" onclick="searchRecords()" data-bs-toggle="tootip">
-                <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                    </use>
-                </svg>
-            </a>
-            <?php echo Labels::getLabel('LBL_BACK_TO_PROMOTION_LIST', $siteLangId); ?>
-        </h5>
-    </div>
-    <div class="card-body">
-        <div class="row ">
-            <div class="col-md-12">
-                <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
-                    <ul>
-                        <li><a href="javascript:void(0);" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                        <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
-                            <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li class="is-active"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="tabs__content">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <?php echo $mediaFrm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="col-md-12">
+    <?php echo $mediaFrm->getFormHtml(); ?>
 </div>
-
 <script>
     $('input[name=banner_min_width]').val(1350);
     $('input[name=banner_min_height]').val(405);
