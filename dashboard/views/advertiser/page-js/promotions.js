@@ -77,6 +77,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		fcom.ajax(fcom.makeUrl('Advertiser', 'promotionForm', [promotionId]), '', function (t) {
 			fcom.removeLoader();
 			$.ykmodal(t, false, 'modal-dialog-vertical-md');
+			bindProductsAutocomplete();
 		});
 	};
 
@@ -107,6 +108,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	setupPromotion = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
+		console.log(data);
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotion'), data, function (t) {
 			if (t.langId) {
 				promotionForm(t.promotionId);
@@ -252,5 +254,27 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 			/* loadSellerProducts(document.frmSearchSellerProducts); */
 		});
 	};
+
+	getRecordTypeURL = function () {
+		/* if ("" == sellerId || 1 > sellerId) {
+			console.error(langLbl.invalidRequest);
+			return false;
+		}
+		if (RECORD_TYPE_PRODUCT == recordType) {
+			return fcom.makeUrl('Products', 'autoComplete');
+		} else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+			return fcom.makeUrl('SellerProducts', 'autoComplete');
+		} else if (RECORD_TYPE_SHOP == recordType) {
+			return fcom.makeUrl('Shops', 'autoComplete');
+		} else {
+			console.error(langLbl.invalidRequest);
+			return false;
+		} */
+		return fcom.makeUrl("Advertiser", "autoCompleteSelprods");
+	}
+
+	bindProductsAutocomplete = function () {
+		select2('promotionProductJs', getRecordTypeURL());
+	}
 
 })();

@@ -2,6 +2,8 @@
 
 class AdvertiserController extends AdvertiserBaseController
 {
+    private $recordData = [];
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -701,10 +703,16 @@ class AdvertiserController extends AdvertiserBaseController
                 break;
         }
 
-        $this->set('promotionType', $promotionType);
+        return [
+            'promotionType' => $promotionType,
+            'label' => $label,
+            'value' => $value
+        ];
+
+        /*  $this->set('promotionType', $promotionType);
         $this->set('label', $label);
         $this->set('value', $value);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->_template->render(false, false, 'json-success.php'); */
     }
 
     public function promotions()
@@ -737,6 +745,8 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set("frmSearch", $frmSearch);
         $this->set("records", $records);
         $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PROMOTION_NAME', $this->siteLangId));
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render(true, true);
     }
 
@@ -816,29 +826,34 @@ class AdvertiserController extends AdvertiserBaseController
                 'slide_target'
             ));
             $rs = $srch->getResultSet();
-            $promotionDetails = FatApp::getDb()->fetch($rs);
-            $promotionType = $promotionDetails['promotion_type'];
-            if ($promotionDetails) {
-                $promotionDetails['promotion_start_time'] = date('H:i', strtotime($promotionDetails['promotion_start_time']));
-                $promotionDetails['promotion_end_time'] = date('H:i', strtotime($promotionDetails['promotion_end_time']));
-                if ($promotionDetails['promotion_type'] == Promotion::TYPE_SHOP) {
-                    $promotionDetails['promotion_shop_cpc'] = $promotionDetails['promotion_cpc'];
-                } elseif ($promotionDetails['promotion_type'] == Promotion::TYPE_PRODUCT) {
-                    $promotionDetails['promotion_product_cpc'] = $promotionDetails['promotion_cpc'];
-                } elseif ($promotionDetails['promotion_type'] == Promotion::TYPE_SLIDES) {
-                    $promotionDetails['promotion_slides_cpc'] = $promotionDetails['promotion_cpc'];
+            $promotions = FatApp::getDb()->fetch($rs);
+            $promotionType = $promotions['promotion_type'];
+            if ($promotions) {
+                $promotions['promotion_start_time'] = date('H:i', strtotime($promotions['promotion_start_time']));
+                $promotions['promotion_end_time'] = date('H:i', strtotime($promotions['promotion_end_time']));
+                if ($promotions['promotion_type'] == Promotion::TYPE_SHOP) {
+                    $promotions['promotion_shop_cpc'] = $promotions['promotion_cpc'];
+                } elseif ($promotions['promotion_type'] == Promotion::TYPE_PRODUCT) {
+                    $promotions['promotion_product_cpc'] = $promotions['promotion_cpc'];
+                } elseif ($promotions['promotion_type'] == Promotion::TYPE_SLIDES) {
+                    $promotions['promotion_slides_cpc'] = $promotions['promotion_cpc'];
                 }
+
+                $typeData = $this->getTypeData($promotions['promotion_id'], $promotions['promotion_type']);
+                $this->recordData = ['id' => $typeData['value'], 'label' => $typeData['label']];
             }
         }
 
+
         $frm = $this->getPromotionForm($promotionId);
-        $frm->fill($promotionDetails);
+        $frm->fill($promotions);
 
         $this->set('frm', $frm);
         $this->set('promotionId', $promotionId);
         $this->set('promotionType', $promotionType);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('language', Language::getAllNames());
+
         $this->_template->render(false, false);
     }
 
@@ -1061,6 +1076,13 @@ class AdvertiserController extends AdvertiserBaseController
 
     public function autoCompleteSelprods()
     {
+        $pagesize = 20;
+        $post = FatApp::getPostedData();
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $userId = $this->userParentId;
         $db = FatApp::getDb();
 
@@ -1082,27 +1104,30 @@ class AdvertiserController extends AdvertiserBaseController
         $srch->setPageSize(FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
 
         $srch->addMultipleFields(array(
-            'selprod_id',
+            'selprod_id as id',
             'IFNULL(product_name,product_identifier) as product_name, IFNULL(selprod_title,product_identifier) as selprod_title'
         ));
+
+        $srch->setPageSize($pagesize);
+        $srch->setPageNumber($page);
         $rs = $srch->getResultSet();
 
-        $products = $db->fetchAll($rs, 'selprod_id');
+        $products = $db->fetchAll($rs, 'id');
+        $pageCount = $srch->pages();
+
         $json = array();
         foreach ($products as $key => $product) {
-            $variantStr = '';
-            $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, $this->siteLangId);
-            if (is_array($options) && count($options)) {
-                foreach ($options as $op) {
-                    $variantStr .= '(' . $op['option_name'] . ': ' . $op['optionvalue_name'] . ')';
-                }
-            }
+            $options = SellerProduct::getSellerProductOptions($key, true, $this->siteLangId);
+            $variantsStr = '';
+            array_walk($options, function ($item, $key) use (&$variantsStr) {
+                $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+            });
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode(($product['selprod_title'] != '') ? $product['selprod_title'] . $variantStr : $product['product_name'] . $variantStr, ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode(($product['selprod_title'] != '') ? $product['selprod_title'] . $variantsStr : $product['product_name'] . $variantsStr, ENT_QUOTES, 'UTF-8'))
             );
         }
-        die(json_encode($json));
+        die(json_encode(['pageCount' => $pageCount, 'results' => $json]));
     }
 
     public function analytics($promotionId = 0)
@@ -1142,7 +1167,7 @@ class AdvertiserController extends AdvertiserBaseController
         $userId = $this->userParentId;
         $data = FatApp::getPostedData();
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
-        
+
         $promotionId = FatUtility::int($data['promotion_id']);
 
         if ($promotionId < 1) {
@@ -1205,7 +1230,7 @@ class AdvertiserController extends AdvertiserBaseController
     {
         $frm = new Form('frmPromotion');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
-        $frm->addHiddenField('', 'promotion_record_id', '');
+        // $frm->addHiddenField('', 'promotion_record_id', '');
         $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'promotion_identifier');
 
         // $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
@@ -1265,12 +1290,17 @@ class AdvertiserController extends AdvertiserBaseController
             /* ] */
 
             /* Product [ */
-            /* $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_product   ', [], '', array('id' => 'promotion_product'), Labels::getLabel('FRM_SELECT', $this->siteLangId)); */
-            $frm->addTextBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_product')->requirements()->setRequired(true);
-            $prodUnReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
+            $selectedProduct = [];
+            if (!empty($this->recordData)) {
+                $selectedProduct[$this->recordData['id']] = $this->recordData['label'];
+            }
+
+            $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_record_id', $selectedProduct, key($selectedProduct), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
+            /* $frm->addTextBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_record_id')->requirements()->setRequired(true); */
+            $prodUnReqObj = new FormFieldRequirement('promotion_record_id', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
             $prodUnReqObj->setRequired(false);
 
-            $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
+            $prodReqObj = new FormFieldRequirement('promotion_record_id', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
             $prodReqObj->setRequired(true);
 
             $frm->addTextBox(Labels::getLabel('FRM_CPC' . '_[' . CommonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array(
@@ -1306,10 +1336,10 @@ class AdvertiserController extends AdvertiserBaseController
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_PRODUCT, 'eq', 'banner_url', $urlUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_url', $urlReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'banner_url', $urlUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'promotion_product', $prodUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'promotion_product', $prodUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_PRODUCT, 'eq', 'promotion_product', $prodReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'promotion_product', $prodUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'promotion_record_id', $prodUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'promotion_record_id', $prodUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_PRODUCT, 'eq', 'promotion_record_id', $prodReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'promotion_record_id', $prodUnReqObj);
 
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'promotion_shop', $shopUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'promotion_shop', $shopReqObj);
@@ -1440,7 +1470,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }        
+        }
         return $frm;
     }
 

@@ -12,8 +12,8 @@ if (User::isSeller()) {
     $shopCpcFld->setWrapperAttribute('class', 'promotion_shop_fld');
     $shopCpcFld->htmlAfterField = '<p class="note">' . Labels::getLabel('MSG_PPC_cost_per_click_for_shop', $siteLangId) . '</p>';
 
-    $productFld = $frm->getField('promotion_product');
-    $productFld->setWrapperAttribute('class', 'promotion_product_fld');
+    $productFld = $frm->getField('promotion_record_id');    
+    $productFld->setFieldTagAttribute('id', 'promotionProductJs');
     $productFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_product.', $siteLangId) . '</p>';
 
     $productCpcFld = $frm->getField('promotion_product_cpc');
@@ -108,7 +108,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
                 $(".slide_url_fld").show();
             }
 
-            fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'getTypeData', [<?php echo $promotionId; ?>, promotionType]), '', function(t) {
+           /*  fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'getTypeData', [<?php echo $promotionId; ?>, promotionType]), '', function(t) {
                 $.mbsmessage.close();
                 if (t.promotionType == PROMOTION_TYPE_SHOP) {
                     $("input[name='promotion_shop']").val(t.label);
@@ -116,39 +116,41 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
                     $("input[name='promotion_product']").val(t.label);
                 }
                 $("input[name='promotion_record_id']").val(t.value);
-            });
+            }); */
         });
 
         $("select[name='promotion_type']").trigger('change');
 
-        $('input[name=\'promotion_product\']').autocomplete({
-            'classes': {
-                "ui-autocomplete": "custom-ui-autocomplete"
-            },
-            'source': function(request, response) {
-                $.ajax({
-                    url: fcom.makeUrl('Advertiser', 'autoCompleteSelprods'),
-                    data: {
-                        keyword: request['term'],
-                        fIsAjax: 1
-                    },
-                    dataType: 'json',
-                    type: 'post',
-                    success: function(json) {
-                        response($.map(json, function(item) {
-                            return {
-                                label: item['name'],
-                                value: item['name'],
-                                id: item['id']
-                            };
-                        }));
-                    },
-                });
-            },
-            'select': function(event, ui) {
-                $("input[name='promotion_record_id']").val(ui.item.id);
-            }
-        });
+        /*  $('input[name=\'promotion_product\']').autocomplete({
+             'classes': {
+                 "ui-autocomplete": "custom-ui-autocomplete"
+             },
+             'source': function(request, response) {
+                 $.ajax({
+                     url: fcom.makeUrl('Advertiser', 'autoCompleteSelprods'),
+                     data: {
+                         keyword: request['term'],
+                         fIsAjax: 1
+                     },
+                     dataType: 'json',
+                     type: 'post',
+                     success: function(json) {
+                         response($.map(json, function(item) {
+                             return {
+                                 label: item['name'],
+                                 value: item['name'],
+                                 id: item['id']
+                             };
+                         }));
+                     },
+                 });
+             },
+             'select': function(event, ui) {
+                 $("input[name='promotion_record_id']").val(ui.item.id);
+             }
+         }); */
 
+        
+         
     });
 </script>
