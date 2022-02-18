@@ -2,65 +2,142 @@
 
 class SocialPlatformController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+
+    protected string $modelClass = 'SocialPlatform';
+    protected $pageKey = 'SOCIAL_PLATFORM';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewSocialPlatforms($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditSocialPlatforms($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewSocialPlatforms();      
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditSocialPlatforms($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditSocialPlatforms();
+        }
+    }
+
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->checkEditPrivilege();
+        $this->setModel($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_SOCIAL_PLATFORM_SETUP', $this->siteLangId));
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewSocialPlatforms();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['deleteButton'] = true;
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->getListingData();
+
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs('js/cropper.js');
-        $this->_template->addJs('js/cropper-main.js');
-        $this->_template->render();
-    }
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js','social-platform/page-js/index.js']);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));       
+        $this->_template->render(true, true, '_partial/listing/index.php');        
+    }    
 
     public function search()
     {
-        $this->objPrivilege->canViewSocialPlatforms();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'social-platform/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $searchForm = $this->getSearchForm($fields);
+
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data);
 
         $srch = SocialPlatform::getSearchObject($this->siteLangId, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('splatform_user_id', '=', 0);
-        $srch->addOrder('splatform_id', 'DESC');
+        //splatform_id
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
+        $page = FatUtility::int($page);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
-
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);       
+        $this->checkEditPrivilege(true);
     }
+    
+    public function form()
+    {       
+        $this->checkEditPrivilege();
 
-    public function form($splatform_id = 0)
-    {
-        $this->objPrivilege->canViewSocialPlatforms();
-
-        $splatform_id = FatUtility::int($splatform_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+       
         $frm = $this->getForm();
 
-        if (0 < $splatform_id) {
-            $data = SocialPlatform::getAttributesById($splatform_id);
+        if (0 < $recordId) {
+            $data = SocialPlatform::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('*', 'IFNULL(splatform_title,splatform_identifier) as splatform_title'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('splatform_id', $splatform_id);
+      
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -68,7 +145,7 @@ class SocialPlatformController extends ListingBaseController
 
     public function setup()
     {
-        $this->objPrivilege->canEditSocialPlatforms();
+        $this->checkEditPrivilege();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -77,192 +154,85 @@ class SocialPlatformController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $splatform_id = $post['splatform_id'];
-        unset($post['splatform_id']);
-        $data_to_be_save = $post;
+        $recordId = $post['splatform_id'];        
+        $data = $post;
+        $data['splatform__identifier'] = $data['splatform_title'];
 
-        $recordObj = new SocialPlatform($splatform_id);
-        $recordObj->assignValues($data_to_be_save, true);
+        $recordObj = new SocialPlatform($recordId);
+        $recordObj->assignValues($data, true);
         if (!$recordObj->save()) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $splatform_id = $recordObj->getMainTableRecordId();
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SocialPlatform::getAttributesByLangId($langId, $splatform_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($splatform_id)) {
-            $this->set('openMediaForm', true);
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('splatformId', $splatform_id);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
+       
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function langForm($splatform_id = 0, $lang_id = 0, $autoFillLangData = 0)
+    } 
+   
+    public function media($recordId)
     {
-        $this->objPrivilege->canViewSocialPlatforms();
-
-        $splatform_id = FatUtility::int($splatform_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($splatform_id == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
-        $langFrm = $this->getLangForm($splatform_id, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id, CommonHelper::getDefaultFormLangId());
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = SocialPlatform::getAttributesByLangId($lang_id, $splatform_id);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('splatform_id', $splatform_id);
-        $this->set('splatform_lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditSocialPlatforms();
-        $post = FatApp::getPostedData();
-        $splatform_id = FatUtility::int($post['splatform_id']);
-        
-        $languages = Language::getAllNames();
-        if(count($languages) > 1){
-            $lang_id = $post['lang_id'];
-        } else  {
-            $lang_id = array_key_first($languages); 
-            $post['lang_id'] = $lang_id;
-        }
-        
-        if ($splatform_id == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frm = $this->getLangForm($splatform_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['splatform_id']);
-        unset($post['lang_id']);
-        $data_to_update = array(
-        'splatformlang_splatform_id' => $splatform_id,
-        'splatformlang_lang_id' => $lang_id,
-        'splatform_title' => $post['splatform_title'],
-        );
-
-        $socialObj = new SocialPlatform($splatform_id);
-        if (!$socialObj->updateLangData($lang_id, $data_to_update)) {
-            LibHelper::exitWithError($socialObj->getError(), true);
-        }
-        
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($splatform_id, CommonHelper::getDefaultFormLangId())) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SocialPlatform::getAttributesByLangId($langId, $splatform_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($splatform_id)) {
-            $this->set('openMediaForm', true);
-        }
-        $this->set('msg', Labels::getLabel('LBL_Social_Platform_Setup_Successful', $this->siteLangId));
-        $this->set('splatformId', $splatform_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function mediaForm($splatform_id)
-    {
-        $splatform_id = FatUtility::int($splatform_id);
-        $splatformDetail = SocialPlatform::getAttributesById($splatform_id);
-        if (false == $splatformDetail) {
+        $data = SocialPlatform::getAttributesById($recordId);
+        if (false == $data) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getMediaForm($splatform_id);
+        $frm = $this->getMediaForm($recordId);
 
-        if (!false == $splatformDetail) {
-            $img = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);
-            $this->set('img', $img);
-        }
-
-        $this->set('splatform_id', $splatform_id);
-        $this->set('frm', $frm);
-        $this->set('languages', Language::getAllNames());
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $recordId);
+        $this->set('image', $image);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);       
+        $this->checkEditPrivilege(true);
+        $this->set('html', $this->_template->render(false, false, NULL, true));      
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUpImage($splatform_id)
+    public function uploadMedia()
     {
-        $splatform_id = FatUtility::int($splatform_id);
-        if (!$splatform_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('splatform_id', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_select_a_file', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);
-        if (!$res = $fileHandlerObj->saveAttachment(
+        $fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $recordId);
+        if (!$fileHandlerObj->saveAttachment(
             $_FILES['cropped_image']['tmp_name'],
             AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE,
-            $splatform_id,
+            $recordId,
             0,
             $_FILES['cropped_image']['name'],
             -1
-        )
-        ) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        )) {
+            LibHelper::exitWithError($fileHandlerObj->getError());
         }
 
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('splatform_id', $splatform_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->siteLangId));
+        $this->set('recordId', $recordId);
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeImage($splatform_id)
+    public function removeMedia()
     {
-        $splatform_id = FatUtility::int($splatform_id);
-        if (!$splatform_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id)) {
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $recordId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -379,7 +349,6 @@ class SocialPlatformController extends ListingBaseController
         }
     }
 
-
     private function isMediaUploaded($splatformId)
     {
         if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatformId, 0)) {
@@ -389,51 +358,37 @@ class SocialPlatformController extends ListingBaseController
     }
 
     private function getForm()
-    {
-        $this->objPrivilege->canViewSocialPlatforms();
-
+    {       
         $frm = new Form('frmSocialPlatform');
-        $frm->addHiddenField('', 'splatform_id', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'splatform_identifier');
-        $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
+        $frm->addHiddenField('', 'splatform_id');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
+       // $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
 
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
 		$urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
         $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
 		$urlFld->requirements()->setRequired();
+
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_IF_YOU_HAVE_TO_ADD_A_PLATFORM_ICON_EXCEPT_THIS_SELECT_LIST', $this->siteLangId) . '</small>';
+        
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', $activeInactiveArr, '', array(), '');
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
 
-    
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
-    private function getLangForm($splatform_id = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
         $frm = new Form('frmSocialPlatformLang');
-        $frm->addHiddenField('', 'splatform_id', $splatform_id);
-
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');        
-
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == CommonHelper::getDefaultFormLangId()) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
+        $frm->addHiddenField('', 'splatform_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
         return $frm;
     }
 
@@ -441,7 +396,43 @@ class SocialPlatformController extends ListingBaseController
     {
         $frm = new Form('frmSocialPlatformMedia');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmSocialPlatformMedia'));
+        $frm->addHtml('', 'image', '');       
         return $frm;
+    }    
+
+    protected function getFormColumns(): array
+    {
+        $tblHeadingCols = CacheHelper::get('socialPlatformTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'splatform_identifier' => Labels::getLabel('LBL_Title', $this->siteLangId),
+            'splatform_url' => Labels::getLabel('LBL_URL', $this->siteLangId),          
+            'splatform_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('socialPlatformTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',         
+            'splatform_identifier',
+            'splatform_url',
+            'splatform_active',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['splatform_url'], Common::excludeKeysForSort());
     }
 }
