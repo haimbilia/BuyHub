@@ -62,7 +62,7 @@ if (count($arrListing) == 0) {
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        fcom.resetFaceboxHeight();
+        
     });
 </script>
 <script>

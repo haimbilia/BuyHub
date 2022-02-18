@@ -169,6 +169,7 @@ trait Options {
         }
 
         $this->set('frmOptions', $frmOptions);
+        $this->set('option_id', $option_id);
         $this->_template->render(false, false);
     }
 
@@ -230,12 +231,6 @@ trait Options {
         )->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('LBL_Option_is_Color', $this->siteLangId), 'option_is_color', $yesNoArr, 0, array(), '')->requirements()->setRequired();
-
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
-        if (isset($product_id) && $product_id > 0) {
-            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CANCEL', $this->siteLangId), array('onclick' => 'productOptionsForm(' . $product_id . ')'));
-            $fld_submit->attachField($fld_cancel);
-        }
 
         return $frm;
     }

@@ -36,10 +36,8 @@
     };
 
     customCatalogInfo = function (prodreq_id) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'customCatalogInfo', [prodreq_id]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'customCatalogInfo', [prodreq_id]), '', function (t) {
+            $.ykmodal(t);
         });
     }
 
@@ -134,10 +132,8 @@
     };
 
     brandMediaForm = function (brandReqId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 
@@ -238,10 +234,8 @@
 
     /* Product Category  request [*/
     addCategoryReqForm = function (id) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 
@@ -281,10 +275,8 @@
     }
 
     productInstructions = function (type) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 

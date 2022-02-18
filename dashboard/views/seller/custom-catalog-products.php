@@ -80,7 +80,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
 <script>
     jQuery(document).ready(function($) {
         $(".initTooltip").click(function() {
-            $.facebox({
+            $.ykmodal({
                 div: '#requestedProductsToolTip'
             }, 'catalog-bg');
         });

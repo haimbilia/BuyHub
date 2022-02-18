@@ -3,8 +3,7 @@ $(document).ready(function () {
 });
 
 (function () {
-	var currentPage = 1;
-	var runningAjaxReq = false;
+	var dv = '#loadForm';
 
 	goToSearchPage = function (page) {
 		if (typeof page == undefined || page == null) {
@@ -21,25 +20,24 @@ $(document).ready(function () {
 	}
 
 	optionForm = function (optionId) {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
-				try {
-					res = jQuery.parseJSON(t);
-					$.facebox(res.msg);
-				} catch (e) {
-					$.facebox(t, 'modal-lg');
-					addOptionForm(optionId);
-					optionValueListing(optionId);
-				}
-				fcom.resetFaceboxHeight();
-			});
+		$.ykmodal(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
+			try {
+				res = jQuery.parseJSON(t);
+				$.mbsmessage(res.msg, true, 'alert--danger');
+			} catch (e) {
+				$.ykmodal(t);
+				addOptionForm(optionId);
+				optionValueListing(optionId);
+			}
+
 		});
 	}
 
 	addOptionForm = function (optionId) {
-		var dv = $('#loadForm');
 		fcom.ajax(fcom.makeUrl('Seller', 'addOptionForm', [optionId]), '', function (t) {
-			dv.html(t);
+			$(dv).html(t);
+			fcom.removeLoader();
 		});
 	};
 
@@ -54,14 +52,13 @@ $(document).ready(function () {
 		var data = 'option_id=' + optionId;
 		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			dv.html(res);
-			fcom.resetFaceboxHeight();
 		});
 	};
 
 	optionValueForm = function (optionId, id) {
-		var dv = $('#loadForm');
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
-			dv.html(t);
+			fcom.removeLoader();
+			$(dv).html(t);
 			optionValueListing(optionId);
 		});
 	};
@@ -127,12 +124,12 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function (t) {
 			reloadList();
-			$.mbsmessage.close();
 			if (t.optionId > 0) {
-				optionValueForm(t.optionId); return;
-				/* optionForm(t.optionId); return; */
+				if (1 > $("#showHideContainer").length) {
+					optionForm(t.optionId);
+				}
 			}
-			$(document).trigger('close.facebox');
+			$.mbsmessage.close();
 		});
 	};
 
@@ -165,7 +162,7 @@ $(document).ready(function () {
 		});
 	};
 
-	deleteOptions = function () {
+	deleteSelected = function () {
 		if (!confirm(langLbl.confirmDelete)) { return; }
 		$("#frmOptionListing").submit();
 	};

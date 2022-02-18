@@ -108,7 +108,7 @@ $(document).ready(function () {
             return;
         }
         fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.facebox(t);
+            $.ykmodal(t);
         });
     };
 
@@ -193,18 +193,8 @@ $(document).ready(function () {
     };
 
     addEditShipRates = function (zoneId, rateId) {
-        /*
         fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
-            $('#ship-section--js').html(t);
-            $('html, body').animate({
-                scrollTop: $("#ship-section--js").offset().top
-            }, 1000);
-        });
-        */
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
-                fcom.updateFaceboxContent(t);
-            });
+            $.ykmodal(t);
         });
     };
 
@@ -232,11 +222,8 @@ $(document).ready(function () {
     };
 
     editRateLangForm = function (zoneId, rateId, langId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
-                /*$('#ship-section--js').html(t);*/
-                fcom.updateFaceboxContent(t);
-            });
+        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 

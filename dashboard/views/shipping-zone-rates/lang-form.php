@@ -39,25 +39,28 @@ $btnSubmit->developerTags['colWidthValues'] = [null, null, null, null];
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
 </div>
-<div class="modal-body">
-    <div class="row">
-        <div class="col-sm-12">
-            <nav class="nav nav-tabs tabsNavJs">
-                <a class="nav-link" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);">
-                    <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
-                </a>
-                <?php
-                foreach ($languages as $key => $langName) {
-                    $class = ($langId == $key) ? 'active' : ''; ?>
-                    <a class="nav-link <?php echo $class; ?>" href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>>
-                        <?php echo $langName; ?>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <div class="row">
+            <div class="col-sm-12">
+                <nav class="nav nav-tabs tabsNavJs">
+                    <a class="nav-link" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);">
+                        <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
                     </a>
-                <?php
-                } ?>
-            </nav>
-            <div class="tabs__content" dir="<?php echo $formLayout; ?>">
-                <?php echo $langFrm->getFormHtml(); ?>
+                    <?php
+                    foreach ($languages as $key => $langName) {
+                        $class = ($langId == $key) ? 'active' : ''; ?>
+                        <a class="nav-link <?php echo $class; ?>" href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>>
+                            <?php echo $langName; ?>
+                        </a>
+                    <?php
+                    } ?>
+                </nav>
+                <div class="tabs__content" dir="<?php echo $formLayout; ?>">
+                    <?php echo $langFrm->getFormHtml(); ?>
+                </div>
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

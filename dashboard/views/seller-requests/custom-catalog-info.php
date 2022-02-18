@@ -1,51 +1,54 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Requested_product_info', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Requested_product_info', $siteLangId); ?></h5>
 </div>
-<div class="modal-body">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12 clearfix">
-            <div id="img-static" class="product-detail-gallery">
-                <img src="<?php echo UrlHelper::generateFileUrl('Image', 'customProduct', array($product['preq_id'], 'MEDIUM', 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) ?>">
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12 clearfix">
+                <div id="img-static" class="product-detail-gallery">
+                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'customProduct', array($product['preq_id'], 'MEDIUM', 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) ?>">
+                </div>
             </div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
-            <div class="product-description">
-                <div class="product-description-inner">
-                    <div class="products_title"><?php echo $product['product_name']; ?></div>
-                    <div class="gap"></div>
-                    <div class="cms">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</th>
-                                    <td><?php echo $product['prodcat_name']; ?></td>
-                                </tr>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</th>
-                                    <td><?php echo ($product['brand_name']) ? $product['brand_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?></td>
-                                </tr>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?>:</th>
-                                    <td><?php echo $product['product_model']; ?></td>
-                                </tr>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('LBL_Minimum_Selling_Price', $siteLangId); ?>:</th>
-                                    <td><?php echo CommonHelper::displayMoneyFormat($product['product_min_selling_price']); ?></td>
-                                </tr>
-                                <?php $saleTaxArr = Tax::getSaleTaxCatArr($siteLangId);
-                                if (array_key_exists($product['ptt_taxcat_id'], $saleTaxArr)) { ?>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+                <div class="product-description">
+                    <div class="product-description-inner">
+                        <div class="products_title"><?php echo $product['product_name']; ?></div>
+                        <div class="gap"></div>
+                        <div class="cms">
+                            <table>
+                                <tbody>
                                     <tr>
-                                        <th><?php echo Labels::getLabel('LBL_Tax_Category', $siteLangId); ?>:</th>
-                                        <td><?php echo $saleTaxArr[$product['ptt_taxcat_id']]; ?></td>
+                                        <th><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</th>
+                                        <td><?php echo $product['prodcat_name']; ?></td>
                                     </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <th><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</th>
+                                        <td><?php echo ($product['brand_name']) ? $product['brand_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?>:</th>
+                                        <td><?php echo $product['product_model']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php echo Labels::getLabel('LBL_Minimum_Selling_Price', $siteLangId); ?>:</th>
+                                        <td><?php echo CommonHelper::displayMoneyFormat($product['product_min_selling_price']); ?></td>
+                                    </tr>
+                                    <?php $saleTaxArr = Tax::getSaleTaxCatArr($siteLangId);
+                                    if (array_key_exists($product['ptt_taxcat_id'], $saleTaxArr)) { ?>
+                                        <tr>
+                                            <th><?php echo Labels::getLabel('LBL_Tax_Category', $siteLangId); ?>:</th>
+                                            <td><?php echo $saleTaxArr[$product['ptt_taxcat_id']]; ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

@@ -1,42 +1,38 @@
-$(document).ready(function() {
+$(document).ready(function () {
     searchBatches(document.frmBatchSearch);
 });
 
-(function() {
+(function () {
     var runningAjaxReq = false;
-    searchBatches = function(frm) {
+    searchBatches = function (frm) {
         $('#listing').prepend(fcom.getLoader());
         var data = fcom.frmData(document.frmBatchSearch);
-        fcom.ajax(fcom.makeUrl('BatchProducts', 'search'), data, function(t) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'search'), data, function (t) {
             fcom.removeLoader();
             $('#listing').html(t);
         });
     }
 
-    batchForm = function(prodgroup_id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('BatchProducts', 'form', [prodgroup_id]), '', function(t) {
-                $.facebox(t);
-            });
+    batchForm = function (prodgroup_id) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'form', [prodgroup_id]), '', function (t) {
+            $.ykmodal(t);
         });
     }
 
-    batchLangForm = function(prodgroup_id, lang_id, autoFillLangData = 0) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('BatchProducts', 'langForm', [prodgroup_id, lang_id, autoFillLangData]), '', function(t) {
-                $.facebox(t);
-            });
+    batchLangForm = function (prodgroup_id, lang_id, autoFillLangData = 0) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'langForm', [prodgroup_id, lang_id, autoFillLangData]), '', function (t) {
+            $.ykmodal(t);
         });
     }
 
-    setUpBatch = function(frm) {
+    setUpBatch = function (frm) {
         if (!$(frm).validate()) return;
         if (runningAjaxReq == true) {
             return;
         }
         runningAjaxReq = true;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setUpBatch'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setUpBatch'), data, function (t) {
             runningAjaxReq = false;
             searchBatches(frm);
             if (t.lang_id > 0) {
@@ -47,7 +43,7 @@ $(document).ready(function() {
                 batchMediaForm(t.prodgroup_id);
                 return;
             }
-            $.facebox.close();
+            $.ykmodal.close();
 
             return;
 
@@ -55,14 +51,14 @@ $(document).ready(function() {
         return false;
     }
 
-    setUpLangBatch = function(frm) {
+    setUpLangBatch = function (frm) {
         if (!$(frm).validate()) return;
         if (runningAjaxReq == true) {
             return;
         }
         runningAjaxReq = true;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setUpLangBatch'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setUpLangBatch'), data, function (t) {
             runningAjaxReq = false;
             if (t.lang_id > 0) {
                 batchLangForm(t.prodgroup_id, t.lang_id);
@@ -72,68 +68,64 @@ $(document).ready(function() {
                 batchMediaForm(t.prodgroup_id);
                 return;
             }
-            $.facebox.close();
+            $.ykmodal.close();
             searchBatches(frm);
             return;
         });
         return false;
     }
 
-    batchProductsForm = function(prodgroup_id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('BatchProducts', 'batchProductsForm', [prodgroup_id]), '', function(t) {
-                $.facebox(t);
-                reloadBatchProducts(prodgroup_id);
-            });
+    batchProductsForm = function (prodgroup_id) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'batchProductsForm', [prodgroup_id]), '', function (t) {
+            $.ykmodal(t);
+            reloadBatchProducts(prodgroup_id);
         });
     }
 
-    reloadBatchProducts = function(prodgroup_id) {
+    reloadBatchProducts = function (prodgroup_id) {
         $("#productsList").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('BatchProducts', 'loadBatchProducts', [prodgroup_id]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'loadBatchProducts', [prodgroup_id]), '', function (t) {
             fcom.removeLoader();
             $("#productsList").html(t);
         });
     }
 
-    updateProductToGroup = function(prodgroup_id, selprod_id) {
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'updateProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function(t) {
+    updateProductToGroup = function (prodgroup_id, selprod_id) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'updateProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
             //$.mbsmessage.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
 
-    removeProductFromGroup = function(prodgroup_id, selprod_id) {
+    removeProductFromGroup = function (prodgroup_id, selprod_id) {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) { return false; }
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'removeProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'removeProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
             //$.mbsmessage.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
 
-    setMainProductFromGroup = function(prodgroup_id, selprod_id) {
+    setMainProductFromGroup = function (prodgroup_id, selprod_id) {
         var agree = confirm(langLbl.setMainProduct);
         if (!agree) { return false; }
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setMainProductFromGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setMainProductFromGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
             //$.mbsmessage.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
 
-    batchMediaForm = function(prodgroup_id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('BatchProducts', 'batchMediaForm', [prodgroup_id]), '', function(t) {
-                $.facebox(t);
-                //reloadBatchProducts( prodgroup_id );
-            });
+    batchMediaForm = function (prodgroup_id) {
+        fcom.ajax(fcom.makeUrl('BatchProducts', 'batchMediaForm', [prodgroup_id]), '', function (t) {
+            $.ykmodal(t);
+            //reloadBatchProducts( prodgroup_id );
         });
     }
 
-    removeBatchImage = function(prodgroup_id, lang_id) {
+    removeBatchImage = function (prodgroup_id, lang_id) {
         if (!confirm(langLbl.confirmRemove)) { return; }
         data = 'prodgroup_id=' + prodgroup_id + '&lang_id=' + lang_id;
-        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'removeBatchImage'), data, function(res) {
+        fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'removeBatchImage'), data, function (res) {
             batchMediaForm(prodgroup_id);
         });
     }
@@ -141,7 +133,7 @@ $(document).ready(function() {
 
 
 
-$(document).on('click', '.prodgroup-Js', function() {
+$(document).on('click', '.prodgroup-Js', function () {
     var node = this;
     $('#form-upload').remove();
     var fileType = $(node).attr('data-file_type');
@@ -157,7 +149,7 @@ $(document).on('click', '.prodgroup-Js', function() {
     if (typeof timer != 'undefined') {
         clearInterval(timer);
     }
-    timer = setInterval(function() {
+    timer = setInterval(function () {
         if ($('#form-upload input[name=\'file\']').val() != '') {
             clearInterval(timer);
             $val = $(node).val();
@@ -169,13 +161,13 @@ $(document).on('click', '.prodgroup-Js', function() {
                 cache: false,
                 contentType: false,
                 processData: false,
-                beforeSend: function() {
+                beforeSend: function () {
                     $(node).val('Loading');
                 },
-                complete: function() {
+                complete: function () {
                     $(node).val($val);
                 },
-                success: function(ans) {
+                success: function (ans) {
                     $.mbsmessage(ans.msg, true, 'alert--success');
                     $('.text-danger').remove();
                     $('#input-field' + fileType).html(ans.msg);
@@ -189,7 +181,7 @@ $(document).on('click', '.prodgroup-Js', function() {
                     }
 
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
+                error: function (xhr, ajaxOptions, thrownError) {
                     alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                 }
             });

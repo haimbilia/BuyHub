@@ -22,35 +22,38 @@ if (null != $fld) {
 <div class="modal-header">
     <h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h5>
 </div>
-<div class="modal-body">
-    <div class="box__body">
-        <div class="tabs">
-            <ul>
-                <li><a href="javascript:void(0)" onclick="addBrandReqForm(<?php echo $brandReqId ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
-                <?php $inactive = ($brandReqId == 0) ? ' fat-inactive' : ''; ?>
-                <li class="<?php echo (0 < $brandReqLangId) ? 'is-active' : '';
-                            echo $inactive; ?>">
-                    <a href="javascript:void(0);">
-                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                    </a>
-                </li>
-                <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($brandReqId > 0) { ?> onclick="brandMediaForm(<?php echo $brandReqId ?>);" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-            </ul>
-        </div>
-        <div class="tabs__content form">
-            <?php
-            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-            $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-            if (!empty($translatorSubscriptionKey) && $brandReqLangId != $siteDefaultLangId) { ?>
-                <div class="row justify-content-end">
-                    <div class="col-auto">
-                        <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="addBrandReqLangForm(<?php echo $brandReqId; ?>, <?php echo $brandReqLangId; ?>, 1)">
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <div class="box__body">
+            <div class="tabs">
+                <ul>
+                    <li><a href="javascript:void(0)" onclick="addBrandReqForm(<?php echo $brandReqId ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?></a></li>
+                    <?php $inactive = ($brandReqId == 0) ? ' fat-inactive' : ''; ?>
+                    <li class="<?php echo (0 < $brandReqLangId) ? 'is-active' : '';
+                                echo $inactive; ?>">
+                        <a href="javascript:void(0);">
+                            <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                        </a>
+                    </li>
+                    <li class="<?php echo $inactive; ?>"><a href="javascript:void(0)" <?php if ($brandReqId > 0) { ?> onclick="brandMediaForm(<?php echo $brandReqId ?>);" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
+                </ul>
+            </div>
+            <div class="tabs__content form">
+                <?php
+                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+                if (!empty($translatorSubscriptionKey) && $brandReqLangId != $siteDefaultLangId) { ?>
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="addBrandReqLangForm(<?php echo $brandReqId; ?>, <?php echo $brandReqLangId; ?>, 1)">
+                        </div>
                     </div>
-                </div>
-            <?php } ?>
-            <?php
-            echo $brandReqLangFrm->getFormHtml();
-            ?>
+                <?php } ?>
+                <?php
+                echo $brandReqLangFrm->getFormHtml();
+                ?>
+            </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

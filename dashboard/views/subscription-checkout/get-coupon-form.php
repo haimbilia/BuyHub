@@ -15,44 +15,47 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Apply_Promo_Coupons', $siteLangId); ?></h5>
 </div>
-<div class="modal-body">
-    <?php
-    $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-2');
-    $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
-    $PromoCouponsFrm->getField('onsubmit', 'applyPromoCode(this); return false;');
-    $PromoCouponsFrm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-6 col-sm-';
-    $PromoCouponsFrm->developerTags['fld_default_col'] = 6;
-    $PromoCouponsFrm->setJsErrorDisplay('afterfield');
-    echo $PromoCouponsFrm->getFormTag();
-    echo $PromoCouponsFrm->getFieldHtml('coupon_code');
-    echo $PromoCouponsFrm->getFieldHtml('btn_submit');
-    echo $PromoCouponsFrm->getExternalJs();
-    ?>
-    </form>
-    <div class="row">
-        <?php if ($couponsList) { ?>
-            <div>
-                <div class="heading3 align--center">
-                    <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php
+        $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-2');
+        $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
+        $PromoCouponsFrm->getField('onsubmit', 'applyPromoCode(this); return false;');
+        $PromoCouponsFrm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-6 col-sm-';
+        $PromoCouponsFrm->developerTags['fld_default_col'] = 6;
+        $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+        echo $PromoCouponsFrm->getFormTag();
+        echo $PromoCouponsFrm->getFieldHtml('coupon_code');
+        echo $PromoCouponsFrm->getFieldHtml('btn_submit');
+        echo $PromoCouponsFrm->getExternalJs();
+        ?>
+        </form>
+        <div class="row">
+            <?php if ($couponsList) { ?>
+                <div>
+                    <div class="heading3 align--center">
+                        <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
+                    </div>
+                    <ul class="coupon-offers">
+                        <?php $counter = 1;
+                        foreach ($couponsList as $coupon_id => $coupon) { ?>
+                            <li>
+                                <div class="coupon-code" onclick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
+                                    <?php echo $coupon['coupon_code']; ?></div>
+                                <?php if ($coupon['coupon_description'] != '') { ?>
+                                    <p><?php echo $coupon['coupon_description']; ?> </p>
+                                <?php } ?>
+                            </li>
+                        <?php $counter++;
+                        } ?>
+                    </ul>
                 </div>
-                <ul class="coupon-offers">
-                    <?php $counter = 1;
-                    foreach ($couponsList as $coupon_id => $coupon) { ?>
-                        <li>
-                            <div class="coupon-code" onclick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
-                                <?php echo $coupon['coupon_code']; ?></div>
-                            <?php if ($coupon['coupon_description'] != '') { ?>
-                                <p><?php echo $coupon['coupon_description']; ?> </p>
-                            <?php } ?>
-                        </li>
-                    <?php $counter++;
-                    } ?>
-                </ul>
-            </div>
-        <?php } else { ?>
-            <div class="col-md">
-                <?php echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId); ?>
-            </div>
-        <?php } ?>
+            <?php } else { ?>
+                <div class="col-md">
+                    <?php echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId); ?>
+                </div>
+            <?php } ?>
+        </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

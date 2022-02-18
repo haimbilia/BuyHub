@@ -1,34 +1,31 @@
-$(document).ready(function(){
-	taxRulesSearch(document.frmSearchTaxRules);
+$(document).ready(function () {
+    taxRulesSearch(document.frmSearchTaxRules);
 });
 
 (function () {
-    
-    
-    taxRulesSearch = function(frm){
+
+
+    taxRulesSearch = function (frm) {
         data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl('seller','taxRulesSearch'),data,function(res){
-                $("#listing").html(res);
+        fcom.ajax(fcom.makeUrl('seller', 'taxRulesSearch'), data, function (res) {
+            $("#listing").html(res);
         });
     };
-    
-    goToSearchPage = function(page) {
-	if(typeof page==undefined || page == null){
-			page =1;
+
+    goToSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
         }
         var frm = document.frmSearchPaging;
         $(frm.page).val(page);
         taxRulesSearch(frm);
-    }    
-    
-    editRule = function (ruleId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'editTaxRuleForm', [ruleId]), '', function (t) {
-                $.facebox(t );
-                fcom.resetFaceboxHeight();
-            });
-        });
+    }
 
+    editRule = function (ruleId) {
+        fcom.ajax(fcom.makeUrl('Seller', 'editTaxRuleForm', [ruleId]), '', function (t) {
+            $.ykmodal(t);
+            
+        });
     };
     updateTaxRule = function (frm) {
         if (!$(frm).validate())
@@ -39,7 +36,7 @@ $(document).ready(function(){
             taxRulesSearch(document.frmSearchTaxRules);
         });
     };
-    
+
 })();
 
 
