@@ -3699,8 +3699,8 @@ class SellerController extends SellerBaseController
         if ($splatform_id > 0) {
             $fld->setFieldTagAttribute('disabled', 'disabled');
         }
-        
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('Lbl_Status', $this->siteLangId), 'splatform_active', $activeInactiveArr, '', array(), '');
 
         return $frm;
     }

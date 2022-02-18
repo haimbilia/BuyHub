@@ -16,7 +16,7 @@ if (null != $fld) {
     if (!empty($translatorSubscriptionKey) && $splatform_lang_id != $siteDefaultLangId) {
     ?>
         <div class="row justify-content-end">
-            <div class="col-auto mb-4">
+            <div class="col-auto">
                 <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="addLangForm(<?php echo $splatform_id; ?>, <?php echo $splatform_lang_id; ?>, 1)">
             </div>
         </div>

@@ -1,4 +1,10 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+
+$fld = $frmSellerProdLangFrm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+?>
 <div class="tabs ">
     <?php require_once('sellerCatalogProductTop.php'); ?>
 </div>
@@ -33,7 +39,7 @@
                         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
                         if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) { ?>
                             <div class="row justify-content-end">
-                                <div class="col-auto mb-4">
+                                <div class="col-auto">
                                     <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="sellerProductLangForm(<?php echo $formLangId; ?>, <?php echo $selprod_id; ?>, 1)">
                                 </div>
                             </div>
