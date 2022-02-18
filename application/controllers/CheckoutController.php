@@ -1743,6 +1743,7 @@ class CheckoutController extends MyAppController
 
             $orderData['order_id'] = $orderId;
             $orderData['order_type'] = $orderInfo["order_type"];
+            $orderData['order_user_id'] = $orderInfo["order_user_id"];
             $orderData['order_net_amount'] = $financialSummary["orderNetAmount"];
             $orderData['order_reward_point_used'] = $financialSummary["cartRewardPoints"];
             $orderData['order_reward_point_value'] = CommonHelper::convertRewardPointToCurrency($financialSummary["cartRewardPoints"]);
