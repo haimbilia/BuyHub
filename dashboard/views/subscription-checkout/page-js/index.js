@@ -131,12 +131,10 @@ $("document").ready(function () {
             loginPopUpBox();
             return false;
         }
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function (t) {
-                $.systemMessage.close();
-                $.facebox(t);
-                $("input[name='coupon_code']").focus();
-            });
+        fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function (t) {
+            $.systemMessage.close();
+            $.ykmodal(t);
+            $("input[name='coupon_code']").focus();
         });
     };
 
@@ -149,7 +147,7 @@ $("document").ready(function () {
         var data = fcom.frmData(frm);
 
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'applyPromoCode'), data, function (res) {
-            $.facebox.close();
+            $.ykmodal.close();
             if ($('.payment-area').length > 0) {
                 loadPaymentSummary();
             }
@@ -172,7 +170,7 @@ $("document").ready(function () {
 
     removePromoCode = function () {
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'removePromoCode'), '', function (res) {
-            $.facebox.close();
+            $.ykmodal.close();
             if ($('.payment-area').length > 0) {
                 loadPaymentSummary();
             }
@@ -238,17 +236,4 @@ $("document").ready(function () {
             }
         });
     };
-    /* $(document).on('click', '.coupon-input', function() {
-        if (isUserLogged() == 0) {
-            loginPopUpBox();
-            return false;
-        }
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function(t) {
-                $.facebox(t );
-                $("input[name='coupon_code']").focus();
-            });
-        });
-    }); */
-
 })();

@@ -53,7 +53,7 @@ $(document).ready(function () {
 
     userPasswordForm = function (id) {
         fcom.ajax(fcom.makeUrl('Seller', 'subUserPasswordForm', [id]), '', function (t) {
-            $.facebox(t);
+            $.ykmodal(t);
         });
     };
 
@@ -62,7 +62,7 @@ $(document).ready(function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateUserPassword'), data, function (t) {
-            $.facebox.close();
+            $.ykmodal.close();
             $.mbsmessage.close();
             reloadList();
         });

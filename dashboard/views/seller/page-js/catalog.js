@@ -34,7 +34,7 @@ $(document).on('change', '.language-js', function () {
 		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'searchCatalogProduct'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			runningAjaxReq = false;
 			$(dv).html(res);
 		});
@@ -50,10 +50,8 @@ $(document).on('change', '.language-js', function () {
 	}
 
 	productInstructions = function (type) {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-				$.facebox(t);
-			});
+		fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
@@ -79,7 +77,7 @@ $(document).on('change', '.language-js', function () {
 		$(dv).prepend(fcom.getLoader());
 
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerShippingForm', [productId]), '', function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			runningAjaxReq = false;
 			$(dv).html(res);
 		});
@@ -90,7 +88,7 @@ $(document).on('change', '.language-js', function () {
 		fcom.ajax(fcom.makeUrl('seller', 'getShippingTab'), 'product_id=' + id, function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.facebox(res.msg );
+				$.ykmodal(res.msg);
 			} catch (e) {
 
 				$(ShipDiv).html(t);
@@ -124,8 +122,8 @@ $(document).on('change', '.language-js', function () {
 		var data = "hideButtons=1";
 		fcom.ajax(fcom.makeUrl('Seller', 'customProductImages', [productId]), data, function (t) {
 			productImages(productId);
-			$.facebox(t );
-			fcom.resetFaceboxHeight();
+			$.ykmodal(t);
+			
 		});
 	};
 
@@ -196,10 +194,8 @@ $(document).on('change', '.language-js', function () {
 	}
 
 	catalogInfo = function (product_id) {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Seller', 'catalogInfo', [product_id]), '', function (t) {
-				$.facebox(t);
-			});
+		fcom.ajax(fcom.makeUrl('Seller', 'catalogInfo', [product_id]), '', function (t) {
+			$.ykmodal(t);
 		});
 	}
 
@@ -303,9 +299,9 @@ $(document).on('change', '.language-js', function () {
 
 	popupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
-            // $.facebox(fcom.getLoader(), '', 'cropper-body');
+			// $.ykmodal(fcom.getLoader(), '', 'cropper-body');
 			fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-				// $.facebox(t );
+				// $.ykmodal(t );
 				$('#cropperBox-js').html(t);
 				$('#cropperBox-js').css("display", "block");
 				$("#mediaForm-js").css("display", "none");

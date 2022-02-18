@@ -14,11 +14,9 @@ $(document).ready(function () {
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         fcom.displayProcessing();
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-                $.mbsmessage.close();
-                $.facebox(res);
-            });
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
+            $.mbsmessage.close();
+            $.ykmodal(res);
         });
     }
 
@@ -31,24 +29,24 @@ $(document).ready(function () {
 
     loadOpShippingCharges = function (orderId, chargeType) {
         if (0 < $(".opShippingChargesJs").length) {
-            $.facebox.show();
+            $.ykmodal.show();
         } else {
-            $.facebox(fcom.getLoader());
+            $.ykmodal(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
                 $.mbsmessage.close();
-                $.facebox(ans, 'modal-lg opShippingChargesJs', 'modal-body-scroll');
+                $.ykmodal(ans, false, 'modal-dialog-vertical-md opShippingChargesJs');
             });
         }
     };
-    
+
     loadOpTaxCharges = function (orderId, chargeType) {
         if (0 < $(".opTaxChargesJs").length) {
-            $.facebox.show();
+            $.ykmodal.show();
         } else {
-            $.facebox(fcom.getLoader());
+            $.ykmodal(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
                 $.mbsmessage.close();
-                $.facebox(ans, 'modal-lg opTaxChargesJs', 'modal-body-scroll');
+                $.ykmodal(ans, false, 'modal-dialog-vertical-md opTaxChargesJs');
             });
         }
     };

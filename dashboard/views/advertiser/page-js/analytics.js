@@ -1,6 +1,6 @@
 	
 $(document).ready(function(){
-	searchRecords(document.frmRecordSearch);
+	searchRecords(document.frmRecordSearch);	
 });
 
 (function() {	
@@ -27,4 +27,5 @@ $(document).ready(function(){
 		$(frm.page).val(page);
 		searchRecords(frm);
 	};	
+
 })();

@@ -72,7 +72,7 @@ if ($canEdit) { ?>
                     if (array_key_exists('html', $otherButtons)) {
                         echo $otherButtons['html'];
                     } else {
-                        $class = isset($otherButtons['class']) ? $class . $otherButtons['class'] : $class . 'btn-outline-brand btn-icon';
+                        $class = isset($otherButtons['class']) ? $class . $otherButtons['class'] : $class . 'btn btn-outline-gray btn-icon';
                         $title = isset($otherButtons['title']) ? $otherButtons['title'] : '';
                         $href = isset($otherButtons['href']) ? $otherButtons['href'] : 'javascript:void(0);';
                         $onclick = isset($otherButtons['onclick']) ? 'onclick = ' . $otherButtons['onclick'] : '';
@@ -89,7 +89,7 @@ if ($canEdit) { ?>
                         if (array_key_exists('html', $attr)) {
                             echo $attr['html'];
                         } else {
-                            $btnClass = isset($attr['attr']['class']) ? $class . $attr['attr']['class'] : $class . 'btn-outline-brand btn-icon';
+                            $btnClass = isset($attr['attr']['class']) ? $class . $attr['attr']['class'] : $class . 'btn btn-outline-gray btn-icon';
                             $title = isset($attr['attr']['title']) ? $attr['attr']['title'] : '';
                             $href = isset($attr['attr']['href']) ? $attr['attr']['href'] : 'javascript:void(0);';
                             $onclick = isset($attr['attr']['onclick']) ? 'onclick = ' . $attr['attr']['onclick'] : '';

@@ -378,7 +378,7 @@ if (!$print) { ?>
         $.mbsmessage(langLbl.processing, false, 'alert--process');
         fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
             $.mbsmessage.close();
-            $.facebox(res);
+            $.ykmodal(res);
         });
     };
 </script>

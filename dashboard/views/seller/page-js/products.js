@@ -47,7 +47,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		}
 		var data = fcom.frmData(document.frmRecordSearch);
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProducts', [product_id]), data, function (t) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$('#listing').html(t);
 		});
 	}
@@ -63,14 +63,14 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 
 	productInstructions = function (type) {
 		fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-			$.facebox(t);
+			$.ykmodal(t);
 		});
 	};
 
 	sellerProductForm = function (product_id, selprod_id) {
 		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductForm', [product_id, selprod_id]), '', function (t) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(t);
 		});
 	};
@@ -79,7 +79,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		if (!confirm(langLbl.confirmDelete)) { return; }
 		data = 'id=' + id;
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'sellerProductDelete'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			loadSellerProducts(document.frmSearchSellerProducts);
 		});
 	};
@@ -90,10 +90,8 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	sellerProductCloneForm = function (product_id, selprod_id) {
-		$.facebox(function () {
-			fcom.ajax(fcom.makeUrl('Seller', 'sellerProductCloneForm', [product_id, selprod_id]), '', function (t) {
-				$.facebox(t);
-			});
+		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductCloneForm', [product_id, selprod_id]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
@@ -103,7 +101,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerProductClone'), data, function (t) {
 			runningAjaxReq = false;
-			$.facebox.close();
+			$.ykmodal.close();
 			loadSellerProducts(document.frmSearchSellerProducts);
 			/* if(t.selprod_id > 0){
 				$(frm.splprice_selprod_id).val(t.selprod_id);
