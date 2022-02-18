@@ -16,7 +16,7 @@ $langFld->setfieldTagAttribute('onChange', "editShopCollectionLangForm(" . $scol
     if (!empty($translatorSubscriptionKey) && $langId != $siteDefaultLangId) {
     ?>
         <div class="mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editShopCollectionLangForm(<?php echo $scollection_id; ?>, <?php echo $langId; ?>, 1)">
+            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editShopCollectionLangForm(<?php echo $scollection_id; ?>, <?php echo $langId; ?>, 1)">
         </div>
     <?php
     }

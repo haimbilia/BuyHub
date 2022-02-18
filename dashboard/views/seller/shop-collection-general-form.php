@@ -27,16 +27,16 @@ $identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs" id="shopFormChildBlockTabsJs">
             <a class="nav-link active" href="javascript:void(0);" onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" title="<?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>">
-                <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
             </a>
             <a class="nav-link" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
-                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
             </a>
             <a class="nav-link" onclick="sellerCollectionProducts(<?php echo $scollection_id ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>
             </a>
             <a class="nav-link" onclick="collectionMediaForm(this, <?php echo $scollection_id; ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>">
-                <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>
             </a>
         </nav>
     </div>

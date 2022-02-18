@@ -36,7 +36,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         ?>
         <div class="row justify-content-end">
             <div class="col-auto mb-4">
-                <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="shopLangForm(<?php echo $shop_id; ?>, <?php echo $formLangId; ?>, 1)">
+                <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="shopLangForm(<?php echo $shop_id; ?>, <?php echo $formLangId; ?>, 1)">
             </div>
         </div>
     <?php } ?>
