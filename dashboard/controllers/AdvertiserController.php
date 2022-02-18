@@ -985,7 +985,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         $recordId = 0;
         $attachedFileType = 0;
-
+        $imgDetail = false;
         switch ($promotionType) {
             case Promotion::TYPE_BANNER:
                 $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
@@ -1109,8 +1109,8 @@ class AdvertiserController extends AdvertiserBaseController
     {
         $this->userPrivilege->canViewPromotions();
         $userId = $this->userParentId;
-        $searchForm = $this->getPPCAnalyticsSearchForm($this->siteLangId);
-        $searchForm->fill(array(
+        $frmSearch = $this->getPPCAnalyticsSearchForm($this->siteLangId);
+        $frmSearch->fill(array(
             'promotion_id' => $promotionId
         ));
 
@@ -1130,7 +1130,7 @@ class AdvertiserController extends AdvertiserBaseController
             CommonHelper::redirectUserReferer();
         }
 
-        $this->set('searchForm', $searchForm);
+        $this->set('frmSearch', $frmSearch);
         $this->set('promotionDetails', $promotionDetails);
 
         $this->_template->render(true, true);
@@ -1142,7 +1142,7 @@ class AdvertiserController extends AdvertiserBaseController
         $userId = $this->userParentId;
         $data = FatApp::getPostedData();
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
-
+        
         $promotionId = FatUtility::int($data['promotion_id']);
 
         if ($promotionId < 1) {
@@ -1208,7 +1208,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addHiddenField('', 'promotion_record_id', '');
         $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'promotion_identifier');
 
-        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
+        // $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
 
         $userId = $this->userParentId;
         $shopSrch = Shop::getSearchObject(true, $this->siteLangId);
@@ -1265,6 +1265,7 @@ class AdvertiserController extends AdvertiserBaseController
             /* ] */
 
             /* Product [ */
+            /* $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_product   ', [], '', array('id' => 'promotion_product'), Labels::getLabel('FRM_SELECT', $this->siteLangId)); */
             $frm->addTextBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'promotion_product')->requirements()->setRequired(true);
             $prodUnReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
             $prodUnReqObj->setRequired(false);
@@ -1423,7 +1424,7 @@ class AdvertiserController extends AdvertiserBaseController
         ));
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'promotion_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -1439,8 +1440,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        }        
         return $frm;
     }
 
@@ -1514,7 +1514,7 @@ class AdvertiserController extends AdvertiserBaseController
     {
         $langId = FatUtility::int($langId);
 
-        $frm = new Form('frmPromotionAnalyticsSearch');
+        $frm = new Form('frmRecordSearch');
 
         $frm->addDateField('', 'date_from', '', array(
             'readonly' => 'readonly',
@@ -1527,13 +1527,14 @@ class AdvertiserController extends AdvertiserBaseController
             'placeholder' => Labels::getLabel('LBL_Date_To', $langId)
         ));
 
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array(
             'onclick' => 'clearPromotionSearch();'
-        ));
+        )); */
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
 
         $frm->addHiddenField('', 'page');
-
         $frm->addHiddenField('', 'promotion_id');
         return $frm;
     }

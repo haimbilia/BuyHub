@@ -1,26 +1,29 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form');
+HtmlHelper::formatFormFields($frm);
+
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'bindProducts');
 $frm->setFormTagAttribute('onsubmit', 'setupProductsToBatch(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 2;
+$frm->setFormTagAttribute('data-onclear', "bindproductform(" . $adsBatchId . ", " . $selProdId . ")"); 
 
-$btnFld = $frm->getField('btn_submit');
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-brand');
-$btnFld->developerTags['noCaptionTag'] = true;
+$fld = $frm->getField('abprod_selprod_id');
+$fld->setFieldTagAttribute('class', 'sellerProductJs');
+if (0 < $selProdId) {
+    $fld->setFieldTagAttribute('disabled', 'disabled');
+}
 
-$btnFld = $frm->getField('btn_clear');
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
-$btnFld->addFieldTagAttribute('onclick', 'clearForm();');
-$btnFld->developerTags['noCaptionTag'] = true;
+$fld = $frm->getField('abprod_cat_id');
+$fld->setFieldTagAttribute('id', 'googleCatIdJs')
+?>
 
-$prodName = $frm->getField('product_name');
-$prodName->developerTags['col'] = 4;
-
-$prodCatFld = $frm->getField('google_product_category');
-$prodCatFld->developerTags['col'] = 5;
-
-$prodName = $frm->getField('abprod_age_group');
-$prodName->developerTags['col'] = 3;
-
-echo $frm->getFormHtml();
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_BIND_PRODUCT', $siteLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>

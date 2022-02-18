@@ -22,7 +22,7 @@ $langFld->setFieldTagAttribute('onChange', "addAddressForm(" . $addr_id . ", thi
     </h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs sectionbody space">
+    <div class="form-edit-body loaderContainerJs">
         <div class="row">
             <div class="col-md-12">
                 <?php echo $addressFrm->getFormHtml(); ?>

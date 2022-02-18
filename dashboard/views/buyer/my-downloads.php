@@ -4,7 +4,7 @@
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Downloads', $siteLangId),
+        'headingLabel' => Labels::getLabel('LBL_DOWNLOADS', $siteLangId),
         'siteLangId' => $siteLangId,
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>

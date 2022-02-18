@@ -1,44 +1,34 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-<div class="card-head">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
-    <div class="">
-        <a href="javascript:void(0)" onclick="socialPlatforms()" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Social_Platforms', $siteLangId); ?></a>
-    </div>
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-onclear', "addForm(" . $splatform_id . ")");
+
+?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS'); ?>
+    </h5>
 </div>
-<div class="card-body">
-    <div class="col-lg-12 col-md-12">
-        <div class="tabs__content">
-            <div class="row ">
-                <div class="col-md-12">
-                    <div class="nav nav-pills nav-fill">
-                        <ul id="shopFormChildBlockTabsJs">
-                            <li class="is-active"><a href="javascript:void(0)" onclick="addForm(<?php echo $splatform_id; ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                            <li class="<?php echo (0 == $splatform_id) ? 'fat-inactive' : ''; ?>">
-                                <a href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id; ?>,<?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>);">
-                                    <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="row" id="shopFormChildBlockJs">
-                        <div class="col-md-12">
-                            <?php
-                            $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
-                            $frm->setFormTagAttribute('class', 'form form--horizontal');
-                            $frm->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
-                            $frm->developerTags['fld_default_col'] = 4;
-                            $urlFld = $frm->getField('splatform_url');
-
-
-                            $submitFld = $frm->getField('btn_submit');
-                            $submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
-                            echo $frm->getFormHtml();
-                            ?>
-                        </div>
-                    </div>
-                </div>
+<div class="modal-body form-edit">
+    <div class="form-edit-head">
+        <nav class="nav nav-tabs navTabsJs" id="shopFormChildBlockTabsJs">
+            <a class="nav-link active" href="javascript:void(0);" onclick="addForm(<?php echo $splatform_id; ?>);" title="<?php echo Labels::getLabel('LBL_General', $siteLangId); ?>">
+                <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
+            </a>
+            <a class="nav-link" href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
+                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+            </a>
+        </nav>
+    </div>
+    <div class="form-edit-body loaderContainerJs">
+        <div class="row" id="shopFormChildBlockJs">
+            <div class="col-md-12">
+                <?php echo $frm->getFormHtml(); ?>
             </div>
         </div>
     </div>
+
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

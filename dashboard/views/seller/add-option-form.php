@@ -1,14 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$fld = $frmOptions->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-if (!empty($translatorSubscriptionKey)) { ?> 
-    <div class="row justify-content-end"> 
-        <div class="col-auto mb-4">
-            <input class="btn btn-brand" 
-                type="button" 
-                value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                onclick="autofillLangData($(this), $('form#frmOptions'))"
-                data-action="<?php echo UrlHelper::generateUrl('Seller', 'getTranslatedOptionData'); ?>">
+if (!empty($translatorSubscriptionKey)) { ?>
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="autofillLangData($(this), $('form#frmOptions'))" data-action="<?php echo UrlHelper::generateUrl('Seller', 'getTranslatedOptionData'); ?>">
         </div>
     </div>
 <?php }
@@ -22,7 +23,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 echo $frmOptions->getFormHtml();
 ?>
 <script type="text/javascript">
-$(document).ready(function(){
-	fcom.resetFaceboxHeight();
-});
+    $(document).ready(function() {
+        fcom.resetFaceboxHeight();
+    });
 </script>

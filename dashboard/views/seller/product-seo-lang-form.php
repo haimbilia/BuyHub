@@ -1,10 +1,14 @@
 <?php
+$fld = $productSeoLangForm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 if (!empty($translatorSubscriptionKey) && $selprod_lang_id != $siteDefaultLangId) { ?>
     <div class="row justify-content-end">
-        <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
+        <div class="col-auto">
+            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
         </div>
     </div>
 <?php } ?>

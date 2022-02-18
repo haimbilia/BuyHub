@@ -47,7 +47,7 @@
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
                 $(contentBody + " .modal-body").addClass(bodyClass);
             }
-
+            
             $.ykmodal.show();
         },
         close: function () {
@@ -80,9 +80,7 @@
             $("." + $.ykmodal.element).addClass('fixed-right');
         }
 
-        if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass);
-        }
+        $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', 'modal-dialog ' + dialogClass);
     }
 
     function fillYKModalFromHref(href) {

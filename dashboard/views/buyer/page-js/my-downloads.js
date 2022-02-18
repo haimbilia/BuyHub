@@ -1,6 +1,5 @@
 $(document).ready(function () {
 	searchBuyerDownloads(document.frmSrch);
-
 });
 
 (function () {

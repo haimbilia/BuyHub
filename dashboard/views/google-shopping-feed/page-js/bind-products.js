@@ -1,167 +1,159 @@
 var keyName = "GoogleShoppingFeed";
 $(document).ready(function () {
-  bindproductform();
-  searchproducts();
-});
-
-$(document).on("keyup", "input[name='product_name']", function () {
-  var currObj = $(this);
-  var parentForm = currObj.closest("form").attr("id");
-  if ("" != currObj.val()) {
-    currObj.siblings("ul.dropdown-menu").remove();
-    currObj.autocomplete({
-      source: function (request, response) {
-        $.ajax({
-          url: fcom.makeUrl("Seller", "autoCompleteProducts"),
-          data: { fIsAjax: 1, keyword: currObj.val() },
-          dataType: "json",
-          type: "post",
-          success: function (json) {
-            response(
-              $.map(json.products, function (item) {
-                return {
-                  label: item["name"],
-                  value: item["name"],
-                  id: item["id"],
-                };
-              })
-            );
-          },
-        });
-      },
-      select: function (event, ui) {
-        $("#" + parentForm + " input[name='abprod_selprod_id']").val(
-          ui.item.id
-        );
-      },
-    });
-  } else {
-    $("#" + parentForm + " input[name='abprod_selprod_id']").val("");
-  }
-});
-
-$(document).on("keyup", "input[name='google_product_category']", function () {
-  var currObj = $(this);
-  var parentForm = currObj.closest("form").attr("id");
-  if ("" != currObj.val()) {
-    currObj.siblings("ul.dropdown-menu").remove();
-    currObj.autocomplete({
-      classes: {
-        "ui-autocomplete": "custom-ui-autocomplete",
-      },
-      source: function (request, response) {
-        $.ajax({
-          url: fcom.makeUrl(keyName, "getProductCategory"),
-          data: { fIsAjax: 1, keyword: currObj.val() },
-          dataType: "json",
-          type: "post",
-          success: function (json) {
-            response(
-              $.map(json, function (value, index) {
-                return { label: value, value: value, id: index };
-              })
-            );
-          },
-        });
-      },
-      select: function (event, ui) {
-        $("#" + parentForm + " input[name='abprod_cat_id']").val(ui.item.id);
-      },
-    });
-  } else {
-    $("input[name='abprod_cat_id']").val("");
-  }
+	searchProducts();
 });
 
 (function () {
-  var dv = "#listing";
-  var bindProductForm = "#bindProductForm";
+	var dv = "#listing";
 
-  bindproductform = function (selProdId = 0) {
-    if (1 > $(bindProductForm).length) {
-      return;
-    }
+	bindproductform = function (adsBatchId = 0, selProdId = 0) {
+		$.ykmodal(fcom.getLoader());
+		fcom.ajax(
+			fcom.makeUrl(keyName, "bindProductForm", [adsBatchId, selProdId]),
+			"",
+			function (res) {
+				fcom.removeLoader();
+				$.ykmodal(res);
+				bindProductsAutocomplete();
+				bindGoogleCatAutocomplete();
+			}
+		);
+	};
 
-    $(bindProductForm).prepend(fcom.getLoader());
-    var adsBatchId = $("input[name='adsBatchId']").val();
-    fcom.ajax(
-      fcom.makeUrl(keyName, "bindProductForm", [adsBatchId, selProdId]),
-      "",
-      function (res) {
-        fcom.removeLoader();
-        $(bindProductForm).html(res);
-      }
-    );
-  };
+	clearForm = function () {
+		bindproductform();
+	};
 
-  clearForm = function () {
-    bindproductform();
-  };
+	searchProducts = function (frm = '') {
+		$(dv).prepend(fcom.getLoader());
+		var data = '';
+		if (frm) {
+			data = fcom.frmData(frm);
+		}
+		var adsBatchId = $("input[name='adsBatchId']").val();
+		fcom.ajax(
+			fcom.makeUrl(keyName, "searchProducts", [adsBatchId]),
+			data,
+			function (res) {
+				fcom.removeLoader();
+				$(dv).html(res);
+			}
+		);
+	};
 
-  searchproducts = function () {
-    $(dv).prepend(fcom.getLoader());
-    var adsBatchId = $("input[name='adsBatchId']").val();
-    fcom.ajax(
-      fcom.makeUrl(keyName, "searchProducts", [adsBatchId]),
-      "",
-      function (res) {
-        fcom.removeLoader();
-        $(dv).html(res);
-      }
-    );
-  };
+	setupProductsToBatch = function (frm) {
+		if (!$(frm).validate()) return;
+		var data = fcom.frmData(frm);
+		fcom.updateWithAjax(
+			fcom.makeUrl(keyName, "setupProductsToBatch"),
+			data,
+			function (t) {
+				closeForm();
+				searchProducts();
+			}
+		);
+	};
 
-  setupProductsToBatch = function (frm) {
-    if (!$(frm).validate()) return;
-    var data = fcom.frmData(frm);
-    fcom.updateWithAjax(
-      fcom.makeUrl(keyName, "setupProductsToBatch"),
-      data,
-      function (t) {
-        bindproductform();
-        searchproducts();
-      }
-    );
-  };
+	unlinkProduct = function (adsBatchId, selProdId) {
+		var agree = confirm(langLbl.confirmDelete);
+		if (!agree) {
+			return false;
+		}
+		fcom.updateWithAjax(
+			fcom.makeUrl(keyName, "unlinkProduct", [adsBatchId, selProdId]),
+			"",
+			function (t) {
+				searchProducts();
+			}
+		);
+	};
 
-  unlinkProduct = function (adsBatchId, selProdId) {
-    var agree = confirm(langLbl.confirmDelete);
-    if (!agree) {
-      return false;
-    }
-    fcom.updateWithAjax(
-      fcom.makeUrl(keyName, "unlinkProduct", [adsBatchId, selProdId]),
-      "",
-      function (t) {
-        searchproducts();
-      }
-    );
-  };
+	unlinkproducts = function (adsBatchId) {
+		if (typeof $(".selectItem--js:checked").val() === "undefined") {
+			$.mbsmessage(langLbl.atleastOneRecord, "alert--danger");
+			return false;
+		}
+		var agree = confirm(langLbl.confirmDelete);
+		if (!agree) {
+			return false;
+		}
+		var data = fcom.frmData(document.getElementById("frmBatchSelprodListing"));
+		$.mbsmessage(langLbl.processing, false, "alert--process");
+		fcom.ajax(
+			fcom.makeUrl(keyName, "unlinkProducts", [adsBatchId]),
+			data,
+			function (t) {
+				var ans = $.parseJSON(t);
+				if (ans.status == 1) {
+					$.mbsmessage(ans.msg, true, "alert--success");
+					$(".formActionBtn-js").addClass("disabled");
+				} else {
+					$.mbsmessage(ans.msg, true, "alert--danger");
+				}
+				searchProducts();
+			}
+		);
+	};
 
-  unlinkproducts = function (adsBatchId) {
-    if (typeof $(".selectItem--js:checked").val() === "undefined") {
-      $.mbsmessage(langLbl.atleastOneRecord, "alert--danger");
-      return false;
-    }
-    var agree = confirm(langLbl.confirmDelete);
-    if (!agree) {
-      return false;
-    }
-    var data = fcom.frmData(document.getElementById("frmBatchSelprodListing"));
-    $.mbsmessage(langLbl.processing, false, "alert--process");
-    fcom.ajax(
-      fcom.makeUrl(keyName, "unlinkProducts", [adsBatchId]),
-      data,
-      function (t) {
-        var ans = $.parseJSON(t);
-        if (ans.status == 1) {
-          $.mbsmessage(ans.msg, true, "alert--success");
-          $(".formActionBtn-js").addClass("disabled");
-        } else {
-          $.mbsmessage(ans.msg, true, "alert--danger");
-        }
-        searchproducts();
-      }
-    );
-  };
+	bindProductsAutocomplete = function () {
+		var ele = $(".sellerProductJs");
+		ele.select2({
+			closeOnSelect: true,
+			dropdownParent: ele.closest('.modal'),
+			dir: langLbl.layoutDirection,
+			allowClear: true,
+			placeholder: ele.attr("placeholder"),
+			ajax: {
+				url: fcom.makeUrl("Seller", "autoCompleteProducts"),
+				dataType: "json",
+				delay: 250,
+				method: "post",
+				data: function (params) {
+					return {
+						keyword: params.term, // search term
+						page: params.page,
+					};
+				},
+				processResults: function (data, params) {
+					params.page = params.page || 1;
+					return {
+						results: data.products,
+						pagination: {
+							more: params.page < data.pageCount,
+						},
+					};
+				},
+				cache: true,
+			},
+			minimumInputLength: 0,
+			templateResult: function (result) {
+				return result.name;
+			},
+			templateSelection: function (result) {
+				return result.name || result.text;
+			},
+		});
+
+		var select2Selector = ele.data("select2");
+		select2Selector.$container.addClass("custom-select2");
+		if (ele.attr('multiple') == undefined) {
+			$('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+		} else {
+			select2Selector.$container.addClass("custom-select2-multiple");
+		}
+	}
+
+	bindGoogleCatAutocomplete = function () {
+		var ele = $(".googleCatIdJs");
+		select2('googleCatIdJs', fcom.makeUrl(keyName, "getProductCategoryAutocomplete"));
+	}
+
+	goToSearchPage = function (page) {
+		if (typeof page == undefined || page == null) {
+			page = 1;
+		}
+		var frm = document.frmSearchPaging;
+		$(frm.page).val(page);
+		searchProducts(frm);
+	};
 })();

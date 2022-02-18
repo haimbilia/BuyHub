@@ -2758,7 +2758,7 @@ class BuyerController extends BuyerBaseController
         $frm = new Form('frmSrch');
         $frm->addHiddenField('', 'op_id');
         $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
+        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('FRM_Keyword', $langId)));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');

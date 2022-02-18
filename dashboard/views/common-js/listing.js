@@ -1,7 +1,12 @@
 /* Reset result on clear(cross) icon on keyword search field. */
 $(document).on("search", "input[type='search']", function () {
-    if ("" == $(this).val()) {
+    if ("" == $(this).val() && typeof searchRecords === 'function') {
         searchRecords(document.frmRecordSearch);
+    }
+
+    var callback = $(this).data('callback');
+    if ("" == $(this).val() && typeof callback !== 'undefined') {
+        eval(callback);
     }
 });
 /* Reset result on clear(cross) icon on keyword search field. */
@@ -18,6 +23,13 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     }
 });
 
+$(document).on("click", ".navTabsJs a", function (e) {
+    if ($(this).hasClass('fat-inactive')) {
+        return;
+    }
+    $(this).siblings('a.active').removeClass('active');
+    $(this).addClass('active');
+});
 
 (function () {
     checkControllerName = function () {
@@ -30,6 +42,7 @@ $(document).on("click", ".resetModalFormJs", function (e) {
 
     clearSearch = function () {
         document.frmRecordSearch.reset();
+        $(document.frmRecordSearch.page).val(1);
         searchRecords(document.frmRecordSearch);
     };
 
@@ -78,8 +91,6 @@ $(document).on("click", ".resetModalFormJs", function (e) {
         $.ykmodal.close();
     };
 
-    markPopTabActive = function () {
-        $('.navTabsJs a.active').removeClass('active');
-        $('.navTabsJs').find("a[onclick^='" + markPopTabActive.caller.name + "']").addClass('active');
-    };
+
 })();
+

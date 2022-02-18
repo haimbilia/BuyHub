@@ -268,7 +268,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             scollection_id = 0;
         }
-        markPopTabActive();
+        
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -315,7 +315,7 @@ $(document).on("change", ".state", function () {
         if (typeof (langId) == "undefined" || langId < 0) {
             return false;
         }
-        markPopTabActive();
+        
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -328,7 +328,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopTabActive();
+        
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -363,8 +363,8 @@ $(document).on("change", ".state", function () {
         }
         markSubTabActive();
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
-            $('.btn-back').removeClass('d-none');
-            $(dv).html(t);
+            fcom.removeLoader();
+            $.ykmodal(t);
         });
     };
 
@@ -373,10 +373,11 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
             $.mbsmessage.close();
-            /*reloadSocialPlatformsList();*/
+            reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
-                return;
+            } else {
+                closeForm();
             }
 
         });
@@ -404,6 +405,8 @@ $(document).on("change", ".state", function () {
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
                 return;
+            } else {
+                closeForm();
             }
         });
     };
@@ -532,7 +535,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopTabActive();
+        
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -923,9 +926,8 @@ $(document).on("change", ".state", function () {
     }
 
     markSubTabActive = function () {
-        let currentTabEle = $(ctabId + ' li').find("a[onclick^='" + markSubTabActive.caller.name + "']").closest('li');
-        currentTabEle.siblings().removeClass('is-active');
-        currentTabEle.addClass('is-active');
+        $(ctabId + ' a.active').removeClass('active');
+        $(ctabId + " a[onclick^='" + markSubTabActive.caller.name + "']").addClass('active');
     }
 
 })();
