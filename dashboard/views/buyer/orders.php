@@ -53,7 +53,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; */
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Order_History', $siteLangId),
+        'headingLabel' => Labels::getLabel('LBL_MY_ORDERS', $siteLangId),
         'siteLangId' => $siteLangId,
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
