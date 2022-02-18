@@ -4,8 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('data-onclear', 'addNew()');
-
+$frm->setFormTagAttribute('data-onclear', 'addUserTransaction(' . $userId . ')');
 $fld = $frm->getField('utxn_user_id');
 $fld->addFieldTagAttribute('id', 'userIdJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_SELECT_USER', $siteLangId));

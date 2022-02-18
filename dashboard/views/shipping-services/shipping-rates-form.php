@@ -5,8 +5,11 @@ $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'setUpShippingRate(this); return(false);');
 
 $fld = $frm->getField('btn_submit');
-$fld->developerTags['noCaptionTag'] = true;
-$fld->setFieldTagAttribute('class', 'btn btn-brand');
+if(null != $fld){
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->setFieldTagAttribute('class', 'btn btn-brand');
+}
+
 ?>
 
 <div class="modal-header">

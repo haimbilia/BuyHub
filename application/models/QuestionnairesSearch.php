@@ -54,7 +54,7 @@ class QuestionnairesSearch extends SearchBase
     public function joinQuestions($langId = 0)
     {
         if (!$this->joinedQuestionnarieToQuestions) {
-            trigger_error(Labels::getLabel('ERR_Please_join_Questionnaire_to_questions_table', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_QUESTIONNAIRE_TO_QUESTIONS_TABLE', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(self::DB_QUESTIONS_TBL, 'INNER JOIN', 'q.question_id = qtq.qtq_question_id and q.question_deleted = 0', 'q');
         if ($langId) {
@@ -66,7 +66,7 @@ class QuestionnairesSearch extends SearchBase
     public function joinQuestionBanks($langId = 0)
     {
         if (!$this->joinedQuestions) {
-            trigger_error(Labels::getLabel('ERR_Please_join_Question_table', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_QUESTION_TABLE', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(self::DB_QUESTION_BANKS_TBL, 'LEFT JOIN', 'qb.qbank_id = q.question_qbank_id and qb.qbank_deleted = 0', 'qb');
         if ($langId) {
@@ -83,7 +83,7 @@ class QuestionnairesSearch extends SearchBase
     public function joinFeedbackToQuestions()
     {
         if (!$this->joinedFeedback) {
-            trigger_error(Labels::getLabel('ERR_Please_join_Feedback_table', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_FEEDBACK_TABLE', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(QuestionnaireFeedback::DB_TBL_QUESTION_TO_ANSWERS, 'LEFT OUTER JOIN', 'qta.qta_qfeedback_id = qfeedback.qfeedback_id', 'qta');
         $this->joinedFeedbackToQuestions = true;
@@ -92,7 +92,7 @@ class QuestionnairesSearch extends SearchBase
     public function joinFeedbackQuestionsToQuestions($langId = 0)
     {
         if (!$this->joinedFeedbackToQuestions) {
-            trigger_error(Labels::getLabel('ERR_Please_join_Feedback_to_questions_table.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_FEEDBACK_TO_QUESTIONS_TABLE.', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(self::DB_QUESTIONS_TBL, 'LEFT OUTER JOIN', 'qta.qta_question_id = fq.question_id', 'fq');
         if ($langId) {

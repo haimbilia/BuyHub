@@ -5,12 +5,14 @@ HtmlHelper::formatFormFields($logoFrm);
 $logoFrm->setFormTagAttribute('class', 'modal-body form');
 
 $logoLangFld = $logoFrm->getField('lang_id');
-$logoLangFld->addFieldTagAttribute('id', 'logoLanguageJs');
+$logoLangFld->addFieldTagAttribute('id', 'brandlogoLanguageJs');
+$logoLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $ratioFld = $logoFrm->getField('ratio_type');
 $ratioFld->addOptionListTagAttribute('class', 'list-radio');
-$ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
+$ratioFld->addFieldTagAttribute('class', 'brandPrefRatioJs');
 $ratioFld = HtmlHelper::configureRadioAsButton($logoFrm, 'ratio_type');
+$ratioFld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $logoFrm->getField('heading');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_LOGO', $siteLangId) . '</h3>';
@@ -19,7 +21,7 @@ $fld = $logoFrm->getField('logo');
 $fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</span>';
 $fld->value = '<span id="logoListingJs"></span>';
 
-$ratioFld->attachField($fld);
+// $ratioFld->attachField($fld);
 
 /* Logo Image */
 
@@ -36,12 +38,12 @@ $fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . 
 $fld->value = '<span id="imageListingJs"></span>';
 
 $imageLangFld = $imageFrm->getField('lang_id');
-$imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
+$imageLangFld->addFieldTagAttribute('id', 'brandBannerLanguageJs');
 
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 
-if (1 < $languageCount) {   
+if (1 < $languageCount) {
     $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
     $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
@@ -106,18 +108,7 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
         var slide_screen = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
         var lang_id = $("#imageLanguageJs").val();
-        brandImages(brand_id, 'image', slide_screen, lang_id);
+        loadImages(brand_id, 'image', slide_screen, lang_id);        
     });
-
-    $(document).on('change', '.prefRatio-js', function() {
-        if ($(this).val() == ratioTypeSquare) {
-            $(minWidthLogoEle).val(500);
-            $(minHeightLogoEle).val(500);
-            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));
-        } else {
-            $(minWidthLogoEle).val(500);
-            $(minHeightLogoEle).val(280);
-            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
-        }
-    });
+    
 </script>

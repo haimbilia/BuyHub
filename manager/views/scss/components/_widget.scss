@@ -1,4 +1,4 @@
-$widget:'widget';
+$widget: "widget";
 .#{$widget}1 {
     $self: &;
     padding: 25px;
@@ -108,9 +108,9 @@ $widget:'widget';
             &--brand {
                 &:before {
                     // // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
                 }
             }
@@ -301,13 +301,13 @@ $widget:'widget';
         #{$self}__icon {
             $selfIcon: &;
             padding-#{$end-direction}: 1.25rem;
-            >i {
+            > i {
                 font-size: 1.6rem;
                 text-align: right;
                 color: $txt-gray;
             }
             &--2x {
-                >i {
+                > i {
                     font-size: 2.2rem;
                 }
             }
@@ -337,7 +337,7 @@ $widget:'widget';
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 0.7rem;
-                    >span {
+                    > span {
                         line-height: 1.1;
                         &:first-child {
                             font-size: 1.1rem;
@@ -455,7 +455,7 @@ $widget:'widget';
             display: flex;
             align-items: center;
             margin-bottom: 1.07rem;
-            >span {
+            > span {
                 font-size: 1rem;
                 color: $txt-gray;
                 font-weight: 400;
@@ -473,7 +473,7 @@ $widget:'widget';
             align-items: center;
             padding: 1.07rem 0;
             border-bottom: $border;
-            >span {
+            > span {
                 color: $txt-gray;
                 font-weight: 400;
                 flex: 1;
@@ -622,8 +622,8 @@ $widget:'widget';
     }
     .table {
         thead {
-            >tr {
-                >td {
+            > tr {
+                > td {
                     padding: 0;
                     vertical-align: top;
                     border-top: 0;
@@ -636,16 +636,16 @@ $widget:'widget';
             overflow-y: hidden;
         }
         tbody {
-            >tr {
+            > tr {
                 border-bottom: $border;
-                >td {
+                > td {
                     border: 0;
                     padding-#{$start-direction}: 0;
                     padding-#{$end-direction}: 0.5rem;
                     padding-top: 20px;
                     vertical-align: top;
                     color: $txt-gray;
-                    >label {
+                    > label {
                         #{$end-direction}: 0;
                         top: 0.5rem;
                         vertical-align: top;
@@ -663,12 +663,12 @@ $widget:'widget';
                     font-weight: 500;
                     display: block;
                     color: $txt-gray;
-                    transition: color .3s ease;
+                    transition: color 0.3s ease;
                     &:hover {
                         color: $brand-color;
-                        transition: color .3s ease;
+                        transition: color 0.3s ease;
                     }
-                    >span {
+                    > span {
                         color: $txt-gray;
                     }
                 }
@@ -766,7 +766,7 @@ $widget:'widget';
                 font-weight: 500;
             }
         }
-        >span {
+        > span {
             flex: 1;
         }
         &:last-child {
@@ -1033,7 +1033,7 @@ $widget:'widget';
                 transition: all 0.3s ease;
                 #{$self}__icon {
                     display: block;
-                    >i {
+                    > i {
                         font-size: 2.6rem;
                     }
                     svg {
@@ -1071,7 +1071,7 @@ $widget:'widget';
         position: relative;
         background-repeat: no-repeat;
         background-size: cover;
-        >img {
+        > img {
             width: 100%;
         }
         #{$self}__shadow {
@@ -1080,7 +1080,8 @@ $widget:'widget';
             bottom: 0;
             #{$start-direction}: 0;
             #{$end-direction}: 0;
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, rgba(0, 0, 0, 0)), color-stop(40%, rgba(0, 0, 0, 0.1)), color-stop(90%, rgba(0, 0, 0, 0.5))) no-repeat scroll 0 0;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, rgba(0, 0, 0, 0)), color-stop(40%, rgba(0, 0, 0, 0.1)), color-stop(90%, rgba(0, 0, 0, 0.5))) no-repeat scroll 0
+                0;
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.5) 90%) no-repeat scroll 0 0;
         }
         #{$self}__title {
@@ -1106,7 +1107,7 @@ $widget:'widget';
             align-items: center;
             margin: 0 0 1.75rem 0;
             #{$self}__userpic {
-                >img {
+                > img {
                     width: 3.2rem;
                     border-radius: 100%;
                 }
@@ -1404,7 +1405,7 @@ $widget:'widget';
         position: relative;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
-        >img {
+        > img {
             width: 100%;
             height: 286px;
             border-top-left-radius: 4px;
@@ -1419,9 +1420,9 @@ $widget:'widget';
             display: block;
             z-index: 1;
             color: #ffffff;
-            >span {
+            > span {
                 font-size: 4.5rem;
-                >span {
+                > span {
                     font-size: 2.5rem;
                     padding-#{$end-direction}: 0.4rem;
                 }
@@ -1461,16 +1462,16 @@ $widget:'widget';
             border-spacing: 0.7rem;
             .nav-item {
                 display: table-cell;
-                >a {
+                > a {
                     text-align: center;
                     font-weight: 600;
                     padding: 0.8rem 0 0.8rem 0;
                     color: $txt-gray;
                     border: $border;
                 }
-                >a.active {
+                > a.active {
                     // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
                     border-color: $brand-color !important;
                     color: #ffffff;
@@ -1565,15 +1566,15 @@ $widget:'widget';
             padding: 0 1rem;
             .nav-item {
                 display: table-cell;
-                >a {
+                > a {
                     text-align: center;
                     padding: 1rem 0 1rem 0;
                     border: 1px solid rgba(255, 255, 255, 0);
-                    >span {
+                    > span {
                         display: block;
                         color: rgba(255, 255, 255, 0.7);
                         transition: color 0.3s ease;
-                        >i {
+                        > i {
                             font-size: 2.2rem;
                             margin-#{$end-direction}: 0;
                             padding-bottom: 1rem;
@@ -1586,10 +1587,10 @@ $widget:'widget';
                     }
                     &:focus {
                         background-color: transparent;
-                        >span {
+                        > span {
                             color: #fff;
                             transition: color 0.3s ease;
-                            >i {
+                            > i {
                                 color: #fff;
                                 transition: color 0.3s ease;
                             }
@@ -1597,10 +1598,10 @@ $widget:'widget';
                     }
                     &:active {
                         background-color: transparent;
-                        >span {
+                        > span {
                             color: #fff;
                             transition: color 0.3s ease;
-                            >i {
+                            > i {
                                 color: #fff;
                                 transition: color 0.3s ease;
                             }
@@ -1608,23 +1609,23 @@ $widget:'widget';
                     }
                     &:hover {
                         background-color: transparent;
-                        >span {
+                        > span {
                             color: #fff;
                             transition: color 0.3s ease;
-                            >i {
+                            > i {
                                 color: #fff;
                                 transition: color 0.3s ease;
                             }
                         }
                     }
                 }
-                >a.active {
+                > a.active {
                     border: 1px solid white;
                     background-color: transparent;
-                    >span {
+                    > span {
                         color: #fff;
                         transition: color 0.3s ease;
-                        >i {
+                        > i {
                             color: #fff;
                             transition: color 0.3s ease;
                         }
@@ -1639,7 +1640,7 @@ $widget:'widget';
                     #{$self}__tab-item {
                         margin-top: 1.2rem;
                         border-bottom: $border;
-                        >span {
+                        > span {
                             display: block;
                             &:first-child {
                                 font-size: 1rem;
@@ -1722,7 +1723,7 @@ $widget:'widget';
                 margin: 1rem 1rem;
                 box-shadow: 0px 2px 14px 2px rgba(0, 0, 0, 0.04);
                 border-radius: 4px;
-                >span {
+                > span {
                     display: block;
                     &:first-child {
                         font-size: 1.1rem;
@@ -1737,13 +1738,13 @@ $widget:'widget';
                 }
             }
             .center {
-                >div {
+                > div {
                     cursor: auto;
                     // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
                     box-shadow: 0px 2px 14px 2px rgba(54, 108, 243, 0.2);
-                    >span {
+                    > span {
                         &:first-child {
                             color: #ffffff;
                         }
@@ -1767,7 +1768,7 @@ $widget:'widget';
                     margin-bottom: 1.5rem;
                     padding-bottom: 1.5rem;
                     #{$self}__pic {
-                        >img {
+                        > img {
                             width: 3rem;
                             height: 3rem;
                             border-radius: 100%;
@@ -1779,7 +1780,7 @@ $widget:'widget';
                         padding: 0 1rem;
                         font-weight: 500;
                         color: $txt-gray;
-                        >a {
+                        > a {
                             display: block;
                             font-size: 1rem;
                             font-weight: 500;
@@ -1790,7 +1791,7 @@ $widget:'widget';
                                 transition: color 0.3s ease;
                             }
                         }
-                        >span {
+                        > span {
                             display: block;
                             font-size: 1rem;
                             font-weight: 400;
@@ -1821,7 +1822,7 @@ $widget:'widget';
             justify-content: space-between;
             align-items: center;
             #{$self}__pic {
-                >img {
+                > img {
                     width: 4rem;
                     border-radius: 50%;
                 }
@@ -1854,7 +1855,7 @@ $widget:'widget';
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 0.7rem;
-                    >span {
+                    > span {
                         line-height: 1.1;
                         &:first-child {
                             font-size: 1.1rem;
@@ -2556,7 +2557,7 @@ $widget:'widget';
                 .#{$widget}__action {
                     text-align: center;
                     margin-top: 2.3rem;
-                    >.btn-label-warning {
+                    > .btn-label-warning {
                         &:hover {
                             color: #fff;
                         }
@@ -3087,7 +3088,7 @@ $widget:'widget';
             padding: 2.2rem 1rem;
             #{$self}__item {
                 #{$self}__info {
-                    >span {
+                    > span {
                         padding-#{$end-direction}: 1rem;
                         &:last-child {
                             padding-#{$end-direction}: 0;

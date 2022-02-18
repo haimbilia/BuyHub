@@ -16,7 +16,7 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
                         echo CommonHelper::replaceStringData(Labels::getLabel("LBL_YOU_SAVED_ADDITIONAL_{AMOUNT}", $siteLangId), $arr); ?>
             </p>
         </div>
-        <button class="close-layer" onClick="removePromoCode()"> </button>
+        <button class="close-layer" onclick="removePromoCode()"> </button>
     </div>
     <?php } else { ?>
     <div class="coupons">

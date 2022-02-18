@@ -17,7 +17,7 @@
                         <?php foreach ($layouts as $layoutType => $layout) { ?>
                             <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $layout; ?>" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>)">
                                 <i class="icn">
-                                    <svg class="svg" width="40" height="40">
+                                    <svg class="svg" width="32" height="32">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#collection-layout-<?php echo $layoutType; ?>"></use>
                                     </svg>
                                 </i>

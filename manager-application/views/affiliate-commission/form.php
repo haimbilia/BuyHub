@@ -2,7 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $fld = $frm->getField('afcommsetting_user_id');

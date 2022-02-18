@@ -56,7 +56,7 @@ class PaygatePayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -76,7 +76,7 @@ class PaygatePayController extends PaymentController
             if (isset($this->payWeb3->processRequest)) {
                 $isValid = $this->payWeb3->validateChecksum($this->payWeb3->initiateResponse);
                 if (false == $isValid) {
-                    $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_CHECKSUM', $this->siteLangId), FatUtility::isAjaxCall());
+                    $this->setErrorAndRedirect(Labels::getLabel('ERR_INVALID_CHECKSUM', $this->siteLangId), FatUtility::isAjaxCall());
                 }
                 $frm = $this->getPaymentForm($orderId, true);
                 $processRequest = true;
@@ -116,7 +116,7 @@ class PaygatePayController extends PaymentController
         
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $log = [
                 'msg' => $msg,
                 'response' => $response,
@@ -130,7 +130,7 @@ class PaygatePayController extends PaymentController
         if (false === $this->plugin->validateResponse($orderId, $response)) {
             SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
 
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
 
             $orderPaymentObj->addOrderPaymentComments($msg);
@@ -142,10 +142,10 @@ class PaygatePayController extends PaymentController
         if (false === $this->plugin->validateTxnStatus($this->queryResponse['TRANSACTION_STATUS'])) {
             SystemLog::transaction(json_encode($this->queryResponse), self::KEY_NAME . "-" . $orderId);
 
-            $desc = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+            $desc = Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);
             $desc = isset($this->queryResponse['RESULT_DESC']) ? $this->queryResponse['RESULT_DESC'] : $desc;
 
-            $msg = Labels::getLabel("MSG_TXN_STATUS_{STATUS}._{DESC}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_TXN_STATUS_{STATUS}._{DESC}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $this->plugin->getError(), '{DESC}' => $desc]);
 
             $orderPaymentObj->addOrderPaymentComments($msg);
@@ -156,7 +156,7 @@ class PaygatePayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         /* Recording Payment in DB */
-        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $this->queryResponse['TRANSACTION_ID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($this->queryResponse));
+        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $this->queryResponse['TRANSACTION_ID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($this->queryResponse));
         /* End Recording Payment in DB */
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
@@ -170,7 +170,7 @@ class PaygatePayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->payWeb3::$process_url;
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
@@ -182,7 +182,7 @@ class PaygatePayController extends PaymentController
                 $frm->addHiddenField('', $name, $value);
             }
         } else {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
 
         return $frm;

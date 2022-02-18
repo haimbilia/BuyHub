@@ -17,21 +17,39 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr,  $listSerial);
                 break;
             case 'buyer_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectUser('.$row['buyer_id'].')">' . $row['buyer_name'] . ' <br>( <strong>' . $row['buyer_username'] . '</strong> )</a>';
-                $td->appendElement('plaintext', $tdAttr, $txt, true);
-
+                $href = "javascript:void(0)";
+                $onclick = ($canViewUsers ? 'redirectUser('. $row['user_id'] . ')' : '');
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                    'extraClass' => 'user-profile-sm'
+                ], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'vendor_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectToShop(' . $row['op_shop_id'] . ')">' . $row['op_shop_name'] . ' <br>( <strong>' . $row['seller_username'] . '</strong> )</a>';
-                $td->appendElement('plaintext', $tdAttr, $txt, true);
+                $onclick = $canViewShops && !empty($row['op_shop_id']) ? 'redirectToShop(' . $row['op_shop_id'] . ')' : '';
+                $data = [
+                    'user_updated_on' => $row['seller_updated_on'],
+                    'user_id' => $row['seller_id'],
+                    'user_name' => $row['seller_name'],
+                    'credential_username' => $row['seller_username'],
+                    'credential_email' => $row['seller_email'],
+                    
+                ];
+                $title = '';
+                if (!empty($row['op_shop_name'])) {
+                    $str = Labels::getLabel('LBL_SHOP:_{SHOP}', $siteLangId);
+                    $data['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['op_shop_name']]);
+                    $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
+                }
+                
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $data, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title,'extraClass' => 'user-profile-sm','displayProfileImage'=>false], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'reuqest_detail':
-                $data = [
-                    'order' => $row, 
-                    'siteLangId' => $siteLangId, 
-                    'horizontalAlignOptions' => true
-                ];
-                $html = $this->includeTemplate('_partial/product/order-product-info-card.php', $data, false, true);
+                $html = $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $row, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false, true);
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;
             case 'amount':
@@ -51,27 +69,53 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['ocrequest_id']
                 ];
 
-                if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
-                    $data['editButton'] = [];
-                }
-                if (!empty($row['ocreason_title'])) {
-                    $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' =>  'javascript:void(0);',
-                                'onclick' => 'viewComment('.$row['ocrequest_id'].','.$siteLangId.')' ,
-                                'title' => Labels::getLabel('LBL_VIEW_COMMENT', $siteLangId),
-                            ],
-                            'label' => '<i class="icn">
-                            <svg class="svg" width="18" height="18">
-                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#comment">
-                                </use>
-                            </svg>
-                        </i>'
-                        ]
-                    ];	                    
-                }
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'viewComment(' . $row['ocrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ],
+                ];
 
+                if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
+                    $arr = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'editRecord(' . $row['ocrequest_id'] . ',true)',
+                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ];
+                    array_unshift($data['otherButtons'], $arr);
+                } else if ($row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED && !empty($row['ocrequest_admin_comment'])) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'viewAdminComment(' . $row['ocrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_ADMIN_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#admin-reply">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ];
+                }
+                
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
@@ -82,16 +126,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

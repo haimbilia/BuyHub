@@ -1,23 +1,23 @@
 (function () {
     mediaForm = function (post_id) {
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, 'imagesForm', [post_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'imagesForm', [post_id]), '', function (t) {
             loadImages(post_id);
-            $.ykmodal(t);
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };
 
     loadImages = function (post_id, lang_id) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'images', [post_id, lang_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [post_id, lang_id]), '', function (t) {
+            fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
             }
 
             if ('' != t) {
-                $(".dropzoneContainerJs").append(t);
+                $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
                 $(".dropzoneUploadJs").show();

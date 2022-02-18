@@ -26,7 +26,7 @@ class ShippingMethods extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL, 'sm');
         if ($isActive == true) {
-            $srch->addCondition('sm.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('sm.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -56,7 +56,7 @@ class ShippingMethods extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'IFNULL(sm_l.shippingapi_name,sm.shippingapi_identifier) as shippingapi_name'
+                'IFNULL(sm_l.shippingapi_name,sm.shippingapi_identifier) as shippingapi_name'
             )
         );
 
@@ -72,7 +72,7 @@ class ShippingMethods extends MyAppModel
         $db = FatApp::getDb();
 
         $srch = new SearchBase(static::DB_SETTING_TBL);
-        $srch->addCondition('shipsetting_shippingapi_id', '=', $recordId);
+        $srch->addCondition('shipsetting_shippingapi_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $rs = $srch->getResultSet();
         $row = $db->fetchAll($rs);
         if ($row == false || empty($row)) {
@@ -96,7 +96,7 @@ class ShippingMethods extends MyAppModel
         $db = FatApp::getDb();
 
         $srch = new SearchBase(static::DB_SETTING_TBL);
-        $srch->addCondition('shipsetting_shippingapi_id', '=', $recordId);
+        $srch->addCondition('shipsetting_shippingapi_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {

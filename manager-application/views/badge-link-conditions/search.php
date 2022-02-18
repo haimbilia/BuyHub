@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'from_date':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'to_date':
-                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $siteLangId) : HtmlHelper::formatDateTime($row[$key], true));
+                $lbl = (1 > strtotime($row[$key]) ? Labels::getLabel('LBL_N/A', $siteLangId) : HtmlHelper::formatDateTime($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())));
                 $td->appendElement('plaintext', [], $lbl, true);
                 break;
             case 'action':
@@ -58,9 +58,8 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit) {
                     $recordType = $row['blinkcond_record_type'];
                     $triggerType = $row['badge_trigger_type'];
-                    $displayInPoup = (int) (Badge::COND_AUTO == $triggerType || BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType);
                     $data['editButton'] = [
-                        'onclick' => 'editConditionRecord(' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'] . ', ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ', ' . $displayInPoup . ')'
+                        'onclick' => 'editConditionRecord(' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'] . ', ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ')'
                     ];
                     $data['deleteButton'] = [];
                 }
@@ -75,16 +74,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

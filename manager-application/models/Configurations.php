@@ -2,11 +2,10 @@
 
 class Configurations extends FatModel
 {
-    private $db;
     public const DB_TBL = 'tbl_configurations';
     public const DB_TBL_PREFIX = 'conf_';
 
-    public const FORM_GENERAL = 1;
+    public const FORM_CMS = 1;
     public const FORM_LOCAL = 2;
     public const FORM_SEO = 3;
     public const FORM_PRODUCT = 4;
@@ -30,6 +29,8 @@ class Configurations extends FatModel
     public const FORM_CART_WISHLIST = 22;
     public const FORM_COMMISSION = 23;
 
+    public const MESSAGE_AUTOCLOSE_TIME = 3;
+
     public function __construct()
     {
         parent::__construct();
@@ -38,12 +39,12 @@ class Configurations extends FatModel
     public static function getLangTypeFormArr()
     {
         return  array(
-            Configurations::FORM_GENERAL,
+            Configurations::FORM_CMS,
             Configurations::FORM_LOCAL,
             Configurations::FORM_EMAIL,
             Configurations::FORM_SHARING,
             Configurations::FORM_MEDIA,
-            Configurations::FORM_SERVER,
+            Configurations::FORM_SYSTEM,
         );
     }
 
@@ -55,28 +56,28 @@ class Configurations extends FatModel
         }
 
         $arr =   array(
-            Configurations::FORM_GENERAL => Labels::getLabel('NAV_GENERAL', $langId),
-            Configurations::FORM_LOCAL => Labels::getLabel('NAV_LOCAL', $langId),
-            Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),
-            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_ACCOUNT', $langId),
+            Configurations::FORM_LOCAL => Labels::getLabel('NAV_BUSINESS_PROFILE', $langId),
+            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_USER_ACCOUNT', $langId),
+            Configurations::FORM_MEDIA => Labels::getLabel('NAV_BUSINESS_LOGO', $langId),
+            Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $langId),
             Configurations::FORM_PRODUCT => Labels::getLabel('NAV_PRODUCT', $langId),
             Configurations::FORM_CART_WISHLIST => Labels::getLabel('NAV_CART/Wishlist', $langId),
-            Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_CHECKOUT', $langId),
-            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_COMMISSION', $langId),
             Configurations::FORM_DISCOUNT => Labels::getLabel('NAV_DISCOUNT', $langId),
-            Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
-            Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
             Configurations::FORM_REVIEWS => Labels::getLabel('NAV_REVIEWS', $langId),
-            Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $langId),
-            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL', $langId),
-            Configurations::FORM_MEDIA => Labels::getLabel('NAV_MEDIA', $langId),
-            Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
-            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $langId),
             Configurations::FORM_SHARING => Labels::getLabel('NAV_SHARING', $langId),
-            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SYSTEM', $langId),
-            Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_LIVE_CHAT', $langId),
+            Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
+            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $langId),
+            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_WEBSITE_COMMISION', $langId),
+            Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
+            Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
+            Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),
             Configurations::FORM_PPC => Labels::getLabel('NAV_PPC_MANAGEMENT', $langId),
-            Configurations::FORM_SERVER => Labels::getLabel('NAV_SERVER', $langId),
+            Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_LIVE_CHAT', $langId),
+            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL_CONFIGURATION', $langId),
+            Configurations::FORM_CMS => Labels::getLabel('NAV_CMS_PAGES', $langId),
+            Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_CHECKOUT', $langId),
+            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SYSTEM', $langId),
+            /* Configurations::FORM_SERVER => Labels::getLabel('NAV_SERVER', $langId), */
         );
         CacheHelper::create('confTabsCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -90,7 +91,7 @@ class Configurations extends FatModel
         }
 
         $arr = array(
-            Configurations::FORM_GENERAL => Labels::getLabel('NAV_SETUP_STORE_NAME,_EMAIL,_CONTACT_NUMBER_AND_MORE', $langId),
+            Configurations::FORM_CMS => Labels::getLabel('NAV_SETUP_STORE_NAME,_EMAIL,_CONTACT_NUMBER_AND_MORE', $langId),
             Configurations::FORM_LOCAL => Labels::getLabel('NAV_SETUP_STORE_ADDRESS,_TIME_ZONE,_LANGUAGE_AND_MORE', $langId),
             Configurations::FORM_SEO => Labels::getLabel('NAV_CONFIGURE_SETTINGS_TO_IMPROVE_SEO_PERFORMANCE', $langId),
             Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_SETUP_PERMISSIONS_AND_WITHDRAWAL_AMOUNTS', $langId),
@@ -111,7 +112,7 @@ class Configurations extends FatModel
             Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SETUP_SYSTEM_MESSAGES', $langId),
             Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_SETUP_LIVE-CHAT_MODULE_VISIBILITY', $langId),
             Configurations::FORM_PPC => Labels::getLabel('NAV_SETUP_COST-PER-CLICK,_PPC_SLIDES_COUNT_AND_MORE', $langId),
-            Configurations::FORM_SERVER => Labels::getLabel('NAV_SETUP_SSL_AND_MAINTENANCE_MODE', $langId),
+            /* Configurations::FORM_SERVER => Labels::getLabel('NAV_SETUP_SSL_AND_MAINTENANCE_MODE', $langId), */
         );
         CacheHelper::create('confTabMsgCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -168,7 +169,7 @@ class Configurations extends FatModel
     public static function getSvgIconNames()
     {
         return [
-            self::FORM_GENERAL => 'general',
+            self::FORM_CMS => 'server',
             self::FORM_LOCAL => 'local',
             self::FORM_SEO => 'seo',
             self::FORM_USER_ACCOUNT => 'user-account',
@@ -189,7 +190,7 @@ class Configurations extends FatModel
             self::FORM_SYSTEM => 'system',
             self::FORM_LIVE_CHAT => 'live-chat',
             self::FORM_PPC => 'ppc',
-            self::FORM_SERVER => 'server',
+            /* self::FORM_SERVER => 'server', */
         ];
     }
 }

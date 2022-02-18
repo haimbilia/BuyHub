@@ -1,11 +1,13 @@
 <?php
 
-class ShippingCompanyUsersController extends ListingBaseController {
+class ShippingCompanyUsersController extends ListingBaseController
+{
 
     protected string $modelClass = 'User';
     protected $pageKey = 'SHIPPING_COMPANY_USERS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShippingCompanyUsers();
     }
@@ -16,7 +18,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
         } else {
@@ -24,7 +27,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -36,12 +40,15 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('shipping-company-users/page-js/index.js');
         $this->getListingData();
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USERNAME', $this->siteLangId));
+
+        $this->_template->addJs(array('shipping-company-users/page-js/index.js'));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'shipping-company-users/search.php', true),
@@ -50,7 +57,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -73,13 +81,12 @@ class ShippingCompanyUsersController extends ListingBaseController {
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj();
-        $srch->addOrder('u.user_id', 'DESC');
         $srch->addCondition('u.user_is_shipping_company', '=', applicationConstants::YES);
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%')
-                    ->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
+                ->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -102,7 +109,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->objPrivilege->canEditShippingCompanyUsers();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
@@ -110,7 +118,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->checkMediaExist = true;
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditShippingCompanyUsers();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getUserForm($recordId, User::USER_TYPE_SHIPPING_COMPANY);
@@ -144,10 +153,12 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->set('stateId', $stateId ?? 0);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditShippingCompanyUsers();
         $frm = $this->getUserForm(0, User::USER_TYPE_SHIPPING_COMPANY);
 
@@ -187,7 +198,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function updateStatus() {
+    public function updateStatus()
+    {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (0 == $recordId) {
@@ -203,7 +215,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function toggleBulkStatuses() {
+    public function toggleBulkStatuses()
+    {
         $this->checkEditPrivilege();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
@@ -222,7 +235,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateUserStatus($userId, $status) {
+    private function updateUserStatus($userId, $status)
+    {
         $status = FatUtility::int($status);
         $userId = FatUtility::int($userId);
         if (1 > $userId || -1 == $status) {
@@ -234,38 +248,44 @@ class ShippingCompanyUsersController extends ListingBaseController {
         }
     }
 
-    protected function getUserForm($user_id = 0, $userType = 0) {
+    protected function getUserForm($user_id = 0, $userType = 0)
+    {
         $user_id = FatUtility::int($user_id);
         $userType = FatUtility::int($userType);
 
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
         $frm->addHiddenField('', 'user_type');
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
+        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $frm->addEmailField(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
+
+        $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         switch ($userType) {
             case User::USER_TYPE_SHIPPING_COMPANY:
-                $frm->addTextBox(Labels::getLabel('LBL_Tracking_Site_Url', $this->siteLangId), 'user_order_tracking_url');
+                $frm->addTextBox(Labels::getLabel('FRM_TRACKING_SITE_URL', $this->siteLangId), 'user_order_tracking_url');
                 break;
         }
         return $frm;
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $frm->setFormTagAttribute('class', 'actionButtonsJs');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
@@ -278,10 +298,11 @@ class ShippingCompanyUsersController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('shippingUserTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
@@ -295,7 +316,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -306,8 +328,8 @@ class ShippingCompanyUsersController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
-        return array_diff($fields, ['credential_username'], Common::excludeKeysForSort());
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
-
 }

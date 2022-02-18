@@ -15,4 +15,15 @@ class ShippingServicesController extends SellerBaseController
         parent::__construct($action);
         $this->langId = $this->siteLangId;        
     }
+
+
+    public function shippingRatesForm(int $opId)
+    {
+        $frm = $this->getShippingRatesForm($opId);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+        $frm->fill(['op_id' => $opId]);
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
+    }
+    
 }

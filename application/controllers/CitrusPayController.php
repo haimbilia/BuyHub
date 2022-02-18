@@ -31,7 +31,7 @@ class CitrusPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -113,13 +113,13 @@ class CitrusPayController extends PaymentController
         }
         $actionUrl = $actionUrl . "$vanityUrl";
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : $actionUrl;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
 
         $frm = new Form('frm-citrus-payment', array('id' => 'frm-citrus-payment', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             $frm->addHiddenField('', 'merchantTxnId', $orderId);
             $frm->addHiddenField('', 'orderAmount', $paymentGatewayCharge);

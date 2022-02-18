@@ -1,37 +1,32 @@
-$(document).ready(function() {
-    searchShipPackages(document.frmPackageSearch);
+$(document).ready(function () {
+    searchRecords(document.frmRecordSearch);
 });
 
-(function() {	
+(function () {
     var dv = '#listing';
-    goToPackagesSearchPage = function(page) {
+    goToPackagesSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
         var frm = document.frmPackageSearchPaging;
         $(frm.page).val(page);
-        searchShipPackages(frm);
+        searchRecords(frm);
     };
 
-    reloadList = function() {
+    reloadList = function () {
         var frm = document.frmPackageSearchPaging;
-        searchShipPackages(frm);
+        searchRecords(frm);
     };
-	
-	searchShipPackages = function(form) {		
+
+    searchRecords = function (form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
-        $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ShippingPackages', 'search'), data, function(res) {
+        $(dv).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('ShippingPackages', 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
-	}
-	
-	clearSearch = function() {
-        document.frmSearch.reset();
-        searchShipPackages(document.frmSearch);
-    };
-	
+    }
 })(); 

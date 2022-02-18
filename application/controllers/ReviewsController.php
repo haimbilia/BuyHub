@@ -177,7 +177,7 @@ class ReviewsController extends MyAppController
         $shopRs = $srch->getResultSet();
         $shop = $db->fetch($shopRs);
         if (!$shop) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
@@ -238,7 +238,7 @@ class ReviewsController extends MyAppController
         $sellerId = Shop::getAttributesById($selprod_id, 'shop_user_id', false);
 
         if ($selprod_id <= 0 || false === $sellerId) {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -266,7 +266,7 @@ class ReviewsController extends MyAppController
 
         $srch->addCondition('spr.spreview_seller_user_id', '=', $sellerId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(seller_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(seller_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
 
         $srch->setPageNumber($page);
@@ -408,7 +408,7 @@ class ReviewsController extends MyAppController
         $reviewId = FatUtility::int($reviewId);
 
         if ($sellerId <= 0) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -436,7 +436,7 @@ class ReviewsController extends MyAppController
         $shop = $db->fetch($shopRs);
 
         if (!$shop) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
@@ -472,7 +472,7 @@ class ReviewsController extends MyAppController
 
         $selProdReviewObj2->addCondition('spr.spreview_id', '=', $reviewId);
         if (!$reviewData = FatApp::getDb()->fetch($selProdReviewObj2->getResultSet())) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -505,7 +505,7 @@ class ReviewsController extends MyAppController
         $reviewId = FatApp::getPostedData('reviewId', FatUtility::VAR_INT, 0);
         $isHelpful = FatApp::getPostedData('isHelpful', FatUtility::VAR_INT, 0);
         if ($reviewId <= 0) {
-            $message = Labels::getLabel('Msg_Invalid_Request', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -523,7 +523,7 @@ class ReviewsController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
         $tblRecObj = new SelProdReviewHelpful($reviewId);
-        $success['msg'] = Labels::getLabel('Msg_Successfully_Updated', $this->siteLangId);
+        $success['msg'] = Labels::getLabel('SUC_SUCCESSFULLY_UPDATED', $this->siteLangId);
         $success['data'] = $tblRecObj->getData();
 
         if (true === MOBILE_APP_API_CALL) {
@@ -545,7 +545,7 @@ class ReviewsController extends MyAppController
         }
         $orderProduct = SelProdReview::getProductOrderId($product_id, $loggedUserId);
         if (empty($orderProduct)) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Review_can_be_posted_on_bought_product', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_REVIEW_CAN_BE_POSTED_ON_BOUGHT_PRODUCT', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         $opId = $orderProduct['op_id'];
@@ -563,7 +563,7 @@ class ReviewsController extends MyAppController
         $post = FatApp::getPostedData();
         $reviewId = FatUtility::int($post['spra_spreview_id']);
         if ($reviewId <= 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $frm = $this->getReviewAbuseForm($reviewId);
         $post = $frm->getFormDataFromArray($post);
@@ -579,7 +579,7 @@ class ReviewsController extends MyAppController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $this->set('reviewId', $reviewId);
-        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -598,8 +598,8 @@ class ReviewsController extends MyAppController
     {
         $frm = new Form('frmReviewAbuse');
         $frm->addHiddenField('', 'spra_spreview_id', $reviewId);
-        $frm->addTextarea(Labels::getLabel('Lbl_Comments', $this->siteLangId), 'spra_comments');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('Lbl_Report_Abuse', $this->siteLangId));
+        $frm->addTextarea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'spra_comments');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REPORT_ABUSE', $this->siteLangId));
         return $frm;
     }
 }

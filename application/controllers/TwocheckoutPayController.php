@@ -44,7 +44,7 @@ class TwocheckoutPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -120,7 +120,7 @@ class TwocheckoutPayController extends PaymentController
             }
         }
         SystemLog::transaction(json_encode($request), self::KEY_NAME . "-" . $orderId);
-        Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
         FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
     }
 
@@ -220,7 +220,7 @@ class TwocheckoutPayController extends PaymentController
                         $message .= 'Response Message: ' . $responseMsg . "\n";
                         if ($responseCode == 'APPROVED') {
                             /* Recording Payment in DB */
-                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $transactionId, $orderPaymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), $message);
+                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $transactionId, $orderPaymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $message);
                             $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
                             /* End Recording Payment in DB */
                         }
@@ -231,10 +231,10 @@ class TwocheckoutPayController extends PaymentController
                     $json['error'] = $exception['errorMsg'];
                 }
             } else {
-                $json['error'] = Labels::getLabel('MSG_EMPTY_GATEWAY_RESPONSE', $this->siteLangId);
+                $json['error'] = Labels::getLabel('ERR_EMPTY_GATEWAY_RESPONSE', $this->siteLangId);
             }
         } else {
-            $json['error'] = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
+            $json['error'] = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
         }
         curl_close($curl);
         echo json_encode($json);
@@ -259,13 +259,13 @@ class TwocheckoutPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         $actionUrl = $this->plugin::PRODUCTION_URL . '/checkout/purchase';
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('TwocheckoutPay', 'charge', array($orderId)) : $actionUrl;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('TwocheckoutPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
 
         $frm = new Form('frmTwoCheckout', array('id' => 'frmTwoCheckout', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             $frm->addHiddenField('', 'sid', $this->settings["sellerId"]);
             $frm->addHiddenField('', 'mode', '2CO'); //it should always be 2CO (We're using hosted payment approach)
@@ -313,7 +313,7 @@ class TwocheckoutPayController extends PaymentController
     {
         $frm = new Form('frmTwoCheckout', array('id' => 'frmTwoCheckout', 'action' => UrlHelper::generateUrl('TwocheckoutPay', 'send', array($orderId)), 'class' => "form form--normal"));
 
-        $frm->addRequiredField(Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'ccNo');
+        $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'ccNo');
         $frm->addHiddenField('', 'token', '');
 
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
@@ -322,12 +322,12 @@ class TwocheckoutPayController extends PaymentController
         for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
             $data['year_expire'][strftime('%Y', mktime(0, 0, 0, 1, 1, $i))] = strftime('%Y', mktime(0, 0, 0, 1, 1, $i));
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_MONTH', $this->siteLangId), 'expMonth', $data['months'], '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_YEAR', $this->siteLangId), 'expYear', $data['year_expire'], '', array(), '');
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_CVV_SECURITY_CODE', $this->siteLangId), 'cvv');
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_MONTH', $this->siteLangId), 'expMonth', $data['months'], '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'expYear', $data['year_expire'], '', array(), '');
+        $fld = $frm->addPasswordField(Labels::getLabel('FRM_CVV_SECURITY_CODE', $this->siteLangId), 'cvv');
         $fld->requirements()->setRequired(true);
         /* $frm->addCheckBox(Labels::getLabel('LBL_SAVE_THIS_CARD_FOR_FASTER_CHECKOUT',$this->siteLangId), 'cc_save_card','1'); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Pay_Now', $this->siteLangId));
 
         return $frm;
     }

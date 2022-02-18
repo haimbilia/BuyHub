@@ -55,28 +55,25 @@ class BlogPostCategoriesController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
 
-        $this->_template->addJs(array('js/jquery-sortable-lists.js'));
-
-        $this->_template->render();
-    }
-
-    public function search()
-    {
-        $this->checkEditPrivilege(true);
         $records = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, 0, true, false, false);
-
         $this->set("arrListing", $records);
-        $this->_template->render(false, false);
+
+        $this->_template->addJs(array('js/jquery-sortable-lists.js'));
+        $this->_template->render();
     }
 
     public function getSubCategories()
     {
         $this->checkEditPrivilege(true);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $parents = BlogPostCategory::getParentIds($recordId);
+        $parentCatCode = implode('_', $parents) . '_';
 
-        $childCategories = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, $recordId, true, false, false);
+        $childCategories = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, $recordId, true, false, false, true);
+        $this->set("parentCatCode", $parentCatCode);
         $this->set("childCategories", $childCategories);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form()
@@ -85,6 +82,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
 
+        $isActive = 0;
         if (0 < $recordId) {
             $data = BlogPostCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
@@ -102,12 +100,14 @@ class BlogPostCategoriesController extends ListingBaseController
             }
             /* ] */
             $frm->fill($data);
+            $isActive = $data['bpcategory_active'];
         }
 
-
+        $this->set('isActive', $isActive);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -121,32 +121,43 @@ class BlogPostCategoriesController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $data = $post;
-
         $recordId = FatUtility::int($post['bpcategory_id']);
-        $parentCatId = FatUtility::int($post['bpcategory_parent']);
+        $oldParentCatId = BlogPostCategory::getAttributesById($recordId, 'bpcategory_parent');
+        if (0 < $recordId && false === $oldParentCatId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $newParentCatId = FatUtility::int($post['bpcategory_parent']);
+        $newRecord = (1 > $recordId || $newParentCatId != $oldParentCatId);
 
         $record = new BlogPostCategory($recordId);
         if ($recordId == 0) {
-            $display_order = $record->getMaxOrder($parentCatId);
-            $data['bpcategory_display_order'] = $display_order;
+            $display_order = $record->getMaxOrder($newParentCatId);
+            $post['bpcategory_display_order'] = $display_order;
         }
-        $record->assignValues($data);
+        $record->assignValues($post);
 
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
+        
+        $this->changeStatus($recordId, $post['bpcategory_active']);
+
         /* url data[ */
         $blogOriginalUrl = BlogPostCategory::REWRITE_URL_PREFIX . $recordId;
-        if ($data['urlrewrite_custom'] == '') {
+        if ($post['urlrewrite_custom'] == '') {
             FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
         } else {
-            $record->rewriteUrl($data['urlrewrite_custom'], true, $parentCatId);
+            $record->rewriteUrl($post['urlrewrite_custom'], true, $newParentCatId);
         }
         /* ] */
 
-        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), ['bpcategory_name' => $data['bpcategory_name']])) {
+        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), ['bpcategory_name' => $post['bpcategory_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
@@ -169,10 +180,24 @@ class BlogPostCategoriesController extends ListingBaseController
             }
         }
 
+        $this->checkEditPrivilege(true);
+        
+        $updateRecordId = ($newRecord ? (1 > $newParentCatId ? $recordId : $newParentCatId) : $recordId);
+
+        $parents = BlogPostCategory::getParentIds($updateRecordId);
+        $parentCatCode = implode('_', $parents) . '_';
+        $this->set("parentCatCode", $parentCatCode);
+
+        $row = BlogPostCategory::getData($this->siteLangId, $updateRecordId, true, false);
+        $this->set("row", $row);
+        
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
+        $this->set('parentCatId', $newParentCatId);
+        $this->set('newRecord', (int) $newRecord);
         $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->set('listingHtml', $this->_template->render(false, false, 'blog-post-categories/search.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateOrder()
@@ -214,7 +239,7 @@ class BlogPostCategoriesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         $bpCatObj = new BlogPostCategory();
-        $arrCategories = $bpCatObj->getCategoriesForSelectBox($this->siteLangId, $recordId);
+        $arrCategories = $bpCatObj->getCategoriesForSelectBox($this->siteLangId, $recordId, false);
         $categories = $bpCatObj->makeAssociativeArray($arrCategories);
 
         $frm = new Form('frmBlogPostCategory');
@@ -225,13 +250,13 @@ class BlogPostCategoriesController extends ListingBaseController
         $fld->requirements()->setRequired();
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_PARENT', $this->siteLangId), 'bpcategory_parent', array(0 => Labels::getLabel('LBL_ROOT_CATEGORY', $this->siteLangId)) + $categories, '', array(), '');
 
-        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'bpcategory_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'bpcategory_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'bpcategory_featured', 1, [], false, 0);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -245,5 +270,57 @@ class BlogPostCategoriesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $langId), 'bpcategory_name');
         return $frm;
+    }
+
+    protected function changeStatus($recordId, $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $obj = new BlogPostCategory($recordId);
+        if (applicationConstants::INACTIVE == $status) {
+            $obj->disableChildCategories();
+        } else {
+            $obj->enableParentCategories();
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+        Product::updateMinPrices();
+    }
+
+    protected function markAsDeleted(int $recordId)
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+                
+        $childIds = BlogPostCategory::getChildIds($recordId);
+        if (1 < count($childIds)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.'), true);
+        }
+        
+        $obj = new BlogPostCategory($recordId);
+        $obj->assignValues(
+            [
+                BlogPostCategory::tblFld('deleted') => 1,
+                BlogPostCategory::tblFld('identifier') => 'mysql_func_CONCAT(' . BlogPostCategory::tblFld('identifier') . ',"{deleted}",' . BlogPostCategory::tblFld('id') . ')'
+            ],
+            false,
+            '',
+            '',
+            true
+        );
+        if (!$obj->save()) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
     }
 }

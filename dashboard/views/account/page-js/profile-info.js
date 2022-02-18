@@ -1,84 +1,76 @@
-$(document).ready(function(){
+$(document).ready(function () {
 	profileInfoForm();
 });
 
-(function() {
+(function () {
 	var runningAjaxReq = false;
 	var dv = '#profileInfoFrmBlock';
 	var imgdv = '#profileImageFrmBlock';
 
-	profileInfoForm = function(){
-		$(dv).html(fcom.getLoader());
+	profileInfoForm = function () {
+		$(dv).prepend(fcom.getLoader());
 		$("#tab-myaccount").parents().children().removeClass("is-active");
 		$("#tab-myaccount").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Account', 'profileInfoForm'), '', function(t) {
-            $(dv).html(t);
-            stylePhoneNumberFld();
+		fcom.ajax(fcom.makeUrl('Account', 'profileInfoForm'), '', function (t) {
+			fcom.removeLoader();
+			$(dv).html(t);
+			stylePhoneNumberFld();
 		});
 	};
 
-	profileImageForm = function(){
-		$(imgdv).html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('Account', 'profileImageForm'), '', function(t) {
-            location.reload();
+	profileImageForm = function () {
+		$(imgdv).prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'profileImageForm'), '', function (t) {
+			fcom.removeLoader();
+			location.reload();
 			/* $(imgdv).html(t); */
 		});
 	};
 
-	updateProfileInfo = function(frm){
-        
+	updateProfileInfo = function (frm) {
+
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateProfileInfo'), data, function(t) {
-			profileInfoForm();
-			$.mbsmessage.close();
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateProfileInfo'), data, function (t) { });
+	};
+
+	setPreferredDashboad = function (id) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'setPrefferedDashboard', [id]), '', function (res) {
 		});
 	};
 
-	setPreferredDashboad = function (id){
-		fcom.updateWithAjax(fcom.makeUrl('Account','setPrefferedDashboard',[id]),'',function(res){
-		});
-	};
-
-	bankInfoForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-bankaccount").parents().children().removeClass("is-active");
-		$("#tab-bankaccount").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Account','bankInfoForm'),'',function(t){
+	settingsForm = function () {
+		$(dv).prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'settingsInfo'), '', function (t) {
+			fcom.removeLoader();
 			$(dv).html(t);
 		});
 	};
-	settingsForm = function(){
-		$(dv).html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('Account','settingsInfo'),'',function(t){
-			$(dv).html(t);
-		});
-	};
-	setSettingsInfo = function(frm){
+	setSettingsInfo = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateSettingsInfo'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateSettingsInfo'), data, function (t) {
 			settingsForm();
 		});
 	};
-	setBankInfo = function(frm){
+	setBankInfo = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateBankInfo'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateBankInfo'), data, function (t) {
 			bankInfoForm();
 		});
 	};
 
-	removeProfileImage = function(){
-		fcom.ajax(fcom.makeUrl('Account','removeProfileImage'),'',function(t){
+	removeProfileImage = function () {
+		fcom.ajax(fcom.makeUrl('Account', 'removeProfileImage'), '', function (t) {
 			profileImageForm();
 		});
 	};
 
-	sumbmitProfileImage = function(){
+	sumbmitProfileImage = function () {
 		$("#frmProfile").ajaxSubmit({
 			delegation: true,
-			success: function(json){
+			success: function (json) {
 				json = $.parseJSON(json);
 				profileImageForm();
 				$(document).trigger('close.facebox');
@@ -86,64 +78,55 @@ $(document).ready(function(){
 		});
 	};
 
-	affiliatePaymentInfoForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-paymentinfo").parents().children().removeClass("is-active");
-		$("#tab-paymentinfo").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Affiliate','paymentInfoForm'),'',function(t){
-			$(dv).html(t);
-		});
-	}
-
-	setUpAffiliatePaymentInfo = function( frm ){
+	setUpAffiliatePaymentInfo = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Affiliate', 'setUpPaymentInfo'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Affiliate', 'setUpPaymentInfo'), data, function (t) {
 			//returnAddressForm();
 		});
 	}
 
-	popupImage = function(inputBtn){
-        if (inputBtn) {
-            if(inputBtn.files && inputBtn.files[0]){
-                $.facebox(fcom.getLoader(), '', 'cropper-body');
-				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
+	popupImage = function (inputBtn) {
+		if (inputBtn) {
+			if (inputBtn.files && inputBtn.files[0]) {
+				$.facebox(fcom.getLoader(), '', 'cropper-body');
+				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
 					$.facebox(t);
 					var file = inputBtn.files[0];
 					var options = {
+						aspectRatio: 1 / 1,
+						preview: '.img-preview',
+						imageSmoothingQuality: 'high',
+						imageSmoothingEnabled: true,
+						crop: function (e) {
+							var data = e.detail;
+						}
+					};
+					$(inputBtn).val('');
+					return cropImage(file, options, 'saveProfileImage', inputBtn);
+				});
+			}
+		} else {
+			$.facebox(fcom.getLoader(), '', 'cropper-body');
+			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
+				$.facebox(t);
+				var container = document.querySelector('.img-container');
+				var image = container.getElementsByTagName('img').item(0);
+				var options = {
 					aspectRatio: 1 / 1,
 					preview: '.img-preview',
 					imageSmoothingQuality: 'high',
 					imageSmoothingEnabled: true,
 					crop: function (e) {
-					  var data = e.detail;
+						var data = e.detail;
 					}
-				  };
-				  $(inputBtn).val('');
-				  return cropImage(file, options, 'saveProfileImage', inputBtn);
-				});
-			}
-		} else {
-            $.facebox(fcom.getLoader(), '', 'cropper-body');
-			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
-				$.facebox(t);
-				var container = document.querySelector('.img-container');
-				var image = container.getElementsByTagName('img').item(0);
-				var options = {
-				aspectRatio: 1 / 1,
-				preview: '.img-preview',
-				imageSmoothingQuality: 'high',
-				imageSmoothingEnabled: true,
-				crop: function (e) {
-				  var data = e.detail;
-				}
-			  };
-			  return cropImage(image, options, 'saveProfileImage');
+				};
+				return cropImage(image, options, 'saveProfileImage');
 			});
 		}
 	};
-    
-	saveProfileImage = function(formData){
+
+	saveProfileImage = function (formData) {
 		$.ajax({
 			url: fcom.makeUrl('Account', 'uploadProfileImage'),
 			type: 'post',
@@ -152,94 +135,60 @@ $(document).ready(function(){
 			cache: false,
 			contentType: false,
 			processData: false,
-			beforeSend: function() {
-				$('#loader-js').html(fcom.getLoader());
+			beforeSend: function () {
+				$('#loader-js').prepend(fcom.getLoader());
 			},
-            complete: function() {
-                $('#loader-js').html(fcom.getLoader());
-            },
-			success: function(ans) {
-					$('#dispMessage').html(ans.msg);
-					profileInfoForm();
-					$(document).trigger('close.facebox');
-				},
-				error: function(xhr, ajaxOptions, thrownError) {
-					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-				}
+			success: function (ans) {
+				fcom.removeLoader();
+				$('#dispMessage').html(ans.msg);
+				profileInfoForm();
+				$(document).trigger('close.facebox');
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
 		});
 	}
 
-	truncateDataRequestPopup = function(){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Account', 'truncateDataRequestPopup'), '', function(t) {
-				$.facebox( t );
+	truncateDataRequestPopup = function () {
+		$.facebox(function () {
+			fcom.ajax(fcom.makeUrl('Account', 'truncateDataRequestPopup'), '', function (t) {
+				$.facebox(t);
 			});
 		});
 	};
 
-	sendTruncateRequest = function(){
-		/* var agree = confirm( langLbl.confirmDeletePersonalInformation );
-		if( !agree ){
-			return false;
-		} */
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendTruncateRequest'), '', function(t) {
+	sendTruncateRequest = function () {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendTruncateRequest'), '', function (t) {
 			profileInfoForm();
 			$.facebox.close();
 		});
 	};
 
-	cancelTruncateRequest = function(){
+	cancelTruncateRequest = function () {
 		$.facebox.close();
 	};
 
-	requestData = function(){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function(t) {
-				$.facebox( t );
+	requestData = function () {
+		$.facebox(function () {
+			fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function (t) {
+				$.facebox(t);
 			});
 		});
 	};
 
-	setupRequestData = function(frm){
+	setupRequestData = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestData'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestData'), data, function (t) {
 			$.facebox.close();
 		});
-    };
-    
-    pluginForm = function(keyName){
-		$(dv).html(fcom.getLoader());
-		$("ul.tabs-js li").removeClass("is-active");
-		$("#tab-" +keyName ).addClass("is-active");
-		fcom.ajax(fcom.makeUrl(keyName, 'form'),'',function(t){
-			$(dv).html(t);
-		});
-    };
-    
-    setupPluginForm = function(frm){
+	};
+
+	setCookiesPreferences = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl(frm.keyName.value, 'setupAccountForm'), data, function(t) {
-			pluginForm(frm.keyName.value);
-		});
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function (t) { });
 	};
-    
-    cookiesPreferencesForm = function(){
-		$(dv).html(fcom.getLoader());
-		$("#tab-cookies-preferences").parents().children().removeClass("is-active");
-		$("#tab-cookies-preferences").addClass("is-active");
-		fcom.ajax(fcom.makeUrl('Account','cookiesPreferencesForm'),'',function(t){
-			$(dv).html(t);
-		});
-	};
-    
-    setCookiesPreferences = function(frm){
-		if (!$(frm).validate()) return;
-		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function(t) {
-			cookiesPreferencesForm();
-		});
-	};
-    
+
 })();

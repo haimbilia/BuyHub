@@ -1,9 +1,13 @@
+$(document).ready(function () {
+    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {'deletedUser' : 1}, '', function () {
+        clearSearch();
+    });
+});
 
 (function () {
     viewRequestPurpose = function (requestId) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('UserGdprRequests', 'viewUserRequest', [requestId]), "", function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('UserGdprRequests', 'viewUserRequest', [requestId]), "", function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };
@@ -30,13 +34,5 @@
             }
         });
     };
-    bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
-            clearSearch();
-        });
-    };
 })();
 
-$(document).ready(function () {
-    bindUserSelect2('searchFrmUserIdJs');
-});

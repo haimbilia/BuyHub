@@ -20,25 +20,25 @@ class TrackingCourierCodeRelation extends MyAppModel
         $plugin = new Plugin();
         $this->keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPMENT_TRACKING);
     }
-    
+
     /**
-    * getSearchObject
-    *
-    * @return object
-    */
+     * getSearchObject
+     *
+     * @return object
+     */
     public static function getSearchObject(): object
     {
         $srch = new SearchBase(static::DB_TBL, 'tccr');
         return $srch;
     }
-    
+
     /**
-    * getDefaultShipAndTrackingRecords
-    *
-    * @param  int $shipApiPluginId
-    * @param  int $trackingApiPluginId
-    * @return array
-    */
+     * getDefaultShipAndTrackingRecords
+     *
+     * @param  int $shipApiPluginId
+     * @param  int $trackingApiPluginId
+     * @return array
+     */
     public function getDefaultShipAndTrackingRecords(int $shipApiPluginId, int $trackingApiPluginId): array
     {
         if (empty($this->keyName)) {
@@ -46,24 +46,24 @@ class TrackingCourierCodeRelation extends MyAppModel
         }
 
         $srch = static::getSearchObject();
-        $srch->addCondition('tccr_shipapi_plugin_id', '=', $shipApiPluginId);
-        $srch->addCondition('tccr_tracking_plugin_id', '=', $trackingApiPluginId);
+        $srch->addCondition('tccr_shipapi_plugin_id', '=', 'mysql_func_' . $shipApiPluginId, 'AND', true);
+        $srch->addCondition('tccr_tracking_plugin_id', '=', 'mysql_func_' . $trackingApiPluginId, 'AND', true);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }
-    
+
     /**
-    * getDataByShipCourierCode
-    *
-    * @param  string $shipApiPluginId
-    * @return array
-    */
+     * getDataByShipCourierCode
+     *
+     * @param  string $shipApiPluginId
+     * @return array
+     */
     public function getDataByShipCourierCode(string $shipCourierCode): array
     {
         if (empty($this->keyName)) {
             return [];
         }
-        
+
         $srch = static::getSearchObject();
         $srch->addCondition('tccr_shipapi_courier_code', '=', $shipCourierCode);
         $rs = $srch->getResultSet();
@@ -72,5 +72,4 @@ class TrackingCourierCodeRelation extends MyAppModel
         }
         return $data;
     }
-
 }

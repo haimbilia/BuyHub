@@ -4,7 +4,7 @@ class UserGdprRequestsController extends ListingBaseController
 {
 
     protected string $modelClass = 'UserGdprRequest';
-    protected $pageKey = 'MANAGE_USER_REQUEST';
+    protected $pageKey = 'MANAGE_USER_GDPR_REQUEST';
 
     public function __construct($action)
     {
@@ -24,7 +24,8 @@ class UserGdprRequestsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditUserRequests($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($fields));
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
-            'newRecordBtn' => false
+            'newRecordBtn' => false,
+            'searchFrmTemplate' => 'users/search-form.php',
         ]);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData();
@@ -54,30 +55,24 @@ class UserGdprRequestsController extends ListingBaseController
 
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'ureq_date');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'ureq_date';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
+
         $srch = new UserGdprRequestSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_username', 'ureq_id', 'ureq_status', 'ureq_type', 'ureq_date'));
         $srch->addCondition('ureq_deleted', '=', applicationConstants::NO);
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
         if ($user_id > 0) {
             $srch->addCondition('user_id', '=', $user_id);
-        } else {
-            $keyword = FatApp::getPostedData('keyword', null, '');
-            if (!empty($keyword)) {
-                $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
-                $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
-                $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
-            }
-        }
+        } 
+
         $request_type = FatApp::getPostedData('request_type', FatUtility::VAR_INT, -1);
         if ($request_type > -1) {
             $srch->addCondition('ureq_type', '=', $request_type);
@@ -91,20 +86,19 @@ class UserGdprRequestsController extends ListingBaseController
         if (!empty($user_request_to)) {
             $srch->addCondition('ureq_date', '<=', $user_request_to . ' 23:59:59');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_username', 'ureq_id', 'ureq_status', 'ureq_type', 'ureq_date', 'user_updated_on'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+         
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
-        $this->set('fields', $fields);
-        $this->set("arrListing", $records);
+        $this->set('fields', $fields); 
         $this->set("userRequestTypeArr", UserGdprRequest::getUserRequestTypesArr($this->siteLangId));
         $this->set("userRequestStatusArr", UserGdprRequest::getUserRequestStatusesArr($this->siteLangId));
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
@@ -157,7 +151,8 @@ class UserGdprRequestsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $this->set('userRequest', $userRequest);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function truncateUserData()
@@ -196,26 +191,15 @@ class UserGdprRequestsController extends ListingBaseController
     protected function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld->overrideFldType('search');
+        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'ureq_date');
+            $this->addSortingElements($frm, 'ureq_date', applicationConstants::SORT_DESC);
         }
-        $frm->addSelectBox(
-            Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
-            'user_id',
-            [],
-            '',
-            [
-                'class' => 'form-control',
-                'id' => 'searchFrmUserIdJs',
-                'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
-            ]
-        );
         $requestType = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_request_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_request_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_request_from', '', array('placeholder' => Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_request_to', '', array('placeholder' => Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'total_record_count');  
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -225,12 +209,12 @@ class UserGdprRequestsController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('gdprRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user' => Labels::getLabel('LBL_User', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User', $this->siteLangId),
             'ureq_type' => Labels::getLabel('LBL_Request_Type', $this->siteLangId),
             'ureq_date' => Labels::getLabel('LBL_Request_Date', $this->siteLangId),
             'ureq_status' => Labels::getLabel('LBL_Request_Status', $this->siteLangId),
@@ -243,8 +227,8 @@ class UserGdprRequestsController extends ListingBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
-            'user',
+            'user_id',
+            'user_name',
             'ureq_date',
             'ureq_type',
             'ureq_status',
@@ -254,6 +238,6 @@ class UserGdprRequestsController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

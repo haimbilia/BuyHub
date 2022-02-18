@@ -2,6 +2,8 @@
 
 class PluginsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_PLUGINS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -24,10 +26,10 @@ class PluginsController extends ListingBaseController
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
     }
 
-    public function getSearchForm($fields = [])
+    public function getSearchForm($fields = [], $type = Plugin::TYPE_CURRENCY_CONVERTER)
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'type');
+        $frm->addHiddenField('', 'type', $type);
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'plugin_name');
@@ -35,18 +37,31 @@ class PluginsController extends ListingBaseController
         return $frm;
     }
 
-    public function index()
+    public function index($activeTab = Plugin::TYPE_CURRENCY_CONVERTER)
     {
+        $tabs = Plugin::getTypeArr($this->siteLangId);
+        if (!array_key_exists($activeTab, $tabs)) {
+            $activeTab = Plugin::TYPE_CURRENCY_CONVERTER;
+        }
+
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
+        $frmSearch->fill(['type' => $activeTab]);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->set('frmSearch', $frmSearch);
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('svgIconNames', Plugin::getSvgIconNames());
-        $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
+        $this->set('activeTab', $activeTab);
         $this->set('includeEditor', true);
-        $this->getListingData();
-
+        $this->set('labels', Plugin::getLabels($this->siteLangId));
+        $this->getListingData($activeTab);
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
+        $this->_template->addCss('css/cropper.css');
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
         $this->_template->render();
     }
 
@@ -59,7 +74,7 @@ class PluginsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($activeTab = Plugin::TYPE_CURRENCY_CONVERTER)
     {
         $db = FatApp::getDb();
 
@@ -68,7 +83,7 @@ class PluginsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, $activeTab);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'plugin_display_order');
@@ -84,7 +99,6 @@ class PluginsController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData);
-
 
         $attr = array(
             'plg.plugin_id',
@@ -169,6 +183,7 @@ class PluginsController extends ListingBaseController
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
+        $pluginLogo = NULL;
         if (0 < $recordId) {
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -182,14 +197,20 @@ class PluginsController extends ListingBaseController
             }
             $identifier = $data['plugin_identifier'];
             $frm->fill($data);
+            if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
+                $pluginLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId);  
+            }          
         }
-
+        
+        $this->set('pluginLogo', $pluginLogo);
 
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
+        $this->set('canEdit', $this->objPrivilege->canEditPlugins($this->admin_id , true));  
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, NULL, true));             
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -203,25 +224,26 @@ class PluginsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        unset($post['plugin_id'], $post['plugin_type']);
-
-        if (1 > $recordId) {
+        unset($post['plugin_id'], $post['plugin_type'], $post['plugin_active']);
+       
+        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id','plugin_type','plugin_active']);
+        if ($pluginData === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (0 < $recordId) {
-            $recordId = Plugin::getAttributesById($recordId, 'plugin_id');
-            if ($recordId === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-        }
+        $active = FatApp::getPostedData('plugin_active', FatUtility::VAR_INT, 0);
 
         $record = new Plugin($recordId);
         $post['plugin_identifier'] = $post['plugin_name'];
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
+        }        
+
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
         $newTabLangId = 0;
@@ -249,37 +271,59 @@ class PluginsController extends ListingBaseController
             }
         }
 
+        if($pluginData['plugin_active'] != $active){
+            if (false == Plugin::updateStatus($pluginData['plugin_type'], $active, $recordId, $error)) {
+                LibHelper::exitWithError($error, true);
+            }
+        }
+        
+
         $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function uploadIcon($plugin_id)
-    {
+    public function uploadIcon()
+    {      
         $this->objPrivilege->canEditPlugins();
-
-        $plugin_id = FatUtility::int($plugin_id);
+        $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);        
 
         if (1 > $plugin_id) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $post = FatApp::getPostedData();
-
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
+        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        $res = $fileHandlerObj->saveAttachment($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_PLUGIN_LOGO, $plugin_id, 0, $_FILES['file']['name'], -1, $unique_record = true);
+        $res = $fileHandlerObj->saveAttachment($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_PLUGIN_LOGO, $plugin_id, 0, $_FILES['cropped_image']['name'], -1, true);
         if (!$res) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('pluginId', $plugin_id);
-        $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->siteLangId));
+        $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteIcon()
+    {      
+        $this->objPrivilege->canEditPlugins();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);        
+
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)){
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+       
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -364,27 +408,17 @@ class PluginsController extends ListingBaseController
         $frm = new Form('frmPlugin');
         $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addHiddenField('', 'plugin_type', $pluginType);
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $this->siteLangId), 'plugin_name');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
 
         if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
-            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
-            $fld = $frm->addButton(
-                'Icon',
-                'plugin_icon',
-                Labels::getLabel('LBL_Upload_File', $this->siteLangId),
-                array('class' => 'btn btn-outline-brand btn-sm uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
-            );
-            if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
-                $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
-                $fld->htmlAfterField .= '<div class="uploaded--image">
-                <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($recordId, 'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></div>';
-            }
+            $frm->addHTML('', 'plugin_logo', '');            
         }
 
         return $frm;
@@ -396,15 +430,15 @@ class PluginsController extends ListingBaseController
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $langId), 'plugin_name');
-        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $langId), 'plugin_description');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $langId), 'plugin_name');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_EXTRA_INFO', $langId), 'plugin_description');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -418,7 +452,7 @@ class PluginsController extends ListingBaseController
         $pluginType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $error = '';
         foreach ($recordIdsArr as $recordId) {
@@ -440,7 +474,7 @@ class PluginsController extends ListingBaseController
 
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginGroupType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -469,7 +503,7 @@ class PluginsController extends ListingBaseController
     {
         $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pluginsTblHeadingCols) {
-            return json_decode($pluginsTblHeadingCols);
+            return json_decode($pluginsTblHeadingCols, true);
         }
 
         $arr = [

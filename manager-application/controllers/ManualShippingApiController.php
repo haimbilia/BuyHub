@@ -43,7 +43,7 @@ class ManualShippingApiController extends ListingBaseController
         $obj = new ManualShippingApi();
         $srch = $obj->getListingObj($this->siteLangId, array('msa.*', 'msa_l.mshipapi_comment'));
         
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('sd.sduration_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('sd_l.sduration_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('msa.mshipapi_zip', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -80,7 +80,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function form($mshipapi_id = 0)
@@ -94,7 +95,7 @@ class ManualShippingApiController extends ListingBaseController
         if (0 < $mshipapi_id) {
             $data = ManualShippingApi::getAttributesById($mshipapi_id);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
             $stateId = $data['mshipapi_state_id'];
@@ -104,7 +105,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('mshipapi_id', $mshipapi_id);
         $this->set('stateId', $stateId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -122,8 +124,7 @@ class ManualShippingApiController extends ListingBaseController
         $post = $frm->getFormDataFromArray($post);
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $post['mshipapi_state_id'] = $mshipapi_state_id;
@@ -134,8 +135,7 @@ class ManualShippingApiController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $newTabLangId = 0;
@@ -166,7 +166,7 @@ class ManualShippingApiController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($mshipapi_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $langFrm = $this->getLangForm($mshipapi_id, $lang_id);
@@ -174,8 +174,7 @@ class ManualShippingApiController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(ManualShippingApi::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($mshipapi_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -191,7 +190,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function langSetup()
@@ -203,8 +203,7 @@ class ManualShippingApiController extends ListingBaseController
         $lang_id = $post['lang_id'];
         
         if ($mshipapi_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getLangForm($mshipapi_id, $lang_id);
@@ -218,16 +217,14 @@ class ManualShippingApiController extends ListingBaseController
         
         $obj = new ManualShippingApi($mshipapi_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ManualShippingApi::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($mshipapi_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -252,42 +249,38 @@ class ManualShippingApiController extends ListingBaseController
         
         $mshipapi_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($mshipapi_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $obj = new ManualShippingApi($mshipapi_id);
         if (!$obj->canRecordDelete($mshipapi_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmManualShippingSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $f1 = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         
         $shipDurationObj = new ShippingDurations();
         $durationArr = $shipDurationObj->getShippingDurationAssoc($this->siteLangId);
-        $frm->addSelectbox(Labels::getLabel('LBL_Duration', $this->siteLangId), 'sduration_id', array( -1 => 'Does not Matter' ) + $durationArr, '', array(), '');
+        $frm->addSelectbox(Labels::getLabel('FRM_DURATION', $this->siteLangId), 'sduration_id', array( -1 => 'Does not Matter' ) + $durationArr, '', array(), '');
         
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'country_id', array( -1 => 'Does not Matter' ) + $countriesArr, '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'country_id', array( -1 => 'Does not Matter' ) + $countriesArr, '', array(), '');
         
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
     
@@ -300,19 +293,19 @@ class ManualShippingApiController extends ListingBaseController
         
         $frm = new Form('frmManualShipping');
         $frm->addHiddenField('', 'mshipapi_id', 0);
-        $frm->addSelectbox(Labels::getLabel('LBL_Duration', $this->siteLangId), 'mshipapi_sduration_id', $durationArr)->requirement->setRequired(true);
-        $frm->addFloatField(Labels::getLabel('LBL_Volume_Upto', $this->siteLangId), 'mshipapi_volume_upto');
-        $frm->addFloatField(Labels::getLabel('LBL_Weight_Upto', $this->siteLangId), 'mshipapi_weight_upto');
-        $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'mshipapi_cost');
+        $frm->addSelectbox(Labels::getLabel('FRM_DURATION', $this->siteLangId), 'mshipapi_sduration_id', $durationArr)->requirement->setRequired(true);
+        $frm->addFloatField(Labels::getLabel('FRM_VOLUME_UPTO', $this->siteLangId), 'mshipapi_volume_upto');
+        $frm->addFloatField(Labels::getLabel('FRM_WEIGHT_UPTO', $this->siteLangId), 'mshipapi_weight_upto');
+        $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'mshipapi_cost');
         
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'mshipapi_country_id', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'mshipapi_country_id', $countriesArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'mshipapi_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addTextbox(Labels::getLabel('LBL_Postal_Code', $this->siteLangId), 'mshipapi_zip');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'mshipapi_state_id', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $frm->addTextbox(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'mshipapi_zip');
                 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
     
@@ -325,17 +318,17 @@ class ManualShippingApiController extends ListingBaseController
         
         $frm = new Form('frmManualShippingLang');
         $frm->addHiddenField('', 'mshipapi_id', $mshipapi_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'mshipapi_comment');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'mshipapi_comment');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 }

@@ -22,6 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['brand_name'] != '') {
                     $name .= "<br/><strong>" . Labels::getLabel('LBL_Brand', $siteLangId) . ": </strong>" . $row['brand_name'];
                 }
+                $name = "<div class='info-wrap'>".$name."</div>";
                 $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
             case 'product_type':
@@ -58,16 +59,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

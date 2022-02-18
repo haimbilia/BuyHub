@@ -189,6 +189,11 @@ class BrandsController extends MyAppController
 
     public function autoComplete()
     {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
         $fetchAllRecords = FatApp::getPostedData('fetchAllRecords', FatUtility::VAR_INT, 0);
@@ -202,24 +207,27 @@ class BrandsController extends MyAppController
             $cond->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
-
-        //$srch->setPageSize($pagesize);
+       
         if($fetchAllRecords == 1){
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
         }else{
+            $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
         }
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $brands = $db->fetchAll($rs, 'brand_id');
-        $json = array();
+        $brands = $db->fetchAll($rs, 'brand_id');        
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($brands as $key => $brand) {
-            $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
+
         die(json_encode($json));
         /* $this->set('brands', $db->fetchAll($rs,'brand_id') );
         $this->_template->render(false,false); */
@@ -234,10 +242,10 @@ class BrandsController extends MyAppController
         $brandName = $post['brandName'];
         $brandId = FatUtility::int($post['brandId']);
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('LBL_Lang_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANG_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (1 > $brandId) {
-            trigger_error(Labels::getLabel('LBL_Brand_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_BRAND_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = Brand::getSearchObject($langId);
         $srch->addCondition('brand_name', '=', $brandName);
@@ -247,7 +255,7 @@ class BrandsController extends MyAppController
         $rs = $srch->getResultSet();
         $records = $srch->recordCount();
         if ($records > 0) {
-            FatUtility::dieJsonError(sprintf(Labels::getLabel('LBL_%s_not_available', $this->siteLangId), $brandName));
+            FatUtility::dieJsonError(sprintf(Labels::getLabel('ERR_%S_NOT_AVAILABLE', $this->siteLangId), $brandName));
         }
         FatUtility::dieJsonSuccess(array());
     }
@@ -258,7 +266,7 @@ class BrandsController extends MyAppController
         $parameters = FatApp::getParameters();
         switch ($action) {
         case 'view':
-            $nodes[] = array('title' => Labels::getLabel('LBL_Brands', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
+            $nodes[] = array('title' => Labels::getLabel('MSG_BRANDS', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
             if (isset($parameters[0]) && $parameters[0] > 0) {
                 $brandId = FatUtility::int($parameters[0]);
                 if ($brandId > 0) {
@@ -275,7 +283,7 @@ class BrandsController extends MyAppController
             break;
 
         case 'index':
-            $nodes[] = array('title' => Labels::getLabel('LBL_Brands', $this->siteLangId));
+            $nodes[] = array('title' => Labels::getLabel('MSG_Brands', $this->siteLangId));
 
             break;
 

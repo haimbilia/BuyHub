@@ -114,7 +114,7 @@ class BlogPost extends MyAppModel
     public function addUpdateCategories(int $postId, array $categories = array()): bool
     {
         if (!$postId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request!', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST!', $this->commonLangId);
             return false;
         }
 
@@ -188,7 +188,7 @@ class BlogPost extends MyAppModel
         $postId = FatUtility::int($postId);
         $image_id = FatUtility::int($image_id);
         if ($postId < 1 || $image_id < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request!', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST!', $this->commonLangId);
             return false;
         }
 
@@ -209,7 +209,7 @@ class BlogPost extends MyAppModel
     {
         $postId = FatUtility::int($postId);
         if ($postId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request!', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST!', $this->commonLangId);
             return false;
         }
 
@@ -239,8 +239,8 @@ class BlogPost extends MyAppModel
         }
 
         return array(
-            applicationConstants::DRAFT => Labels::getLabel('LBL_Draft', $langId),
-            applicationConstants::PUBLISHED => Labels::getLabel('LBL_Published', $langId),
+            applicationConstants::DRAFT => Labels::getLabel('LBL_DRAFT', $langId),
+            applicationConstants::PUBLISHED => Labels::getLabel('LBL_PUBLISHED', $langId),
         );
     }
 

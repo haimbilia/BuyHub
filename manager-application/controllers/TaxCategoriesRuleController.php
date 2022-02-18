@@ -55,6 +55,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         ]);
         $this->set('postedData', ['taxrule_taxcat_id' => $ruleId]);
         $this->set('recordId', $ruleId);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RULE_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -68,6 +69,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
 
         $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -106,8 +108,9 @@ class TaxCategoriesRuleController extends ListingBaseController
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
-        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id'));
-        if (!empty($post['keyword'])) {
+        $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id');
+        $srch->joinTable(Tax::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxcat_id = taxcatlang_taxcat_id and taxcatlang_lang_id = ' . $this->siteLangId);
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('taxrule_name', 'LIKE', "%" . $post['keyword'] . "%");
         }
 
@@ -116,17 +119,14 @@ class TaxCategoriesRuleController extends ListingBaseController
         } else if (!empty($ruleId)) {
             $srch->addCondition('taxrule_taxcat_id', '=', $ruleId);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id','taxcat_name','taxcat_identifier'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->addOrder($sortBy, $sortOrder);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -158,7 +158,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         $this->set('ruleLocations', $ruleLocations ?? []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**
@@ -202,24 +203,24 @@ class TaxCategoriesRuleController extends ListingBaseController
         unset($post['taxrule_id']);
         $taxRuleObj->assignValues($post);
         if (!$taxRuleObj->save()) {
-            LibHelper::exitWithError(Message::getHtml());
+            LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
 
 
         if (!$taxRuleObj->addUpdateRate($post['trr_rate'])) {
-            LibHelper::exitWithError($taxRuleObj->getError());
+            LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
 
         $ruleId = $taxRuleObj->getMainTableRecordId();
         /* [ update location data */
         if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId), true);
         }
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */
         if (!$taxRuleObj->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Combined_Tax_Data', $this->siteLangId), true);
         }
         /* ] */
 
@@ -266,7 +267,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         $ruleId = FatUtility::int($ruleId);
         $this->set('taxStrId', $taxStrId);
         $this->set('combTaxes', (new TaxStructure($taxStrId))->getCombinedTaxesByParent($this->siteLangId, $ruleId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteRecord()
@@ -284,7 +286,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
         $taxRule = new TaxRule($recordId);
         if (!$taxRule->deleteRelatedRecord()) {
-            LibHelper::exitWithError($taxRule->getError());
+            LibHelper::exitWithError($taxRule->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -358,12 +360,13 @@ class TaxCategoriesRuleController extends ListingBaseController
     {
         $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxTblHeadingCols) {
-            return json_decode($taxTblHeadingCols);
+            return json_decode($taxTblHeadingCols, true);
         }
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'taxrule_name' => Labels::getLabel('LBL_RULE_NAME', $this->siteLangId),
+            'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'trr_rate' => Labels::getLabel('LBL_TAX_RATE(%)', $this->siteLangId),
             'taxstr_name' => Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -378,6 +381,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         return [
             'listSerial',
             'taxrule_name',
+            'taxcat_identifier',
             'trr_rate',
             'taxstr_name',
             'action',
@@ -386,7 +390,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['trr_rate', 'taxstr_name'], Common::excludeKeysForSort());
+        return array_diff($fields, ['trr_rate', 'taxstr_name','taxcat_identifier'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

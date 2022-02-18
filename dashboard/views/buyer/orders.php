@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+/* 
 $frmOrderSrch->setFormTagAttribute('onSubmit', 'searchOrders(this); return false;');
 $frmOrderSrch->setFormTagAttribute('class', 'form');
 $frmOrderSrch->developerTags['colClassPrefix'] = 'col-md-';
@@ -10,7 +10,6 @@ $keywordFld = $frmOrderSrch->getField('keyword');
 $keywordFld->setWrapperAttribute('class', 'col-lg-4');
 $keywordFld->developerTags['col'] = 4;
 $keywordFld->developerTags['noCaptionTag'] = true;
-/* $keywordFld->htmlAfterField = '<small class="form-text text-muted">'.Labels::getLabel('LBL_Buyer_account_orders_listing_search_form_keyword_help_txt', $siteLangId).'</small>'; */
 
 $statusFld = $frmOrderSrch->getField('status');
 $statusFld->setWrapperAttribute('class', 'col-lg-4');
@@ -49,37 +48,26 @@ $cancelBtnFld = $frmOrderSrch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true;
-?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?> <main id="main-area" class="main"   >
-    <div class="content-wrapper content-space">
-        <?php 
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_Order_History',$siteLangId),
-            'siteLangId' => $siteLangId,         
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-        <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="replaced">
-                                <?php echo $frmOrderSrch->getFormHtml(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="ordersListing"></div>
-                            <span class="gap"></span>
-                        </div>
+$cancelBtnFld->developerTags['noCaptionTag'] = true; */
+?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_Order_History', $siteLangId),
+        'siteLangId' => $siteLangId,
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    <div class="content-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <div class="card-body">
+                        <div id="ordersListing"></div>
+                        <span class="gap"></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>

@@ -12,4 +12,3 @@ $actionItemsData = array_merge($actionItemsData, ['otherButtons' =>  [[
 </svg>' . Labels::getLabel('LBL_Export', $siteLangId)
 ]]]);
 require_once(CONF_THEME_PATH . '_partial/listing/index.php');
-?>

@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $fld = $frm->getField('orderstatus_color_class');
+$fld->addFieldTagAttribute('class', 'orderStatusClassJs');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('orderstatus_type');

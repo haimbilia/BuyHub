@@ -2,19 +2,19 @@
 <?php if (!$print) { ?>
     <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php } ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php if (!$print) { ?>
-            <?php 
+            <?php
             $data = [
-                'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request',$siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
-                'siteLangId' => $siteLangId,         
+                'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
+                'siteLangId' => $siteLangId,
             ];
             $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
-            <?php } ?>
+        <?php } ?>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">
+                <div class="card-head">
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
                     <?php if (!$print) { ?>
                         <div class="">
@@ -57,11 +57,11 @@
                         </div>
                     </div>
                     <?php if ($canEscalateRequest && !$print) { ?>
-                        <a class="btn btn-brand no-print" onClick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'escalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_Escalate_to_{websitename}', $siteLangId)); ?></a>
+                        <a class="btn btn-brand no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'escalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_Escalate_to_{websitename}', $siteLangId)); ?></a>
                     <?php } ?>
 
                     <?php if ($canWithdrawRequest && !$print) { ?>
-                        <a class="btn btn-brand btn-sm no-print" onClick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Buyer', 'WithdrawOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_Withdraw_Request', $siteLangId); ?></a>
+                        <a class="btn btn-brand btn-sm no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Buyer', 'WithdrawOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_Withdraw_Request', $siteLangId); ?></a>
                     <?php } ?>
 
 
@@ -83,7 +83,7 @@
                                         <td><?php echo $request['op_invoice_number']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request ,'siteLangId'=> $siteLangId], false, true);?>                                          
+                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?>
                                         </td>
                                         <td><?php echo $request['orrequest_qty']; ?></td>
                                         <td> <?php echo $returnRequestTypeArr[$request['orrequest_type']]; ?></td>
@@ -181,13 +181,7 @@
             </div>
         </div>
     </div>
-</main>
+
 <?php if ($print) { ?>
-    <script>
-        $(".sidebar-is-expanded").addClass('sidebar-is-reduced').removeClass('sidebar-is-expanded');
-        /*window.print();
-        window.onafterprint = function(){
-            location.href = history.back();
-        }*/
-    </script>
+
 <?php } ?>

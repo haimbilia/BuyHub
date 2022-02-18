@@ -55,7 +55,7 @@ class PaynowPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -63,7 +63,7 @@ class PaynowPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -77,7 +77,7 @@ class PaynowPayController extends PaymentController
 
             $this->authorize = $this->plugin->getResponse();
             if ("ERROR" == $this->authorize->getStatus()) {
-                $msg = Labels::getLabel("MSG_UNABLE_TO_INITIALIZE_PAYMENT_REQUEST._PAYMENT_CANNOT_BE_COMPLETED.", $this->siteLangId);
+                $msg = Labels::getLabel("ERR_UNABLE_TO_INITIALIZE_PAYMENT_REQUEST._PAYMENT_CANNOT_BE_COMPLETED.", $this->siteLangId);
                 $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
             }
             
@@ -136,7 +136,7 @@ class PaynowPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         /* Recording Payment in DB */
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paymentId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($_REQUEST))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paymentId, $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($_REQUEST))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
@@ -180,7 +180,7 @@ class PaynowPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaynowPay', 'charge', array($orderId)) : $this->authorize->getRedirectUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaynowPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->authorize->getRedirectUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {

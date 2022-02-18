@@ -405,7 +405,7 @@ class CommonHelper extends FatUtility
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
 
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0) && CommonHelper::canAvailShippingChargesBySeller($requestRow['op_selprod_user_id'], $requestRow['opshipping_by_seller_user_id'])) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
@@ -2104,7 +2104,8 @@ class CommonHelper extends FatUtility
 
     public static function getDefaultFormLangId()
     {
-        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        return CommonHelper::getLangId();
+        // return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
 
     public static function isSetCookie($cookieName)

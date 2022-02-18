@@ -7,16 +7,12 @@ class ShippingCompanies extends MyAppModel
     public const DB_TBL_PREFIX = 'scompany_';
     public const DB_TBL_LANG_PREFIX = 'scompanylang_';
 
-
     public const MANUAL_SHIPPING = 1;
     public const SHIPPING_SERVICES = 2;
-
-    private $db;
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($isActive = true, $langId = 0)
@@ -25,7 +21,7 @@ class ShippingCompanies extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL, 'sc');
         if ($isActive == true) {
-            $srch->addCondition('sc.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('sc.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -55,7 +51,7 @@ class ShippingCompanies extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'IFNULL(sc_l.scompany_name,sc.scompany_identifier) as scompany_name'
+                'IFNULL(sc_l.scompany_name,sc.scompany_identifier) as scompany_name'
             )
         );
 

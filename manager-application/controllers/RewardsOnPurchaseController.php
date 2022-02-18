@@ -75,37 +75,32 @@ class RewardsOnPurchaseController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = RewardsOnPurchase::getSearchObject();
-        $srch->addMultipleFields(['rop.*']);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        if (!empty($post['keyword'])) {
+        $srch = RewardsOnPurchase::getSearchObject(); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('rop.rop_purchase_upto', 'like', '%' . $post['keyword'] . '%');
         }
         
         if (!empty($post['rop_reward_point'])) {
             $srch->addCondition('rop.rop_reward_point', 'like', '%' . $post['rop_reward_point'] . '%');
         }
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['rop.*']);
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true));
-        
+        $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true)); 
     }
 
     public function form()
@@ -126,7 +121,8 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_REWARDS_ON_PURCHASE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -189,7 +185,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('rop_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -206,7 +202,7 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $ropId = FatUtility::int($ropId);
         if (1 > $ropId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new RewardsOnPurchase($ropId);
 
@@ -231,7 +227,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $fld->overrideFldType('search');
         
         $frm->addTextBox(Labels::getLabel('FRM_REWARD_POINTS', $this->siteLangId), 'rop_reward_point');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -252,13 +248,13 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $rewardsOnPurchaseTblHeadingCols = CacheHelper::get('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsOnPurchaseTblHeadingCols) {
-            return json_decode($rewardsOnPurchaseTblHeadingCols);
+            return json_decode($rewardsOnPurchaseTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'rop_purchase_upto' => Labels::getLabel('LBL_PURCHAHSE', $this->siteLangId),
+            'rop_purchase_upto' => Labels::getLabel('LBL_PURCHASE', $this->siteLangId),
             'rop_reward_point' => Labels::getLabel('LBL_REWARD_POINT', $this->siteLangId),            
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];

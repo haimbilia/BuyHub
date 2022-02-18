@@ -1,13 +1,11 @@
 (function () {
 
     editLangForm = function (etplCode, langId, autoFillLangData = 0) {
-        $.ykmodal(fcom.getLoader());
-        //fcom.resetEditorInstance();
-        fcom.ajax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) {
-            $.ykmodal(t, '', 'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) {
+            $.ykmodal(t.html, '', 'modal-dialog-vertical-md');
             fcom.removeLoader();
             fcom.setEditorLayout(langId);
-            if(!navigator.clipboard){
+            if (!navigator.clipboard) {
                 $('[data-toggle="tooltip"]').removeAttr('title');
                 return;
             }
@@ -16,19 +14,10 @@
 
     saveLangData = function (frm) {
         if (!$(frm).validate()) { return; }
-        $.ykmodal(fcom.getLoader());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
-            fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
-            $.ykmsg.success(t.msg);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
             reloadList();
-
         });
     };
 
@@ -144,8 +133,8 @@
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Shops', 'imgCropper'), '', function (t) {
-                $('#cropperBox-js').html(t);
+            fcom.updateWithAjax(fcom.makeUrl('Shops', 'imgCropper'), '', function (t) {
+                $('#cropperBox-js').html(t.html);
                 $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
                 var minWidth = document.frmEtplSettingsForm.logo_min_width.value;
@@ -168,7 +157,8 @@
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadShopImages', inputBtn);
+                setTimeout(function () { cropImage(file, options, 'uploadShopImages', inputBtn); }, 100);
+                return
             });
         }
     };

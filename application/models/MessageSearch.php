@@ -31,6 +31,7 @@ class MessageSearch extends SearchBase
         $srch->addGroupBy(Thread::DB_TBL_THREAD_MESSAGES_PREFIX . 'id');
         $srch->addOrder(Thread::DB_TBL_THREAD_MESSAGES_PREFIX . 'id', 'desc');
         $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'tth.thread_id = ttm.message_thread_id', 'ttm');
         /* $this->joinTable(Thread::DB_TBL_THREAD_MESSAGES, 'LEFT OUTER JOIN', 'tth.thread_id = ttm.message_thread_id', 'ttm'); */
     }
@@ -38,7 +39,7 @@ class MessageSearch extends SearchBase
     public function joinMessagePostedFromUser($joinShop = false, $langId = 0)
     {
         if (!$this->joinThreadMessage) {
-            trigger_error(Labels::getLabel('MSG_You_have_not_joined_joinThreadMessage.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_YOU_HAVE_NOT_JOINED_JOINTHREADMESSAGE.', $this->commonLangId), E_USER_ERROR);
         }
 
         $fields = array('tfr.user_id as message_from_user_id', 'tfr.user_name as message_from_name', 'tfr_c.credential_email as message_from_email', 'tfr_c.credential_username as message_from_username');
@@ -55,7 +56,7 @@ class MessageSearch extends SearchBase
     public function joinMessagePostedToUser($joinShop = false, $langId = 0)
     {
         if (!$this->joinThreadMessage) {
-            trigger_error(Labels::getLabel('MSG_You_have_not_joined_joinThreadMessage.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_YOU_HAVE_NOT_JOINED_JOINTHREADMESSAGE.', $this->commonLangId), E_USER_ERROR);
         }
 
         $fields = array('tfto.user_id as message_to_user_id', 'tfto.user_name as message_to_name', 'tfto_c.credential_email as message_to_email', 'tfto_c.credential_username as message_to_username');
@@ -106,7 +107,7 @@ class MessageSearch extends SearchBase
     public function joinOrderProductStatus($langId = 0)
     {
         if (!$this->joinOrderProducts) {
-            trigger_error(Labels::getLabel('MSG_You_have_not_joined_joinOrderProducts.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_YOU_HAVE_NOT_JOINED_JOINORDERPRODUCTS.', $this->commonLangId), E_USER_ERROR);
         }
 
         $this->joinTable(Orders::DB_TBL_ORDERS_STATUS, 'LEFT OUTER JOIN', 'top.op_status_id = tops.orderstatus_id', 'tops');
@@ -117,27 +118,5 @@ class MessageSearch extends SearchBase
             $this->addMultipleFields(array('tops.orderstatus_identifier as orderstatus_name'));
         }
     }
-    /*
-    public function addUnreadMessageCounts($userId, $startDate = false,$endDate = false ,$alias = 'message'){
-    if(!$this->joinThreadMessage){
-    trigger_error(Labels::getLabel('MSG_You_have_not_joined_joinThreadMessage.',$this->commonLangId),E_USER_ERROR);
-    }
-    $srch = new SearchBase( Thread::DB_TBL_THREAD_MESSAGES, $alias );
-    $srch->doNotCalculateRecords();
-    $srch->doNotLimitRecords();
-    $srch->addCondition('message_is_unread','=',Thread::MESSAGE_IS_UNREAD);
-    $srch->addCondition('message_deleted','=',0);
-    $srch->addGroupBy($alias.'.message_thread_id');
-    if($startDate){
-    $srch->addCondition($alias.'.message_date', '>=', $startDate. ' 00:00:00');
-    }
-    if($endDate){
-    $srch->addCondition($alias.'.message_date', '<=', $endDate. ' 23:59:59');
-    }
-
-    $srch->addMultipleFields(array($alias.'.message_thread_id as '.$alias.'_message_thread_id',"count(".$alias.".message_id) as ".$alias.'Count'));
-
-    $qrytotalOrders = $srch->getQuery();
-    $this->joinTable('(' . $qrytotalOrders . ')', 'LEFT OUTER JOIN', 'ttm.message_thread_id = '.$alias.'.'.$alias.'_message_thread_id', $alias);
-    } */
+   
 }

@@ -30,7 +30,7 @@ if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) {
             <input class="btn btn-brand"
                    type="button"
                    value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                   onClick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
+                   onclick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
         </div>
     </div>
 <?php } ?>

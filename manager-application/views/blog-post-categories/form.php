@@ -1,7 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
-
 $fld = $frm->getField('bpcategory_identifier');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','bpcategory_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -12,12 +10,15 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('bpcategory_active');
 HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->setFieldTagAttribute('data-old-value', $isActive);
 $fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('bpcategory_featured');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 
+$fld = $frm->getField('bpcategory_parent');
+$fld->setFieldTagAttribute('data-old-parent-id', $fld->value);
 
 $fld = $frm->getField('bpcategory_id');
 $fld->setFieldTagAttribute('id', "bpcategory_id");

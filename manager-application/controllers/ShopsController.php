@@ -71,12 +71,11 @@ class ShopsController extends ListingBaseController
         $post['pageSize'] = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $shopSrch = new AdminShopSearch($this->siteLangId);
+        $shopSrch->joinWithUser();
+        $shopSrch->joinWithCredential();
         $shopSrch->applySearchConditions($post);
+        $this->setRecordCount(clone $shopSrch, $post['pageSize'], $post['page'], $post);
         $this->set("arrListing", $shopSrch->getListingRecords());
-        $this->set('pageCount', $shopSrch->pages());
-        $this->set('recordCount', $shopSrch->recordCount());
-        $this->set('page', $post['page']);
-        $this->set('pageSize', $post['pageSize']);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $post['sortOrder']);
@@ -89,7 +88,7 @@ class ShopsController extends ListingBaseController
             LibHelper::exitWithSuccess([
                 'listingHtml' => $this->_template->render(false, false, 'shops/search.php', true),
                 'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-            ], true);
+                    ], true);
         }
     }
 
@@ -117,7 +116,8 @@ class ShopsController extends ListingBaseController
         $this->set('recordId', $shop_id);
         $this->set('stateId', $data['shop_state_id'] ?? 0);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -210,7 +210,7 @@ class ShopsController extends ListingBaseController
         return false;
     }
 
-    public function media($shop_id)
+    public function media($shop_id, $langId = 0)
     {
         $this->checkEditPrivilege();
         $shop_id = FatUtility::int($shop_id);
@@ -244,7 +244,8 @@ class ShopsController extends ListingBaseController
         $this->set('languageCount', count($languages));
         // $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($shop_id, $file_type, $lang_id = 0, $slide_screen = 0)
@@ -267,7 +268,8 @@ class ShopsController extends ListingBaseController
         $this->set('file_type', $file_type);
         $this->set('shop_id', $shop_id);
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()
@@ -300,17 +302,17 @@ class ShopsController extends ListingBaseController
         $fileHandlerObj->deleteFile($file_type, $shop_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $shop_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            false,
-            $lang_id,
-            $slide_screen,
-            $aspectRatio
-        )) {
+                        $_FILES['cropped_image']['tmp_name'],
+                        $file_type,
+                        $shop_id,
+                        0,
+                        $_FILES['cropped_image']['name'],
+                        -1,
+                        false,
+                        $lang_id,
+                        $slide_screen,
+                        $aspectRatio
+                )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -399,8 +401,9 @@ class ShopsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_SHOP_STATUS_BY_SELLER', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -410,7 +413,7 @@ class ShopsController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [
@@ -442,6 +445,8 @@ class ShopsController extends ListingBaseController
         $frm->addHiddenField('', 'shop_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'shop_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
+
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'shop_country_code', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
@@ -472,8 +477,6 @@ class ShopsController extends ListingBaseController
 
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
-        $frm->addHtml('', 'space', '');
-        $frm->addHtml('', 'space', '');
         return $frm;
     }
 
@@ -512,7 +515,7 @@ class ShopsController extends ListingBaseController
         $srch = Shop::getSearchObject(false, $this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
@@ -536,7 +539,10 @@ class ShopsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs, 'shop_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
         foreach ($products as $key => $product) {
             $json['results'][] = array(
                 'id' => $key,
@@ -567,4 +573,5 @@ class ShopsController extends ListingBaseController
     {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
+
 }

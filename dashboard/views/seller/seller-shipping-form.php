@@ -34,7 +34,7 @@ if (null != $submitFld) {
 }
 
 $cancelFld = $shippingFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('onClick', 'searchCatalogProducts(document.frmSearchCatalogProduct)');
+$cancelFld->setFieldTagAttribute('onclick', 'searchCatalogProducts(document.frmSearchCatalogProduct)');
 $cancelFld->developerTags['col'] = 2;
 $cancelFld->setWrapperAttribute('class', 'col-6');
 $cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
@@ -61,10 +61,10 @@ echo $shippingFrm->getFormHTML();
                     dataType: 'json',
                     type: 'post',
                     success: function(json) {
-                        response($.map(json, function(item) {
+                        response($.map(json['results'], function(item) {
                             return {
-                                label: item['name'],
-                                value: item['name'],
+                                label: item['text'],
+                                value: item['text'],
                                 id: item['id']
                             };
                         }));

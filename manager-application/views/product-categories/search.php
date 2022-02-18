@@ -1,125 +1,83 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-<div class="accordion-categories">
-    <?php
-    if (count($arrListing) > 0) {
-    ?>
-        <ul id="sorting-categories" class="sorting-categories">
-            <?php foreach ($arrListing as $sn => $row) {  ?>
-                <li id="<?php echo $row['prodcat_id']; ?>" class="sortableListsClosed <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
-                    <div>
-                        <div class="sorting-bar ">
-                            <div class="sorting-title">
-                                <span class="clickable">
-                                    <?php echo $row['prodcat_name']; ?>
-                                </span>
-                                <a href="<?php echo commonHelper::generateUrl('Products', 'index', array($row['prodcat_id'])); ?>" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></a>
-                            </div>
-                            <div class="clickable">
-                            <div class="sorting-actions">
-                            <?php
-                                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['prodcat_id'] . ', ' . ((int) !$row['prodcat_active']) . ')' : 'return false;';
-                                $statusClass = ($canEdit) ? '' : 'disabled';
-                                $checked = applicationConstants::ACTIVE == $row['prodcat_active'] ? 'checked' : '';                      
-                            ?>
-                                <label class="switch switch-sm switch-icon">
-                                    <input type="checkbox" data-old-status="<?php echo $row['prodcat_active'];?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" <?php echo $statusClass;?> '>
-                                    <span class="input-helper clickable"></span>
-                                </label>
-                            
-                                <?php if ($canEdit) { ?>                            
-                                    <button onClick="editRecord('<?php echo $row['prodcat_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
-                                        <svg class="svg clickable" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                    <button title="<?php echo  Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteRecord(<?php echo $row['prodcat_id']; ?>)" class="btn btn-clean btn-sm clickable">
-                                        <svg class="svg clickable" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                <?php } ?>
-                            </div>
-                            </div>
-                        </div>
-                        <?php if ($row['subcategory_count'] > 0) { ?>
-                            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
-                        <?php } ?>
-                    </div>
-                </li>
-            <?php } ?>
+$recordId = $recordId ?? 0;
+if (0 < $recordId) {
+    include('row.php');
+} else { ?>
+    <div class="accordion-categories listingRecordJs">
+        <ul id="sorting-categories" class="sorting-categories categoriesListJs">
+            <?php if (count($arrListing) > 0) { ?>
+                <?php foreach ($arrListing as $sn => $row) {
+                    include('row.php');
+                } ?>
+            <?php } else {
+                $this->includeTemplate('_partial/no-record-found.php');
+            } ?>
         </ul>
-    <?php } else {
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
-    }
-    ?>
-</div>
-
-
-<script type="text/javascript">
-    $(function() {
-        var optionsPlus = {
-            insertZone: 0,
-            insertZonePlus: true,
-            placeholderCss: {
-                'background-color': '#e5f5ff',
-            },
-            hintCss: {
-                'background-color': '#6dc5ff'
-            },
-            baseCss: {
-                'list-style-type': 'none',
-            },
-            listsClass: "sorting-categories",
-            onDragStart: function(e, cEl) {
-                var catId = $(cEl).attr('id');
-                $("#" + catId).children().children().children('.sorting-title').css('margin-left', '25px');
-                $("#" + catId).children('ul').css('list-style-type', 'none');
-            },
-            complete: function(cEl) {
-                var catId = $(cEl).attr('id');
-                $("#" + catId).children().children().children('.sorting-title').css('margin-left', '0px');
-            },
-            onChange: function(cEl) {
-                $("#js-cat-section").addClass('overlay-blur');
-                var catId = $(cEl).attr('id');
-                var parentCatId = $(cEl).parent('ul').parent('li').attr('id');
-                var catOrder = [];
-                $($(cEl).parent().children()).each(function(i) {
-                    catOrder[i + 1] = $(this).attr('id');
-                });
-                var data = "catId=" + catId + "&parentCatId=" + parentCatId + "&catOrder=" + JSON.stringify(
-                    catOrder);
-
-                if (typeof parentCatId != 'undefined') {
-                    displaySubCategories(cEl, parentCatId, data);
-                    $(cEl).parents('li').each(function() {
-                        var rootCat = $(this).attr('id');
-                        $("#" + rootCat).children('div').children('.sortableListsOpener').remove();
-                        $("#" + rootCat).removeClass('sortableListsClosed').addClass(
-                            'sortableListsOpen');
-                        $("#" + rootCat).children('div').append(
-                            '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i></span>'
-                        );
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            var optionsPlus = {
+                insertZone: 0,
+                insertZonePlus: true,
+                placeholderCss: {
+                    'background-color': '#e5f5ff',
+                },
+                hintCss: {
+                    'background-color': '#6dc5ff'
+                },
+                baseCss: {
+                    'list-style-type': 'none',
+                },
+                listsClass: "sorting-categories",
+                onDragStart: function(e, cEl) {
+                    var catId = $(cEl).attr('id');
+                    $("#" + catId).children().children().children('.sorting-title').css('margin-left', '25px');
+                    $("#" + catId).children('ul').css('list-style-type', 'none');
+                },
+                complete: function(cEl) {
+                    var catId = $(cEl).attr('id');
+                    $("#" + catId).children().children().children('.sorting-title').css('margin-left', '0px');
+                },
+                onChange: function(cEl) {
+                    var catId = $(cEl).attr('id');
+                    var parentCatId = $(cEl).parent('ul').parent('li').attr('id');
+                    var catOrder = [];
+                    $($(cEl).parent().children()).each(function(i) {
+                        catOrder[i + 1] = $(this).attr('id');
                     });
-                    $("#" + catId).parent('ul').addClass('append-ul');
-                } else {
-                    updateCatOrder(data);
-                }
-            },
-            opener: {
-                active: true,
-                as: 'html', // if as is not set plugin uses background image
-                close: '<i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i>',
-                open: '<i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i>',
-                openerCss: {}
-            },
-            ignoreClass: 'clickable'
-        };
+                    var data = "catId=" + catId + "&parentCatId=" + parentCatId + "&catOrder=" + JSON.stringify(
+                        catOrder);
 
-        $('#sorting-categories').sortableLists(optionsPlus);
+                    if (typeof parentCatId != 'undefined') {
+                        displaySubCategories(cEl, parentCatId, data);
+                        $(cEl).parents('li').each(function() {
+                            var rootCat = $(this).attr('id');
+                            $("#" + rootCat).children('div').children('.sortableListsOpener').remove();
+                            $("#" + rootCat).removeClass('sortableListsClosed').addClass(
+                                'sortableListsOpen');
+                            $("#" + rootCat).children('div').append(
+                                '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i></span>'
+                            );
+                        });
+                        $("#" + catId).parent('ul').addClass('append-ul');
+                    } else {
+                        fcom.displayProcessing();
+                        updateCatOrder(data);
+                    }
+                },
+                opener: {
+                    active: true,
+                    as: 'html', // if as is not set plugin uses background image
+                    close: '<i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i>',
+                    open: '<i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i>',
+                    openerCss: {}
+                },
+                ignoreClass: 'clickable'
+            };
 
-    });
-</script>
+            $('#sorting-categories').sortableLists(optionsPlus);
+
+        });
+    </script>
+<?php } ?>

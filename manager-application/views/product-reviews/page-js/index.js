@@ -7,17 +7,9 @@ $(document).ready(function () {
             clearSearch();
         });
     }
-    
-    displayImageInFacebox = function(href) {
+
+    displayImageInFacebox = function (href) {
         loadCropperSkeleton();
         $("#modalBoxJs .modal-body").html(`<image width='100%' src='${href}' />`);
-        
     }
-
-    $(document).on('click', '.close.ykmodalJs', function(){
-        if (true === $.ykmodal.isAdded()) {
-            $.ykmodal.show();
-        }
-    })
-
 })();

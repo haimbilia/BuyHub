@@ -73,19 +73,19 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
             'type' => Product::FILTER_TYPE_SORT_BY,
             'data' => [
                 [
-                    'title' => Labels::getLabel('LBL_Price_(Low_to_High)', $siteLangId),
+                    'title' => Labels::getLabel('LBL_PRICE_(LOW_TO_HIGH)', $siteLangId),
                     'value' => 'price_asc',
                 ],
                 [
-                    'title' => Labels::getLabel('LBL_Price_(High_to_Low)', $siteLangId),
+                    'title' => Labels::getLabel('LBL_PRICE_(HIGH_TO_LOW)', $siteLangId),
                     'value' => 'price_desc',
                 ],
                 [
-                    'title' => Labels::getLabel('LBL_Sort_by_Popularity', $siteLangId),
+                    'title' => Labels::getLabel('LBL_SORT_BY_POPULARITY', $siteLangId),
                     'value' => 'popularity_desc',
                 ],
                 [
-                    'title' => Labels::getLabel('LBL_Most_discounted', $siteLangId),
+                    'title' => Labels::getLabel('LBL_MOST_DISCOUNTED', $siteLangId),
                     'value' => 'discounted',
                 ],
             ],

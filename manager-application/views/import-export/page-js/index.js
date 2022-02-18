@@ -14,23 +14,23 @@ $(document).ready(function () {
         }
 
         $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
             fcom.removeLoader();
-            $(dv).html(t);
+            $(dv).html(t.html);
         });
     };
 
     uploadSuccessCallback = function (resp) {
-        searchRecords();    
+        searchRecords();
     }
 
     searchFiles = function () {
         var data = '';
         var dv = $('#listing');
         $("#listing").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
             fcom.removeLoader();
-            $("#listing").html(res);
+            $("#listing").html(res.html);
         });
     };
 
@@ -56,7 +56,7 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 success: function (t) {
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
@@ -87,7 +87,7 @@ $(document).ready(function () {
         if (true == confirm(langLbl.confirmDelete)) {
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
-                $.ykmsg.close();
+                fcom.closeProcessing();
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
                     $(document).trigger('close.facebox');

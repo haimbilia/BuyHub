@@ -1,15 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $formOnSubmit = 'saveRecord($("#frmCMSPage")); return(false);';
 $fld = $frm->getField('cpage_title');
-$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','cpage_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Cms', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
-$pageLayout = $frm->getField('cpage_layout');
-// $pageLayout->setFieldTagAttribute('onchange', "showLayout($(this))");
 $displayLangTab = false;
 $otherButtons = [
     [

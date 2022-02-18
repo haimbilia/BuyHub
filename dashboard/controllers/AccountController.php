@@ -17,7 +17,6 @@ class AccountController extends LoggedUserController
                 $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
             }
         }
-        $this->set('bodyClass', 'is--dashboard');
     }
 
     public function index()
@@ -399,7 +398,7 @@ class AccountController extends LoggedUserController
         $this->set('payouts', $payouts);
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
         $this->set('codMinWalletBalance', $codMinWalletBalance);
-        $this->set('frmSrch', $frm);
+        $this->set('frmSearch', $frm);
         $this->set('accountSummary', $accountSummary);
         $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
         $this->set('canAddMoneyToWallet', $canAddMoneyToWallet);
@@ -408,12 +407,18 @@ class AccountController extends LoggedUserController
 
     public function payouts()
     {
-        $payoutPlugins = Plugin::getDataByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
-        $data = [
-            'isBankPayoutEnabled' => applicationConstants::YES,
-            'payoutPlugins' => array_values($payoutPlugins)
-        ];
-        $this->set('data', $data);
+        if (true === MOBILE_APP_API_CALL) {
+            $payoutPlugins = Plugin::getDataByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+            $data = [
+                'isBankPayoutEnabled' => applicationConstants::YES,
+                'payoutPlugins' => array_values($payoutPlugins)
+            ];
+            $this->set('data', $data);
+        } else {
+            $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+            $this->set('payouts', $payoutPlugins);
+        }
+
         $this->_template->render();
     }
 
@@ -551,10 +556,6 @@ class AccountController extends LoggedUserController
         $dateOrder = FatApp::getPostedData('date_order', FatUtility::VAR_STRING, "DESC");
 
         $srch = Transactions::getUserTransactionsObj($this->userId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $srch->addOrder('utxn.utxn_date', $dateOrder);
-
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cond = $srch->addCondition('utxn.utxn_order_id', 'like', '%' . $keyword . '%');
@@ -575,22 +576,23 @@ class AccountController extends LoggedUserController
         if ($debit_credit_type > 0) {
             switch ($debit_credit_type) {
                 case Transactions::CREDIT_TYPE:
-                    $srch->addCondition('utxn.utxn_credit', '>', '0');
-                    $srch->addCondition('utxn.utxn_debit', '=', '0');
+                    $srch->addCondition('utxn.utxn_credit', '>', 'mysql_func_0', 'AND', true);
+                    $srch->addCondition('utxn.utxn_debit', '=', 'mysql_func_0', 'AND', true);
                     break;
 
                 case Transactions::DEBIT_TYPE:
-                    $srch->addCondition('utxn.utxn_debit', '>', '0');
-                    $srch->addCondition('utxn.utxn_credit', '=', '0');
+                    $srch->addCondition('utxn.utxn_debit', '>', 'mysql_func_0', 'AND', true);
+                    $srch->addCondition('utxn.utxn_credit', '=', 'mysql_func_0', 'AND', true);
                     break;
             }
         }
-
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder('utxn.utxn_date', $dateOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
         $this->set('arrListing', $records);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
         $this->set('postedData', $post);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
@@ -847,7 +849,7 @@ class AccountController extends LoggedUserController
 
             $srch = Product::getSearchObject();
             $srch->addMultipleFields(['product_id']);
-            $srch->addCondition('product_type', '=', Product::PRODUCT_TYPE_DIGITAL);
+            $srch->addCondition('product_type', '=', 'mysql_func_' . Product::PRODUCT_TYPE_DIGITAL, 'AND', true);
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = $this->db->fetch($rs);
@@ -899,17 +901,6 @@ class AccountController extends LoggedUserController
         $srch->joinTable('tbl_states_lang', 'LEFT JOIN', 'statelang_state_id = user_state_id and statelang_lang_id = ' . $this->siteLangId);
         $rs = $srch->getResultSet();
         $data = FatApp::getDb()->fetch($rs, 'user_id');
-        if (true === MOBILE_APP_API_CALL) {
-            return $data;
-        }
-        $this->set('info', $data);
-        $this->_template->render(false, false);
-    }
-
-    public function bankInfo()
-    {
-        $userObj = new User($this->userId);
-        $data = $userObj->getUserBankInfo();
         if (true === MOBILE_APP_API_CALL) {
             return $data;
         }
@@ -1136,7 +1127,7 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function bankInfoForm()
+    private function loadBankInfoForm()
     {
         if (User::isAffiliate()) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
@@ -1155,9 +1146,21 @@ class AccountController extends LoggedUserController
         if ($data != false) {
             $frm->fill($data);
         }
-
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('info', $data);
+    }
+
+    public function bankInfo()
+    {
+        $this->loadBankInfoForm();
+        $this->_template->render();
+    }
+
+    public function bankInfoForm()
+    {
+        $this->loadBankInfoForm();
+        $this->_template->addJs('account/page-js/profile-info.js');
+        $this->_template->render();
     }
 
     public function settingsInfo()
@@ -1214,7 +1217,7 @@ class AccountController extends LoggedUserController
     }
 
     public function updateSettingsInfo()
-    {      
+    {
         $frm = $this->getSettingsForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -1307,13 +1310,13 @@ class AccountController extends LoggedUserController
 
     public function moveToWishList($selProdId)
     {
-        $wishList = new UserWishList();       
+        $wishList = new UserWishList();
         $defaultWishListId = $wishList->getWishListId($this->userId, UserWishList::TYPE_DEFAULT_WISHLIST);
         $this->addRemoveWishListProduct($selProdId, $defaultWishListId);
     }
 
     public function moveToSaveForLater($selProdId)
-    {       
+    {
         $wishList = new UserWishList();
         $wishListId = $wishList->getWishListId($this->userId, UserWishList::TYPE_SAVE_FOR_LATER);
         if (!$wishList->addUpdateListProducts($wishListId, $selProdId)) {
@@ -1344,7 +1347,7 @@ class AccountController extends LoggedUserController
     /* called from products listing page */
     public function viewWishList($selprod_id, $excludeWishList = 0)
     {
-        $excludeWishList = FatUtility::int($excludeWishList);        
+        $excludeWishList = FatUtility::int($excludeWishList);
         $wishLists = UserWishList::getUserWishLists($this->userId, true, $excludeWishList);
         $frm = $this->getCreateWishListForm();
         $frm->fill(array('selprod_id' => $selprod_id));
@@ -1366,7 +1369,7 @@ class AccountController extends LoggedUserController
             }
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
-        }      
+        }
         $wListObj = new UserWishList();
         $data_to_save_arr = $post;
         $data_to_save_arr['uwlist_added_on'] = date('Y-m-d H:i:s');
@@ -1404,7 +1407,7 @@ class AccountController extends LoggedUserController
         //UserWishList
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->joinTable(UserWishList::DB_TBL_LIST_PRODUCTS, 'LEFT OUTER JOIN', 'uwlist_id = uwlp_uwlist_id');
-        $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+        $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('uwlist_id'));
@@ -1496,7 +1499,7 @@ class AccountController extends LoggedUserController
         //UserWishList
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->joinTable(UserWishList::DB_TBL_LIST_PRODUCTS, 'LEFT OUTER JOIN', 'uwlist_id = uwlp_uwlist_id');
-        $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+        $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('uwlist_id'));
@@ -1526,7 +1529,7 @@ class AccountController extends LoggedUserController
             }
         }
 
-        $this->updateFavConfTime(); 
+        $this->updateFavConfTime();
 
         $this->set('productIsInAnyList', $productIsInAnyList);
         $this->set('action', $action);
@@ -1541,9 +1544,9 @@ class AccountController extends LoggedUserController
     }
 
     private function updateWishList($selprod_id, $wish_list_id, $rowAction = -1)
-    {      
+    {
         $row = false;
-
+        $selprod_id = FatUtility::int($selprod_id);
         $db = FatApp::getDb();
         $wListObj = new UserWishList();
         if (0 > $rowAction) {
@@ -1552,7 +1555,7 @@ class AccountController extends LoggedUserController
             $srch->addMultipleFields(array('uwlist_id'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+            $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
             // $srch->addCondition('uwlp_uwlist_id', '=', $wish_list_id);
 
             $rs = $srch->getResultSet();
@@ -1628,7 +1631,7 @@ class AccountController extends LoggedUserController
     }
 
     public function wishListSearch()
-    {       
+    {
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $wishLists[] = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
         } else {
@@ -1649,8 +1652,8 @@ class AccountController extends LoggedUserController
                     $srch->joinSellerProductSpecialPrice();
                     $srch->joinFavouriteProducts($this->userId);
                     $srch->addCondition('uwlp_uwlist_id', '=', $wishlist['uwlist_id']);
-                    $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                    $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+                    $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+                    $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     $srch->setPageNumber(1);
                     $srch->setPageSize(4);
                     $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'product_updated_on'));
@@ -1675,27 +1678,14 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false);
     }
 
-    public function viewFavouriteItems()
-    {        
-        $favouriteListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
-
-        if (!$favouriteListRow) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->set('wishListRow', $favouriteListRow);
-        $this->_template->render(false, false, 'account/favourite-list-items.php');
-        // $this->_template->render(false, false, 'account/wish-list-items.php');
-    }
-
     public function searchWishListItems()
     {
         $post = FatApp::getPostedData();
         $db = FatApp::getDb();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-        $uwlist_id = empty($post['uwlist_id']) ? 0 : FatUtility::int($post['uwlist_id']);
-        
+        $uwlist_id = FatApp::getPostedData('uwlist_id', FatUtility::VAR_INT, 0);
+
         if (false === MOBILE_APP_API_CALL) {
             $wishListRow = UserWishList::getAttributesById($uwlist_id, array('uwlist_id'));
             if (!$wishListRow) {
@@ -1723,20 +1713,20 @@ class AccountController extends LoggedUserController
         $srch->joinFavouriteProducts($this->userId);
         if (true === MOBILE_APP_API_CALL && 0 >= $uwlist_id) {
             $srch->joinWishLists();
-            $srch->addCondition('uwlist_user_id', '=', $this->userId);
+            $srch->addCondition('uwlist_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         } else {
-            $srch->addCondition('uwlp_uwlist_id', '=', $uwlist_id);
+            $srch->addCondition('uwlp_uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
         }
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
         $selProdRviewSubQuery = $selProdReviewObj->getQuery();
         $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
@@ -1776,7 +1766,7 @@ class AccountController extends LoggedUserController
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 $selprodIdsArr[] = $arr['selprod_id'];
             }
-            
+
             $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selprodIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selprodIdsArr);
         }
@@ -1803,17 +1793,13 @@ class AccountController extends LoggedUserController
         $this->set('endRecord', $endRecord);
         $this->set('showActionBtns', true);
         $this->set('isWishList', true);
+        $this->set('uwlist_id', $uwlist_id);
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
 
-        if ($totalRecords > 0) {
-            $this->set('html', $this->_template->render(false, false, 'products/products-list.php', true, false));
-        } else {
-            $this->set('html', $this->_template->render(false, false, '_partial/no-record-found.php', true, false));
-        }
-        $this->set('loadMoreBtnHtml', $this->_template->render(false, false, 'products/products-list-load-more-btn.php', true, false));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -1823,9 +1809,8 @@ class AccountController extends LoggedUserController
         $db = FatApp::getDb();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-       
-        $wishListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
 
+        $wishListRow = Product::getUserFavouriteProducts($this->userId, $this->siteLangId);
         if (!$wishListRow) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -1844,27 +1829,25 @@ class AccountController extends LoggedUserController
         $srch->joinSellerProductSpecialPrice();
         $srch->joinSellerSubscription($this->siteLangId, true);
         $srch->addSubscriptionValidCondition();
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $wislistPSrchObj = new UserWishListProductSearch();
         $wislistPSrchObj->joinWishLists();
         $wislistPSrchObj->doNotCalculateRecords();
-        $wislistPSrchObj->addCondition('uwlist_user_id', '=', $this->userId);
+        $wislistPSrchObj->addCondition('uwlist_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $wishListSubQuery = $wislistPSrchObj->getQuery();
         $srch->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
-
 
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating"));
         $selProdRviewSubQuery = $selProdReviewObj->getQuery();
         $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');
-
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -1884,7 +1867,7 @@ class AccountController extends LoggedUserController
         );
 
         $srch->addOrder('ufp_id', 'desc');
-        $srch->addCondition('ufp_user_id', '=', $this->userId);
+        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $rs = $srch->getResultSet();
 
         $products = $db->fetchAll($rs);
@@ -1920,12 +1903,7 @@ class AccountController extends LoggedUserController
             $this->_template->render();
         }
 
-        if ($totalRecords > 0) {
-            $this->set('html', $this->_template->render(false, false, 'products/products-list.php', true, false));
-        } else {
-            $this->set('html', $this->_template->render(false, false, '_partial/no-record-found.php', true, false));
-        }
-        $this->set('loadMoreBtnHtml', $this->_template->render(false, false, 'products/products-list-load-more-btn.php', true, false));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -1944,8 +1922,8 @@ class AccountController extends LoggedUserController
         $srch = UserWishList::getSearchObject($this->userId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('uwlist_id', '=', $uwlist_id);
-        $srch->addCondition('uwlist_type', '!=', UserWishList::TYPE_DEFAULT_WISHLIST);
+        $srch->addCondition('uwlist_id', '=', 'mysql_func_' . $uwlist_id, 'AND', true);
+        $srch->addCondition('uwlist_type', '!=', 'mysql_func_' . UserWishList::TYPE_DEFAULT_WISHLIST, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
@@ -1967,35 +1945,13 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewWishListItems()
-    {
-        $post = FatApp::getPostedData();
-        $uwlist_id = FatUtility::int($post['uwlist_id']);
-
-        $db = FatApp::getDb();
-      
-        $srch = UserWishList::getSearchObject($this->userId);
-        $srch->addMultipleFields(array('uwlist_id', 'uwlist_title', 'uwlist_type'));
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addCondition('uwlist_id', '=', $uwlist_id);
-        $rs = $srch->getResultSet();
-        $wishListRow = $db->fetch($rs);
-        if (!$wishListRow) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->set('wishListRow', $wishListRow);
-        $this->_template->render(false, false, 'account/wish-list-items.php');
-    }
-
     public function updateSearchdate()
     {
         $post = FatApp::getPostedData();
         $pssearch_id = FatUtility::int($post['pssearch_id']);
 
         $srch = new SearchBase(SavedSearchProduct::DB_TBL);
-        $srch->addCondition('pssearch_id', '=', $pssearch_id);
+        $srch->addCondition('pssearch_id', '=', 'mysql_func_' . $pssearch_id, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
@@ -2017,7 +1973,7 @@ class AccountController extends LoggedUserController
 
     public function toggleShopFavorite()
     {
-        $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);       
+        $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         $db = FatApp::getDb();
 
         $srch = new ShopSearch($this->siteLangId);
@@ -2030,7 +1986,7 @@ class AccountController extends LoggedUserController
                 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'
             )
         );
-        $srch->addCondition('shop_id', '=', $shop_id);
+        $srch->addCondition('shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
         //echo $srch->getQuery();
         $shopRs = $srch->getResultSet();
         $shop = $db->fetch($shopRs);
@@ -2048,8 +2004,8 @@ class AccountController extends LoggedUserController
         $srch = new UserFavoriteShopSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('ufs_user_id', '=', $this->userId);
-        $srch->addCondition('ufs_shop_id', '=', $shop_id);
+        $srch->addCondition('ufs_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ufs_shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs)) {
             $shopObj = new Shop($shop_id);
@@ -2085,7 +2041,7 @@ class AccountController extends LoggedUserController
     }
 
     public function favoriteShopSearch()
-    {        
+    {
         $post = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
@@ -2097,7 +2053,7 @@ class AccountController extends LoggedUserController
         $srch->setDefinedCriteria();
         $srch->joinSellerOrder();
         $srch->joinSellerOrderSubscription($this->siteLangId);
-        $srch->addCondition('ufs_user_id', '=', $this->userId);
+        $srch->addCondition('ufs_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->addMultipleFields(
             array(
                 's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
@@ -2131,17 +2087,17 @@ class AccountController extends LoggedUserController
     private function isValidSelProd($selprodId)
     {
         $db = FatApp::getDb();
-
+        $selprodId = FatUtility::int($selprodId);
         $srch = new ProductSearch($this->siteLangId);
         $srch->setDefinedCriteria(0, 0, array(), false);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['selprod_id']);
-        $srch->addCondition('selprod_id', '=', $selprodId);
+        $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
         $srch->joinProductToCategory();
         $srch->joinShops();
         $srch->joinSellerSubscription();
         $srch->addSubscriptionValidCondition();
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $productRs = $srch->getResultSet();
         $product = $db->fetch($productRs);
@@ -2180,7 +2136,7 @@ class AccountController extends LoggedUserController
 
     public function markAsFavorite($selprodId, $renderView = true)
     {
-        $this->isValidSelProd($selprodId);        
+        $this->isValidSelProd($selprodId);
         $prodObj = new Product();
         if (!$prodObj->addUpdateUserFavoriteProduct($this->userId, $selprodId)) {
             $message = Labels::getLabel('LBL_Some_problem_occurred,_Please_contact_webmaster', $this->siteLangId);
@@ -2209,7 +2165,7 @@ class AccountController extends LoggedUserController
     public function removeFromFavorite($selprodId, $renderView = true)
     {
         $this->isValidSelProd($selprodId);
-        $db = FatApp::getDb();       
+        $db = FatApp::getDb();
         if (!$db->deleteRecords(Product::DB_TBL_PRODUCT_FAVORITE, array('smt' => 'ufp_user_id = ? AND ufp_selprod_id = ?', 'vals' => array($this->userId, $selprodId)))) {
             $message = Labels::getLabel('LBL_Some_problem_occurred,_Please_contact_webmaster', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -2259,15 +2215,7 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function messages()
-    {
-        $this->userPrivilege->canViewMessages($this->userId);
-        $frm = $this->getMessageSearchForm($this->siteLangId);
-        $this->set('frmSrch', $frm);
-        $this->_template->render();
-    }
-
-    public function messageSearch()
+    private function setMessages()
     {
         $userImgUpdatedOn = User::getAttributesById($this->userId, 'user_updated_on');
         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
@@ -2276,41 +2224,70 @@ class AccountController extends LoggedUserController
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-
-        $parentAndTheirChildIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
+        $page = FatUtility::int($page);
 
         $srch = new MessageSearch();
         $srch->joinThreadLastMessage();
         $srch->joinMessagePostedFromUser(true, $this->siteLangId);
         $srch->joinMessagePostedToUser(true, $this->siteLangId);
         $srch->joinThreadStartedByUser();
-        $srch->addMultipleFields(array(
-            'tth.*',
-            'ttm.message_id', 'ttm.message_text', 'ttm.message_date', 'ttm.message_is_unread',
-            'ttm.message_to', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name',
-            'tfrs.shop_id as message_from_shop_id', 'tftos.shop_id as message_to_shop_id',
-            'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
-        ));
         $srch->addCondition('ttm.message_deleted', '=', 0);
-        $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndTheirChildIds);
-        $cnd->attachCondition('ttm.message_to', 'IN', $parentAndTheirChildIds, 'OR');
-        $srch->addOrder('message_id', 'DESC');
-        $srch->addGroupBy('ttm.message_thread_id');
 
+        $parentAndTheirChildIds = [];
+        switch ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) {
+            case 'B':
+                $srch->addCondition('ttm.message_from', '=', UserAuthentication::getLoggedUserId());
+                break;
+            case 'S':
+                $parentAndTheirChildIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
+                $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndTheirChildIds);
+                $cnd->attachCondition('ttm.message_to', 'IN', $parentAndTheirChildIds, 'OR');
+                break;
+            default:
+                FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
+                break;
+        }
+
+        $srch->addGroupBy('ttm.message_thread_id');
         if ($post['keyword'] != '') {
             $cnd = $srch->addCondition('tth.thread_subject', 'like', "%" . $post['keyword'] . "%");
-            $cnd->attachCondition('tfr.user_name', 'like', "%" . $post['keyword'] . "%", 'OR');
-            $cnd->attachCondition('tfr_c.credential_username', 'like', "%" . $post['keyword'] . "%", 'OR');
+            $cnd->attachCondition('ttm.message_text', 'like', '%' . $post['keyword'] . '%');
+            if ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == "S") {
+                $cnd->attachCondition('tfr.user_name', 'like', "%" . $post['keyword'] . "%", 'OR');
+                $cnd->attachCondition('tfr_c.credential_username', 'like', "%" . $post['keyword'] . "%", 'OR');
+            } else {
+                $cnd->attachCondition('tfto.user_name', 'like', "%" . $post['keyword'] . "%", 'OR');
+                $cnd->attachCondition('tfto_c.credential_username', 'like', "%" . $post['keyword'] . "%", 'OR');
+            }
         }
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
+
+        $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
+        if (!empty($date_from)) {
+            $srch->addCondition('ttm.message_date', '>=', $date_from . ' 00:00:00');
+        }
+
+        $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+        if (!empty($date_to)) {
+            $srch->addCondition('ttm.message_date', '<=', $date_to . ' 23:59:59');
+        }
+
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array(
+            'tth.*', 'ttm.*',
+            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+        ));
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
+        $srch->addOrder('message_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
         if (true === MOBILE_APP_API_CALL) {
             $message_records = array();
             foreach ($records as $mkey => $mval) {
@@ -2324,23 +2301,75 @@ class AccountController extends LoggedUserController
             $records = $message_records;
         }
 
-        /*CommonHelper::printArray($records); die;*/
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('loggedUserId', $this->userId);
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
         $this->set('parentAndTheirChildIds', $parentAndTheirChildIds);
         $this->set('postedData', $post);
+        $this->set('activeTab', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']);
+    }
 
+    public function messages()
+    {
+        $this->userPrivilege->canViewMessages($this->userId);
+        $frm = $this->getMessageSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frm);
+
+        $this->setMessages();
+        $this->_template->render();
+    }
+
+    public function messageSearch()
+    {
+        $this->setMessages();
+        $this->set('loggedUserId', $this->userId);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
         $this->_template->render(false, false);
     }
 
-    public function viewMessages($threadId, $messageId = 0)
+    /**
+     * Used for load more functionality
+     */
+    public function getRows()
+    {
+        $this->setMessages();
+        $jsonData = [
+            'html' => $this->_template->render(false, false, 'account/message-search.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function viewThread(int $threadId)
+    {
+        if (empty($threadId)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $srch = new MessageSearch();
+        $srch->joinThreadMessage();
+        $srch->joinMessagePostedFromUser(true, $this->siteLangId);
+        $srch->joinMessagePostedToUser();
+        $srch->joinShops($this->siteLangId);
+        $srch->joinOrderProducts($this->siteLangId);
+        $srch->addMultipleFields(array(
+            'tth.*', 'ttm.*',
+            'tfr.user_id as message_sent_by', 'tfr.user_updated_on as message_from_user_updated_on', 'tfr.user_phone as message_from_user_phone', 'tfr.user_phone_dcode as message_from_user_phone_dcode', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 'tfto.user_updated_on as message_to_user_updated_on',
+            'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
+            'tfrs.shop_id as message_from_shop_id', 'tfrs.shop_user_id as message_from_shop_user_id', 'tfto.user_name as message_sent_to_name', 'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name'
+        ));
+        $srch->addCondition('message_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("threadListing", $records);
+
+        $frm = $this->sendMessageForm($this->siteLangId);
+        $frm->fill(array('message_thread_id' => $threadId));
+        $this->set('frm', $frm);
+        $this->set('activeTab', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    /* public function viewMessages($threadId, $messageId = 0)
     {
         $this->userPrivilege->canViewMessages($this->userId);
         $threadId = FatUtility::int($threadId);
@@ -2387,10 +2416,10 @@ class AccountController extends LoggedUserController
         $srch->joinOrderProducts();
         $srch->joinOrderProductStatus();
         $srch->addMultipleFields(array('tth.*', 'top.op_invoice_number'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
         if ($messageId) {
-            $srch->addCondition('ttm.message_id', '=', $messageId);
+            $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
         }
 
         $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndThierChildIds);
@@ -2437,7 +2466,7 @@ class AccountController extends LoggedUserController
             $this->_template->render();
         }
         $this->_template->render();
-    }
+    } */
 
     public function threadMessageSearch()
     {
@@ -2472,8 +2501,8 @@ class AccountController extends LoggedUserController
             'IFNULL(tfrs_l.shop_name, tfrs.shop_identifier) as message_from_shop_name', 'tfrs.shop_id as message_from_shop_id',
             'tftos.shop_id as message_to_shop_id', 'IFNULL(tftos_l.shop_name, tftos.shop_identifier) as message_to_shop_name'
         ));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
         $cnd = $srch->addCondition('ttm.message_from', 'in', $allowedUserIds);
         $cnd->attachCondition('ttm.message_to', 'in', $allowedUserIds, 'OR');
         $srch->addOrder('message_id', 'DESC');
@@ -2525,9 +2554,8 @@ class AccountController extends LoggedUserController
         }
 
         $threadId = FatUtility::int($post['message_thread_id']);
-        $messageId = FatUtility::int($post['message_id']);
 
-        if (1 > $threadId || 1 > $messageId) {
+        if (1 > $threadId) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
@@ -2544,9 +2572,8 @@ class AccountController extends LoggedUserController
         $srch->joinMessagePostedToUser();
         $srch->joinThreadStartedByUser();
         $srch->addMultipleFields(array('tth.*'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('tth.thread_id', '=', $threadId);
-        $srch->addCondition('ttm.message_id', '=', $messageId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
+        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
         $cnd = $srch->addCondition('ttm.message_from', 'in', $allowedUserIds);
         $cnd->attachCondition('ttm.message_to', 'in', $allowedUserIds, 'OR');
         $rs = $srch->getResultSet();
@@ -2600,31 +2627,37 @@ class AccountController extends LoggedUserController
 
     private function getMessageSearchForm($langId)
     {
-        $frm = new Form('frmMessageSrch');
-        $frm->addTextBox('', 'keyword');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
-        $frm->addHiddenField('', 'page');
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page', 1);
+        $frm->addHiddenField('', 'total_record_count', 1);
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
     private function getWithdrawalForm($langId)
     {
         $frm = new Form('frmWithdrawal');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Amount_to_be_Withdrawn', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT_TO_BE_WITHDRAWN', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
         $fld->requirement->setFloat(true);
         $walletBalance = User::getUserBalance($this->userId);
-        $fld->htmlAfterField = Labels::getLabel("LBL_Current_Wallet_Balance", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true);
+        $fld->htmlAfterField = Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true);
 
         if (User::isAffiliate()) {
-            $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));
+            $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Cheque_Payee_Name', $langId), 'uextra_cheque_payee_name');
-            $chequePayeeNameUnReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('LBL_Cheque_Payee_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId), 'uextra_cheque_payee_name');
+            $chequePayeeNameUnReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId));
             $chequePayeeNameUnReqFld->setRequired(false);
 
-            $chequePayeeNameReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('LBL_Cheque_Payee_Name', $langId));
+            $chequePayeeNameReqFld = new FormFieldRequirement('uextra_cheque_payee_name', Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $langId));
             $chequePayeeNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'uextra_cheque_payee_name', $chequePayeeNameReqFld);
@@ -2633,11 +2666,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Bank_Name', $langId), 'ub_bank_name');
-            $bankNameUnReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('LBL_Bank_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_BANK_NAME', $langId), 'ub_bank_name');
+            $bankNameUnReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('FRM_BANK_NAME', $langId));
             $bankNameUnReqFld->setRequired(false);
 
-            $bankNameReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('LBL_Bank_Name', $langId));
+            $bankNameReqFld = new FormFieldRequirement('ub_bank_name', Labels::getLabel('FRM_BANK_NAME', $langId));
             $bankNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_bank_name', $bankNameUnReqFld);
@@ -2646,11 +2679,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Account_Holder_Name', $langId), 'ub_account_holder_name');
-            $bankAccHolderNameUnReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('LBL_Account_Holder_Name', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId), 'ub_account_holder_name');
+            $bankAccHolderNameUnReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId));
             $bankAccHolderNameUnReqFld->setRequired(false);
 
-            $bankAccHolderNameReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('LBL_Account_Holder_Name', $langId));
+            $bankAccHolderNameReqFld = new FormFieldRequirement('ub_account_holder_name', Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId));
             $bankAccHolderNameReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_account_holder_name', $bankAccHolderNameUnReqFld);
@@ -2659,11 +2692,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Bank_Account_Number', $langId), 'ub_account_number');
-            $bankAccNumberUnReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('LBL_Bank_Account_Number', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId), 'ub_account_number');
+            $bankAccNumberUnReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId));
             $bankAccNumberUnReqFld->setRequired(false);
 
-            $bankAccNumberReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('LBL_Bank_Account_Number', $langId));
+            $bankAccNumberReqFld = new FormFieldRequirement('ub_account_number', Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $langId));
             $bankAccNumberReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_account_number', $bankAccNumberUnReqFld);
@@ -2672,11 +2705,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextBox(Labels::getLabel('LBL_Swift_Code', $langId), 'ub_ifsc_swift_code');
-            $bankIfscUnReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('LBL_Swift_Code', $langId));
+            $frm->addTextBox(Labels::getLabel('FRM_SWIFT_CODE', $langId), 'ub_ifsc_swift_code');
+            $bankIfscUnReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('FRM_SWIFT_CODE', $langId));
             $bankIfscUnReqFld->setRequired(false);
 
-            $bankIfscReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('LBL_Swift_Code', $langId));
+            $bankIfscReqFld = new FormFieldRequirement('ub_ifsc_swift_code', Labels::getLabel('FRM_SWIFT_CODE', $langId));
             $bankIfscReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_ifsc_swift_code', $bankIfscUnReqFld);
@@ -2685,11 +2718,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $langId), 'ub_bank_address');
-            $bankBankAddressUnReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('LBL_Bank_Address', $langId));
+            $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
+            $bankBankAddressUnReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('FRM_BANK_ADDRESS', $langId));
             $bankBankAddressUnReqFld->setRequired(false);
 
-            $bankBankAddressReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('LBL_Bank_Address', $langId));
+            $bankBankAddressReqFld = new FormFieldRequirement('ub_bank_address', Labels::getLabel('FRM_BANK_ADDRESS', $langId));
             $bankBankAddressReqFld->setRequired(true);
 
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_CHEQUE, 'eq', 'ub_bank_address', $bankBankAddressUnReqFld);
@@ -2698,11 +2731,11 @@ class AccountController extends LoggedUserController
             /* ] */
 
             /* [ */
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_PayPal_Email_Account', $langId), 'uextra_paypal_email_id');
-            $PPEmailIdUnReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('LBL_PayPal_Email_Account', $langId));
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId), 'uextra_paypal_email_id');
+            $PPEmailIdUnReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId));
             $PPEmailIdUnReqFld->setRequired(false);
 
-            $PPEmailIdReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('LBL_PayPal_Email_Account', $langId));
+            $PPEmailIdReqFld = new FormFieldRequirement('uextra_paypal_email_id', Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $langId));
             $PPEmailIdReqFld->setRequired(true);
             $PPEmailIdReqFld->setEmail();
 
@@ -2711,15 +2744,15 @@ class AccountController extends LoggedUserController
             $PayMethodFld->requirements()->addOnChangerequirementUpdate(User::AFFILIATE_PAYMENT_METHOD_PAYPAL, 'eq', 'uextra_paypal_email_id', $PPEmailIdReqFld);
             /* ] */
         } else {
-            $frm->addRequiredField(Labels::getLabel('LBL_Bank_Name', $langId), 'ub_bank_name');
-            $frm->addRequiredField(Labels::getLabel('LBL_Account_Holder_Name', $langId), 'ub_account_holder_name');
-            $frm->addRequiredField(Labels::getLabel('LBL_Account_Number', $langId), 'ub_account_number');
-            $ifsc = $frm->addRequiredField(Labels::getLabel('LBL_IFSC_Swift_Code', $langId), 'ub_ifsc_swift_code');
+            $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $langId), 'ub_bank_name');
+            $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $langId), 'ub_account_holder_name');
+            $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $langId), 'ub_account_number');
+            $ifsc = $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $langId), 'ub_ifsc_swift_code');
             $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
-            $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $langId), 'ub_bank_address');
+            $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
-        $frm->addTextArea(Labels::getLabel('LBL_Other_Info_Instructions', $langId), 'withdrawal_instructions');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Request', $langId));
+        $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
         $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId));
         return $frm;
     }
@@ -2730,7 +2763,7 @@ class AccountController extends LoggedUserController
         $frm->setRequiredStarWith('NONE');
         $frm->addRequiredField('', 'uwlist_title');
         $frm->addHiddenField('', 'selprod_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Add', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_ADD', $this->siteLangId));
         $frm->setJsErrorDisplay('afterfield');
         return $frm;
     }
@@ -2738,51 +2771,51 @@ class AccountController extends LoggedUserController
     private function getProfileInfoForm()
     {
         $frm = new Form('frmProfileInfo');
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
-        $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $frm->addTextBox(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phoneFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phoneFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
+        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
 
         if (User::isAffiliate()) {
-            $frm->addTextBox(Labels::getLabel('LBL_Company', $this->siteLangId), 'uextra_company_name');
-            $frm->addTextBox(Labels::getLabel('LBL_Website', $this->siteLangId), 'uextra_website');
-            $frm->addTextBox(Labels::getLabel('LBL_Address_Line1', $this->siteLangId), 'user_address1')->requirements()->setRequired();
-            $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'user_address2');
+            $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'uextra_company_name');
+            $frm->addTextBox(Labels::getLabel('FRM_WEBSITE', $this->siteLangId), 'uextra_website');
+            $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE1', $this->siteLangId), 'user_address1')->requirements()->setRequired();
+            $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $this->siteLangId), 'user_address2');
         }
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         if (User::isAffiliate()) {
-            $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'user_zip');
+            $zipFld = $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'user_zip');
             /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-            $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
+            $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId)); */
         }
         $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
         if (User::isAdvertiser() && $parent == 0) {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_COMPANY', $this->siteLangId), 'user_company');
-            $fld = $frm->addTextArea(Labels::getLabel('LBL_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info');
-            $fld->html_after_field = '<small>' . Labels::getLabel('LBL_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
-            $frm->addTextArea(Labels::getLabel('LBL_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'user_company');
+            $fld = $frm->addTextArea(Labels::getLabel('FRM_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info');
+            $fld->html_after_field = '<small>' . Labels::getLabel('FRM_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
+            $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
     private function getProfileImageForm()
     {
         $frm = new Form('frmProfile', array('id' => 'frmProfile'));
-        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onClick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
+        $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image', array('id' => 'user_profile_image', 'onclick' => 'popupImage(this)', 'accept' => 'image/*', 'data-frm' => 'frmProfile'));
         return $frm;
     }
 
@@ -2803,7 +2836,7 @@ class AccountController extends LoggedUserController
                         <svg class="svg">
                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
                             </use>
-                        </svg>' . Labels::getLabel('Lbl_Your_Bank/Card_info_is_safe_with_us', $this->siteLangId) . '
+                        </svg>' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
@@ -2971,7 +3004,7 @@ class AccountController extends LoggedUserController
         }
         $srch = new OrderReturnRequestSearch();
         $srch->joinOrderProducts();
-        $srch->addCondition('orrequest_id', '=', $orrequest_id);
+        $srch->addCondition('orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $srch->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
 
         /* $cnd = $srch->addCondition( 'orrequest_user_id', '=', $this->userId );
@@ -3022,7 +3055,7 @@ class AccountController extends LoggedUserController
         $post = $frm->getFormDataFromArray($postedData);
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-       
+
         $orrequest_id = isset($post['orrequest_id']) ? FatUtility::int($post['orrequest_id']) : 0;
         $isSeller = isset($postedData['isSeller']) ? FatUtility::int($postedData['isSeller']) : 0;
 
@@ -3032,7 +3065,7 @@ class AccountController extends LoggedUserController
         $srch->joinMessageUser($this->siteLangId);
         $srch->joinMessageAdmin();
         $srch->joinOrderProducts();
-        $srch->addCondition('orrmsg_orrequest_id', '=', $orrequest_id);
+        $srch->addCondition('orrmsg_orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         if (0 < $isSeller) {
             $srch->addCondition('op_selprod_user_id', 'in', $parentAndTheirChildIds);
         } else {
@@ -3103,7 +3136,7 @@ class AccountController extends LoggedUserController
         $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->doNotLimitRecords();
-        $prodSrchObj->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrchObj->addCondition('selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $prodSrchObj->addMultipleFields(array('selprod_id'));
         $rs = $prodSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -3223,24 +3256,24 @@ class AccountController extends LoggedUserController
 
     private function getCreditsSearchForm($langId)
     {
-        $frm = new Form('frmCreditSrch');
-        $frm->addTextBox('', 'keyword', '');
-        $frm->addSelectBox('', 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
-        $frm->addDateField('', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        /* $frm->addSelectBox( '', 'date_order', array( 'ASC' => Labels::getLabel('LBL_Date_Order_Ascending', $langId), 'DESC' => Labels::getLabel('LBL_Date_Order_Descending', $langId) ), 'DESC', array(), '' ); */
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'total_record_count', '');
         $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
+        $frm->addSelectBox(Labels::getLabel('LBL_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
     private function sendMessageForm($langId)
     {
         $frm = new Form('frmSendMessage');
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $langId), 'message_text', '')->requirements()->setRequired(true);
         $frm->addHiddenField('', 'message_thread_id');
-        $frm->addHiddenField('', 'message_id');
+        $frm->addTextarea(Labels::getLabel('LBL_Comments', $langId), 'message_text', '')->requirements()->setRequired(true);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $langId));
         return $frm;
     }
@@ -3327,10 +3360,10 @@ class AccountController extends LoggedUserController
     public function sendTruncateRequest()
     {
         $srch = new UserGdprRequestSearch();
-        $srch->addCondition('ureq_user_id', '=', $this->userId);
-        $srch->addCondition('ureq_type', '=', UserGdprRequest::TYPE_TRUNCATE);
-        $srch->addCondition('ureq_status', '=', UserGdprRequest::STATUS_PENDING);
-        $srch->addCondition('ureq_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('ureq_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ureq_type', '=', 'mysql_func_' . UserGdprRequest::TYPE_TRUNCATE, 'AND', true);
+        $srch->addCondition('ureq_status', '=', 'mysql_func_' . UserGdprRequest::STATUS_PENDING, 'AND', true);
+        $srch->addCondition('ureq_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
@@ -3383,7 +3416,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
-        $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->addCondition('cpage_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0), 'AND', true);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         $gdprPolicyLinkHref = '';
         if (!empty($cpage) && is_array($cpage)) {
@@ -3408,10 +3441,10 @@ class AccountController extends LoggedUserController
         }
 
         $srch = new UserGdprRequestSearch();
-        $srch->addCondition('ureq_user_id', '=', $this->userId);
-        $srch->addCondition('ureq_type', '=', UserGdprRequest::TYPE_DATA_REQUEST);
-        $srch->addCondition('ureq_status', '=', UserGdprRequest::STATUS_PENDING);
-        $srch->addCondition('ureq_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('ureq_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('ureq_type', '=', 'mysql_func_' . UserGdprRequest::TYPE_DATA_REQUEST, 'AND', true);
+        $srch->addCondition('ureq_status', '=', 'mysql_func_' . UserGdprRequest::STATUS_PENDING, 'AND', true);
+        $srch->addCondition('ureq_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
@@ -3446,7 +3479,7 @@ class AccountController extends LoggedUserController
 
     //Valid for 10 Minutes only
     public function getTempToken()
-    {        
+    {
         $uObj = new User($this->userId);
         $tempToken = substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
 
@@ -3463,7 +3496,7 @@ class AccountController extends LoggedUserController
         $defaultPageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
         $srch = Notifications::getSearchObject();
-        $srch->addCondition('unt.unotification_user_id', '=', $this->userId);
+        $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->addOrder('unt.unotification_id', 'DESC');
         $srch->addMultipleFields(array('unt.*'));
         $srch->setPageNumber($page);
@@ -3478,7 +3511,7 @@ class AccountController extends LoggedUserController
     }
 
     public function readAllNotifications()
-    {     
+    {
         $smt = array(
             'smt' => Notifications::DB_TBL_PREFIX . 'is_read = ? AND ' . Notifications::DB_TBL_PREFIX . 'user_id = ?',
             'vals' => array(applicationConstants::NO, (int) $this->userId)
@@ -3497,10 +3530,10 @@ class AccountController extends LoggedUserController
         if (1 > $notificationId) {
             FatUtility::dieJSONError(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
         }
-        
+
         $srch = Notifications::getSearchObject();
-        $srch->addCondition('unt.unotification_user_id', '=', $this->userId);
-        $srch->addCondition('unt.unotification_id', '=', $notificationId);
+        $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        $srch->addCondition('unt.unotification_id', '=', 'mysql_func_' . $notificationId, 'AND', true);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $notification = FatApp::getDb()->fetch($rs);
@@ -3516,7 +3549,7 @@ class AccountController extends LoggedUserController
     }
 
     public function changePhoneForm($updatePhnFrm = 0)
-    {       
+    {
         $phData = User::getAttributesById($this->userId, ['user_phone_dcode', 'user_phone', 'user_country_id']);
         $updatePhnFrm = empty($updatePhnFrm) ? (empty($phData['user_phone']) ? 1 : 0) : $updatePhnFrm;
 
@@ -3568,7 +3601,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER_FORMAT", $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
-        
+
         if (1 > $updatePhnFrm && false === UserAuthentication::validateUserPhone($this->userId, $phoneNumber)) {
             LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_PHONE_NUMBER', $this->siteLangId));
         }
@@ -3576,8 +3609,8 @@ class AccountController extends LoggedUserController
         if (0 < $updatePhnFrm) {
             $db = FatApp::getDb();
             $srch = User::getSearchObject(false, 0, false);
-            $srch->addCondition('user_phone', '=', $phoneNumber);
-            $srch->addCondition('user_id', '!=', $this->userId);
+            $srch->addCondition('user_phone', '=', 'mysql_func_' . $phoneNumber, 'AND', true);
+            $srch->addCondition('user_id', '!=', 'mysql_func_' . $this->userId, 'AND', true);
             $rs = $srch->getResultSet();
             $row = $db->fetch($rs);
             if (!empty($row)) {
@@ -3613,7 +3646,7 @@ class AccountController extends LoggedUserController
     }
 
     public function resendOtp()
-    {       
+    {
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
 
@@ -3634,7 +3667,7 @@ class AccountController extends LoggedUserController
     }
 
     public function pushNotifications()
-    {       
+    {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $defaultPageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
@@ -3642,7 +3675,7 @@ class AccountController extends LoggedUserController
         $srch = User::getSearchObject();
         $srch->joinTable(UserAuthentication::DB_TBL_USER_AUTH, 'INNER JOIN', 'ua.uauth_user_id = u.user_id', 'ua');
         $srch->addMultipleFields(['uauth_device_os', 'user_regdate']);
-        $srch->addCondition('uauth_user_id', '=', $this->userId);
+        $srch->addCondition('uauth_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $uData = FatApp::getDb()->fetch($rs);
@@ -3655,13 +3688,13 @@ class AccountController extends LoggedUserController
             'pnotification_url',
             'pntu_user_id'
         ]);
-        $cond = $srch->addCondition('pnotification_status', '=', PushNotification::STATUS_COMPLETED, 'AND');
-        $cond->attachCondition('pnotification_status', '=', PushNotification::STATUS_PROCESSING, 'OR');
-        $srch->addCondition('pnotification_user_auth_type', '=', User::AUTH_TYPE_REGISTERED);
+        $cond = $srch->addCondition('pnotification_status', '=', 'mysql_func_' . PushNotification::STATUS_COMPLETED, 'AND', true);
+        $cond->attachCondition('pnotification_status', '=', 'mysql_func_' . PushNotification::STATUS_PROCESSING, 'OR', true);
+        $srch->addCondition('pnotification_user_auth_type', '=', 'mysql_func_' . User::AUTH_TYPE_REGISTERED, 'AND', true);
         $srch->addCondition('pnotification_added_on', '>=', $uData['user_regdate']);
         $cond = $srch->addCondition('pntu_user_id', 'IS', 'mysql_func_NULL', 'AND', true);
-        $cond->attachCondition('pntu_user_id', '=', $this->userId, 'OR');
-        $cond = $srch->addCondition('pnotification_device_os', '=', User::DEVICE_OS_BOTH, 'AND');
+        $cond->attachCondition('pntu_user_id', '=', 'mysql_func_' . $this->userId, 'OR', true);
+        $cond = $srch->addCondition('pnotification_device_os', '=', 'mysql_func_' . User::DEVICE_OS_BOTH, 'AND', true);
         $cond->attachCondition('pnotification_device_os', '=', $uData['uauth_device_os'], 'OR');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -3677,7 +3710,7 @@ class AccountController extends LoggedUserController
     }
 
     public function cookiesPreferencesForm()
-    {       
+    {
         $user = new User($this->userId);
         $data = $user->getUserSelectedCookies();
 
@@ -3692,7 +3725,8 @@ class AccountController extends LoggedUserController
         }
 
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->_template->addJs('account/page-js/profile-info.js');
+        $this->_template->render();
     }
 
     private function getCookiesPreferencesForm()
@@ -3723,7 +3757,7 @@ class AccountController extends LoggedUserController
             'ucp_statistical' => FatApp::getPostedData('ucp_statistical', FatUtility::VAR_INT, 0),
             'ucp_personalized' => FatApp::getPostedData('ucp_personalized', FatUtility::VAR_INT, 0)
         ];
-       
+
         $user = new User($this->userId);
         if (!$user->updateCookiesPreferences($data)) {
             $message = Labels::getLabel($user->getError(), $this->siteLangId);
@@ -3749,7 +3783,7 @@ class AccountController extends LoggedUserController
         }
 
         $opId = FatUtility::int($opId);
-       
+
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
@@ -3762,7 +3796,7 @@ class AccountController extends LoggedUserController
         $srch->joinShippingCharges();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
-            $srch->addCondition('op_id', '=', $opId);
+            $srch->addCondition('op_id', '=', 'mysql_func_' . $opId, 'AND', true);
         }
         $srch->addDirectCondition("((op_selprod_user_id = $this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))) . ")) or (order_user_id=$this->userId and op.op_status_id IN (" . implode(",", unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))) . ") ) )");
 
@@ -3861,5 +3895,41 @@ class AccountController extends LoggedUserController
         )) {
             echo "2424";
         }
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'profileInfo') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'bankInfoForm') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'cookiesPreferencesForm') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        }
+        return $this->nodes;
     }
 }

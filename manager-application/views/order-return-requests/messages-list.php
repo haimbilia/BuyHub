@@ -66,7 +66,7 @@ foreach ($messagesList as $sn => $row) {
                                 'data-bs-target' => '#modal' . $row['orrmsg_id']
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#comment">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
                                             </use>
                                         </svg>'
                         ]
@@ -86,13 +86,19 @@ foreach ($messagesList as $sn => $row) {
 }
 
 if (count($messagesList) == 0) {
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
+            </div>';
     $tbody->appendElement('tr')->appendElement(
         'td',
         array(
             'colspan' => count($fields),
             'class' => 'noRecordFoundJs'
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+        $img,
+        true
     );
 } else if (1 > $rowsOnly) {
     $postedData['page'] = $page;

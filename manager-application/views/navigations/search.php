@@ -46,6 +46,6 @@
             <?php } ?>
         </ul>
     <?php } else {
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+        $this->includeTemplate('_partial/no-record-found.php');
     } ?>
 </div>

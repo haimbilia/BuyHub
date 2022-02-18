@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row){
 			case 'action':
 				$ul = $td->appendElement("ul",array('class'=>'actions'),'',true);
 				$li = $ul->appendElement("li");
-				$li->appendElement('a', array('href'=>'javascript:void(0)','onClick'=>'addCategoryBanner('.$row['prodcat_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Media',$siteLangId)),
+				$li->appendElement('a', array('href'=>'javascript:void(0)','onclick'=>'addCategoryBanner('.$row['prodcat_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Media',$siteLangId)),
 				'<i class="fa fa-edit"></i>', true);
 			break;
 			default:

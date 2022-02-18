@@ -6,10 +6,16 @@
         list-style: none;
         position: relative;
         padding-#{$start-direction}: 40px;
+        margin: 5px;
+        border: $border;
+        background-color: #efefef;
         &.sortableListsOpen {
             .sorting-bar {
                 border-color: darken($border-color, 20);
             }
+        }
+        div {
+            background: #ffffff;
         }
     }
     .sorting-bar {
@@ -20,6 +26,8 @@
         border: dashed 1px $border-color;
         padding: 1rem;
         margin-bottom: 1rem;
+        margin-bottom: 0;
+        border: 0;
     }
     .sorting-title {
         font-weight: 500;
@@ -38,25 +46,25 @@
             color: darken($bg-gray, 50);
             //color: $brand-color-inverse;
             padding: 10px;
-            // width: 30px; 
+            // width: 30px;
             // height: 30px;
             line-height: 1.4;
             text-align: center;
             font-size: 0.8rem;
-            //border: solid 1px #dee2e6; 
+            //border: solid 1px #dee2e6;
             border-radius: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             &:hover {
-                background: lighten($bg-gray, 0.20);
+                background: lighten($bg-gray, 0.2);
             }
             .svg {
                 width: 16px;
                 height: 16px;
                 [fill]:not(.permanent):not(g) {
-                    transition: fill .3s ease;
+                    transition: fill 0.3s ease;
                     // fill: $brand-color;
                 }
             }
@@ -73,9 +81,9 @@
         float: left;
         background-position: center center;
         background-repeat: no-repeat;
-        margin-right: 0px;
+        margin-#{$end-direction}: 0px;
         position: absolute;
-        left: 0;
+        #{$start-direction}: 0;
         top: 0;
         font-size: 12px;
         cursor: pointer;
@@ -103,7 +111,7 @@
     a {
         color: $txt-body;
         display: block;
-        &[data-option='on'] {
+        &[data-option="on"] {
             .fa-angle-right {
                 transform: rotate(90deg);
             }
@@ -111,5 +119,9 @@
         &:hover {
             text-decoration: none;
         }
+    }
+    ul.append-ul {
+        background: #ffffff;
+        padding: 1px;
     }
 }

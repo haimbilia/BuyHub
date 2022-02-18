@@ -2,12 +2,12 @@
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
-$frm->setFormTagAttribute('data-callback', 'mediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('data-onclear', 'catMediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-callback', 'catMediaForm(' . $recordId . ')');
 
 $iconLangFld = $frm->getField('icon_lang_id');
-$iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
+$iconLangFld->addFieldTagAttribute('class', 'catIconLanguageJs');
 
 $fld = $frm->getField('heading_icon');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_ICON', $siteLangId) . '</h3>';
@@ -46,7 +46,7 @@ $fld = $frm->getField('seperatorthumb');
 $fld->value = '<div class="separator separator-dashed my-4"></div>';
 }
 $bannerLangFld = $frm->getField('banner_lang_id');
-$bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
+$bannerLangFld->addFieldTagAttribute('class', 'catBannerLanguageJs');
 
 if($isParent){
 $thumbLangFld = $frm->getField('thumb_lang_id');
@@ -54,7 +54,7 @@ $thumbLangFld->addFieldTagAttribute('class', 'thumb-language-js');
 
 }
 $screenFld = $frm->getField('slide_screen');
-$screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
+$screenFld->addFieldTagAttribute('class', 'catPrefDimensionsJs');
 
 if (1 < $languageCount) {
     $bannerLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -65,7 +65,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
+            'onclick' => 'catMediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -89,8 +89,7 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
     $('input[name=thumb_min_width]').val(300);
     $('input[name=thumb_min_height]').val(300);
     var aspectRatio = 4 / 1;
-    $(document).on('change', '.prefDimensions-js', function() {
-        console.log('vvv')
+    $(document).on('change', '.catPrefDimensionsJs', function() {       
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 

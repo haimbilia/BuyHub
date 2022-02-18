@@ -1,9 +1,26 @@
+$(document).on('change', '#addrStateJs', function () {
+    if (0 < $(this).val()) {
+        $(this).removeClass('error'); 
+    } else {
+        $(this).addClass('error'); 
+    }
+});
+
 (function () {
+    addNew = function () {
+        /* Uncheck all if checked. */
+        $(".selectAllJs, .selectItemJs").prop("checked", false)
+
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            fcom.removeLoader();
+        });
+    }
+
     editRecord = function (id, langId) {
         var data = 'langId=' + langId;
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
-            $.ykmodal(res, false, 'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
+            $.ykmodal(res.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
             var oldLabel = $(".label-js").text();
             $(".label-js").attr("data-listlabel", oldLabel).text(langLbl.pickupAddressForm);
@@ -19,26 +36,34 @@
             return;
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
-                $.ylmsg.error(langLbl.selectTimeslotDay);
+                $.ykmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
         } else {
             if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
-                $.ylmsg.error(langLbl.invalidTimeSlot);
+                $.ykmsg.error(langLbl.invalidTimeSlot);
                 return false;
             }
         }
 
+        if (0 > $('#addrStateJs').val()) {
+            $('#addrStateJs').addClass('error');
+            $.ykmsg.error(langLbl.invalidState);
+            return false;
+        }
+
+        $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
             searchRecords();
             $.ykmodal.close();
         });
     };
     getCountryStates = function (countryId, stateId, div, langId) {
-        fcom.ajax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+            fcom.removeLoader();
             $(div).empty();
-            $(div).append(res);
+            $(div).append(res.html);
         });
     };
 
@@ -51,9 +76,9 @@
         var rowHtml = '<tr class="rows jsDay-' + day + ' row-' + count + '" data-count=' + count + '><td></td>';
         rowHtml += '<td>' + fromTimeHtml + '</td>';
         rowHtml += '<td>' + toTimeHtml + '</td>';
-        rowHtml += '<td class="align-right  border-0"><ul class="actions">';
-        rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="/admin/images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
-        rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="/admin/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
+        rowHtml += '<td class="align-right"><ul class="actions">';
+        rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
+        rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
         rowHtml += '</td>';
 
         var addRowBtn = $('.addRowBtn' + day + '-js');
@@ -113,7 +138,7 @@
 
         if (fromTime == '' && toTime != '') {
             $(toElement).val("");
-            $.ylmsg.error(langLbl.invalidFromTime);
+            $.ykmsg.error(langLbl.invalidFromTime);
             return false;
         }
 
@@ -151,7 +176,6 @@
         } else {
             $(".js-slot-from-" + day).attr('disabled', 'true');
             $(".js-slot-to-" + day).attr('disabled', 'true');
-            $(".js-slot-add-" + day).addClass('d-none');
             $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
             $(".addRowBtnBlock" + day + "-js").addClass('d-none');
         }

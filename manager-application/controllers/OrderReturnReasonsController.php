@@ -1,12 +1,11 @@
 <?php
 
-class OrderReturnReasonsController extends ListingBaseController
-{
+class OrderReturnReasonsController extends ListingBaseController {
+
     protected string $modelClass = 'OrderReturnReason';
     protected $pageKey = 'MANAGE_ORDER_RETURN_REASONS';
 
-    public function __construct($action)
-    {
+    public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewOrderReturnReasons();
     }
@@ -17,16 +16,14 @@ class OrderReturnReasonsController extends ListingBaseController
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void
-    {
+    protected function setLangTemplateData(array $constructorArgs = []): void {
         $this->objPrivilege->canEditOrderReturnReasons();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -57,8 +54,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search()
-    {
+    public function search() {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'order-return-reasons/search.php', true),
@@ -67,15 +63,14 @@ class OrderReturnReasonsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
-    {
+    private function getListingData() {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
@@ -94,26 +89,20 @@ class OrderReturnReasonsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = OrderReturnReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('orreason.*', 'orreason_l.orreason_title'));
-
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('orreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('orreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(array('orreason.*', 'orreason_l.orreason_title'));  
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $arrListing = $db->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -121,8 +110,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditOrderReturnReasons($this->admin_id, true));
     }
 
-    public function form()
-    {
+    public function form() {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         $languages = Language::getAllNames();
@@ -143,11 +131,11 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup()
-    {
+    public function setup() {
         $this->objPrivilege->canEditOrderReturnReasons();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -162,7 +150,11 @@ class OrderReturnReasonsController extends ListingBaseController
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
@@ -170,8 +162,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm()
-    {
+    private function getForm() {
         $frm = new Form('frmOrderReturnReason');
         $frm->addHiddenField('', 'orreason_id');
         //$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'orreason_identifier');
@@ -185,8 +176,7 @@ class OrderReturnReasonsController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $langId = 0)
-    {
+    protected function getLangForm($recordId = 0, $langId = 0) {
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmOrderReturnReasonLang');
         $frm->addHiddenField('', 'orreason_id', $recordId);
@@ -195,8 +185,7 @@ class OrderReturnReasonsController extends ListingBaseController
         return $frm;
     }
 
-    public function deleteRecord()
-    {
+    public function deleteRecord() {
         $this->objPrivilege->canEditOrderReturnReasons();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -209,13 +198,12 @@ class OrderReturnReasonsController extends ListingBaseController
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
 
-    public function deleteSelected()
-    {
+    public function deleteSelected() {
         $this->objPrivilege->canEditOrderReturnReasons();
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('orreason_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -228,11 +216,10 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($recordId)
-    {
+    protected function markAsDeleted($recordId) {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new OrderReturnReason($recordId);
         if (!$obj->deleteRecord(true)) {
@@ -240,27 +227,25 @@ class OrderReturnReasonsController extends ListingBaseController
         }
     }
 
-    protected function getFormColumns(): array
-    {
+    protected function getFormColumns(): array {
         $orderRetReasonTblHeadingCols = CacheHelper::get('orderRetReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderRetReasonTblHeadingCols) {
-            return json_decode($orderRetReasonTblHeadingCols);
+            return json_decode($orderRetReasonTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            /*'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->siteLangId),*/
+            /* 'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->siteLangId), */
             'orreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->siteLangId),
-            'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
         CacheHelper::create('orderRetReasonTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',
@@ -270,8 +255,8 @@ class OrderReturnReasonsController extends ListingBaseController
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array
-    {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, Common::excludeKeysForSort());
     }
+
 }

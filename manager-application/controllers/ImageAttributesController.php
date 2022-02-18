@@ -80,7 +80,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -91,7 +91,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -102,7 +102,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_name', 'afile_type')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('post_title', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('post_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -113,7 +113,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type', 'afile_id')
                 );
-                if (!empty($post['keyword'])) {
+                if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
@@ -121,21 +121,15 @@ class ImageAttributesController extends ListingBaseController
         }
 
         $srch->addGroupBy('record_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->addHaving('record_id', 'is not', 'mysql_func_NULL', 'AND', true);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing",  FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('moduleType', (isset($post['select_module'])) ? $post['select_module'] : AttachedFile::FILETYPE_PRODUCT_IMAGE);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -151,7 +145,7 @@ class ImageAttributesController extends ListingBaseController
         $optionId = FatUtility::int($optionId);
 
         if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         switch ($moduleType) {
@@ -181,8 +175,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-
-                $title = $records['post_title'];
+                $title = ($records) ? $records['post_title'] : '';
                 break;
             default:
                 $srch = Brand::getListingObj($this->siteLangId, null, true);
@@ -192,11 +185,15 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-                $title = $records['brand_name'];
+                $title = ($records) ? $records['brand_name'] : '';
                 break;
         }
-        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
-        $languages = Language::getAllNames();
+        $languages = Language::getAllNames(); 
+        if (count($languages) <= 1) {
+            $langId = array_key_first($languages);
+        }
+
+        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
         $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $this->set('recordId', $recordId);
         $this->set('moduleType', $moduleType);
@@ -205,7 +202,8 @@ class ImageAttributesController extends ListingBaseController
         $this->set('title', $title);
         $this->set('images', $images);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId, $moduleType, $langId, $images, $optionId = 0)
@@ -221,20 +219,20 @@ class ImageAttributesController extends ListingBaseController
 
         if ($moduleType == AttachedFile::FILETYPE_PRODUCT_IMAGE) {
             $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
         }
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId);
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId);
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
         foreach ($images as $afileId => $afileData) {
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->siteLangId), 'image_alt' . $afileId);
+            $frm->addTextBox(Labels::getLabel('FRM_IMAGE_TITLE', $this->siteLangId), 'image_title' . $afileId);
+            $frm->addTextBox(Labels::getLabel('FRM_IMAGE_ALT', $this->siteLangId), 'image_alt' . $afileId);
         }
         return $frm;
     }
@@ -251,14 +249,19 @@ class ImageAttributesController extends ListingBaseController
         if (!$recordId || !$moduleType) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-
-        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
-
+        $languages = Language::getAllNames(); 
+        if (count($languages) <= 1) {
+            $langId = array_key_first($languages);
+        }
+        
+        $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
+        
         $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+            
 
         $db = FatApp::getDb();
         foreach ($images as $afileId => $afileData) {
@@ -280,12 +283,12 @@ class ImageAttributesController extends ListingBaseController
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE,[],'');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');
         }
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

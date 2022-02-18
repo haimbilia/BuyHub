@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchRecords(document.frmSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 $(document).on('click', '.selectAll-js, .selectItem--js', function () {
@@ -29,19 +29,21 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
+        
         fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
 
     clearSearch = function () {
-        document.frmSearch.reset();
-        searchRecords(document.frmSearch);
+        document.frmRecordSearch.reset();
+        searchRecords(document.frmRecordSearch);
         $('.searchHead--js').click();
     };
     

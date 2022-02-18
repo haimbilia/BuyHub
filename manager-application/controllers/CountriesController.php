@@ -83,7 +83,7 @@ class CountriesController extends ListingBaseController
         $srch = Countries::getSearchObject(false, $this->siteLangId);
         $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name']);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('c.country_code', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('c_l.country_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -135,7 +135,8 @@ class CountriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -144,13 +145,14 @@ class CountriesController extends ListingBaseController
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $countryId = FatApp::getPostedData('country_id', FatUtility::VAR_INT, 0);
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $checkCountryCode = Countries::getCountryByCode($post['country_code'], 'country_id');
-        if (!empty($checkCountryCode)) {
+        $checkCountryId = Countries::getCountryByCode($post['country_code'], 'country_id');
+        if (!empty($checkCountryId) && $checkCountryId != $countryId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_COUNTRY_CODE_ALREADY_EXISTS'), true);
         }
 
@@ -197,7 +199,7 @@ class CountriesController extends ListingBaseController
             $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'country_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'country_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -212,8 +214,8 @@ class CountriesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $langId), 'country_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_COUNTRY_NAME', $langId), 'country_name');
         return $frm;
     }
 
@@ -283,7 +285,8 @@ class CountriesController extends ListingBaseController
         $srch->setPageSize($pagesize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => []
         );
         foreach ($records as $key => $record) {
             $json['results'][] = array(
@@ -310,7 +313,7 @@ class CountriesController extends ListingBaseController
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($countriesTblHeadingCols) {
-            return json_decode($countriesTblHeadingCols);
+            return json_decode($countriesTblHeadingCols, true);
         }
 
         $arr = [

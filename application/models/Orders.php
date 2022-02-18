@@ -71,9 +71,9 @@ class Orders extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::ORDER_PAYMENT_CANCELLED => Labels::getLabel('LBL_Order_Payment_Status_Cancelled', $langId),
-            static::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_Order_Payment_Status_Pending', $langId),
-            static::ORDER_PAYMENT_PAID => Labels::getLabel('LBL_Order_Payment_Status_Paid', $langId),
+            static::ORDER_PAYMENT_CANCELLED => Labels::getLabel('LBL_ORDER_PAYMENT_STATUS_CANCELLED', $langId),
+            static::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_ORDER_PAYMENT_STATUS_PENDING', $langId),
+            static::ORDER_PAYMENT_PAID => Labels::getLabel('LBL_ORDER_PAYMENT_STATUS_PAID', $langId),
         );
     }
     public static function getActiveSubscriptionStatusArr()
@@ -93,9 +93,9 @@ class Orders extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::PAYMENT_GATEWAY_STATUS_PENDING => Labels::getLabel('LBL_Payment_Gateway_Status_Pending', $langId),
-            static::PAYMENT_GATEWAY_STATUS_PAID => Labels::getLabel('LBL_Order_Payment_Gateway_Paid', $langId),
-            static::PAYMENT_GATEWAY_STATUS_CANCELLED => Labels::getLabel('LBL_Payment_Gateway_Status_Cancelled', $langId),
+            static::PAYMENT_GATEWAY_STATUS_PENDING => Labels::getLabel('LBL_PAYMENT_GATEWAY_STATUS_PENDING', $langId),
+            static::PAYMENT_GATEWAY_STATUS_PAID => Labels::getLabel('LBL_ORDER_PAYMENT_GATEWAY_PAID', $langId),
+            static::PAYMENT_GATEWAY_STATUS_CANCELLED => Labels::getLabel('LBL_PAYMENT_GATEWAY_STATUS_CANCELLED', $langId),
         );
     }
 
@@ -292,7 +292,6 @@ class Orders extends MyAppModel
     private function addUpdateProductOrder($data = array(), $langId = 1)
     {
         $db = FatApp::getDb();
-
         $ordersLangData = [];
         if (array_key_exists('orderLangData', $data)) {
             $ordersLangData = $data['orderLangData'];
@@ -360,13 +359,13 @@ class Orders extends MyAppModel
 
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
 
-        $this->setMainTableRecordId($this->getOrderId());
-
-        $discountCouponHoldTblUpdate = false;
+        $this->setMainTableRecordId($this->getOrderId());        
+        
         if (array_key_exists('coupon_id', $discountInfo)) {
-            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->getOrderId());
+          
+            $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
-                $this->error = Labels::getLabel('ERR_Invalid_Coupon_Code', $data['order_language_id']);
+                $this->error = Labels::getLabel('ERR_INVALID_COUPON_CODE', $data['order_language_id']);
                 return false;
             }
 
@@ -375,19 +374,19 @@ class Orders extends MyAppModel
                 'ochold_coupon_id' => $discountInfo['coupon_id'],
                 'ochold_added_on' => date('Y-m-d H:i:s')
             );
+
             if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $holdCouponData, true, array(), $holdCouponData)) {
                 $db->rollbackTransaction();
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
-            $discountCouponHoldTblUpdate = true;
-        }
 
-        if (array_key_exists('coupon_id', $discountInfo) && true === $discountCouponHoldTblUpdate) {
-            $dataToUp = ['ochold_order_id' => $this->getOrderId()];
-            $where = array('ochold_coupon_id = ?', 'vals' => [$discountInfo['coupon_id']]);
-            FatApp::getDb()->updateFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $dataToUp, $where);
-        }
+            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
+                return false;
+            }          
+        }        
 
         if (!empty($ordersLangData)) {
             $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => [$this->getOrderId()]));
@@ -782,6 +781,11 @@ class Orders extends MyAppModel
         $subscrCharges = $data['subscrCharges'];
         unset($data['subscrCharges']);
 
+        $discountInfo = [];
+        if (array_key_exists('order_discount_info', $data)) {
+            $discountInfo = json_decode($data['order_discount_info'], true);
+        }
+
         if (!empty($data['order_id'])) {
             $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_number']);
             if (false === $oldOrderData || Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
@@ -928,6 +932,31 @@ class Orders extends MyAppModel
             }
         }
 
+        if (array_key_exists('coupon_id', $discountInfo)) {                  
+            $couponInfo = DiscountCoupons::getValidSubscriptionCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
+            if ($couponInfo == false) {
+                $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
+                return false;
+            }
+
+            $holdCouponData = array(
+                'ochold_order_id' => $this->getOrderId(),
+                'ochold_coupon_id' => $discountInfo['coupon_id'],
+                'ochold_added_on' => date('Y-m-d H:i:s')
+            );
+
+            if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $holdCouponData, true, array(), $holdCouponData)) {
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
+                return false;
+            }
+            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+                $db->rollbackTransaction();
+                $this->error = FatApp::getDb()->getError();
+                return false;
+            }
+        }
+
         $db->commitTransaction();
 
         return $this->getOrderId();
@@ -1012,7 +1041,7 @@ class Orders extends MyAppModel
     public function getOrderById($order_id, $langId = 0)
     {
         if (!$order_id) {
-            trigger_error(Labels::getLabel('MSG_Order_Id_Is_Not_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_ID_IS_NOT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Plugin::DB_TBL, 'LEFT JOIN', 'order_pmethod_id = plugin_id');
@@ -1045,12 +1074,12 @@ class Orders extends MyAppModel
         $order_status_id = FatUtility::int($order_status_id);
         $orderInfo = $this->getOrderById($order_id, $langId);
         if (!$orderInfo) {
-            $this->error = Labels::getLabel('ERR_Error_in_updating_the_order,_Please_try_after_some_time.', $langId);
+            $this->error = Labels::getLabel('ERR_ERROR_IN_UPDATING_THE_ORDER,_PLEASE_TRY_AFTER_SOME_TIME.', $langId);
             return false;
         }
 
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Not_Specified', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_NOT_SPECIFIED', $this->commonLangId), E_USER_ERROR);
         }
 
         $db = FatApp::getDb();
@@ -1206,7 +1235,7 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('b.user_name as buyer_name', 'b.user_phone_dcode as buyer_phone_dcode', 'b.user_phone as buyer_phone', 'bc.credential_email as buyer_email'));
         }
 
-        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id'));
+        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id','opshipping_label','opshipping_plugin_id'));
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
@@ -1313,8 +1342,8 @@ class Orders extends MyAppModel
                         'commsetting_by_package' => applicationConstants::YES,
                     );
                     if (!$record->addUpdateData($dataToSave)) {
-                        Message::addErrorMessage($record->getError());
-                        FatUtility::dieJsonError(Message::getHtml());
+                        $this->error = $record->getError();
+                        return false;
                     }
                     $insertId = $record->getMainTableRecordId();
                     if (!$insertId) {
@@ -1325,8 +1354,8 @@ class Orders extends MyAppModel
                     } */
                     if ($insertId) {
                         if (!$record->addCommissionHistory($insertId)) {
-                            Message::addErrorMessage($record->getError());
-                            FatUtility::dieJsonError(Message::getHtml());
+                            $this->error = $record->getError();
+                            return false;
                         }
                     }
 
@@ -1354,7 +1383,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $orderSubObj->getOrderSubscriptionByOssubId($ossubs_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
             return false;
         }
 
@@ -1489,7 +1518,7 @@ class Orders extends MyAppModel
                 }
 
                 $rewardsRecord = new UserRewards();
-                $urpComments = Labels::getLabel("LBL_Purchase_Reward_Points:_Your_Referral_{username}_placed_first_order.", CommonHelper::getLangId());
+                $urpComments = Labels::getLabel("LBL_PURCHASE_REWARD_POINTS:_YOUR_REFERRAL_{username}_PLACED_FIRST_ORDER.", CommonHelper::getLangId());
                 $referralUserName = User::getAttributesById($orderInfo['order_user_id'], "user_name");
                 $urpComments = str_replace("{username}", $referralUserName, $urpComments);
 
@@ -1521,7 +1550,7 @@ class Orders extends MyAppModel
                 }
 
                 $rewardsRecord = new UserRewards();
-                $urpComments = Labels::getLabel("LBL_Purchase_Reward_Points:_[1st_purchase]_you_are_referral_of_{username}.", CommonHelper::getLangId());
+                $urpComments = Labels::getLabel("LBL_PURCHASE_REWARD_POINTS:_[1st_purchase]_YOU_ARE_REFERRAL_OF_{username}.", CommonHelper::getLangId());
                 $referralUserName = User::getAttributesById($orderInfo['order_referrer_user_id'], "user_name");
                 $urpComments = str_replace("{username}", $referralUserName, $urpComments);
 
@@ -1570,7 +1599,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $this->getOrderProductsByOpId($op_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
             return false;
         }
 
@@ -1778,7 +1807,7 @@ class Orders extends MyAppModel
         if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
             if ($moveRefundToWallet) {
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
-                $comments = sprintf(Labels::getLabel('LBL_Return_Request_Approved', $langId), $formattedRequestValue);
+                $comments = sprintf(Labels::getLabel('LBL_RETURN_REQUEST_APPROVED', $langId), $formattedRequestValue);
                 $txnAmount = $childOrderInfo['op_refund_amount'];
                 /*Refund to Buyer[*/
                 if ($txnAmount > 0) {
@@ -1881,7 +1910,7 @@ class Orders extends MyAppModel
         if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
-                $comments = Labels::getLabel('Msg_Cash_collected_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
+                $comments = Labels::getLabel('LBL_CASH_COLLECTED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
                 $amt = CommonHelper::orderProductAmount($childOrderInfo);
 
                 $txnDataArr = array(
@@ -1913,7 +1942,7 @@ class Orders extends MyAppModel
             /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
             if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
-                $comments = Labels::getLabel('Msg_Cash_Deposited_for_COD_order', $langId) . ' ' . $formattedInvoiceNumber;
+                $comments = Labels::getLabel('LBL_CASH_DEPOSITED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
                 $amt = CommonHelper::orderProductAmount($childOrderInfo);
 
                 $txnDataArr = array(
@@ -1933,7 +1962,7 @@ class Orders extends MyAppModel
 
             /* Start Order Payment to Vendor [ */
             $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
-            $comments = sprintf(Labels::getLabel('Msg_Received_credits_for_order', $langId), $formattedInvoiceNumber);
+            $comments = sprintf(Labels::getLabel('LBL_RECEIVED_CREDITS_FOR_ORDER', $langId), $formattedInvoiceNumber);
 
             $availQty = $childOrderInfo['op_qty'] - $childOrderInfo['op_refund_qty'];
 
@@ -2015,7 +2044,7 @@ class Orders extends MyAppModel
             $commissionFees = $childOrderInfo['op_commission_charged'] - $childOrderInfo['op_refund_commission'];
 
             if ($commissionFees > 0 && false === $alreadyPaid) {
-                $comments = sprintf(Labels::getLabel('Msg_Charged_Commission_for_order', $langId), $formattedInvoiceNumber);
+                $comments = sprintf(Labels::getLabel('LBL_CHARGED_COMMISSION_FOR_ORDER', $langId), $formattedInvoiceNumber);
                 $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
                 $txnArray["utxn_debit"] = $commissionFees;
                 $txnArray["utxn_credit"] = 0;
@@ -2034,7 +2063,7 @@ class Orders extends MyAppModel
             /* Commission to Affiliate, if sale is linked with Affiliate referral [ */
             $affiliateCommissionFees = $childOrderInfo['op_affiliate_commission_charged'] - $childOrderInfo['op_refund_affiliate_commission'];
             if ($affiliateCommissionFees > 0 && $childOrderInfo['order_affiliate_user_id'] > 0) {
-                $commentString = Labels::getLabel('Msg_Commission_Received_Order{invoicenumber}_Placed_by_Referrar_User', $langId);
+                $commentString = Labels::getLabel('MSG_COMMISSION_RECEIVED_ORDER{invoicenumber}_PLACED_BY_REFERRAR_USER', $langId);
                 $commentString = str_replace("invoicenumber", $formattedInvoiceNumber, $commentString);
                 $txnArray["utxn_user_id"] = $childOrderInfo['order_affiliate_user_id'];
                 $txnArray["utxn_credit"] = $affiliateCommissionFees;
@@ -2489,7 +2518,7 @@ class Orders extends MyAppModel
         $order = $this->getOrderById($order_id, $langId);
 
         $formattedRequestValue = "#" . $order["order_id"];
-        $comments = sprintf(Labels::getLabel('LBL_Order_Number_Comments', $langId), $formattedRequestValue);
+        $comments = sprintf(Labels::getLabel('LBL_ORDER_NUMBER_COMMENTS', $langId), $formattedRequestValue);
         $txnAmount = $order['order_net_amount'];
 
         if ($txnAmount <= 0) {
@@ -2618,9 +2647,9 @@ class Orders extends MyAppModel
         /* CommonHelper::printArray($orderInfo); die; */
         if ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             if ($orderInfo['order_renew']) {
-                return sprintf(Labels::getLabel('LBL_Your_Subscription_is_renewed_%s', $langId), $formattedOrderValue);
+                return sprintf(Labels::getLabel('LBL_YOUR_SUBSCRIPTION_IS_RENEWED_%s', $langId), $formattedOrderValue);
             } else {
-                return sprintf(Labels::getLabel('LBL_New_Subscription_Purchased_%s', $langId), $formattedOrderValue);
+                return sprintf(Labels::getLabel('LBL_NEW_SUBSCRIPTION_PURCHASED_%s', $langId), $formattedOrderValue);
             }
         } else {
             return sprintf(Labels::getLabel('LBL_ORDER_PLACED_%s', $langId), $formattedOrderValue);
@@ -2738,7 +2767,7 @@ class Orders extends MyAppModel
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!$order) {
-            $this->error = Labels::getLabel('ERR_Order_Data_Not_Found', $langId);
+            $this->error = Labels::getLabel('ERR_ORDER_DATA_NOT_FOUND', $langId);
             return false;
         }
 
@@ -2885,7 +2914,7 @@ class Orders extends MyAppModel
 
     private function markeredOrderProductDelivered($opId, $orderLangId)
     {
-        $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", $orderLangId);
+        $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_DELIVERED_BY_SYSTEM.", $orderLangId);
         $order = new Orders();
         $order->addChildProductOrderHistory($opId, $orderLangId, FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"), $comment, true);
         $where = array('smt' => 'op_id = ? ', 'vals' => array($opId));
@@ -2911,5 +2940,25 @@ class Orders extends MyAppModel
                 break;
         }
         return HtmlHelper::getStatusHtml($status, rtrim($msg));
+    }
+
+    public static function canUpdateStatus(array $opRow)
+    {
+        $orderObj = new Orders($opRow['order_id']);
+        if ($opRow['plugin_code'] == 'CashOnDelivery') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+        } else if ($opRow['plugin_code'] == 'PayAtStore') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+        } else {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
+        }
+
+        if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        } else {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+        
+        return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
 }

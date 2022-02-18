@@ -74,7 +74,7 @@ $(document).on('change','.language',function(){
 		$inputs.each(function() { data.append( this.name,$(this).val());});
 
 		$.each( $('#prod_image')[0].files, function(i, file) {
-				$('#imageupload_div').html(fcom.getLoader());
+				$('#imageupload_div').prepend(fcom.getLoader());
 				data.append('prod_image', file);
 				$.ajax({
 					url : fcom.makeUrl('Seller', 'setupCustomProductImages'),
@@ -83,6 +83,7 @@ $(document).on('change','.language',function(){
 					processData: false,
 					contentType: false,
 					success: function(t){
+						fcom.removeLoader();
 						var ans = $.parseJSON(t);
 						if(ans.status == 1){
 							$.mbsmessage( ans.msg,true,'alert--success');

@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+    <?php
     $arr_flds = array(
         // 'select_all'=>'',
         'product_name' => Labels::getLabel('LBL_Product_Name', $siteLangId),
@@ -33,7 +33,7 @@
                 case 'select_all':
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
-                case 'product_name':        
+                case 'product_name':
                     $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $linkedToProducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
@@ -46,13 +46,13 @@
                         array_walk($options, function ($item, $key) use (&$variantsStr) {
                             $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
                         });
-                        $productName = strip_tags(html_entity_decode(($relatedProd['selprod_title'] != '') ? $relatedProd['selprod_title'] :  $relatedProd['product_name'], ENT_QUOTES, 'UTF-8'));
-                        $productName .=  $variantsStr;
+                        $productName = strip_tags(html_entity_decode(($relatedProd['selprod_title'] != '') ? $relatedProd['selprod_title'] : $relatedProd['product_name'], ENT_QUOTES, 'UTF-8'));
+                        $productName .= $variantsStr;
 
                         $li = $ul->appendElement("li");
                         $removeIcon = '';
                         if ($canEdit) {
-                            $removeIcon = '<i class="remove_buyTogether remove_param fa fa-times" onClick="deleteSelprodRelatedProduct(' . $selProdId . ', ' . $relatedProd['selprod_id'] . ')"></i>';
+                            $removeIcon = '<i class="remove_buyTogether remove_param fa fa-times" onclick="deleteSelprodRelatedProduct(' . $selProdId . ', ' . $relatedProd['selprod_id'] . ')"></i>';
                         }
                         $li->appendElement('plaintext', array(), '<span>' . $productName . ' ' . $removeIcon . '</span>', true);
                         $li->appendElement('plaintext', array(), '<input type="hidden" name="product_related[]" value="' . $relatedProd['selprod_id'] . '">', true);
@@ -73,8 +73,9 @@
     $frm = new Form('frmVolDiscountListing', array('id' => 'frmVolDiscountListing'));
     $frm->setFormTagAttribute('class', 'form');
 
-    echo $frm->getFormTag(); ?>
-    </form>
+    echo $frm->getFormTag();
+    ?>
+</form>
 </div>
 <?php
 $postedData['page'] = $page;

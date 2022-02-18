@@ -52,12 +52,19 @@ class RatingType extends MyAppModel
      */
     public static function getTypeArr(int $langId): array
     {
-        return [
+        $ratingTypeArr = CacheHelper::get('ratingTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($ratingTypeArr) {
+            return json_decode($ratingTypeArr, true);
+        }
+
+        $arr = [
             self::TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
             self::TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId),
-            self::TYPE_DELIVERY => Labels::getLabel('LBL_SHOP', $langId),
-            self::TYPE_OTHER => Labels::getLabel('LBL_CATEGORY', $langId),
+            self::TYPE_DELIVERY => Labels::getLabel('LBL_DELIVERY', $langId),
+            self::TYPE_OTHER => Labels::getLabel('LBL_OTHER', $langId),
         ];
+        CacheHelper::create('ratingTypeArr' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 
     /**

@@ -280,7 +280,7 @@ class Shipping
 
         $adminAddress = Admin::getAddress($this->langId);
         $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
-        $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
+        $adminAddress['shop_name'] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         $adminAddress['shop_id'] = 0;
         return $adminAddress;
     }
@@ -415,15 +415,14 @@ class Shipping
                         CacheHelper::create($cacheKey, serialize($shippingRates), CacheHelper::TYPE_SHIPING_API);
                     }
                 }
-
+                unset($physicalSelProdIdArr[$product['selprod_id']]);
                 if ((false == $shippingRates || empty($shippingRates))) {
                     $msg = (string) $shippingApiObj->getError();
                     if (!empty($msg)) {
                         SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
                     }
                     continue;
-                }
-                unset($physicalSelProdIdArr[$product['selprod_id']]);
+                }                
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -819,13 +818,14 @@ class Shipping
             }
         }
 
-        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
-        if ($isSellerPluginObjActive) {
-            $pluginObj->setRecordId($sellerId);
-        }
-        if (false === $pluginObj) {
+        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);        
+        if (false === $pluginObj) {           
             $this->error = $error;
             return false;
+        }
+
+        if ($isSellerPluginObjActive) {
+            $pluginObj->setRecordId($sellerId);
         }
 
         if (method_exists($pluginObj, 'init') && false === $pluginObj->init()) {

@@ -2,6 +2,12 @@
 $frm->setFormTagAttribute('onsubmit', 'updateShippingUser(this); return(false);');
 $frm->setFormTagAttribute('data-onclear', 'getShippingUsersForm(' . $orderId . ', ' . $recordId . ')');
 
+if (true === $isShippingUserAssigned) {
+    $fld = $frm->getField('optsu_user_id');
+    $fld->setFieldTagAttribute('disabled', 'disabled');
+    $displayFooterButtons = false;
+}
+
 $generalTab = [
     'attr' => [
         'href' => 'javascript:void(0);',

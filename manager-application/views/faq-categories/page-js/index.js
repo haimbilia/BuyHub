@@ -11,7 +11,10 @@ $(document).ajaxComplete(function() {
             return;
         }
     
-        $("#orderStatuses > tbody").sortable({
+        $("#listingTableJs > tbody").sortable({
+            handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function(event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -31,7 +34,7 @@ $(document).ajaxComplete(function() {
                     function(value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
                             fcom.removeLoader();
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             var ans = $.parseJSON(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);
@@ -42,11 +45,11 @@ $(document).ajaxComplete(function() {
                     },
                     function(error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
-        }).disableSelection();
+        });
     }
 
     redirectToList = function (faqCatId) {

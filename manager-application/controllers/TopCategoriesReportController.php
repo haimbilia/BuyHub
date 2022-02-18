@@ -116,7 +116,8 @@ class TopCategoriesReportController extends ListingBaseController
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
             $this->set('catTreeAssocArr', $catTreeAssocArr);
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
 
@@ -125,14 +126,14 @@ class TopCategoriesReportController extends ListingBaseController
         $this->search('export');
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmTopCategoriesReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->siteLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_RECORD_PER_PAGE', $this->siteLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
         $frm->addHiddenField('', 'order_by', 'DESC');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

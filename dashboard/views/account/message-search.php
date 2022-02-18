@@ -1,80 +1,81 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (!empty($arrListing) && is_array($arrListing)) { ?>
-    <div class="messages-list">
-        <ul>
-            <?php
-            foreach ($arrListing as $sn => $row) {
+$activeIndex = $activeIndex ?? '';
 
-                $liClass = 'is-read';
-
-                if (!in_array($row['message_to'], $parentAndTheirChildIds)) {
-                    $toUserId = $row['message_to_user_id'];
-                    $toName = $row['message_to_name'];
-                    if ($row['message_to_shop_name'] != '') {
-                        $toName = $row['message_to_shop_name'] . ' (' . $row['message_to_name'] . ')';
-                    }
-
-                    if ($row['message_to_shop_name'] != '' && $row['message_to_shop_id'] > 0) {
-                        $userImgUpdatedOn = Shop::getAttributesById($row['message_to_shop_id'], 'shop_updated_on');
-                        $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                        $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($row['message_to_shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    } else {
-                        $userImgUpdatedOn = User::getAttributesById($toUserId, 'user_updated_on');
-                        $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                        $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($toUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    }
-                } else {
-                    if (in_array($row['message_from_user_id'], $parentAndTheirChildIds)) {
-                        $toUserId = $row['thread_started_by'];
-                        $toName = $row['thread_started_by_name'];
-                        $userImgUpdatedOn = User::getAttributesById($toUserId, 'user_updated_on');
-                        $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                        $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($toUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    } else {
-                        $toUserId = $row['message_from_user_id'];
-                        $toName = $row['message_from_name'];
-                        if ($row['message_from_shop_name'] != '') {
-                            $toName = $row['message_from_shop_name'] . ' (' . $row['message_from_name'] . ')';
-                        }
-                        if ($row['message_from_shop_name'] != '' && $row['message_from_shop_id'] > 0) {
-                            $userImgUpdatedOn = Shop::getAttributesById($row['message_from_shop_id'], 'shop_updated_on');
-                            $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($row['message_from_shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        } else {
-                            $userImgUpdatedOn = User::getAttributesById($toUserId, 'user_updated_on');
-                            $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($toUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        }
-                    }
-                }
-
-                if ($row['message_to'] == $loggedUserId) {
-                    if ($row['message_is_unread'] == Thread::MESSAGE_IS_UNREAD) {
-                        $liClass = '';
-                    }
-                }
-
-            ?>
-                <li class="<?php echo $liClass; ?>">
-                    <div class="msg_db"><img src="<?php echo $toImage; ?>" alt="<?php echo $toName; ?>"></div>
-                    <div class="msg__desc">
-                        <span class="msg__title"><?php echo htmlentities($toName); ?></span>
-                        <span class="msg__date"><?php echo FatDate::format($row['message_date'], true); ?></span>
-                        <p class="msg__detail"><?php echo CommonHelper::truncateCharacters(trim(preg_replace('/\s\s+/', ' ', $row['message_text'])), 120, '', '', true); ?></p>
-
-                    </div>
-                    <ul class="actions">
-                        <li><a href="<?php echo UrlHelper::generateUrl('Account', 'viewMessages', array($row['thread_id'], $row['message_id'])); ?>"><i class="fa fa-eye"></i></a></li>
-                    </ul>
-                </li>
-            <?php } ?>
-        </ul>
-    </div>
-<?php } else {
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
+if (1 == $page) {
+    $ul = new HtmlElement('ul', ['class' => 'message__list appendRowsJs listingRecordJs']);
 }
 
-$postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmMessageSrchPaging'));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToMessageSearchPage');
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+if (!empty($arrListing)) {
+    foreach ($arrListing as $sn => $row) {
+        $isActive = $sn === $activeIndex ? ' is-active' : '';
+        $attr = ['class' => 'message__list-item' . $isActive . ' listItemJs', 'data-thread-id' => $row['thread_id'], 'onclick' => 'viewThread(this)'];
+        if (1 == $page) {
+            $li = $ul->appendElement('li', $attr);
+        } else {
+            $li = new HtmlElement('li', $attr);
+        }
+
+        $fromUserId = $row['message_from_user_id'];
+        $fromUserUpdatedOn = $row['message_from_user_updated_on'];
+        $fromUserName = $row['message_from_name'];
+
+        $toUserId = $row['message_to_user_id'];
+        $toUserUpdatedOn = $row['message_to_user_updated_on'];
+        $toUserName = $row['message_to_name'];
+        if ($row['thread_started_by'] == $row['message_to_user_id'] || $activeTab == "B") {
+            $fromUserId = $row['message_to_user_id'];
+            $fromUserUpdatedOn = $row['message_to_user_updated_on'];
+            $fromUserName = $row['message_to_name'];
+
+            $toUserId = $row['message_from_user_id'];
+            $toUserUpdatedOn = $row['message_from_user_updated_on'];
+            $toUserName = $row['message_from_name'];
+        }
+
+
+        /* Message From */
+        $msgFrom = $li->appendElement('div', ['class' => 'message-from']);
+
+        $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+        $img = '<img src="' . $userImageUrl . '" alt="' . $fromUserName . '">';
+        $media = $msgFrom->appendElement('div', ['class' => 'message-media']);
+        $media->appendElement('plaintext', [], $img, true);
+
+        $data = $msgFrom->appendElement('div', ['class' => 'message-data']);
+        $data->appendElement('h4', ['class' => 'title'], $fromUserName);
+
+        $msg = $row['message_text'];
+        $msg = 25 < strlen($msg) ? substr($msg, 0, 25) . ' ...' : $msg;
+        $data->appendElement('p', [], $msg);
+        /* --------- */
+
+        /* Message to */
+        $msgTo = $li->appendElement('div', ['class' => 'message-to']);
+
+        $uploadedTime = AttachedFile::setTimeParam($toUserUpdatedOn);
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, 'thumb', 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $img = '<img src="' . $userImageUrl . '" alt="' . $toUserName . '">';
+        $media = $msgTo->appendElement('div', ['class' => 'message-media']);
+        $div = $media->appendElement('div', ['class' => 'user user-sm user-circle']);
+        $div->appendElement('plaintext', [], $img, true);
+        /* --------- */
+
+        if (1 < $page) {
+            echo $li->getHtml();
+        }
+    }
+} else {
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
+            </div>';
+
+    $li = $ul->appendElement('li', ['class' => 'message__list-item'], $img, true);
+}
+
+if (1 == $page) {
+    echo $ul->getHtml();
+}

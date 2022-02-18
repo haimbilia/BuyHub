@@ -21,12 +21,12 @@ class EmptyCartItems extends MyAppModel
                 'LEFT OUTER JOIN',
                 'emptycartitemlang_emptycartitem_id = emptycartitem_id
 			AND emptycartitemlang_lang_id = ' . $langId,
-            'eci_l'
+                'eci_l'
             );
         }
 
         if ($isActive) {
-            $srch->addCondition('emptycartitem_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('emptycartitem_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if (true === $setOrderBy) {
@@ -38,8 +38,9 @@ class EmptyCartItems extends MyAppModel
 
     public function canRecordMarkDelete($id)
     {
+        $id = FatUtility::int($id);
         $srch = static::getSearchObject(0, false);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld(static::DB_TBL_PREFIX . 'id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);

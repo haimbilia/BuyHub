@@ -4,7 +4,7 @@ $(document).on('change', '.languageJs', function () {
     couponImages(coupon_id, lang_id);
 });
 
-$(document).on('keyup', '.discountValueJs', function() {
+$(document).on('keyup', '.discountValueJs', function () {
     if ($('.discountTypeJs option:selected').val() == PERCENTAGE && $(this).val() > 100) {
         $(this).val(100);
         return false;
@@ -20,20 +20,16 @@ $(document).ready(function () {
     var couponHistoryId = 0;
 
     couponLinkPlanForm = function (couponId) {
-        fcom.displayProcessing();
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, 'linkPlanForm'), 'recordId=' + couponId, function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'linkPlanForm'), 'recordId=' + couponId, function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };
 
 
     couponHistory = function (couponId) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, 'usesHistory'), 'recordId=' + couponId, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory'), 'recordId=' + couponId, function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };
@@ -43,10 +39,11 @@ $(document).ready(function () {
             page = 1;
         }
         var frm = document.frmHistorySearchPaging;
-        $(frm.page).val(page);
+        $(frm.page).val(page.html);
         data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'usesHistory', [couponHistoryId]), data, function (t) {
-            $.facebox(t, 'faceboxWidth');
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory', [couponHistoryId]), data, function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
     };
 
@@ -75,14 +72,15 @@ $(document).ready(function () {
     };
 
     loadImages = function (recordId, lang_id) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
+            fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
             }
 
-            if ('' != t) {
-                $(".dropzoneContainerJs").append(t);
+            if ('' != t.html) {
+                $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
                 $(".dropzoneUploadJs").show();
@@ -101,7 +99,7 @@ $(document).ready(function () {
                 $.ykmsg.error(ans.msg);
                 return;
             }
-            
+
             $.ykmsg.success(ans.msg);
             loadImages(recordId, lang_id);
         });

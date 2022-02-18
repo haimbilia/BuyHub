@@ -41,17 +41,18 @@ class ShopCollection extends MyAppModel
     public static function getCollectionGeneralDetail($shop_id, $scollection_id = 0, $langId = 0, $join = 'LEFT OUTER JOIN')
     {
         $langId = FatUtility::int($langId);
+        $shop_id = FatUtility::int($shop_id);
         $srch = self::getSearchObject();
         if (0 < $langId) {
             $srch->joinTable(static::DB_TBL_LANG, $join, static::DB_TBL_LANG_PREFIX . 'scollection_id = ' . static::DB_TBL_PREFIX . 'id and ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId);
             $srch->addMultipleFields(['scollection_id', 'scollection_shop_id', 'scollection_identifier', 'scollection_active', 'IFNULL(scollection_name, scollection_identifier) as scollection_name']);
         }
 
-        $srch->addCondition(static::DB_TBL_PREFIX . "shop_id", "=", $shop_id);
+        $srch->addCondition(static::DB_TBL_PREFIX . "shop_id", "=", 'mysql_func_' . $shop_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         if (0 < $scollection_id) {
-            $srch->addCondition(static::DB_TBL_PREFIX . "id", "=", $scollection_id);
+            $srch->addCondition(static::DB_TBL_PREFIX . "id", "=", 'mysql_func_' . $scollection_id, 'AND', true);
             $rs = $srch->getResultSet();
             return  FatApp::getDb()->fetch($rs);
         }
@@ -85,7 +86,7 @@ class ShopCollection extends MyAppModel
             return false;
         }
 
-        FatApp::getDb()->deleteRecords(static::DB_TBL_SHOP_COLLECTION_PRODUCTS, array('smt' => static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id = ?', 'vals' => array($scp_scollection_id) ));
+        FatApp::getDb()->deleteRecords(static::DB_TBL_SHOP_COLLECTION_PRODUCTS, array('smt' => static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id = ?', 'vals' => array($scp_scollection_id)));
         if (empty($selProds)) {
             return true;
         }
@@ -113,7 +114,7 @@ class ShopCollection extends MyAppModel
             return false;
         }
         $srch = new SearchBase(static::DB_TBL_SHOP_COLLECTION_PRODUCTS);
-        $srch->addCondition(static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id', '=', $scollection_id);
+        $srch->addCondition(static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id', '=', 'mysql_func_' . $scollection_id, 'AND', true);
         $srch->joinTable(static::DB_SELLER_PRODUCTS, 'INNER JOIN', static::DB_SELLER_PRODUCTS_PREFIX . 'id = ' . static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'selprod_id');
         $srch->joinTable(static::DB_SELLER_PRODUCTS . '_lang', 'LEFT JOIN', 'slang.' . static::DB_SELLER_PRODUCTS_LANG_TBL_PREFIX . 'selprod_id = ' . static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'selprod_id AND ' . static::DB_SELLER_PRODUCTS_LANG_TBL_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_SELLER_PRODUCTS_PREFIX . 'product_id');
@@ -122,7 +123,8 @@ class ShopCollection extends MyAppModel
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = seller_user.user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES, 'tuc');
         $srch->addMultipleFields(
             array(
-            'selprod_id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username')
+                'selprod_id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username'
+            )
         );
 
 
@@ -137,24 +139,14 @@ class ShopCollection extends MyAppModel
         return $data;
     }
 
-    public static function getCollectionDetail($shop_id, $lang_id)
-    {
-        $srch = self::getSearchObject();
-        $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', static::DB_TBL_LANG_PREFIX . 'scollection_id = ' . static::DB_TBL_PREFIX . 'id');
-        $srch->addCondition(static::DB_TBL_PREFIX . "shop_id", "=", $shop_id);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return  FatApp::getDb()->fetch($rs);
-    }
-
     public static function getShopCollectionsDetail($shop_id, $langId)
     {
+        $shop_id = FatUtility::int($shop_id);
         $srch = self::getSearchObject();
         $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', static::DB_TBL_LANG_PREFIX . 'scollection_id = ' . static::DB_TBL_PREFIX . 'id and ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId);
-        $srch->addMultipleFields(array( 'scollection_id', 'IFNULL(scollection_name, scollection_identifier) as scollection_name', 'scollection_shop_id'));
-        $srch->addCondition(static::DB_TBL_PREFIX . "shop_id", "=", $shop_id);
-        $srch->addCondition(static::DB_TBL_PREFIX . "active", "=", applicationConstants::YES);
+        $srch->addMultipleFields(array('scollection_id', 'IFNULL(scollection_name, scollection_identifier) as scollection_name', 'scollection_shop_id'));
+        $srch->addCondition(static::DB_TBL_PREFIX . "shop_id", "=", 'mysql_func_' . $shop_id, 'AND', true);
+        $srch->addCondition(static::DB_TBL_PREFIX . "active", "=", 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addGroupBy('scollection_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -181,7 +173,7 @@ class ShopCollection extends MyAppModel
             return false;
         }
 
-        if (!$db->deleteRecords(static::DB_TBL_SHOP_COLLECTION_PRODUCTS, array('smt' => static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id = ?', 'vals' => array($collection_id) ))) {
+        if (!$db->deleteRecords(static::DB_TBL_SHOP_COLLECTION_PRODUCTS, array('smt' => static::DB_TBL_SHOP_COLLECTION_PRODUCTS_PREFIX . 'scollection_id = ?', 'vals' => array($collection_id)))) {
             $this->error = $db->getError();
             return false;
         }

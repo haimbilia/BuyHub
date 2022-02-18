@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchProfile(document.frmProfileSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 (function () {
@@ -11,30 +11,25 @@ $(document).ready(function () {
         }
         var frm = document.frmProfileSearchPaging;
         $(frm.page).val(page);
-        searchProfile(frm);
+        searchRecords(frm);
     }
 
     reloadList = function () {
         var frm = document.frmProfileSearchPaging;
-        searchProfile(frm);
+        searchRecords(frm);
     };
 
-    searchProfile = function (form) {
+    searchRecords = function (form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ShippingProfile', 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     }
-
-    clearSearch = function () {
-        document.frmSearch.reset();
-        searchProfile(document.frmSearch);
-    };
-
 
     deleteRecord = function(shippingProfileId){        
         if (!confirm(langLbl.confirmDelete)) {

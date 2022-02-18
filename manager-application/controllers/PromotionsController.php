@@ -132,15 +132,10 @@ class PromotionsController extends ListingBaseController
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinPromotionsLogForCount();
         $srch->joinActiveUser(false);
-        $srch->joinShops($this->siteLangId);
-        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
-        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO);
-        $srch->addOrder($sortBy, $sortOrder);
+        $srch->joinShops($this->siteLangId); 
+        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO); 
 
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('pr.promotion_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('pr_l.promotion_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -158,11 +153,12 @@ class PromotionsController extends ListingBaseController
         $active = FatApp::getPostedData('active');
         if ('' != $active && '-1' != $active) {
             $srch->addCondition('pr.promotion_active', '=', $active);
-        }
+        }        
 
-        $promotion_id = FatApp::getPostedData('promotion_id');
-        if (!empty($promotion_id) && $promotion_id >= 0) {
-            $srch->addCondition('pr.promotion_id', '=', $promotion_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $promotionId = FatApp::getPostedData('promotion_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $promotionId) {
+            $srch->addCondition('pr.promotion_id', '=', $promotionId);
         }
 
         $approved = FatApp::getPostedData('approve');
@@ -193,23 +189,22 @@ class PromotionsController extends ListingBaseController
             $srch->addCondition('promotion_type', '=', $type);
         }
         $srch->addGroupBy('pr.promotion_id');
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
-
+        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true)); 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -248,7 +243,7 @@ class PromotionsController extends ListingBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+                    LibHelper::exitWithError($this->str_invalid_request, true);
                 }
                 $promotion_record_id = $row['shop_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0);
@@ -269,7 +264,7 @@ class PromotionsController extends ListingBaseController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (empty($row)) {
-                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+                    LibHelper::exitWithError($this->str_invalid_request, true);
                 }
                 $promotion_record_id = $row['selprod_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0);
@@ -310,7 +305,7 @@ class PromotionsController extends ListingBaseController
                 break;
 
             default:
-                LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+                LibHelper::exitWithError($this->str_invalid_request, true);
                 break;
         }
 
@@ -343,7 +338,11 @@ class PromotionsController extends ListingBaseController
         $record->assignValues($data);
 
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
@@ -448,7 +447,7 @@ class PromotionsController extends ListingBaseController
         }
 
         if (1 > $attachedFileType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -580,7 +579,8 @@ class PromotionsController extends ListingBaseController
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PPC_PROMOTION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function media($recordId = 0)
@@ -590,7 +590,7 @@ class PromotionsController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $promotionType = 0;
@@ -605,7 +605,7 @@ class PromotionsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
@@ -642,7 +642,8 @@ class PromotionsController extends ListingBaseController
 
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId = 0, $lang_id = 0, $screen = 0)
@@ -650,7 +651,7 @@ class PromotionsController extends ListingBaseController
         $this->objPrivilege->canEditPromotions();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $languages = Language::getAllNames();
@@ -668,7 +669,7 @@ class PromotionsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
@@ -705,7 +706,8 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(0 => '') + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('language', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoCompleteSelprods(int $userId = 0, int $selProdId = 0, bool $return = false)
@@ -822,26 +824,26 @@ class PromotionsController extends ListingBaseController
             $this->addSortingElements($frm, 'promotion_name');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addDateField(Labels::getLabel('FRM_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Active', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
 
         $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Approved', $this->siteLangId), 'approve', array(-1 => 'Does not Matter') + $yesNoArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_APPROVED', $this->siteLangId), 'approve', array(-1 => 'Does not Matter') + $yesNoArr, '', array(), '');
 
-        $frm->addTextBox(Labels::getLabel('FRM_Impression_from_(number)', $this->siteLangId), 'impression_from');
-        $frm->addTextBox(Labels::getLabel('FRM_Impression_to_(number)', $this->siteLangId), 'impression_to');
+        $frm->addTextBox(Labels::getLabel('FRM_IMPRESSION_FROM_(NUMBER)', $this->siteLangId), 'impression_from');
+        $frm->addTextBox(Labels::getLabel('FRM_IMPRESSION_TO_(NUMBER)', $this->siteLangId), 'impression_to');
 
-        $frm->addTextBox(Labels::getLabel('FRM_Clicks_from_(number)', $this->siteLangId), 'click_from');
-        $frm->addTextBox(Labels::getLabel('FRM_Clicks_to_(number)', $this->siteLangId), 'click_to');
+        $frm->addTextBox(Labels::getLabel('FRM_CLICKS_FROM_(NUMBER)', $this->siteLangId), 'click_from');
+        $frm->addTextBox(Labels::getLabel('FRM_CLICKS_TO_(NUMBER)', $this->siteLangId), 'click_to');
         $frm->addHiddenField('', 'promotion_id');
-        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_All_Type', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
-
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_ALL_TYPE', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -1062,7 +1064,7 @@ class PromotionsController extends ListingBaseController
     {
         $promotionsTblHeadingCols = CacheHelper::get('promotionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($promotionsTblHeadingCols) {
-            return json_decode($promotionsTblHeadingCols);
+            return json_decode($promotionsTblHeadingCols, true);
         }
 
         $arr = [

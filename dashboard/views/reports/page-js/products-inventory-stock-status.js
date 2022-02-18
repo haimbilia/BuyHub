@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchReport(document.frmReportSearch);
+	searchRecords(document.frmRecordSearch);
 });
 
 $(document).on("click", ".headerColumnJs", function (e) {
@@ -14,7 +14,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 		$(frm.sortOrder).val('ASC');
 		document.getElementById("sortOrder").value = 'ASC';
 	}
-	searchReport(frm, false);
+	searchRecords(frm, false);
 });
 
 $(function () {
@@ -34,17 +34,17 @@ $(function () {
 		}
 		var frm = document.frmReportSearchPaging;
 		$(frm.page).val(page);
-		searchReport(frm);
+		searchRecords(frm);
 	};
 	redirectBack = function (redirecrt) {
 		window.location = redirecrt;
 	}
 	reloadList = function (withloader) {
 		var frm = document.frmReportSearchPaging;
-		searchReport(frm, withloader);
+		searchRecords(frm, withloader);
 	};
 
-	searchReport = function (frm, withloader) {
+	searchRecords = function (frm, withloader) {
 		setColumnsData(frm);
 		var data = '';
 		if (frm) {
@@ -52,28 +52,29 @@ $(function () {
 		}
 
 		if (typeof withloader == 'undefined' || withloader != false) {
-			$(dv).html(fcom.getLoader());
+			$(dv).prepend(fcom.getLoader());
 		}
 
 		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsInventoryStockStatus'), data, function (res) {
+            fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
 
 	exportReport = function () {
-		setColumnsData(document.frmReportSearch);
-		document.frmReportSearch.action = fcom.makeUrl(controllerName, 'exportProductsInventoryStockStatusReport', ['export']);
-		document.frmReportSearch.submit();
+		setColumnsData(document.frmRecordSearch);
+		document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'exportProductsInventoryStockStatusReport', ['export']);
+		document.frmRecordSearch.submit();
 	}
 
 	clearSearch = function () {
-		document.frmReportSearch.reset();
+		document.frmRecordSearch.reset();
 		$("input:checkbox[name=reportColumns]:checked").each(function () {
 			if ($(this).attr('disabled') != 'disabled') {
 				$(this).prop('checked', false);
 			}
 		});
-		searchReport(document.frmReportSearch);
+		searchRecords(document.frmRecordSearch);
 	};
 
 	setColumnsData = function (frm) {

@@ -215,7 +215,7 @@ class PushNotification extends MyAppModel
         $dataToUpdateOnDuplicate = $dataToSave;
         unset($dataToUpdateOnDuplicate['pnotification_id']);
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
-            $error = Labels::getLabel("MSG_UNABLE_TO_UPDATE!", CommonHelper::getLangId());
+            $error = Labels::getLabel("ERR_UNABLE_TO_UPDATE!", CommonHelper::getLangId());
             return false;
         }
         return true;
@@ -231,7 +231,7 @@ class PushNotification extends MyAppModel
     {
         $defaultPushNotiAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . Plugin::TYPE_PUSH_NOTIFICATION, FatUtility::VAR_INT, 0);
         if (empty($defaultPushNotiAPI)) {
-            $error =  Labels::getLabel('MSG_DEFAULT_PUSH_NOTIFICATION_API_NOT_SET', CommonHelper::getLangId());
+            $error =  Labels::getLabel('ERR_DEFAULT_PUSH_NOTIFICATION_API_NOT_SET', CommonHelper::getLangId());
             return false;
         }
 
@@ -239,7 +239,7 @@ class PushNotification extends MyAppModel
         $keyName = $pluginData['plugin_code'];
 
         if (1 > Fatutility::int($pluginData['plugin_active'])) {
-            $error =  Labels::getLabel('MSG_PLUGIN_IS_NOT_ACTIVE', CommonHelper::getLangId());
+            $error =  Labels::getLabel('ERR_PLUGIN_IS_NOT_ACTIVE', CommonHelper::getLangId());
             return false;
         }
 
@@ -265,7 +265,7 @@ class PushNotification extends MyAppModel
         $rs = $srch->getResultSet();
         $notificationList = FatApp::getDb()->fetchAll($rs);
         if (1 > count($notificationList)) {
-            $error = Labels::getLabel('MSG_NO_RECORD_FOUND', CommonHelper::getLangId());
+            $error = Labels::getLabel('ERR_NO_RECORD_FOUND', CommonHelper::getLangId());
             return false;
         }
 

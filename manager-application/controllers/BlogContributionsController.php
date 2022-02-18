@@ -23,13 +23,14 @@ class BlogContributionsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'blog-contributions/search-form.php';
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME_EMAIL_AND_PHONE_WITHOUT_CODE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -46,9 +47,7 @@ class BlogContributionsController extends ListingBaseController
     }
 
     private function getListingData()
-    {
-        $db = FatApp::getDb();
-
+    {       
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -72,32 +71,32 @@ class BlogContributionsController extends ListingBaseController
 
         $srch = BlogContribution::getSearchObject();
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $keywordCond = $srch->addCondition('bcontributions_author_first_name', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_last_name', 'like', '%' . $post['keyword'] . '%');
+            $keywordCond->attachCondition('mysql_func_concat(bcontributions_author_first_name," ",bcontributions_author_last_name)', 'like', '%' . $post['keyword'] . '%','or',true);
             $keywordCond->attachCondition('bcontributions_author_email', 'like', '%' . $post['keyword'] . '%');
             $keywordCond->attachCondition('bcontributions_author_phone', 'like', '%' . $post['keyword'] . '%');
         }
 
         if (isset($post['bcontributions_status']) && $post['bcontributions_status'] != '') {
             $srch->addCondition('bcontributions_status', '=', $post['bcontributions_status']);
-        }
-        if (isset($post['bcontributions_id']) && $post['bcontributions_id'] != '') {
-            $srch->addCondition('bcontributions_id', '=', $post['bcontributions_id']);
-        }
-        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        }        
 
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $contributionId = FatApp::getPostedData('bcontributions_id', FatUtility::VAR_INT, $recordId);
+        if (0 < $contributionId) {
+            $srch->addCondition('bcontributions_id', '=', $contributionId);
+        }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize); 
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -133,7 +132,7 @@ class BlogContributionsController extends ListingBaseController
         $frm = $this->getForm($recordId);
         $data = BlogContribution::getAttributesById($recordId);
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm->fill($data);
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
@@ -146,7 +145,8 @@ class BlogContributionsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -201,7 +201,7 @@ class BlogContributionsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bcontributions_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -218,7 +218,7 @@ class BlogContributionsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new BlogContribution($recordId);
         if (!$obj->deleteRecord()) {
@@ -242,7 +242,7 @@ class BlogContributionsController extends ListingBaseController
         $frm = new Form('frmBlogContribution', array('id' => 'frmBlogContribution'));
         $frm->addHiddenField('', 'bcontributions_id', $recordId);
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), '');
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
@@ -260,7 +260,7 @@ class BlogContributionsController extends ListingBaseController
 
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
-        
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -270,7 +270,7 @@ class BlogContributionsController extends ListingBaseController
     {
         $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogContributionTblHeadingCols) {
-            return json_decode($blogContributionTblHeadingCols);
+            return json_decode($blogContributionTblHeadingCols, true);
         }
 
         $arr = [

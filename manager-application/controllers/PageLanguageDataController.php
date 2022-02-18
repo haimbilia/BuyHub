@@ -103,7 +103,7 @@ class PageLanguageDataController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = PageLanguageData::getSearchObject();
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('plang_key', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('plang_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -164,7 +164,8 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('langFrm', $langFrm);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($pLangKey = '', $lang_id = 0)
@@ -199,7 +200,7 @@ class PageLanguageDataController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true, false, true);
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $langId =  $langId == 1 ? -1 : $langId;
         $langData = PageLanguageData::getAttributesByKey($plangKey, $langId);
@@ -215,9 +216,9 @@ class PageLanguageDataController extends ListingBaseController
             'plang_helping_text' => $post['plang_helping_text'],
             'plang_recommendations' => $post['plang_recommendations']
         ];
-
+        
         if (!$pLangDataPage->addUpdateData($data)) {
-            LibHelper::exitWithError($pLangDataPage->getError(), true, false, true);
+            LibHelper::exitWithError($pLangDataPage->getError(), true);
         }
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
@@ -236,7 +237,7 @@ class PageLanguageDataController extends ListingBaseController
     {
         $pagesLanguageDataTblHeadingCols = CacheHelper::get('pagesLanguageDataTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pagesLanguageDataTblHeadingCols) {
-            return json_decode($pagesLanguageDataTblHeadingCols);
+            return json_decode($pagesLanguageDataTblHeadingCols, true);
         }
 
         $arr = [

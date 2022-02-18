@@ -27,54 +27,58 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId,'shopName'=>$row['shop_name']], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'selprod_price':
                 $price = CommonHelper::displayMoneyFormat($row[$key], true, true);
                 $td->appendElement('plaintext', $tdAttr, $price, true);
                 break;
-            case 'credential_username':
-                $href = "javascript:void(0)";
-                $onclick = 'redirectUser(' . $row['user_id'] . ')';
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
-                    'user' => $row,
-                    'extraClass' => 'user-profile-sm',
-                    'displayEmail' => false,
-                    'userTitleClass' => 'text-muted',
-                    'siteLangId' => $siteLangId,
-                    'href' => $href,
-                    'onclick' => $onclick,
-                ], false, true);
-                $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
-                break;
             case 'splprice_start_date':
             case 'splprice_end_date':
                 $date = date('Y-m-d', strtotime($row[$key]));
-                $attr = array(
-                    'readonly' => 'readonly',
+                $fldAttr = array(
                     'placeholder' => $val,
-                    'data-selprodid' => $selProdId,
-                    'data-id' => $splPriceId,
-                    'data-oldval' => $date,
+                    'readonly' => 'readonly',
+                    'class' => 'field--calender inputDateJs hide',
+                    'name' => $key,
+                    'data-selprod-id' => $selProdId,
                     'data-price' => $row['selprod_price'],
-                    'id' => $key . '-' . $splPriceId,
-                    'class' => 'dateJs splPriceColJs hide click-to-edit-input sp-input',
+                    'data-id' => $splPriceId,
+                    'data-value' => $date,
+                    'data-formated-value' => $date,
                 );
-                $editListingFrm->addDateField($val, $key, $date, $attr);
-                $td->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
-                $td->appendElement('plaintext', $tdAttr, $editListingFrm->getFieldHtml($key), true);
+
+                $attr = ['class' => 'dateJs contenteditable click-to-edit', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)];
+                $td->appendElement('div', $attr, $date, true);
+                $editListingFrm->addDateField($val, $key, $date, $fldAttr);
+                $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($key), true);
                 break;
             case 'splprice_price':
-                $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
-                $input = '<input type="text" class="" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs click-to-edit-input hide  sp-input"/>';
-                $div->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
-                $div->appendElement('plaintext', $tdAttr, $input, true);
+                $editable = $canEdit ? 'true' : 'false';
+                $div = $td->appendElement('div', ['class' => 'edit-price']);
+                $splPrice = CommonHelper::displayMoneyFormat($row[$key], true, true);
+
+                $div->appendElement('div', [
+                    "class" => 'click-to-edit',
+                    'name' => $key,
+                    'data-selprod-id' => $selProdId,
+                    'data-price' => $row['selprod_price'],
+                    'data-id' => $splPriceId,
+                    'data-value' => $row[$key],
+                    'data-formated-value' => $splPrice,
+                    'contentEditable' => $editable,
+                    'data-bs-toggle' => 'tooltip',
+                    'data-placement' => 'top',
+                    'onblur' => 'updateValues(this)',
+                    'onfocus' => 'showOrignal(this)',
+                    'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
+                ], $splPrice, true);
                 if ($row['selprod_price'] > $row[$key]) {
                     $discountPrice = $row['selprod_price'] - $row[$key];
                     $discountPercentage = round(($discountPrice / $row['selprod_price']) * 100, 2);
                     $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $siteLangId);
-                    $div->appendElement('div', array("class" => 'percentValJs badge badge-success ms-3'), $discountPercentage, true);
+                    $div->appendElement('div', array("class" => 'percentValJs badge badge-success'), $discountPercentage, true);
                 }
                 break;
             case 'action':
@@ -96,16 +100,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

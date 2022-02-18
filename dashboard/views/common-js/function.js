@@ -58,6 +58,16 @@ $('[ripple]').on('click', function (e) {
     }, 1500);
 });
 
+markNavActive = function (ele) {
+    if (!ele.hasClass("active")) {
+        ele.addClass("active");
+    }
+    var menuLink = ele.parents("li").find(".menuLinkJs");
+    menuLink.addClass("active").removeClass('collapsed');
+    var target = menuLink.data('bsTarget');
+    $(target).addClass('show');
+};
+
 /*Tabs*/
 $(document).ready(function () {
     $(".tabs-content-js").hide();
@@ -73,9 +83,27 @@ $(document).ready(function () {
         setSlider();
     });
 
-    if (CONF_ENABLE_GEO_LOCATION && isUserDashboard == 0 && CONF_MAINTENANCE == 0 && (getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController')) {
+    if (CONF_ENABLE_GEO_LOCATION && CONF_MAINTENANCE == 0 && (getCookie('_ykGeoDisabled') != 1 || className == 'CheckoutController' || className == 'CartController')) {
         accessLocation();
     }
+
+    /* Active Sidebar Link. */
+    var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+
+    $(".sidebarMenuJs .navLinkJs").each(function () {
+        var attr = $(this).attr("href");
+        var href = '';
+        if (typeof attr !== 'undefined' && attr !== false) {
+            var href = attr.replace(/^\/|\/$/g, "");
+        }
+
+        if (uri == href) {
+            markNavActive($(this));
+        }
+    });
+
+    $(".navLinkJs.active").closest('ul').addClass('show').siblings('.menuLinkJs').addClass('active').removeClass('collapsed');
+    /* Active Sidebar Link. */
 });
 
 $(document).on('afterClose.facebox', $('.location-permission').closest("#facebox"), function () {
@@ -268,7 +296,7 @@ $(function () {
         extra_li = total_li - limit;
         if (total_li > limit) {
             $(elem).children('ul').children('li:gt(' + (limit - 1) + ')').hide();
-            $(elem).append('<a class="read_more_toggle closed"  onClick="bindChangeToggle(this);"><span class="ink animate"></span> <span class="read_more">View More</span></a>');
+            $(elem).append('<a class="read_more_toggle closed"  onclick="bindChangeToggle(this);"><span class="ink animate"></span> <span class="read_more">View More</span></a>');
         }
     }
 });
@@ -814,3 +842,110 @@ function loadScript(src, callback = '', params = []) {
 
     document.head.append(script);
 }
+
+/*
+expected response
+{
+  "results": [
+    {
+      "id": 1,
+      "text": "Option 1"
+    },
+    {
+      "id": 2,
+      "text": "Option 2"
+    }
+  ],
+  "pageCount" : 3 
+}
+
+postdata object| callback function like {record:1}
+*/
+select2 = function (
+    elmId,
+    url,
+    postdata = {},
+    callbackOnSelect = "",
+    callbackOnUnSelect = "",
+    processResultsCallback = "",
+    data = [],
+) {
+    let ele = $("#" + elmId);
+    if (1 > ele.length) {
+        return false;
+    }
+
+    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
+    if (null === obj) {
+        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
+    }
+
+    ele.select2({
+        dropdownParent: obj,
+        closeOnSelect: ele.data("closeOnSelect") || true,
+        data: data,
+        dir: langLbl.layoutDirection,
+        allowClear: ele.data("allowClear") || true,
+        placeholder: ele.attr("placeholder") || "",
+        ajax: {
+            url: url,
+            dataType: "json",
+            delay: 250,
+            method: "post",
+            data: function (params) {
+                return $.extend(
+                    {
+                        keyword: params.term, // search term
+                        page: params.page,
+                        fIsAjax: 1,
+                    },
+                    ("function" == typeof postdata ? postdata(ele) : postdata)
+                );
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                data.pageCount = data.pageCount || 1;
+                if ("function" == typeof processResultsCallback) {
+                    return processResultsCallback(data, params, ele);
+                }
+                return {
+                    results: data.results,
+                    pagination: {
+                        more: params.page < data.pageCount,
+                    },
+                };
+            },
+            cache: true,
+        },
+        minimumInputLength: 0,
+        dropdownPosition: "below",
+    })
+        .on("select2:selecting", function (e) {
+            if ("function" == typeof callbackOnSelect) {
+                callbackOnSelect(e);
+            }
+        })
+        .on("select2:unselecting", function (e) {
+            if ("function" == typeof callbackOnUnSelect) {
+                callbackOnUnSelect(e);
+            }
+        });
+
+    var select2Selector = ele.data("select2");
+    var elementName = ele.attr('name').replace('[]', '');
+    if ('undefined' != typeof (select2Selector.dropdown)) {
+        $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
+    }
+
+    if ('undefined' != typeof (select2Selector.selection)) {
+        $(select2Selector.selection.$search).attr('name', elementName + '-select2');
+    }
+    if (0 < ele.closest(".advancedSearchJs").length) {
+        select2Selector.$container.addClass("w-100");
+    }
+
+    if (0 < ele.closest(".form-group").length) {
+        select2Selector.$container.addClass("w-100");
+    }
+    select2Selector.$container.addClass("custom-select2");
+};

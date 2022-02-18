@@ -12,7 +12,7 @@ $submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
 $submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -134,12 +134,12 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
             <div class="row mb-4">
                 <div class="col-md-12 mb-4">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-head">
                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
                             </h5>
                             <div class="action">
                                 <?php if ($canEdit) { ?>
-                                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>"><i class="fa fa-plus"></i> <?php echo Labels::getLabel('LBL_ADD', $siteLangId); ?>
+                                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>"><i class="fa fa-plus"></i> <?php echo Labels::getLabel('LBL_ADD', $siteLangId); ?>
                                     </a>
                                 <?php } ?>
                             </div>
@@ -160,4 +160,3 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
         <?php } ?>
     </div>
     </div>
-</main>

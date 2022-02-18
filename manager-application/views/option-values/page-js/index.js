@@ -13,6 +13,9 @@ $(document).ajaxComplete(function () {
         }
 
         $(".listingTableJs tbody.listingRecordJs").sortable({
+            handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -31,7 +34,7 @@ $(document).ajaxComplete(function () {
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
@@ -44,18 +47,17 @@ $(document).ajaxComplete(function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
-        }).disableSelection();
+        });
     };
 
     optionValueForm = function (optionId, id = 0) {
-        $.ykmodal(fcom.getLoader());
         var data = "optionvalue_id=" + id + "&option_id=" + optionId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };

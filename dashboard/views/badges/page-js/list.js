@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    searchRecords(document.frmSearch);
+    searchRecords(document.frmRecordSearch);
 });
 
 $(document).on('change', '.icon-language-js', function () {
@@ -27,25 +27,26 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     searchRecords = function (form) {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
         fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
+            fcom.removeLoader();
             $(dv).html(res);
         });
     };
 
     backToListing = function () {
-        searchRecords(document.frmSearch);
+        searchRecords(document.frmRecordSearch);
         $('.editRecord--js').html("");
         $('.pagebody--js').fadeIn();
     }
 
     clearSearch = function () {
-        document.frmSearch.reset();
-        searchRecords(document.frmSearch);
+        document.frmRecordSearch.reset();
+        searchRecords(document.frmRecordSearch);
         $('.searchHead--js').click();
     };
 
@@ -209,7 +210,7 @@ $(document).on('change', '.icon-language-js', function () {
             setTimeout(function () {
                 selector.val('').trigger('change');
             }, 200);
-            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onclick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
             var tbl = "";
             if (1 > $('table.recordListing--js').length) {
                 var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
@@ -267,16 +268,17 @@ $(document).on('change', '.icon-language-js', function () {
     }
 
     reloadRecordsList = function (badgeReqId, page) {
-        $(".recordsContainer--js").html(fcom.getLoader());
+        $(".recordsContainer--js").prepend(fcom.getLoader());
         var data = 'page=' + page;
         fcom.ajax(fcom.makeUrl(controller, 'records', [badgeReqId]), data, function (t) {
+            fcom.removeLoader();
             $(".recordsContainer--js").html(t);
         });
     };
 
     deleteBadgeRequest = function (badgeReqId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmSearch) });
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmRecordSearch) });
     }
 
 })()

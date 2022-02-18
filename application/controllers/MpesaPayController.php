@@ -58,7 +58,7 @@ class MpesaPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -66,7 +66,7 @@ class MpesaPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -100,11 +100,11 @@ class MpesaPayController extends PaymentController
                     $this->setErrorAndRedirect($response['ResponseDescription'], FatUtility::isAjaxCall());
                 }
 
-                $msg = Labels::getLabel('MSG_WAITING_FOR_CONFIRMATION', $this->siteLangId);
+                $msg = Labels::getLabel('SUC_WAITING_FOR_CONFIRMATION', $this->siteLangId);
                 $json['msg'] = $response['ResponseDescription'] . ' ' . $msg;
                 $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
             } else {
-                $msg = Labels::getLabel('LBL_SOMETHING_WENT_WRONG', $this->siteLangId);
+                $msg = Labels::getLabel('ERR_SOMETHING_WENT_WRONG', $this->siteLangId);
                 $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
             }
         }
@@ -179,7 +179,7 @@ class MpesaPayController extends PaymentController
                             break;
                         }
                     }
-                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $txnId, $payment_amount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $json);
+                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $txnId, $payment_amount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $json);
                     return;
                 }
             } else { 
@@ -187,7 +187,7 @@ class MpesaPayController extends PaymentController
             }
         }
         SystemLog::transaction($json, self::KEY_NAME . "-" . $orderId);
-        $msg = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+        $msg = Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);
 
         $orderPaymentObj->addOrderPaymentComments($msg);
         return;
@@ -201,9 +201,9 @@ class MpesaPayController extends PaymentController
      */
     private function getPaymentForm($orderId): object
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('MpesaPay', 'charge', array($orderId)), 'class' => "form form--normal"));
-        $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'customerPhone');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_REQUEST', $this->siteLangId));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('MpesaPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
+        $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'customerPhone');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REQUEST', $this->siteLangId));
 
         return $frm;
     }
@@ -217,23 +217,23 @@ class MpesaPayController extends PaymentController
     private function getResultCodeName(int $code): string
     {
         $arr = [
-            '0' => Labels::getLabel('MSG_SUCCESS', $this->siteLangId),
-            '1' => Labels::getLabel('MSG_INSUFFICIENT_FUNDS', $this->siteLangId),
-            '2' => Labels::getLabel('MSG_LESS_THAN_MINIMUM_TRANSACTION_VALUE', $this->siteLangId),
-            '3' => Labels::getLabel('MSG_MORE_THAN_MAXIMUM_TRANSACTION_VALUE', $this->siteLangId),
-            '4' => Labels::getLabel('MSG_WOULD_EXCEED_DAILY_TRANSFER_LIMIT', $this->siteLangId),
-            '5' => Labels::getLabel('MSG_WOULD_EXCEED_MINIMUM_BALANCE', $this->siteLangId),
-            '6' => Labels::getLabel('MSG_UNRESOLVED_PRIMARY_PARTY', $this->siteLangId),
-            '7' => Labels::getLabel('MSG_UNRESOLVED_RECEIVER_PARTY', $this->siteLangId),
-            '8' => Labels::getLabel('MSG_WOULD_EXCEED_MAXIUMUM_BALANCE', $this->siteLangId),
-            '11' => Labels::getLabel('MSG_DEBIT_ACCOUNT_INVALID', $this->siteLangId),
-            '12' => Labels::getLabel('MSG_CREDIT_ACCOUNT_INVALIUD', $this->siteLangId),
-            '13' => Labels::getLabel('MSG_UNRESOLVED_DEBIT_ACCOUNT', $this->siteLangId),
-            '14' => Labels::getLabel('MSG_UNRESOLVED_CREDIT_ACCOUNT', $this->siteLangId),
-            '15' => Labels::getLabel('MSG_DUPLICATE_DETECTED', $this->siteLangId),
-            '17' => Labels::getLabel('MSG_INTERNAL_FAILURE', $this->siteLangId),
-            '20' => Labels::getLabel('MSG_UNRESOLVED_INITIATOR', $this->siteLangId),
-            '26' => Labels::getLabel('MSG_TRAFFIC_BLOCKING_CONDITION_IN_PLACE', $this->siteLangId),
+            '0' => Labels::getLabel('SUC_SUCCESS', $this->siteLangId),
+            '1' => Labels::getLabel('ERR_INSUFFICIENT_FUNDS', $this->siteLangId),
+            '2' => Labels::getLabel('ERR_LESS_THAN_MINIMUM_TRANSACTION_VALUE', $this->siteLangId),
+            '3' => Labels::getLabel('ERR_MORE_THAN_MAXIMUM_TRANSACTION_VALUE', $this->siteLangId),
+            '4' => Labels::getLabel('ERR_WOULD_EXCEED_DAILY_TRANSFER_LIMIT', $this->siteLangId),
+            '5' => Labels::getLabel('ERR_WOULD_EXCEED_MINIMUM_BALANCE', $this->siteLangId),
+            '6' => Labels::getLabel('ERR_UNRESOLVED_PRIMARY_PARTY', $this->siteLangId),
+            '7' => Labels::getLabel('ERR_UNRESOLVED_RECEIVER_PARTY', $this->siteLangId),
+            '8' => Labels::getLabel('ERR_WOULD_EXCEED_MAXIUMUM_BALANCE', $this->siteLangId),
+            '11' => Labels::getLabel('ERR_DEBIT_ACCOUNT_INVALID', $this->siteLangId),
+            '12' => Labels::getLabel('ERR_CREDIT_ACCOUNT_INVALID', $this->siteLangId),
+            '13' => Labels::getLabel('ERR_UNRESOLVED_DEBIT_ACCOUNT', $this->siteLangId),
+            '14' => Labels::getLabel('ERR_UNRESOLVED_CREDIT_ACCOUNT', $this->siteLangId),
+            '15' => Labels::getLabel('ERR_DUPLICATE_DETECTED', $this->siteLangId),
+            '17' => Labels::getLabel('ERR_INTERNAL_FAILURE', $this->siteLangId),
+            '20' => Labels::getLabel('ERR_UNRESOLVED_INITIATOR', $this->siteLangId),
+            '26' => Labels::getLabel('ERR_TRAFFIC_BLOCKING_CONDITION_IN_PLACE', $this->siteLangId),
         ];
         return array_key_exists($code, $arr) ? $arr[$code] : '';
     }

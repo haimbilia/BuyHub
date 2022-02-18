@@ -9,6 +9,18 @@ $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $fld = $langFrm->getField('key');
 $fld->setFieldTagAttribute('disabled', 'disabled');
+if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
+    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+    if (!empty($translatorSubscriptionKey) && 1 < count($languages)) {
+        $fld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+        $fld->htmlAfterField = '<a href="javascript:void(0);" onclick="labelsForm(' . $recordId . ', ' . $labelType . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                </use>
+                            </svg>
+                        </a>';
+    }
+}
 ?>
 
 <div class="modal-header">
@@ -18,18 +30,6 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
-        <?php
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 1 < count($languages)) { ?>
-            <div class="row justify-content-end">
-                <a class="col-auto mb-4" href="javascript:void(0);" onclick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)" class="btn" title="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>">
-                    <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">
-                        </use>
-                    </svg>
-                </a>
-            </div>
-        <?php } ?>
         <?php echo $langFrm->getFormHtml(); ?>
     </div>
 

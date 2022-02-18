@@ -76,7 +76,8 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BADGE_REQUEST = 62;
     public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 63;
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
-    public const FILETYPE_CATEGORY_THUMB = 65; /* Used in category detail page */
+    public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
+    public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -142,11 +143,11 @@ class AttachedFile extends MyAppModel
     public static function getFileTypeArray($langId)
     {
         return $arr = array(
-            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_Product_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_Category_Icon', $langId),
-            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
+            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_PRODUCT_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_CATEGORY_ICON', $langId),
+            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_CATEGORY_BANNER_SELLER', $langId),
         );
         return $arr;
     }
@@ -192,7 +193,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (!is_uploaded_file($fileTmpName)) {
-            $this->error = Labels::getLabel('ERR_Unable_To_Upload_File', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_UPLOAD_FILE', CommonHelper::getLangId());
             return false;
         }
 
@@ -208,29 +209,29 @@ class AttachedFile extends MyAppModel
         return true;
     }
 
-    
+
     public static function getMultipleAttachments($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0, $size = 0, $haveSubIdZero = false)
     {
         $fileType = FatUtility::int($fileType);
         $recordId = FatUtility::int($recordId);
         $recordSubid = FatUtility::int($recordSubid);
-        $langId = FatUtility::int($langId);
+        $langId = FatUtility::int($langId); 
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
-        $srch->addCondition('afile_type', '=', $fileType);
-        $srch->addCondition('afile_record_id', '=', $recordId);
+        $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
+        $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
                 /* -1, becoz, needs to show, products universal image as well, in that case, value passed is as -1 */
                 $recordSubid = 0;
             }
-            $srch->addCondition('afile_record_subid', '=', $recordSubid);
+            $srch->addCondition('afile_record_subid', '=', 'mysql_func_' . $recordSubid, 'AND', true);
         }
-                
+
         if ($langId > 0) {
-            $cnd = $srch->addCondition('afile_lang_id', '=', $langId);
+            $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
                 $srch->addOrder('afile_lang_id', 'DESC');
@@ -248,14 +249,15 @@ class AttachedFile extends MyAppModel
         }
 
         if ($langId == 0) {
-            $srch->addCondition('afile_lang_id', '=', 0);
+            $srch->addCondition('afile_lang_id', '=', 'mysql_func_0', 'AND', true);
         }
 
         if ($size > 0) {
             $srch->setPageSize($size);
         }
-        
+
         $rs = $srch->getResultSet();
+        //echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 
@@ -457,8 +459,9 @@ class AttachedFile extends MyAppModel
                 $path .= self::FILETYPE_PRODCAT_IMAGE_PATH;
                 break;
             case self::FILETYPE_PRODUCT_IMAGE:
-                case self::FILETYPE_PRODUCT_IMAGE_TEMP:    
+            case self::FILETYPE_PRODUCT_IMAGE_TEMP:
             case self::FILETYPE_CUSTOM_PRODUCT_IMAGE:
+            case self::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP:
                 $path .= self::FILETYPE_PRODUCT_IMAGE_PATH;
                 break;
             case self::FILETYPE_BLOG_POST_IMAGE:
@@ -623,6 +626,7 @@ class AttachedFile extends MyAppModel
             $imageName = substr($imageName, 5);
             self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
         }
+
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -960,7 +964,7 @@ class AttachedFile extends MyAppModel
     public static function getTempImages($limit = false)
     {
         $srch = new SearchBase(AttachedFile::DB_TBL_TEMP, 'aft');
-        $srch->addCondition('aft.afile_downloaded', '=', applicationConstants::NO);
+        $srch->addCondition('aft.afile_downloaded', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         //$srch->addOrder('aft.afile_id', 'asc');
         $srch->addOrder('rand()');
         if ($limit > 0) {
@@ -1154,9 +1158,9 @@ class AttachedFile extends MyAppModel
         if (0 < $fileId) {
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
-        }         
+        }
 
-        $db = FatApp::getDb();        
+        $db = FatApp::getDb();
         if (!$db->deleteRecords(static::DB_TBL, $deleteStatementArr)) {
             $this->error = $db->getError();
             return false;
@@ -1210,29 +1214,29 @@ class AttachedFile extends MyAppModel
     {
         switch ($code) {
             case UPLOAD_ERR_INI_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
                 break;
             case UPLOAD_ERR_FORM_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
                 break;
             case UPLOAD_ERR_PARTIAL:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_FILE:
-                $message = Labels::getLabel("MSG_NO_FILE_WAS_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_NO_FILE_WAS_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
-                $message = Labels::getLabel("MSG_MISSING_A_TEMPORARY_FOLDER", $langId);
+                $message = Labels::getLabel("ERR_MISSING_A_TEMPORARY_FOLDER", $langId);
                 break;
             case UPLOAD_ERR_CANT_WRITE:
-                $message = Labels::getLabel("MSG_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
+                $message = Labels::getLabel("ERR_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
                 break;
             case UPLOAD_ERR_EXTENSION:
-                $message = Labels::getLabel("MSG_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
+                $message = Labels::getLabel("ERR_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
                 break;
 
             default:
-                $message = Labels::getLabel("MSG_UNKNOWN_UPLOAD_ERROR", $langId);
+                $message = Labels::getLabel("ERR_UNKNOWN_UPLOAD_ERROR", $langId);
                 break;
         }
         return $message;
@@ -1339,4 +1343,5 @@ class AttachedFile extends MyAppModel
         }
         return false;
     }
+    
 }

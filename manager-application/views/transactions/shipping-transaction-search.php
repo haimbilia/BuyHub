@@ -1,10 +1,7 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$title = (!empty($arrListing) ? current($arrListing)['user_name'] : '');
-?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo $title; ?>
+        <?php echo Labels::getLabel('LBL_TRANSACTION_HISTORY', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -12,7 +9,7 @@ $title = (!empty($arrListing) ? current($arrListing)['user_name'] : '');
         <?php
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
-            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+            $this->includeTemplate('_partial/no-record-found.php');
         } else {
             ?>
             <div class="timeline-v4 appendRowsJs">
@@ -20,7 +17,7 @@ $title = (!empty($arrListing) ? current($arrListing)['user_name'] : '');
             </div>
             <?php
             $lastRecord = current(array_reverse($arrListing));
-            $postedData['reference'] = $lastRecord['utxn_date'];
+            $postedData['reference'] = date('Y-m-d', strtotime($lastRecord['utxn_date']));
             $data = [
                 'siteLangId' => $siteLangId,
                 'postedData' => $postedData,

@@ -35,14 +35,16 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                   $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:' . $row['user_id'] . '})'), $row[$key]);
+                    $href = "javascript:void(0)";
+					$onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> false, 'href' => $href, 'onclick' => $onclick,], false, true);
+                    $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
                 break;                          
-            case 'preq_status':
-                $statusHtm = Orders::getPaymentStatusHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);              
+            case 'preq_status':                
+                $td->appendElement('plaintext', $tdAttr, ProductRequest::getPaymentStatusHtml($siteLangId,$row[$key]), true);              
                 break;
             case 'preq_requested_on':    
             case 'preq_added_on':
@@ -53,8 +55,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['preq_id']
                 ];
-
-                if ($canEdit) {
+                if ($canEdit && $row['preq_status'] == ProductRequest::STATUS_PENDING) {
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => UrlHelper::generateUrl('CustomProducts', 'form', array($row['preq_id'])),
@@ -66,6 +67,20 @@ foreach ($arrListing as $sn => $row) {
                             </use>
                         </svg>'
                     ];
+
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'requestStatusForm(' . $row['preq_id'] . ')',
+                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#form">
+                                        </use>
+                                    </svg>',
+                    ];
+                    
                     $data['deleteButton'] = false;
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
@@ -80,16 +95,7 @@ foreach ($arrListing as $sn => $row) {
 }
 
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

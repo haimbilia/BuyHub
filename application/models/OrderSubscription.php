@@ -38,7 +38,7 @@ class OrderSubscription extends MyAppModel
     {
         $userId = FatUtility::int($userId);
         if ($userId < 1) {
-            trigger_error(Labels::getLabel('ERR_User_Id_Not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_USER_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
 
@@ -106,10 +106,10 @@ class OrderSubscription extends MyAppModel
         }
         return array(
 
-            OrderProduct::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
+            OrderProduct::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_DISCOUNT_CHARGES', $langId),
 
-            OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
-            OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE => Labels::getLabel('LBL_Order_Adjustment', $langId),
+            OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_REWARD_POINT', $langId),
+            OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE => Labels::getLabel('LBL_ORDER_ADJUSTMENT', $langId),
 
         );
     }
@@ -174,7 +174,7 @@ class OrderSubscription extends MyAppModel
     public static function getAdjustedAmount($currentPlanDetails = array(), $userId = 0)
     {
         if (empty($currentPlanDetails)) {
-            die(Labels::getLabel('MSG_Please_Provide_plan_details', CommonHelper::getLangId()));
+            die(Labels::getLabel('ERR_PLEASE_PROVIDE_PLAN_DETAILS', CommonHelper::getLangId()));
         }
         if ($currentPlanDetails[SellerPackages::DB_TBL_PREFIX . 'type'] == SellerPackages::FREE_TYPE) {
             return 0;
@@ -220,7 +220,7 @@ class OrderSubscription extends MyAppModel
         return $activeSusbscriptions;
     }
 
-    public static function getSubscriptionTitle($plan, $langId = 0)
+    public static function getSubscriptionTitle($plan, $langId = 0, $includeAmount = true)
     {
         if (!$langId) {
             $langId = CommonHelper::getLangId();
@@ -228,13 +228,14 @@ class OrderSubscription extends MyAppModel
         $price = $plan['ossubs_price'];
 
         $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($langId);
+        $price = (true === $includeAmount ? CommonHelper::displayMoneyFormat($price) . " /  " : '');
 
         if ($plan['ossubs_frequency'] == SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED) {
-            return CommonHelper::displayMoneyFormat($price) . " /  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
+            return $price . $subcriptionPeriodArr[$plan['ossubs_frequency']];
         }
-        $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $langId) : Labels::getLabel("LBL_For", $langId);
+        $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_PER", $langId) : Labels::getLabel("LBL_FOR", $langId);
 
-        return $plan['ossubs_subscription_name'] . " - " . CommonHelper::displayMoneyFormat($price) . $planText . " " . (($plan['ossubs_interval'] > 0) ? $plan['ossubs_interval'] : '')
+        return $plan['ossubs_subscription_name'] . " - " . $price . $planText . " " . (($plan['ossubs_interval'] > 0) ? $plan['ossubs_interval'] : '')
             . "  " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
     }
 }

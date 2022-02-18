@@ -20,11 +20,9 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'style="
     }
     echo '<script type="text/javascript">
 		var SITE_ROOT_URL = "' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . '" ;
-		var langLbl = ' . json_encode(
-        $jsVariables
-    ) . ';
+		var langLbl = ' . json_encode($jsVariables) . ';
 		var CONF_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 0) . ';
-		var layoutDirection ="' . $layoutDirection . '";
+		var layoutDirection ="' . CommonHelper::getLayoutDirection() . '";
 		var CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 3) . ';
 		var extendEditorJs = ' . $extendEditorJs . ';
 		if( CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES <= 0  ){

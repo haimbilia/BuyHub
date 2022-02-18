@@ -24,7 +24,7 @@ if (!empty($data['user_phone'])) {
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
     $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
     $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
-    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onClick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+    $phoneFld->htmlAfterField = '<span toggle="#user-phone" onclick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
 
 
@@ -35,7 +35,7 @@ if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
     $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
-    $userDobFld->htmlAfterField = '<span toggle="#user-dob" onClick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+    $userDobFld->htmlAfterField = '<span toggle="#user-dob" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
 
 $userDobFld->setFieldTagAttribute('class', 'user_dob_js');
@@ -45,7 +45,7 @@ $emailFld->setFieldTagAttribute('disabled', 'disabled');
 $emailFld->setFieldTagAttribute('id', 'user-email');
 $emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
 $emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
-$emailFld->htmlAfterField = '<span toggle="#user-email" onClick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
+$emailFld->htmlAfterField = '<span toggle="#user-email" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 
 
 $countryFld = $frm->getField('user_country_id');
@@ -69,123 +69,121 @@ if (User::isAdvertiser() && $parent == 0) {
     $userCompFld->developerTags['col'] = 12;
 }
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
-/* $imgFrm->setFormTagAttribute('id', 'imageFrm');
-$fld = $imgFrm->getField('user_profile_image');
-$fld->addFieldTagAttribute('class','btn btn-brand btn-sm'); */
 ?>
-<div class="row">
-    <div class="col-xl-4">
-        <div class="row">
-            <div class="col-xl-12 col-lg-6 mb-4">
-                <div class=" bg-gray rounded p-4 text-center profile-image" id="profileImageFrmBlock">
-                    <div class="avtar avtar--large mb-4 ">
-                        <?php
-                        $userId = UserAuthentication::getLoggedUserId();
-                        $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
-                        $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-                        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $userId);
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="profile-image" id="profileImageFrmBlock">
+            <div class="avatar">
+                <?php
+                $userId = UserAuthentication::getLoggedUserId();
+                $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
+                $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
+                $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $userId);
 
-                        $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        ?>
-                        <img src="<?php echo $profileImg; ?>"
-                            alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
-                    </div>
-
-                    <div class="btn-group">
-                        <?php echo $imgFrm->getFormTag(); ?>
-                        <?php if ($mode == 'Edit') { ?>
-                        <a class="btn btn-brand btn-sm" href="javascript:void(0)"
-                            onClick="popupImage()"><?php echo Labels::getLabel('LBL_Change', $siteLangId); ?></a>
-                        <?php } else { ?>
-                        <label class="btn btn-brand btn-sm" title="Upload image file">
-                            <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*"
-                                onChange="popupImage(this)">
+                $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                ?>
+                <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
+                <?php echo $imgFrm->getFormTag(); ?>
+                    <?php if ($mode == 'Edit') { ?>
+                        <button class="btn btn-edit" type="button" onclick="popupImage()">
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </button>
+                    <?php } else { ?>
+                        <label class="btn" title="Upload image file">
+                            <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
                             <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
                         </label>
-                        <?php } ?>
-                        <?php if ($mode == 'Edit' && 0 < $file_row['afile_id']) { ?>
-                        <a class="btn btn-outline-brand btn-sm" href="javascript:void(0)"
-                            onClick="removeProfileImage()"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
-                        <?php } ?>
-                        </form>
-                        <?php echo $imgFrm->getExternalJS(); ?>
-                        <div id="dispMessage"></div>
-                    </div>
-
-
-
-                </div>
-            </div>
-            <div class="col-xl-12 col-lg-6 mb-4">
-                <?php if (User::isBuyer() && User::isSeller()) { ?>
-                <div class=" bg-gray rounded p-4">
-                    <div class="align-items-center">
-                        <h5><?php echo Labels::getLabel('LBL_Preferred_Dashboard', $siteLangId); ?> </h5>
-                        <div class="switch-group">
-                            <ul class="switch setactive-js">
-                                <?php if (User::canViewBuyerTab() && (User::canViewSupplierTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
-                                <li
-                                    <?php echo (User::USER_BUYER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
-                                    <a href="javascript:void(0)"
-                                        onClick="setPreferredDashboad(<?php echo User::USER_BUYER_DASHBOARD; ?>)"><?php echo Labels::getLabel('LBL_Buyer', $siteLangId); ?></a>
-                                </li>
-                                <?php } ?>
-                                <?php if (User::canViewSupplierTab() && (User::canViewBuyerTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
-                                <li
-                                    <?php echo (User::USER_SELLER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
-                                    <a href="javascript:void(0)"
-                                        onClick="setPreferredDashboad(<?php echo User::USER_SELLER_DASHBOARD; ?>)"><?php echo Labels::getLabel('LBL_Seller', $siteLangId); ?></a>
-                                </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <?php } ?>
+                    <?php } ?>
+                </form>
+                <?php echo $imgFrm->getExternalJS(); ?>
+                <div id="dispMessage"></div>
             </div>
         </div>
-    </div>
-    <div class="col-xl-8">
-        <?php echo $frm->getFormHtml(); ?>
+        <?php if (User::isBuyer() && User::isSeller()) { ?>
+            <div class="my-5">
+                <h6> <?php echo Labels::getLabel('LBL_Preferred_Dashboard', $siteLangId); ?> </h6>
+                <ul class="user-type setactive-js">
+                    <?php if (User::canViewBuyerTab() && (User::canViewSupplierTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
+                        <li <?php echo (User::USER_BUYER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
+                            <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_BUYER_DASHBOARD; ?>)">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
+                                    </use>
+                                </svg>
+                                <?php echo Labels::getLabel('LBL_Buyer', $siteLangId); ?>
+                            </button>
+                        </li>
+                    <?php } ?>
+                    <?php if (User::canViewSupplierTab() && (User::canViewBuyerTab() || User::canViewAdvertiserTab() || User::canViewAffiliateTab())) { ?>
+                        <li <?php echo (User::USER_SELLER_DASHBOARD == $data['user_preferred_dashboard']) ? 'class="is-active"' : '' ?>>
+                            <button class="user-type-link" type="button" href="javascript:void(0)" onclick="setPreferredDashboad(<?php echo User::USER_SELLER_DASHBOARD; ?>)">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#tick">
+                                    </use>
+                                </svg>
+                                <?php echo Labels::getLabel('LBL_Seller', $siteLangId); ?></button>
+                        </li>
+                    <?php } ?>
+                </ul>
+
+            </div>
+
+        <?php }
+        
+        echo $frm->getFormHtml(); ?>
+
+        <div class="or"><span><?php echo Labels::getLabel('LBL_MORE_OPTIONS', $siteLangId); ?></span></div>
+
+        <div class="account-delete">
+            <button type="button" class="btn btn-light" onclick="truncateDataRequestPopup()">
+                <?php echo Labels::getLabel('LBL_REQUEST_TO_REMOVE_MY_DATA', $siteLangId); ?>
+            </button>
+            <button type="button" class="btn btn-light" onclick="requestData()">
+                <?php echo Labels::getLabel('LBL_REQUEST_MY_DATA', $siteLangId); ?>
+            </button>
+        </div>
     </div>
 </div>
 <script language="javascript">
-$(document).ready(function() {
-    getCountryStates($("#user_country_id").val(), <?php echo $stateId; ?>, '#user_state_id');
-    $('.user_dob_js').datepicker('option', {
-        maxDate: new Date()
-    });
+    $(document).ready(function() {
+        getCountryStates($("#user_country_id").val(), <?php echo $stateId; ?>, '#user_state_id');
+        $('.user_dob_js').datepicker('option', {
+            maxDate: new Date()
+        });
 
-    toggleEncryptedFields = function(element, handleDisabled = 0, handleValidations = 0) {
-        $(element).toggleClass("fa-eye fa-eye-slash");
-        var input = $($(element).attr("toggle"));
-        if ($(element).hasClass('fa-eye')) {
-            input.val(input.attr('data-value'));
-            if (handleDisabled == 1) {
-                input.removeAttr('disabled');
-            }
-            if (handleValidations == 1) {
-                input.attr('data-fatreq', input.attr('data-validations'));
-            }
-        } else {
-            input.val(input.attr('data-encrypted-value'));
-            if (handleDisabled == 1) {
-                input.attr('disabled', 'disabled');
-            }
-            if (handleValidations == 1) {
-                var validations = input.attr('data-fatreq');
-                input.attr('data-validations', validations);
-                input.attr('data-fatreq', '');
+        toggleEncryptedFields = function(element, handleDisabled = 0, handleValidations = 0) {
+            $(element).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(element).attr("toggle"));
+            if ($(element).hasClass('fa-eye')) {
+                input.val(input.attr('data-value'));
+                if (handleDisabled == 1) {
+                    input.removeAttr('disabled');
+                }
+                if (handleValidations == 1) {
+                    input.attr('data-fatreq', input.attr('data-validations'));
+                }
+            } else {
+                input.val(input.attr('data-encrypted-value'));
+                if (handleDisabled == 1) {
+                    input.attr('disabled', 'disabled');
+                }
+                if (handleValidations == 1) {
+                    var validations = input.attr('data-fatreq');
+                    input.attr('data-validations', validations);
+                    input.attr('data-fatreq', '');
+                }
             }
         }
-    }
 
-    $('.js-toggle-data').trigger('click');
-});
+        $('.js-toggle-data').trigger('click');
+    });
 </script>
 <?php
 if (isset($countryIso) && !empty($countryIso)) { ?>
-<script>
-langLbl.defaultCountryCode = '<?php echo $countryIso; ?>';
-</script>
+    <script>
+        langLbl.defaultCountryCode = '<?php echo $countryIso; ?>';
+    </script>
 <?php } ?>

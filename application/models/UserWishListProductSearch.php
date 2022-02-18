@@ -76,15 +76,15 @@ class UserWishListProductSearch extends SearchBase
         }
 
         if ($isProductActive) {
-            $this->addCondition('product_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isProductApproved) {
-            $this->addCondition('product_approved', '=', Product::APPROVED);
+            $this->addCondition('product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
         }
 
         if ($isProductDeleted) {
-            $this->addCondition('product_deleted', '=', applicationConstants::NO);
+            $this->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         $this->productsJoined = true;
@@ -102,8 +102,8 @@ class UserWishListProductSearch extends SearchBase
 
         $this->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'p.product_brand_id = brand.brand_id', 'brand');
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $this->addCondition('brand.brand_active', '=', applicationConstants::ACTIVE);
-            $this->addCondition('brand.brand_deleted', '=', '0');
+            $this->addCondition('brand.brand_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('brand.brand_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($langId) {
@@ -124,8 +124,8 @@ class UserWishListProductSearch extends SearchBase
         $this->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = p.product_id', 'ptc');
         $this->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
-        $this->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
-        $this->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
+        $this->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $this->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         if ($langId) {
             $this->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.prodcatlang_prodcat_id = c.prodcat_id AND prodcatlang_lang_id = ' . $langId, 'c_l');
@@ -154,12 +154,12 @@ class UserWishListProductSearch extends SearchBase
         $shopCondition = '';
         if ($isActive) {
             $shopCondition .= ' and shop.shop_active = ' . applicationConstants::ACTIVE;
-            $this->addCondition('shop.shop_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop.shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isDisplayStatus) {
             $shopCondition .= ' and shop.shop_supplier_display_status = ' . applicationConstants::ON;
-            $this->addCondition('shop.shop_supplier_display_status', '=', applicationConstants::ON);
+            $this->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
         }
 
         $joinShopWithSubQuery = false;
@@ -171,8 +171,8 @@ class UserWishListProductSearch extends SearchBase
                         $shopSearch = new SearchBase(Shop::DB_TBL, 'shop');
                         $shopSearch->doNotCalculateRecords();
                         $shopSearch->doNotLimitRecords();
-                        $shopSearch->addCondition('shop.shop_supplier_display_status', '=', applicationConstants::ON);
-                        $shopSearch->addCondition(Shop::tblFld('active'), '=', applicationConstants::ACTIVE);
+                        $shopSearch->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
+                        $shopSearch->addCondition(Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
                         $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance');
                         $shopSearch->addHaving('distance', '<=', FatApp::getConfig('CONF_RADIUS_DISTANCE_IN_MILES', FatUtility::VAR_INT, 10));
@@ -181,8 +181,8 @@ class UserWishListProductSearch extends SearchBase
                             $shopSearch = new SearchBase(Shop::DB_TBL, 'sshop');
                             $shopSearch->doNotCalculateRecords();
                             $shopSearch->doNotLimitRecords();
-                            $shopSearch->addCondition('sshop.shop_supplier_display_status', '=', applicationConstants::ON);
-                            $shopSearch->addCondition('sshop.' . Shop::tblFld('active'), '=', applicationConstants::ACTIVE);
+                            $shopSearch->addCondition('sshop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
+                            $shopSearch->addCondition('sshop.' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                             $shopSearch->addMultipleFields(array('sshop.*', 'shop.distance'));
                             $shopSearch->joinTable('(' . $shopSubQuery . ')', 'LEFT OUTER JOIN', 'shop.shop_id = sshop.shop_id', 'shop');
                         }
@@ -336,10 +336,10 @@ class UserWishListProductSearch extends SearchBase
         $this->sellerUserJoined = true;
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'selprod_user_id = seller_user.user_id', 'seller_user');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'seller_user_cred.credential_user_id = seller_user.user_id', 'seller_user_cred');
-        $this->addCondition('seller_user.user_is_supplier', '=', applicationConstants::YES);
-        $this->addCondition('seller_user_cred.credential_active', '=', applicationConstants::ACTIVE);
-        $this->addCondition('seller_user_cred.credential_verified', '=', applicationConstants::YES);
-        $this->addCondition('seller_user.user_deleted', '=', applicationConstants::NO);
+        $this->addCondition('seller_user.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $this->addCondition('seller_user_cred.credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $this->addCondition('seller_user_cred.credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $this->addCondition('seller_user.user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
     }
 
     public function joinSellerOrderSubscription($langId = 0)

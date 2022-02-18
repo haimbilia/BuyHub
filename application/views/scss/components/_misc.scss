@@ -164,7 +164,7 @@ a:hover {
 }
 
 .hidden {
-    display: none;
+    display: none!important;
 }
 
 .no-after {
@@ -410,83 +410,29 @@ a:hover {
     }
 }
 
-.dropdown-toggle-custom {
-    border: none;
-    position: relative;
-    &-arrow {
-        position: absolute;
-        transform: translate(-6px, 0);
-        top: calc(50% - 4px);
-        #{$end-direction}: 25px;
-        &:after,
-        &:before {
-            content: "";
-            position: absolute;
-            background-color: currentColor;
-            width: 1px;
-            height: 9px;
-            transition: all 0.25s ease-in-out;
-        }
-        &:before {
-            transform: translate(-3px, 0) rotate(45deg);
-        }
-        &:after {
-            transform: translate(3px, 0) rotate(-45deg);
-        }
-    }
-    &:not(.show) {
-        .dropdown-toggle-custom-arrow {
-            &:before {
-                transform: translate(3px, 0) rotate(45deg);
-            }
-            &:after {
-                transform: translate(-3px, 0) rotate(-45deg);
-            }
-        }
-    }
-}
-
-.offcanvas-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.slider-controls {
-    grid-gap: 1rem;
+.form-edit {
     display: flex;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    .btn {
-        background-color: #fff;
-        border: solid 1px $black;
-        padding: 0;
-        width: 42px;
-        height: 42px;
-        display: block;
-        &-prev span {
-            display: inline-block;
-            border-right: 1px solid black;
-            border-bottom: 1px solid black;
-            width: 10px;
-            height: 10px;
-            transform: rotate(-225deg);
-            margin-#{$end-direction}: -7px;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    &-head {
+        padding: 0 2rem;
+        border-bottom: $border;
+    }
+    &-body {
+        flex: 1 1 auto;
+        padding: 1.5rem 2rem;
+        .h3 {
+            font-size: 1rem;
+            color: $txt-body;
         }
-
-        &-next span {
-            display: inline-block;
-            border-right: 1px solid black;
-            border-bottom: 1px solid black;
-            width: 10px;
-            height: 10px;
-            transform: rotate(-45deg);
-            margin-#{$start-direction}: -7px;
-        }
+    }
+    &-foot {
+        border-top: $border;
+        position: sticky;
+        bottom: 0;
+        z-index: 1020;
+        background-color: $bg-white;
+        padding: 1.5rem 2rem;
     }
 }

@@ -31,7 +31,7 @@ class PayuMoneyPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -70,7 +70,7 @@ class PayuMoneyPayController extends PaymentController
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if ($orderInfo) {
-            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
             switch ($post['status']) {
                 case 'success':
                     $receiver_match = (strtolower($post['key']) == strtolower($this->settings['merchant_key']));
@@ -93,7 +93,7 @@ class PayuMoneyPayController extends PaymentController
                     break;
             }
             if ($order_payment_status == 1) {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $post["mihpayid"], $paymentGatewayCharge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($post));
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $post["mihpayid"], $paymentGatewayCharge, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             } else {         
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
@@ -116,13 +116,13 @@ class PayuMoneyPayController extends PaymentController
             $actionUrl = 'https://sandboxsecure.payu.in/_payment';
         }
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : $actionUrl;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
 
         $frm = new Form('frmPayuMoney', array('id' => 'frmPayuMoney', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             /* Retrieve Primary Info corresponding to your order */
             $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
@@ -132,7 +132,7 @@ class PayuMoneyPayController extends PaymentController
             $address_line_2 = $orderInfo["customer_billing_address_2"];
             $zip_code = $orderInfo["customer_billing_postcode"];
             $email = $orderInfo["customer_email"];
-            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
             $txnid = $orderInfo["invoice"];
 
             $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
@@ -166,7 +166,7 @@ class PayuMoneyPayController extends PaymentController
             $frm->addHiddenField('city', 'city', $orderInfo["customer_billing_city"]);
             $frm->addHiddenField('country', 'country', $orderInfo["customer_billing_country"]);
             $frm->addHiddenField('state', 'state', $orderInfo["customer_billing_state"]);
-            $frm->addHiddenField('custom_note', 'custom_note', Labels::getLabel('MSG_ORDER_CUSTOM_NOTE', $this->siteLangId));
+            $frm->addHiddenField('custom_note', 'custom_note', Labels::getLabel('FRM_ORDER_CUSTOM_NOTE', $this->siteLangId));
             /* $frm->addHiddenField('api_version', 'api_version', 1);
             $frm->addHiddenField('service_provider', 'service_provider', 'payu_paisa'); */
             $frm->setJsErrorDisplay('afterfield');

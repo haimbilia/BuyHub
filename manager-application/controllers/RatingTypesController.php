@@ -22,10 +22,7 @@ class RatingTypesController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($fields));
-        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
-            'newRecordBtn' => false
-        ]);
-        $this->set('actionItemsData', $actionItemsData);
+        $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RATING_TYPE', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -52,9 +49,9 @@ class RatingTypesController extends ListingBaseController
 
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'ratingtype_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'ratingtype_id';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -65,23 +62,21 @@ class RatingTypesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = new RatingTypeSearch($this->siteLangId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $attr = array_merge(RatingType::ATTR, RatingType::LANG_ATTR, ['COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('restrictTypes', [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $this->set('types', RatingType::getTypeArr($this->siteLangId));
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -126,7 +121,7 @@ class RatingTypesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = RatingType::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ratingtype_name', 'ratingtype_identifier'], true);
+            $data = RatingType::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ratingtype_name', 'ratingtype_identifier', 'ratingtype_active'], true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -136,7 +131,8 @@ class RatingTypesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_RATING_TYPES_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -150,20 +146,31 @@ class RatingTypesController extends ListingBaseController
 
         $recordId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
         $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
+
+        $post['ratingtype_type'] = RatingType::TYPE_OTHER;
         if (in_array($recordId, $restrictTypes)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->siteLangId), true);
+            $post['ratingtype_type'] = $recordId;
         }
 
+        if (!in_array($recordId, $restrictTypes)) {
+            $post['ratingtype_identifier'] = $post['ratingtype_name'];
+        }
 
-        $recordId = $post['ratingtype_id'];
-        unset($post['ratingtype_id']);
-        $data = $post;
-        $data['ratingtype_identifier'] = $data['ratingtype_name'];
+        if (RatingType::TYPE_PRODUCT == $recordId) {
+            $post['ratingtype_active'] = applicationConstants::ACTIVE;
+        }
+
         $rating = new RatingType($recordId);
-        $rating->assignValues($data);
+        $rating->assignValues($post);
         if (!$rating->save()) {
-            LibHelper::exitWithError($rating->getError(), true);
+            $msg = $rating->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
+
+        $recordId = $rating->getMainTableRecordId();
 
         $this->setLangData($rating, [$rating::tblFld('name') => $post[$rating::tblFld('name')]]);
         $this->set('msg', $this->str_setup_successful);
@@ -177,8 +184,23 @@ class RatingTypesController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmRating', array('id' => 'frmRating'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
+
+        $label = Labels::getLabel('LBL_THIS_CAN_BE_BIND_WITH_CATEGORIES.', $this->siteLangId);
+        if (in_array($recordId, [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
+            $label = Labels::getLabel('LBL_THIS_IS_DEFAULT_RATING_TYPE_CANNOT_BE_ASSIGNED.', $this->siteLangId);
+        }
+        
+        $htm = '<div class="alert alert-solid-brand " role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i>
+                    </div>
+                    <div class="alert-text text-xs">' . $label . '</div>
+                </div>';
+        $frm->addHtml('', 'rating_type_info', $htm);
+
         $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $this->siteLangId), 'ratingtype_name');
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_RATING_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+
+        $attr = (RatingType::TYPE_PRODUCT == $recordId ? ['disabled' => 'disabled'] : []);
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_RATING_TYPE_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::ACTIVE, $attr, true, applicationConstants::INACTIVE);
         HtmlHelper::configureSwitchForCheckbox($fld);
         $fld->developerTags['noCaptionTag'] = true;
 
@@ -206,18 +228,37 @@ class RatingTypesController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'ratingtype_active');
+            $this->addSortingElements($frm, 'ratingtype_id');
         }
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
+    }
+
+    protected function changeStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (RatingType::TYPE_PRODUCT == $recordId) {
+            $status = applicationConstants::ACTIVE;
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
     }
 
     private function getFormColumns(): array
     {
         $shopsTblHeadingCols = CacheHelper::get('ratingTypeTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
 
         $arr = [

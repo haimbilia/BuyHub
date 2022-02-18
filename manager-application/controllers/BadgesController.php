@@ -89,9 +89,9 @@ class BadgesController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'badge_id';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
@@ -107,8 +107,7 @@ class BadgesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
-
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true); 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
@@ -125,28 +124,19 @@ class BadgesController extends ListingBaseController
             $srch->addCondition('badge_trigger_type', '=', $conditionType);
         }
 
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting); 
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         $this->set("approvalStatusArr", $approvalStatusArr);
     }
@@ -170,7 +160,8 @@ class BadgesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -193,6 +184,8 @@ class BadgesController extends ListingBaseController
         }
 
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $dateCol = (1 > $recordId) ? 'badge_added_on' : 'badge_updated_on';
+        $post[$dateCol] = date('Y-m-d H:i:s');
 
         $record = new Badge($recordId);
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
@@ -229,7 +222,7 @@ class BadgesController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'badge_name');
+            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         $fld->overrideFldType('search');
@@ -239,9 +232,9 @@ class BadgesController extends ListingBaseController
 
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -280,7 +273,8 @@ class BadgesController extends ListingBaseController
         $frm->addHiddenField('', 'badge_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
+        $fld->addFieldTagAttribute('maxlength', Badge::RIBB_TEXT_MAX_LEN);
 
         return $frm;
     }
@@ -291,7 +285,7 @@ class BadgesController extends ListingBaseController
         $recordId = Badge::getAttributesById($recordId, 'badge_id');
 
         if (false == $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
@@ -299,7 +293,8 @@ class BadgesController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $langId = 0)
@@ -312,18 +307,20 @@ class BadgesController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = Badge::getAttributesById($recordId, 'badge_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BADGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+
         $this->set('languages', Language::getAllNames());
         $this->set('images', $images);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getMediaForm($recordId = 0)
@@ -486,7 +483,7 @@ class BadgesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new Badge($recordId);
         if (!$obj->deleteRecord(true)) {
@@ -503,7 +500,7 @@ class BadgesController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('badgesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

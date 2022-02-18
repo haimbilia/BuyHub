@@ -26,17 +26,7 @@ class CategoryRequestsController extends ListingBaseController
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }
-
-    public function getSearchForm()
-    {
-        $frm = new Form('frmCategoryReqSearch', array('id' => 'frmcategoryReqSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearCategoryRequestSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
+    
     public function search()
     {
         $this->objPrivilege->canViewCategoryRequests();
@@ -51,7 +41,7 @@ class CategoryRequestsController extends ListingBaseController
         $srch = CategoryRequest::getSearchObject($this->siteLangId);
         $srch->addFld('cat.*');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('cat.scategoryreq_identifier', 'like', '%' . $post['keyword'] . '%');
         }
 
@@ -75,7 +65,8 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($categoryReqId = 0)
@@ -88,7 +79,7 @@ class CategoryRequestsController extends ListingBaseController
         if (0 < $categoryReqId) {
             $data = CategoryRequest::getAttributesById($categoryReqId, array('scategoryreq_id', 'scategoryreq_identifier', 'scategoryreq_seller_id', 'scategoryreq_status'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $data['status'] = $data['scategoryreq_status'];
             $frm->fill($data);
@@ -97,7 +88,8 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('categoryReqId', $categoryReqId);
         $this->set('frmCategoryReq', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($categoryReqId = 0)
@@ -107,12 +99,12 @@ class CategoryRequestsController extends ListingBaseController
         $frm = new Form('frmcategoryReq', array('id' => 'frmCategoryReq'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'scategoryreq_seller_id', $categoryReqId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Identifier', $this->siteLangId), 'scategoryreq_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_REQUEST_IDENTIFIER', $this->siteLangId), 'scategoryreq_identifier');
         $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         unset($statusArr[CategoryRequest::CATEGORY_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -124,8 +116,7 @@ class CategoryRequestsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $categoryReqId = $post['scategoryreq_id'];
@@ -135,14 +126,12 @@ class CategoryRequestsController extends ListingBaseController
         $sCategoryRequest = $creqObj->getAttributesById($categoryReqId);
 
         if ($sCategoryRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $statusArr = array(CategoryRequest::CATEGORY_REQUEST_APPROVED, CategoryRequest::CATEGORY_REQUEST_CANCELLED);
         if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId), true);
         }
 
         $db = FatApp::getDb();
@@ -151,20 +140,9 @@ class CategoryRequestsController extends ListingBaseController
             $post['request_id'] = $categoryReqId;
             if (!$creqObj->updateCategoryRequest($post)) {
                 $db->rollbackTransaction();
-                Message::addErrorMessage($creqObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($creqObj->getError(), true);
             }
         }
-
-        /* $email = new EmailHandler();
-        $sCategoryRequest['scategoryreq_status'] = $post['status'];
-        $sCategoryRequest['scategoryreq_comments'] = $post['comments'];
-        
-        if (!$email->SendCategoryRequestStatusChangeNotification($this->siteLangId, $sCategoryRequest)) {
-            $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        } */
 
         $db->commitTransaction();
         $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
@@ -179,7 +157,7 @@ class CategoryRequestsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($categoryReqId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $categoryReqLangFrm = $this->getLangForm($categoryReqId, $lang_id);
@@ -195,86 +173,18 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('scategoryreq_lang_id', $lang_id);
         $this->set('categoryReqLangFrm', $categoryReqLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
-    /* public function langSetup(){
-    $this->objPrivilege->canEditCategoryRequests();
-    $post=FatApp::getPostedData();
-
-    $categoryReqId = $post['scategoryreq_id'];
-    $lang_id = $post['lang_id'];
-
-    if($categoryReqId == 0 || $lang_id == 0){
-    Message::addErrorMessage($this->str_invalid_request_id);
-    FatUtility::dieWithError( Message::getHtml() );
-    }
-
-    $frm = $this->getLangForm($categoryReqId,$lang_id);
-    $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-    unset($post['categoryReqId']);
-    unset($post['lang_id']);
-    $data = array(
-    'scategoryreqlang_lang_id'=>$lang_id,
-    'scategoryreqlang_scategoryreq_id'=>$categoryReqId,
-    'scategoryreq_name'=>$post['scategoryreq_name'],
-    );
-
-    $categoryReqObj=new CategoryRequest($categoryReqId);
-    if(!$categoryReqObj->updateLangData($lang_id,$data)){
-
-    Message::addErrorMessage($categoryReqObj->getError());
-    FatUtility::dieJsonError( Message::getHtml() );
-    }
-
-    $newTabLangId=0;
-    $languages=Language::getAllNames();
-    foreach($languages as $langId =>$langName ){
-    if(!$row=CategoryRequest::getAttributesByLangId($langId,$categoryReqId)){
-                $newTabLangId = $langId;
-                break;
-    }
-    }
-
-    $this->set('msg', Labels::getLabel('LBL_Category_Request_Setup_Successful',$this->siteLangId));
-    $this->set('categoryReqId', $categoryReqId);
-    $this->set('langId', $newTabLangId);
-    $this->_template->render(false, false, 'json-success.php');
-    } */
 
     private function getLangForm($categoryReqId = 0, $lang_id = 0)
     {
         $frm = new Form('frmCategoryReqLang', array('id' => 'frmCategoryReqLang'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Name', $this->siteLangId), 'scategoryreq_name');
-        /* $frm->addSubmitButton('', 'btn_submit',Labels::getLabel('LBL_Update',$this->siteLangId)); */
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_REQUEST_NAME', $this->siteLangId), 'scategoryreq_name');
         return $frm;
     }
-
-    /* public function deleteRecord()
-    {
-        $this->objPrivilege->canEditCategoryRequests();
-
-        $categoryReqId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($categoryReqId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $categoryReqObj = new CategoryRequest($categoryReqId);
-        if (!$categoryReqObj->canRecordDelete($categoryReqId)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-
-        if (!$categoryReqObj->deleteRecord(true)) {
-            Message::addErrorMessage($categoryReqObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    } */
 
     public function autoComplete()
     {
@@ -291,18 +201,15 @@ class CategoryRequestsController extends ListingBaseController
         );
         $srch->addMultipleFields(array('categoryReqId, scategoryreq_name, categoryReqIdentifier'));
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('scategoryreq_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('categoryReqIdentifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $options = array();
-        if ($rs) {
-            $options = $db->fetchAll($rs, 'categoryReqId');
-        }
+        $options = FatApp::getDb()->fetchAll($rs, 'categoryReqId');
+        
         $json = array();
         foreach ($options as $key => $option) {
             $json[] = array(

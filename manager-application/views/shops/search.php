@@ -23,18 +23,18 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'shop_name':
                 $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId, 'onclick' => 'return false;'], false, true);
-                $td->appendElement('plaintext', array(), $str, true); 
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'shop_featured':
                 $td->appendElement('plaintext', array(), applicationConstants::getYesNoArr($siteLangId)[$row[$key]], true);
                 break;
             case 'shop_supplier_display_status':
                 $td->appendElement('plaintext', array(), applicationConstants::getOnOffArr($siteLangId)[$row[$key]], true);
-                break;           
+                break;
             case 'shop_created_on':
                 $dispDate = HtmlHelper::formatDateTime($row[$key], true);
                 $td->appendElement('plaintext', $tdAttr, $dispDate, true);
-                break;           
+                break;
             case 'shop_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['shop_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfReports':
                 if ($canViewShopReports && 0 < $row[$key]) {
                     $fn = 'redirectToShopReport(' . $row['shop_id'] . ')';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfReviews':
                 if ($canViewShopReports && 0 < $row[$key]) {
                     $fn = 'redirectToProductReviews(' . $row['shop_user_id'] . ')';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
             case 'numOfProducts':
                 if ($canViewSellerProducts && 0 < $row[$key]) {
                     $fn = 'redirectToSellerProduct(0, {"user_id" : ' . $row['shop_user_id'] . '})';
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -92,16 +92,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('MSG_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

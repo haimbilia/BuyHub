@@ -4,7 +4,7 @@ foreach ($images as $image) {
     $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($image['afile_record_id'], "THUMB", 0, $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     if ($isDefaultLayout  == applicationConstants::YES) {
     ?>
-        <li class="abc" id="<?php echo $image['afile_id']; ?>">
+        <li id="<?php echo $image['afile_id']; ?>">
             <div class="uploaded-stocks-item" data-ratio="1:1">
                 <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
                 <div class="uploaded-stocks-actions">
@@ -54,62 +54,3 @@ if ($isDefaultLayout  == applicationConstants::YES) {
     }
 }
 
-if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
-    ?>
-    <script type="text/javascript">
-        $(function() {
-            $("#productImagesJs").sortable({
-                stop: function() {
-                    var mysortarr = new Array();
-                    $(this).find('li').each(function() {
-                        mysortarr.push($(this).attr("id"));
-                    });
-
-                    var sort = mysortarr.join('-');
-                    var lang_id = $('.language-js').val();
-                    var product_id = $('#image_product_id').val();
-                    var option_id = $('#image_option_id').val();
-                    var option_id = $('#image_option_id').val();
-                    var file_type = $('#image_file_type').val();
-                    fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
-                        product_id,
-                        file_type,
-                        ids: sort
-                    }, function(t) {
-                        productImages(product_id, file_type, option_id, lang_id);
-                    });
-                }
-            }).disableSelection();
-        });
-    </script>
-
-<?php }elseif($isDefaultLayout  == applicationConstants::YES && count($images)) {
-    ?>
- <script type="text/javascript">
-        $(function() {
-            $("#productDefaultImagesJs").sortable({
-                items: "li:not(.unsortableJs)",
-                stop: function() {
-                    var mysortarr = new Array();
-                    $(this).find('li').each(function() {
-                        mysortarr.push($(this).attr("id"));
-                    });
-
-                    var sort = mysortarr.join('-');
-                    var lang_id = $('.language-js').val();
-                    var product_id = $('#hiddenMediaFrmJs').find('[name="product_id"]').val();              
-                    var option_id = 0;
-                    var file_type = $('#hiddenMediaFrmJs').find('[name="file_type"]').val();
-                    fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
-                        product_id,
-                        file_type,
-                        ids: sort
-                    });
-                }
-            }).disableSelection();
-        });
-    </script>
-
-
-<?php 
-} ?>

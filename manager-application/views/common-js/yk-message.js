@@ -3,9 +3,18 @@
         setOptions(fn, msg, closeButton, progressBar, positionClass);
     };
 
-    var autoCloseTimeOut = "5000";
+    getTimeout = function () {
+        return 0 < CONF_AUTO_CLOSE_SYSTEM_MESSAGES ? CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000 : -1;
+    };
+
+    var autoCloseTimeOut = getTimeout();
+    var dir = langLbl.layoutDirection;
+    var toastExtraClass = 'toast';
 
     setOptions = function (fn, msg, closeButton = true, progressBar = true, positionClass = 'toast-bottom-center') {
+        var hasClassToast = toastExtraClass.indexOf("toast");
+        toastExtraClass = (-1 == hasClassToast) ? "toast " + toastExtraClass : toastExtraClass;
+
         toastr.options = {
             "closeButton": closeButton,
             "debug": false,
@@ -16,12 +25,14 @@
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
-            "timeOut": autoCloseTimeOut,
-            "extendedTimeOut": "1000",
+            "timeOut": autoCloseTimeOut, // How long the toast will display without user interaction
+            "extendedTimeOut": "60", // How long the toast will display after a user hovers over it
             "showEasing": "swing",
             "hideEasing": "linear",
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut",
+            "rtl": (dir == 'rtl'),
+            "toastClass": toastExtraClass,
         };
 
         if (undefined != fn && undefined != msg) {
@@ -30,25 +41,28 @@
     }
 
     $.extend($.ykmsg, {
-        success: function (message, timeOut = "5000") {
-            autoCloseTimeOut = timeOut;
+        success: function (message, timeOut = "", toastClass = "") {
+            autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
+            toastExtraClass = "successMsgJs " + toastClass;
             setOptions('success', message);
         },
-        info: function (message, timeOut = "5000") {
-            autoCloseTimeOut = timeOut;
+        info: function (message, timeOut = "", toastClass = "") {
+            autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
+            toastExtraClass = "infoMsgJs " + toastClass;
             setOptions('info', message);
         },
-        warning: function (message, timeOut = "5000") {
-            autoCloseTimeOut = timeOut;
+        warning: function (message, timeOut = "", toastClass = "") {
+            autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
+            toastExtraClass = "warningMsgJs " + toastClass;
             setOptions('warning', message);
         },
-        error: function (message, timeOut = "5000") {
-            autoCloseTimeOut = timeOut;
+        error: function (message, timeOut = "", toastClass = "") {
+            autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
+            toastExtraClass = "errorMsgJs " + toastClass;
             setOptions('error', message);
         },
         close: function () {
-            $('.toast').remove();
-            toastr.clear();
+            toastr.remove();
         }
     });
 })(jQuery);

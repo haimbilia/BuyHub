@@ -55,13 +55,13 @@ if (!empty($order['payments'])) { ?>
                             ?>
                             <span class="badge <?php echo $cls; ?>"><?php echo $msg; ?></span>
                         </td>
-                        <td class="align-right">
+                        <td>
                             <?php echo HtmlHelper::getModalStructure("modal" . $key, Labels::getLabel('LBL_COMMENT', $siteLangId), nl2br($row['opayment_comments'])); ?>
                             <ul class="actions">
                                 <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal<?php echo $key; ?>">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#comment">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#comment">
                                             </use>
                                         </svg>
                                     </a>

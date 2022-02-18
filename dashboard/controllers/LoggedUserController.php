@@ -8,7 +8,7 @@ class LoggedUserController extends DashboardBaseController
 
     public function __construct($action)
     {
-        parent::__construct($action);       
+        parent::__construct($action);
         UserAuthentication::checkLogin();
         $this->userId = UserAuthentication::getLoggedUserId(true);
         $user = new User($this->userId);
@@ -77,8 +77,7 @@ class LoggedUserController extends DashboardBaseController
     }
 
     private function initCommonValues()
-    {
-        $this->set('isUserDashboard', true);
+    {       
         $this->userPrivilege = UserPrivilege::getInstance();
         $this->set('userPrivilege', $this->userPrivilege);
     }
@@ -86,33 +85,37 @@ class LoggedUserController extends DashboardBaseController
     protected function getOrderCancellationRequestsSearchForm($langId)
     {
         $frm = new Form('frmOrderCancellationRequest');
-        $frm->addTextBox('', 'op_invoice_number');
-        $frm->addSelectBox('', 'ocrequest_status', array('-1' => Labels::getLabel('LBL_Status_Does_Not_Matter', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
-        $frm->addDateField('', 'ocrequest_date_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField('', 'ocrequest_date_to', '', array('readonly' => 'readonly'));
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderCancelRequestSearch();'));
         $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
+        $fld = $frm->addTextBox('', 'op_invoice_number');
+        $fld->overrideFldType('search');
+        $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $langId), 'ocrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_FROM_DATE', $langId), 'ocrequest_date_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_TO_DATE', $langId), 'ocrequest_date_to', '', array('readonly' => 'readonly'));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
     protected function getOrderReturnRequestsSearchForm($langId)
-    {
+    {   
         $frm = new Form('frmOrderReturnRequest');
-        $frm->addTextBox('', 'keyword');
-        $frm->addSelectBox('', 'orrequest_status', array('-1' => Labels::getLabel('LBL_Status_Does_Not_Matter', $langId)) + OrderReturnRequest::getRequestStatusArr($langId), '', array(), '');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'total_record_count');
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword');
+        $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $langId), 'orrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderReturnRequest::getRequestStatusArr($langId), '', array(), '');
         $returnRquestArray = OrderReturnRequest::getRequestTypeArr($langId);
         if (count($returnRquestArray) > applicationConstants::YES) {
-            $frm->addSelectBox('', 'orrequest_type', array('-1' => Labels::getLabel('LBL_Request_Type_Does_Not_Matter', $langId)) + $returnRquestArray, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_TYPE', $langId), 'orrequest_type', array('-1' => Labels::getLabel('FRM_REQUEST_TYPE_DOES_NOT_MATTER', $langId)) + $returnRquestArray, '', array(), '');
         } else {
-            $frm->addHiddenField('', 'orrequest_type', '-1');
+            $frm->addHiddenField(Labels::getLabel('LBL_REQUEST_TYPE', $langId), 'orrequest_type', '-1');
         }
-        $frm->addDateField('', 'orrequest_date_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField('', 'orrequest_date_to', '', array('readonly' => 'readonly'));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderReturnRequestSearch();'));
-        $frm->addHiddenField('', 'page');
+        $frm->addDateField(Labels::getLabel('LBL_DATE_FORM', $langId), 'orrequest_date_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'orrequest_date_to', '', array('readonly' => 'readonly'));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -130,9 +133,9 @@ class LoggedUserController extends DashboardBaseController
         $frm->setRequiredStarPosition('');
         $fld = $frm->addTextArea('', 'orrmsg_msg');
         $fld->requirements()->setRequired();
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_Message_is_mandatory', $langId));
+        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_MESSAGE_IS_MANDATORY', $langId));
         $frm->addHiddenField('', 'orrmsg_orrequest_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 }

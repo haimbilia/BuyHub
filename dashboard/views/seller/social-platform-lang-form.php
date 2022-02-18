@@ -10,7 +10,7 @@
                 <input class="btn btn-brand"
                        type="button"
                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                       onClick="addLangForm(<?php echo $splatform_id; ?>, <?php echo $splatform_lang_id; ?>, 1)">
+                       onclick="addLangForm(<?php echo $splatform_id; ?>, <?php echo $splatform_lang_id; ?>, 1)">
             </div>
         </div>
     <?php } ?>

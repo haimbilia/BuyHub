@@ -3,7 +3,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
 $merchantId = isset($userData[$keyName . '_merchantId']) ? $userData[$keyName . '_merchantId'] : '';
 $serviceAccInfo = isset($userData['service_account']) ? $userData['service_account'] : '';
 ?>
-<main id="main-area" class="main"   >
+
     <div class="content-wrapper content-space">
         <?php 
             $data = [
@@ -13,7 +13,7 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
             $this->includeTemplate('_partial/header/content-header.php', $data, false);
         ?>
         <div class="content-body">
-            <div class="row mb-4">
+            <div class="row ">
                 <div class="col-lg-12">
                     <div class="card ">
                         <div class="card-body d-flex justify-content-between align-items-center">
@@ -30,14 +30,14 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
                                 ?>
                             </h6>
                             <?php if (!empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
-                                <a class="btn btn-brand btn-sm" href="javascript:void(0)" onClick="serviceAccountForm();" id="userAccInfoBtn"><?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?></a>
+                                <a class="btn btn-brand btn-sm" href="javascript:void(0)" onclick="serviceAccountForm();" id="userAccInfoBtn"><?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?></a>
                             <?php } ?>
                         </div>
                     </div>
                 </div>
             </div>
             <?php if (!empty($merchantId) && !empty($serviceAccInfo)) { ?>
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
@@ -61,7 +61,7 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
             <?php } ?>
         </div>
     </div>
-</main>
+
 
 <?php if (!empty($merchantId) && empty($serviceAccInfo) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
     <script>

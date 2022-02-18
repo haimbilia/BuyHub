@@ -91,6 +91,30 @@ checkEmpty = function (element) {
         element.addClass("is-invalid");
     }
 };
+
+copyText = function (obj, applyToolTipInfo = true) {
+    var title = $(obj).data("title");
+    /*
+      document.addEventListener('copy', function(e) {
+          e.clipboardData.setData('text/plain', copyText);
+          e.preventDefault();
+      }, true);
+      */
+
+    if (!navigator.clipboard) {
+        console.warn('clipboard API only works on localhost and https');
+        // Clipboard API  only works on localhost anf https as per doc
+        return;
+    }
+    try {
+        navigator.clipboard.writeText(copyText);
+        if (applyToolTipInfo) {
+            tooltipCopyHelper(obj, title);
+        }
+    } catch (err) {
+        console.error("Failed to copy!", err);
+    }
+};
 var otpIntervalObj;
 startOtpInterval = function (parent = "", callback = "", params = []) {
     if ("undefined" != typeof otpIntervalObj) {
@@ -103,13 +127,13 @@ startOtpInterval = function (parent = "", callback = "", params = []) {
     element.text(counter);
     $(parent + ".getOtpBtnBlock--js").addClass("d-none");
     var resendOtpEle = $(parent + ".resendOtp-js");
-    var onClickFn = resendOtpEle.attr("onclick");
+    var onclickFn = resendOtpEle.attr("onclick");
     resendOtpEle.removeAttr("onclick");
     otpIntervalObj = setInterval(function () {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
-            resendOtpEle.attr("onclick", onClickFn).removeClass("disabled");
+            resendOtpEle.attr("onclick", onclickFn).removeClass("disabled");
             element.parent().parent().hide();
             if ("" != callback && eval("typeof " + callback) == "function") {
                 window[callback](params);
@@ -288,6 +312,7 @@ setupWishList = function (frm, event) {
         }
     );
 };
+
 addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
     event.stopPropagation();
     if (isUserLogged() == 0) {
@@ -334,7 +359,7 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
                         .removeClass("is-active");
                 }
                 if ("updateRemoveWishListProduct" == action) {
-                    viewWishListItems(oldWishListId);
+                    searchWishList();
                 }
             }
         }
@@ -532,8 +557,12 @@ function defaultSetUpLogin(frm, v) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
-        getLoader: function () {
-            return '<div class="loader-yk"><div class="loader-yk-inner"></div></div>';
+        getLoader: function (addAsNew) {
+            if (typeof addAsNew === 'undefined') {
+                $(document.body).css({ cursor: "wait" });
+                $(".loaderJs").remove();
+            }
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
@@ -626,6 +655,18 @@ function defaultSetUpLogin(frm, v) {
         closeAlertMessage: function (msg, cls, autoclose) {
             $.systemMessage.close();
         },
+        getModalBody: function () {
+            return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
+        },
+        removeLoader: function (cls) {
+            $(document.body).css({ cursor: "default" });
+            $(".loaderJs").remove();
+            $(".submitBtnJs").removeClass("loading");
+        },
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
+        },
+
     });
     $(document).bind("reveal.facebox", function () {
         fcom.resetFaceboxHeight();
@@ -725,7 +766,7 @@ $(document).ready(function () {
             return false;
         }
         $.mbsmessage.close();
-        fcom.updateWithAjax(
+        fcom.ajax(
             fcom.makeUrl("Account", "markAsFavorite", [selProdId]),
             "",
             function (ans) {
@@ -740,7 +781,7 @@ $(document).ready(function () {
                         langLbl.RemoveProductFromFavourite
                     );
                 }
-            }
+            }, { fOutMode: 'json' }
         );
     };
     removeFromFavorite = function (selProdId, callbackFunction = false) {
@@ -749,7 +790,7 @@ $(document).ready(function () {
             return false;
         }
         $.mbsmessage.close();
-        fcom.updateWithAjax(
+        fcom.ajax(
             fcom.makeUrl("Account", "removeFromFavorite", [selProdId]),
             "",
             function (ans) {
@@ -764,7 +805,7 @@ $(document).ready(function () {
                         langLbl.AddProductToFavourite
                     );
                 }
-            }
+            }, { fOutMode: 'json' }
         );
         if (callbackFunction !== false) {
             window[callbackFunction]();

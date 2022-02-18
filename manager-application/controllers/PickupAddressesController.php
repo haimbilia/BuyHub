@@ -68,7 +68,7 @@ class PickupAddressesController extends ListingBaseController
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition(Address::tblFld('type'), '=', Address::TYPE_ADMIN_PICKUP);
         $srch->addCondition('addr_deleted', '=', 0);
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('addr_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('addr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('addr_address1', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -116,6 +116,7 @@ class PickupAddressesController extends ListingBaseController
 
             $timeSlot = new TimeSlot();
             $timeSlots = $timeSlot->timeSlotsByAddrId($addressId);
+            
             $timeSlotsRow = current($timeSlots);
             $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : 0;
             $data['tslot_availability'] = $availability;
@@ -136,7 +137,8 @@ class PickupAddressesController extends ListingBaseController
         $this->set('langId', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('slotData', $slotData);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -152,8 +154,7 @@ class PickupAddressesController extends ListingBaseController
         $frm = $this->getForm($post['addr_id'], $post['lang_id']);
         $postedData = $frm->getFormDataFromArray($post);
         if (false === $postedData) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         if ($availability == TimeSlot::DAY_ALL_DAYS && !isset($slotFromTime[TimeSlot::DAY_SUNDAY])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -166,7 +167,9 @@ class PickupAddressesController extends ListingBaseController
         $data = $post;
         $data['addr_state_id'] = $addrStateId;
         $data['addr_lang_id'] = $post['lang_id'];
-        $data['addr_type'] = Address::TYPE_ADMIN_PICKUP;
+        if (1 > $addressId) {
+            $data['addr_type'] = Address::TYPE_ADMIN_PICKUP;
+        }
         $address->assignValues($data);
         if (!$address->save()) {
             LibHelper::exitWithError($address->getError(), true);
@@ -244,7 +247,7 @@ class PickupAddressesController extends ListingBaseController
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE', $langId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $langId));
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $langId));
 
         $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_SLOT_TIMINGS', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
@@ -254,9 +257,7 @@ class PickupAddressesController extends ListingBaseController
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
             $frm->addSelectBox(Labels::getLabel('FRM_FROM', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
             $frm->addSelectBox(Labels::getLabel('FRM_TO', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-            $frm->addButton('', 'btn_add_row[' . $i . ']', '+');
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $langId));
         return $frm;
     }
 
@@ -292,7 +293,7 @@ class PickupAddressesController extends ListingBaseController
     {
         $pickupTblHeadingCols = CacheHelper::get('pickupAddressTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pickupTblHeadingCols) {
-            return json_decode($pickupTblHeadingCols);
+            return json_decode($pickupTblHeadingCols, true);
         }
 
         $arr = [

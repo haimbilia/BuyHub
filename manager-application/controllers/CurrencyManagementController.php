@@ -2,6 +2,7 @@
 
 class CurrencyManagementController extends ListingBaseController
 {
+    protected $modelClass = 'Currency';
     protected $pageKey = 'MANAGE_CURRENCIES';
 
     public function __construct($action)
@@ -107,7 +108,7 @@ class CurrencyManagementController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
         }
 
@@ -158,7 +159,8 @@ class CurrencyManagementController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -222,7 +224,7 @@ class CurrencyManagementController extends ListingBaseController
             $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_THIS_IS_YOUR_DEFAULT_CURRENCY', $this->siteLangId) . '</small>';
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'currency_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'currency_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -271,7 +273,7 @@ class CurrencyManagementController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('currency_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -290,7 +292,7 @@ class CurrencyManagementController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $obj = new Currency($recordId);
@@ -303,7 +305,7 @@ class CurrencyManagementController extends ListingBaseController
     {
         $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyTblHeadingCols) {
-            return json_decode($currencyTblHeadingCols);
+            return json_decode($currencyTblHeadingCols, true);
         }
 
         $arr = [

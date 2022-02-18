@@ -69,12 +69,6 @@
             $(document).on("keyup", '.faq-input', function() {
                 // Get user input from search box
                 var filter_text = $(this).val();
-
-                <
-                !--
-                var re = new RegExp(filter_text, 'g');
-                -- >
-
                 $('.faqlist h3').each(function() {
                     if ('' !== filter_text) {
                         var startAt = $(this).text().toLowerCase().indexOf(filter_text
@@ -92,6 +86,7 @@
                             $(this).text($(this).text());
                             $(this).siblings(".faqanswer").slideUp();
                         }
+
                     } else {
                         $(this).text($(this).text());
                         $('.faqlist h3').siblings(".faqanswer").slideUp();

@@ -27,8 +27,8 @@ class PageLanguageData extends MyAppModel
             $srch->setPageSize(1);
             $srch->addOrder('plang_lang_id', 'DESC');
 
-            $cnd = $srch->addCondition(static::tblFld('lang_id'), '=', $langId);
-            $cnd->attachCondition(static::tblFld('lang_id'), '=', -1);
+            $cnd = $srch->addCondition(static::tblFld('lang_id'), '=', 'mysql_func_' . $langId, 'AND', true);
+            $cnd->attachCondition(static::tblFld('lang_id'), '=', 'mysql_func_-1', 'OR', true);
         }
 
         $srch->addCondition(static::tblFld('key'), '=', $key);
@@ -64,7 +64,8 @@ class PageLanguageData extends MyAppModel
             static::DB_TBL_PREFIX . 'summary' => $data['plang_summary'],
             static::DB_TBL_PREFIX . 'warring_msg' => $data['plang_warring_msg'],
             static::DB_TBL_PREFIX . 'recommendations' => $data['plang_recommendations'],
-            static::DB_TBL_PREFIX . 'replacements' => $data['plang_replacements']
+            static::DB_TBL_PREFIX . 'replacements' => $data['plang_replacements'],
+            static::DB_TBL_PREFIX . 'helping_text' => $data['plang_helping_text'],
         ];
 
         if (!FatApp::getDb()->insertFromArray(static::DB_TBL, $assignValues, false, array(), $assignValues)) {

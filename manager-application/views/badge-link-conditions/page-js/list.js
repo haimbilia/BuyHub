@@ -19,6 +19,11 @@ $(document).on("change", "#recordTypeJs", function () {
     setRecordField();
 });
 
+$(window).on('load', function () {
+    /* Mark Sidebar Nav Active. */
+    markNavActive($("[data-selector*=" + objectCtrlName + "]"));
+});
+
 $(document).on('change', '#conditionTypeJs', function () {
     if ("" == $(this).val()) {
         $(this).val(COND_TYPE_AVG_RATING_SHOP).trigger('change');
@@ -44,24 +49,33 @@ $(document).on('change', '#conditionTypeJs', function () {
         $('#conditionFromSectionJs').addClass("col-md-12");
         $('#conditionToSectionJs').hide();
         toSelector.attr('data-fatreq', JSON.stringify({ required: false }));
-        var htm = '<label class="label">' + langLbl.rate + '<span class="spn_must_field">*</span></label>';
+        var htm = '<label class="label">' + langLbl.rateDecimal + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);
+    } else if (parseInt($(this).val()) == COND_TYPE_COMPLETED_ORDERS) {
+        var htm = '<label class="label">' + langLbl.fromDigit + '<span class="spn_must_field">*</span></label>';
+        $('#conditionFromSectionJs label').replaceWith(htm);
+        
+        var htm = '<label class="label">' + langLbl.toDigit + '<span class="spn_must_field">*</span></label>';
+        $('#conditionToSectionJs label').replaceWith(htm);
+    } else {
+        var htm = '<label class="label">' + langLbl.fromDecimal + '<span class="spn_must_field">*</span></label>';
+        $('#conditionFromSectionJs label').replaceWith(htm);
+        
+        var htm = '<label class="label">' + langLbl.toDecimal + '<span class="spn_must_field">*</span></label>';
+        $('#conditionToSectionJs label').replaceWith(htm);
     }
 });
 
 
 (function () {
-    editConditionRecord = function (badgeId, recordId = 0, displayInPopup = 0) {
+    editConditionRecord = function (badgeId, recordId = 0) {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
-        
-        /* !! is used to convert variable type in to bool. */
-        var displayInPopup = !!displayInPopup;
-        $.ykmodal(fcom.getLoader(), displayInPopup);
+
         var data = (0 < recordId) ? ("recordId=" + recordId) : '';
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
-            $.ykmodal(t, displayInPopup);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
+            $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
     };
@@ -133,7 +147,6 @@ $(document).on('change', '#conditionTypeJs', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Shops', 'autoComplete');
         } else {
-            alert(recordType);
             console.error(langLbl.invalidRequest);
             return false;
         }

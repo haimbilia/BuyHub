@@ -24,6 +24,16 @@
         overflow: hidden;
         border-top: 1px solid $gray-200;
     }
+
+    &-static {
+        position: static !important;
+    }
+}
+.dropdown,
+.dropleft,
+.dropright,
+.dropup {
+    position: relative;
 }
 
 .dropdown-menu {
@@ -496,11 +506,4 @@
     to {
         margin-top: 0;
     }
-}
-
-.dropdown,
-.dropleft,
-.dropright,
-.dropup {
-    position: relative;
 }

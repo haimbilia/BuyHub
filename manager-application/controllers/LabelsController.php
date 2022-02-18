@@ -104,39 +104,26 @@ class LabelsController extends ListingBaseController
         $srch->joinTable('tbl_languages', 'inner join', 'label_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'lng');
 
         $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'key');
-        $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'id', 'DESC');
+        $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'id');
 
         $type = FatApp::getPostedData('label_type', FatUtility::VAR_INT, -1);
         if ($type > -1) {
             $srch->addCondition('label_type', '=', $type);
-        }
-
-        /*  if (!empty($post['label_key'])) {
-            $srch->addCondition('label_key', 'like', "mysql_func_CONCAT(" . $post['label_key'] . ", '%')", 'AND', true);
-        } */
-
-        if (!empty($post['keyword'])) {
+        } 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('lbl.label_lang_id', '=', $this->siteLangId);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();
         $page = FatUtility::int($page);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->addOrder($sortBy, $sortOrder); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -213,7 +200,8 @@ class LabelsController extends ListingBaseController
         $this->set('langFrm', $frm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -281,9 +269,7 @@ class LabelsController extends ListingBaseController
         $fld->overrideFldType('search');
 
         $frm->addSelectBox(Labels::getLabel('FRM_PLATFORM', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
-
-        /* $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_key', array('' => Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId)) + Labels::getPrefixTypes($this->siteLangId), '', array(), ''); */
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
 
@@ -321,7 +307,7 @@ class LabelsController extends ListingBaseController
     {
         $labelsTblHeadingCols = CacheHelper::get('labelsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($labelsTblHeadingCols) {
-            return json_decode($labelsTblHeadingCols);
+            return json_decode($labelsTblHeadingCols, true);
         }
 
         $arr = [

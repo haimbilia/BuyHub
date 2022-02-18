@@ -4,7 +4,8 @@ class DummyController extends ListingBaseController
 {
     public function index()
     {
-        echo ucfirst(strtolower('HellAAAsss Hello hLL'));exit;
+        echo ucfirst(strtolower('HellAAAsss Hello hLL'));
+        exit;
 
         $shopIdArr = [];
         /* Shop Rating */
@@ -64,7 +65,7 @@ class DummyController extends ListingBaseController
             // $srch3->addMultipleFields(['((SUM(CASE WHEN op_status_id = ' . $returnReqApprovedStatus . ' THEN 1 ELSE 0 END)/count(op_id)) * 100) as rate']);
             $query .= ' UNION (' . $srch3->getQuery() . ')';
         }
-        
+
         $cancelOrderStatus = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_STRING, '');
         if (!empty($cancelOrderStatus)) {
             $srch4 = new OrderProductSearch();
@@ -79,33 +80,18 @@ class DummyController extends ListingBaseController
             $query .= ' UNION (' . $srch4->getQuery() . ')';
         }
 
-        $qry = "select shop_id, sum(shopRating) as shopRating, sum(completionRate) as completionRate,sum(completedOrders) as completedOrders,sum(returnAcceptanceRate) as returnAcceptanceRate, sum(orderCancelationRate) as orderCancelationRate from (".$query.") as tmp group by tmp.shop_id";
+        $qry = "select shop_id, sum(shopRating) as shopRating, sum(completionRate) as completionRate,sum(completedOrders) as completedOrders,sum(returnAcceptanceRate) as returnAcceptanceRate, sum(orderCancelationRate) as orderCancelationRate from (" . $query . ") as tmp group by tmp.shop_id";
 
-       echo $qry ;exit;
+        echo $qry;
+        exit;
     }
 
-    public function tt(){
-            $localFile='/files/myfile.zip';
-            $remoteFile='/filesDir/myfile.zip';
-            $host = "Infolink.aramex.net";
-            $port = 22;
-            $user = "Workajans";
-            $pass = "E5tyP13#8We";
-            
-            $connection = ssh2_connect($host, $port);
-            ssh2_auth_password($connection, $user, $pass);
-            $sftp = ssh2_sftp($connection);
-            var_dump($sftp);
-            
-            $stream = fopen("ssh2.sftp://$sftp$remoteFile", 'w');
-            $file = file_get_contents($localFile);
-            fwrite($stream, $file);
-            fclose($stream);
+    public function tt()
+    {
+
+        $trackingRelation = new TrackingCourierCodeRelation();
+        $trackData = $trackingRelation->getDataByShipCourierCode('stamps_com');
+
+        print_r($trackData);
     }
-
-    public function tt1(){
-
-        Product::updateMinPrices();
-    }
-
-}       
+}

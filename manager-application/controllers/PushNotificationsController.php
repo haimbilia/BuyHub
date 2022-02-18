@@ -121,7 +121,7 @@ class PushNotificationsController extends ListingBaseController
         if ('' != $deviceType && -1 < $deviceType) {
             $srch->addCondition('pnotification_device_os', '=', $deviceType);
         }
-        
+
         $authType = $post['pnotification_user_auth_type'];
         if ('' != $authType && -1 < $authType) {
             $srch->addCondition('pnotification_user_auth_type', '=', $authType);
@@ -155,17 +155,18 @@ class PushNotificationsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = PushNotification::getAttributesById($recordId);
         if (empty($data)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_DETAIL', $this->siteLangId));
         $this->set('data', $data);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form()
@@ -174,19 +175,16 @@ class PushNotificationsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
         $frm = $this->getForm($langId);
-        $status = 0;
         $userAuthType = '';
         $isUsersSelected = false;
         if (0 < $recordId) {
             $data = PushNotification::getAttributesById($recordId);
-            $status = $data['pnotification_status'];
             $userAuthType = $data['pnotification_user_auth_type'];
             $data['pnotification_lang_id'] = $langId;
             $frm->fill($data);
 
             $isUsersSelected = (0 < count($this->getSelectedUsers($recordId)));
         }
-        $this->set('status', $status);
         $this->set('isUsersSelected', $isUsersSelected);
         $this->set('recordId', $recordId);
         $this->set('userAuthType', $userAuthType);
@@ -194,7 +192,8 @@ class PushNotificationsController extends ListingBaseController
         $this->set('displayLangTab', false);
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function clone()
@@ -204,14 +203,14 @@ class PushNotificationsController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
         }
-        
+
         $data = PushNotification::getAttributesById($recordId);
         unset($data['pnotification_id'], $data['pnotification_status'], $data['pnotification_uauth_last_access']);
         $db = FatApp::getDb();
         if (!$db->insertFromArray(PushNotification::DB_TBL, $data, true, array(), $data)) {
-            LibHelper::exitWithError($db->getError());
+            LibHelper::exitWithError($db->getError(), true);
         }
 
         $recordId = $db->getInsertId();
@@ -223,11 +222,11 @@ class PushNotificationsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('userAuthType', $data['pnotification_user_auth_type']);
         $this->set('frm', $frm);
-        $this->set('status', 0);
         $this->set('displayLangTab', false);
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false, 'push-notifications/form.php');
+        $this->set('html', $this->_template->render(false, false, 'push-notifications/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -267,7 +266,7 @@ class PushNotificationsController extends ListingBaseController
 
         $userAuthType = $frm->addSelectBox(Labels::getLabel('FRM_USER_AUTH_TYPE', $langId), 'pnotification_user_auth_type', User::getUserAuthTypeArr($langId), '', [], Labels::getLabel('FRM_SELECT', $langId));
         $userAuthType->requirements()->setRequired(true);
-        
+
         $dateFld = $frm->addDateTimeField(Labels::getLabel('FRM_SCHEDULE_DATE', $langId), 'pnotification_notified_on', date('Y-m-d H:00'), ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
         $dateFld->requirements()->setRequired(true);
 
@@ -278,7 +277,7 @@ class PushNotificationsController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_URL', $langId), 'pnotification_url');
         $fld = $frm->addTextArea(Labels::getLabel('FRM_BODY', $langId), 'pnotification_description');
         $fld->requirements()->setRequired(true);
-        
+
         return $frm;
     }
 
@@ -298,12 +297,12 @@ class PushNotificationsController extends ListingBaseController
 
         $authType = [-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)] + User::getUserAuthTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_NOTIFICATION_FOR_(USERS)', $this->siteLangId), 'pnotification_user_auth_type', $authType, '', array(), '');
-       
+
         $deviceTypeArr = [-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)] + User::getDeviceTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $this->siteLangId), 'pnotification_device_os', $deviceTypeArr, '', array(), '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -320,7 +319,6 @@ class PushNotificationsController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('langId', $data['pnotification_lang_id']);
-        $this->set('status', $data['pnotification_status']);
         $this->set('pNotificationId', $recordId);
         $this->set('userAuthType', $data['pnotification_user_auth_type']);
         $this->set('frm', $mediaFrm);
@@ -328,7 +326,8 @@ class PushNotificationsController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId)
@@ -337,17 +336,18 @@ class PushNotificationsController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $recordId);
         $this->set('images', $images);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getMediaForm($recordId)
@@ -429,11 +429,11 @@ class PushNotificationsController extends ListingBaseController
         $this->objPrivilege->canEditPushNotification();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
         }
         $data = PushNotification::getAttributesById($recordId, ['pnotification_status', 'pnotification_user_auth_type', 'pnotification_lang_id']);
         if (User::AUTH_TYPE_GUEST == $data['pnotification_user_auth_type']) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED_TO_ADD_USERS_FOR_GUESTS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED_TO_ADD_USERS_FOR_GUESTS", $this->siteLangId), true);
         }
 
         $frm = $this->selectedUsersform($data['pnotification_status']);
@@ -445,14 +445,14 @@ class PushNotificationsController extends ListingBaseController
         }
         $this->set('notifyTo', PushNotification::getAttributesById($recordId, ['pnotification_for_buyer', 'pnotification_for_seller']));
         $this->set('recordId', $recordId);
-        $this->set('status', $data['pnotification_status']);
         $this->set('langId', $data['pnotification_lang_id']);
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('displayLangTab', false);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function selectedUsersform($status = 0)
@@ -503,7 +503,7 @@ class PushNotificationsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('pushNotificationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

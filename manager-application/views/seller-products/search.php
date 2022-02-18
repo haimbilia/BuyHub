@@ -14,7 +14,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="brandIds[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['selprod_user_id'] . ')'), $row['user_name'], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectUser(' . $row['selprod_user_id'] . ')'), $row['user_name'], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row['user_name'], true);
                 }
@@ -35,9 +35,7 @@ foreach ($arrListing as $sn => $row) {
             case 'selprod_price':
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 break;
-            case 'selprod_available_from':
-                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], false), true);
-                break;
+            
             case 'selprod_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['selprod_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
@@ -57,7 +55,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick' => 'editRecord(' . $row['selprod_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = ['onclick' => 'editRecord(' . $row['selprod_id'] . ', false, "modal-dialog-vertical-md")'];
                     $data['deleteButton'] = [];
                 }
                 if ($row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -88,16 +86,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

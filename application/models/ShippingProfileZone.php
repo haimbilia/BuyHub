@@ -1,21 +1,25 @@
 <?php
 
-class ShippingProfileZone extends MyAppModel {
+class ShippingProfileZone extends MyAppModel
+{
 
     const DB_TBL = 'tbl_shipping_profile_zones';
     const DB_TBL_PREFIX = 'shipprozone_';
 
-    public function __construct($id = 0) {
+    public function __construct($id = 0)
+    {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
-    public static function getSearchObject() {
+    public static function getSearchObject()
+    {
         $srch = new SearchBase(static::DB_TBL, 'spzone');
         $srch->joinTable(ShippingZone::DB_TBL, 'LEFT OUTER JOIN', 'szone.shipzone_id = spzone.shipprozone_shipzone_id', 'szone');
         return $srch;
     }
 
-    public static function getAttributesByProfileId($recordId, $attr = null, $multiRows = false) {
+    public static function getAttributesByProfileId($recordId, $attr = null, $multiRows = false)
+    {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $db = FatApp::getDb();
 
@@ -24,7 +28,7 @@ class ShippingProfileZone extends MyAppModel {
         if (false === $multiRows) {
             $srch->setPageSize(1);
         }
-        $srch->addCondition(static::tblFld('shipprofile_id'), '=', $recordId);
+        $srch->addCondition(static::tblFld('shipprofile_id'), '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -61,13 +65,15 @@ class ShippingProfileZone extends MyAppModel {
       return true;
       } */
 
-    public static function getZone($profileId, $zoneId) {
+    public static function getZone($profileId, $zoneId)
+    {
+        $profileId = FatUtility::int($profileId);
+        $zoneId = FatUtility::int($zoneId);
         $srch = ShippingProfileZone::getSearchObject();
-        $srch->addCondition("shipprozone_shipprofile_id", "=", $profileId);
-        $srch->addCondition("shipprozone_shipzone_id", "=", $zoneId);
+        $srch->addCondition("shipprozone_shipprofile_id", "=", 'mysql_func_' . $profileId, 'AND', true);
+        $srch->addCondition("shipprozone_shipzone_id", "=", 'mysql_func_' . $zoneId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
-
 }

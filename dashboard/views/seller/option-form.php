@@ -17,7 +17,7 @@
             </h4>
           </div>
           <div class="section__action"> 
-            <a href="javascript:void(0)" class="btn btn-brand btn-sm ripplelink" onClick="optionValueForm(<?php echo $option_id;?>,0)";>
+            <a href="javascript:void(0)" class="btn btn-brand btn-sm ripplelink" onclick="optionValueForm(<?php echo $option_id;?>,0)";>
               <?php echo Labels::getLabel('LBL_ADD_NEW',$langId);?>
             </a> 
           </div>

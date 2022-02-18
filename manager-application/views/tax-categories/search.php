@@ -24,14 +24,8 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'taxcat_identifier':
-                if ($row['taxcat_name'] != '') {
-                    $td->appendElement('plaintext', array(), $row['taxcat_name'], true);
-                    $td->appendElement('br', array());
-                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', array(), $taxCatIdentifier, true);
-                }
+            case 'taxcat_name':
+                $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
             case 'taxcat_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['taxcat_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -63,11 +57,11 @@ foreach ($arrListing as $sn => $row) {
                             'title' => Labels::getLabel('LBL_Tax_Categories_Rule', $siteLangId)
                         ],
                         'label' => '<i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
-                                                </use>
-                                            </svg>
-                                        </i>'
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#tax-rule">
+                                            </use>
+                                        </svg>
+                                    </i>'
                     ]
                 ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
@@ -80,16 +74,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

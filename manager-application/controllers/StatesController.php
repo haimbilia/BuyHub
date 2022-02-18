@@ -59,7 +59,7 @@ class StatesController extends ListingBaseController
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'country', $countriesArr, '', [], Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -111,10 +111,8 @@ class StatesController extends ListingBaseController
             'st.' . States::DB_TBL_PREFIX . 'country_id = c.' . Countries::tblFld('id'),
             'c'
         );
-
-        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
-
-        if (!empty($post['keyword'])) {
+            
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('st_l.state_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('st.state_code', 'like', $post['keyword'], 'OR');
@@ -122,24 +120,18 @@ class StatesController extends ListingBaseController
         if (!empty($post['country'])) {
             $condition = $srch->addCondition('st.state_country_id', '=', $post['country']);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
+        $srch->addOrder($sortBy, $sortOrder); 
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -166,7 +158,8 @@ class StatesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -187,7 +180,11 @@ class StatesController extends ListingBaseController
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
@@ -209,7 +206,7 @@ class StatesController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'state_country_id', $countriesArr, '', array(), '');
 
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'state_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'state_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         HtmlHelper::configureSwitchForCheckbox($fld);
         $fld->developerTags['noCaptionTag'] = true;
 
@@ -255,7 +252,7 @@ class StatesController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('state_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -275,7 +272,7 @@ class StatesController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $stateObj = new States($recordId);
@@ -289,7 +286,7 @@ class StatesController extends ListingBaseController
     {
         $statesTblHeadingCols = CacheHelper::get('statesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($statesTblHeadingCols) {
-            return json_decode($statesTblHeadingCols);
+            return json_decode($statesTblHeadingCols, true);
         }
 
         $arr = [

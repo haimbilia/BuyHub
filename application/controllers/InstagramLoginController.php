@@ -48,7 +48,7 @@ class InstagramLoginController extends SocialMediaAuthController
             $userName = $userInfo['username'];
             $userName = $userName . $instagramId;
             if (empty($instagramId)) {
-                $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId);
+                $msg = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
                 $this->setErrorAndRedirect($msg, true);
             }
 

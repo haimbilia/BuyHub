@@ -197,7 +197,6 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         $srch->doNotCalculateRecords();
-
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
 
         $rs = $srch->getResultSet();

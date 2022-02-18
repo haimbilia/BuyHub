@@ -1,8 +1,8 @@
 $(document).ready(function(){
-	searchOrderCancellationRequests(document.frmOrderCancellationRequest);
+	searchRecords(document.frmRecordSearch);
 });
 (function() {
-	searchOrderCancellationRequests = function(frm){
+	searchRecords = function(frm){
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
 		var data = fcom.frmData(frm);
 		/*]*/
@@ -19,11 +19,11 @@ $(document).ready(function(){
 		}
 		var frm = document.frmOrderCancellationRequestSrchPaging;		
 		$(frm.page).val(page);
-		searchOrderCancellationRequests(frm);
+		searchRecords(frm);
 	}
 	
 	clearOrderCancelRequestSearch = function(){
-		document.frmOrderCancellationRequest.reset();
-		searchOrderCancellationRequests(document.frmOrderCancellationRequest);
+		document.frmRecordSearch.reset();
+		searchRecords(document.frmRecordSearch);
 	};
 })();

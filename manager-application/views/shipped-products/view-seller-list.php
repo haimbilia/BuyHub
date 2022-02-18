@@ -11,7 +11,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
         <?php
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
-            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+            $this->includeTemplate('_partial/no-record-found.php');
         } else {
             $arr_flds = array(
                 'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
@@ -35,10 +35,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                             $td->appendElement('plaintext', array(), $serialNo);
                             break;
                         case 'user_name':
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
                             break;
                         case 'shop_identifier':
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
                             break;
                         default:
                             $td->appendElement('plaintext', array(), $row[$key], true);
@@ -47,7 +47,12 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                 }
             }
             if (count($arrListing) == 0) {
-                $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+                $img = '<div class="not-found">
+                    <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                    <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                    <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
+                </div>';
+                $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), $img, true);
             }
             echo $tbl->getHtml();
             $lastRecord = current(array_reverse($arrListing));

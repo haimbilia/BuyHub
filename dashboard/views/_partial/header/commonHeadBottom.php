@@ -7,8 +7,8 @@ if (isset($includeEditor) && $includeEditor) { ?>
 <?php
 $bodyClass = ($controllerName == 'Home') ? 'home' : 'inner';
 
-if (isset($isUserDashboard) && $isUserDashboard && strtolower($controllerName) != 'subscriptioncheckout') {
-    $bodyClass = 'is-dashboard my-dashboard';
+if (strtolower($controllerName) != 'subscriptioncheckout') {
+    $bodyClass = 'my-dashboard';
     $expanded = 'sidebar-is-reduced';
     if (!array_key_exists('openSidebar', $_COOKIE)) {
         setcookie('openSidebar', 1, 0, CONF_WEBROOT_FRONTEND);

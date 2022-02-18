@@ -11,10 +11,9 @@
         if (0 < $(".opDetailsJs" + ossubsId).length) {
             $.ykmodal.show();
         } else {
-            $.ykmodal(fcom.getLoader(), false);
-            fcom.ajax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'ossubs_id=' + ossubsId, function (ans) {
-                $.ykmodal(ans);
-                fcom.removeLoader()
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'ossubs_id=' + ossubsId, function (ans) {
+                fcom.removeLoader();
+                $.ykmodal(ans.html);
             });
         }
     };

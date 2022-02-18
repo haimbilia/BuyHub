@@ -43,7 +43,8 @@ class LibHelper extends FatUtility
             FatUtility::dieJsonError($message);
         }
 
-        if (true === $json) {
+        $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
+        if (true === $json || 'json' == $fOutMode) {
             FatUtility::dieJsonError($message);
         }
 
@@ -52,7 +53,12 @@ class LibHelper extends FatUtility
             return;
         }
 
-        FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+        if (method_exists('HtmlHelper', 'getErrorMessageHtml')) {
+            FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+        }
+
+        Message::addErrorMessage($message);
+        FatUtility::dieWithError(Message::getHtml());
     }
 
     public static function exitWithSuccess($message, $json = false, $redirect = false)

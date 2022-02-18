@@ -20,10 +20,10 @@ class TaxStructureController extends ListingBaseController {
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $this->siteLangId));
         $this->getListingData();
-        $this->_template->addJs([
-            'tax-structure/page-js/index.js'
-        ]);
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
+        $this->_template->addJs('tax-structure/page-js/index.js');
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -37,8 +37,7 @@ class TaxStructureController extends ListingBaseController {
     }
 
     private function getListingData() {
-        $db = FatApp::getDb();
-        $post = FatApp::getPostedData();
+        $db = FatApp::getDb(); 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -57,25 +56,23 @@ class TaxStructureController extends ListingBaseController {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = TaxStructure::getSearchObject($this->siteLangId);
-        $srch->addCondition('taxstr_parent', '=', 0);
+        $srch->addCondition('taxstr_parent', '=', 0); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
+            $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
+            $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields([
             'ts.taxstr_id',
             'ts.taxstr_identifier',
             'ts.taxstr_is_combined',
             'ts_l.taxstr_name'
         ]);
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
-            $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $this->set("arrListing", $db->fetchAll($srch->getResultSet()));
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -119,10 +116,10 @@ class TaxStructureController extends ListingBaseController {
         $frm = new Form('frmTaxStructure', array('id' => 'frmTaxStructure'));
         $frm->addHiddenField('', 'taxstr_id', FatUtility::int($taxStrId));
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $this->siteLangId), 'taxstr_name');
-        $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $this->siteLangId), 'taxstr_is_combined', 1);
+        $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $this->siteLangId), 'taxstr_is_combined', 1,[],false,0);
         HtmlHelper::configureCheckboxLabel($frm, 'taxstr_is_combined');
 
-        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['class' => 'test']);
+        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['placeholder' => Labels::getLabel('FRM_TITLE', $this->siteLangId).' 1']);
         $htmlFld = $frm->addHTML('', 'component_link', '');
         $componentFld->attachField($htmlFld);
         $componentFld->fieldWrapper = ['<div class="component_link"><div class="input-group mb-2 component-row--js">', '</div></div>'];
@@ -137,14 +134,33 @@ class TaxStructureController extends ListingBaseController {
         return $frm;
     }
 
+    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0) {
+        $frm = new Form('frmLangJs', array('id' => 'frmLangJs'));
+        $frm->addHiddenField('', 'taxstr_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
+
+        if ($isCombined) {
+            $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
+            $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
+            $count = 1;
+            foreach ($combinedTaxes as $key => $value) {
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TITLE', $this->siteLangId).' '.$count++]);
+                if (2 < $count) {
+                    $fld->developerTags['noCaptionTag'] = true;
+                }
+            }
+        }
+        return $frm;
+    }
+
     /* @@ todo We have to modifiy the current procress for tax component */
 
     public function form() {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        $frm = $this->getForm($recordId);
-
+        $frm = $this->getForm($recordId); 
         if (0 < $recordId) {
             $taxStrData = TaxStructure::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId);
             $combinedData = TaxStructure::getAttributesById($recordId, ['taxstr_is_combined', 'taxstr_id']);
@@ -176,17 +192,19 @@ class TaxStructureController extends ListingBaseController {
         $this->set('languages', $lang);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup() {
-        $this->objPrivilege->canEditTax();
-
-        $frm = TaxStructure::getForm($this->siteLangId);
-        $post = FatApp::getPostedData();
-
+        $this->objPrivilege->canEditTax(); 
+        $frm = $this->getForm(FatApp::getPostedData('taxstr_id', FatUtility::VAR_INT,0)); 
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData()); 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+        if($post['taxstr_is_combined'] == 1  && empty(array_filter($post['taxstr_component_name']))){
+            LibHelper::exitWithError(Labels::getLabel('ERR_COMPONENT_NAME_SHOULD_NOT_EMPTY!'), true);
         }
         $recordId = $post['taxstr_id'];
         unset($post['taxstr_id']);
@@ -195,7 +213,11 @@ class TaxStructureController extends ListingBaseController {
         $record = new TaxStructure($recordId);
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, [
             'taxstr_name' => $post['taxstr_name']
@@ -259,7 +281,8 @@ class TaxStructureController extends ListingBaseController {
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup() {
@@ -304,28 +327,10 @@ class TaxStructureController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0) {
-        $frm = new Form('frmLangJs', array('id' => 'frmLangJs'));
-        $frm->addHiddenField('', 'taxstr_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
-
-        if ($isCombined) {
-            $htmlFld = $frm->addHTML('', 'component_link', '<div class="separator separator-dashed my-4"></div>' . '<h3 class="h3">' . Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id) . '</h3>');
-            $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
-            $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
-            foreach ($combinedTaxes as $key => $value) {
-                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId)]);
-                $fld->developerTags['noCaptionTag'] = true;
-            }
-        }
-        return $frm;
-    }
-
     protected function getFormColumns(): array {
         $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxStructureTblHeadingCols) {
-            return json_decode($taxStructureTblHeadingCols);
+            return json_decode($taxStructureTblHeadingCols, true);
         }
 
         $arr = [

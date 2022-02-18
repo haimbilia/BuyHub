@@ -9,7 +9,10 @@ bindSortable = function() {
     if (1 > $('[data-field="dragdrop"]').length) {
         return;
     }
-    $("#orderStatuses > tbody").sortable({
+    $("#listingTableJs > tbody").sortable({
+        handle: '.handleJs',
+        helper: fixWidthHelper,
+        start: fixPlaceholderStyle,
         update: function(event, ui) {
             fcom.displayProcessing();
             $('.listingTableJs').prepend(fcom.getLoader());
@@ -29,7 +32,7 @@ bindSortable = function() {
                 function(value) {
                     fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                         var ans = $.parseJSON(res);
                         if (ans.status == 1) {
                             $.ykmsg.success(ans.msg);
@@ -40,11 +43,11 @@ bindSortable = function() {
                 },
                 function(error) {
                     fcom.removeLoader();
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                 }
             );
         },
-    }).disableSelection();
+    });
 }
 
 
@@ -57,13 +60,27 @@ deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
     });
 };    
 
+mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+    if (false === checkControllerName()) {
+        return false;
+    }
+
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
+        function (t) {
+            fcom.removeLoader();
+            $.ykmodal(t.html, !$.ykmodal.isSideBarView());
+        }
+    );
+};
 
 loadImages = function (recordId, imageType, slide_screen, langId) {
-    fcom.ajax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
-        $('#imageListingJs').html(t);
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
+        fcom.removeLoader();
+        $('#imageListingJs').html(t.html);
     });
 };
-$(document).on('change', '#imageLanguageJs', function() {
+$(document).on('change', '#imageLanguageJs', function(e) {
+    e.stopPropagation();
     let langId = $(this).val();
     let recordId = $(this).closest("form").find('input[name="slide_id"]').val();
     let slideScreen = $(this).closest("form").find('[name="slide_screen"]').val();

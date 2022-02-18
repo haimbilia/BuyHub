@@ -13,6 +13,9 @@ $(document).ajaxComplete(function () {
         }
 
         $(".listingTableJs tbody.listingRecordJs").sortable({
+            handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -31,7 +34,7 @@ $(document).ajaxComplete(function () {
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
-                            $.ykmsg.close();
+                            fcom.closeProcessing();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
@@ -44,27 +47,18 @@ $(document).ajaxComplete(function () {
                     },
                     function (error) {
                         fcom.removeLoader();
-                        $.ykmsg.close();
+                        fcom.closeProcessing();
                     }
                 );
             },
-        }).disableSelection();
+        });
     };
 
     updateCurrencyRates = function (converterClass) {
         if (!confirm(langLbl.updateCurrencyRates)) {
             return false;
         }
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
-            $.ykmsg.close();
-            var ans = $.parseJSON(res);
-            if (ans.status != 1) {
-                $.ykmsg.danger(ans.msg);
-                return false;   
-            }
-            $.ykmsg.success(ans.msg);
-            reloadList();
-        });
+        
+        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {});
     };
 })();

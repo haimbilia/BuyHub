@@ -1,21 +1,22 @@
 <?php
+
 class SellerController extends SellerBaseController
 {
+
     // use Attributes;
     use Options;
-    use CustomProducts;
+    //use CustomProducts;
     use SellerProducts;
     use SellerCollections;
-    use CustomCatalogProducts;
-    use SellerUsers;  
+    use SellerUsers;
     use ProductDigitalDownloads;
     use ShippingServices;
-  
+
     private $paymentPlugin;
     private $method = '';
 
     public function __construct($action)
-    { 
+    {
         $this->method = $action;
         parent::__construct($action);
     }
@@ -42,18 +43,20 @@ class SellerController extends SellerBaseController
         $srch->addCountsOfOrderedProducts();
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
         //$srch->addSellerOrderCounts(date('Y-m-d',strtotime("-1 days")),date('Y-m-d'),'yesterdayOrder');
-        $srch->addCondition('op_selprod_user_id', '=', $userId);
+        $srch->addCondition('op_selprod_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
 
         $srch->addOrder("op_id", "DESC");
         $srch->setPageNumber(1);
         $srch->setPageSize(2);
 
         $srch->addMultipleFields(
-            array('order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added',
+            array(
+                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added',
                 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name',
                 'op_id', 'op_qty', 'op_selprod_options', 'op_status_id', 'op_brand_name', 'op_other_charges', 'op_unit_price',
                 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_tax_collected_by_seller', 'op_selprod_user_id',
-                'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
+                'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off'
+            )
         );
 
         $rs = $srch->getResultSet();
@@ -82,7 +85,7 @@ class SellerController extends SellerBaseController
         $orderSrch->addSellerRefundedOrdersStats();
         $orderSrch->addSellerCancelledOrdersStats();
         $orderSrch->addGroupBy('order_user_id');
-        $orderSrch->addCondition('op_selprod_user_id', '=', $userId);
+        $orderSrch->addCondition('op_selprod_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $orderSrch->addMultipleFields(array('todayOrderCount', 'totalInprocessSales', 'totalSoldSales', 'totalSoldCount', 'refundedOrderCount', 'refundedOrderAmount', 'cancelledOrderCount', 'cancelledOrderAmount'));
         $rs = $orderSrch->getResultSet();
         $ordersStats = FatApp::getDb()->fetch($rs);
@@ -120,6 +123,15 @@ class SellerController extends SellerBaseController
          * Return Request Listing
          */
         $srchReturnReq = $this->returnReuestsListingObj();
+
+        $srchReturnReq->addMultipleFields(
+            array(
+                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
+                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
+                'op_id', 'selprod_product_id'
+            )
+        );
+        $srchReturnReq->addOrder('orrequest_date', 'DESC');
         $srchReturnReq->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
         $rs = $srchReturnReq->getResultSet();
         $returnRequests = FatApp::getDb()->fetchAll($rs);
@@ -135,6 +147,8 @@ class SellerController extends SellerBaseController
          * Cancellation Request Listing
          */
         $canSrch = $this->cancelRequestListingObj();
+        $srch->addMultipleFields(array('ocrequest_id', 'ocrequest_date', 'ocrequest_status', 'order_id', 'order_number', 'op_invoice_number', 'op_id', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'op_selprod_title', 'op_product_name', 'op_selprod_id', 'op_is_batch'));
+        $srch->addOrder('ocrequest_date', 'DESC');
         $canSrch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
         $rs = $canSrch->getResultSet();
         $cancellationRequests = FatApp::getDb()->fetchAll($rs);
@@ -168,24 +182,27 @@ class SellerController extends SellerBaseController
         $this->set('classArr', applicationConstants::getClassArr());
         $this->_template->addJs(array('js/chartist.min.js'));
         $this->_template->addJs('js/slick.min.js');
-        $this->_template->render(true, true);
+        $this->_template->render(true, false);
     }
 
     public function sales()
     {
-        $data = FatApp::getPostedData();
-        $frmOrderSrch = $this->getOrderSearchForm($this->siteLangId);
-        if (!empty($data)) {
-            $frmOrderSrch->fill($data);
-        }
         $this->userPrivilege->canViewSales(UserAuthentication::getLoggedUserId());
-        $this->set('frmOrderSrch', $frmOrderSrch);
+        $data = FatApp::getPostedData();
+        $frmSearch = $this->getOrderSearchForm();
+        if (!empty($data)) {
+            $frmSearch->fill($data);
+        }
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID_OR_ORDER_DETAIL', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
     public function orderProductSearchListing()
     {
-        $frm = $this->getOrderSearchForm($this->siteLangId);
+        $frm = $this->getOrderSearchForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
@@ -208,13 +225,6 @@ class SellerController extends SellerBaseController
         $srch->joinOrderProductShipment();
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
         $srch->addCondition('op_selprod_user_id', '=', $userId);
-        $srch->addOrder("op_id", "DESC");
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $srch->addMultipleFields(
-            array('order_number', 'order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opr_response', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'op_status_id', 'opshipping_carrier_code', 'opshipping_service_code')
-        );
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -223,7 +233,6 @@ class SellerController extends SellerBaseController
         }
 
         $op_status_id = FatApp::getPostedData('status', null, '0');
-
         if (in_array($op_status_id, unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")))) {
             $srch->addStatusCondition($op_status_id, ($op_status_id == FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")));
         } else {
@@ -255,47 +264,52 @@ class SellerController extends SellerBaseController
             $srch->addCondition('opshipping_by_seller_user_id', '=', $shippedById);
         }
 
-        $rs = $srch->getResultSet();
-        $orders = FatApp::getDb()->fetchAll($rs);
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addOrder("op_id", "DESC");
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addMultipleFields(
+            array('order_number', 'order_id', 'order_status', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opr_response', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'op_status_id', 'opshipping_carrier_code', 'opshipping_service_code')
+        );
 
+        $orders = FatApp::getDb()->fetchAll($srch->getResultSet());
         $oObj = new Orders();
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id']);
             $order['charges'] = $charges;
         }
-        
-        $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->set('orders', $orders);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
         $this->set('postedData', $post);
         $this->set('classArr', applicationConstants::getClassArr());
+        $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
-    private function getOrderSearchForm($langId)
+    private function getOrderSearchForm()
     {
         $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
         $frm = new Form('frmOrderSrch');
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
+        $frm->addHiddenField('', 'total_record_count');
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
 
         $vendors = [
-            0 => Labels::getLabel('LBL_ADMIN', $langId),
-            UserAuthentication::getLoggedUserId() => Labels::getLabel('LBL_SELLER', $langId),
+            0 => Labels::getLabel('LBL_ADMIN', $this->siteLangId),
+            UserAuthentication::getLoggedUserId() => Labels::getLabel('LBL_ME', $this->siteLangId),
         ];
-        $frm->addSelectBox(Labels::getLabel('LBL_SHIPPPED_BY', $langId), 'opshipping_by_seller_user_id', $vendors, '', array('title' => Labels::getLabel('LBL_SHIPPED_BY', $langId)), Labels::getLabel('LBL_FULLFILED_BY', $langId));
+        $frm->addSelectBox(Labels::getLabel('LBL_SHIPPPED_BY', $this->siteLangId), 'opshipping_by_seller_user_id', $vendors, '', array('title' => Labels::getLabel('LBL_SHIPPED_BY', $this->siteLangId)), Labels::getLabel('LBL_FULLFILED_BY', $this->siteLangId));
 
-        $frm->addSelectBox('', 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))), '', array(), Labels::getLabel('LBL_Status', $langId));
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
-        $frm->addHiddenField('', 'page');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', Orders::getOrderProductStatusArr($this->siteLangId, unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))), '', array(), Labels::getLabel('LBL_Status', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Price_Min', $this->siteLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO', $this->siteLangId), 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $this->siteLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -315,20 +329,10 @@ class SellerController extends SellerBaseController
 
         $userId = $this->userParentId;
 
-        /*  $ocSrch = new SearchBase(OrderProduct::DB_TBL_CHARGES, 'opc');
-         $ocSrch->doNotCalculateRecords();
-         $ocSrch->doNotLimitRecords();
-         $ocSrch->addCondition('opcharge_order_type', '=', Orders::ORDER_SUBSCRIPTION);
-         $ocSrch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
-         $ocSrch->addGroupBy('opc.opcharge_op_id');
-         $qryOtherCharges = $ocSrch->getQuery(); */
-
         $srch = new OrderSubscriptionSearch($this->siteLangId, true, true);
         $srch->joinSubscription();
         $srch->joinOrderUser();
-        //$srch->addCountsOfOrderedProducts();
         $srch->joinOtherCharges();
-        // $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'oss.ossubs_id = opcc.opcharge_op_id', 'opcc');
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->addOrder("ossubs_id", "DESC");
@@ -342,7 +346,7 @@ class SellerController extends SellerBaseController
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $srch->joinOrderUser();
-            $srch->addKeywordSearch($keyword);
+            $srch->addKeywordSearch(trim($keyword));
         }
 
         $op_status_id = FatApp::getPostedData('status', null, '0');
@@ -375,6 +379,7 @@ class SellerController extends SellerBaseController
             $srch->addMaxPriceCondition($priceTo);
         }
         $rs = $srch->getResultSet();
+        // echo $srch->getQuery();
         $orders = FatApp::getDb()->fetchAll($rs);
 
         $oObj = new Orders();
@@ -422,7 +427,7 @@ class SellerController extends SellerBaseController
             array(
                 'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
                 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off','ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit'
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -435,13 +440,13 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
-        
+
         $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
-        
+
         $shippingApiObj = NULL;
         if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
-            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;            
-            if($shippingApiObj){
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            if ($shippingApiObj) {
                 $shippingApiObj->getSettings();
             }
             if (!empty($orderDetail["opship_orderid"]) && method_exists($shippingApiObj, 'loadOrder')) {
@@ -541,7 +546,7 @@ class SellerController extends SellerBaseController
         } else {
             $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
-        
+
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
         }
@@ -669,10 +674,10 @@ class SellerController extends SellerBaseController
         $orderDetail['taxOptions'] = $taxOptions;
 
         /* $this->set('orderDetail', $orderDetail);
-        $this->set('languages', Language::getAllNames());
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-        $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
-        $this->_template->render(true, true); */
+          $this->set('languages', Language::getAllNames());
+          $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
+          $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
+          $this->_template->render(true, true); */
 
         $template = new FatTemplate('', '');
         $template->set('siteLangId', $this->siteLangId);
@@ -763,12 +768,13 @@ class SellerController extends SellerBaseController
         if (!isset($post['op_id'])) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
-        }        
+        }
 
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        
+        $shippedByPlugin = FatApp::getPostedData('shipped_by_plugin', FatUtility::VAR_INT, 0);
+
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -812,7 +818,7 @@ class SellerController extends SellerBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addCondition('op_selprod_user_id', '=', $loggedUserId);
         $srch->addCondition('op_id', '=', $op_id);
-        $srch->addMultipleFields(['op.*','pm.*','opshipping_by_seller_user_id','ocrequest_status','opshipping_fulfillment_type','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id']);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'opshipping_by_seller_user_id', 'ocrequest_status', 'opshipping_fulfillment_type', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code']);
         $rs = $srch->getResultSet();
 
         $orderDetail = FatApp::getDb()->fetch($rs);
@@ -822,12 +828,12 @@ class SellerController extends SellerBaseController
         }
         $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
 
-        $activatedTrackPlugin = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, ['plugin_id', 'plugin_code']);  
+        $activatedTrackPlugin = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, ['plugin_id', 'plugin_code']);
         if ($status == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && false === $activatedTrackPlugin) {
             Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         if ($orderDetail["op_status_id"] != $post['op_status_id'] && $orderDetail['ocrequest_status'] != '' && $orderDetail['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING) {
             Message::addErrorMessage(Labels::getLabel('MSG_Buyer_Order_Cancellation_request_is_pending', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -851,7 +857,7 @@ class SellerController extends SellerBaseController
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
         }
 
-        /* [ if shipping not handled by seller then seller can not update status to ship and delived */      
+        /* [ if shipping not handled by seller then seller can not update status to ship and delived */
         if (!$shippedBySeller) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
@@ -865,10 +871,16 @@ class SellerController extends SellerBaseController
         if ($orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
         }
-        
+
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
+
+        if (1 == $shippedByPlugin) {
+            $fld = $frm->getField('op_status_id');
+            $fld->requirements()->removeOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'eq');
+        }
+
         $post = $frm->getFormDataFromArray($post);
-        
+
         if (false == $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
@@ -878,40 +890,50 @@ class SellerController extends SellerBaseController
             $trackingCourierCode = '';
             $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
 
-            $activatedTrackPluginId = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_id']) ? $activatedTrackPlugin['plugin_id'] : 0;  
-            $activatedTrackPluginCode = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_code']) ? $activatedTrackPlugin['plugin_code'] : 0;  
-            
-            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") &&  0 < $activatedTrackPluginId && in_array($activatedTrackPluginCode, ['AfterShipShipment'])) {
+            $activatedTrackPluginId = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_id']) ? $activatedTrackPlugin['plugin_id'] : 0;
+            $activatedTrackPluginCode = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_code']) ? $activatedTrackPlugin['plugin_code'] : 0;
+
+            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && 0 < $activatedTrackPluginId && in_array($activatedTrackPluginCode, ['AfterShipShipment'])) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number']
                     ];
-                    if (array_key_exists('opship_tracking_url', $post)) {                   
-                        $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
+                    if (array_key_exists('opship_tracking_url', $post)) {
+                        $updateData['opship_tracking_url'] = $opship_tracking_url;
                     }
                     if (array_key_exists('oshistory_courier', $post)) {
                         $trackingCourierCode = $post['oshistory_courier'];
                         $updateData['opship_tracking_courier_code'] = $trackingCourierCode;
                         $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;
                     }
-                    
+                    if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                        LibHelper::dieJsonError(FatApp::getDb()->getError());
+                    }
                 } else {
-                    $trackingRelation = new TrackingCourierCodeRelation();
-                    $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
-                    $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
-                    $updateData = [
-                        'opship_op_id' => $post['op_id'],
-                        "opship_tracking_courier_code" => $trackingCourierCode,
-                        "opship_tracking_plugin_id" => $activatedTrackPluginId,    
-                    ];                    
-                }              
-                 
-                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
-                    LibHelper::dieJsonError(FatApp::getDb()->getError());
+
+                    $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
+                    $shippingObj = new Shipping($this->siteLangId);
+                    $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+
+                    if (0 < $activatedTrackPluginId && !$shippingApiObj->canFetchTrackingDetail()) {
+                        $trackingRelation = new TrackingCourierCodeRelation();
+                        $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
+                        if (count($trackData)) {
+                            $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                            $updateData = [
+                                'opship_op_id' => $post['op_id'],
+                                "opship_tracking_courier_code" => $trackingCourierCode,
+                                "opship_tracking_plugin_id" => $activatedTrackPluginId,
+                            ];
+                            if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                                LibHelper::dieJsonError(FatApp::getDb()->getError());
+                            }
+                        }
+                    }
                 }
             }
-            
+
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
             if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
                 Message::addErrorMessage($orderObj->getError());
@@ -938,6 +960,20 @@ class SellerController extends SellerBaseController
                     Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                     FatUtility::dieJsonError(Message::getHtml());
                 }
+            }
+
+            if (!empty($orderDetail['order_discount_coupon_code'])) {
+                $srch = DiscountCoupons::getSearchObject();
+                $srch->addFld('coupon_id');
+                $srch->addCondition('coupon_code', '=', $orderDetail['order_discount_coupon_code']);
+                $couponData = FatApp::getDb()->fetch($srch->getResultSet());
+                if (!empty($couponData)) {
+                    if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $couponData['coupon_id'], 'couponhistory_order_id' => $orderDetail['order_id'], 'couponhistory_user_id' => $orderDetail['order_user_id'], 'couponhistory_amount' => $orderDetail['order_discount_total'], 'couponhistory_added_on' => $orderDetail['order_date_added']))) {
+                        $this->error = FatApp::getDb()->getError();
+                        return false;
+                    }
+                }
+                FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, array('smt' => 'ochold_order_id = ?', 'vals' => array($orderDetail['order_id'])));
             }
         }
 
@@ -1124,16 +1160,25 @@ class SellerController extends SellerBaseController
 
     public function productTags()
     {
-        $this->userPrivilege->canViewProductTags(UserAuthentication::getLoggedUserId());
+
+        $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         if (!$this->isShopActive($this->userParentId, 0, true)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
+        }
+
+        if (!User::canAddCustomProduct()) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
 
         $this->_template->addJs('js/tagify.min.js');
         $this->_template->addJs('js/tagify.polyfills.min.js');
 
-        $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
-        $this->set("frmSearch", $frmSearchCatalogProduct);
+        $frmSearch = $this->getTagsProdSrchForm();
+        $frmSearch->fill(['lang_id' => $this->siteLangId]);
+        $this->set("frmSearch", $frmSearch);
+        $this->set("languages", Language::getAllNames());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -1521,7 +1566,6 @@ class SellerController extends SellerBaseController
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
 
-
         $srch->addDirectCondition(
             '((CASE
                     WHEN product_seller_id = 0 THEN product_active = 1
@@ -1613,14 +1657,16 @@ class SellerController extends SellerBaseController
 
     public function searchProductTags()
     {
-        $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
-        $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
+        $srchFrm = $this->getTagsProdSrchForm();
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
+
         //$srch = Product::getSearchObject($this->siteLangId);
-        $srch = new ProductSearch($this->siteLangId, null, null, true, true, true);
+        $srch = new ProductSearch($langId, null, null, true, true, true);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
@@ -1657,6 +1703,7 @@ class SellerController extends SellerBaseController
                 'IFNULL(product_name, product_identifier) as product_name',
             )
         );
+
         $srch->addOrder('product_active', 'DESC');
         $srch->addOrder('product_added_on', 'DESC');
         $srch->addGroupBy('product_id');
@@ -1665,18 +1712,15 @@ class SellerController extends SellerBaseController
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('siteLangId', $this->siteLangId);
-
+        $this->set('langId', $langId);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         unset($post['page']);
-        $frmSearchCatalogProduct->fill($post);
-        $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
-        $this->set('canEdit', $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId(), true));
+        $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
@@ -1741,21 +1785,19 @@ class SellerController extends SellerBaseController
     {
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            CommonHelper::redirectUserReferer();
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
         }
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
         $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_TAX_CATEGORY_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
     public function searchTaxCategories()
     {
-        //echo $this->userParentId;
-        $userId = $this->userParentId;
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
-
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $frmSearch->getFormDataFromArray($data);
@@ -1772,24 +1814,19 @@ class SellerController extends SellerBaseController
 
         $activatedTaxServiceId = Tax::getActivatedServiceId();
         $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
-
-        $srch->addMultipleFields(array('taxcat_id', 'IFNULL(taxcat_name, taxcat_identifier) as taxcat_name', 'taxcat_code', 'trr_rate'));
         $srch->addCondition('taxcat_deleted', '=', 0);
         $srch->addGroupBy('taxcat_id');
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('taxcat_id', 'IFNULL(taxcat_name, taxcat_identifier) as taxcat_name', 'taxcat_code', 'trr_rate'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $srch->addOrder('taxcat_name', 'ASC');
-        $rs = $srch->getResultSet();
-        $taxCatData = FatApp::getDb()->fetchAll($rs, 'taxcat_id');
-        $this->set('canEdit', $this->userPrivilege->canEditTaxCategory(UserAuthentication::getLoggedUserId(), true));
-        $this->set("arrListing", $taxCatData);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet(), 'taxcat_id'));
         $this->set('postedData', $post);
-        $this->set('userId', $userId);
+        $this->set('userId', $this->userParentId);
         $this->set('activatedTaxServiceId', $activatedTaxServiceId);
+        $this->set('canEdit', $this->userPrivilege->canEditTaxCategory(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
@@ -2116,10 +2153,10 @@ class SellerController extends SellerBaseController
     {
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        
-        if(false == $shopDetails){
+
+        if (false == $shopDetails) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml()); 
+            FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
@@ -2164,13 +2201,13 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-		
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $lang_id =  array_key_first($languages); 
-		}
-		
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $lang_id = array_key_first($languages);
+        }
+
+
         $shop_id = 0;
         $stateId = 0;
         $bannerAttachments = array();
@@ -2366,7 +2403,6 @@ class SellerController extends SellerBaseController
         $stateData = States::getStateByCountryAndCode($post['shop_country_id'], $stateCode);
         $post['shop_state_id'] = $stateData['state_id'];
 
-
         if ($shop_id > 0) {
             $post['shop_updated_on'] = date('Y-m-d H:i:s');
         } else {
@@ -2449,14 +2485,14 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $shop_id = FatUtility::int($shopDetails['shop_id']);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-       
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
 
         if ($lang_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request_id', $this->siteLangId));
@@ -2588,12 +2624,12 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
         if (!$file_type) {
@@ -2671,55 +2707,55 @@ class SellerController extends SellerBaseController
 
     /* public function CategoryBanners(){
       $this->_template->render(true,false);
-      } 
+      }
 
-    public function addCategoryBanner($prodCatId)
-    {
-        $userId = $this->userParentId;
-        $prodCatId = FatUtility::int($prodCatId);
+      public function addCategoryBanner($prodCatId)
+      {
+      $userId = $this->userParentId;
+      $prodCatId = FatUtility::int($prodCatId);
 
-        if (1 > $prodCatId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+      if (1 > $prodCatId) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      FatUtility::dieWithError(Message::getHtml());
+      }
 
-        if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $shop_id = $shopDetails['shop_id'];
-        if (1 > $shop_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $shop_id = $shopDetails['shop_id'];
+      if (1 > $shop_id) {
+      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $srch = $this->getSellerProdCategoriesObj($userId, $shop_id, $prodCatId, $this->siteLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
+      $srch = $this->getSellerProdCategoriesObj($userId, $shop_id, $prodCatId, $this->siteLangId);
+      $srch->doNotCalculateRecords();
+      $srch->doNotLimitRecords();
+      $db = FatApp::getDb();
+      $rs = $srch->getResultSet();
 
-        $arrListing = $db->fetchAll($rs, 'prodcat_id');
+      $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+      if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      FatUtility::dieWithError(Message::getHtml());
+      }
 
-        $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, $prodCatId, -1);
-        $mediaFrm = $this->getCategoryMediaForm($prodCatId);
+      $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, $prodCatId, -1);
+      $mediaFrm = $this->getCategoryMediaForm($prodCatId);
 
-        $this->set('mediaFrm', $mediaFrm);     
-        $this->set('userId', $userId);
-        $this->set('shop_id', $shop_id);
-        $this->set('prodCatId', $prodCatId);
-        $this->set('attachments', $attachments);
-        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
-        $this->_template->render(false, false);
-    }
+      $this->set('mediaFrm', $mediaFrm);
+      $this->set('userId', $userId);
+      $this->set('shop_id', $shop_id);
+      $this->set('prodCatId', $prodCatId);
+      $this->set('attachments', $attachments);
+      $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
+      $this->_template->render(false, false);
+      }
 
-    /* public function categoryBannerLangForm( $prodCatId, $langId ){
+      /* public function categoryBannerLangForm( $prodCatId, $langId ){
       $userId = $this->userParentId;
       $prodCatId = FatUtility::int($prodCatId);
       $langId = FatUtility::int($langId);
@@ -2761,147 +2797,147 @@ class SellerController extends SellerBaseController
       $this->set( 'languages', Language::getAllNames() );
       $this->set( 'formLangId', $langId );
       $this->_template->render( false, false );
-    }
+      }
 
-    public function setUpCategoryBanner()
-    {
-        $userId = $this->userParentId;
-        $post = FatApp::getPostedData();
+      public function setUpCategoryBanner()
+      {
+      $userId = $this->userParentId;
+      $post = FatApp::getPostedData();
 
-        $prodCatId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!$prodCatId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $prodCatId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
+      $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+      if (!$prodCatId) {
+      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $shop_id = $shopDetails['shop_id'];
-        if (!$shop_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $shop_id = $shopDetails['shop_id'];
+      if (!$shop_id) {
+      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $srch = $this->getSellerProdCategoriesObj($userId, $shop_id, $prodCatId, $this->siteLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs, 'prodcat_id');
+      $srch = $this->getSellerProdCategoriesObj($userId, $shop_id, $prodCatId, $this->siteLangId);
+      $srch->doNotCalculateRecords();
+      $srch->doNotLimitRecords();
+      $db = FatApp::getDb();
+      $rs = $srch->getResultSet();
+      $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+      if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      FatUtility::dieWithError(Message::getHtml());
+      }
 
-        $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveAttachment(
-            $_FILES['file']['tmp_name'],
-            AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER,
-            $shop_id,
-            $prodCatId,
-            $_FILES['file']['name'],
-            -1,
-            $unique_record = true,
-            $lang_id
-        )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $fileHandlerObj = new AttachedFile();
+      if (!$res = $fileHandlerObj->saveAttachment(
+      $_FILES['file']['tmp_name'],
+      AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER,
+      $shop_id,
+      $prodCatId,
+      $_FILES['file']['name'],
+      -1,
+      $unique_record = true,
+      $lang_id
+      )) {
+      Message::addErrorMessage($fileHandlerObj->getError());
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $this->set('file', $_FILES['file']['name']);
-        $this->set('prodCatId', $prodCatId);
-        $this->set('shop_id', $shop_id);
+      $this->set('file', $_FILES['file']['name']);
+      $this->set('prodCatId', $prodCatId);
+      $this->set('shop_id', $shop_id);
 
-        Message::addMessage(Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
-        FatUtility::dieJsonSuccess(Message::getHtml());
-    }
+      Message::addMessage(Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
+      FatUtility::dieJsonSuccess(Message::getHtml());
+      }
 
-    public function removeCategoryBanner($prodCatId, $langId)
-    {
-        $userId = $this->userParentId;
-        $prodCatId = FatUtility::int($prodCatId);
-        $langId = FatUtility::int($langId);
+      public function removeCategoryBanner($prodCatId, $langId)
+      {
+      $userId = $this->userParentId;
+      $prodCatId = FatUtility::int($prodCatId);
+      $langId = FatUtility::int($langId);
 
-        if (!$prodCatId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      if (!$prodCatId) {
+      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      if (!$shopDetails = $this->isShopActive($userId, 0, true)) {
+      Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $shop_id = $shopDetails['shop_id'];
-        if (!$shop_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $shop_id = $shopDetails['shop_id'];
+      if (!$shop_id) {
+      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, 0, $prodCatId, $langId)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+      $fileHandlerObj = new AttachedFile();
+      if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, 0, $prodCatId, $langId)) {
+      Message::addErrorMessage($fileHandlerObj->getError());
+      FatUtility::dieJsonError(Message::getHtml());
+      }
 
-        $this->set('msg', Labels::getLabel('MSG_File_deleted_successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
+      $this->set('msg', Labels::getLabel('MSG_File_deleted_successfully', $this->siteLangId));
+      $this->_template->render(false, false, 'json-success.php');
+      }
 
-    public function searchCategoryBanners()
-    {
-        $userId = $this->userParentId;
+      public function searchCategoryBanners()
+      {
+      $userId = $this->userParentId;
 
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+      $post = FatApp::getPostedData();
+      $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+      $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
-        $srch = $this->getSellerProdCategoriesObj($userId, 0, 0, $this->siteLangId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+      $srch = $this->getSellerProdCategoriesObj($userId, 0, 0, $this->siteLangId);
+      $srch->setPageNumber($page);
+      $srch->setPageSize($pagesize);
 
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs, 'prodcat_id');
+      $db = FatApp::getDb();
+      $rs = $srch->getResultSet();
+      $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
-        $this->set('arrListing', $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
+      $this->set('arrListing', $arrListing);
+      $this->set('pageCount', $srch->pages());
+      $this->set('page', $page);
+      $this->set('pageSize', $pagesize);
+      $this->set('postedData', $post);
 
-        $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
-        if ($shopLayoutTemplateId == 0) {
-            $shopLayoutTemplateId = 10001;
-        }
-        $shop_id = 0;
-        if (!false == $shopDetails) {
-            $shop_id = $shopDetails['shop_id'];
-        }
+      $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+      $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
+      if ($shopLayoutTemplateId == 0) {
+      $shopLayoutTemplateId = 10001;
+      }
+      $shop_id = 0;
+      if (!false == $shopDetails) {
+      $shop_id = $shopDetails['shop_id'];
+      }
 
-        $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
-        $this->set('shop_id', $shop_id);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('language', Language::getAllNames());
-        $this->_template->render(false, false);
-    }*/    
+      $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
+      $this->set('shop_id', $shop_id);
+      $this->set('siteLangId', $this->siteLangId);
+      $this->set('language', Language::getAllNames());
+      $this->_template->render(false, false);
+      } */
 
     public function orderCancellationRequests()
     {
         $this->userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId());
-        $frm = $this->getOrderCancellationRequestsSearchForm($this->siteLangId);
-        $this->set('frmOrderCancellationRequestsSrch', $frm);
+        $frmSearch = $this->getOrderCancellationRequestsSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frmSearch);
         $this->_template->render(true, true);
     }
 
@@ -2914,9 +2950,6 @@ class SellerController extends SellerBaseController
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
 
         $srch = $this->cancelRequestListingObj();
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
         $op_invoice_number = $post['op_invoice_number'];
         if (!empty($op_invoice_number)) {
             $srch->addCondition('op_invoice_number', '=', $op_invoice_number);
@@ -2932,20 +2965,19 @@ class SellerController extends SellerBaseController
             $srch->addCondition('ocrequest_date', '<=', $ocrequest_date_to . ' 23:59:59');
         }
 
-        //$ocrequest_status = $post['ocrequest_status'];
         $ocrequest_status = FatApp::getPostedData('ocrequest_status', null, -1);
         if ($ocrequest_status > -1) {
             $ocrequest_status = FatUtility::int($ocrequest_status);
             $srch->addCondition('ocrequest_status', '=', $ocrequest_status);
         }
 
-        $rs = $srch->getResultSet();
-        $requests = FatApp::getDb()->fetchAll($rs);
-
-        $this->set('requests', $requests);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('ocrequest_id', 'ocrequest_date', 'ocrequest_status', 'order_id', 'order_number', 'op_invoice_number', 'op_id', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'op_selprod_title', 'op_product_name', 'op_selprod_id', 'op_is_batch'));
+        $srch->addOrder('ocrequest_date', 'DESC');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $this->set('requests', FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('OrderCancelRequestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
         $this->set('cancelReqStatusClassArr', OrderCancelRequest::getStatusClassArr());
@@ -2960,16 +2992,15 @@ class SellerController extends SellerBaseController
         $srch->joinOrderCancelReasons();
         $srch->joinOrders();
         $srch->addCondition('op_selprod_user_id', '=', $this->userParentId);
-        $srch->addMultipleFields(array('ocrequest_id', 'ocrequest_date', 'ocrequest_status', 'order_id', 'order_number', 'op_invoice_number', 'op_id', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'op_selprod_title', 'op_product_name', 'op_selprod_id', 'op_is_batch'));
-        $srch->addOrder('ocrequest_date', 'DESC');
         return $srch;
     }
 
     public function orderReturnRequests()
     {
         $this->userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId());
-        $frm = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
-        $this->set('frmOrderReturnRequestsSrch', $frm);
+        $frmSearch = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
+        $this->set('frmSearch', $frmSearch);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_IN_ORDER_INVOICE_NUMBER,_PRODUCT_NAME,_BRAND_NAME,_SKU,_MODEL', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -2979,16 +3010,10 @@ class SellerController extends SellerBaseController
         $frm = $this->getOrderReturnRequestsSearchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $user_id = $this->userParentId;
-        $keyword = $post['keyword'];
-        $orrequest_date_from = $post['orrequest_date_from'];
-        $orrequest_date_to = $post['orrequest_date_to'];
-
         $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
 
         $srch = $this->returnReuestsListingObj();
-
         $orrequest_status = FatApp::getPostedData('orrequest_status', null, '-1');
         if ($orrequest_status > -1) {
             $orrequest_status = FatUtility::int($orrequest_status);
@@ -3001,14 +3026,15 @@ class SellerController extends SellerBaseController
             $srch->addCondition('orrequest_type', '=', $orrequest_type);
         }
 
-        if (!empty($orrequest_date_from)) {
-            $srch->addCondition('orrequest_date', '>=', $orrequest_date_from . ' 00:00:00');
+        if (!empty($post['orrequest_date_from'])) {
+            $srch->addCondition('orrequest_date', '>=', $post['orrequest_date_from'] . ' 00:00:00');
         }
 
-        if (!empty($orrequest_date_to)) {
-            $srch->addCondition('orrequest_date', '<=', $orrequest_date_to . ' 23:59:59');
+        if (!empty($post['orrequest_date_to'])) {
+            $srch->addCondition('orrequest_date', '<=', $post['orrequest_date_to'] . ' 23:59:59');
         }
 
+        $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('op_invoice_number', '=', $keyword);
             $cnd->attachCondition('op_order_id', '=', $keyword);
@@ -3020,22 +3046,22 @@ class SellerController extends SellerBaseController
             $cnd->attachCondition('op_product_model', 'LIKE', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('orrequest_reference', 'LIKE', '%' . $keyword . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(
+            [
+                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
+                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
+                'op_id', 'selprod_product_id'
+            ]
+        );
+        $srch->addOrder('orrequest_date', 'DESC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-
-        //echo $srch->getQuery(); die();
-        $rs = $srch->getResultSet();
-        $requests = FatApp::getDb()->fetchAll($rs);
-        
+        $this->set('requests', FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sellerPage', true);
         $this->set('buyerPage', false);
-
-        $this->set('requests', $requests);
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('postedData', $post);
         $this->set('returnRequestTypeArr', OrderReturnRequest::getRequestTypeArr($this->siteLangId));
         $this->set('OrderReturnRequestStatusArr', OrderReturnRequest::getRequestStatusArr($this->siteLangId));
         $this->set('OrderRetReqStatusClassArr', OrderReturnRequest::getRequestStatusClassArr());
@@ -3048,16 +3074,6 @@ class SellerController extends SellerBaseController
         $srch->joinOrderProducts();
         $srch->joinSellerProducts();
         $srch->addCondition('op_selprod_user_id', '=', $this->userParentId);
-
-        $srch->addMultipleFields(
-            array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
-                'op_id','selprod_product_id'
-            )
-        );
-        $srch->addOrder('orrequest_date', 'DESC');
-
         return $srch;
     }
 
@@ -3096,6 +3112,7 @@ class SellerController extends SellerBaseController
         $srch->joinSellerProducts();
         $srch->joinOrderProductSettings();
         $srch->joinOrders();
+        $srch->joinShippingCharges();
         $srch->joinOrderBuyerUser();
         $srch->joinOrderReturnReasons();
         $srch->addOrderProductCharges();
@@ -3113,7 +3130,8 @@ class SellerController extends SellerBaseController
                 'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'op_shop_id', 'op_shop_name',
                 'op_shop_owner_name', 'buyer.user_name as buyer_name', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping',
                 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax',
-                'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off','op_selprod_id','selprod_product_id'
+                'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off', 'op_selprod_id', 'selprod_product_id',
+                'opshipping_by_seller_user_id'
             )
         );
 
@@ -3300,9 +3318,9 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        if(false == $shopDetails){
+        if (false == $shopDetails) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml()); 
+            FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
@@ -3313,7 +3331,7 @@ class SellerController extends SellerBaseController
             $shop_id = $shopDetails['shop_id'];
             $stateId = $shopDetails['shop_state_id'];
         }
-        
+
         $srch = SocialPlatform::getSearchObject($this->siteLangId, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -3429,16 +3447,16 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         $splatform_id = FatUtility::int($post['splatform_id']);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-      
-		if ($splatform_id == 0 || $lang_id == 0) {
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
+
+        if ($splatform_id == 0 || $lang_id == 0) {
             Message::addErrorMessage('Invalid Request');
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -3634,8 +3652,8 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmSearchTaxCat');
         $frm->addTextBox('', 'keyword');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -3643,17 +3661,16 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmSocialPlatformLang');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
-		
-       
+
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'splatform_title');
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'splatform_title');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -3705,7 +3722,7 @@ class SellerController extends SellerBaseController
         //return Shop::isShopActive($userId, $shopId, $returnResult);
     }
 
-    private function getShopInfoForm($shopUserId ,$shop_id = 0)
+    private function getShopInfoForm($shopUserId, $shop_id = 0)
     {
         $frm = new Form('frmShop');
         $frm->addHiddenField('', 'shop_id', $shop_id);
@@ -3726,17 +3743,17 @@ class SellerController extends SellerBaseController
         $frm->addSelectBox(Labels::getLabel('Lbl_State', $this->siteLangId), 'shop_state', array(), '', array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirement->setRequired(true);
 
         $zipFld = $frm->addRequiredField(Labels::getLabel('Lbl_Postalcode', $this->siteLangId), 'shop_postalcode');
-        
+
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-        $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
+          $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
 
         $onOffArr = applicationConstants::getOnOffArr($this->siteLangId);
 
         $frm->addSelectBox(Labels::getLabel('Lbl_Display_Status', $this->siteLangId), 'shop_supplier_display_status', $onOffArr);
 
         /* $fld = $frm->addTextBox(Labels::getLabel('LBL_Free_Shipping_On', $this->siteLangId), 'shop_free_ship_upto');
-        $fld->requirements()->setInt();
-        $fld->requirements()->setPositive(); */
+          $fld->requirements()->setInt();
+          $fld->requirements()->setPositive(); */
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_RETURN_AGE', $this->siteLangId), 'shop_return_age');
         $fld->requirements()->setInt();
@@ -3773,21 +3790,21 @@ class SellerController extends SellerBaseController
         // $frm->addHtml('', '', '<div id="map" style="width:1500px; height:500px"></div>');
 
         /* $alphanumericFld = $frm->addRequiredField(Labels::getLabel('LBL_Invoice_number_starts_from', $this->siteLangId), 'shop_invoice_prefix', '', array('placeholder' => Labels::getLabel('LBL_Alphanumeric_value', $this->siteLangId)));
-        $alphanumericFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-        $alphanumericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId));
-        $numericFld = $frm->addIntegerField(Labels::getLabel('LBL_Invoice_number_starts_from', $this->siteLangId), 'shop_invoice_suffix', '', array('placeholder' => Labels::getLabel('LBL_Integer_value', $this->siteLangId)));
-        $numericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_numeric_value_is_allowed.', $this->siteLangId));
-        $alphanumericFld->attachField($numericFld); */
-        $pluginObj = new Plugin();    
+          $alphanumericFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
+          $alphanumericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId));
+          $numericFld = $frm->addIntegerField(Labels::getLabel('LBL_Invoice_number_starts_from', $this->siteLangId), 'shop_invoice_suffix', '', array('placeholder' => Labels::getLabel('LBL_Integer_value', $this->siteLangId)));
+          $numericFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_numeric_value_is_allowed.', $this->siteLangId));
+          $alphanumericFld->attachField($numericFld); */
+        $pluginObj = new Plugin();
         $sellerPluginObj = new SellerPlugin(0, $shopUserId);
         if ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active')) {
             $fld = $frm->addCheckBox(
-                    Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
-                    'shop_use_manual_shipping_rates',
-                    1,
-                    array(),
-                    false,
-                    0
+                Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
+                'shop_use_manual_shipping_rates',
+                1,
+                array(),
+                false,
+                0
             );
             $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId) . "</span>";
         }
@@ -3805,15 +3822,15 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmShopLogo');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
-		
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'logo-language-js'), '');
-        } else  {
-			$langId = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $langId);
-		}
-       
-		
+
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'logo-language-js'), '');
+        } else {
+            $langId = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $langId);
+        }
+
+
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE, array('class' => 'list-inline'));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
@@ -3828,13 +3845,13 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmBackgroundImage');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
-		if(count($bannerTypeArr) > 1){
-			$frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'bg-language-js'), '');
-        } else  {
-			$langId = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $langId);
-		}
-		
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'bg-language-js'), '');
+        } else {
+            $langId = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $langId);
+        }
+
         $fld = $frm->addButton(
             Labels::getLabel('Lbl_Background_Image', $langId),
             'shop_background_image',
@@ -3849,13 +3866,13 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmShopBanner');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'banner-language-js'), '');
-        } else  {
-			$langId = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $langId);
-		}
-	  
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'banner-language-js'), '');
+        } else {
+            $langId = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $langId);
+        }
+
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_BANNER);
@@ -3869,16 +3886,15 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmShopLang');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $lang_id), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$fl = $frm->addHiddenField('', 'lang_id', $lang_id);
-			
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $lang_id), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $fl = $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LbL_Shop_Name', $lang_id), 'shop_name');
         $frm->addRequiredField(Labels::getLabel('LBL_SHOP_ADDRESS_LINE_1', $lang_id), 'shop_address_line_1');
         $frm->addTextBox(Labels::getLabel('LBL_SHOP_ADDRESS_LINE_2', $lang_id), 'shop_address_line_2');
@@ -3911,24 +3927,27 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmSearchCatalogProduct');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'lang_id');
         $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
-
-        /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
         if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            //$frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'type', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + applicationConstants::getCatalogTypeArrForFrontEnd($this->siteLangId), '-1', array('id' => 'type'), '');
             $frm->addHiddenField('', 'type', $type);
         }
-
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
-        /* }  */
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        return $frm;
+    }
 
-        /* if( !User::canAddCustomProductAvailableToAllSellers() ){ */
-        $frm->addButton('', 'btn_clear', Labels::getLabel('LBL_Clear', $this->siteLangId));
-        /* } */
-        //$fldSubmit->attachField($fldCancel);
+    private function getTagsProdSrchForm()
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword');
+        $frm->addHiddenField('', 'lang_id');
         $frm->addHiddenField('', 'page');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -3972,18 +3991,26 @@ class SellerController extends SellerBaseController
         $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirements()->setRequired();
+        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] != FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
 
-        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {    
-            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            $shippedBySeller = applicationConstants::NO;
+            if (CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id'])) {
+                $shippedBySeller = applicationConstants::YES;
+            }
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderData['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            if (!$shippingApiObj) {
+                $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            } else {
+                $manualFld = $frm->addSelectBox(Labels::getLabel('FRM_SHIPPED_VIA', $this->siteLangId), 'manual_shipping', [0 => Labels::getLabel("FRM_SHIPPING_PLUGIN", $this->siteLangId), 1 => Labels::getLabel("FRM_SELF_SHIPPING", $this->siteLangId)], 0, array(), false);
+            }
 
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipUnReqObj->setRequired(false);
             $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipReqObj->setRequired(true);
 
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'eq', 'manual_shipping', $manualShipReqObj);
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'ne', 'manual_shipping', $manualShipUnReqObj);
-
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'eq', 'manual_shipping', $manualShipReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'ne', 'manual_shipping', $manualShipUnReqObj);
 
             $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
 
@@ -4023,6 +4050,7 @@ class SellerController extends SellerBaseController
             }
         }
 
+        $frm->addHiddenField('', 'shipped_by_plugin', 0, ['id' => 'shippedByPluginJs']);
         $frm->addHiddenField('', 'op_id', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
@@ -4030,21 +4058,14 @@ class SellerController extends SellerBaseController
 
     private function getSubscriptionOrderSearchForm($langId)
     {
-        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
-        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
-
         $frm = new Form('frmOrderSrch');
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
-        /* $frm->addSelectBox('','status', Orders::getOrderSubscriptionStatusArr( $langId, unserialize(FatApp::getConfig("CONF_SUBSCRIPTION_ORDER_STATUS")) ), '', array(), Labels::getLabel('LBL_Status', $langId) ); */
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
-        /* $frm->addTextBox( '', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $langId).' ['.$currencySymbol.']' ) );
-          $frm->addTextBox( '', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_to', $langId).' ['.$currencySymbol.']' ) ); */
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
-        //$fldSubmit->attachField($fldCancel);
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -4101,13 +4122,14 @@ class SellerController extends SellerBaseController
         }
         $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
 
-        $frmOrderSrch = $this->getSubscriptionOrderSearchForm($this->siteLangId);
+        $frmSearch = $this->getSubscriptionOrderSearchForm($this->siteLangId);
         $userId = $this->userParentId;
         $autoRenew = User::getAttributesById($userId, 'user_autorenew_subscription');
         $this->set('canEdit', $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true));
         $this->set('currentActivePlan', $currentActivePlan);
-        $this->set('frmOrderSrch', $frmOrderSrch);
         $this->set('autoRenew', $autoRenew);
+        $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_ORDER_ID_/_PACKAGE_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -4163,7 +4185,7 @@ class SellerController extends SellerBaseController
         if (!empty($profileData)) {
             $shippingDetails['shipping_profile'] = $profileData['profile_id'];
         }
-        /* ]*/
+        /* ] */
 
         $shippingFrm->fill($shippingDetails);
 
@@ -4184,9 +4206,9 @@ class SellerController extends SellerBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [])->requirements()->setRequired();
 
         /* if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
-            $shipPackArr = ShippingPackage::getAllNames();
-            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->siteLangId), 'product_ship_package', $shipPackArr)->requirements()->setRequired();
-        } */
+          $shipPackArr = ShippingPackage::getAllNames();
+          $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->siteLangId), 'product_ship_package', $shipPackArr)->requirements()->setRequired();
+          } */
         //$fld = $frm->addCheckBox(Labels::getLabel('LBL_Free_Shipping', $this->siteLangId), 'ps_free', 1);
         //$frm->addHtml('', '', '<div id="tab_shipping"></div>');
 
@@ -4203,8 +4225,6 @@ class SellerController extends SellerBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         $productShiping = FatApp::getPostedData('product_shipping');
-
-
 
         if (false === $post) {
             FatUtility::dieWithError(current($frm->getValidationErrors()));
@@ -4225,10 +4245,10 @@ class SellerController extends SellerBaseController
         //$prodObj = new Product($product_id);
 
         /* $prod = new Product($product_id);
-        if (!$prod->saveProductData($post)) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        } */
+          if (!$prod->saveProductData($post)) {
+          Message::addErrorMessage($prod->getError());
+          FatUtility::dieWithError(Message::getHtml());
+          } */
 
         /* Save Product Shipping  [ */
         $data_to_be_save = $post;
@@ -4242,9 +4262,9 @@ class SellerController extends SellerBaseController
 
         /* Save Prodcut Shipping Details [ */
         /* if (!$this->addUpdateProductShippingRates($product_id, $productShiping)) {
-            Message::addErrorMessage($taxObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        } */
+          Message::addErrorMessage($taxObj->getError());
+          FatUtility::dieWithError(Message::getHtml());
+          } */
         /* ] */
 
         if (isset($post['shipping_profile']) && $post['shipping_profile'] > 0) {
@@ -4448,7 +4468,6 @@ class SellerController extends SellerBaseController
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_height', $pHeightUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_height', $pHeightReqObj);
 
-
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_dimension_unit', $pDimensionUnitUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_dimension_unit', $pDimensionUnitReqObj);
 
@@ -4486,10 +4505,10 @@ class SellerController extends SellerBaseController
 
         if ($type == 'CATALOG_PRODUCT') {
             $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Option_Groups', $this->siteLangId), 'option_name');
-            $fld1->htmlAfterField = '<div class=""><small> <a class="" href="javascript:void(0);" onClick="optionForm(0);">' . Labels::getLabel('LBL_Add_New_Option', $this->siteLangId) . '</a></small></div><div class="col-md-12"><ul class="list--vertical" id="product_options_list"></ul></div>';
+            $fld1->htmlAfterField = '<div class=""><small> <a class="" href="javascript:void(0);" onclick="optionForm(0);">' . Labels::getLabel('LBL_Add_New_Option', $this->siteLangId) . '</a></small></div><div class="col-md-12"><ul class="list--vertical" id="product_options_list"></ul></div>';
 
             $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Tag', $this->siteLangId), 'tag_name');
-            $fld1->htmlAfterField = '<div class=""><small><a href="javascript:void(0);" onClick="addTagForm(0);">' . Labels::getLabel('LBL_Tag_Not_Found?_Click_here_to_', $this->siteLangId) . ' ' . Labels::getLabel('LBL_Add_New_Tag', $this->siteLangId) . '</a></small></div><div class="col-md-12"><ul class="list--vertical" id="product-tag-js"></ul></div>';
+            $fld1->htmlAfterField = '<div class=""><small><a href="javascript:void(0);" onclick="addTagForm(0);">' . Labels::getLabel('LBL_Tag_Not_Found?_Click_here_to_', $this->siteLangId) . ' ' . Labels::getLabel('LBL_Add_New_Tag', $this->siteLangId) . '</a></small></div><div class="col-md-12"><ul class="list--vertical" id="product-tag-js"></ul></div>';
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
@@ -4715,7 +4734,7 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'selprod_id', $selprod_id);
         $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         if ($type != 'CUSTOM_CATALOG') {
-            $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Discard', $this->siteLangId), array('onClick' => 'gotToProucts()'));
+            $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Discard', $this->siteLangId), array('onclick' => 'gotToProucts()'));
             //$fld1->attachField($fld2);
         }
         return $frm;
@@ -4732,10 +4751,12 @@ class SellerController extends SellerBaseController
         $prodSrch->addCondition('product_id', '=', $product_id);
         $prodSrch->doNotLimitRecords();
 
-
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'product_min_selling_price'
+                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name',
+                'product_min_selling_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -4907,17 +4928,15 @@ class SellerController extends SellerBaseController
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-		
-		
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] =  array_key_first($languages); 
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = array_key_first($languages);
+        }
+
         $userId = $this->userParentId;
 
         if ($userId == 0 || $lang_id == 0) {
@@ -4960,7 +4979,6 @@ class SellerController extends SellerBaseController
             $rs = $srch->getResultSet();
             $vendorReturnAddress = FatApp::getDb()->fetch($rs);
 
-
             if (!$vendorReturnAddress) {
                 $newTabLangId = $langId;
                 break;
@@ -4986,7 +5004,7 @@ class SellerController extends SellerBaseController
         /* $frm->addTextBox(Labels::getLabel('LBL_City',$this->siteLangId), 'ura_city');     */
         $zipFld = $frm->addTextBox(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'ura_zip');
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-        $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
+          $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
         $frm->addHiddenField('', 'ura_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'ura_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
@@ -5002,14 +5020,14 @@ class SellerController extends SellerBaseController
         $formLangId = FatUtility::int($formLangId);
 
         $frm = new Form('frmReturnAddressLang');
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $formLangId, array(), '');
-		} else  {
-			$formLangId = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $formLangId);
-		}
-		
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $formLangId, array(), '');
+        } else {
+            $formLangId = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $formLangId);
+        }
+
         $frm->addTextBox(Labels::getLabel('LBL_Name', $formLangId), 'ura_name')->requirement->setRequired(true);;
         $frm->addTextBox(Labels::getLabel('LBL_City', $formLangId), 'ura_city')->requirement->setRequired(true);;
         $frm->addTextarea(Labels::getLabel('LBL_Address1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;
@@ -5099,6 +5117,8 @@ class SellerController extends SellerBaseController
         $this->set("dataToEdit", $dataToEdit);
         $this->set("frmSearch", $srchFrm);
         $this->set("selProd_id", $selProd_id);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
+        $this->set('deleteButton', true);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
@@ -5112,13 +5132,20 @@ class SellerController extends SellerBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $userId);
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(
+            array(
+                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+            )
+        );
+        $srch->addOrder('splprice_id', 'DESC');
         $srch->setPageNumber($page);
-
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);        
+        $srch->setPageSize($pagesize);
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($arrListing)) {
             foreach ($arrListing as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
@@ -5126,21 +5153,18 @@ class SellerController extends SellerBaseController
         }
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditSpecialPrice(UserAuthentication::getLoggedUserId(), true));
-        $this->set('page', $page);
-        $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
     private function getSpecialPriceSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
 
@@ -5208,13 +5232,13 @@ class SellerController extends SellerBaseController
         }
 
         /* if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] >= $product['selprod_price']) {
-            $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $this->siteLangId);
-            $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
-            $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
+          $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $this->siteLangId);
+          $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
+          $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
 
-            $message = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
-            FatUtility::dieJsonError($message);
-        } */
+          $message = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
+          FatUtility::dieJsonError($message);
+          } */
 
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
@@ -5525,8 +5549,8 @@ class SellerController extends SellerBaseController
         if (true == $forCatalogReq) {
             $userId = 0;
         }
-        $shippingObj = new Shipping($this->siteLangId);       
-        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userId) || Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates') )) {            
+        $shippingObj = new Shipping($this->siteLangId);
+        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userId) || Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates'))) {
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $userId, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr)->requirements()->setRequired();
         }
@@ -5610,7 +5634,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        if(!$shopDetails){
+        if (!$shopDetails) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -5645,7 +5669,7 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function pickupAddressForm(int $addrId = 0)
+    public function pickupAddressForm(int $addrId = 0, $langId = 0)
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
@@ -5661,19 +5685,21 @@ class SellerController extends SellerBaseController
         if (!false == $shopDetails) {
             $shopId = $shopDetails['shop_id'];
         }
-        $frm = $this->getPickUpAddressForm($addrId);
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+
+        $frm = $this->getPickUpAddressForm($addrId, $langId);
         $availability = TimeSlot::DAY_INDIVIDUAL_DAYS;
         if ($addrId > 0) {
-            $address = new Address($addrId, $this->siteLangId);
+            $address = new Address($addrId, $langId);
             $data = $address->getData(Address::TYPE_SHOP_PICKUP, $shopId);
             if (!empty($data)) {
                 $stateId = $data['addr_state_id'];
 
                 $timeSlot = new TimeSlot();
                 $timeSlots = $timeSlot->timeSlotsByAddrId($addrId);
-                
+
                 $timeSlotsRow = current($timeSlots);
-                $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : $availability;                
+                $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : $availability;
                 $data['tslot_availability'] = $availability;
                 $frm->fill($data);
                 if (!empty($timeSlots)) {
@@ -5688,12 +5714,12 @@ class SellerController extends SellerBaseController
 
         $this->set('availability', $availability);
         $this->set('shop_id', $shopId);
-        $this->set('language', Language::getAllNames());
-        $this->set('siteLangId', $this->siteLangId);
+        $this->set('addrId', $addrId);
+        $this->set('langId', $langId);
         $this->set('frm', $frm);
         $this->set('stateId', $stateId);
-        $this->set('languages', Language::getAllNames());
         $this->set('slotData', $slotData);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -5735,42 +5761,40 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    private function getPickUpAddressForm($addressId = 0)
+    private function getPickUpAddressForm($addressId, $langId)
     {
         $addressId = FatUtility::int($addressId);
         $frm = new Form('frmPickUpAddress');
         $frm->addHiddenField('', 'addr_id', $addressId);
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $this->siteLangId), 'addr_title');
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->siteLangId), 'addr_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $this->siteLangId), 'addr_address1');
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'addr_address2');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $langId), 'addr_title');
+        $frm->addRequiredField(Labels::getLabel('LBL_Name', $langId), 'addr_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $langId), 'addr_address1');
+        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $langId), 'addr_address2');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
+        $countriesArr = $countryObj->getCountriesAssocArr($langId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $langId))->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('LBL_City', $this->siteLangId), 'addr_city');
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $langId))->requirement->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('LBL_City', $langId), 'addr_city');
 
-        $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
+        $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $langId), 'addr_zip');
         $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $langId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $langId));
 
-        $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('LBL_Slot_Timings', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
+        $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($langId);
+        $frm->addRadioButtons(Labels::getLabel('LBL_Slot_Timings', $langId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
 
-        $daysArr = TimeSlot::getDaysArr($this->siteLangId);
+        $daysArr = TimeSlot::getDaysArr($langId);
         for ($i = 0; $i < count($daysArr); $i++) {
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
-            $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-            $frm->addSelectBox(Labels::getLabel('LBL_To', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-            //$frm->addButton('', 'btn_add_row['.$i.']', '+');
+            $frm->addSelectBox(Labels::getLabel('LBL_From', $langId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $langId));
+            $frm->addSelectBox(Labels::getLabel('LBL_To', $langId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        $fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
         return $frm;
     }
 
@@ -5784,18 +5808,18 @@ class SellerController extends SellerBaseController
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
 
         $addrStateId = FatUtility::int($post['addr_state_id']);
-            $slotDays = isset($post['tslot_day']) ? $post['tslot_day'] : array();
-            $slotFromTime = $post['tslot_from_time'];
-            $slotToTime = $post['tslot_to_time'];
+        $slotDays = isset($post['tslot_day']) ? $post['tslot_day'] : array();
+        $slotFromTime = $post['tslot_from_time'];
+        $slotToTime = $post['tslot_to_time'];
 
-        $frm = $this->getPickUpAddressForm($post['addr_id']);
+        $frm = $this->getPickUpAddressForm($post['addr_id'], $this->siteLangId);
         $postedData = $frm->getFormDataFromArray($post);
         if (false === $postedData) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        if($availability == TimeSlot::DAY_ALL_DAYS  && !isset($slotFromTime[TimeSlot::DAY_SUNDAY])){           
+        if ($availability == TimeSlot::DAY_ALL_DAYS && !isset($slotFromTime[TimeSlot::DAY_SUNDAY])) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
@@ -5806,8 +5830,8 @@ class SellerController extends SellerBaseController
         $data = $post;
         $data['addr_state_id'] = $addrStateId;
         $data['addr_record_id'] = $shopId;
-        $data['addr_lang_id'] = $this->siteLangId;
-        $data['addr_type'] =  Address::TYPE_SHOP_PICKUP;;
+        $data['addr_lang_id'] = $post['lang_id'];
+        $data['addr_type'] = Address::TYPE_SHOP_PICKUP;
         $address->assignValues($data);
         if (!$address->save()) {
             if (true === MOBILE_APP_API_CALL) {
@@ -5879,548 +5903,139 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* Digital downloads*/
-    public function downloadsForm()
-    {
-        $this->userPrivilege->canEditProducts();
-
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $productId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $requstedProd = Product::CATALOG_TYPE_PRIMARY;
-        $recordId = $productId;
-
-        if (0 < $preqId) {
-            $recordId = $preqId;
-            $requstedProd = Product::CATALOG_TYPE_REQUEST;
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
-
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
-        }
-
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-
-        $fld = $frm->getField('option_comb_id');
-        if (1 > count($optionCombinations)) {
-            $frm->removeField($fld);
-        } else {
-            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-            $fld->options = $optionCombinations;
-        }
-
-        $showFldAttachWithExistingOrders = false;
-
-        if (Product::CATALOG_TYPE_PRIMARY == $requstedProd) {
-            $showFldAttachWithExistingOrders = true;
-
-            $fld = $frm->getField('attach_with_existing_orders');
-
-            $product = $ddpObj->getProduct($recordId);
-
-            if (!is_array($product) && 1 > count($product)) {
-                if (1 === $product['product_attachements_with_inventory']) {
-                    $frm->removeField($fld);
-                    $showFldAttachWithExistingOrders = false;
-                }
-            }
-        }
-
-        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
-
-        $msg = '';
-        $frmData = [
-            'product_id' => $productId,
-            'preq_id' => $preqId
-        ];
-
-        if (1 <= $linkId) {
-            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
-
-            $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
-            if (!empty($linkDetail)) {
-                $frmData['dd_link_id'] = $linkId;
-                $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
-                $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
-                $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
-                $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
-                $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
-                $fld = $frm->getField('attachment_link_btn');
-                $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
-            } else {
-                $msg = 'Invalid Link. Please refresh to get latest list!!!';
-            }
-        }
-
-        $frm->fill($frmData);
-
-        $this->set('downloadFrm', $frm);
-        $this->set('canDo', $canDo);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('msg', $msg);
-        $this->_template->render(false, false, 'seller/download-setup-frm.php');
-    }
-
-    public function setupDigitalDownloads()
-    {
-        $this->userPrivilege->canEditProducts();
-
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $prodId && 1 > $preqId && 1 > $selProdId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
-
-        $requstedProd = Product::CATALOG_TYPE_PRIMARY;
-        $recordId = $prodId;
-
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-
-        if (0 < $selProdId) {
-            $requstedProd = Product::CATALOG_TYPE_INVENTORY;
-            $recordId = $selProdId;
-        } else {
-            if (0 < $preqId) {
-                $recordId = $preqId;
-                $requstedProd = Product::CATALOG_TYPE_REQUEST;
-            }
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-
-        if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
-            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true);
-
-            if (false === $canDo) {
-                FatUtility::dieJsonError($ddpObj->getError());
-            }
-            $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
-            if (!is_array($selProdData) && 1 > count($selProdData)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-
-            if ($selProdData['selprod_user_id'] !== $this->userParentId) {
-                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-            $selProdOption = explode('_', $selProdData['selprod_code']);
-            array_shift($selProdOption);
-            if (0 < count($selProdOption)) {
-                $optionComb = implode('_', $selProdOption);
-            } else {
-                $optionComb = '0';
-            }
-        } else {
-            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
-
-            if (false === $canDo) {
-                Message::addErrorMessage($ddpObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
-
-        $ddObj = new DigitalDownload();
-
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
-
-        $refId = $ddObj->getReferenceId($recordId, $optionComb, $requstedProd);
-
-        if (1 > $refId) {
-            if (!$ddObj->saveReference($recordId, $optionComb, $requstedProd)) {
-                FatUtility::dieJsonError($ddObj->getError());
-            }
-            $refId = $ddObj->getMainTableRecordId();
-        }
-
-        if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            if (true == $this->setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        } else {
-            if (true == $this->setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        }
-
-        FatUtility::dieJsonError(Message::getHtml());
-    }
-
-    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
-    {
-        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
-            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
-        ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            return false;
-        }
-
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
-        $refFileId = FatApp::getPostedData('ref_file_id', FatUtility::VAR_INT, 0);
-
-        $mainFileId = 0;
-
-        if (1 == $isPreview) {
-            if (array_key_exists('downloadable_file', $_FILES)) {
-                unset($_FILES['downloadable_file']);
-            }
-            $mainFileId = $refFileId;
-        }
-
-        if (
-            isset($_FILES['downloadable_file']['tmp_name'])
-            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
-        ) {
-            $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
-
-            if (1 > $mainFileId) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-
-            $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-
-            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
-            if (1 === $attachWithExistingOrders && Product::CATALOG_TYPE_REQUEST != $requstedProd) {
-                $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-                $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId, $optionComb);
-            }
-        }
-
-        if (
-            isset($_FILES['preview_file']['tmp_name'])
-            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
-        ) {
-            if (1 > $this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
-        }
-
-        return true;
-    }
-
-    private function setupDigitalMainFile($ddObj, $refId, $langId)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['downloadable_file']['tmp_name'],
-            $_FILES['downloadable_file']['name'],
-            $refId,
-            0,
-            $langId
-        );
-        if (1 > $fileId) {
-            return 0;
-        }
-
-        return $fileId;
-    }
-
-    private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['preview_file']['tmp_name'],
-            $_FILES['preview_file']['name'],
-            $refId,
-            $mainFileId,
-            $langId,
-            true
-        );
-
-        if (1 > $fileId) {
-            return 0;
-        }
-
-        return $fileId;
-    }
-
-    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
-    {
-        $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
-        $previewLink = FatApp::getPostedData('product_preview_link', null, '');
-
-        if ('' == $downloadLink && '' == $previewLink) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
-            return false;
-        }
-
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-
-        if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            Message::addMessage($ddObj->getError());
-            return false;
-        }
-
-        if (1 <= $ddLinkId) {
-            $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
-            $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
-
-            if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
-                $ddObj->deleteReference($ddRefId);
-            }
-        }
-
-        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-
-        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
-        if (0 === $attachWithExistingOrders && '' == $downloadLink) {
-            return true;
-        }
-
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId, $optionComb);
-
-        return true;
-    }
-
-    public function getDigitalDownloadLinks()
-    {
-        $this->userPrivilege->canViewProducts();
-
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
-
-        if (1 > $prodId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $recordId  = $prodId;
-        $prodRefType = 0;
-
-        if (0 < $preqId) {
-            $recordId  = $preqId;
-            $prodRefType = 1;
-        }
-
-        $optionCombi = FatApp::getPostedData('option_comb', null, '0');
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId, true);
-        $this->set('canDo', $canDo);
-
-        $rows = DigitalDownloadSearch::getLinks($recordId, $prodRefType, $optionCombi, $langId);
-
-        $this->set('links', $rows);
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($prodId, $this->siteLangId, true);
-        }
-
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-
-        $this->set('options', $optionCombinations);
-        echo $this->_template->render(false, false, 'seller/digital-download-links-list.php', true);
-    }
-
-    public function getDigitalDownloadAttachments()
-    {
-        $this->userPrivilege->canViewProducts();
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
-
-        if (1 > $productId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $recordId  = $productId;
-        $prodRefType = 0;
-        $isProductRequest = false;
-
-        if (0 < $preqId) {
-            $isProductRequest = true;
-            $recordId = $preqId;
-            $prodRefType = Product::CATALOG_TYPE_REQUEST;
-        }
-
-        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
-        $this->set('canDo', $canDo);
-
-        $optionComb = FatApp::getPostedData('option_comb', null, 0);
-        $langId = FatApp::getPostedData('langId', null, 0);
-
-        $attachments = DigitalDownloadSearch::getAttachments($recordId, $prodRefType, $optionComb, $langId);
-        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
-
-        $this->set('attachments', $attachments);
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
-        }
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-
-        $this->set('options', $optionCombinations);
-        $this->set('isProductRequest', $isProductRequest);
-        $this->set('recordId', $recordId);
-
-        echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
-    }
-
-    public function deleteDigitalLink()
-    {
-        $this->userPrivilege->canEditProducts();
-
-        $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $refId || 1 > $linkId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $reference = DigitalDownload::getAttributesById($refId);
-
-        if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $link = DigitalDownloadSearch::getLinkDetail($linkId);
-        if (1 > count($link)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $validateAllowedWithInventory = false;
-
-        if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
-            $validateAllowedWithInventory = true;
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit(
-            $link['pddr_record_id'],
-            $link['pddr_type'],
-            $this->userParentId,
-            $this->siteLangId,
-            $validateAllowedWithInventory
-        );
-
-
-        /* $canDelete = DigitalDownload::canDelete($link['pddr_record_id'], $link['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
-
-        if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
-        }
-
-        $ddObj = new DigitalDownload();
-
-        if (!$ddObj->deleteLink($linkId, $refId)) {
-            FatUtility::dieJsonError($ddObj->getError());
-        }
-
-        $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
-
-        $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($refId);
-
-        if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
-            $ddObj->deleteReference($refId);
-        }
-
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
-    }
-
-    public function deleteDigitalFile()
-    {
-        $this->userPrivilege->canEditProducts();
-        $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
-        $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $refId || 1 > $aFileId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $isPreviewFile = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
-        $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
-
-        $reference = DigitalDownload::getAttributesById($refId);
-
-        if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $validateAllowedWithInventory = false;
-
-        if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
-            $validateAllowedWithInventory = true;
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit(
-            $reference['pddr_record_id'],
-            $reference['pddr_type'],
-            $this->userParentId,
-            $this->siteLangId,
-            $validateAllowedWithInventory
-        );
-
-        /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
-
-        if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
-        }
-
-        $digDownload = new DigitalDownload();
-
-        if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
-            FatUtility::dieJsonError($digDownload->getError());
-        }
-
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
-    }
-    /* Digital downloads*/
-
     public function getShopDetail(int $autoComplteRequest = 0)
     {
         $attr = (1 > $autoComplteRequest ? null : [
             'shop_id as id',
             'COALESCE(shop_name, shop_identifier) as name'
         ]);
-        $shopData = (array)Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), $attr, true, $this->siteLangId);
+        $shopData = (array) Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), $attr, true, $this->siteLangId);
         FatUtility::dieJsonSuccess(['shopData' => $shopData]);
+    }
+
+    public function tagsAutoComplete()
+    {
+        $post = FatApp::getPostedData();
+
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
+
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        $options = $db->fetchAll($rs, 'tag_id');
+        $json = array();
+        foreach ($options as $key => $option) {
+            $json[] = array(
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),
+            );
+        }
+        die(json_encode($json));
+    }
+
+    public function updateProductTag()
+    {
+        $this->checkEditPrivilege();
+        $post = FatApp::getPostedData();
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
+        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        if ($productId < 1 || $tagId < 1) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        $prod = new Product($productId);
+        if (!$prod->addUpdateProductTag($tagId)) {
+            Message::addErrorMessage(Labels::getLabel($prod->getError(), $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        Tag::updateProductTagString($productId);
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function tagSetup()
+    {
+        $tagName = FatApp::getPostedData('tag_name', FatUtility::VAR_STRING);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (empty($tagName) || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+
+        $record = new Tag();
+        $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
+
+        if (!$record->save()) {
+            Message::addErrorMessage(Labels::getLabel('MSG_This_identifier_is_not_available._Please_try_with_another_one.', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        $tag_id = $record->getMainTableRecordId();
+        /* update product tags association and tag string in products lang table[ */
+        Tag::updateTagStrings($tag_id);
+        /* ] */
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successful', $this->siteLangId));
+        $this->set('tagId', $tag_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function removeProductTag()
+    {
+        $this->checkEditPrivilege();
+
+        $post = FatApp::getPostedData();
+        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
+        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        if ($productId < 1 || $tagId < 1) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $prod = new Product($productId);
+        if (!$prod->removeProductTag($tagId)) {
+            Message::addErrorMessage(Labels::getLabel($prod->getError(), $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        Tag::updateProductTagString($productId);
+
+        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
+        } else {
+            $this->userPrivilege->canEditProducts();
+        }
+    }
+
+    protected function getCatalogType(): int
+    {
+        return Product::CATALOG_TYPE_INVENTORY;
     }
 
     // Page Created for Pawan to create new UI for add product. 26/11/2021

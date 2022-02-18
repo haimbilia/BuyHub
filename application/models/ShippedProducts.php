@@ -53,21 +53,21 @@ class ShippedProducts extends SearchBase
 
     public function addProductByAdminCondition()
     {
-        $this->addCondition('product_added_by_admin_id', '=', applicationConstants::YES);
+        $this->addCondition('product_added_by_admin_id', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
     }
 
     public function addProductDeletedCondition()
     {
-        $this->addCondition('tp.product_deleted', '=', applicationConstants::NO);
+        $this->addCondition('tp.product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
     }
 
     public function addProductAdminShipCondition()
     {
-        $this->addCondition('sppro.shippro_user_id', '=', '0');
+        $this->addCondition('sppro.shippro_user_id', '=', 'mysql_func_0', 'AND', true);
     }
 
     public function addPhyProductCheckCondition()
     {
-        $this->addCondition('tp.product_type', '=', Product::PRODUCT_TYPE_PHYSICAL);
+        $this->addCondition('tp.product_type', '=', 'mysql_func_' . Product::PRODUCT_TYPE_PHYSICAL, 'AND', true);
     }
 }

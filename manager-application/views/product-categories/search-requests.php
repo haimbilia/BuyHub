@@ -66,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
 echo $tbl->getHtml();
 
 if (count($arrListing) == 0) {
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+    $this->includeTemplate('_partial/no-record-found.php');
 }
 
 $postedData['page'] = $page;

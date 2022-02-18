@@ -38,6 +38,10 @@ trait PluginBaseCommon
 
         $this->identifier = $settings['plugin_identifier'];
         $frm->fill(['plugin_id' => $settings['plugin_id'], 'keyName' => $keyName]);
+        
+        if (null == $frm->getField('btn_submit')) {
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
+        }
         return $frm;
     }
 

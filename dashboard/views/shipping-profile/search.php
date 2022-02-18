@@ -57,13 +57,31 @@
                         $li = $ul->appendElement("li");
 
                         if ($canEdit) {
-                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="fa fa-edit"></i>', true);
+                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
+                        </i>', true);
                             if ($row['shipprofile_default'] != applicationConstants::YES) {
                                 $li = $ul->appendElement("li");
-                                $li->appendElement('a', array('href' => 'javascript::void(0)',  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "deleteRecord(" . $row['shipprofile_id'] . ")"), '<i class="fa fa-trash"></i>', true);
+                                $li->appendElement('a', array('href' => 'javascript::void(0)',  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "deleteRecord(" . $row['shipprofile_id'] . ")"), '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>
+                            </i>', true);
                             }
                         } else {
-                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)), '<i class="fa fa-eye"></i>', true);
+                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)), '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                </use>
+                            </svg>
+                        </i>', true);
                         }
 
                         break;

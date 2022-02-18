@@ -125,9 +125,9 @@ foreach ($optionRows as $key => &$option) {
 }
 
 $arr_flds = array(
-    'country_name' => Labels::getLabel('LBL_Ship_to', $siteLangId),
-    'pship_charges' => Labels::getLabel('LBL_Cost', $siteLangId),
-    'pship_additional_charges' => Labels::getLabel('LBL_With_Another_item', $siteLangId),
+    'country_name' => Labels::getLabel('LBL_SHIP_TO', $siteLangId),
+    'pship_charges' => Labels::getLabel('LBL_COST', $siteLangId),
+    'pship_additional_charges' => Labels::getLabel('LBL_WITH_ANOTHER_ITEM', $siteLangId),
 );
 $shippingRatesDetail = [];
 foreach ($shippingRates as $sn => $row) {
@@ -154,7 +154,7 @@ if (!empty($product)) {
     $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
 
     if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
         $returnAge = !empty($returnAge) ? $returnAge : 0;
         $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
@@ -165,7 +165,7 @@ if (!empty($product)) {
         );
     }
     if (!empty($product['selprod_cancellation_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
         $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
         $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
         $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
@@ -176,7 +176,7 @@ if (!empty($product)) {
         );
     }
     if (!empty($product['product_warranty'])) {
-        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_WARRANTY', $siteLangId);
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
         $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
         $product['productPolicies'][] = array(
             'title' => $warranty,
@@ -188,13 +188,13 @@ if (!empty($product)) {
     if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
         if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
             $product['productPolicies'][] = array(
-                'title' => Labels::getLabel('LBL_Free_Shipping_on_this_Order', $siteLangId),
+                'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
                 'isSvg' => Plugin::RETURN_FALSE,
                 'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
             );
         } elseif (count($shippingRates) > 0) {
             $product['productPolicies'][] = array(
-                'title' => Labels::getLabel('LBL_Shipping_Rates', $siteLangId),
+                'title' => Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId),
                 'isSvg' => Plugin::RETURN_FALSE,
                 'icon' => CONF_WEBROOT_URL . 'images/shipping-policies.png',
                 'shippingRatesDetail' => $shippingRatesDetail,
@@ -204,7 +204,7 @@ if (!empty($product)) {
 
     if (0 < $codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
         $product['productPolicies'][] = array(
-            'title' => Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId),
+            'title' => Labels::getLabel('LBL_CASH_ON_DELIVERY_IS_AVAILABLE', $siteLangId),
             'isSvg' => Plugin::RETURN_FALSE,
             'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
         );
@@ -333,12 +333,12 @@ $data = array(
     'shippingDetails' => empty($shippingDetails) ? (object) array() : $shippingDetails,
     'optionRows' => $optionRows,
     'productSpecifications' => array(
-        'title' => Labels::getLabel('LBL_Specifications', $siteLangId),
+        'title' => Labels::getLabel('LBL_SPECIFICATIONS', $siteLangId),
         'data' => $productSpecifications,
     ),
     'banners' => $productDetailPageBanner,
     'product' => array(
-        'title' => Labels::getLabel('LBL_Detail', $siteLangId),
+        'title' => Labels::getLabel('LBL_DETAIL', $siteLangId),
         'data' => empty($product) ? (object) array() : $product,
     ),
     'shop_rating' => round($shop_rating, 1),
@@ -348,19 +348,19 @@ $data = array(
     'volumeDiscountRows' => $volumeDiscountRows,
     'socialShareContent' => empty($socialShareContent) ? (object) array() : $socialShareContent,
     'buyTogether' => array(
-        'title' => Labels::getLabel('LBL_Product_Add-ons', $siteLangId),
+        'title' => Labels::getLabel('LBL_PRODUCT_ADD-ONS', $siteLangId),
         'data' => $upsellProducts,
     ),
     'relatedProducts' => array(
-        'title' => Labels::getLabel('LBL_Similar_Products', $siteLangId),
+        'title' => Labels::getLabel('LBL_SIMILAR_PRODUCTS', $siteLangId),
         'data' => array_values($relatedProductsRs)
     ),
     'recommendedProducts' => array(
-        'title' => Labels::getLabel('LBL_Recommended_Products', $siteLangId),
+        'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
         'data' => $recommendedProducts
     ),
     'recentlyViewed' => array(
-        'title' => Labels::getLabel('LBL_Recently_Viewed', $siteLangId),
+        'title' => Labels::getLabel('LBL_RECENTLY_VIEWED', $siteLangId),
         'data' => array_values($recentlyViewed)
     )
 );

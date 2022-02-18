@@ -7,13 +7,36 @@ class SystemRestoreController extends ListingBaseController
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
     }
+
+    public function restore()
+    {
+        $interval = 5;
+        $currTime = date('Y-m-d H:i:s');
+        $manualHitTime = FatApp::getConfig('CONF_MANUAL_RESTORE_HIT', FatUtility::VAR_STRING, $currTime);
+
+        $dateTime = date('Y-m-d H:i:s', strtotime($currTime . ' +' . $interval . ' MIN'));
+
+        if (strtotime($manualHitTime . ' +' . $interval . ' MIN') > strtotime($dateTime)) {
+            FatUtility::dieWithError('Demo url has been restored manually at ' . $manualHitTime . '. Please try after ' . $interval . ' mins.');
+        }
+
+        $record = new Configurations();
+        if (!$record->update(array("CONF_RESTORE_SCHEDULE_TIME" => $dateTime, 'CONF_MANUAL_RESTORE_HIT' => $dateTime))) {
+            Message::addErrorMessage($record->getError());
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        Message::addMessage("Restore Point Updated Successfully!!");
+        FatApp::redirectUser(UrlHelper::generateUrl('home'));
+    }
+
     public function index()
     {
         if (!AdminPrivilege::isAdminSuperAdmin($this->admin_id)) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $settingsObj = new Settings();
-        
+
         $restore_point_frm = $this->getRestorePointForm();
         $post = FatApp::getPostedData();
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($post['submit_restore_point'])) {
@@ -30,13 +53,12 @@ class SystemRestoreController extends ListingBaseController
         $this->set('restore_point_frm', $restore_point_frm);
         $this->_template->render();
     }
-    
+
     public function updateSetting($val)
     {
         $record = new Configurations();
         if (!$record->update(array("CONF_AUTO_RESTORE_ON" => $val))) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         $this->set('msg', 'Setting Updated Successfully!!');
         $this->_template->render(false, false, 'json-success.php');

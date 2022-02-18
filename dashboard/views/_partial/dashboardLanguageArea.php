@@ -1,42 +1,59 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php if (($languages && count($languages) > 1) || ($currencies && count($currencies) > 1)) { ?>
-<li class="divider"></li>
-<li class="menu__item">
-    <div class="menu__item__inner"> <span
-            class="menu-head"><?php echo Labels::getLabel("LBL_Language_&_Currency", $siteLangId); ?></span></div>
-</li>
-<?php if ($languages && count($languages) > 1) { ?>
-<li class="menu__item">
-    <div class="menu__item__inner">
-        <a href="javascript:void(0)" class="accordianheader">
-            <i class="icn "><svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language"></use>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
+
+if ($languages && count($languages) > 1) { ?>
+    <li class="dashboard-menu-item">
+        <button class="dashboard-menu-btn dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-language" aria-expanded="true" aria-controls="collapseOne" title="">
+            <span class="dashboard-menu-icon">
+                <svg class="svg" width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language">
+                    </use>
                 </svg>
-            </i><span class="menu-item__title"><?php echo $languages[$siteLangId]['language_name']; ?></span></a>
-        <ul class="accordianbody">
+            </span>
+            <span class="dashboard-menu-head">
+                <?php echo Labels::getLabel("LBL_LANGUAGE", $siteLangId); ?>
+            </span>
+            <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
+            </i>
+        </button>
+        <ul class="menu-sub menu-sub-accordion collapse" id="nav-language" aria-labelledby="" data-parent="#dashboard-menu">
             <?php foreach ($languages as $langId => $language) { ?>
-            <li <?php echo ($siteLangId==$langId)?'class="is-active"':'';?>><a href="javascript:void(0);"
-                    onClick="setSiteDefaultLang(<?php echo $langId;?>)"> <?php echo $language['language_name']; ?></a>
-            </li>
+                <li class="menu-sub-item">
+                    <a class="menu-sub-link <?php echo ($siteLangId == $langId) ? 'active' : ''; ?>" href="javascript:void(0);" onclick="setSiteDefaultLang(<?php echo $langId; ?>)">
+                        <span class="menu-sub-title">
+                            <?php echo $language['language_name']; ?>
+                        </span>
+                    </a>
+                </li>
             <?php } ?>
         </ul>
-    </div>
-</li>
+    </li>
 <?php }
-    if ($currencies && count($currencies) > 1) { ?>
-<li class="menu__item">
-    <div class="menu__item__inner"><a title="" href="javascript:void(0)" class="accordianheader">
-            <i class="icn "><svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency"></use>
+
+if ($currencies && count($currencies) > 1) { ?>
+    <li class="dashboard-menu-item">
+        <button class="dashboard-menu-btn dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-currency" aria-expanded="true" aria-controls="collapseOne" title="">
+            <span class="dashboard-menu-icon">
+                <svg class="svg" width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency">
+                    </use>
                 </svg>
-            </i><span class="menu-item__title"> <?php echo Labels::getLabel('LBL_Currency', $siteLangId);?></span></a>
-        <ul class="accordianbody">
+            </span>
+            <span class="dashboard-menu-head">
+                <?php echo Labels::getLabel("LBL_CURRENCY", $siteLangId); ?>
+            </span>
+            <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
+            </i>
+        </button>
+        <ul class="menu-sub menu-sub-accordion collapse" id="nav-currency" aria-labelledby="" data-parent="#dashboard-menu">
             <?php foreach ($currencies as $currencyId => $currency) { ?>
-            <li <?php echo ($siteCurrencyId == $currencyId)?'class="is-active"':'';?>><a href="javascript:void(0);"
-                    onClick="setSiteDefaultCurrency(<?php echo $currencyId;?>)"> <?php echo $currency; ?></a></li>
+                <li class="menu-sub-item">
+                    <a class="menu-sub-link <?php echo ($siteCurrencyId == $currencyId) ? 'active' : ''; ?>" href="javascript:void(0);" onclick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)">
+                        <span class="menu-sub-title">
+                            <?php echo $currency; ?>
+                        </span>
+                    </a>
+                </li>
             <?php } ?>
         </ul>
-    </div>
-</li>
-<?php } ?>
+    </li>
 <?php } ?>

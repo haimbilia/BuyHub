@@ -8,7 +8,7 @@ class ContentPagesController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewContentPages();       
+        $this->objPrivilege->canViewContentPages();
     }
 
     public function index()
@@ -23,7 +23,22 @@ class ContentPagesController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
-       
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon',
+                    'onclick' => "pagesLayouts()",
+                    'title' => Labels::getLabel('LBL_LAYOUTS_INSTRUCTIONS', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start " width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_LAYOUTS', $this->siteLangId) . '</span>',
+            ]
+        ];
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -33,7 +48,7 @@ class ContentPagesController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'content-pages/page-js/index.js']);
         $this->set('includeEditor', true);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -52,7 +67,7 @@ class ContentPagesController extends ListingBaseController
             $this->objPrivilege->canEditContentPages();
         }
     }
-     /**
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -63,7 +78,7 @@ class ContentPagesController extends ListingBaseController
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [
-            $this->modelObj::tblFld('title'), 
+            $this->modelObj::tblFld('title'),
             $this->modelObj::tblFld('image_title'),
             $this->modelObj::tblFld('image_content'),
         ];
@@ -100,27 +115,20 @@ class ContentPagesController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = ContentPage::getSearchObject($this->siteLangId);
-
-        if (!empty($post['keyword'])) {
+        $srch = ContentPage::getSearchObject($this->siteLangId); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('cpage_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('cpage_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->addOrder($sortBy, $sortOrder); 
-        $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -142,7 +150,7 @@ class ContentPagesController extends ListingBaseController
 
         if (0 < $recordId) {
             $arrayFlds = array(
-                'cpage_id', 'cpage_identifier', 'cpage_content','cpage_title', 'cpage_layout', 
+                'cpage_id', 'cpage_identifier', 'cpage_content', 'cpage_title', 'cpage_layout',
                 'cpage_image_content', 'cpage_image_title'
             );
             $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, true);
@@ -165,11 +173,13 @@ class ContentPagesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
-    public function setup() {
+    public function setup()
+    {
 
         $this->checkEditPrivilege();
 
@@ -203,17 +213,14 @@ class ContentPagesController extends ListingBaseController
         /* ] */
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList();
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!ContentPage::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $contentPage->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -227,7 +234,7 @@ class ContentPagesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
 
-        $frm = new Form('frmCMSPage', [ 'id' => 'frmCMSPage']);
+        $frm = new Form('frmCMSPage', ['id' => 'frmCMSPage']);
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_id', 0);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
@@ -248,7 +255,7 @@ class ContentPagesController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $langId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $langId) );
+            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $langId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $langId));
             $frm->addHTML('', 'cpage_bg_image', '');
             $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
             $frm->addHiddenField('', 'min_width', 1300);
@@ -269,19 +276,19 @@ class ContentPagesController extends ListingBaseController
 
         return $frm;
     }
-    
+
     public function langForm($autoFillLangData = 0)
     {
         $this->mainTableRecordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        
+
         if (1 > $this->mainTableRecordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $cpage_layout = ContentPage::getAttributesByLangId($langId, $recordId, 'cpage_layout', TRUE);
 
-        $this->setLangTemplateData();     
+        $this->setLangTemplateData();
         $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
@@ -299,12 +306,12 @@ class ContentPagesController extends ListingBaseController
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $srch->addMultipleFields(array("cpblocklang_text", 'cpblocklang_block_id'));
-            $srch->addCondition('cpblocklang_cpage_id', '=', $recordId);
+            $srch->addCondition('cpblocklang_cpage_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
             if (0 < $autoFillLangData) {
                 $srch->addCondition('cpblocklang_lang_id', '=', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
             } else {
-                $srch->addCondition('cpblocklang_lang_id', '=', $langId);
+                $srch->addCondition('cpblocklang_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             }
 
             $srchRs = $srch->getResultSet();
@@ -328,7 +335,7 @@ class ContentPagesController extends ListingBaseController
                 $langFrm->removeField($langFrm->getField('plugin_description'));
             }
         }
-        
+
         $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -344,9 +351,10 @@ class ContentPagesController extends ListingBaseController
         }
         $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function languageSetup()
     {
         $this->checkEditPrivilege();
@@ -411,15 +419,15 @@ class ContentPagesController extends ListingBaseController
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $lang_id));
-        $this->set('pageId', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('cpage_layout', $cpage_layout);
         $this->_template->render(false, false, 'json-success.php');
     }
 
 
-    
-   
+
+
     /**
      * Undocumented function
      *
@@ -428,27 +436,24 @@ class ContentPagesController extends ListingBaseController
      * @param integer $lang_id
      * @return void
      */
-    public function images($recordId, $file_type = 'THUMB', $lang_id = 0)
+    public function images($recordId, $lang_id = 0)
     {
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (count($languages) > 1) {
-            $universalImage = true;
             $lang_id = FatUtility::int($lang_id);
         } else {
-            $universalImage = false;
             $lang_id = array_key_first($languages);
         }
-        $lang_id = $lang_id == 0 ?  $this->siteLangId : $lang_id;
 
-        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id, $universalImage);
+        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id, false);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cpageBackgroundImage');
-        $this->set('file_type', $file_type);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
-        
-        $this->_template->render(false, false);
+
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -458,7 +463,7 @@ class ContentPagesController extends ListingBaseController
      *
      * @return void
      */
-    public function uploadMedia() 
+    public function uploadMedia()
     {
         $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
@@ -501,14 +506,16 @@ class ContentPagesController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] .' '. Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
 
-    public function removeMedia($recordId, $afileId = 0) {
+    public function removeMedia($recordId, $afileId)
+    {
         $recordId = FatUtility::int($recordId);
-        if (!$recordId) {
+        $afileId = FatUtility::int($afileId);
+        if (!$recordId || !$afileId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fileHandlerObj = new AttachedFile();
@@ -518,9 +525,8 @@ class ContentPagesController extends ListingBaseController
 
         $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-
     }
-    
+
     /**
      * Undocumented function
      *
@@ -564,7 +570,7 @@ class ContentPagesController extends ListingBaseController
         $srch = ContentPage::getSearchObject($this->siteLangId);
 
         $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('cpage_title', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
@@ -576,8 +582,8 @@ class ContentPagesController extends ListingBaseController
         $json = array();
         foreach ($products as $key => $product) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($product['cpage_name'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($product['cpage_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
@@ -592,6 +598,12 @@ class ContentPagesController extends ListingBaseController
         return $collectionLayouts;
     }
 
+    public function layouts()
+    {
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     /**
      * Undocumented function
      *
@@ -601,7 +613,7 @@ class ContentPagesController extends ListingBaseController
     {
         $ContentPageTblHeadingCols = CacheHelper::get('ContentPageTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ContentPageTblHeadingCols) {
-            return json_decode($ContentPageTblHeadingCols);
+            return json_decode($ContentPageTblHeadingCols, true);
         }
 
         $arr = [

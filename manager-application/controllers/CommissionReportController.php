@@ -88,7 +88,8 @@ class CommissionReportController extends ListingBaseController
             $this->set('page', $page);
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
     
@@ -97,19 +98,19 @@ class CommissionReportController extends ListingBaseController
         $this->search('export');
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmCommissionReportSearch');
         $frm->addHiddenField('', 'page', 1);
         
-        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'shop_name');
+        $frm->addTextBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'shop_name');
         $frm->addHiddenField('', 'op_shop_id', 0);
         
-        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->siteLangId), 'user_name');
+        $frm->addTextBox(Labels::getLabel('FRM_SHOP_OWNER', $this->siteLangId), 'user_name');
         $frm->addHiddenField('', 'op_selprod_user_id', 0);
         
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

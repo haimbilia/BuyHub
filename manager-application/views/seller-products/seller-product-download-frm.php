@@ -2,7 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'frmDownload');
 
 $frm->setFormTagAttribute('onsubmit', 'return(false);');
@@ -23,7 +23,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         ?>
         </form>
         <?php echo $frm->getExternalJS(); ?>
-        <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>'
+        <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>
     </div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 

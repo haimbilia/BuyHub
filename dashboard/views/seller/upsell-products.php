@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+
     <div class="content-wrapper content-space">
         <?php 
         $data = [
@@ -10,7 +10,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <?php if ($canEdit) { ?>
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-search">
                             <div class="card-body">
@@ -78,4 +78,3 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>

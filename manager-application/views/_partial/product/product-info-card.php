@@ -18,7 +18,9 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>
     <div class="product-profile__data">
-        <div class="title"><?php echo CommonHelper::subStringByWords($productTitle, 35); ?></div>
+        <div class="title" title="<?php echo $productTitle; ?>" data-bs-toggle='tooltip' data-bs-placement='top'>
+            <?php echo CommonHelper::subStringByWords($productTitle, 35); ?>
+        </div>
 
         <?php if ($canViewProducts || $displayProductName) {
             if ($canViewProducts == true) { ?>
@@ -31,7 +33,7 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         } ?>
         <?php if (true == $displayOptions) {
             $options = isset($options) ? $options : SellerProduct::getSellerProductOptions($product['selprod_id'], true, $siteLangId);
-            if (0 < count($options) || isset($sellerName)) { ?>
+            if (0 < count($options) || isset($sellerName) || isset($shopName)) { ?>
                 <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                     <?php foreach ($options as $option) { ?>
                         <li class="">
@@ -45,6 +47,13 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
                         <li class="">
                             <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
                             <span class="value"><?php echo $sellerName; ?></span>
+                        </li>
+                    <?php }
+                    if (isset($shopName)) {
+                    ?>
+                        <li class="seller-info">
+                            <span class="label"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>:</span>
+                            <span class="value"><?php echo $shopName; ?></span>
                         </li>
                     <?php } ?>
                 </ul>

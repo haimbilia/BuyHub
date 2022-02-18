@@ -111,25 +111,17 @@ class DeletedUsersController extends ListingBaseController
         if (!empty($user_regdate_to)) {
             $srch->addCondition('user_regdate', '<=', $user_regdate_to . ' 23:59:59');
         }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
 
         $srch->addMultipleFields(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on'));
-
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -169,9 +161,9 @@ class DeletedUsersController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'user_id', []);
 
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('placeholder' => Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('placeholder' => Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -181,18 +173,14 @@ class DeletedUsersController extends ListingBaseController
     {
         $deletedUsersTblHeadingCols = CacheHelper::get('deletedUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($deletedUsersTblHeadingCols) {
-            return json_decode($deletedUsersTblHeadingCols);
+            return json_decode($deletedUsersTblHeadingCols, true);
         }
 
         $arr = [
             'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
-            'user_is_buyer' => Labels::getLabel('LBL_Buyer', $this->siteLangId),
-            'user_is_supplier' => Labels::getLabel('LBL_Seller', $this->siteLangId),
-            'user_is_advertiser' => Labels::getLabel('LBL_Advertiser', $this->siteLangId),
-            'user_is_affiliate' => Labels::getLabel('LBL_Affiliate', $this->siteLangId),
+            'user_type' => Labels::getLabel('LBL_USER_TYPE', $this->siteLangId),
             'user_regdate' => Labels::getLabel('LBL_Reg._Date', $this->siteLangId),
-            'credential_verified' => Labels::getLabel('LBL_verified', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
@@ -205,12 +193,8 @@ class DeletedUsersController extends ListingBaseController
         return [
             'user_id',
             'user_name',
-            'user_is_buyer',
-            'user_is_supplier',
-            'user_is_advertiser',
-            'user_is_affiliate',
+            'user_type',
             'user_regdate',
-            'credential_verified',
             'action',
         ];
     }

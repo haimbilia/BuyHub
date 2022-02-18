@@ -12,10 +12,8 @@ $(document).ready(function () {
 
 (function () {
     addBankInfoForm = function (id) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'bankInfoForm', [id]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bankInfoForm', [id]), '', function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
 
@@ -30,10 +28,8 @@ $(document).ready(function () {
     };
 
     changeUserPassword = function (id) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'changePasswordForm', [id]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t, true);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changePasswordForm', [id]), '', function (t) {
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
@@ -49,10 +45,8 @@ $(document).ready(function () {
     };
 
     sendMailToUser = function (id) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'sendMailForm', [id]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t, true);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'sendMailForm', [id]), '', function (t) {
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
@@ -68,10 +62,8 @@ $(document).ready(function () {
     };
 
     displayCookiesPerferences = function (id) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'cookiesPreferencesForm', [id]), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'cookiesPreferencesForm', [id]), '', function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };

@@ -93,28 +93,20 @@ class ShopReportReasonsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = ShopReportReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
-
-        if (!empty($post['keyword'])) {
+        $srch = ShopReportReason::getSearchObject($this->siteLangId); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('reportreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('reportreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -144,7 +136,8 @@ class ShopReportReasonsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -170,7 +163,11 @@ class ShopReportReasonsController extends ListingBaseController
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
@@ -183,12 +180,12 @@ class ShopReportReasonsController extends ListingBaseController
         $frm = new Form('frmShopReportReason');
         $frm->addHiddenField('', 'reportreason_id');
         /*$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'reportreason_identifier');*/
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'reportreason_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $this->siteLangId), 'reportreason_title');
         $languageArr = Language::getDropDownList();
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -199,8 +196,8 @@ class ShopReportReasonsController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmShopReportReasonLang');
         $frm->addHiddenField('', 'reportreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $langId), 'reportreason_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $langId), 'reportreason_title');
         return $frm;
     }
 
@@ -253,7 +250,7 @@ class ShopReportReasonsController extends ListingBaseController
     {
         $shopReportReasonTblHeadingCols = CacheHelper::get('shopReportReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopReportReasonTblHeadingCols) {
-            return json_decode($shopReportReasonTblHeadingCols);
+            return json_decode($shopReportReasonTblHeadingCols, true);
         }
 
         $arr = [

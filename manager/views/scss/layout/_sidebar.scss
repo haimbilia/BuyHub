@@ -10,7 +10,7 @@ $space: 25px;
     top: 0;
     bottom: 0;
     #{$start-direction}: 0;
-    z-index: $zindex-offcanvas;
+    z-index: $zindex-modal-backdrop;
     width: $side-bar-size;
     transition: width 0.3s ease;
     display: flex;
@@ -25,36 +25,70 @@ $space: 25px;
         height: 65px;
         padding: 0 $space;
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        flex-direction: row-reverse;
         .logo {
             align-self: center;
             flex: 1;
         }
     }
     &-toggle {
-        display: none;
-        @include media-breakpoint-up(md) {
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        //margin-#{$end-direction}: 1rem;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-icon {
+            position: relative;
+            height: 0.125rem;
+            width: 1.25rem;
+            transition: $transition-base;
             display: block;
-            border: none;
-            background: none;
-            opacity: 0.5;
-            color: currentColor;
-            transition: transform 0.3s ease-out;
-            &:focus {
-                outline: none;
+            top: -4px;
+            // margin-#{$start-direction}: auto;
+            .toggle-line {
+                display: block;
+                height: 100%;
+                border-radius: 2px;
+                transition: $transition-base;
+                background-color: #fff;
             }
-            &.active {
-                opacity: 1;
-                transform: rotate(180deg);
+
+            &:after,
+            &:before {
+                content: "";
+                position: absolute;
+                height: 0.125rem;
+                background-color: #fff;
+                left: 0;
+                transition: $transition-base;
+                border-radius: 2px;
+            }
+
+            &:before {
+                top: 0.3125rem;
+                width: 50%;
+            }
+
+            &:after {
+                top: 0.625rem;
+                width: 100%;
             }
         }
     }
+
     &-close {
         @include media-breakpoint-up(lg) {
             display: none;
         }
     }
     &-menu {
+        margin-top: 2rem;
         width: $side-bar-size;
         flex: 1;
         overflow: hidden;
@@ -68,6 +102,44 @@ $space: 25px;
     }
     &--on & {
         transform: translateX(0 * $transform-direction);
+    }
+}
+
+@include media-breakpoint-up(md) {
+    [data-sidebar-minimize="on"] {
+        .sidebar {
+            width: $side-bar-size-close;
+            transition: width 0.3s ease;
+            &:not(:hover) {
+                .menu-title {
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                .nav_text {
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+            }
+
+            &-toggle {
+                &-icon {
+                    &:before {
+                        width: 100%;
+                    }
+                }
+            }
+            &-hoverable {
+                &:hover {
+                    &:not(.animating) {
+                        transition: width 0.3s ease;
+                        width: 265px;
+                    }
+                }
+            }
+        }
+        .wrap {
+            padding-#{$start-direction}: $side-bar-size-close;
+        }
     }
 }
 
@@ -150,8 +222,12 @@ $space: 25px;
     .sidebar-dropdown-menu {
         .nav {
             padding: 0;
+
             display: flex;
             flex-direction: column;
+            .nav {
+                margin-#{$start-direction}: 10px;
+            }
             &_item {
                 border: none;
                 font-size: 0.8rem;
@@ -250,9 +326,9 @@ $space: 25px;
                     padding-#{$start-direction}: 45px;
                     &::after {
                         content: "";
-                        width: 6px;
-                        height: 6px;
-                        background: rgba(255, 255, 255, 0.9);
+                        width: 5px;
+                        height: 5px;
+                        background: currentColor;
                         display: block;
                         position: absolute;
                         #{$start-direction}: 28px;
@@ -260,32 +336,6 @@ $space: 25px;
                     }
                 }
             }
-        }
-    }
-}
-
-@include media-breakpoint-up(md) {
-    [data-sidebar-minimize="on"] {
-        .sidebar {
-            width: $side-bar-size-close;
-            transition: width 0.3s ease;
-            &:not(:hover) {
-                .menu-title {
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-                .nav_text {
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-            }
-        }
-        .sidebar-hoverable:hover {
-            transition: width 0.3s ease;
-            width: 265px;
-        }
-        .wrap {
-            padding-#{$start-direction}: $side-bar-size-close;
         }
     }
 }

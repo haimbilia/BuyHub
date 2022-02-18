@@ -213,8 +213,8 @@ class AdminUsersController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = AdminUsers::getSearchObject(false);
-        $srch->addCondition('admin_id', '!=', $this->admin_id);
-        $srch->addCondition('admin_id', '!=', 1);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_' . $this->admin_id, 'AND', true);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_1', 'AND', true);
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
@@ -222,25 +222,16 @@ class AdminUsersController extends ListingBaseController
             $cond->attachCondition('adu.admin_name', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('adu.admin_email', 'like', '%' . $keyword . '%');
         }
-
-        $srch->addMultipleFields(array('*'));
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+         
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);  
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $this->set("arrListing", $records);   
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -268,7 +259,8 @@ class AdminUsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_ADMIN_USER_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -327,7 +319,8 @@ class AdminUsersController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('adminProfile', $data);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()
@@ -394,7 +387,7 @@ class AdminUsersController extends ListingBaseController
         }
 
         if ($recordId != 1) {
-            $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+            $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
             HtmlHelper::configureSwitchForCheckbox($fld);
             $fld->developerTags['noCaptionTag'] = true;
         }
@@ -467,7 +460,7 @@ class AdminUsersController extends ListingBaseController
     {
         $adminUsersTblHeadingCols = CacheHelper::get('adminUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($adminUsersTblHeadingCols) {
-            return json_decode($adminUsersTblHeadingCols);
+            return json_decode($adminUsersTblHeadingCols, true);
         }
 
         $arr = [

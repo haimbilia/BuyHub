@@ -174,7 +174,7 @@ trait ApiOrders
             $excryptedOpId = LibHelper::encrypt($opId);
             $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId], CONF_WEBROOT_FRONT_URL);    
         } else if (!empty($carrierDetail['opship_tracking_url'])) {
-            $shipBy = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_INT, 1);
+            $shipBy = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_INT, 1);
             if (0 < $carrierDetail['opshipping_by_seller_user_id']) {
                 $shop = Shop::getAttributesByUserId($carrierDetail['opshipping_by_seller_user_id'], ['shop_identifier', 'shop_name'], true, $this->langId);
                 $shipBy = empty($shop['shop_name']) ? $shop['shop_name'] : $shop['shop_identifier'];

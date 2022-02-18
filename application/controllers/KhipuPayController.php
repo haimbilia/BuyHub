@@ -32,12 +32,12 @@ class KhipuPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (empty($orderInfo)) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -46,7 +46,7 @@ class KhipuPayController extends PaymentController
         $processRequest = false;
         if (!empty($postOrderId) && $orderId = $postOrderId) {
             $receiver_id = $this->settings['receiver_id'];
-            $subject = Labels::getLabel('MSG_YoKart_Payment', $this->siteLangId);
+            $subject = Labels::getLabel('MSG_YOKART_PAYMENT', $this->siteLangId);
             $body = '';
             $return_url = UrlHelper::generateFullUrl('custom', 'paymentSuccess', array($orderId));
             $notify_url = UrlHelper::generateNoAuthUrl('KhipuPay', 'send');
@@ -140,7 +140,7 @@ class KhipuPayController extends PaymentController
                     $order_actual_paid = ceil($order_payment_amount);
                     $json = array();
                     if (!$response) {
-                        throw new Exception(Labels::getLabel('MSG_EMPTY_GATEWAY_RESPONSE', $this->siteLangId));
+                        throw new Exception(Labels::getLabel('ERR_EMPTY_GATEWAY_RESPONSE', $this->siteLangId));
                     }
                     if ($response->getReceiverId() == $this->settings['receiver_id']) {
                         if (strtolower($response->getStatus()) == 'done') {
@@ -160,7 +160,7 @@ class KhipuPayController extends PaymentController
                         $orderPaymentObj->addOrderPaymentComments($request);
                     }
                 } else {
-                    $json['error'] = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
+                    $json['error'] = Labels::getLabel('ERR_Invalid_Request', $this->siteLangId);
                 }
             } else {
                 // Use previous version of Notification API
@@ -182,11 +182,11 @@ class KhipuPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('KhipuPay', 'charge', array($orderId)) : $this->initiatePayment->getPaymentUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('KhipuPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->initiatePayment->getPaymentUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         return $frm;
     }

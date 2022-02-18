@@ -12,7 +12,7 @@ $email->setFieldTagAttribute('class', 'emailAddressJs');
 $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId));
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main">
+
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -150,7 +150,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             </div>
         </div>
     </div>
-</main>
+
 <script type="text/javascript">
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];

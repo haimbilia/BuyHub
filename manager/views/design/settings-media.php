@@ -64,15 +64,15 @@
             </div>
             <main class="main">
                 <div class="container">
-                    <div class="row grid-layout">
-                        <div class="col-lg-4">
+                    <div class="grid-layout">
+                        <div class="grid-layout-left">
                             <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
                                     </use>
                                 </svg>
                             </button>
-                            <div class="card offcanvas sticky-sidebar sticky-top  card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
+                            <div class="card offcanvas sticky-sidebar sticky-top card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
                                 <div class="card-head">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">
@@ -296,7 +296,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8">
+                        <div class="grid-layout-right">
                             <div class="card">
                                 <div class="card-head">
                                     <div class="card-head-label">

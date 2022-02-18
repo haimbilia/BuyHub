@@ -98,9 +98,6 @@ trait OrdersPackage
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->siteLangId);
         $srch->addCondition('order_type', '=', $this->ordersType);
-
-        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
-
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $srch->addKeywordSearch($keyword);
@@ -136,22 +133,26 @@ trait OrdersPackage
             $srch->addMaxPriceCondition($priceTo);
         }
 
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);    
+        if (0 < $recordId) {
+            $srch->addCondition('order_id', '=', $recordId);
+        }
+
         $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
         $srch->addCondition('order_deleted', '=', $isDeleted);
         $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -169,7 +170,12 @@ trait OrdersPackage
         $this->initVariables();
 
         $this->orderData($orderId);
-        $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        if ($this->ordersType == Orders::ORDER_SUBSCRIPTION) {
+            $str = Labels::getLabel('LBL_SUBSCRIPTION_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        } else {
+            $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        }
+
         $pageData = PageLanguageData::getAttributesByKey($this->viewPageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' =>  $this->order['order_number']]);
         $this->set('pageTitle', $pageTitle);
@@ -179,23 +185,26 @@ trait OrdersPackage
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
+        $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render();
     }
 
     public function getItem($orderId)
     {
         $this->orderData($orderId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getPaymentForm($orderId = '')
     {
         $frm = new Form('frmPayment');
         $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('FRM_Payment_Method', $this->siteLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('FRM_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_PAYMENT_METHOD', $this->siteLangId), 'opayment_method');
+        $frm->addRequiredField(Labels::getLabel('FRM_TXN_ID', $this->siteLangId), 'opayment_gateway_txn_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
         return $frm;
     }
 
@@ -220,17 +229,17 @@ trait OrdersPackage
 
         $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_STATUS', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         $str = Labels::getLabel('FRM_ORDER_FROM_[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => $str));
 
         $str = Labels::getLabel('FRM_ORDER_TO[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
-
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -252,7 +261,7 @@ trait OrdersPackage
         $this->objPrivilege->canEditOrders();
         $orderIdsArr = FatUtility::int(FatApp::getPostedData('order_ids'));
         if (empty($orderIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($orderIdsArr as $orderId) {
@@ -329,8 +338,15 @@ trait OrdersPackage
     {
         switch ($action) {
             case 'view':
+                $lbl = Labels::getLabel('LBL_ORDER', $this->siteLangId);
+                $pageUrl = UrlHelper::generateUrl('Orders');
+                if ($this->ordersType == Orders::ORDER_SUBSCRIPTION) {
+                    $lbl = Labels::getLabel('LBL_SUBSCRIPTION_ORDER', $this->siteLangId);
+                    $pageUrl = UrlHelper::generateUrl('SubscriptionOrders');
+                }
+                $lbl = $this->ordersType == Orders::ORDER_SUBSCRIPTION ? Labels::getLabel('LBL_SUBSCRIPTION_ORDER', $this->siteLangId) : Labels::getLabel('LBL_ORDER', $this->siteLangId);
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_ORDERS', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? $lbl;
 
                 $url = FatApp::getQueryStringData('url');
                 $urlParts = explode('/', $url);
@@ -340,7 +356,7 @@ trait OrdersPackage
                 }
 
                 $this->nodes = [
-                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('Orders')],
+                    ['title' => $pageTitle, 'href' => $pageUrl],
                     ['title' => $title]
                 ];
                 break;

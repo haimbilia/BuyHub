@@ -52,7 +52,7 @@ class DpoPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -121,18 +121,18 @@ class DpoPayController extends PaymentController
 
         $this->orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         if ($response['PnrID'] != $response['CompanyRef'] || $orderId != $response['CompanyRef']) {
-            $msg = Labels::getLabel('LBL_INVALID_PAYMENT.', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_PAYMENT.', $this->siteLangId);
             $this->paymentFailedAndRedirect($orderId, $msg, $response);
         }
 
         $orderInfo = $this->orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->paymentFailedAndRedirect($orderId, $msg, $response);
         }
 
         if (false === $this->plugin->validateResponse($response)) {
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED._{MSG}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED._{MSG}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{MSG}' => $this->plugin->getError()]);
             $this->paymentFailedAndRedirect($orderId, $msg, $response);
         }
@@ -145,12 +145,12 @@ class DpoPayController extends PaymentController
         ];
 
         if ($paymentAmount != $queryResponse->TransactionFinalAmount || $this->systemCurrencyCode != $queryResponse->TransactionFinalCurrency) {
-            $msg = Labels::getLabel('LBL_PAYMENT_MISMATCHED.', $this->langId);
+            $msg = Labels::getLabel('ERR_PAYMENT_MISMATCHED.', $this->langId);
             $this->paymentFailedAndRedirect($orderId, $msg, $logResponse);
         }
 
         /* Recording Payment in DB */
-        $this->orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['TransID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($logResponse));
+        $this->orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['TransID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($logResponse));
         /* End Recording Payment in DB */
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
@@ -164,12 +164,12 @@ class DpoPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId)) : $this->plugin->getPaymenUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->plugin->getPaymenUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
 
         return $frm;

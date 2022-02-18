@@ -65,7 +65,7 @@ class ImportInstructionsController extends ListingBaseController
             'ep_l.*'
         ]);
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ep.epage_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ep_l.epage_label', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -108,8 +108,7 @@ class ImportInstructionsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -125,7 +124,8 @@ class ImportInstructionsController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -142,14 +142,12 @@ class ImportInstructionsController extends ListingBaseController
 
 
         if ($recordId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJSONError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         unset($post['epage_id']);
@@ -163,16 +161,14 @@ class ImportInstructionsController extends ListingBaseController
 
         $epageObj = new Extrapage($recordId);
         if (!$epageObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($epageObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($epageObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -198,21 +194,21 @@ class ImportInstructionsController extends ListingBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
         } else {
             $langId = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $langId), 'epage_label');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECTION_TITLE', $langId), 'epage_label');
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $langId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_SECTION_CONTENT', $langId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -222,7 +218,7 @@ class ImportInstructionsController extends ListingBaseController
     {
         $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($importInstructionsTblHeadingCols) {
-            return json_decode($importInstructionsTblHeadingCols);
+            return json_decode($importInstructionsTblHeadingCols, true);
         }
 
         $arr = [

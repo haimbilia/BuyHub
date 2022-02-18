@@ -50,7 +50,7 @@ class OrderSubscriptionSearch extends SearchBase
     public function joinOrders()
     {
         if ($this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_Orders_Table_is_already_joined', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDERS_TABLE_IS_ALREADY_JOINED', $this->commonLangId), E_USER_ERROR);
         }
         $this->isOrdersTableJoined = true;
         $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'order_id', 'o');
@@ -72,7 +72,7 @@ class OrderSubscriptionSearch extends SearchBase
             $langId = $this->langId;
         }
         if ($this->isOrderSubscriptionStatusJoined) {
-            trigger_error(Labels::getLabel('MSG_OrderProduct_Status_is_already_joined', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDERPRODUCT_STATUS_IS_ALREADY_JOINED', $this->commonLangId), E_USER_ERROR);
         }
         $this->isOrderSubscriptionStatusJoined = true;
         $this->joinTable(Orders::DB_TBL_ORDERS_STATUS, 'LEFT OUTER JOIN', 'os.orderstatus_id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'status_id', 'os');
@@ -84,7 +84,7 @@ class OrderSubscriptionSearch extends SearchBase
     public function joinOrderUser()
     {
         if (!$this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_joinOrderUser_can_be_joined_only,_if_joinOrders_is_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_join_joinOrderUser', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERUSER_CAN_BE_JOINED_ONLY,_IF_JOINORDERS_IS_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_JOIN_JOINORDERUSER', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(User::DB_TBL, 'INNER JOIN', 'ou.user_id = o.order_user_id', 'ou');
         $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'ou.user_id = ouc.credential_user_id', 'ouc');
@@ -135,7 +135,7 @@ class OrderSubscriptionSearch extends SearchBase
     }
     public function addKeywordSearch($keyword)
     {
-        $cnd = $this->addCondition('oss.ossubs_order_id', 'like', '%' . $keyword . '%');
+        $cnd = $this->addCondition('o.order_number', 'like', '%' . $keyword . '%');
         $cnd->attachCondition('oss.ossubs_invoice_number', 'like', '%' . $keyword . '%', 'OR');
         if ($this->isOrderUserTableJoined) {
             $cnd->attachCondition('ou.user_name', 'like', '%' . $keyword . '%', 'OR');
@@ -152,7 +152,7 @@ class OrderSubscriptionSearch extends SearchBase
         $dateFrom = date('Y-m-d', strtotime($dateFrom));
 
         if (!$this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_Order_Date_Condition_cannot_be_applied,_as_Orders_Table_is_not_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_add_Order_date_from_condition', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_DATE_CONDITION_CANNOT_BE_APPLIED,_AS_ORDERS_TABLE_IS_NOT_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_ADD_ORDER_DATE_FROM_CONDITION', $this->commonLangId), E_USER_ERROR);
         }
         if ($dateFrom != '') {
             $this->addCondition('o.order_date_added', '>=', $dateFrom . ' 00:00:00');
@@ -165,7 +165,7 @@ class OrderSubscriptionSearch extends SearchBase
         $dateTo = date('Y-m-d', strtotime($dateTo));
 
         if (!$this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_Order_Date_Condition_cannot_be_applied,_as_Orders_Table_is_not_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_add_Order_date_to_condition', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_DATE_CONDITION_CANNOT_BE_APPLIED,_AS_ORDERS_TABLE_IS_NOT_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_ADD_ORDER_DATE_TO_CONDITION', $this->commonLangId), E_USER_ERROR);
         }
         if ($dateTo != '') {
             $this->addCondition('o.order_date_added', '<=', $dateTo . ' 23:59:59');
@@ -174,7 +174,7 @@ class OrderSubscriptionSearch extends SearchBase
     public function addMinPriceCondition($priceFrom)
     {
         if (!$this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_Order_Price_Condition_cannot_be_applied,_as_Orders_Table_is_not_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_add_Order_Price_condition', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_PRICE_CONDITION_CANNOT_BE_APPLIED,_AS_ORDERS_TABLE_IS_NOT_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_ADD_ORDER_PRICE_CONDITION', $this->commonLangId), E_USER_ERROR);
         }
         $this->addCondition('o.order_net_amount', '>=', $priceFrom);
     }
@@ -182,7 +182,7 @@ class OrderSubscriptionSearch extends SearchBase
     public function addMaxPriceCondition($priceTo)
     {
         if (!$this->isOrdersTableJoined) {
-            trigger_error(Labels::getLabel('MSG_Order_Price_Condition_cannot_be_applied,_as_Orders_Table_is_not_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_add_Order_Price_condition', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_PRICE_CONDITION_CANNOT_BE_APPLIED,_AS_ORDERS_TABLE_IS_NOT_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_ADD_ORDER_PRICE_CONDITION', $this->commonLangId), E_USER_ERROR);
         }
         $this->addCondition('o.order_net_amount', '<=', $priceTo);
     }

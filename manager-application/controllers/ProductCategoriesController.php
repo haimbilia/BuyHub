@@ -1,5 +1,4 @@
 <?php
-
 class ProductCategoriesController extends ListingBaseController
 {
     protected $modelClass = 'ProductCategory';
@@ -49,24 +48,14 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
 
-        $srch = new ProductCategorySearch(0, false, false, false, -1);
-        $this->set("recordCount", FatApp::getDb()->totalRecords($srch->getResultSet()));
+        $prodCat = new ProductCategory();
+        $records = (array) $prodCat->getCategories(true, true);
+        $this->set("arrListing", $records);
 
-        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js','product-categories/page-js/add-media.js'));
         $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
 
         $this->_template->render();
-    }
-
-    public function search()
-    {
-        $prodCat = new ProductCategory();
-        $records = (array) $prodCat->getCategories(true, true);
-
-        $this->set("arrListing", $records);
-        $this->set("recordCount", count($records));
-        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
-        $this->_template->render(false, false);
     }
 
     public function getSubCategories()
@@ -80,7 +69,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set("childCategories", $childCategories);
         $this->set("level", $level);
         $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateOrder()
@@ -138,6 +128,19 @@ class ProductCategoriesController extends ListingBaseController
                 $ratingTypes[$key]['value'] = $types['ratingtype_name'];
             }
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
+
+            /* url data[ */
+            $urlSrch = UrlRewrite::getSearchObject();
+            $urlSrch->doNotCalculateRecords();
+            $urlSrch->setPageSize(1);
+            $urlSrch->addFld('urlrewrite_custom');
+            $urlSrch->addCondition('urlrewrite_original', '=', 'category/view/' . $recordId);
+            $urlRow = FatApp::getDb()->fetch($urlSrch->getResultSet());
+            if ($urlRow) {
+                $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+            }
+            /* ] */
+
             $data = array_merge($data, $catNameArr, $ratingTypes);
         }
         $frm->fill($data);
@@ -148,7 +151,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function imagesForm($recordId)
@@ -157,7 +161,7 @@ class ProductCategoriesController extends ListingBaseController
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!ProductCategory::getAttributesById($recordId)) {
@@ -170,7 +174,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languageCount', count($languages));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCategoryForm($recordId = 0, $productReq = 0)
@@ -179,15 +184,18 @@ class ProductCategoriesController extends ListingBaseController
 
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'prodcat_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        $fld->requirements()->setRequired();
 
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
         $categories =  array(0 => Labels::getLabel('FRM_ROOT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
         $frm->addTextBox(Labels::getLabel('FRM_RATING_TYPES', $this->siteLangId), 'rating_type');
-        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', 1, array(), true, 0);
 
         if (0 < $productReq) {
             $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'prodcat_status', 1, array(), false, 0);
@@ -196,7 +204,7 @@ class ProductCategoriesController extends ListingBaseController
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
@@ -280,6 +288,15 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         $recordId = FatUtility::int($post['prodcat_id']);
+
+        $oldParentCatId = ProductCategory::getAttributesById($recordId, 'prodcat_parent');
+        if (0 < $recordId && false === $oldParentCatId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $newParentCatId = FatUtility::int($post['prodcat_parent']);
+        $newRecord = (1 > $recordId || $newParentCatId != $oldParentCatId);
+
         $prodCatStatus = FatApp::getPostedData('prodcat_status', FatUtility::VAR_INT, 0);
         $post['prodcat_status'] = 0 < $prodCatReq ? $prodCatStatus : ProductCategory::REQUEST_APPROVED;
 
@@ -287,28 +304,36 @@ class ProductCategoriesController extends ListingBaseController
         if (!$productCategory->saveCategoryData($post)) {
             LibHelper::exitWithError($productCategory->getError(), true);
         }
+        $recordId = $productCategory->getMainTableRecordId();
 
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                if (!ProductCategory::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         }
 
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($productCategory->getMainTableRecordId())) {
+        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
         }
 
         FatApp::getDb()->query('CALL updateCategoryRelations(0)');
 
+        $updateRecordId = ($newRecord ? (1 > $newParentCatId ? $recordId : $newParentCatId) : $recordId);
+        $prodCat = new ProductCategory($updateRecordId);
+        $row = (array) $prodCat->getData(true, true);
+        $this->set("row", $row);
+        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
+
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $productCategory->getMainTableRecordId());
+        $this->set('listingHtml', $this->_template->render(false, false, 'product-categories/search.php', true));
         $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function isMediaUploaded($recordId)
@@ -366,7 +391,9 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());
         $this->set('canEdit', $canEdit);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+
     }
 
     public function setUpCatImages()
@@ -509,19 +536,29 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         $prodCateObj = new ProductCategory($prodcat_id);
+        $childCats = $prodCateObj->getChildrens();
+        if (1 < count($childCats)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.'), true);
+        }
+
         if (!$prodCateObj->canRecordMarkDelete($prodcat_id)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         /* Sub-Categories have products[ */
         if (true === $prodCateObj->haveProducts()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->siteLangId), true);
         }
         /* ] */
 
-        $prodCateObj->assignValues(array(ProductCategory::tblFld('deleted') => 1));
+        $prodCateObj->assignValues(
+            [
+                ProductCategory::tblFld('deleted') => 1,
+                ProductCategory::tblFld('identifier') => 'mysql_func_CONCAT(' . ProductCategory::tblFld('identifier') . ',"{deleted}",' . ProductCategory::tblFld('id') . ')'
+            ], false, '', '', true 
+        );
         if (!$prodCateObj->save()) {
-            FatUtility::dieJsonError($prodCateObj->getError());
+            LibHelper::exitWithError($prodCateObj->getError(), true);
         }
 
         Product::updateMinPrices();
@@ -538,7 +575,9 @@ class ProductCategoriesController extends ListingBaseController
 
         $prodCateObj = new ProductCategory();
         $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 20, $langId, $excludeRecords);
-        $json = array();
+        $json = array(
+            'results' => []
+        );
         foreach ($categories as $key => $val) {
             $json['results'][] = array(
                 'id' => $key,
@@ -611,7 +650,7 @@ class ProductCategoriesController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->addOrder('prodcat_requested_on', 'desc');
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -636,7 +675,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getParentIds(int $catId)
@@ -693,6 +733,7 @@ class ProductCategoriesController extends ListingBaseController
             $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
+        $srch->addCondition('ratingtype_id', 'NOT IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $srch->addCondition('ratingtype_active', '=', applicationConstants::YES);
         $rs = $srch->getResultSet();
         $options = FatApp::getDb()->fetchAll($rs, 'ratingtype_id');

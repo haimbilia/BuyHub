@@ -1,9 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
 ?>
-
-
-
 <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
     <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
 <?php } ?>
@@ -18,6 +15,7 @@ $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video
                         <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
                         </span>
                     </li>
+
                 <?php } ?>
             </ul>
         </div>

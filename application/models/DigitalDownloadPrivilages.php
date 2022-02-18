@@ -35,7 +35,7 @@ class DigitalDownloadPrivilages extends FatModel
                 return false;
             }
 
-            $this->product = json_decode($this->productRequest['preq_content'], true);
+            $this->product = $this->productRequest + json_decode($this->productRequest['preq_content'], true);
             
             if (!is_array($this->product) || 1 > count($this->product)) {
                 $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
@@ -96,6 +96,8 @@ class DigitalDownloadPrivilages extends FatModel
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventory */
                 $recordOwnerId = $this->sellerProduct['selprod_user_id'];
+            }elseif(Product::CATALOG_TYPE_REQUEST == $recordType){
+                $recordOwnerId = $this->product['preq_user_id'];
             } else { /* Catalog product */
                 $recordOwnerId = $this->product['product_seller_id'];
             }
@@ -223,7 +225,7 @@ class DigitalDownloadPrivilages extends FatModel
             case Product::CATALOG_TYPE_PRIMARY:
                 $this->getProduct($recordId);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
                 
@@ -242,7 +244,7 @@ class DigitalDownloadPrivilages extends FatModel
                     || ProductRequest::STATUS_APPROVED == $this->productRequest['preq_status']
                     || applicationConstants::YES == $this->productRequest['preq_deleted']
                 ) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
 
@@ -256,7 +258,7 @@ class DigitalDownloadPrivilages extends FatModel
                 $this->getSellerProduct($recordId);
 
                 if (1 > count($this->sellerProduct)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
 
@@ -267,7 +269,7 @@ class DigitalDownloadPrivilages extends FatModel
 
                 $this->getProduct($this->sellerProduct['selprod_product_id']);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;
                 }
                 
@@ -281,7 +283,7 @@ class DigitalDownloadPrivilages extends FatModel
                 return true;
                 break;
             default:
-                $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
+                $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                 return false;
                 break;
         }

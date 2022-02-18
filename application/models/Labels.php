@@ -39,8 +39,8 @@ class Labels extends MyAppModel
     public static function getTypeArr($langId)
     {
         return array(
-            static::TYPE_WEB => self::getLabel('LBL_Web', $langId),
-            static::TYPE_APP => self::getLabel('LBL_App', $langId)
+            static::TYPE_WEB => self::getLabel('LBL_WEB', $langId),
+            static::TYPE_APP => self::getLabel('LBL_APP', $langId)
         );
     }
 
@@ -116,7 +116,7 @@ class Labels extends MyAppModel
         $srch->addMultipleFields($attr);
 
         if ($langId > 0) {
-            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .$langId, 'AND', true);
         }
         return $srch;
     }

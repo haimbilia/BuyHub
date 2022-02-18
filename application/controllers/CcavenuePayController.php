@@ -69,7 +69,7 @@ class CcavenuePayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!$orderInfo['id']) {
-            $this->setErrorAndRedirect(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), FatUtility::isAjaxCall());
         }
         $working_key = $this->settings['working_key'];
         $access_code = $this->settings['access_code'];
@@ -126,7 +126,7 @@ class CcavenuePayController extends PaymentController
                 $request .= "\n\n CCAvenue :: TOTAL PAID MISMATCH! " . strtolower($paid_amount) . "\n\n";
             }
             if ($order_status == "Success" && $total_paid_match) {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($post));
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             } else {              
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
@@ -142,13 +142,13 @@ class CcavenuePayController extends PaymentController
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'iframe', array($orderId));
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'iframe', array($orderId));
 
         $frm = new Form('frm-ccavenue', array('id' => 'frm-ccavenue', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             $frm->addHiddenField('', 'tid', "", array("id" => "tid"));
             $frm->addHiddenField('', 'merchant_id', $this->settings["merchant_id"]);

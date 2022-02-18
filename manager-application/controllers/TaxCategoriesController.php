@@ -38,6 +38,7 @@ class TaxCategoriesController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($fields));
         $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -50,6 +51,7 @@ class TaxCategoriesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'taxcat_identifier');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -90,23 +92,20 @@ class TaxCategoriesController extends ListingBaseController
         $srch = Tax::getSearchObject($this->siteLangId, false);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $srch->addCondition('taxcat_plugin_id', '=', Tax::getActivatedServiceId());
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('t_l.taxcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('t.taxcat_code', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addMultipleFields(["t_l.taxcat_name", 't.*']);
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->addOrder($sortBy, $sortOrder);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -142,7 +141,8 @@ class TaxCategoriesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**
@@ -176,7 +176,11 @@ class TaxCategoriesController extends ListingBaseController
         $tax = new Tax($recordId);
         $tax->assignValues($data);
         if (!$tax->save()) {
-            LibHelper::exitWithError($tax->getError(), true);
+            $msg = $tax->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($tax, [$tax::tblFld('name') => $post[$tax::tblFld('name')]]);
         $this->set('msg', $this->str_setup_successful);
@@ -234,9 +238,11 @@ class TaxCategoriesController extends ListingBaseController
                 ->attachCondition('taxcat_code', 'LIKE', '%' . $keyword . '%');
         }
         $srch->setPageSize($pagesize);
+        $srch->setPageNumber($page);
         $taxCategories = FatApp::getDb()->fetchAll($srch->getResultSet(), 'taxcat_id');
         $json = array(
-            'pageCount' => $srch->pages()
+            'pageCount' => $srch->pages(),
+            'results' => [],
         );
         foreach ($taxCategories as $key => $taxCategory) {
             $taxCatName = strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'));
@@ -273,7 +279,7 @@ class TaxCategoriesController extends ListingBaseController
             $frm->addRequiredField(Labels::getLabel('FRM_TAX_CODE', $this->siteLangId), 'taxcat_code');
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'taxcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'taxcat_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -286,13 +292,13 @@ class TaxCategoriesController extends ListingBaseController
     {
         $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxTblHeadingCols) {
-            return json_decode($taxTblHeadingCols);
+            return json_decode($taxTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
+            'taxcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'taxcat_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -306,7 +312,7 @@ class TaxCategoriesController extends ListingBaseController
         return [
             'select_all',
             'listSerial',
-            'taxcat_identifier',
+            'taxcat_name',
             'taxcat_active',
             'action',
         ];

@@ -34,14 +34,14 @@ class BraintreePayController extends PaymentController
     public function charge($orderId)
     {
         if (empty(trim($orderId))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
         $clientToken = $this->getClientToken();
 
         if (!$clientToken) {
-            Message::addErrorMessage(Labels::getLabel('BRAINTREE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_BRAINTREE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -110,8 +110,8 @@ class BraintreePayController extends PaymentController
 
     private function getPaymentForm($orderId)
     {
-        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('BraintreePay', 'charge', array($orderId)), 'class' => "form form--normal"));
-        $frm->addButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId), array("disabled" => "disabled", "id" => "submit-button"));
+        $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('BraintreePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
+        $frm->addButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId), array("disabled" => "disabled", "id" => "submit-button"));
         return $frm;
     }
 
@@ -129,7 +129,7 @@ class BraintreePayController extends PaymentController
                     throw new Exception("The paymentMethod Nonce was not generated correctly");
                 } else {
                     if (!$this->getClientToken()) {
-                        Message::addErrorMessage(Labels::getLabel('BRAINTREE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel('ERR_BRAINTREE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
                         CommonHelper::redirectUserReferer();
                     }
                     $this->paymentInitiated($orderId);
@@ -144,7 +144,7 @@ class BraintreePayController extends PaymentController
                     );
 
                     $charge = (array) $charge;
-                    $message = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+                    $message = Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);
                     $orderPaymentObj = new OrderPayment($orderInfo['id']);
                     if (!empty($charge) && 0 < count($charge)) {
                         if (isset($charge['success']) && 0 < $charge['success'] || (isset($charge['transaction']) && !is_null($charge['transaction']))) {

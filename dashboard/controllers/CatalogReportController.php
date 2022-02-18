@@ -1,31 +1,29 @@
 <?php
 
-class CatalogReportController extends SellerBaseController
-{
-    public function __construct($action)
-    {
+class CatalogReportController extends SellerBaseController {
+
+    public function __construct($action) {
         parent::__construct($action);
         $this->userPrivilege->canViewCatalogReport(UserAuthentication::getLoggedUserId());
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns($this->siteLangId);
         $frmSearch = $this->getSearchForm($fields);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
 
-    public function search($type = false)
-    {
+    public function search($type = false) {
         $db = FatApp::getDb();
         $fields = $this->getFormColumns($this->siteLangId);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current(array_keys($fields));
@@ -72,8 +70,6 @@ class CatalogReportController extends SellerBaseController
         $srch->joinBrands($this->siteLangId, false, true);
         $srch->joinProductToCategory();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
-        $srch->addMultipleFields($selectedFlds);
-        $srch->addGroupBy('p.product_id');
 
         if (!empty($keyword)) {
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
@@ -87,8 +83,12 @@ class CatalogReportController extends SellerBaseController
             default:
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
-        }
-
+        } 
+        $srch->addFld('p.product_id');
+        $srch->addGroupBy('p.product_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true); 
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields($selectedFlds);
         $productTypeArr = Product::getProductTypes($this->siteLangId);
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -144,11 +144,7 @@ class CatalogReportController extends SellerBaseController
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $arrListing); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -156,14 +152,13 @@ class CatalogReportController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function export()
-    {
+    public function export() {
         $this->search("export");
     }
 
-    private function getSearchForm($fields = [])
-    {
+    private function getSearchForm($fields = []) {
         $frm = new Form('frmReportSearch');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'page');
         $frm->addTextBox('', 'keyword');
         if (!empty($fields)) {
@@ -171,18 +166,16 @@ class CatalogReportController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_Clear', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function getFormColumns(int $langId)
-    {
+    private function getFormColumns(int $langId) {
         $sellerCatalogReportCacheVar = CacheHelper::get('sellerCatalogReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerCatalogReportCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product', $langId),
+                'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $langId),
                 'totOrders' => Labels::getLabel('LBL_No._of_Orders', $langId),
                 'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $langId),
                 'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $langId),
@@ -203,14 +196,14 @@ class CatalogReportController extends SellerBaseController
             ];
             CacheHelper::create('sellerCatalogReportCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  unserialize($sellerCatalogReportCacheVar);
+            $arr = unserialize($sellerCatalogReportCacheVar);
         }
 
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }
+
 }

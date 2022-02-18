@@ -68,27 +68,19 @@ class SmartRecomendedWeightagesController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = SmartWeightageSettings::getSearchObject();
-        $srch->addMultipleFields(['sws.*']);
-        if (!empty($post['keyword'])) {
+        $srch = SmartWeightageSettings::getSearchObject(); 
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('sws.swsetting_name', 'like', '%' . $post['keyword'] . '%');
         }
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['sws.*']);
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -131,7 +123,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
     {
         $smartRecWeightagesTblHeadingCols = CacheHelper::get('smartRecWeightagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($smartRecWeightagesTblHeadingCols) {
-            return json_decode($smartRecWeightagesTblHeadingCols);
+            return json_decode($smartRecWeightagesTblHeadingCols, true);
         }
 
         $arr = [

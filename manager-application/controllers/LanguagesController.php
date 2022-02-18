@@ -68,7 +68,7 @@ class LanguagesController extends ListingBaseController
 
         $srch->addFld('l.*');
 
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('l.language_code', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('l.language_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
@@ -117,7 +117,10 @@ class LanguagesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', Labels::getLabel('LBL_LANGUAGE_SETUP', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -165,10 +168,10 @@ class LanguagesController extends ListingBaseController
 
         $frm = new Form('frmLanguage');
         $frm->addHiddenField('', 'language_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $siteLangId), 'language_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $siteLangId), 'language_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_LANGUAGE_NAME', $siteLangId), 'language_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_LANGUAGE_CODE', $siteLangId), 'language_code');
         $fld = $frm->addRadioButtons(
-            Labels::getLabel("LBL_Language_Layout_Direction", $siteLangId),
+            Labels::getLabel("FRM_LANGUAGE_LAYOUT_DIRECTION", $siteLangId),
             'language_layout_direction',
             applicationConstants::getLayoutDirections($siteLangId),
             '',
@@ -177,11 +180,10 @@ class LanguagesController extends ListingBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($siteLangId, true, 'country_code');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $siteLangId), 'language_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'language_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);
         return $frm;
     }
 
@@ -270,7 +272,7 @@ class LanguagesController extends ListingBaseController
     {
         $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($languagesTblHeadingCols) {
-            return json_decode($languagesTblHeadingCols);
+            return json_decode($languagesTblHeadingCols, true);
         }
 
         $arr = [

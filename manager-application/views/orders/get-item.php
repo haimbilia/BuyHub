@@ -36,7 +36,7 @@ foreach ($op['taxOptions'] as $key => $val) {
 </div>
 <div class="modal-body opDetailsJs<?php echo $op['op_id']; ?>">
     <div class="form-edit-body loaderContainerJs">
-        <ul class="list-stats">
+        <ul class="list-stats list-stats-double">
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_INVOICE_NUMBER', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_invoice_number'] ?></span>
@@ -72,14 +72,14 @@ foreach ($op['taxOptions'] as $key => $val) {
                 </li>
             <?php } ?>
 
-            <li class="list-stats-item">
+            <li class="list-stats-item list-stats-item-full">
                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_LABEL', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_label"]); ?>
                 </span>
             </li>
             <?php if (!empty($op["opshipping_service_code"])) { ?>
-                <li class="list-stats-item">
+                <li class="list-stats-item list-stats-item-full">
                     <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_SERVICES', $siteLangId); ?>:</span>
                     <span class="value">
                         <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_service_code"]); ?>
@@ -87,7 +87,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 </li>
             <?php } ?>
             <li class="list-stats-item">
-                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?>:</span>
+                <span class="lable"><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php
                     $orderStatus = ucwords($op['orderstatus_name']);

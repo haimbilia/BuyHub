@@ -1,3 +1,10 @@
+$(document).ready(function () {
+    bindSortable();
+});
+$(document).ajaxComplete(function () {
+    bindSortable();
+});
+
 (function () {
     var dv = '#pluginsListing';
     var listingTableJs = '#listingTableJs';
@@ -10,16 +17,13 @@
     setTabActive = function (type) {
         $('ul.pluginTypesJs li.is-active').removeClass('is-active');
         $('ul.pluginTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
-            scrollTop: $("#pluginsListing").offset().top
-        }, 800);
     }
 
     searchRecords = function (object) {
         $(dv).prepend(fcom.getLoader());
         var frm = document.frmRecordSearch;
         var pluginsType = frm.type.value;
-        
+
         /* This function is also called from sort by columns functionality. */
         var type = object;
         if (isNaN(object)) {
@@ -29,32 +33,25 @@
         frm.type.value = type;
         if (pluginsType != type) {
             frm.page.value = 1;
-            frm.sortBy.value ='';
-            frm.sortOrder.value ='';
+            frm.sortBy.value = '';
+            frm.sortOrder.value = '';
         }
         data = fcom.frmData(frm);
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             fcom.removeLoader();
             setTabActive(type);
-
-            var res = JSON.parse(res);
+            window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
         });
     };
 
     editSettingForm = function (keyName) {
-        $.ykmodal(fcom.getLoader());
         var data = 'keyName=' + keyName;
-        fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
             fcom.removeLoader();
-            var res = isJson(t);
-            if (res && res.status == 0) {
-                $.ykmsg.error(res.msg);
-                return;
-            }
-            $.ykmodal(t);
+            $.ykmodal(t.html);
         });
     };
 
@@ -62,6 +59,7 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
+        $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
             fcom.removeLoader();
         });
@@ -82,7 +80,7 @@
         data = 'pluginId=' + pluginId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, 'changeStatusByType'), data, function (res) {
             fcom.removeLoader();
-            $.ykmsg.close();
+            fcom.closeProcessing();
             var ans = JSON.parse(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
@@ -92,7 +90,7 @@
             reloadList();
         });
     };
-    
+
     syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
             fcom.removeLoader();
@@ -104,6 +102,73 @@
         frm = frm.concat('<input type="hidden" name="plugin_id" value="' + pluginId + '"/>');
         $('body').prepend(frm);
         $('#formExportSellerProducts').submit();
+    };
+
+    bindSortable = function () {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
+
+        $("#pluginsJs > tbody").sortable({
+            handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
+            update: function (event, ui) {
+                fcom.displayProcessing();
+                $('.listingTableJs').prepend(fcom.getLoader());
+
+                var order = $(this).sortable('toArray');
+                var data = '';
+                const bindData = new Promise((resolve, reject) => {
+                    for (let i = 0; i < order.length; i++) {
+                        data += 'plugin[]=' + order[i];
+                        if (i + 1 < order.length) {
+                            data += '&';
+                        }
+                    }
+                    resolve(data);
+                });
+                bindData.then(
+                    function (value) {
+                        fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function (res) {
+                            fcom.removeLoader();
+                            fcom.closeProcessing();
+                            var ans = $.parseJSON(res);
+                            if (ans.status == 1) {
+                                $.ykmsg.success(ans.msg);
+                                return;
+                            }
+                            $.ykmsg.error(ans.msg);
+                        });
+                    },
+                    function (error) {
+                        fcom.removeLoader();
+                        fcom.closeProcessing();
+                        var ans = $.parseJSON(res);
+                        if (ans.status == 1) {
+                            $.ykmsg.success(ans.msg);
+                            return;
+                        }
+                        $.ykmsg.error(ans.msg);
+                    });
+            },
+            function(error) {
+                fcom.removeLoader();
+                fcom.closeProcessing();
+            }
+        }).disableSelection();
+    },
+    deleteIcon = function (recordId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
+        fcom.updateWithAjax(
+            fcom.makeUrl('plugins', "deleteIcon"),
+            {recordId},
+            function (t) {
+                editRecord(recordId);
+            }
+        );
     };
 })();
 
@@ -141,7 +206,7 @@ $(document).on('click', '.uploadFile-Js', function () {
                 },
                 success: function (ans) {
                     fcom.removeLoader();
-                    $.ykmsg.close();
+                    fcom.closeProcessing();
                     $('.text-danger').remove();
                     $('#plugin_icon').html(ans.msg);
                     if (ans.status == true) {

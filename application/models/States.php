@@ -20,7 +20,7 @@ class States extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'st');
 
         if ($isActive == true) {
-            $srch->addCondition('st.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('st.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -65,7 +65,7 @@ class States extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->addCondition(static::tblFld('identifier'), '=', $recordId);
-        $srch->addCondition(static::tblFld('country_id'), '=', $countryId);
+        $srch->addCondition(static::tblFld('country_id'), '=', 'mysql_func_' . $countryId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -95,7 +95,7 @@ class States extends MyAppModel
         $countryId = FatUtility::int($countryId);
 
         $srch = static::getSearchObject($isActive, $langId);
-        $srch->addCondition('state_country_id', '=', $countryId);
+        $srch->addCondition('state_country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
         if ('state_code' == $idCol) {
             $srch->addCondition('state_code', '!=', '');
         }
@@ -157,7 +157,7 @@ class States extends MyAppModel
 
         $srch = static::getSearchObject();
         $srch->addCondition('state_code', '=', strtoupper($stateCode));
-        $srch->addCondition('state_country_id', '=', $countryId);
+        $srch->addCondition('state_country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         return $row;

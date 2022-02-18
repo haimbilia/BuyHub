@@ -7,7 +7,7 @@ $arr_flds = array(
     'shop_identifier' => Labels::getLabel('LBL_shop_name', $siteLangId),
 );
 $tbl = new HtmlElement('tr', array('width' => '100%', 'class' => ''));
-$th = $tbl->appendElement('thead')->appendElement('tr'); 
+$th = $tbl->appendElement('thead')->appendElement('tr');
 $serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
@@ -19,10 +19,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'user_name':
-                $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
+                $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectUser(' . $row['user_id'] . ')'), $row[$key]);
                 break;
             case 'shop_identifier':
-                $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
+                $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key]);
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
@@ -31,7 +31,11 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND') . '</h3>
+                <p> ' . Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS') . ' </p>
+            </div>';
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), $img, true);
 }
 echo $tbl->getHtml();
-?>

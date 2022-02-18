@@ -2,6 +2,7 @@ $(document).ready(function () {
     var profileId = $('input[name="profile_id"]').val();
     searchZone(profileId);
     searchProductsSection(profileId);
+
 });
 (function () {
     var prodListing = '#product-listing--js';
@@ -37,28 +38,62 @@ $(document).ready(function () {
         searchProducts(profileId, frm);
     };
 
+    searchRecords = function (frm) {
+        searchProducts(0, frm);
+    }
+
     searchProducts = function (profileId, form) {
         var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
 
-        $(prodListing).html(fcom.getLoader());
+        $(prodListing).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
-            $(prodListing).html(res);
+            res = $.parseJSON(res);
+            $(prodListing).html(res.html);
+            fcom.removeLoader();
         });
         $(shipListing).html('');
-        fcom.removeLoader();
     };
 
     searchProductsSection = function (profileId) {
         var dv = '#product-section--js';
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
-            $(dv).html(res);
+            res = $.parseJSON(res);
+            fcom.removeLoader();
+            $(dv).html(res.html);
             searchProducts(profileId);
         });
         fcom.removeLoader();
+    };
+
+    clearSearch = function (profileId, frm) {
+        document.frmRecordSearch.reset();
+        searchProducts(profileId, frm);
+    };
+
+    loadLangData = function (autoFillLangData = 0) {
+        var frm = $('#frmShippingProfile');
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+        if (0 < autoFillLangData) {
+            data += '&autoFillLangData=1';
+        }
+
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'ProfileNameForm'), data, function (res) {
+            fcom.removeLoader();
+            $('#profile-name-form').html(res.html);
+        });
+    };
+
+    profileProductForm = function (profileId) {
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'form', [profileId]), '', function (t) {
+            $.ykmodal(t.html, true, '');
+            fcom.removeLoader();
+        });
     };
 
     setupProfileProduct = function (frm) {
@@ -73,6 +108,7 @@ $(document).ready(function () {
             var profileId = $('input[name="profile_id"]').val();
             searchProducts(profileId);
             document.frmProfileProducts.reset();
+            closeForm();
         });
     };
 
@@ -88,9 +124,11 @@ $(document).ready(function () {
     }
 
     searchZone = function (profileId, scrollToNew = false) {
-        $(zoneListing).html(fcom.getLoader());
+        $(zoneListing).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
-            $(zoneListing).html(res);
+            res = $.parseJSON(res);
+            fcom.removeLoader();
+            $(zoneListing).html(res.html);
             if (true == scrollToNew) {
                 setTimeout(function () {
                     $('html, body').animate({
@@ -108,11 +146,10 @@ $(document).ready(function () {
             $.ykmsg.error(langLbl.saveProfileFirst);
             return;
         }
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
+            $.ykmodal(t.html, false, '');
+            fcom.removeLoader();
         });
-        fcom.removeLoader();
     };
 
 
@@ -136,9 +173,10 @@ $(document).ready(function () {
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
             var profileId = $('input[name="profile_id"]').val();
-            searchZone(profileId, true);
-            searchProductsSection(profileId);
-            $(document).trigger('close.facebox');
+            setTimeout(() => {
+                searchZone(profileId, true);
+                searchProductsSection(profileId);
+            }, 500);
         });
     };
 
@@ -170,17 +208,10 @@ $(document).ready(function () {
     };
 
     addEditShipRates = function (zoneId, rateId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
-            $.ykmsg.close();
-            if (isJson(t)) {
-                var ans = JSON.parse(t);
-                $.ykmsg.error(ans.msg);
-                return;
-            } else {
-                $.ykmodal(t, false, '');
-            }
-        }); 
+        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
+            $.ykmodal(t.html, false, '');
+            fcom.removeLoader();
+        });
 
     };
 
@@ -203,11 +234,10 @@ $(document).ready(function () {
     };
 
     editRateLangForm = function (zoneId, rateId, langId) {
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
+            $.ykmodal(t.html, false, '');
+            fcom.removeLoader();
         });
-        fcom.removeLoader();
     };
 
     setupLangRate = function (frm) {
@@ -243,7 +273,7 @@ $(document).ready(function () {
     getZoneLocation = function (zoneId) {
         $.ajax({
             url: fcom.makeUrl('ShippingZones', 'getLocations', [zoneId, 1]),
-            data: {fIsAjax: 1},
+            data: { fIsAjax: 1 },
             dataType: 'json',
             type: 'post',
             success: function (res) {
@@ -280,6 +310,56 @@ $(document).ready(function () {
     }
 })();
 
+$(document).on('keyup', '.continentJs', function () {
+    var filter = $(this).val();
+    if (filter.length <= 1) {
+        $('.zones--js').find(".filter-country--js").show();
+        $('.zones--js').find(".country--js").show();
+        $('.zones--js').find(".zone-name--js").show();
+        $('.zones--js').find(".zones--js").show();
+        $('.zones--js').find(".list-zones li").show();
+        return;
+    }
+    $('.zones--js').find(".zone-name--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).closest('.zones--js').removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).closest('.zones--js').addClass('li-display');
+        }
+    });
+
+    $('.zones--js').find(".country--js").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).closest('.filter-country--js').hide();
+            $(this).closest('.filter-country--js').removeClass('li-display');
+        } else {
+            $(this).closest('.filter-country--js').show();
+            $(this).closest('.filter-country--js').addClass('li-display');
+        }
+    });
+
+    $('.list-zones').find("ul li").each(function () {
+        if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).hide();
+            $(this).removeClass('li-display');
+        } else {
+            $(this).show();
+            $(this).addClass('li-display');
+        }
+    });
+
+    $('.li-display').each(function () {
+        $(this).closest('.zones--js').find('.zone-name--js').show();
+        $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
+        if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').show();
+        } else {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display li').show();
+        }
+    });
+});
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
         $('.checkbox_container--js input[type="checkbox"]').each(function (index) {
@@ -327,38 +407,6 @@ $(document).ready(function () {
         $('.selectedStateCount--js_' + countryId).html(count);
         $('input[name="rest_of_the_world"]').prop('checked', false);
     });
-});
-
-$(document).on('keyup', "input[name='product_name']", function () {
-    var currObj = $(this);
-    var parentForm = currObj.closest('form').attr('id');
-    var shipProfileId = $("#" + parentForm + " input[name='shippro_shipprofile_id']").val();
-    if ('' != currObj.val()) {
-        currObj.siblings('ul.dropdown-menu').remove();
-        currObj.autocomplete({
-            'classes': {
-                "ui-autocomplete": "custom-ui-autocomplete"
-            },
-            'source': function (request, response) {
-                $.ajax({
-                    url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: {fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId},
-                    dataType: 'json',
-                    type: 'post',
-                    success: function (json) {
-                        response($.map(json, function (item) {
-                            return {label: item['name'], value: item['name'], id: item['id']};
-                        }));
-                    },
-                });
-            },
-            select: function (event, ui) {
-                $("#" + parentForm + " input[name='shippro_product_id']").val(ui.item.id);
-            }
-        });
-    } else {
-        $("#" + parentForm + " input[name='shippro_product_id']").val('');
-    }
 });
 
 function isJson(str) {

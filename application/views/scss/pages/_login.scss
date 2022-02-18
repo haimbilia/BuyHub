@@ -44,10 +44,46 @@
             display: flex;
             justify-content: center;
         }
-        &-body {
-            padding: 2rem;
-            @include media-breakpoint-up(lg) {
-                //border: $border;
+        &.sign-in {
+            opacity: 1;
+            transition: all 0.5s;
+            #{$start-direction}: 50%;
+        }
+        &.sign-up {
+            transform: translateX(100% * $transform-direction);
+            #{$end-direction}: 0;
+            opacity: 0;
+            transition: all 0.5s;
+            @include media-breakpoint-down(sm) {
+                & {
+                    opacity: 1;
+                    transform: none;
+                    border-top: $border;
+                }
+            }
+            &.is-opened {
+                opacity: 1;
+
+                transform: translateX(50% * $transform-direction);
+                transition: all 0.5s;
+                #{$end-direction}: 50%;
+                @include media-breakpoint-down(sm) {
+                    & {
+                        transform: none;
+                        left: auto;
+                    }
+                }
+            }
+        }
+    }
+    &.sign-up .form-item.sign-in {
+        #{$start-direction}: -100%;
+        opacity: 0;
+        transition: all 0.5s;
+        @include media-breakpoint-down(sm) {
+            & {
+                opacity: 1;
+                #{$start-direction}: auto;
             }
         }
     }

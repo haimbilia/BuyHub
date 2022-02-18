@@ -20,11 +20,11 @@ class SupportController extends ListingBaseController
     private function getForm()
     {
         $frm = new Form('frmReportAnIssue');
-        $frm->addTextBox(Labels::getLabel('LBL_User_Name', $this->siteLangId), 'admin_username', '', array('readonly' => 'readonly'));
-        $frm->addTextBox(Labels::getLabel('LBL_User_Email', $this->siteLangId), 'admin_email');
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'title');
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $this->siteLangId), 'description')->requirement->setRequired(true);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'admin_username', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_USER_EMAIL', $this->siteLangId), 'admin_email');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'title');
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'description')->requirement->setRequired(true);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $this->siteLangId));
         return $frm;
     }
     
@@ -35,8 +35,7 @@ class SupportController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray($data);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -48,8 +47,7 @@ class SupportController extends ListingBaseController
         $body .= "<b>Description:</b> " . $post['description'] . '<br/>';
         
         if (!mail("team@fatbit.com", $post['title'], $body, $headers)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Mail_Sent_Successfully', $this->siteLangId));

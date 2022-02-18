@@ -1,7 +1,7 @@
 <?php $inactive = ($preqId==0) ? 'fat-inactive' : ''; ?>
 <ul>
     <li class="<?php echo ($activeTab == 'GENERAL') ? 'is-active' : $inactive; ?>">
-        <a onClick="customCatalogProductForm(<?php echo $preqId;?>,<?php echo $preqCatId;?>)" href="javascript:void(0);">
+        <a onclick="customCatalogProductForm(<?php echo $preqId;?>,<?php echo $preqCatId;?>)" href="javascript:void(0);">
             <?php echo Labels::getLabel('LBL_Basic', $siteLangId);?>
         </a>
     </li>

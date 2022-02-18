@@ -32,7 +32,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->set("zoneLocations", $zoneLocations);
         $this->set("shipRatesData", $shipRates);
         $this->set("profile_id", $profileId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoCompleteZone() {
@@ -40,7 +41,7 @@ class ShippingZonesController extends ListingBaseController {
         $srch = ShippingZone::getSearchObject();
         $srch->addOrder('shipzone_name');
         $srch->addCondition('shipzone_user_id', '=', 0); //== only admin added zones
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('shipzone_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->addMultipleFields(array('shipzone_id as id', 'shipzone_name'));
@@ -72,7 +73,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->set("selected", $selected);
         $this->set("zoneLocations", $zoneLocations);
         $this->set("excludeLocations", $excludeLocations);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($profileId, $zoneId = 0) {
@@ -84,7 +86,7 @@ class ShippingZonesController extends ListingBaseController {
         if (0 < $zoneId) {
             $data = ShippingProfileZone::getZone($profileId, $zoneId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $zoneLocations = $this->getLocations($zoneId);
         }
@@ -103,9 +105,10 @@ class ShippingZonesController extends ListingBaseController {
         $this->set('zone_data', $data);
         $this->set('zoneLocations', $zoneLocations);
         $this->set('excludeLocations', $excludeLocations);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
+     
     public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();

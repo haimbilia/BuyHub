@@ -81,31 +81,26 @@ class EmptyCartItemsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = EmptyCartItems::getSearchObject($this->siteLangId, false, false);
-        $srch->addMultipleFields([
-            'eci.*',
-            'eci_l.*'
-        ]);
-
-        if (!empty($post['keyword'])) {
+       
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('emptycartitem_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('eci_l.emptycartitem_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();  
+        $srch->addMultipleFields([
+            'eci.*',
+            'eci_l.*'
+        ]); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $srch->addOrder($sortBy, $sortOrder); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -131,7 +126,8 @@ class EmptyCartItemsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -153,7 +149,11 @@ class EmptyCartItemsController extends ListingBaseController
         $recordObj = new EmptyCartItems($recordId);
         $recordObj->assignValues($post);
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
@@ -179,7 +179,7 @@ class EmptyCartItemsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -196,7 +196,7 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new EmptyCartItems($recordId);
         if (!$obj->canRecordMarkDelete($recordId)) {
@@ -233,7 +233,7 @@ class EmptyCartItemsController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -252,7 +252,7 @@ class EmptyCartItemsController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $emptyCartItemObj = new EmptyCartItems($recordId);
@@ -271,7 +271,7 @@ class EmptyCartItemsController extends ListingBaseController
         $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_PREFIX_WITH_{SITEROOT},_if_needs_to_generate_system\'s_url.', $this->siteLangId) . '</small>';
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_LINK_IN_NEW_TAB', $this->siteLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array(), '');
         $frm->addIntegerField(Labels::getLabel('FRM_DISPLAY_ORDER', $this->siteLangId), 'emptycartitem_display_order');
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'emptycartitem_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);        
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'emptycartitem_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);        
         $languageArr = Language::getDropDownList();
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -295,7 +295,7 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
-            return json_decode($emptyCartItemsTblHeadingCols);
+            return json_decode($emptyCartItemsTblHeadingCols, true);
         }
 
         $arr = [

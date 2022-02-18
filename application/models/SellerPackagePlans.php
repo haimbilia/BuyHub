@@ -47,15 +47,15 @@ class SellerPackagePlans extends MyAppModel
     {
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
         if (!$langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
         return array(
-        self::SUBSCRIPTION_PERIOD_DAYS => Labels::getLabel('LBL_Days', $langId),
+        self::SUBSCRIPTION_PERIOD_DAYS => Labels::getLabel('LBL_DAYS', $langId),
         /* self::SUBSCRIPTION_PERIOD_WEEKS => Labels::getLabel('LBL_Weeks', $langId), */
-        self::SUBSCRIPTION_PERIOD_MONTH => Labels::getLabel('LBL_Months', $langId),
-        self::SUBSCRIPTION_PERIOD_YEAR => Labels::getLabel('LBL_Years', $langId),
-        self::SUBSCRIPTION_PERIOD_UNLIMITED => Labels::getLabel('LBL_Unlimited', $langId),
+        self::SUBSCRIPTION_PERIOD_MONTH => Labels::getLabel('LBL_MONTHS', $langId),
+        self::SUBSCRIPTION_PERIOD_YEAR => Labels::getLabel('LBL_YEARS', $langId),
+        self::SUBSCRIPTION_PERIOD_UNLIMITED => Labels::getLabel('LBL_UNLIMITED', $langId),
         );
     }
     public static function getSubscriptionPeriodValues()
@@ -87,7 +87,7 @@ class SellerPackagePlans extends MyAppModel
         $frequency = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'] : '';
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
 
-        $planText = ($type == SellerPackages::PAID_TYPE) ? Labels::getLabel("LBL_Per", CommonHelper::getLangId()) : Labels::getLabel("LBL_For", CommonHelper::getLangId());
+        $planText = ($type == SellerPackages::PAID_TYPE) ? Labels::getLabel("LBL_PER", CommonHelper::getLangId()) : Labels::getLabel("LBL_FOR", CommonHelper::getLangId());
         return $planText . " " . (($interval > 0) ? $interval : '') . "  " . $period;
     }
     public static function getPlanTrialPeriod($plan)
@@ -115,7 +115,7 @@ class SellerPackagePlans extends MyAppModel
         $frequency = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'] : '';
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
 
-        $planText = ($type == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", CommonHelper::getLangId()) : " " . Labels::getLabel("LBL_For", CommonHelper::getLangId());
+        $planText = ($type == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_PER", CommonHelper::getLangId()) : " " . Labels::getLabel("LBL_FOR", CommonHelper::getLangId());
         return CommonHelper::displayMoneyFormat($price) . $planText . " " . (($interval > 0) ? $interval : '') . "  " . $period;
     }
 
@@ -126,13 +126,13 @@ class SellerPackagePlans extends MyAppModel
         $frequency = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'] : '';
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
         
-        return CommonHelper::displayMoneyFormat($price) . " <span>" . " " . Labels::getLabel("LBL_Per", CommonHelper::getLangId()) . " " . (($interval > 1) ? $interval : '') . "  " . $period ."</span>";
+        return CommonHelper::displayMoneyFormat($price) . " <span>" . " " . Labels::getLabel("LBL_PER", CommonHelper::getLangId()) . " " . (($interval > 1) ? $interval : '') . "  " . $period ."</span>";
     }
     public static function getPlanByPackageId($spackageId = 0)
     {
         $spackageId = FatUtility::convertToType($spackageId, FatUtility::VAR_INT);
         if (!$spackageId) {
-            trigger_error(Labels::getLabel('ERR_Package_Id_Not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PACKAGE_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
         $srch = new SellerPackagePlansSearch();
@@ -151,7 +151,7 @@ class SellerPackagePlans extends MyAppModel
     {
         $spackageId = FatUtility::convertToType($spackageId, FatUtility::VAR_INT);
         if (!$spackageId) {
-            trigger_error(Labels::getLabel('ERR_Package_Id_Not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PACKAGE_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
         $srch = new SellerPackagePlansSearch();
@@ -175,7 +175,7 @@ class SellerPackagePlans extends MyAppModel
     {
         $spplan_id = FatUtility::convertToType($spplan_id, FatUtility::VAR_INT);
         if (!$spplan_id) {
-            trigger_error(Labels::getLabel('ERR_Package_Id_Not_Specified', $siteLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PACKAGE_ID_NOT_SPECIFIED', $siteLangId), E_USER_ERROR);
             return false;
         }
         $srch = new SellerPackageSearch($siteLangId);

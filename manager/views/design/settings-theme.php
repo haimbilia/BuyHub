@@ -64,13 +64,8 @@
             </div>
             <main class="main">
                 <div class="container">
-
-
-
-
-
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="grid-layout">
+                        <div class="grid-layout-left">
                             <div class="card">
                                 <div class="card-head">
                                     <div class="card-head-label">
@@ -161,7 +156,7 @@
                             </div>
 
                         </div>
-                        <div class="col-md-8">
+                        <div class="grid-layout-right">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="palette">
@@ -2466,11 +2461,6 @@
 
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </main>
             <?php

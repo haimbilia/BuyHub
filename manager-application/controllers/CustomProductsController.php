@@ -1,10 +1,11 @@
 <?php
 
-use Predis\Configuration\Options;
-
 class CustomProductsController extends ListingBaseController
 {
+    use CatalogProduct;
     protected string $modelClass = 'ProductRequest';
+    protected $pageKey = 'CUSTOM_PRODUCT_REQUEST';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -31,19 +32,19 @@ class CustomProductsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-        $actionItemsData['newRecordBtn'] = false;        
+        $actionItemsData['newRecordBtn'] = false;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
 
         $this->checkEditPrivilege(true);
         $this->getListingData();
@@ -85,23 +86,22 @@ class CustomProductsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
-        $post['seller_id'] = FatApp::getPostedData('seller_id',FatUtility::VAR_INT,0);
+        $post['seller_id'] = FatApp::getPostedData('seller_id', FatUtility::VAR_INT, 0);
 
-        $srch = ProductRequest::getSearchObject($this->siteLangId, false, true);
+        $srch = ProductRequest::getSearchObject($this->siteLangId, true, true);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'preq_user_id = u.user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');      
-     
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
-        if (!empty($post['keyword'])) {
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
+
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR'); 
         }
 
         if (!empty($post['date_from'])) {
             $srch->addCondition('preq.preq_added_on', '>=', $post['date_from'] . ' 00:00:00');
-        }        
+        }
 
         if (!empty($post['date_to'])) {
             $srch->addCondition('preq.preq_added_on', '<=', $post['date_to'] . ' 23:59:59');
@@ -111,17 +111,25 @@ class CustomProductsController extends ListingBaseController
             $srch->addCondition('preq.preq_status', '=', $post['status']);
         }
 
-        if (0 < $post['seller_id']) {       
+        if (0 < $post['seller_id']) {
             $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
-        }        
+        }
 
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);       
+        if (0 < $recordId) {
+            $srch->addCondition('preq_id', '=', $recordId);
+        }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name','credential_username','credential_email'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-    
+
         $rs = $srch->getResultSet();
         $records = [];
-        while ($res = FatApp::getDb()->fetch($rs)) {           
+        while ($res = FatApp::getDb()->fetch($rs)) {
             $content = (!empty($res['preq_content'])) ? json_decode($res['preq_content'], true) : array();
             $langContent = (!empty($res['preq_lang_data'])) ? json_decode($res['preq_lang_data'], true) : array();
 
@@ -139,34 +147,32 @@ class CustomProductsController extends ListingBaseController
                 'user_id' => $res['user_id'] ?? 0,
                 'user_name' => $res['user_name'] ?? '',
                 'user_parent' => $res['user_parent'] ?? 0,
-                'shop_name' => $res['shop_name'] ?? '', 
+                'shop_name' => $res['shop_name'] ?? '',
                 'product_identifier' => $res['product_identifier'],
                 'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
+                'credential_username' => $res['credential_username'] ?? '',
+                'credential_email' => $res['credential_email'] ?? '',
             );
             $records[] = $arr;
         }
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting); 
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
         $this->checkEditPrivilege(true);
     }
-    
-    public function form($preqId, $productType = 0)
+
+    public function form($recordId, $productType = 0)
     {
         $this->checkEditPrivilege();
 
-        $preqId = FatUtility::int($preqId);        
-        if (!$preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $productType = FatUtility::int($productType);
@@ -175,60 +181,55 @@ class CustomProductsController extends ListingBaseController
             $langId = CommonHelper::getDefaultFormLangId();
         }
 
-        $frm = $this->getForm($langId, $productType, $preqId , 1);
-        $imgFrm = $this->getImageFrm();
-        $isSelProdCreatedBySeller = true;
-        $isProductAddedByAdmin = false;
+        $frm = $this->getForm($langId, $productType, $recordId);
+        $imgFrm = $this->getImageFrm($recordId);
         $productOptions = [];
-        
-        $this->setModel([$preqId]);
-        if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
-            $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($preqId, $langId, CommonHelper::getDefaultFormLangId());
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $productData = current($translatedData);
-            $productData += $this->modelObj::getAttributesById($preqId);
-        } else {       
-            $productData = $this->modelObj::getAttributesByLangId($langId, $preqId, null, true);          
-            if(!empty($productData['preq_lang_data'])){
-                $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
-            } 
-            unset($productData['preq_lang_data']);
 
+        $this->setModel([$recordId]);
+
+        if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
+            $productData = $this->modelObj::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            if (!empty($productData['preq_lang_data'])) {
+                $preqLangData = json_decode($productData['preq_lang_data'], true);
+                $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
+                $translatedData = $updateLangDataobj->directTranslate($preqLangData, $langId);
+                if (false === $translatedData) {
+                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
+                }
+                $productData = array_merge($productData, current($translatedData));
+            }
+        } else {
+            $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, true);
+            if ($productData && !empty($productData['preq_lang_data'])) {
+                $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
+            }
+        }     
+
+        if (empty($productData)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
         }
+        unset($productData['preq_lang_data']);
+
+        if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
         $productData = array_merge(
             $productData,
-            json_decode($productData['preq_content'], true),
-            json_decode($productData['preq_specifications'], true),
+            json_decode($productData['preq_content'], true)
         );
         unset($productData['preq_content']);
-        unset($productData['preq_specifications']);
 
-        $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] &&
-            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
+        if (1 > $productType) {
+            $frm = $this->getForm($langId, $productData['product_type'], $recordId);
+        }
 
-        if (1 > $productType) {                
-            $frm = $this->getForm($langId, $productData['product_type'], $preqId);
-        } 
-
-        $fld = $frm->getField('product_seller_id');
-        if ($productData['product_seller_id'] > 0) {
-            $userShopName = User::getUserShopName($productData['product_seller_id'], $langId);
-            $fld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] . ')'];
-        } else {
-            $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
-        }        
-
-        commonHelper::printArray($productData,true);
-        
         $tagData = [];
-        /// to save as array...............................
-        if(!empty($productData['product_tags'])){
+        if (!empty($productData['product_tags'])) {
             $srch = Tag::getSearchObject($langId);
-            $srch->addCondition('tag_id','IN', $productData['product_tags']);
-            $srch->addMultipleFields(['tag_id','tag_name']);
+            $srch->addCondition('tag_id', 'IN', $productData['product_tags']);
+            $srch->addMultipleFields(['tag_id', 'tag_name']);
             $productTags = FatApp::getDb()->fetchAll($srch->getResultSet());
             foreach ($productTags as $key => $data) {
                 $tagData[$key]['id'] = $data['tag_id'];
@@ -240,13 +241,13 @@ class CustomProductsController extends ListingBaseController
             $productData['product_brand_id'] = $productData['preq_brand_id'];
             $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
             if (false != $brandData) {
-                $fld = $frm->getField('product_brand_id');                
+                $fld = $frm->getField('product_brand_id');
                 $fld->options = [$productData['preq_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
             }
             unset($productData['preq_brand_id']);
-        }   
-        
-        if (!empty($productData['preq_prodcat_id'])) {        
+        }
+
+        if (!empty($productData['preq_prodcat_id'])) {
             $productData['ptc_prodcat_id'] = $productData['preq_prodcat_id'];
             $catData = ProductCategory::getAttributesByLangId($langId, $productData['preq_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
             if (false != $catData) {
@@ -265,51 +266,52 @@ class CustomProductsController extends ListingBaseController
         //ptt_taxcat_id        
         if (!empty($productData['ptt_taxcat_id'])  && 0 < $productData['ptt_taxcat_id']) {
             $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, true, applicationConstants::YES, applicationConstants::NO);
-            if($catData){                
+            if ($catData) {
                 $fld = $frm->getField('ptt_taxcat_id');
                 $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            } 
-        }
-
-
-        if (!empty($productData['ps_from_country_id'])  && 0 < $productData['ps_from_country_id']) {
-            $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
-            if($countryData){                
-                $fld = $frm->getField('ps_from_country_id');
-                $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            } 
-        }
-
-        // need to update paramter
-        $productData['shipping_profile'] = $productData['product_ship_package'];
-        /* ]*/
-
-        if(is_array($productData['product_option'])){
-            $srch = Option::getSearchObject($langId); 
-            $srch->addMultipleFields(['option_id','option_identifier','option_name','option_is_separate_images']);
-            $srch->addCondition('option_id','IN', $productData['product_option']); 
-            $productOptions = FatApp::getDb()->fetchAll($srch->getResultSet());
-            foreach($productOptions as &$option ){
-                $option['optionValues'] = product::getOptionValues($option['option_id'], $langId , ($productData[0]['product_option_values'] ?? []) );
             }
         }
 
+        if (!empty($productData['ps_from_country_id'])  && 0 < $productData['ps_from_country_id']) {
+            $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
+            if ($countryData) {
+                $fld = $frm->getField('ps_from_country_id');
+                $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+            }
+        }
+
+        if (isset($productData['product_option']) && is_array($productData['product_option']) && count($productData['product_option'])) {
+            $srch = Option::getSearchObject($langId);
+            $srch->addMultipleFields(['option_id', 'option_identifier', 'option_name', 'option_is_separate_images']);
+            $srch->addCondition('option_id', 'IN', $productData['product_option']);
+            $prodOptions = FatApp::getDb()->fetchAll($srch->getResultSet(), 'option_id');
+            foreach ($productData['product_option'] as $index => $optionId) {
+                if ($prodOptions[$optionId]) {
+                    $productOptions[$index] = $prodOptions[$optionId];
+                    $productOptions[$index]['optionValues'] = Product::getOptionValues($optionId, $langId, ($productData['product_option_values'][$index] ?? []));
+                }
+            }
+        }
         $productData['upc_type'] = applicationConstants::YES;
-         
+        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);        
+        if (!empty($productData['preq_ean_upc_code']) && count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
+            $productData['upc_type'] = applicationConstants::NO;
+        }
+
         $this->set("productData", [
             'product_type' => $productData['product_type'],
-            'product_seller_id' => $productData['product_seller_id'],
-            'product_attachements_with_inventory' => $productData['product_attachements_with_inventory'],
+            'product_seller_id' => 0,
+            'product_attachements_with_inventory' => ($productData['product_attachements_with_inventory'] ?? 0),
         ]);
 
         /* to select product type in get */
-        if (0 < $productType) {                
+        if (0 < $productType) {
             $productData['product_type'] = $productType;
-        } 
+        }
+
+        $productData['record_id'] = $recordId;
 
         $frm->fill($productData);
-        $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $preqId]);
-         
 
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
@@ -322,14 +324,13 @@ class CustomProductsController extends ListingBaseController
         $this->set("codEnabled", $codEnabled);
         $this->set("canEditTags",  $this->objPrivilege->canEditTags($this->admin_id, true));
         $this->set("langId", $langId);
-        $this->set("productId", $preqId);
-
-        $this->set('isSelProdCreatedBySeller', $isSelProdCreatedBySeller);
-        $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);
+        $this->set("recordId", $recordId);
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         if (FatUtility::isAjaxCall()) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+            $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
 
@@ -338,605 +339,40 @@ class CustomProductsController extends ListingBaseController
         $this->set("includeEditor", true);
         $this->_template->render();
     }
-            
-        
-    /**
-     * getForm
-     *
-     * @param  mixed $langId
-     * @param  mixed $productType
-     * @param  mixed $recordId  - isRequested = 0 then it is product id  else request id
-     * @param  mixed $isRequested - is requested catalog by seller
-     * @return object
-     */
-    private function getForm($langId, $productType = 0, $recordId = 0 , $isRequested = 0) : object
+
+    public function requestStatusForm(int $recordId)
     {
-        $frm = new Form('frmProduct');
-        $productTypeArr = Product::getProductTypes($langId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $reqStatus = $this->modelClass::getAttributesById($recordId, 'preq_status');
 
-        $productType = $productType == 0 ? array_key_first($productTypeArr) : $productType;
-
-        if (0 < $recordId) {
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
-        } else {
-            $fld = $frm->addHiddenField('', 'lang_id', $langId);
-            $fld->requirements()->setRequired();
+        if (false === $reqStatus ||  $reqStatus != ProductRequest::STATUS_PENDING) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
-        $fld->requirements()->setRequired();
-
-        $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [], '', [], Labels::getLabel('FRM_ADMIN', $langId));
-        $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $langId), 'product_identifier');
-        $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_BRAND', $langId), 'product_brand_id', []);
-        if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $fld->requirements()->setRequired();
-        }
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $langId), 'ptc_prodcat_id', []);
-        $fld->requirements()->setRequired();
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_MODEL', $langId), 'product_model');
-        if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $fld->requirements()->setRequired();
-        }
-        $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
-        $fld->requirements()->setPositive();
-        if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
-            $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $langId), 'product_warranty');
-            $fld->requirements()->setInt();
-            $fld->requirements()->setPositive();
-            $frm->addHiddenField('', 'product_warranty_unit', current(Product::getWarrantyUnits($langId)));
-        }
-        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
-        $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
-        $frm->addCheckBox(Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
-        $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', []);
-        $fld->requirements()->setRequired();
-
-        $frm->addSelectBox(Labels::getLabel('LBL_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
-        if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
-            $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
-            $fld->requirements()->setRequired();
-        } else {
-            $fld = $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
-            $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('FRM_SELECT', $langId));
-            $fld->requirements()->setRequired();
-            if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
-                $shipPackArr = ShippingPackage::getAllNames();
-                $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
-
-                $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
-
-                $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $langId), 'product_weight', '0.00');
-                $weightFld->requirements()->setRequired(true);
-                $weightFld->requirements()->setFloatPositive();
-                $weightFld->requirements()->setRange('0.01', '9999999999');
-            }
-            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
-        }
-
-        if (0 < $recordId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', 1, array(), false, 0);
-        }
-
-        $languageArr = Language::getDropDownList();
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId() && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $fld = $frm->addRadioButtons('', 'upc_type', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
-        $fld->requirements()->setRequired();
-
-        $frm->addHiddenField('', 'product_upcs');
-        $frm->addHiddenField('', 'product_option');
-        $frm->addHiddenField('', 'product_option_values');
-        $frm->addHiddenField('', 'specifications');
-        
-        if (1 > $recordId && $isRequested == 0) {
-            $fld = $frm->addHiddenField('', 'temp_product_id');
-            $fld->requirements()->setRequired();
-        }
-        if($isRequested == applicationConstants::YES){
-            $frm->addHiddenField('', 'preq_id', 0);
-        }else{
-            $frm->addHiddenField('', 'product_id', 0);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
-        return $frm;
-    }
-
-    private function getImageFrm()
-    {
-        $frm = new Form('imageFrm');
-        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', [], '', array(), Labels::getLabel('FRM_FOR_ALL_OPTIONS', $this->siteLangId));
-        $languagesAssocArr = Language::getAllNames();
-        if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
-        } else {
-            $langId = array_key_first($languagesAssocArr);
-            $frm->addHiddenField('', 'lang_id', $langId);
-        }
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'prod_image');
-        $frm->addHtml('', 'images', '');
-        $frm->addHiddenField('', 'min_width', 500);
-        $frm->addHiddenField('', 'min_height', 500);
-        $frm->addHiddenField('', 'record_id');
-        $frm->addHiddenField('', 'file_type');
-
-        return $frm;
-    }
-
-    public function form1($preqId = 0)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $preqId = FatUtility::int($preqId);
-        if (!$preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-        $productReqRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_prodcat_id'));
-        $preq_prodcat_id = $productReqRow['preq_prodcat_id'];
-
-        $customProductFrm = $this->getForm(0);
-        $productOptions = array();
-        $productTags = array();
-
-        $displayDownloadTab = false;
-
-        if ($preqId > 0) {
-            $row_data = ProductRequest::getAttributesById($preqId, array('preq_id', 'preq_user_id', 'preq_prodcat_id', 'preq_content', 'preq_status', 'preq_deleted', 'preq_added_on'));
-            $productData = json_decode($row_data['preq_content'], true);
-            unset($row_data['preq_content']);
-            $row_data = array_merge($row_data, $productData);
-            $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
-            $productTags = !(empty($row_data['product_tags'])) ? $row_data['product_tags'] : array();
-
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] &&
-            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
-            
-            /*   */
-            $customProductFrm = $this->getForm(0, $productData['product_type']);
-            $customProductFrm->fill($row_data);
-        }
-
-        $this->set('customProductFrm', $customProductFrm);
-        $this->set('preqId', $preqId);
-        $this->set('preq_prodcat_id', $preq_prodcat_id);
-        $this->set('productOptions', $productOptions);
-        $this->set('productTags', $productTags);
-        
-        $this->set('displayDownloadTab', $displayDownloadTab);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function setup()
-    {
-        $this->objPrivilege->canEditCustomProductRequests();
-        $post = FatApp::getPostedData();
-        $product_option = FatApp::getPostedData('product_option');
-        $product_tags = FatApp::getPostedData('product_tags');
-        $product_shipping = FatApp::getPostedData('product_shipping');
-        $product_type = FatApp::getPostedData('product_type', FatUtility::VAR_INT, Product::PRODUCT_TYPE_PHYSICAL);
-
-        $frm = $this->getForm(0, $product_type);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $preq_id = FatUtility::int($post['preq_id']);
-        $preq_user_id = FatUtility::int($post['product_seller_id']);
-        unset($post['preq_id']);
-        unset($post['preq_user_id']);
-        unset($post['btn_submit']);
-
-        $prodReqObj = new ProductRequest($preq_id);
-        $data_to_be_save = $post;
-        $data_to_be_save['product_option'] = $product_option;
-        $data_to_be_save['product_tags'] = $product_tags;
-        $data_to_be_save['product_shipping'] = $product_shipping;
-        if ($post['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $data_to_be_save['product_length'] = 0;
-            $data_to_be_save['product_width'] = 0;
-            $data_to_be_save['product_height'] = 0;
-            $data_to_be_save['product_dimension_unit'] = 0;
-            $data_to_be_save['product_weight'] = 0;
-            $data_to_be_save['product_weight_unit'] = 0;
-        }
-        $data = array(
-            'preq_user_id' => $preq_user_id,
-            'preq_content' => FatUtility::convertToJson($data_to_be_save),
-            'preq_status' => ProductRequest::STATUS_PENDING,
-        );
-
-        $prodReqObj->assignValues($data);
-
-        if (!$prodReqObj->save()) {
-            Message::addErrorMessage($prodReqObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $languages = Language::getAllNames();
-        reset($languages);
-        $nextLangId = key($languages);
-
-        $preq_id = $prodReqObj->getMainTableRecordId();
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
-        $this->set('preq_id', $preq_id);
-        $this->set('lang_id', $nextLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function sellerProductForm($preqId = 0)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-
-        $preqId = FatUtility::int($preqId);
-        if (!$preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $productReqRow = ProductRequest::getAttributesById($preqId);
-        if (!$productReqRow) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $productReqRow = array_merge($productReqRow, json_decode($productReqRow['preq_content'], true));
-
-        if ($productReqRow['preq_sel_prod_data'] != '') {
-            $productReqRow = array_merge($productReqRow, json_decode($productReqRow['preq_sel_prod_data'], true));
-        }
-
-        $productOptions = !empty($productReqRow['product_option']) ? $productReqRow['product_option'] : array();
-        $preq_user_id = $productReqRow['preq_user_id'];
-
-        $frmSellerProduct = $this->getSellerProductForm($preqId, 'REQUESTED_CATALOG_PRODUCT');
-        $frmSellerProduct->fill($productReqRow);
-
-        $this->set('preqId', $preqId);
-        $this->set('preq_user_id', $preq_user_id);
-        $this->set('productReqRow', $productReqRow);
-        $this->set('productOptions', $productOptions);
-        $this->set('frmSellerProduct', $frmSellerProduct);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function setupSellerProduct()
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-
-        $preqId = FatApp::getPostedData('selprod_product_id', FatUtility::VAR_INT, 0);
-        if (!$preqId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $post = FatApp::getPostedData();
-        $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
-        $post['use_shop_policy'] = $useShopPolicy;
-
-        $frm = $this->getSellerProductForm($preqId, 'REQUESTED_CATALOG_PRODUCT');
-        $post = $frm->getFormDataFromArray($post);
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        unset($post['btn_cancel']);
-        unset($post['btn_submit']);
-
-        $prodReqObj = new ProductRequest($preqId);
-        $data = array(
-            'preq_sel_prod_data' => FatUtility::convertToJson($post),
-        );
-        $prodReqObj->assignValues($data);
-
-        if (!$prodReqObj->save()) {
-            Message::addErrorMessage($prodReqObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $languages = Language::getAllNames();
-        reset($languages);
-        $nextLangId = key($languages);
-
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
-        $this->set('preq_id', $preqId);
-        $this->set('lang_id', $nextLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    /* Specification Module [ */
-
-    public function specificationForm($preqId = 0, $prodspecId = 0)
-    {
-        $preqId = FatUtility::int($preqId);
-
-        $productOptions = array();
-        $productRow = array();
-        $displayDownloadTab = false;
-            
-           
-        if ($preqId) {
-            $productRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_prodcat_id', 'preq_content', 'preq_specifications'));
-            $preqCatId = $productRow['preq_prodcat_id'];
-            $productReqData = json_decode($productRow['preq_content'], true);
-            // CommonHelper::printArray($productRow);
-            $productOptions = !empty($productReqData['product_option']) ? $productReqData['product_option'] : [];
-
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
-            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
-        }
-        $productSpecData = !empty($productRow['preq_specifications']) ? json_decode($productRow['preq_specifications'], true) : [];
-        $this->set('productSpecifications', $productSpecData);
-        $this->set('preqId', $preqId);
-        $this->set('preqCatId', $preqCatId);
-        $this->set('productOptions', $productOptions);
-        $this->set('displayDownloadTab', $displayDownloadTab);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function getSpecificationForm($preqId, $prodspecId = 0, $divCount = 0)
-    {
-        $post = FatApp::getPostedData();
-        $data = array();
-        $data['product_id'] = $preqId;
-        $data['prodspec_id'] = $prodspecId;
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('languages', Language::getAllNames());
-        $this->set('preqId', $preqId);
-        $this->set('divCount', $divCount);
-        $this->_template->render(false, false);
-    }
-
-    public function setupSpecification($preqId, $prodSpecId = 0)
-    {
-        $preqId = FatUtility::int($preqId);
-
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Please_fill_Specifications', $this->siteLangId));
-        }
-
-        $languages = Language::getAllNames();
-        foreach ($post['prod_spec_name'][CommonHelper::getLangId()] as $specKey => $specval) {
-            $count = 0;
-            foreach ($languages as $langId => $langName) {
-                if ($post['prod_spec_name'][$langId][$specKey] == '') {
-                    $count++;
-                }
-
-                if ($count == count($languages)) {
-                    foreach ($languages as $langId => $langName) {
-                        unset($post['prod_spec_name'][$langId][$specKey]);
-                        unset($post['prod_spec_value'][$langId][$specKey]);
-                    }
-                }
-            }
-        }
-
-        unset($post['btn_submit']);
-        unset($post['fOutMode']);
-        unset($post['fIsAjax']);
-        $prodReqObj = new ProductRequest($preqId);
-        $data = array(
-            'preq_specifications' => FatUtility::convertToJson($post)
-        );
-
-        $prodReqObj->assignValues($data);
-
-        if (!$prodReqObj->save()) {
-            FatUtility::dieWithError($prodReqObj->getError());
-        }
-        $languages = Language::getAllNames();
-        reset($languages);
-        $nextLangId = key($languages);
-
-        $preqId = $prodReqObj->getMainTableRecordId();
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
-        $this->set('preqId', $preqId);
-        $this->set('lang_id', $nextLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    /* ] */
-
-
-    public function langForm($preq_id = 0, $lang_id = 0, $autoFillLangData = 0)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-
-        $preq_id = FatUtility::int($preq_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($preq_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $row_data = ProductRequest::getAttributesById($preq_id, array('preq_content'));
-        
-        if (false == $row_data) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $displayDownloadTab = false;
-        
-        $customProductLangFrm = $this->getLangForm($preq_id, $lang_id);
-
-        $prodObj = new ProductRequest($preq_id);
-
-        if (0 < $autoFillLangData) {
-            $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-            $customProductLangData = $prodObj->getAttributesByLangId($siteDefaultLangId, $preq_id);
-        } else {
-            $customProductLangData = $prodObj->getAttributesByLangId($lang_id, $preq_id);
-        }
-
-        if ($customProductLangData) {
-            $customProductLangData['preq_id'] = $preq_id;
-            $productData = json_decode($customProductLangData['preq_lang_data'], true);
-
-            unset($customProductLangData['preq_lang_data']);
-
-            if (0 < $autoFillLangData) {
-                $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
-                $translatedData = $updateLangDataobj->directTranslate($productData, $lang_id);
-                if (false === $translatedData) {
-                    Message::addErrorMessage($updateLangDataobj->getError());
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-                $productData = current($translatedData);
-            }
-
-            if (is_array($productData)) {
-                $customProductLangData = array_merge($customProductLangData, $productData);
-            }
-        }
-
-        $customProductLangFrm->fill($customProductLangData);
-
-        $productData = json_decode($row_data['preq_content'], true);
-        $row_data = array_merge($row_data, $productData);
-        $productOptions = !empty($row_data['product_option']) ? $row_data['product_option'] : array();
-
-        $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
-
-        $customProductLangData['preq_id'] = $preq_id;
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('preqId', $preq_id);
-        $this->set('productOptions', $productOptions);
-        $this->set('product_lang_id', $lang_id);
-        $this->set('customProductLangFrm', $customProductLangFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->set('displayDownloadTab', $displayDownloadTab);
-        $this->_template->render(false, false);
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditCustomProductRequests();
-
-        $post = FatApp::getPostedData();
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-
-        $preq_id = FatUtility::int($post['preq_id']);
-
-        if ($preq_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $frm = $this->getLangForm($preq_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        unset($post['preq_id']);
-        unset($post['lang_id']);
-        unset($post['btn_submit']);
-        if (array_key_exists('auto_update_other_langs_data', $post)) {
-            unset($post['auto_update_other_langs_data']);
-        }
-        $data_to_update = array(
-            'preqlang_preq_id' => $preq_id,
-            'preqlang_lang_id' => $lang_id,
-            'preq_lang_data' => FatUtility::convertToJson($post),
-        );
-
-        $prodObj = new ProductRequest($preq_id);
-        if (!$prodObj->updateLangData($lang_id, $data_to_update)) {
-            Message::addErrorMessage($prodObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        /* $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(ProductRequest::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($preq_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        } */
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = ProductRequest::getAttributesByLangId($langId, $preq_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-        $data = ProductRequest::getAttributesById($preq_id, array('preq_content'));
-        $productData = json_decode($data['preq_content'], true);
-        $productOptions = !empty($productData['product_option']) ? $productData['product_option'] : array();
-
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
-        $this->set('preq_id', $preq_id);
-        $this->set('productOptions', $productOptions);
-        $this->set('lang_id', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function updateStatusForm($preqId = 0)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $preqId = FatUtility::int($preqId);
-        if (!$preqId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = ProductRequest::getAttributesById($preqId, array('preq_id,preq_content'));
-
-        $productData = json_decode($data['preq_content'], true);
-        $productOptions = !empty($productData['product_option']) ? $productData['product_option'] : array();
-
-        $frm = $this->getStatusForm();
-        $frm->fill($data);
-
-        $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type'] && applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productData) ? $productData['product_attachements_with_inventory'] : applicationConstants::NO));
-
-        $this->set('displayDownloadTab', $displayDownloadTab);
+        $frm = $this->getStatusForm($recordId);
+        $frm->fill(['preq_status' => $reqStatus]);
 
         $this->set('frm', $frm);
-        $this->set('preqId', $preqId);
-        $this->set('productOptions', $productOptions);
-        $this->set('languages', Language::getAllNames());
-        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('recordId', $recordId);
+        $this->set('includeTabs', false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function updateStatus()
+    public function changeRequestStatus()
     {
-        $this->objPrivilege->canEditCustomProductRequests();
+        $this->checkEditPrivilege();
 
         $frm = $this->getStatusForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        $preqId = $post['preq_id'];
-        $status = $post['preq_status'];
-        //$update_withselprod = $post['preq_update_withselprod'];
-        $update_withselprod = 0;
+
+        $preqId = FatUtility::int($post['preq_id']);
+        $status = FatUtility::int($post['preq_status']);
 
         $srch = ProductRequest::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = preq.preq_user_id', 'u');
@@ -951,14 +387,12 @@ class CustomProductsController extends ListingBaseController
         $db = FatApp::getDb();
         $data = $db->fetch($rs);
 
-        if ($data == false || $data['preq_deleted'] == applicationConstants::YES || $data['preq_status'] == ProductRequest::STATUS_APPROVED) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($data == false || $data['preq_deleted'] == applicationConstants::YES || $data['preq_status'] != ProductRequest::STATUS_PENDING) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if ($status != ProductRequest::STATUS_APPROVED && $status != ProductRequest::STATUS_CANCELLED) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($status == ProductRequest::STATUS_PENDING) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_REQUEST_ALREADY_PENDING', $this->siteLangId), true);
         }
 
         $db = FatApp::getDb();
@@ -968,9 +402,8 @@ class CustomProductsController extends ListingBaseController
         $prodReqObj->assignValues($updateData);
 
         if (!$prodReqObj->save()) {
-            Message::addErrorMessage($prodReqObj->getError());
             $db->rollbackTransaction();
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($prodReqObj->getError(), true);
         }
 
         if ($status == ProductRequest::STATUS_APPROVED) {
@@ -982,7 +415,6 @@ class CustomProductsController extends ListingBaseController
                 'product_model' => isset($data['product_model']) ? $data['product_model'] : '',
                 'product_brand_id' => isset($data['product_brand_id']) ? $data['product_brand_id'] : 0,
                 'product_added_by_admin_id' => applicationConstants::YES,
-                /* 'product_seller_id'=>isset($data['preq_user_id'])?$data['preq_user_id']:0, */
                 'product_min_selling_price' => isset($data['product_min_selling_price']) ? $data['product_min_selling_price'] : 0,
                 'product_length' => isset($data['product_length']) ? $data['product_length'] : 0,
                 'product_width' => isset($data['product_width']) ? $data['product_width'] : 0,
@@ -1003,9 +435,8 @@ class CustomProductsController extends ListingBaseController
 
             $prodObj->assignValues($productData);
             if (!$prodObj->save()) {
-                Message::addErrorMessage($prodObj->getError());
                 $db->rollbackTransaction();
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($prodObj->getError(), true);
             }
 
             $product_id = $prodObj->getMainTableRecordId();
@@ -1019,17 +450,16 @@ class CustomProductsController extends ListingBaseController
 
             $ddSrch->doNotCalculateRecords();
             $rs = $ddSrch->getResultSet();
-            
+
             $rows = FatApp::getDb()->fetchAll($rs, 'pddr_id');
             if (0 < count($rows)) {
                 $pddrIds = array_Keys($rows);
-                
+
                 $pddrIds = FatUtility::int($pddrIds);
 
-                if (!$db->query("UPDATE " . DigitalDownload::DB_TBL . " SET pddr_record_id = ".$product_id.", pddr_type = 0 WHERE pddr_id IN (" . implode(',', $pddrIds) . ")")) {
-                    Message::addErrorMessage($db->getError());
+                if (!$db->query("UPDATE " . DigitalDownload::DB_TBL . " SET pddr_record_id = " . $product_id . ", pddr_type = 0 WHERE pddr_id IN (" . implode(',', $pddrIds) . ")")) {
                     $db->rollbackTransaction();
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError($db->getError(), true);
                 }
             }
 
@@ -1041,31 +471,31 @@ class CustomProductsController extends ListingBaseController
                 );
                 $spObj = new ShippingProfileProduct();
                 if (!$spObj->addProduct($shipProProdData)) {
-                    Message::addErrorMessage($spObj->getError());
-                    FatUtility::dieWithError(Message::getHtml());
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($spObj->getError(), true);
                 }
             }
 
             $prodSepc = [
                 'ps_product_id' => $product_id,
-                'product_warranty' => isset($data['product_warranty']) ? $data['product_warranty'] : 0
+                'product_warranty' => isset($data['product_warranty']) ? $data['product_warranty'] : 0,
+                'product_warranty_unit' => isset($data['product_warranty_unit']) ? $data['product_warranty'] : 0
             ];
 
             $productSpecificsObj = new ProductSpecifics($product_id);
             $productSpecificsObj->assignValues($prodSepc);
             if (!$productSpecificsObj->addNew(array(), $prodSepc)) {
-                Message::addErrorMessage($productSpecificsObj->getError());
                 $db->rollbackTransaction();
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($productSpecificsObj->getError(), true);
             }
 
             /* saving of product categories[ */
             $product_categories = array($data['preq_prodcat_id']);
             if (!$prodObj->addUpdateProductCategories($product_id, $product_categories)) {
-                Message::addErrorMessage($prodObj->getError());
                 $db->rollbackTransaction();
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($prodObj->getError(), true);
             }
+
             /* ] */
 
             /*Save Prodcut tax category [*/
@@ -1075,36 +505,24 @@ class CustomProductsController extends ListingBaseController
             );
             $taxObj = new Tax();
             if (!$taxObj->addUpdateProductTaxCat($prodTaxData)) {
-                Message::addErrorMessage($taxObj->getError());
                 $db->rollbackTransaction();
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($taxObj->getError(), true);
             }
+
             /*]*/
 
             /* saving of product options[ */
-            $optons = isset($data['product_option']) ? $data['product_option'] : array();
-            if (!empty($optons)) {
-                foreach ($optons as $option_id) {
-                    if (!$prodObj->addUpdateProductOption($option_id)) {
-                        Message::addErrorMessage($prodObj->getError());
+            $options = isset($data['product_option']) ? $data['product_option'] : array();
+            if (!empty($options)) {
+                foreach ($options as $index => $optionId) {
+                    $optionValIds = isset($data['product_option_values'][$index]) && is_array($data['product_option_values'][$index])  ? implode(",", $data['product_option_values'][$index]) : '';
+                    if (!$prodObj->addUpdateProductOption($optionId, $optionValIds)) {
                         $db->rollbackTransaction();
-                        FatUtility::dieWithError(Message::getHtml());
+                        LibHelper::exitWithError($prodObj->getError(), true);
                     }
                 }
             }
-            /*]*/
 
-            /* Saving of product tags[ */
-            $tags = isset($data['product_tags']) ? $data['product_tags'] : array();
-            if (!empty($tags)) {
-                foreach ($tags as $tag_id) {
-                    if (!$prodObj->addUpdateProductTag($tag_id)) {
-                        Message::addErrorMessage($prodObj->getError());
-                        $db->rollbackTransaction();
-                        FatUtility::dieWithError(Message::getHtml());
-                    }
-                }
-            }
             /*]*/
 
             /* Update Product seller shipping [*/
@@ -1114,9 +532,8 @@ class CustomProductsController extends ListingBaseController
             );
 
             if (!Product::addUpdateProductSellerShipping($product_id, $prodSellerShipArr, 0)) {
-                Message::addErrorMessage(FatApp::getDb()->getError());
                 $db->rollbackTransaction();
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($db->getError(), true);
             }
             /* ]*/
 
@@ -1124,9 +541,8 @@ class CustomProductsController extends ListingBaseController
             $shippingArr = isset($data['product_shipping']) ? $data['product_shipping'] : array();
             if (!empty($shippingArr)) {
                 if (!Product::addUpdateProductShippingRates($product_id, $shippingArr, 0)) {
-                    Message::addErrorMessage(FatApp::getDb()->getError());
                     $db->rollbackTransaction();
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError($db->getError(), true);
                 }
             }
             /*]*/
@@ -1153,10 +569,33 @@ class CustomProductsController extends ListingBaseController
                     'product_tags_string' => '',
                 );
                 if (!$prodObj->updateLangData($lang_id, $productLangData)) {
-                    Message::addErrorMessage($prodObj->getError());
                     $db->rollbackTransaction();
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError($prodObj->getError(), true);
                 }
+
+
+                /* Saving of product tags[ */
+                if (isset($reqLangData['product_tags']) && is_array($reqLangData['product_tags'])) {
+                    foreach ($reqLangData['product_tags'] as $tag_id) {
+                        if (!$prodObj->addUpdateProductTag($tag_id)) {
+                            $db->rollbackTransaction();
+                            LibHelper::exitWithError($prodObj->getError(), true);
+                        }
+                    }
+                }
+                /*]*/
+
+                /*[ Saving product Specifications */
+
+                if (isset($reqLangData['specifications']) && is_array($reqLangData['specifications'])) {
+                    foreach ($reqLangData['specifications'] as $specification) {
+                        if (!$prodObj->saveProductSpecifications(0, $lang_id, $specification['name'], $specification['value'], $specification['group'])) {
+                            $db->rollbackTransaction();
+                            LibHelper::exitWithError($prodObj->getError(), true);
+                        }
+                    }
+                }
+                /*]*/
             }
             /*]*/
 
@@ -1208,9 +647,8 @@ class CustomProductsController extends ListingBaseController
 
                     $upcObj->assignValues($upcData);
                     if (!$upcObj->save()) {
-                        Message::addErrorMessage($upcObj->getError());
                         $db->rollbackTransaction();
-                        FatUtility::dieWithError(Message::getHtml());
+                        LibHelper::exitWithError($upcObj->getError(), true);
                     }
                 }
             }
@@ -1222,142 +660,6 @@ class CustomProductsController extends ListingBaseController
 
             $db->updateFromArray(AttachedFile::DB_TBL, array('afile_record_id' => $product_id, 'afile_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE), $where);
             /*]*/
-
-            $selProdData = isset($data['preq_sel_prod_data']) ? json_decode($data['preq_sel_prod_data'], true) : array();
-            if ($update_withselprod && !empty($selProdData)) {
-                $updateSelProdData = array(
-                    'selprod_user_id' => isset($selProdData['preq_user_id']) ? $selProdData['preq_user_id'] : $data['preq_user_id'],
-                    'selprod_product_id' => $product_id,
-                    'selprod_cost' => isset($selProdData['selprod_cost']) ? $selProdData['selprod_cost'] : 0,
-                    'selprod_price' => isset($selProdData['selprod_price']) ? $selProdData['selprod_price'] : 0,
-                    'selprod_stock' => isset($selProdData['selprod_stock']) ? $selProdData['selprod_stock'] : 0,
-                    'selprod_min_order_qty' => isset($selProdData['selprod_min_order_qty']) ? $selProdData['selprod_min_order_qty'] : 0,
-                    /* 'selprod_max_order_qty'=>isset($selProdData['selprod_min_order_qty'])?$selProdData['selprod_max_order_qty']:0, */
-                    'selprod_subtract_stock' => isset($selProdData['selprod_subtract_stock']) ? $selProdData['selprod_subtract_stock'] : 0,
-                    'selprod_track_inventory' => isset($selProdData['selprod_track_inventory']) ? $selProdData['selprod_track_inventory'] : 0,
-                    'selprod_sku' => isset($selProdData['selprod_sku']) ? $selProdData['selprod_sku'] : '',
-                    'selprod_condition' => isset($selProdData['selprod_condition']) ? $selProdData['selprod_condition'] : Product::CONDITION_NEW,
-                    'selprod_available_from' => isset($selProdData['selprod_available_from']) ? $selProdData['selprod_available_from'] : '',
-                    'selprod_active' => isset($selProdData['selprod_active']) ? $selProdData['selprod_active'] : '',
-                    'selprod_cod_enabled' => isset($selProdData['selprod_cod_enabled']) ? $selProdData['selprod_cod_enabled'] : '',
-                );
-
-                $options = array();
-
-                $optionValueIdArr = (isset($selProdData['selprodoption_optionvalue_id']) && count($selProdData['selprodoption_optionvalue_id']) > 0) ? $selProdData['selprodoption_optionvalue_id'] : array();
-                foreach ($optionValueIdArr as $optionValueId) {
-                    $row = OptionValue::getAttributesById($optionValueId, array('optionvalue_option_id'));
-                    if ($row == false) {
-                        continue;
-                    }
-                    $options[$row['optionvalue_option_id']] = $optionValueId;
-                }
-
-                asort($options);
-
-
-                $selProdCode = $product_id . '_' . implode('_', $options);
-                $updateSelProdData['selprod_code'] = $selProdCode;
-
-                if (isset($data['selprod_track_inventory']) && $data['selprod_track_inventory'] == Product::INVENTORY_NOT_TRACK) {
-                    $updateSelProdData['selprod_threshold_stock_level'] = 0;
-                }
-
-                $sellerProdObj = new SellerProduct();
-                $sellerProdObj->assignValues($updateSelProdData);
-                if (!$sellerProdObj->save()) {
-                    Message::addErrorMessage($sellerProdObj->getError());
-                    $db->rollbackTransaction();
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-                $selprod_id = $sellerProdObj->getMainTableRecordId();
-
-                if (!empty($selprod_id)) {
-                    $selProdSpecificsObj = new SellerProductSpecifics($selprod_id);
-                    $selProdSepc = [
-                        'sps_selprod_id' => $selprod_id,
-                        'selprod_return_age' => $selProdData['selprod_return_age'],
-                        'selprod_cancellation_age' => $selProdData['selprod_cancellation_age'],
-                    ];
-                    $selProdSpecificsObj->assignValues($selProdSepc);
-                    if (!$selProdSpecificsObj->addNew(array(), $selProdSepc)) {
-                        Message::addErrorMessage($selProdSpecificsObj->getError());
-                        $db->rollbackTransaction();
-                        FatUtility::dieWithError(Message::getHtml());
-                    }
-                }
-
-                /* Save url keyword [ */
-                $urlKeyword = strtolower(CommonHelper::createSlug($selProdData['selprod_url_keyword']));
-                $seoUrl = CommonHelper::seoUrl($urlKeyword) . '-' . $selprod_id;
-                $originalUrl = Product::PRODUCT_VIEW_ORGINAL_URL . $selprod_id;
-                $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl);
-                $seoUrlKeyword = array(
-                    'urlrewrite_original' => $originalUrl,
-                    'urlrewrite_custom' => $customUrl
-                );
-                FatApp::getDb()->insertFromArray(UrlRewrite::DB_TBL, $seoUrlKeyword, false, array(), array('urlrewrite_custom' => $customUrl));
-                /*]*/
-
-                /* save options data, if any [ */
-                if (!$sellerProdObj->addUpdateSellerProductOptions($selprod_id, $options)) {
-                    Message::addErrorMessage($sellerProdObj->getError());
-                    $db->rollbackTransaction();
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-                /*]*/
-
-                /* Seller product lang data [*/
-                $sellerProdObj = new SellerProduct($selprod_id);
-                foreach ($languages as $lang_id => $langName) {
-                    $reqLangData = ProductRequest::getAttributesByLangId($lang_id, $preqId);
-                    if ($reqLangData == false) {
-                        continue;
-                    }
-
-                    $arr = json_decode($reqLangData['preq_lang_data'], true);
-                    if (!empty($arr)) {
-                        $reqLangData = array_merge($reqLangData, json_decode($reqLangData['preq_lang_data'], true));
-                    }
-                    $title = $reqLangData['product_name'] ?? '';
-
-                    $selProdLangData = array(
-                        'selprodlang_selprod_id' => $selprod_id,
-                        'selprodlang_lang_id' => $lang_id,
-                        'selprod_title' => $reqLangData['selprod_title'] ?? $title,
-                        'selprod_comments' => $reqLangData['selprod_comments'] ?? '',
-                    );
-
-                    if (!$sellerProdObj->updateLangData($lang_id, $selProdLangData)) {
-                        Message::addErrorMessage($prodObj->getError());
-                        $db->rollbackTransaction();
-                        FatUtility::dieWithError(Message::getHtml());
-                    }
-                } /* ]*/
-            }
-
-            /*[ Saving product Specifications */
-            $prodSpecData = array();
-            if (isset($data['preq_specifications'])) {
-                $prodSpecData = json_decode($data['preq_specifications'], true);
-            }
-
-            if (!empty($prodSpecData)) {
-                $languages = Language::getAllNames();
-                foreach ($languages as $langId => $langName) {
-                    if (!empty($prodSpecData['prod_spec_name'][$langId])) {
-                        foreach ($prodSpecData['prod_spec_name'][$langId] as $specKey => $specval) {
-                            $prod = new Product($product_id);
-                            $prodSpecGroup = !empty($prodSpecData['prod_spec_group'][$langId][$specKey]) ? $prodSpecData['prod_spec_group'][$langId][$specKey] : '';
-                            if (!$prod->saveProductSpecifications(0, $langId, $prodSpecData['prod_spec_name'][$langId][$specKey], $prodSpecData['prod_spec_value'][$langId][$specKey], $prodSpecGroup)) {
-                                Message::addErrorMessage($prod->getError());
-                                FatUtility::dieWithError(Message::getHtml());
-                            }
-                        }
-                    }
-                }
-            }
-            /*]*/
         }
 
         $email = new EmailHandler();
@@ -1367,338 +669,368 @@ class CustomProductsController extends ListingBaseController
         $customCatalogReq['preq_comment'] = $post['preq_comment'];
         if (!$email->sendCustomCatalogRequestStatusChangeNotification($this->siteLangId, $customCatalogReq)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_Sent', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId), true);
         }
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
         }
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('MSG_Status_updated_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function customEanUpcForm($preqId = 0)
+    private function getForm($langId, $productType = 0, $recordId = 0)
     {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $preqId = FatUtility::int($preqId);
-        $upcCodeData = array();
-
-        $displayDownloadTab = false;
-        /* Validate product request belongs to current logged seller[ */
-        if ($preqId) {
-            $productReqRow = ProductRequest::getAttributesById($preqId);
-            // CommonHelper::printArray([$productReqRow], 1);
-            if ($productReqRow == false) {
-                Message::addErrorMessage($this->str_invalid_request);
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $prodcat_id = $productReqRow['preq_prodcat_id'];
-            $upcCodeData = json_decode($productReqRow['preq_ean_upc_code'], true);
-
-            $productReqData = json_decode($productReqRow['preq_content'], true);
-
-            /* $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
-            applicationConstants::NO == $productReqData['product_attachements_with_inventory']); */
-            $displayDownloadTab = (Product::PRODUCT_TYPE_DIGITAL == $productReqData['product_type'] &&
-            applicationConstants::NO == (array_key_exists('product_attachements_with_inventory', $productReqData) ? $productReqData['product_attachements_with_inventory'] : applicationConstants::NO));
+        $frm = $this->getCatalogForm($langId, $productType, $recordId, 1);
+        $shippingObj = new Shipping($langId);
+        if (!$shippingObj->getShippingApiObj(0)) {
+            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
         }
-        /* ] */
-        
+        return $frm;
+    }
 
-        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
+    public function digitalDownloadForm($recordId, $type)
+    {
+        $this->checkEditPrivilege();
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
 
-        $this->set('productOptions', $productOptions);
+        $productData = ProductRequest::getAttributesById($recordId, 'preq_content');
+        if ($productData == false) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $productData = json_decode($productData, true);
+        if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
+
+        $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
+        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
+
+        $fld = $frm->getField('option_comb_id');
+        if (1 > count($optionCombinations)) {
+            $frm->removeField($fld);
+        } else {
+            $optionCombinations = array('0' => Labels::getLabel('FRM_All', $this->siteLangId)) + $optionCombinations;
+            $fld->options = $optionCombinations;
+        }
+
+        $this->set('frm', $frm);
+        $this->set('type', $type);
+        $this->set('html', $this->_template->render(false, false, 'products/digital-download-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function prodSpecifications()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+        $specifications =  [];
+        if (0 < $recordId) {
+            $langData = $this->modelClass::getAttributesByLangId($langId, $recordId, 'preq_lang_data');
+            if (!empty($langData)) {
+                $langData = json_decode($langData, true);
+                if (isset($langData['specifications']) && !empty($langData['specifications'])) {
+                    foreach ($langData['specifications'] as $specification) {
+                        $specifications[] = [
+                            'prodspec_id' => '',
+                            'prodspec_name' => $specification['name'],
+                            'prodspec_value' => $specification['value'],
+                            'prodspec_group' => $specification['group'],
+                        ];
+                    }
+                }
+            }
+        }
+        $this->set('productSpecifications', $specifications);
+        $this->set('langId', $langId);
+        $this->set('html', $this->_template->render(false, false, 'products/prod-specifications.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function upcListing()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $productOptions = FatApp::getPostedData('productOptions');
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
+        $upcCodes = $this->modelClass::getAttributesById($recordId, 'preq_ean_upc_code');
+        $upcCodeData = [];
+        if (!empty($upcCodes)) {
+            $upcCodes = json_decode($upcCodes, true);
+            foreach ($upcCodes as $key => $upcCode) {
+                $upcCodeData[$key]['upc_code'] = $upcCode;
+            }
+        }
+
+        $optionCombinations = [];
+        if ($type == applicationConstants::NO && is_array($productOptions)) {
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues');
+        }
+
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
-        $this->set('preqId', $preqId);
-        $this->set('displayDownloadTab', $displayDownloadTab);
-        $this->set('productType', $productReqData['product_type']);
-        $this->set('preqCatId', $prodcat_id);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('recordId', $recordId);
+        $this->set('langId', $langId);
+        $this->set('html', $this->_template->render(false, false, 'products/upc-listing.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function validateUpcCode()
+    public function images($recordId, $optionId = 0, $langId = 0)
     {
-        $post = FatApp::getPostedData();
-        if (empty($post) || $post['code'] == '') {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatUtility::int($recordId);
+        if (1  > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $langId =  array_key_first($languages);
+        }
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
 
-        $srch = UpcCode::getSearchObject();
-        $srch->addCondition('upc_code', '=', $post['code']);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $totalRecords = FatApp::getDb()->totalRecords($rs);
-        if ($totalRecords > 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_This_UPC/EAN_code_already_assigned_to_another_product', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->_template->render(false, false, 'json-success.php');
+        $this->set('images', $images);
+        $this->set('record_id', $recordId);
+        $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
+        $this->checkEditPrivilege(true);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setupEanUpcCode($preqId)
+    public function setup()
     {
-        $this->objPrivilege->canEditCustomProductRequests();
-        $preqId = FatUtility::int($preqId);
+        $this->checkEditPrivilege();
 
-        /* Validate product request belongs to current logged seller[ */
-        if ($preqId) {
-            $productReqRow = ProductRequest::getAttributesById($preqId);
-            if ($productReqRow == false) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $prodcat_id = $productReqRow['preq_prodcat_id'];
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+
+        $reqStatus = $this->modelClass::getAttributesById($recordId, 'preq_status');
+        if (false === $reqStatus ||  $reqStatus != ProductRequest::STATUS_PENDING) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        /* ] */
 
-        $post = FatApp::getPostedData();
+        $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (1 > $langId ||  !array_key_exists($productType, Product::getProductTypes($langId))) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $frm = $this->getForm($langId, $productType, $recordId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+        
+        /* [select2 data */
+        $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
+        $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
+        $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
+        /* select2 data ] */
+
+        $this->validateGetForm($post);
+
+        $requestStatus = FatApp::getPostedData('request_status', FatUtility::VAR_INT, 0);
+
+        unset($post['btn_submit'], $post['record_id'], $post['product_approved'], $post['request_status']);
+
+        $db = FatApp::getDb();
+        $db->startTransaction();
+
+        $data = [
+            'preq_brand_id' => $post['product_brand_id'],
+            'preq_prodcat_id' => $post['ptc_prodcat_id'],
+            'preq_ean_upc_code' => json_encode($post['product_upcs']),
+        ];
+        $langData =  [
+            'product_name' => $post['product_name'],
+            'product_description' => $post['product_description'],
+            'product_youtube_video' => $post['product_youtube_video'] ?? '',
+            'product_tags' => [],
+            'specifications' => $post['specifications'] ?? '',
+        ];
+
+        if (isset($post['product_tags']) && !empty($post['product_tags'])) {
+            $productTags = json_decode($post['product_tags'], true);
+            foreach ($productTags as $tag) {
+                if (!isset($tag['id'])) {
+                    $tagObj = new Tag();
+                    $tagObj->assignValues(['tag_name' => $tag['value'], 'tag_lang_id' => $langId]);
+                    if (!$tagObj->save()) {
+                        $db->rollbackTransaction();
+                        LibHelper::exitWithError($tagObj->getError(), true);
+                    }
+                    $tagId = $tagObj->getMainTableRecordId();
+                } else {
+                    $tagId = $tag['id'];
+                }
+                $langData['product_tags'][] = $tagId;
+            }
         }
 
-        unset($post['btn_submit']);
-        unset($post['fOutMode']);
-        unset($post['fIsAjax']);
-        $prodReqObj = new ProductRequest($preqId);
-        $data = array(
-            'preq_ean_upc_code' => str_replace('code', '', FatUtility::convertToJson($post))
+        foreach ($post['options'] as $index => $optionId) {
+            $data['preq_content']['product_option'][] = $optionId;
+            $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
+            $data['preq_content']['product_option_values'][] = $opValuesArr;
+        }
+   
+        unset(
+            $post['options'],
+            $post['optionValues'],        
+            $post['product_upcs'],
+            $post['lang_id'],
+            $post['record_id'],
+            $post['upc_type'],
         );
 
+        $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
+        $data['preq_content'] = json_encode($data['preq_content']);
+        $data['preq_status'] = $requestStatus;
+
+        $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
-
         if (!$prodReqObj->save()) {
-            FatUtility::dieWithError($prodReqObj->getError());
+            $db->rollbackTransaction();
+            LibHelper::exitWithError($prodReqObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
-        $this->set('preq_id', $preqId);
+        if (!$prodReqObj->updateLangData($langId, ['preq_lang_data' => json_encode($langData)])) {
+            $db->rollbackTransaction();
+            LibHelper::exitWithError($prodReqObj->getError(), true);
+        }
+
+        $db->commitTransaction();
+        $this->set('recordId', $recordId);
+        $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function loadCustomProductTags()
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $post = FatApp::getPostedData();
-        if (empty($post['tags'])) {
-            return false;
-        }
-
-        $srch = Tag::getSearchObject($this->siteLangId);
-        $srch->addOrder('tag_name');
-       
-        $srch->addMultipleFields(array('tag_id', 'tag_name'));
-        $srch->addCondition('tag_id', 'IN', $post['tags']);
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $tags = $db->fetchAll($rs, 'tag_id');
-        $li = '';
-        foreach ($tags as $key => $tag) {
-            $li .= '<li id="product-tag' . $tag['tag_id'] . '"><span class="left "><a href="javascript:void(0)" title="Remove" onClick="removeProductTag(' . $tag['tag_id'] . ');"><i class="icon ion-close remove_tag-js" data-tag-id="' . $tag['tag_id'] . '"></i></a></span>';
-            $li .= '<span class="left">' . $tag['tag_name']  . '<input type="hidden" value="' . $tag['tag_id'] . '"  name="product_tags[]"></span></li>';
-        }
-        echo $li;
-        exit;
-    }
-
-    public function loadCustomProductOptionss()
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $post = FatApp::getPostedData();
-        if (empty($post['options'])) {
-            return false;
-        }
-
-        $srch = Option::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('option_id, option_name, option_identifier'));
-        $srch->addCondition('option_id', 'IN', $post['options']);
-        $srch->addOrder('option_identifier');
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $options = $db->fetchAll($rs, 'option_id');
-        $li = '';
-        foreach ($options as $key => $option) {
-            $li .= '<li id="product-option' . $option['option_id'] . '"><span class="left" ><a href="javascript:void(0)" title="Remove" onClick="removeProductOption(' . $option['option_id'] . ');"><i class="icon ion-close" data-option-id="' . $option['option_id'] . '"></i></a></span>';
-            $li .= '<span class="left">' . $option['option_name'] . ' (' . $option['option_identifier'] . ')' . '<input type="hidden" value="' . $option['option_id'] . '"  name="product_option[]"></span></li>';
-        }
-
-        echo $li;
-        exit;
-    }
-
-    public function getShippingTab()
-    {
-        $shipping_rates = array();
-        $post = FatApp::getPostedData();
-        $preq_id = $post['preq_id'];
-
-        $shipping_rates = array();
-        $productReqData = ProductRequest::getAttributesById($preq_id, array('preq_id', 'preq_user_id'));
-        $shipping_rates = ProductRequest::getProductShippingRates($preq_id, $this->siteLangId, 0, $productReqData['preq_user_id']);
-        /* $shipping_rates = array();
-        $productReqData = ProductRequest::getAttributesById($preq_id);
-        $productReqData = json_decode($productReqData['preq_content'],true);
-        $shipping_rates = !(empty($productReqData['product_shipping']))?$productReqData['product_shipping']:array(); */
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('product_id', $preq_id);
-        $this->set('shipping_rates', $shipping_rates);
-        $this->_template->render(false, false, 'products/get-shipping-tab.php');
-    }
-
-    public function imagesForm($preq_id)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $preq_id = FatUtility::int($preq_id);
-        if (!$preq_id) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
-        }
-        $imagesFrm = $this->getImagesFrm($preq_id, $this->siteLangId);
-        $this->set('preq_id', $preq_id);
-        $this->set('imagesFrm', $imagesFrm);
-        $this->_template->render(false, false);
-    }
-
-    public function images($preq_id, $option_id = 0, $lang_id = 0)
-    {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $preq_id = FatUtility::int($preq_id);
-        if (!$preq_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-        }
-
-        if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
-        }
-		
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $lang_id =  array_key_first($languages); 
-			 $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, true, 0, 0, true);
-		} else {
-			$product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, false, 0, 0, true);
-		}
-		
-        
-        $imgTypesArr = $this->getSeparateImageOptions($preq_id, $this->siteLangId);
-
-        $this->set('images', $product_images);
-        $this->set('preq_id', $preq_id);
-        $this->set('imgTypesArr', $imgTypesArr);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
     }
 
     public function setImageOrder()
     {
-        $this->objPrivilege->canEditCustomProductRequests();
+        $this->checkEditPrivilege();
         $preqObj = new ProductRequest();
         $post = FatApp::getPostedData();
-        $preq_id = FatUtility::int($post['preq_id']);
+        $recordId = FatUtility::int($post['record_id']);
         $imageIds = explode('-', $post['ids']);
         $count = 1;
         foreach ($imageIds as $row) {
             $order[$count] = $row;
             $count++;
         }
-        if (!$preqObj->updateProdImagesOrder($preq_id, $order)) {
-            Message::addErrorMessage($preqObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+        if (!$preqObj->updateProdImagesOrder($recordId, AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $order)) {
+            LibHelper::exitWithError($preqObj->getError(), true);
         }
-        $this->set("msg", Labels::getLabel('LBL_Ordered_Successfully', $this->siteLangId));
+        $this->set("msg", $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function uploadProductImages()
+    public function uploadMedia()
     {
-        $this->objPrivilege->canEditCustomProductRequests();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
-
-        $preq_id = FatUtility::int($post['preq_id']);
-        $option_id = FatUtility::int($post['option_id']);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = FatUtility::int($post['lang_id']);
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-       
-
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $_FILES['cropped_image']['name'], -1, $unique_record = false, $lang_id)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
-        $this->set("msg", Labels::getLabel('LBL_Image_Uploaded_Successfully', $this->siteLangId));
+        $recordId = FatUtility::int($post['record_id']);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $optionId = FatUtility::int($post['option_id']);
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $langId = FatUtility::int($post['lang_id']);
+        } else {
+            $langId = array_key_first($languages);
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $recordId, $optionId, $_FILES['cropped_image']['name'], -1, false, $langId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        if (count($languages) > 1) {
+            $this->set("isDefaultLayout", $langId == 0 &&  $optionId == 0);
+        } else {
+            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() &&  $optionId == 0);
+        }
+
+        $this->set("lang_id", $langId);
+        $this->set("option_id", $optionId);
+        $this->set("recordId", $recordId);
+        $this->set("msg", Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteImage($preq_id, $image_id)
+    public function deleteImage($recordId, $imageId)
     {
-        $this->objPrivilege->canEditCustomProductRequests();
-        $preq_id = FatUtility::int($preq_id);
-        $image_id = FatUtility::int($image_id);
-        if (!$image_id || !$preq_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        $this->checkEditPrivilege();
+        $recordId = FatUtility::int($recordId);
+        $imageId = FatUtility::int($imageId);
+
+        if (1 > $imageId || 1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $preqObj = new ProductRequest();
-        if (!$preqObj->deleteProductImage($preq_id, $image_id)) {
-            Message::addErrorMessage($preqObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        $fileHandlerObj = new AttachedFile();
+        $data = $fileHandlerObj::getAttributesById($imageId, ['afile_lang_id', 'afile_record_subid']);
+        if (false == $data) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $this->set("msg", Labels::getLabel('LBL_Image_Removed_Successfully', $this->siteLangId));
+        $productObj = new ProductRequest();
+        if (!$productObj->deleteProductImage($recordId, $imageId)) {
+            LibHelper::exitWithError($productObj->getError(), true);
+        }
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $this->set("isDefaultLayout", $data['afile_lang_id'] == 0 &&  $data['afile_record_subid'] == 0);
+        } else {
+            $this->set("isDefaultLayout", $data['afile_lang_id'] == CommonHelper::getDefaultFormLangId() &&  $data['afile_record_subid'] == 0);
+        }
+        $this->set("optionId", $data['afile_record_subid']);
+        $this->set("langId", $data['afile_lang_id']);
+        $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getImagesFrm($preq_id = 0, $lang_id = 0)
     {
-        $this->objPrivilege->canViewCustomProductRequests();
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
-		
-		
+        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
+
         $languagesAssocArr = Language::getAllNames();
-       
-		$languages = Language::getAllNames();
-		if(count($languagesAssocArr) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
-		} else  {
-			$lang_id = array_key_first($languagesAssocArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-	   
-		
-       
-	   $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+
+        $languages = Language::getAllNames();
+        if (count($languagesAssocArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+        } else {
+            $lang_id = array_key_first($languagesAssocArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</small>';
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</small>';
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
         $frm->addHiddenField('', 'preq_id', $preq_id);
@@ -1735,413 +1067,127 @@ class CustomProductsController extends ListingBaseController
         return $imgTypesArr;
     }
 
-
-    // need to remove both
-    // private function getForm($attrgrp_id = 0, $productType = Product::PRODUCT_TYPE_PHYSICAL)
-    // {
-    //     return $this->getProductCatalogForm($attrgrp_id, 'REQUESTED_CATALOG_PRODUCT', $productType);
-    // }
-
-    private function getLangForm($preqId, $langId)
+    public function setupDigitalDownload()
     {
-        $frm = new Form('frmCustomProductLang');
-        $frm->addHiddenField('', 'preq_id', $preqId);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
-		
-		
-        $frm->addRequiredField(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'product_name');
-        /* $frm->addRequiredField(Labels::getLabel('LBL_Seller_Product_Title', $this->siteLangId), 'selprod_title');
-        $frm->addTextBox(Labels::getLabel('LBL_Any_extra_comment_for_buyer', $this->siteLangId), 'selprod_comments'); */
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->siteLangId), 'product_description');
-        $frm->addTextBox(Labels::getLabel('LBL_YouTube_Video', $this->siteLangId), 'product_youtube_video');
+        $this->checkEditPrivilege();
 
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
 
-        /* $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } */
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getStatusForm()
-    {
-        $frm = new Form('frmUpdateStatus');
-
-        $statusArr = ProductRequest::getStatusArr($this->siteLangId);
-        unset($statusArr[ProductRequest::STATUS_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Select_Status', $this->siteLangId), 'preq_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
-
-        /*$frm->addCheckbox(Labels::getLabel('LBL_Move_seller_data_along_with_catalog_request_data', $this->siteLangId), 'preq_update_withselprod', 1, array(), true, 0);*/
-        $frm->addHiddenField('', 'preq_id');
-        $frm->addTextArea('', 'preq_comment', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function catalogCustomProductRequestSearchForm()
-    {
-        $frm = new Form('frmCustomProdReqSrch');
-        $frm->addTextBox('Keyword', 'keyword', '');
-
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + ProductRequest::getStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
-        $frm->addDateField('Date From', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('Date To', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', 'Search');
-        $fld_cancel = $frm->addButton("", "btn_clear", "Clear Search", array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-
-    public function getTranslatedData()
-    {
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $prodSpecName = FatApp::getPostedData('prod_spec_name', FatUtility::VAR_STRING, '');
-        $prodSpecValue = FatApp::getPostedData('prod_spec_value', FatUtility::VAR_STRING, '');
-
-        if (!empty($prodSpecName) && !empty($prodSpecValue)) {
-            $data = [];
-
-            $translatedText = $this->translateLangFields(ProductRequest::DB_TBL_LANG, $prodSpecName[$siteDefaultLangId]);
-            foreach ($translatedText as $langId => $textArr) {
-                foreach ($textArr as $index => $value) {
-                    if ('preqlang_lang_id' === $index) {
-                        continue;
-                    }
-                    $data[$langId]['prod_spec_name[' . $langId . '][' . $index . ']'] = $value;
-                }
-            }
-
-            $translatedText = $this->translateLangFields(ProductRequest::DB_TBL_LANG, $prodSpecValue[$siteDefaultLangId]);
-            foreach ($translatedText as $langId => $textArr) {
-                foreach ($textArr as $index => $value) {
-                    if ('preqlang_lang_id' === $index) {
-                        continue;
-                    }
-                    $data[$langId]['prod_spec_value[' . $langId . '][' . $index . ']'] = $value;
-                }
-            }
-
-            CommonHelper::jsonEncodeUnicode($data, true);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-    }
 
-    /* Digital downloads*/
-    public function downloadsForm($preqId, $linkId = 0)
-    {
-        $this->objPrivilege->canEditProducts();
-
-        $preqId = FatUtility::int($preqId);
-        $requestedProd = 1;
-        
-        if (1 > $preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        $productData = ProductRequest::getAttributesById($recordId, 'preq_content');
+        if ($productData == false) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
+
+        $productData = json_decode($productData, true);
+        if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
-
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
-
-        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-        
-        $fld = $frm->getField('option_comb_id');
-        if (1 > count($optionCombinations)) {
-            $frm->removeField($fld);
-        } else {
-            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-            $fld->options = $optionCombinations;
+        $canDo = $ddpObj->canEdit($recordId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
+        if (false == $canDo) {
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
-        $msg = '';
-        $frmData = [
-            'preq_id' => $preqId
-        ];
+        $optionValId = FatApp::getPostedData('option_comb_id', null, 0);
+        $post['option_comb_id'] = $optionValId;
 
-        if (1 <= $linkId) {
-            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
-            $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
-            if (!empty($linkDetail)) {
-                $frmData['dd_link_id'] = $linkId;
-                $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
-                $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
-                $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
-                $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
-                $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
-                $fld = $frm->getField('attachment_link_btn');
-                $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
-            } else {
-                $msg = 'Invalid Link. Please refresh to get latest list!!!';
-            }
-        }
-        
-        $frm->fill($frmData);
-
-        $this->set('canDo', $canDo);
-        $this->set('downloadFrm', $frm);
-        $this->set('productOptions', $productOptions);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('msg', $msg);
-        $this->set('preqId', $preqId);
-        $this->_template->render(false, false, 'custom-products/download-setup-frm.php');
-    }
-
-    public function setupDigitalDownloads()
-    {
-        $this->objPrivilege->canEditProducts();
-
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        
-        if (1 > $preqId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
-        $ddpObj = new DigitalDownloadPrivilages();
-
-        if (false == $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true)) {
-            FatUtility::dieJsonError($ddObj->getError());
-        }
-        
-        $post = FatApp::getPostedData();
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-        
         $ddObj = new DigitalDownload();
-
-        $refId = $ddObj->getReferenceId($preqId, $optionComb, Product::CATALOG_TYPE_REQUEST);
+        $refId = $ddObj->getReferenceId($recordId, $optionValId, Product::CATALOG_TYPE_REQUEST);
         if (1 > $refId) {
-            if (!$ddObj->saveReference($preqId, $optionComb, Product::CATALOG_TYPE_REQUEST)) {
-                FatUtility::dieWithError($ddObj->getError());
+            if (!$ddObj->saveReference($recordId, $optionValId, Product::CATALOG_TYPE_REQUEST)) {
+                LibHelper::exitWithError($ddObj->getError(), true);
             }
-            $refId = $ddObj->getMainTableRecordId();
+        } else {
+            $ddObj->setMainTableRecordId($refId);
         }
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            if (true == $this->setupDigitalLink($ddObj, $refId, $preqId, Product::CATALOG_TYPE_REQUEST)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
+            $this->setupDigitalLink($ddObj, $post);
         } else {
-            if (true == $this->setupDigitalFile($ddObj, $refId, $preqId, Product::CATALOG_TYPE_REQUEST)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
+            $this->setupDigitalFile($ddObj, $post);
         }
-
-        FatUtility::dieWithError($this->str_invalid_request);
-    }
-
-    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
-    {
-        $this->objPrivilege->canEditProducts();
-
-        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
-            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
-        ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
-        $refFileId = FatApp::getPostedData('ref_file_id', FatUtility::VAR_INT, 0);
-
-        $mainFileId = 0;
-
-        if (1 == $isPreview) {
-            if (array_key_exists('downloadable_file', $_FILES)) {
-                unset($_FILES['downloadable_file']);
-            }
-            $mainFileId = $refFileId;
-        }
-
-        if (isset($_FILES['downloadable_file']['tmp_name'])
-            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
-        ) {
-            $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
-
-            if (1 > $mainFileId) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-
-            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
-        }
-
-        if (isset($_FILES['preview_file']['tmp_name'])
-            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
-        ) {
-            if (1 > $this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
-        }
-
-        return true;
-    }
-
-    private function setupDigitalMainFile($ddObj, $refId, $langId)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['downloadable_file']['tmp_name'],
-            $_FILES['downloadable_file']['name'],
-            $refId,
-            0,
-            $langId
-        );
-        if (1 > $fileId) {
-            return 0;
-        }
-        
-        return $fileId;
-    }
-
-    private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['preview_file']['tmp_name'],
-            $_FILES['preview_file']['name'],
-            $refId,
-            $mainFileId,
-            $langId,
-            true
-        );
-
-        if (1 > $fileId) {
-            return 0;
-        }
-
-        return $fileId;
-    }
-
-    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
-    {
-        $this->objPrivilege->canEditProducts();
-
-        $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
-        $previewLink = FatApp::getPostedData('product_preview_link', null, '');
-
-        if ('' == $downloadLink && '' == $previewLink) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-        
-        if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            FatUtility::dieJsonError($ddObj->getError());
-        }
-
-        if (1 <= $ddLinkId) {
-            $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
-            $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
-
-            if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
-                $ddObj->deleteReference($ddRefId);
-            }
-        }
-        
-        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
-        return true;
     }
 
     public function getDigitalDownloadLinks()
     {
-        $this->objPrivilege->canViewProducts();
-
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        
-        if (1 > $preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        $rows = DigitalDownloadSearch::getLinks($preqId, Product::CATALOG_TYPE_REQUEST, $optionCombi, $langId);
-
-        $this->set('links', $rows);
-        
         $ddpObj = new DigitalDownloadPrivilages();
-        
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
+
+        $canDo = $ddpObj->canEdit($recordId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
         $this->set('canDo', $canDo);
 
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
-        
-        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+        $links = DigitalDownloadSearch::getLinks($recordId, Product::CATALOG_TYPE_REQUEST, $optionCombi, $langId);
+        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + Language::getAllNames();
 
+        $optionArr = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
+        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-    
+
+        $this->set('links', $links);
+        $this->set('languages', $languages);
         $this->set('options', $optionCombinations);
-        echo $this->_template->render(false, false, 'custom-products/digital-download-links-list.php', true);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getDigitalDownloadAttachments()
     {
-        $this->objPrivilege->canViewProducts();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $optionComb = FatApp::getPostedData('option_comb', null, '0');
+        $langId = FatApp::getPostedData('langId', null, 0);
 
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
-
-        if (1 > $preqId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $optionComb = FatApp::getPostedData('option_comb', null, '0');
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, -1);
-        $prodRefType = Product::CATALOG_TYPE_REQUEST;
-
-        $attachments = DigitalDownloadSearch::getAttachments($preqId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId, true);
-
-        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
-        $this->set('attachments', $attachments);
-        
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
+        $canDo = $ddpObj->canEdit($recordId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
         $this->set('canDo', $canDo);
-        
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
 
-        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        
+        $attachments = DigitalDownloadSearch::getAttachments($recordId, Product::CATALOG_TYPE_REQUEST, $optionComb, $langId);
+
+        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
+
+        $this->set('attachments', $attachments);
+        $this->set('languages', array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + Language::getAllNames());
+        $optionArr = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-        
         $this->set('options', $optionCombinations);
-        
-        $this->set('recordId', $preqId);
+        $this->set('recordId', $recordId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_REQUEST);
-
-        echo $this->_template->render(false, false, 'custom-products/digital-download-attachments-list.php', true);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteDigitalLink($linkId, $refId)
     {
-        $this->objPrivilege->canEditProducts();
+        $this->checkEditPrivilege();
 
         $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true);
 
@@ -2149,22 +1195,22 @@ class CustomProductsController extends ListingBaseController
         $linkId = FatUtility::int($linkId);
 
         if (1 > $refId || 1 > $linkId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
-        
+
         $reference = DigitalDownload::getAttributesById($refId);
-        
+
         if (false == $reference) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
-        
+
         $canDo = $ddpObj->canEdit(
             $link['pddr_record_id'],
             $link['pddr_type'],
@@ -2173,15 +1219,15 @@ class CustomProductsController extends ListingBaseController
             false,
             true
         );
-        
+
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $ddObj = new DigitalDownload();
-        
+
         if (!$ddObj->deleteLink($linkId, $refId)) {
-            FatUtility::dieJsonError($ddObj->getError());
+            LibHelper::exitWithError($ddObj->getError(), true);
         }
 
         $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
@@ -2196,26 +1242,23 @@ class CustomProductsController extends ListingBaseController
 
     public function deleteDigitalFile()
     {
-        $this->objPrivilege->canEditCustomProductRequests();
+        $this->checkEditPrivilege();
         $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
         $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         $isPreviewFile = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
         $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
 
         if (1 > $refId || 1 > $aFileId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $reference = DigitalDownload::getAttributesById($refId);
-        
         if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
-        
+
         $canDo = $ddpObj->canEdit(
             $reference['pddr_record_id'],
             $reference['pddr_type'],
@@ -2224,61 +1267,106 @@ class CustomProductsController extends ListingBaseController
             false,
             true
         );
-        
+
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $digDownload = new DigitalDownload();
-
         if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
-            FatUtility::dieJsonError($digDownload->getError());
+            LibHelper::exitWithError($digDownload->getError(), true);
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
+        LibHelper::exitWithSuccess($this->str_delete_record, true);
     }
 
     public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
     {
-        $this->objPrivilege->canViewProducts();
-        
         $aFileId = FatUtility::int($aFileId);
         $recordId = FatUtility::int($recordId);
         $isPreview = FatUtility::int($isPreview);
         $requestType = FatUtility::int($requestType);
 
         if (1 > $aFileId || 1 > $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId), true);
         }
-        /* $reqData = ProductRequest::getAttributesById($recordId, array('preq_user_id', 'preq_status', 'preq_deleted'));
-        if (false == $reqData) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
-        } */
 
         $ddpObj = new DigitalDownloadPrivilages();
-
         $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->siteLangId, $isPreview, true);
-        
+
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
-        
+
         if (1 > count($file)) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId), true);
         }
-        
+
         if ($file['pddr_record_id'] != $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_FILE_NOT_FOUND", $this->siteLangId), true);
         }
-        
+
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
+    }
+
+    private function setupDigitalFile($ddObj, $post)
+    {
+        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
+            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
+        ) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+        }
+
+        $langId = FatUtility::int($post['lang_id']);
+        $optionComb = $post['option_comb_id'];
+        $isPreview = FatUtility::int($post['is_preview']);
+        $refFileId = FatUtility::int($post['ref_file_id']);
+        $mainFileId = 0;
+        if (1 == $isPreview) {
+            if (AttachedFile::getAttributesById($refFileId, 'afile_record_id') !=  $ddObj->getMainTableRecordId()) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+            if (array_key_exists('downloadable_file', $_FILES)) {
+                unset($_FILES['downloadable_file']);
+            }
+            $mainFileId = $refFileId;
+        }
+
+        if (
+            isset($_FILES['downloadable_file']['tmp_name'])
+            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
+        ) {
+            $mainFileId = $this->setupDigitalMainFile($ddObj, $langId);
+            if (1 > $mainFileId) {
+                LibHelper::exitWithError($ddObj->getError(), true);
+            }
+            $attachWithExistingOrders = $post['attach_with_existing_orders'];
+            if (1 === $attachWithExistingOrders) {
+                $ddObj->attachFileWithOrderedProducts($mainFileId, $post['record_id'], Product::CATALOG_TYPE_PRIMARY, $langId, $optionComb);
+            }
+        }
+
+        if (
+            isset($_FILES['preview_file']['tmp_name'])
+            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
+        ) {
+            if (1 > $this->setupDigitalPreviewFile($ddObj, $langId, $mainFileId)) {
+                LibHelper::exitWithError($ddObj->getError(), true);
+            }
+        }
+        $this->set('langId', $langId);
+        $this->set('optionComb', $optionComb);
+        $this->set('recordId', $post['record_id']);
+        $this->set('downloadType', $post['download_type']);
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     protected function getSearchForm($fields = [])
@@ -2288,35 +1376,104 @@ class CustomProductsController extends ListingBaseController
             $this->addSortingElements($frm, 'preq_requested_on');
         }
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [],'',['id'=>'searchFrmUserIdJs']); 
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs','placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ProductRequest::getStatusArr($this->siteLangId));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'preq_id');
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }
-    /* Digital downloads*/
+
+    private function getStatusForm($recordId = 0)
+    {
+        $frm = new Form('frmUpdateStatus');
+        $statusArr = ProductRequest::getStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'preq_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addHiddenField('', 'preq_id', $recordId);
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'preq_comment', '');
+        return $frm;
+    }
+
+    private function setupDigitalMainFile($ddObj, $langId)
+    {
+        $fileId = $ddObj->saveAttachment(
+            $_FILES['downloadable_file']['tmp_name'],
+            $_FILES['downloadable_file']['name'],
+            $ddObj->getMainTableRecordId(),
+            0,
+            $langId
+        );
+        if (1 > $fileId) {
+            return 0;
+        }
+
+        return $fileId;
+    }
+
+    private function setupDigitalPreviewFile($ddObj, $langId, $mainFileId = 0)
+    {
+        $fileId = $ddObj->saveAttachment(
+            $_FILES['preview_file']['tmp_name'],
+            $_FILES['preview_file']['name'],
+            $ddObj->getMainTableRecordId(),
+            $mainFileId,
+            $langId,
+            true
+        );
+
+        if (1 > $fileId) {
+            return 0;
+        }
+
+        return $fileId;
+    }
+
+    private function setupDigitalLink($ddObj, $post)
+    {
+        $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
+        $previewLink = FatApp::getPostedData('product_preview_link', null, '');
+
+        if ('' == $post['product_downloadable_link'] && '' == $post['product_preview_link']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_LINK', $this->siteLangId), true);
+        }
+
+        $langId = FatUtility::int($post['lang_id']);
+        $optionComb = $post['option_comb_id'];
+        $ddLinkId = FatUtility::int($post['dd_link_id']);
+
+        if (!$ddObj->saveLink($langId, $downloadLink, $previewLink, $ddLinkId)) {
+            LibHelper::exitWithError($ddObj->getError(), true);
+        }
+
+        $this->set('langId', $langId);
+        $this->set('optionComb', $optionComb);
+        $this->set('recordId', $post['record_id']);
+        $this->set('downloadType', $post['download_type']);
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
+    }   
 
     protected function getFormColumns(): array
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('cProductsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
-            return json_decode($emptyCartItemsTblHeadingCols);
+            return json_decode($emptyCartItemsTblHeadingCols, true);
         }
 
-        $arr = [ 
+        $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
-            'product_identifier' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'preq_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
-            'preq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),    
+            'preq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'preq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -2327,13 +1484,13 @@ class CustomProductsController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return [     
+        return [
             'listSerial',
             'images',
             'product_identifier',
             'user_name',
             'preq_added_on',
-            'preq_requested_on',     
+            'preq_requested_on',
             'preq_status',
             'action',
         ];
@@ -2341,14 +1498,14 @@ class CustomProductsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['images','product_identifier'], Common::excludeKeysForSort(['product_identifier']));
+        return array_diff($fields, ['images', 'product_identifier'], Common::excludeKeysForSort(['product_identifier']));
     }
 
     public function getBreadcrumbNodes($action)
     {
         switch ($action) {
             case 'index':
-                $pageData = PageLanguageData::getAttributesByKey('MANAGE_CATALOG_REQUEST', $this->siteLangId);
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => $pageTitle]
@@ -2360,6 +1517,4 @@ class CustomProductsController extends ListingBaseController
         }
         return $this->nodes;
     }
-
-
 }

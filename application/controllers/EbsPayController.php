@@ -31,7 +31,7 @@ class EbsPayController extends PaymentController
     public function charge($orderId)
     {
         if (empty(trim($orderId))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -51,7 +51,7 @@ class EbsPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -103,13 +103,13 @@ class EbsPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : self::PRODUCTION_URL;
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : self::PRODUCTION_URL;
 
         $frm = new Form('payment', array('id' => 'frmPaymentForm', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
             if (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == true) {
                 $mode = "LIVE";
@@ -117,7 +117,7 @@ class EbsPayController extends PaymentController
                 $mode = "TEST";
             }
 
-            $order_payment_gateway_description = sprintf(Labels::getLabel('M_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+            $order_payment_gateway_description = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
             $return_url = UrlHelper::generateFullUrl('ebsPay', 'callback');
 
             $dataToPost = [
@@ -190,7 +190,7 @@ class EbsPayController extends PaymentController
             $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
             $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
             if ($response['ResponseCode'] == '0') {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($response));
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("SUC_Received_Payment", $this->siteLangId), json_encode($response));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             } else {              
                 SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);

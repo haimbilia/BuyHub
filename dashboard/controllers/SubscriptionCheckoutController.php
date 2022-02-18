@@ -371,14 +371,14 @@ class SubscriptionCheckoutController extends LoggedUserController
         $userWalletBalance = User::getUserBalance($userId);
 
         if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected']) {
-            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
+            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $WalletPaymentForm->fill(array('order_id' => $order_id));
             $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
-            $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
+            $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $confirmPaymentFrm->fill(array('order_id' => $order_id));
             $confirmPaymentFrm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm', $this->siteLangId));
@@ -454,9 +454,9 @@ class SubscriptionCheckoutController extends LoggedUserController
         $controller = $paymentMethod['plugin_code'] . 'Pay';
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
         $frm->setFormTagAttribute('data-method', $methodCode);
-        $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries'));
+        $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries', [], CONF_WEBROOT_FRONTEND));
 
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'])));
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id']), CONF_WEBROOT_FRONTEND));
         $frm->fill(
             array(
                 'order_id' => $order_id,
@@ -620,16 +620,16 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
 
 
-
+        $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
+        $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
+        /*
         if ($plugin_id) {
             $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
-            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
-            /*
+            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));            
             $this->scartObj->clear();
-            $this->scartObj->updateUserSubscriptionCart();
-            * 
-            */
+            $this->scartObj->updateUserSubscriptionCart();           
         }
+        */
 
         /* if ( !$orderObj->addOrderHistory( $order_id, 1, Labels::getLabel("LBL_-NA-",$this->siteLangId), true, $this->siteLangId ) ){
         Message::addErrorMessage( $orderObj->getError() );
@@ -695,93 +695,13 @@ class SubscriptionCheckoutController extends LoggedUserController
 
     public function getCouponForm()
     {
-        $currDate = date('Y-m-d');
-        $interval = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' - 15 minute'));
+
         $loggedUserId = $this->userParentId;
-
-        $cartObj = new SubscriptionCart();
-        /*$cartSubTotal = $cartObj->getSubTotal();   */
-        $cartSubTotalAfterAdjustment = $cartObj->getSubTotalAfterAdjustment();
-        /* coupon history[ */
-        $cHistorySrch = CouponHistory::getSearchObject();
-        $cHistorySrch->doNotLimitRecords();
-        $cHistorySrch->doNotCalculateRecords();
-        $cHistorySrch->addMultipleFields(array('couponhistory_coupon_id', 'couponhistory_id'));
-        /* ] */
-
-        /* coupon User History[ */
-        $userCouponHistorySrch = CouponHistory::getSearchObject();
-        $userCouponHistorySrch->addCondition('couponhistory_user_id', '=', $loggedUserId);
-        $userCouponHistorySrch->doNotLimitRecords();
-        $userCouponHistorySrch->doNotCalculateRecords();
-        //$userCouponHistorySrch->addMultipleFields(array('count(couponhistory_id) as user_coupon_used_count'));
-        /* ] */
-
-        /* coupon temp hold[ */
-        $cHoldSrch = new SearchBase(DiscountCoupons::DB_TBL_COUPON_HOLD);
-        $cHoldSrch->addCondition('couponhold_added_on', '>=', $interval);
-        $cHoldSrch->addCondition('couponhold_user_id', '!=', $loggedUserId);
-        $cHoldSrch->addMultipleFields(array('couponhold_coupon_id'));
-        $cHoldSrch->doNotLimitRecords();
-        $cHoldSrch->doNotCalculateRecords();
-        /* ] */
-
-        /* Coupon Users[ */
-        /* $cUsersSrch = new SearchBase( DiscountCoupons::DB_TBL_COUPON_TO_USER );
-        $cUsersSrch->doNotCalculateRecords();
-        $cUsersSrch->doNotLimitRecords();
-        $cUsersSrch->addGroupBy('ctu_coupon_id');
-        $cUsersSrch->addMultipleFields( array('ctu_coupon_id','GROUP_CONCAT(ctu_user_id) as grouped_coupon_users') ); */
-        /* ] */
-
-        /* Coupon Plans[ */
-        $cPlanSrch = new SearchBase(DiscountCoupons::DB_TBL_COUPON_TO_PLAN);
-        $cPlanSrch->doNotCalculateRecords();
-        $cPlanSrch->doNotLimitRecords();
-        $cPlanSrch->addGroupBy('ctplan_coupon_id');
-        $cPlanSrch->addMultipleFields(array('ctplan_coupon_id', 'GROUP_CONCAT(ctplan_spplan_id) as grouped_coupon_plans'));
-        /* ] */
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-
-        $srch->joinTable('(' . $cHistorySrch->getQuery() . ')', 'LEFT OUTER JOIN', 'coupon_history.couponhistory_coupon_id = dc.coupon_id', 'coupon_history');
-        $srch->joinTable('(' . $cHoldSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'dc.coupon_id = coupon_hold.couponhold_coupon_id', 'coupon_hold');
-        //$srch->joinTable( '('.$cUsersSrch->getQuery().')', 'LEFT OUTER JOIN', 'dc.coupon_id = ctu.ctu_coupon_id', 'ctu' );
-
-        $srch->joinTable('(' . $userCouponHistorySrch->getQuery() . ')', 'LEFT OUTER JOIN', 'dc.coupon_id = user_coupon_history.couponhistory_coupon_id', 'user_coupon_history');
-
-        $srch->joinTable('(' . $cPlanSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'dc.coupon_id = ctplan.ctplan_coupon_id', 'ctplan');
-
-        $srch->addCondition('coupon_type', '=', DiscountCoupons::TYPE_SELLER_PACKAGE);
-        $cnd = $srch->addCondition('coupon_start_date', '=', '0000-00-00', 'AND');
-        $cnd->attachCondition('coupon_start_date', '<=', $currDate, 'OR');
-        $cnd1 = $srch->addCondition('coupon_end_date', '=', '0000-00-00', 'AND');
-        $cnd1->attachCondition('coupon_end_date', '>=', $currDate, 'OR');
-
-        $srch->addCondition('coupon_min_order_value', '<', $cartSubTotalAfterAdjustment);
-        $srch->addMultipleFields(array('dc.*', 'dc_l.coupon_description', 'IFNULL(COUNT(coupon_history.couponhistory_id), 0) as coupon_used_count', 'IFNULL(COUNT(coupon_hold.couponhold_coupon_id), 0) as coupon_hold_count', 'count(user_coupon_history.couponhistory_id) as user_coupon_used_count', 'ctplan.grouped_coupon_plans'));
-
-        //$srch->addDirectCondition( 'IF(grouped_coupon_users != "NULL", FIND_IN_SET('.$loggedUserId.', grouped_coupon_users), 1 = 1 )');
-
-        /* checking current coupon is valid for current subscription plan[ */
-        $cartSubscription = $this->scartObj->getSubscription($this->siteLangId);
-
-        foreach ($cartSubscription as $cartSubscription) {
-            $srch->addDirectCondition('IF(grouped_coupon_plans != "NULL", FIND_IN_SET(' . $cartSubscription['spplan_id'] . ', grouped_coupon_plans), 1 = 1 )');
-        }
-        /* ] */
-
-        $srch->addHaving('coupon_uses_count', '>', 'coupon_used_count + coupon_hold_count');
-        $srch->addHaving('coupon_uses_coustomer', '>', 'mysql_func_user_coupon_used_count', 'AND', true);
-        $srch->addGroupBy('dc.coupon_id');
-
-        $rs = $srch->getResultSet();
-        $couponsList = FatApp::getDb()->fetchAll($rs, 'coupon_id');
+        
+        $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
+        $couponsList = DiscountCoupons::getValidSubscriptionCoupons($loggedUserId, $this->siteLangId, '' , $orderId);
+      
         $this->set('couponsList', $couponsList);
-
-        $this->set('spackage_type', $cartSubscription['spackage_type']);
 
         $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
         $this->set('PromoCouponsFrm', $PromoCouponsFrm);
@@ -817,8 +737,12 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $couponCode = $post['coupon_code'];
 
+        $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
+        $couponInfo = DiscountCoupons::getValidSubscriptionCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId, $couponCode , $orderId);
+        /*
         $couponObj = new DiscountCoupons();
         $couponInfo = $couponObj->getSubscriptionCoupon($couponCode, $this->siteLangId);
+        */
         if ($couponInfo == false) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Coupon_Code', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());

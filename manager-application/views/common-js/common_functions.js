@@ -3,19 +3,42 @@ function setSiteDefaultLang(langId) {
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
         function (res) {
-            document.location.reload();
+            $.cookie('defaultAdminSiteLang', res.langId);
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 5000);
         }
     );
 }
 
-function getNotifications() {
-    $("#notificationList").prepend(fcom.getLoader());
+function getNotifications(type, obj) {
 
-    fcom.ajax(
-        fcom.makeUrl("Notifications", "notificationList"),
+    $("#notificationList").prepend(fcom.getLoader());
+    let url = fcom.makeUrl("Notifications", "notificationList");
+    let viewAllUrl = fcom.makeUrl("Notifications");
+    if (type == 1) {
+        url = fcom.makeUrl("SystemLog", "notificationList");
+        viewAllUrl = fcom.makeUrl("SystemLog");
+    } else {
+        $('.headerNotificationTabJs').removeClass('is-current');
+        $('.headerNotificationTabJs:first').addClass('is-current');
+    }
+    if (typeof obj != undefined) {
+        $(obj).siblings().removeClass('is-current');
+        $(obj).addClass('is-current');
+    }
+
+    fcom.updateWithAjax(
+        url,
         "",
         function (res) {
-            $("#notificationList").html(res);
+            fcom.removeLoader();
+            $("#notificationList").html(res.html);
+            $('#notifiLinkViewAll').attr('href', viewAllUrl);
+            $('#notifiLinkCount').addClass('hide');
+            if (type == 0) {
+                $('#notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
+            }
         }
     );
 }
@@ -75,7 +98,7 @@ tooltipCopyHelper = function (obj, title) {
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {   
+    $(obj).mouseout(function () {
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)
@@ -186,8 +209,13 @@ select2 = function (
         return false;
     }
 
+    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
+    if (null === obj) {
+        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
+    }
+
     ele.select2({
-        dropdownParent: ele.closest('.modal').length ? ele.closest('.modal') : null,
+        dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
@@ -235,10 +263,17 @@ select2 = function (
             if ("function" == typeof callbackOnUnSelect) {
                 callbackOnUnSelect(e);
             }
+        }).on('select2:open', function (e) {
+            if (ele.attr('multiple') == undefined) {
+                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+            }
         });
 
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
+
+    select2Selector.$container.addClass("custom-select2");
+
     if ('undefined' != typeof (select2Selector.dropdown)) {
         $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
     }
@@ -246,16 +281,20 @@ select2 = function (
     if ('undefined' != typeof (select2Selector.selection)) {
         $(select2Selector.selection.$search).attr('name', elementName + '-select2');
     }
-    if (0 < ele.closest(".advancedSearchJs").length) {
-        select2Selector.$container.addClass("w-100");
+
+    if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
+        select2Selector.$container.addClass("custom-select2-width");
     }
 
-    if (0 < ele.closest(".form-group").length) {
-        select2Selector.$container.addClass("w-100");
+    if (ele.attr('multiple') != undefined) {
+        select2Selector.$container.addClass("custom-select2-multiple");
     }
-    select2Selector.$container.addClass("custom-select2");
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
+
+$(document).on('select2:open', () => {
+    setTimeout(function () { document.querySelector('.select2-search__field').focus(); }, 10);
+});
 /**
  * hiddenfields object = { fieldname : fieldValue}
  */
@@ -301,45 +340,39 @@ redirectToProductReviews = function (id, extraData = {}) {
     redirectfunc(fcom.makeUrl('ProductReviews'), extraData, 0, true);
 };
 
-redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
-    newTab = typeof newTab != "undefined" ? newTab : true;
-    if (nid > 0) {
-        fcom.displayProcessing();
-        markRead(nid, url, id);
-    } else {
-        var target = newTab ? ' target="_blank" ' : " ";
-        let inputs = "";
-        $.each(hiddenfields, function (index, value) {
-            inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
-        });
-        $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
+redirectToBlogPosts = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['bpcat_id'] = id;
     }
+    redirectfunc(fcom.makeUrl('BlogPosts'), extraData, 0, true);
 };
 
-markRead = function (nid, url, id) {
-    if (nid.length < 1) {
-        return false;
+redirectfunc = async function (url, hiddenfields = {}, nid, newTab) {
+    newTab = typeof newTab != "undefined" ? newTab : true;
+    if (nid > 0) {
+        await $.ajax({
+            url: fcom.makeUrl('Notifications', 'updateReadStatus'),
+            type: 'POST',
+            data: { recordId: nid, status: 1, fOutMode: 'json', fIsAjax: 1 },
+        });
     }
-    var data = "record_ids=" + nid + "&status=" + 1 + "&markread=1";
-    fcom.updateWithAjax(
-        fcom.makeUrl("Notifications", "changeStatus"),
-        data,
-        function (t) {
-            var form = '<input type="hidden" name="id" value="' + id + '">';
-            $('<form action="' + url + '" method="POST">' + form + "</form>")
-                .appendTo($(document.body))
-                .submit();
-        }
-    );
+    var target = newTab ? ' target="_blank" ' : " ";
+    let inputs = "";
+    $.each(hiddenfields, function (index, value) {
+        inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
+    });
+    console.log(inputs);
+    $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
 };
+
 
 markNavActive = function (ele) {
     ele.addClass("active");
     var menuLink = ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs");
-    menuLink.addClass("active");
-    var target = menuLink.data('target');
+    menuLink.addClass("active").removeClass('collapsed');
+    var target = menuLink.data('bsTarget');
     $(target).addClass('show');
-    ele.parents("li.hasNestedChildJs").addClass("show").find(".collapseJs").addClass("show");
+    ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
 };
 
 $(document).ready(function () {
@@ -347,13 +380,17 @@ $(document).ready(function () {
     var uri = window.location.pathname.replace(/^\/|\/$/g, "");
 
     $(".sidebarMenuJs .navLinkJs").each(function () {
-        var href = $(this).attr("href").replace(/^\/|\/$/g, "");
+        var attr = $(this).attr("href");
+        var href = '';
+        if (typeof attr !== 'undefined' && attr !== false) {
+            var href = attr.replace(/^\/|\/$/g, "");
+        }
+
         if (uri == href) {
             markNavActive($(this));
         } else {
-            var urlParts = uri.split('/');
-            var hrefParts = href.split('/');
-            if ("undefined" != typeof (urlParts[1]) && "undefined" != typeof (hrefParts[1]) && urlParts[1] == hrefParts[1]) {
+            var selectors = $(this).data("selector");
+            if ('undefined' != typeof selectors && -1 != jQuery.inArray(controllerName, selectors)) {
                 markNavActive($(this));
             }
         }
@@ -374,12 +411,17 @@ $(document).ready(function () {
                 fcom.makeUrl("PageLanguageData", "displayAlert"),
                 data,
                 function (t) {
+                    $(".alertWarningJs").remove();
                     $(".mainHeaderJs").append(t.html);
                 }
             );
         } else {
             $(".alertWarningJs").remove();
         }
+    });
+
+    $('.dropdown-menu').on('click', function (e) {
+        e.stopPropagation();
     });
 
     /* Sidebar menu open on hover. */

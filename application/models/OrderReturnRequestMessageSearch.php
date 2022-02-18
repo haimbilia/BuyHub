@@ -46,7 +46,7 @@ class OrderReturnRequestMessageSearch extends SearchBase
     public function joinOrderProducts($langId = 0)
     {
         if (!$this->isOrderReturnRequestJoined) {
-            trigger_error(Labels::getLabel('MSG_joinOrderProducts_can_be_joined_only,_if_joinOrderReturnRequests_is_Joined,_So,_Please_Use_joinOrderReturnRequests()_first,_then_try_to_join_joinOrderProducts', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERPRODUCTS_CAN_BE_JOINED_ONLY,_IF_JOINORDERRETURNREQUESTS_IS_JOINED,_SO,_PLEASE_USE_JOINORDERRETURNREQUESTS()_FIRST,_THEN_TRY_TO_JOIN_JOINORDERPRODUCTS', $this->commonLangId), E_USER_ERROR);
         }
 
         $langId = FatUtility::int($langId);
@@ -64,7 +64,7 @@ class OrderReturnRequestMessageSearch extends SearchBase
     public function joinOrders($langId = 0)
     {
         if (!$this->isOrderProductsJoined) {
-            trigger_error(Labels::getLabel('MSG_joinOrders_can_be_joined_only,_if_joinOrderProducts_is_Joined,_So,_Please_Use_joinOrderProducts()_first,_then_try_to_join_joinOrders', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERS_CAN_BE_JOINED_ONLY,_IF_JOINORDERPRODUCTS_IS_JOINED,_SO,_PLEASE_USE_JOINORDERPRODUCTS()_FIRST,_THEN_TRY_TO_JOIN_JOINORDERS', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
         if ($this->langId) {
@@ -80,7 +80,7 @@ class OrderReturnRequestMessageSearch extends SearchBase
     public function joinOrderBuyerUser()
     {
         if (!$this->isOrdersJoined) {
-            trigger_error(Labels::getLabel('MSG_joinOrderBuyerUser_can_be_joined_only,_if_joinOrders_is_Joined,_So,_Please_Use_joinOrders()_first,_then_try_to_join_joinOrderBuyerUser', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINORDERBUYERUSER_CAN_BE_JOINED_ONLY,_IF_JOINORDERS_IS_JOINED,_SO,_PLEASE_USE_JOINORDERS()_FIRST,_THEN_TRY_TO_JOIN_JOINORDERBUYERUSER', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'o.order_user_id = buyer.user_id', 'buyer');
         $this->joinTable(user::DB_TBL_CRED, 'LEFT OUTER JOIN', 'buyer.user_id = buyer_cred.credential_user_id', 'buyer_cred');
@@ -89,7 +89,7 @@ class OrderReturnRequestMessageSearch extends SearchBase
     public function joinReturnReason($langId = 0)
     {
         if (!$this->isOrderReturnRequestJoined) {
-            trigger_error(Labels::getLabel('MSG_joinReturnReason_can_be_joined_only,_if_joinOrderReturnRequests_is_Joined,_So,_Please_Use_joinOrderReturnRequests()_first,_then_try_to_join_joinReturnReason', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINRETURNREASON_CAN_BE_JOINED_ONLY,_IF_JOINORDERRETURNREQUESTS_IS_JOINED,_SO,_PLEASE_USE_JOINORDERRETURNREQUESTS()_FIRST,_THEN_TRY_TO_JOIN_JOINRETURNREASON', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(OrderReturnReason::DB_TBL, 'LEFT OUTER JOIN', 'orreason.orreason_id = orrequest_returnreason_id', 'orreason');
 

@@ -54,8 +54,8 @@ class OrderStatus extends MyAppModel
     public static function getOrderStatusTypeArr($langId)
     {
         return array(
-            Orders::ORDER_PRODUCT => Labels::getLabel('LBL_Product', $langId),
-            Orders::ORDER_SUBSCRIPTION => Labels::getLabel('LBL_Subscriptions', $langId),
+            Orders::ORDER_PRODUCT => Labels::getLabel('LBL_PRODUCt', $langId),
+            Orders::ORDER_SUBSCRIPTION => Labels::getLabel('LBL_SUBSCRIPTIONS', $langId),
         );
     }
 

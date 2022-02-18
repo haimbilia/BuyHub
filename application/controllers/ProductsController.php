@@ -75,7 +75,7 @@ class ProductsController extends MyAppController
         switch ($method) {
             case 'index':
                 $arr = array(
-                    'pageTitle' => Labels::getLabel('LBL_All_PRODUCTS', $this->siteLangId),
+                    'pageTitle' => Labels::getLabel('MSG_All_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'index'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT_INDEX,
                     'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'allProducts'),
@@ -83,7 +83,7 @@ class ProductsController extends MyAppController
                 break;
             case 'search':
                 $arr = array(
-                    'pageTitle' => Labels::getLabel('LBL_Search_results_for', $this->siteLangId),
+                    'pageTitle' => Labels::getLabel('MSG_SEARCH_RESULTS_FOR', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'search'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT,
                     'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'searchListing'),
@@ -92,7 +92,7 @@ class ProductsController extends MyAppController
                 break;
             case 'featured':
                 $arr = array(
-                    'pageTitle' => Labels::getLabel('LBL_FEATURED_PRODUCTS', $this->siteLangId),
+                    'pageTitle' => Labels::getLabel('MSG_FEATURED_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'featured'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_FEATURED_PRODUCT,
                     'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'searchListing'),
@@ -136,7 +136,7 @@ class ProductsController extends MyAppController
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && 0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
-            $et->addImpression(($method == 'search' ? Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));
+            $et->addImpression(($method == 'search' ? Labels::getLabel('MSG_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));
             $productPostion = 1;
             foreach ($data['products'] as $product) {
                 $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
@@ -487,7 +487,7 @@ class ProductsController extends MyAppController
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $product = $this->getProductDetail($selprod_id);
@@ -499,7 +499,7 @@ class ProductsController extends MyAppController
 
         if (!$product) {
             if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             FatUtility::exitWithErrorCode(404);
         }
@@ -784,7 +784,7 @@ class ProductsController extends MyAppController
         $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
         /* End of Prmotional Banner  ]*/
 
-        /* Get Product Specifications */
+        /* Get Product Specifications */        
         $this->set('productSpecifications', $this->getProductSpecifications($product['product_id'], $this->siteLangId));
         /* End of Product Specifications */
 
@@ -903,13 +903,13 @@ class ProductsController extends MyAppController
                 $productAction = '';
                 switch ($refererParseUrl['path']) {
                     case '/products/index':
-                        $productAction = Labels::getLabel('LBL_All_PRODUCTS', $this->siteLangId);
+                        $productAction = Labels::getLabel('MSG_All_PRODUCTS', $this->siteLangId);
                         break;
                     case '/products/search':
-                        $productAction = Labels::getLabel('LBL_SEARCH_RESULTS', $this->siteLangId);
+                        $productAction = Labels::getLabel('MSG_SEARCH_RESULTS', $this->siteLangId);
                         break;
                     case '/products/featured':
-                        $productAction = Labels::getLabel('LBL_FEATURED_PRODUCTS', $this->siteLangId);
+                        $productAction = Labels::getLabel('MSG_FEATURED_PRODUCTS', $this->siteLangId);
                         break;
                 }
             }
@@ -924,12 +924,12 @@ class ProductsController extends MyAppController
             /* product click event from search page] */
 
             /* [product view */
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et = new EcommerceTracking($analyticsId, Labels::getLabel('MSG_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
 
             if ($recommendedProducts && 0 < count($recommendedProducts)) {
-                $et->addImpression(Labels::getLabel('LBL_Recommended_Products', $this->siteLangId));
+                $et->addImpression(Labels::getLabel('MSG_Recommended_Products', $this->siteLangId));
                 $productPostion = 1;
                 foreach ($recommendedProducts as $product) {
                     $et->addImpressionProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], $productPostion);
@@ -967,8 +967,10 @@ class ProductsController extends MyAppController
         $specSrchObj->doNotLimitRecords();
         $specSrchObj->joinTable(Product::DB_PRODUCT_SPECIFICATION, 'LEFT OUTER JOIN', 'product_id = tcps.prodspec_product_id', 'tcps');
         $specSrchObj->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'INNER JOIN', 'tcps.prodspec_id = tcpsl.prodspeclang_prodspec_id and   prodspeclang_lang_id  = ' . $langId, 'tcpsl');
-        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value'));
+        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value','prodspec_group'));
         $specSrchObj->addGroupBy('prodspec_id');
+        $specSrchObj->addOrder('prodspec_group');
+        $specSrchObj->addOrder('prodspec_name');
         $specSrchObj->addCondition('prodspec_product_id', '=', $product_id);
         $specSrchObjRs = $specSrchObj->getResultSet();
         return FatApp::getDb()->fetchAll($specSrchObjRs);
@@ -1109,7 +1111,7 @@ class ProductsController extends MyAppController
         }
 
         $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
-        $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
+        $product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
         $productImageUrl = '';
         /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
@@ -1299,7 +1301,7 @@ class ProductsController extends MyAppController
 
         if (empty($keyword) || mb_strlen($keyword) < 3) {
             if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_ENTER_ATLEAST_3_CHARACTERS', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_ENTER_ATLEAST_3_CHARACTERS', $this->siteLangId));
             }
 
             $this->set('keyword', $keyword);
@@ -1480,7 +1482,7 @@ class ProductsController extends MyAppController
                 }
                 break;
             default:
-                $nodes[] = array('title' => Labels::getLabel('LBL_' . FatUtility::camel2dashed($action), $this->siteLangId));
+                $nodes[] = array('title' => Labels::getLabel('MSG_' . FatUtility::camel2dashed($action), $this->siteLangId));
                 break;
         }
         return $nodes;
@@ -1507,12 +1509,9 @@ class ProductsController extends MyAppController
     private function getCartForm($formLangId)
     {
         $frm = new Form('frmBuyProduct', array('id' => 'frmBuyProduct'));
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Quantity', $formLangId), 'quantity', 1, array('maxlength' => '3'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Quantity', $formLangId), 'quantity', 1, array('maxlength' => '3'));
         $fld->requirements()->setIntPositive();
-        // $frm->addSubmitButton(null, 'btnProductBuy', Labels::getLabel('LBL_Buy_Now', $formLangId ), array( 'id' => 'btnProductBuy' ) );
-        //$frm->addSubmitButton(null, 'btnAddToCart', Labels::getLabel('LBL_Add_to_Cart', $formLangId), array( 'id' => 'btnAddToCart' ));
-        // $frm->addHTML(null, 'btnProductBuy', '<button name="btnProductBuy" type="submit" id="btnProductBuy" class="btn btn-brand block-on-mobile add-to-cart--js btnBuyNow"> ' . Labels::getLabel('LBL_Buy_Now', $formLangId) . '</button>');
-        $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('LBL_Add_to_Cart', $formLangId) . '</button>');
+          $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('BTN_ADD_TO_CART', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
     }
@@ -1531,8 +1530,8 @@ class ProductsController extends MyAppController
     {
         $frm = new Form('frmReviewAbuse');
         $frm->addHiddenField('', 'spra_spreview_id', $reviewId);
-        $frm->addTextarea(Labels::getLabel('Lbl_Comments', $this->siteLangId), 'spra_comments');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('Lbl_Report_Abuse', $this->siteLangId));
+        $frm->addTextarea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'spra_comments');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REPORT_ABUSE', $this->siteLangId));
         return $frm;
     }
 
@@ -1541,7 +1540,7 @@ class ProductsController extends MyAppController
         $frm = new Form('frmPoll');
         $frm->addHiddenField('', 'polling_id', $pollId);
         $frm->addRadioButtons('', 'polling_feedback', Polling::getPollingResponseTypeArr($langId), '', array('class' => 'listing--vertical listing--vertical-chcek'), array());
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('Lbl_Vote', $this->siteLangId), array('class' => 'btn btn-brand poll--link-js'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_VOTE', $this->siteLangId), array('class' => 'btn btn-brand poll--link-js'));
         return $frm;
     }
 
@@ -1554,7 +1553,7 @@ class ProductsController extends MyAppController
     {
         $productId = FatUtility::int($productId);
         if (1 > $productId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
         $loggedUserId = 0;
@@ -1925,7 +1924,7 @@ class ProductsController extends MyAppController
             }
 
             $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
-            $product_description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
+            $product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
             $productImageUrl = '';
             /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
@@ -1948,14 +1947,16 @@ class ProductsController extends MyAppController
 
     public function linksAutocomplete()
     {
-        $prodCatObj = new ProductCategory();
-        $post = FatApp::getPostedData();
-        $arr_options = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $post['keyword']);
+        $prodCatObj = new ProductCategory();        
+        $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $search_keyword = urldecode($search_keyword);
+        //$categories = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $search_keyword);
+        $categories = $prodCatObj->getProdCatAutoSuggest($search_keyword, 20, $this->siteLangId);
         $json = array();
-        foreach ($arr_options as $key => $product) {
-            $json[] = array(
+        foreach ($categories as $key => $product) {
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
@@ -2123,7 +2124,7 @@ class ProductsController extends MyAppController
     {
         $selProdId = FatUtility::int($selProdId);
         if (1 > $selProdId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $optionRows = SellerProduct::getFormattedOptions($selProdId, $this->siteLangId);
         $this->set('options', $optionRows);
@@ -2132,7 +2133,11 @@ class ProductsController extends MyAppController
 
     public function autoCompleteTaxCategories()
     {
-        $pagesize = 10;
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
         $post = FatApp::getPostedData();
         $srch = Tax::getSearchObject($this->siteLangId, true);
         $srch->addCondition('taxcat_deleted', '=', 0);
@@ -2151,21 +2156,20 @@ class ProductsController extends MyAppController
                 ->attachCondition('taxcat_identifier', 'LIKE', '%' . $post['keyword'] . '%')
                 ->attachCondition('taxcat_code', 'LIKE', '%' . $post['keyword'] . '%');
         }
+        $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $taxCategories = $db->fetchAll($rs, 'taxcat_id');
-        $json = array();
-        $defaultStringLength = applicationConstants::DEFAULT_STRING_LENGTH;
+
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($taxCategories as $key => $taxCategory) {
             $taxCatName = strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'));
-            $taxCatName1 = substr($taxCatName, 0, $defaultStringLength);
-            if ($defaultStringLength < strlen($taxCatName)) {
-                $taxCatName1 .= '...';
-            }
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => $taxCatName1
+                'text' => $taxCatName
             );
         }
         die(json_encode($json));
@@ -2195,7 +2199,7 @@ class ProductsController extends MyAppController
 
         $orderProductShipmentDetail = OrderProduct::getShippingResponse($opId, OrderProduct::RESPONSE_TYPE_SHIPMENT, true);
         if (empty($orderProductShipmentDetail) || empty($orderProductShipmentDetail['opr_response'])) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NO_LABEL_DATA_FOUND", $this->siteLangId));
         }
 
         $shipmentResponse = json_decode($orderProductShipmentDetail['opr_response'], true);
@@ -2213,7 +2217,7 @@ class ProductsController extends MyAppController
 
         $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_product_id'));
         if (false == $selProdData) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -2225,15 +2229,15 @@ class ProductsController extends MyAppController
         
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, 1);
         if (1 > count($file)) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_FILE_NOT_FOUND", $this->siteLangId));
         }
         
         if ($file['pddr_record_id'] != $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
         
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_FILE_NOT_FOUND", $this->siteLangId));
         }
         
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';

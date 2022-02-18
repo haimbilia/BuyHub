@@ -2,7 +2,6 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $siteLangId),
@@ -17,12 +16,15 @@ if (!$canEdit || 1 > count($arrListing)) {
 
 if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
-} else {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position']);
 }
 
 if (Badge::COND_AUTO == $badgeConditionType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
+    unset(
+        $arr_flds['cond_seller_name'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'from_date'],
+        $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'to_date'],
+    );
 } else {
     unset(
         $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'],
@@ -59,10 +61,6 @@ foreach ($arrListing as $sn => $row) {
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
-            case BadgeLinkCondition::DB_TBL_PREFIX . 'position':
-                $txt = Badge::RIBB_POS_TRIGHT == $row[$key] ? Labels::getLabel('LBL_TOP_RIGHT', $siteLangId) : Labels::getLabel('LBL_TOP_LEFT', $siteLangId);
-                $td->appendElement('plaintext', [], $txt, true);
-                break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
                 $conditionType = (empty($row['badgelink_record_ids']) ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
@@ -79,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $ul = $td->appendElement("ul", array("class"=>"actions"));
+                    $ul = $td->appendElement("ul", array("class" => "actions"));
                     if (Badge::COND_MANUAL == $badgeConditionType) {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
 
@@ -90,10 +88,10 @@ foreach ($arrListing as $sn => $row) {
                             $icon = "<i class='far fa-eye icon'></i>";
                             $title = Labels::getLabel('LBL_VIEW', $siteLangId);
                         }
-                        $li = $ul->appendElement("li"); 
+                        $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
                         if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
-                            $li = $ul->appendElement("li"); 
+                            $li = $ul->appendElement("li");
                             $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                         }
                     } else if (in_array($row['blinkcond_condition_type'], BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
@@ -104,14 +102,14 @@ foreach ($arrListing as $sn => $row) {
                             $class = 'label-success';
                         }
 
-                        $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
-                        $li = $ul->appendElement("li"); 
+                        $htm = ' <span class="badge badge-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
+                        $li = $ul->appendElement("li");
                         $li->appendElement('plaintext', [], $htm, true);
                     } else {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                         $icon = "<i class='far fa-eye icon'></i>";
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);
-                        $li = $ul->appendElement("li"); 
+                        $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
                     }
                 } else {

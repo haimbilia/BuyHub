@@ -17,7 +17,7 @@ class SentEmailsController extends ListingBaseController
     public function search()
     {
         if (!FatUtility::isAjaxCall()) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $srchFrm = $this->sentEmailSearchForm();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -39,7 +39,8 @@ class SentEmailsController extends ListingBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function view($id)

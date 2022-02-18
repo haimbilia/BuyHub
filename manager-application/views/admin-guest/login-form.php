@@ -27,11 +27,11 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
             <div class="logo">
                 <a href="<?php echo UrlHelper::generateUrl(); ?>">
                     <?php
-                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
                     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                     ?>
-                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
                 </a>
             </div>
             <div class="card">
@@ -51,15 +51,16 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
                         <div class="input-group">
                             <?php echo $passwordFld->getHTML('password'); ?>
-                            <div class="input-group-append"><span class="input-group-text show-password" id="showPass"><?php echo Labels::getlabel('FRM_SHOW', $siteLangId); ?></span></div>
+                            <div class="input-group-append">
+                                <span class="input-group-text field-password"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="switch switch-sm remember-me">
+                        <label class="switch switch-sm switch-icon remember-me">
                             <?php echo $frm->getFieldHTML('rememberme'); ?>
                             <span class="input-helper"></span><?php echo Labels::getlabel('FRM_REMEMBER_ME', $siteLangId); ?>
                         </label>
-
                     </div>
                     <div class="form-group">
                         <?php echo $frm->getFieldHTML('btn_submit'); ?>

@@ -14,7 +14,6 @@ class ShippingApi extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
     public static function getSearchObject($isActive = true, $langId = 0)
     {
@@ -22,7 +21,7 @@ class ShippingApi extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'c');
 
         if ($isActive == true) {
-            $srch->addCondition('c.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('c.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -79,7 +78,7 @@ class ShippingApi extends MyAppModel
                 $rs = $srch->getResultSet();
                 $res = FatApp::getDb()->fetchAll($rs);
                 return $res;
-             break;
+                break;
         }
         return $data;
     }
@@ -123,7 +122,7 @@ class ShippingApi extends MyAppModel
             'msapi_l'
         );
         $srch->joinTable('tbl_shipping_durations', 'LEFT OUTER JOIN', 'msapi.mshipapi_sduration_id = sd.sduration_id', 'sd');
-        $srch->addCondition('sd.sduration_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('sd.sduration_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addMultipleFields(array('mshipapi_id', 'mshipapi_cost', 'mshipapi_comment'));
         $srch->addCondition('mshipapi_sduration_id', '=', $mshipapi_sduration_id);
         $srch->addCondition('mshipapi_volume_upto', '>=', $volume);
@@ -176,7 +175,7 @@ class ShippingApi extends MyAppModel
         $db = FatApp::getDb();
 
         $srch = new SearchBase(static::DB_TBL);
-        $srch->addCondition('shippingapi_id', '=', $recordId);
+        $srch->addCondition('shippingapi_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -199,7 +198,7 @@ class ShippingApi extends MyAppModel
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null)
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, $includePrimaryTable = false, $active = NULL, $deleted =  NULL)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
@@ -207,8 +206,8 @@ class ShippingApi extends MyAppModel
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-        $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
-        $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', FatUtility::int($langId));
+        $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {

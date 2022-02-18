@@ -133,7 +133,7 @@ class TagsController extends ListingBaseController
         $frm = new Form('frmTag');
         $frm->addHiddenField('', 'tag_id');
         $frm->addHiddenField('', 'tag_lang_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_TAG_NAME', $this->siteLangId), 'tag_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_TAG_NAME', $this->siteLangId), 'tag_name');
         return $frm;
     }
 
@@ -221,7 +221,7 @@ class TagsController extends ListingBaseController
 
         $relatedProdsTblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
-            return json_decode($relatedProdsTblHeadingCols);
+            return json_decode($relatedProdsTblHeadingCols, true);
         }
 
         $arr = [

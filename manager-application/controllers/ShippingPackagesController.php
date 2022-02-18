@@ -63,23 +63,22 @@ class ShippingPackagesController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = ShippingPackage::getSearchObject();
-        if (!empty($post['keyword'])) {
+        if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('spack.shippack_name', 'like', '%' . $post['keyword'] . '%');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
@@ -100,7 +99,8 @@ class ShippingPackagesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHIPPING_PACKAGE_SETUP'));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -116,13 +116,13 @@ class ShippingPackagesController extends ListingBaseController
         $recordId = FatUtility::int(ShippingPackage::getPackageIdByName($packageName));
         $packageId = $post['shippack_id'];
         if (0 < $recordId && $packageId != $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->siteLangId), true);
         }
         unset($post['shippack_id']);
         $spObj = new ShippingPackage($packageId);
         $spObj->assignValues($post);
         if (!$spObj->save()) {
-            LibHelper::exitWithError($spObj->getError());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -134,7 +134,7 @@ class ShippingPackagesController extends ListingBaseController
         $frm = new Form('frmShippingPackages');
         $frm->addHiddenField('', 'shippack_id');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_NAME', $this->siteLangId), 'shippack_name');
-        $frm->addSelectBox(Labels::getLabel('FRM_UNIT', $this->siteLangId), 'shippack_units', ShippingPackage::getUnitTypes($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_UNIT', $this->siteLangId), 'shippack_units', ShippingPackage::getUnitTypes($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId))->requirements()->setRequired(true);
         $frm->addFloatField(Labels::getLabel('FRM_LENGTH', $this->siteLangId), 'shippack_length');
         $frm->addFloatField(Labels::getLabel('FRM_WIDTH', $this->siteLangId), 'shippack_width');
         $frm->addFloatField(Labels::getLabel('FRM_HEIGHT', $this->siteLangId), 'shippack_height');
@@ -150,6 +150,7 @@ class ShippingPackagesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shippack_id');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -159,12 +160,13 @@ class ShippingPackagesController extends ListingBaseController
     {
         $shopsTblHeadingCols = CacheHelper::get('shippingPackTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
-            return json_decode($shopsTblHeadingCols);
+            return json_decode($shopsTblHeadingCols, true);
         }
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'shippack_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'shippack_units' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
+            'dimensions' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
+            'shippack_units' => Labels::getLabel('LBL_UNIT', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('shippingPackTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -176,6 +178,7 @@ class ShippingPackagesController extends ListingBaseController
         return [
             'listSerial',
             'shippack_name',
+            'dimensions',
             'shippack_units',
             'action',
         ];
@@ -183,6 +186,6 @@ class ShippingPackagesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['shippack_units'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dimensions', 'shippack_units'], Common::excludeKeysForSort());
     }
 }

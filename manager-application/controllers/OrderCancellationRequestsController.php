@@ -2,7 +2,7 @@
 class OrderCancellationRequestsController extends ListingBaseController
 {
     protected $modelClass = 'OrderCancelRequest';
-    protected $pageKey = 'MANAGE_ORDER_CANCELLATION_REQUESTS';
+    protected $pageKey = 'ORDER_CANCELLATION_REQUESTS';
 
     public function __construct($action)
     {
@@ -39,7 +39,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_INVOICE_NUMBER_AND_COMMENT', $this->siteLangId));
         $this->getListingData();
 
         $data = FatApp::getPostedData();
@@ -77,7 +77,7 @@ class OrderCancellationRequestsController extends ListingBaseController
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'ocrequest_id', 0);
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -107,6 +107,12 @@ class OrderCancellationRequestsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
+        if ('buyer_detail' == $sortBy) {
+            $sortBy = 'buyer.user_name';
+        } else if ('vendor_detail' == $sortBy) {
+            $sortBy = 'seller.user_name';
+        }
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $searchForm = $this->getSearchForm($fields);
@@ -120,24 +126,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinOrderSellerUser();
         $srch->joinOrderProductStatus();
         $srch->joinOrderCancelReasons();
-        $srch->addOrderProductCharges();
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder('ocrequest_date', 'DESC');
-        $srch->addMultipleFields(
-            array(
-                'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-                'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone_dcode as seller_phone_dcode',
-                'seller.user_phone as seller_phone', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
-                'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
-                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS buyer_id',
-                'buyer.user_updated_on AS buyer_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id'
-            )
-        );
-
+        $srch->addOrderProductCharges(); 
+        
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('op_invoice_number', '=', $keyword);
@@ -158,9 +148,10 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addCondition('ocrequest_id', '=', $post['ocrequest_id']);
         }
 
-        if (isset($post['ocrequest_ocreason_id']) && $post['ocrequest_ocreason_id'] != '') {
-            $ocrequest_ocreason_id = FatUtility::int($post['ocrequest_ocreason_id']);
-            $srch->addCondition('ocrequest_ocreason_id', '=', $ocrequest_ocreason_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);   
+        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, $recordId); 
+        if (0 < $reasonId) {
+            $srch->addCondition('ocrequest_ocreason_id', '=', $reasonId);
         }
 
         $buyer = FatApp::getPostedData('buyer', FatUtility::VAR_INT, 0);
@@ -183,21 +174,33 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addDateToCondition($dateTo);
         }
         
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addMultipleFields(
+            array(
+                'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
+                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email','seller.user_name as seller_name','seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email','op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
+                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS user_id',
+                'buyer.user_updated_on AS user_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id','seller.user_updated_on AS seller_updated_on','seller.user_id AS seller_id', 'ocrequest_admin_comment'
+            )
+        );
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
-        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
-        $this->set('pageSize', $pageSize);
+        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr()); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
+        $this->set("arrListing", $records); 
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
     }
 
     public function form()
@@ -241,13 +244,17 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCELLATION_REQUEST_UPDATE', $this->siteLangId));
 
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId, $langId, $canRefundToCard = false)
     {
         $frm = new Form('frmUpdateStatus');
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
+        $frm->addHiddenField('', 'ocrequest_id', $recordId);
+        $statusFld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', ['class' => 'fieldsVisibilityJs'], '');
+        $statusFld->requirement->setRequired(true);
+
         $moveRefundLocationArr = PaymentMethods::moveRefundLocationsArr($this->siteLangId);
         if (false == $canRefundToCard) {
             unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_CARD]);
@@ -255,8 +262,25 @@ class OrderCancellationRequestsController extends ListingBaseController
             unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_WALLET]);
         }
         $frm->addRadioButtons(Labels::getLabel('FRM_TRANSFER_REFUND', $this->siteLangId), 'ocrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
+        $fld1 = new FormFieldRequirement('ocrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
+        $fld1->setRequired(false);
+        $reqFld1 = new FormFieldRequirement('ocrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
+        $reqFld1->setRequired(true);
+
         $frm->addTextarea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'ocrequest_admin_comment');
-        $frm->addHiddenField('', 'ocrequest_id', $recordId);
+        $fld2 = new FormFieldRequirement('ocrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));
+        $fld2->setRequired(false);
+        $reqFld2 = new FormFieldRequirement('ocrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));
+        $reqFld2->setRequired(true);
+
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED, 'eq', 'ocrequest_refund_in_wallet', $reqFld1);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING, 'eq', 'ocrequest_refund_in_wallet', $fld1);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED, 'eq', 'ocrequest_refund_in_wallet', $fld1);
+        
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED, 'eq', 'ocrequest_admin_comment', $reqFld2);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING, 'eq', 'ocrequest_admin_comment', $fld2);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED, 'eq', 'ocrequest_admin_comment', $fld2);
+
         return $frm;
     }
 
@@ -270,6 +294,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         if (false == $post) {
             LibHelper::exitWithError($frm->getValidationErrors(), true);
         }
+        $postStatus = FatApp::getPostedData('ocrequest_status', FatUtility::VAR_INT, 0);
 
         $srch = new OrderCancelRequestSearch($this->siteLangId);
         $srch->joinOrderProducts();
@@ -283,8 +308,17 @@ class OrderCancellationRequestsController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
+        }
+
+        if ($postStatus == $row['ocrequest_status']) {
+            $str = Labels::getLabel('MSG_ALREADY_PENDING', $this->siteLangId);
+            if ($postStatus == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED) {
+                $str = Labels::getLabel('MSG_ALREADY_APPROVED', $this->siteLangId);
+            } else if ($postStatus == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED) {
+                $str = Labels::getLabel('MSG_ALREADY_DECLINED', $this->siteLangId);
+            }
+            LibHelper::exitWithError($str);
         }
 
         $db = FatApp::getDb();
@@ -317,7 +351,7 @@ class OrderCancellationRequestsController extends ListingBaseController
                         if (true === $paymentMethodObj->canRefundToCard($pluginKey, $row['order_language_id'])) {
                             if (false == $paymentMethodObj->initiateRefund($row, PaymentMethods::REFUND_TYPE_CANCEL)) {
                                 $db->rollbackTransaction();
-                                FatUtility::dieJsonError($paymentMethodObj->getError());
+                                LibHelper::exitWithError($paymentMethodObj->getError(), true);
                             }
                             $resp = $paymentMethodObj->getResponse();
                             if (empty($resp)) {
@@ -365,21 +399,26 @@ class OrderCancellationRequestsController extends ListingBaseController
         FatUtility::dieJsonSuccess($successMsgString);
     }
 
-    public function viewComment($recordId, $langId = 0)
+    public function viewComment($ocrequestId)
     {
-        $this->checkEditPrivilege();
-        // $row = OrderCancelRequest::getAttributesById($recordId);
-
+        $ocrequestId = FatUtility::int($ocrequestId);        
         $srch = new OrderCancelRequestSearch($this->siteLangId);
         $srch->joinOrderCancelReasons();
-        $srch->addCondition('ocrequest_id', '=', $recordId);
-        $records = FatApp::getDb()->fetch($srch->getResultSet());
-        if (!$records) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $this->set('title', Labels::getLabel('LBL_VIEW_COMMENT', $langId));
-        $this->set('cancelMessage', $records);
-        $this->_template->render(false, false);
+        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message']);
+        $srch->addCondition('ocrequest_id', '=', $ocrequestId);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+
+        $this->set('row', $row);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+    
+    public function viewAdminComment($ocrequestId)
+    {
+        $ocrequestId = FatUtility::int($ocrequestId);
+        $this->set('comment', OrderCancelRequest::getAttributesById($ocrequestId, 'ocrequest_admin_comment'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -393,14 +432,14 @@ class OrderCancellationRequestsController extends ListingBaseController
     {
         $withdrawalRequestsTblHeadingCols = CacheHelper::get('withdrawalRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($withdrawalRequestsTblHeadingCols) {
-            return json_decode($withdrawalRequestsTblHeadingCols);
+            return json_decode($withdrawalRequestsTblHeadingCols, true);
         }
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'buyer_detail' => Labels::getLabel('LBL_BUYER_DETAILS', $this->siteLangId),
-            'vendor_detail' => Labels::getLabel('LBL_SELLER_DETAILS', $this->siteLangId),
-            'reuqest_detail' => Labels::getLabel('LBL_REQUEST_DETAILS', $this->siteLangId),
+            'reuqest_detail' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
+            'buyer_detail' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
+            'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
             'ocrequest_date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
             'ocrequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -419,9 +458,9 @@ class OrderCancellationRequestsController extends ListingBaseController
     {
         return [
             'listSerial',
+            'reuqest_detail',
             'buyer_detail',
             'vendor_detail',
-            'reuqest_detail',
             'amount',
             'ocrequest_date',
             'ocrequest_status',
@@ -437,9 +476,6 @@ class OrderCancellationRequestsController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        $excludeArray = [
-            'buyer_detail', 'vendor_detail', 'reuqest_detail', 'amount', 'ocrequest_date', 'ocrequest_status'
-        ];
-        return array_diff($fields, $excludeArray, Common::excludeKeysForSort());
+        return array_diff($fields, ['reuqest_detail', 'amount'], Common::excludeKeysForSort());
     }
 }

@@ -8,12 +8,9 @@ class BlogComment extends MyAppModel
     public const COMMENT_STATUS_APPROVED = 1;
     public const COMMENT_STATUS_PENDING = 0;
 
-    private $db;
-
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($joinBlogPost = true, $langId = 0)
@@ -28,15 +25,15 @@ class BlogComment extends MyAppModel
             }
         }
 
-        $srch->addCondition('bpcomment_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('bpcomment_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         return $srch;
     }
 
     public function canMarkRecordDelete(int $bpcommentId): bool
     {
         $srch = static::getSearchObject();
-        $srch->addCondition('bpcomment_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('bpcomment_id', '=', $bpcommentId);
+        $srch->addCondition('bpcomment_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('bpcomment_id', '=', 'mysql_func_' . $bpcommentId, 'AND', true);
         $srch->addFld('bpcomment_id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -56,8 +53,8 @@ class BlogComment extends MyAppModel
         }
 
         return array(
-            self::COMMENT_STATUS_PENDING => Labels::getLabel('LBL_Pending', $langId),
-            self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_Approved', $langId)
+            self::COMMENT_STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId)
         );
     }
 
@@ -72,7 +69,7 @@ class BlogComment extends MyAppModel
             case self::COMMENT_STATUS_APPROVED:
                 $status = HtmlHelper::SUCCESS;
                 break;
-            
+
             default:
                 $status = HtmlHelper::PRIMARY;
                 break;
