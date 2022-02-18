@@ -54,6 +54,14 @@ class CommonHelper extends FatUtility
                     if (array_key_exists($_COOKIE['defaultSiteCurrency'], $currencies)) {
                         self::$_currency_id = FatUtility::int(trim($_COOKIE['defaultSiteCurrency']));
                     }
+                }else{                    
+                    if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
+                        self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+                    }
+                }
+
+                if (!isset($_COOKIE['defaultSiteLang']) && !empty($_SERVER['HTTP_X_LANGUAGE_ID'])) {
+                    self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
                 }
             }
 
