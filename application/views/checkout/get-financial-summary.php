@@ -147,6 +147,9 @@
             <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
             <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
         </li>
+        <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                <p class="form-text text-muted mt-1"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderNetAmt); ?> </p>
+        <?php } ?>
 
     </ul>
     <?php /*  ?><p class="earn-points"><svg class="svg" width="20px" height="20px">

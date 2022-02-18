@@ -18,10 +18,13 @@
                 if (isset($error))
                     echo '<div class="alert alert--danger"><p>' . $error . '</p></div>';
                 if (isset($success))
-                    echo '<div class="alert alert--success" ><p>Your payment has been successfull.</p></div>';
+                    echo '<div class="alert alert--success" ><p>'.Labels::getLabel('LBL_Your_payment_has_been_successfull', $siteLangId).'</p></div>';
                 if (strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) echo '<div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>';
                 ?>
             </div>  
+            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+            <?php } ?>
         </div>
     </div>
 </section>

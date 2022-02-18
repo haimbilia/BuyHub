@@ -1,15 +1,12 @@
 	
 $(document).ready(function(){
-	searchAnalytics(document.frmPromotionAnalyticsSearch);
+	searchRecords(document.frmRecordSearch);	
 });
 
-(function() {
-	var currentPage = 1;
-	var runningAjaxReq = false;
-	var dv = '#ppcListing';
-	
+(function() {	
+	var dv = '#listing';	
 
-	searchAnalytics = function(form){			
+	searchRecords = function(form){			
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
@@ -26,12 +23,9 @@ $(document).ready(function(){
 		if(typeof page==undefined || page == null){
 			page =1;
 		}
-		var frm = document.frmPromotionAnalyticsSearch;		
+		var frm = document.frmRecordSearch;		
 		$(frm.page).val(page);
-		searchAnalytics(frm);
-	};
-	clearPromotionSearch = function(){
-		document.frmPromotionAnalyticsSearch.reset();
-		searchAnalytics(document.frmPromotionAnalyticsSearch);
-	}
+		searchRecords(frm);
+	};	
+
 })();

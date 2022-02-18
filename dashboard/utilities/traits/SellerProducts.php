@@ -2034,8 +2034,7 @@ trait SellerProducts
         $srch->addOrder('selprod_active', 'DESC');
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $products = $db->fetchAll($rs, 'id');
-        $arrListing = $db->fetchAll($rs);
+        $products = $db->fetchAll($rs, 'id');       
         $pageCount = $srch->pages();
 
         $json = array();

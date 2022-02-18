@@ -24,6 +24,9 @@ $(document).on("click", ".resetModalFormJs", function (e) {
 });
 
 $(document).on("click", ".navTabsJs a", function (e) {
+    if ($(this).hasClass('fat-inactive')) {
+        return;
+    }
     $(this).siblings('a.active').removeClass('active');
     $(this).addClass('active');
 });
@@ -39,6 +42,7 @@ $(document).on("click", ".navTabsJs a", function (e) {
 
     clearSearch = function () {
         document.frmRecordSearch.reset();
+        $(document.frmRecordSearch.page).val(1);
         searchRecords(document.frmRecordSearch);
     };
 
