@@ -6,19 +6,20 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <div id="body" class="body detail-page">
     <section class="">
         <div class="container">
-            <div class="breadcrumb">
-                <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php');  ?>
-            </div>
-            <div class="detail-first-fold">
-                <div class="detail-first-left">
-                    <?php include('product-detail-gallery.php'); ?>
-                    <?php include('prod-desc-nav-detail.php'); ?>
-                </div>
-                <div class="detail-first-right">
-                    <?php include('product-description.php'); ?>
-                    <?php include('more-sellers.php');  ?>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="breadcrumb">
+                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php');  ?>
+                    </div>
+                    <div class="detail-first-fold">
+                        <?php include('product-detail-gallery.php'); ?>
+                        <?php include('product-description.php'); ?>
+                    </div>
                 </div>
             </div>
+
+            <?php include('prod-desc-nav-detail.php'); ?>
+            <?php include('more-sellers.php');  ?>
         </div>
     </section>
     <?php include('banners.php'); ?>
