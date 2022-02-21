@@ -463,7 +463,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frm->addHiddenField('', 'blinkcond_id');
         $frm->addHiddenField('', 'blinkcond_badge_id');
         $frm->addHiddenField('', 'badge_type');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
 
         HtmlHelper::addSearchButton($frm);
         return $frm;
@@ -609,13 +609,13 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frm->addHiddenField('', 'badge_type', $badgeType);
         $frm->addHiddenField('', 'record_condition', $conditionType);
         if (Badge::COND_MANUAL == $conditionType) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT_LINK_TYPE', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT_LINK_TYPE', $this->siteLangId));
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT_CONDITION', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
         }
 
         if (Badge::TYPE_RIBBON == $badgeType) {
-            $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', Badge::getRibbonPostionArr($this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_POSITION', $this->siteLangId), 'blinkcond_position', Badge::getRibbonPostionArr($this->siteLangId));
         }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
@@ -641,19 +641,19 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
         $frm->addHiddenField('', 'record_ids', json_encode($recordIds));
 
-        $frm->addTextBox(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
-        $frm->addTextBox(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
+        $frm->addTextBox(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
+        $frm->addTextBox(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
 
         if (1 > $this->badgeLinkCondId) {
             $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
             $fld->requirement->setRequired((Badge::COND_MANUAL == $recordCondition));
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         return $frm;
     }
 

@@ -353,13 +353,13 @@ class ImportExportController extends SellerBaseController
     {
         $frm = new Form('uploadBulkImages', array('id' => 'uploadBulkImages'));
 
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $langId), 'bulk_images', array('id' => 'bulk_images', 'accept' => '.zip'));
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_FILE_TO_BE_UPLOADED:', $langId), 'bulk_images', array('id' => 'bulk_images', 'accept' => '.zip'));
         $fldImg->requirement->setRequired(true);
         $fldImg->setFieldTagAttribute('onChange', '$("#uploadFileName").html(this.value)');
         $fldImg->htmlBeforeField = '<div class="filefield">';
         $fldImg->htmlAfterField = '<label class="filelabel"></label></div>';
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 
@@ -412,82 +412,82 @@ class ImportExportController extends SellerBaseController
     {
         $frm = new Form('frmImportExportSetting', array('id' => 'frmImportExportSetting'));
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $langId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_BRAND_ID_INSTEAD_OF_BRAND_IDENTIFIER", $langId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_brand_id_instead_of_brand_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $langId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_CATEGORY_ID_INSTEAD_OF_CATEGORY_IDENTIFIER", $langId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_category_id_instead_of_category_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $langId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_CATALOG_PRODUCT_ID_INSTEAD_OF_CATALOG_PRODUCT_IDENTIFIER", $langId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_catalog_product_id_instead_of_catalog_product_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $langId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_id_instead_of_option_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $langId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_VALUE_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_value_id_instead_of_option_value_identifier_in_worksheets", $langId) . '</small>';
 
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_type_id_instead_of_option_type_identifier",$langId),'CONF_USE_OPTION_TYPE_ID',1,array(),false,0);
+        /* $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_TYPE_ID_INSTEAD_OF_OPTION_TYPE_IDENTIFIER",$langId),'CONF_USE_OPTION_TYPE_ID',1,array(),false,0);
         $fld->htmlAfterField = '<br><small>'.Labels::getLabel("MSG_Use_option_type_id_instead_of_option_type_identifier_in_worksheets",$langId).'</small>'; */
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $langId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_TAG_ID_INSTEAD_OF_TAG_IDENTIFIER", $langId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tag_id_instead_of_tag_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $langId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_TAX_ID_INSTEAD_OF_TAX_IDENTIFIER", $langId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tax_category_id_instead_of_tax_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $langId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_PRODUCT_TYPE_ID_INSTEAD_OF_PRODUCT_TYPE_IDENTIFIER", $langId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_product_type_id_instead_of_product_type_identifier_in_worksheets", $langId) . '</small>';
 
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $langId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
+        /* $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_DIMENSION_UNIT_ID_INSTEAD_OF_DIMENSION_UNIT_IDENTIFIER", $langId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $langId) . '</small>'; */
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $langId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_WEIGHT_UNIT_ID_INSTEAD_OF_WEIGHT_UNIT_IDENTIFIER", $langId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_weight_unit_id_instead_of_weight_unit_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $langId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_LANG_ID_INSTEAD_OF_LANG_CODE", $langId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_language_id_instead_of_language_code_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $langId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_CURRENCY_ID_INSTEAD_OF_CURRENCY_CODE", $langId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_currency_id_instead_of_currency_code_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $langId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_PRODUCT_CONDITION_ID_INSTEAD_OF_CONDITION_IDENTIFIER", $langId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_Product_condition_id_instead_of_condition_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $langId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_PERSENT_OR_FLAT_CONDITION_ID_INSTEAD_OF_IDENTIFIER", $langId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_persent_or_flat_condition_id_instead_of_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $langId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_COUNTRY_ID_INSTEAD_OF_COUNTRY_CODE", $langId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_country_id_instead_of_country_code_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $langId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_STATE_ID_INSTEAD_OF_STATE_IDENTIFIER", $langId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_state_id_instead_of_state_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $langId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_POLICY_POINT_ID_INSTEAD_OF_POLICY_POINT_IDENTIFIER", $langId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_id_instead_of_policy_point_identifier_in_worksheets", $langId) . '</small>';
 
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $langId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
+        /* $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SHIPPING_COMPANY_ID_INSTEAD_OF_SHIPPING_COMPANY_IDENTIFIER", $langId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $langId) . '</small>'; */
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $langId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_POLICY_POINT_TYPE_ID_INSTEAD_OF_POLICY_POINT_TYPE_IDENTIFIER", $langId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_type_id_instead_of_policy_point_type_identifier_in_worksheets", $langId) . '</small>';
 
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_method_id_instead_of_shipping_method_identifier",$langId),'CONF_USE_SHIPPING_METHOD_ID',1,array(),false,0);
+        /* $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SHIPPING_METHOD_ID_INSTEAD_OF_SHIPPING_METHOD_IDENTIFIER",$langId),'CONF_USE_SHIPPING_METHOD_ID',1,array(),false,0);
         $fld->htmlAfterField = '<br><small>'.Labels::getLabel("MSG_Use_shipping_method_id_instead_of_shipping_method_identifier_in_worksheets",$langId).'</small>'; */
 
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $langId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
+        /* $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SHIPPING_DURATION_ID_INSTEAD_OF_SHIPPING_DURATION_IDENTIFIER", $langId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $langId) . '</small>'; */
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $langId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SHIPPING_PROFILE_ID_INSTEAD_OF_SHIPPING_PROFILE_IDENTIFIER", $langId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_profile_id_instead_of_shipping_profile_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $langId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SHIPPING_PACKAGE_ID_INSTEAD_OF_SHIPPING_PACKAGE_IDENTIFIER", $langId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_package_id_instead_of_shipping_package_identifier_in_worksheets", $langId) . '</small>';
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $langId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_1_FOR_YES_0_FOR_NO", $langId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $langId) . '</small>';
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 
@@ -507,7 +507,7 @@ class ImportExportController extends SellerBaseController
             array('class' => 'list-inline'),
             array('onclick' => 'getInstructions(this.value)')
         );
-        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Select_Above_option_to_import_data.", $langId) . "</small><br/><small>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</small>";
+        $fld->htmlAfterField = "<small>" . Labels::getLabel("FRM_SELECT_ABOVE_OPTION_TO_IMPORT_DATA.", $langId) . "</small><br/><small>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</small>";
         return $frm;
     }
 
@@ -523,7 +523,7 @@ class ImportExportController extends SellerBaseController
             array('class' => 'list-inline'),
             array('onclick' => 'exportForm(this.value)')
         );
-        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Select_Above_option_to_export_data.", $langId) . "</small>";
+        $fld->htmlAfterField = "<small>" . Labels::getLabel("FRM_SELECT_ABOVE_OPTION_TO_EXPORT_DATA.", $langId) . "</small>";
         return $frm;
     }
 
@@ -534,11 +534,11 @@ class ImportExportController extends SellerBaseController
 
         /* if($type != 'EXPORT_MEDIA'){ */
         if ($type == 'IMPORT_MEDIA') {
-            $frm->addSelectBox(Labels::getLabel('LBL_Upload_File_Language', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('FRM_UPLOAD_FILE_LANGUAGE', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
         } elseif ($type == 'EXPORT_MEDIA') {
-            $frm->addSelectBox(Labels::getLabel('LBL_Export_File_Language', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('FRM_EXPORT_FILE_LANGUAGE', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, '', array(), '')->requirements()->setRequired();
         }
         /* } */
 
@@ -550,11 +550,11 @@ class ImportExportController extends SellerBaseController
                     case Importexport::TYPE_PRODUCTS:
                     case Importexport::TYPE_SELLER_PRODUCTS:
                         $displayRangeFields = true;
-                        $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
+                        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DATA', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
                     case Importexport::TYPE_INVENTORIES:
                         $displayRangeFields = true;
-                        $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
+                        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DATA', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
                     case Importexport::TYPE_USERS:
                         $displayRangeFields = true;
@@ -573,22 +573,22 @@ class ImportExportController extends SellerBaseController
             case 'IMPORT':
                 switch ($actionType) {
                     case Importexport::TYPE_SELLER_PRODUCTS:
-                        $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
+                        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DATA', $langId), 'sheet_type', Importexport::getProductCatalogContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
                     case Importexport::TYPE_INVENTORIES:
-                        $frm->addSelectBox(Labels::getLabel('LBL_Select_Data', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
+                        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DATA', $langId), 'sheet_type', Importexport::getSellerProductContentTypeArr($langId), '', array(), '')->requirements()->setRequired();
                         break;
                 }
-                $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $langId), 'import_file', array('id' => 'import_file'));
-                $fldImg->setFieldTagAttribute('onChange', '$(\'#importFileName\').html(this.value)');
+                $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_FILE_TO_BE_UPLOADED:', $langId), 'import_file', array('id' => 'import_file'));
+                $fldImg->setFieldTagAttribute('onChange', '$(\'#impoRTFILENAME\').HTML(this.value)');
                 $fldImg->htmlBeforeField = '<div class="filefield">';
                 $fldImg->htmlAfterField = "</div><span class='form-text text-muted'>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</span>";
                 /*$fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="importFileName"></span>';
                 $fldImg->htmlAfterField = '</div>'; */
                 break;
             case 'IMPORT_MEDIA':
-                $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $langId), 'import_file', array('id' => 'import_file'));
-                $fldImg->setFieldTagAttribute('onChange', '$(\'#importFileName\').html(this.value)');
+                $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_FILE_TO_BE_UPLOADED:', $langId), 'import_file', array('id' => 'import_file'));
+                $fldImg->setFieldTagAttribute('onChange', '$(\'#impoRTFILENAME\').HTML(this.value)');
                 $fldImg->htmlBeforeField = '<div class="filefield">';
                 $fldImg->htmlAfterField = "</div><span class='form-text text-muted'>" . Labels::getLabel('MSG_Invalid_data_will_not_be_processed', $langId) . "</span>";
                 /* $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="importFileName"></span>';
@@ -597,44 +597,44 @@ class ImportExportController extends SellerBaseController
         }
 
         if ($displayRangeFields) {
-            $dataRangeArr = array(0 => Labels::getLabel('LBL_Does_not_matter', $langId)) + Importexport::getDataRangeArr($langId);
-            $rangeTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Export_data_range', $langId), 'export_data_range', $dataRangeArr, '', array(), '');
+            $dataRangeArr = array(0 => Labels::getLabel('FRM_DOES_NOT_MATTER', $langId)) + Importexport::getDataRangeArr($langId);
+            $rangeTypeFld = $frm->addSelectBox(Labels::getLabEL('FRM_EXPORT_DATA_RANGE', $langId), 'export_data_range', $dataRangeArr, '', array(), '');
 
             /* Start Id[ */
-            $frm->addIntegerField(Labels::getLabel('LBL_start_id', $langId), 'start_id', 1);
-            $startIdUnReqObj = new FormFieldRequirement('start_id', Labels::getLabel('LBL_start_id', $langId));
+            $frm->addIntegerField(Labels::getLabel('FRM_START_ID', $langId), 'start_id', 1);
+            $startIdUnReqObj = new FormFieldRequirement('START_Id', Labels::getLabel('FRM_START_ID', $langId));
             $startIdUnReqObj->setRequired(false);
 
-            $startIdReqObj = new FormFieldRequirement('start_id', Labels::getLabel('LBL_start_id', $langId));
+            $startIdReqObj = new FormFieldRequirement('start_id', Labels::getLabel('FRM_START_ID', $langId));
             $startIdReqObj->setRequired(true);
             /*]*/
 
             /* End Id[ */
-            $frm->addIntegerField(Labels::getLabel('LBL_end_id', $langId), 'end_id', Importexport::MAX_LIMIT);
-            $endIdUnReqObj = new FormFieldRequirement('end_id', Labels::getLabel('LBL_end_id', $langId));
+            $frm->addIntegerField(Labels::getLabel('FRM_END_ID', $langId), 'end_id', Importexport::MAX_LIMIT);
+            $endIdUnReqObj = new FormFieldRequirement('eND_ID', Labels::getLabel('FRM_END_ID', $langId));
             $endIdUnReqObj->setRequired(false);
 
-            $endIdReqObj = new FormFieldRequirement('end_id', Labels::getLabel('LBL_end_id', $langId));
+            $endIdReqObj = new FormFieldRequirement('end_id', Labels::getLabel('FRM_END_ID', $langId));
             $endIdReqObj->setRequired(true);
             //$endIdReqObj->setRange(1,Importexport::MAX_LIMIT);
             /*]*/
 
             /* Batch Count[ */
-            $frm->addIntegerField(Labels::getLabel('LBL_counts_per_batch', $langId), 'batch_count', Importexport::MAX_LIMIT);
-            $batchCountUnReqObj = new FormFieldRequirement('batch_count', Labels::getLabel('LBL_counts_per_batch', $langId));
+            $frm->addIntegerField(Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId), 'batch_count', Importexport::MAX_LIMIT);
+            $batchCountUnReqObj = new FormFieldRequiremeNT('BATCH_COUNT', Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId));
             $batchCountUnReqObj->setRequired(false);
 
-            $batchCountReqObj = new FormFieldRequirement('batch_count', Labels::getLabel('LBL_counts_per_batch', $langId));
+            $batchCountReqObj = new FormFieldRequirement('batch_count', Labels::getLabel('FRM_COUNTS_PER_BATCH', $langId));
             $batchCountReqObj->setRequired(true);
             $batchCountReqObj->setRange(1, Importexport::MAX_LIMIT);
             /*]*/
 
             /* Batch Number[ */
-            $frm->addIntegerField(Labels::getLabel('LBL_batch_number', $langId), 'batch_number', 1);
-            $batchNumberUnReqObj = new FormFieldRequirement('batch_number', Labels::getLabel('LBL_batch_number', $langId));
+            $frm->addIntegerField(Labels::getLabel('FRM_BATCH_NUMBER', $langId), 'batch_number', 1);
+            $batchNumberUnReqObj = new FormFieldRequiremENT('BATCH_Number', Labels::getLabel('FRM_BATCH_NUMBER', $langId));
             $batchNumberUnReqObj->setRequired(false);
 
-            $batchNumberReqObj = new FormFieldRequirement('batch_number', Labels::getLabel('LBL_batch_number', $langId));
+            $batchNumberReqObj = new FormFieldRequirement('batch_number', Labels::getLabel('FRM_BATCH_NUMBER', $langId));
             $batchNumberReqObj->setRequired(true);
             /*]*/
 
@@ -654,7 +654,7 @@ class ImportExportController extends SellerBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
 		
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
 		$this->set('displayRangeFields',$displayRangeFields);
         return $frm;
     }
@@ -774,14 +774,14 @@ class ImportExportController extends SellerBaseController
         $frm = new Form('frmInventoryUpdate');
         $frm->addHiddenField('', 'lang_id', $langId);
 
-        $fld = $frm->addButton('', 'csvfile', Labels::getLabel('Lbl_Upload_Csv_File', $this->siteLangId), array('class' => 'csvFile-Js', 'id' => 'csvFile-Js'));
+        $fld = $frm->addButton('', 'csvfile', Labels::getLabel('FRM_UPLOAD_CSV_FILE', $this->siteLangId), array('class' => 'csvFile-Js', 'id' => 'csvFile-Js'));
         return $frm;
     }
 
     public function updateInventory()
     {
         if (!$this->userPrivilege->canEditImportExport(0, true)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('FRM_UNAUTHORIZED_ACCESS!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $frm = $this->getInventoryUpdateForm($this->siteLangId);
@@ -820,7 +820,7 @@ class ImportExportController extends SellerBaseController
         $row = 1;
 
         $importExport = new ImportexportCommon();
-        $sheetName = Labels::getLabel('LBL_INVENTORY_UPDATE_ERROR', $this->siteLangId);
+        $sheetName = Labels::getLabel('FRM_INVENTORY_UPDATE_ERROR', $this->siteLangId);
         $CSVfileObj = $importExport->openCSVfileToWrite($sheetName, $this->siteLangId, true);
         while (($dataArray = fgetcsv($fileHandle)) !== false) {
             $row++;
@@ -884,7 +884,7 @@ class ImportExportController extends SellerBaseController
         }
 
         if ($error) {
-            $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $this->siteLangId);
+            $success['msg'] = Labels::getLabel('FRM_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET', $this->siteLangId);
             FatUtility::dieJsonError($success);
         }
 

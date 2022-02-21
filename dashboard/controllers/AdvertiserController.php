@@ -1417,15 +1417,15 @@ class AdvertiserController extends AdvertiserBaseController
             }
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LbL_Budget' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_budget');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET' . '_[' . commonHelper::getDefaultCurrencySymbol() . ']', $this->siteLangId), 'promotion_budget');
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 
-        $locIdFld = $frm->addSelectBox(Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
-        $locIdFldUnReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId));
+        $locIdFld = $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired(true);
+        $locIdFldUnReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId));
         $locIdFldUnReqObj->setRequired(false);
 
-        $locIdFldReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId));
+        $locIdFldReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId));
         $locIdFldReqObj->setRequired(true);
 
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_blocation_id', $locIdFldReqObj);
@@ -1437,29 +1437,29 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
 
-        $fldDuration = $frm->addSelectBox(Labels::getLabel('LBL_Duration', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array(
+        $fldDuration = $frm->addSelectBox(Labels::getLabel('FRM_DURATION', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array(
             'id' => 'promotion_duration'
-        ), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        ), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
 
-        $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->siteLangId), 'promotion_start_date', '', array(
-            'placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId),
+        $frm->addDateField(Labels::getLabel('FRM_START_DATE', $this->siteLangId), 'promotion_start_date', '', array(
+            'placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId),
             'readonly' => 'readonly'
         ))->requirements()->setRequired();
-        $frm->addDateField(Labels::getLabel('LBL_End_Date', $this->siteLangId), 'promotion_end_date', '', array(
-            'placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId),
+        $frm->addDateField(Labels::getLabel('FRM_END_DATE', $this->siteLangId), 'promotion_end_date', '', array(
+            'placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId),
             'readonly' => 'readonly'
         ))->requirements()->setRequired();
 
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_promotion_start_time', $this->siteLangId), 'promotion_start_time', '', array(
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_PROMOTION_START_TIME', $this->siteLangId), 'promotion_start_time', '', array(
             'class' => 'time',
             'readonly' => 'readonly'
         ));
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_promotion_end_time', $this->siteLangId), 'promotion_end_time', '', array(
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_PROMOTION_END_TIME', $this->siteLangId), 'promotion_end_time', '', array(
             'class' => 'time',
             'readonly' => 'readonly'
         ));
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'promotion_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'promotion_active', $activeInactiveArr, '', array(), '');
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
@@ -1468,14 +1468,14 @@ class AdvertiserController extends AdvertiserBaseController
     {
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_promotion_name', $langId), 'promotion_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_PROMOTION_NAME', $langId), 'promotion_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
@@ -1494,12 +1494,12 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
         $bannerTypeArr = applicationConstants::getAllLanguages();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'banner_image', array('accept' => 'image/*'));
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'banner_image', array('accept' => 'image/*'));
 
         return $frm;
     }
@@ -1510,7 +1510,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         $frm = new Form('frmPromotionSearch');
         $frm->addTextBox('', 'keyword', '', array(
-            'placeholder' => Labels::getLabel('LBL_keyword', $langId)
+            'placeholder' => Labels::getLabel('FRM_KEYWORD', $langId)
         ));
 
         $typeArr = Promotion::getTypeArr($langId);
@@ -1518,23 +1518,23 @@ class AdvertiserController extends AdvertiserBaseController
             unset($typeArr[Promotion::TYPE_SHOP]);
             unset($typeArr[Promotion::TYPE_PRODUCT]);
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_PROMOTION_STATUS'), 'active_promotion', array(
-            '-1' => Labels::getLabel('LBL_All', $langId),
-            '1' => Labels::getLabel('LBL_Active_Promotions', $langId)
+        $frm->addSelectBox(Labels::getLabel('FRM_PROMOTION_STATUS'), 'active_promotion', array(
+            '-1' => Labels::getLabel('FRM_ALL', $langId),
+            '1' => Labels::getLabel('FRM_ACTIVE_PROMOTIONS', $langId)
         ), '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE'), 'type', array(
-            '-1' => Labels::getLabel('LBL_All_Type', $langId)
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE'), 'type', array(
+            '-1' => Labels::getLabel('FRM_ALL_TYPE', $langId)
         ) + $typeArr, '', array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM'), 'date_from', '', array(
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM'), 'date_from', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
-            'placeholder' => Labels::getLabel('LBL_Date_From', $langId)
+            'placeholder' => Labels::getLabel('FRM_DATE_FROM', $langId)
         ));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_TO'), 'date_to', '', array(
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO'), 'date_to', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
-            'placeholder' => Labels::getLabel('LBL_Date_To', $langId)
+            'placeholder' => Labels::getLabel('FRM_DATE_TO', $langId)
         ));
 
         $frm->addHiddenField('', 'total_record_count', '');
@@ -1555,16 +1555,16 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addDateField('', 'date_from', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
-            'placeholder' => Labels::getLabel('LBL_Date_From', $langId)
+            'placeholder' => Labels::getLabel('FRM_DATE_FROM', $langId)
         ));
         $frm->addDateField('', 'date_to', '', array(
             'readonly' => 'readonly',
             'class' => 'field--calender',
-            'placeholder' => Labels::getLabel('LBL_Date_To', $langId)
+            'placeholder' => Labels::getLabel('FRM_DATE_TO', $langId)
         ));
 
-        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array(
+        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SEARCH', $langId));
+        $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("FRM_CLEAR", $langId), array(
             'onclick' => 'clearPromotionSearch();'
         )); */
         HtmlHelper::addSearchButton($frm);
@@ -1580,7 +1580,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm = new Form('frmRechargeWallet');
         $fld = $frm->addFloatField('', 'amount');
         //$fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Add_Money_to_wallet', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD_MONEY_TO_WALLET', $langId));
         return $frm;
     }
 

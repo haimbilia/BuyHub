@@ -205,7 +205,7 @@ trait Options {
                 $defaultLang = false;
             }
             $fld = $frm->addRequiredField(
-                    Labels::getLabel('LBL_OPTION_NAME', $this->siteLangId) . ' ' . $langName,
+                    Labels::getLabel('FRM_OPTION_NAME', $this->siteLangId) . ' ' . $langName,
                     'option_name' . $langId,
                     '',
                     $attr
@@ -222,7 +222,7 @@ trait Options {
 
         $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
         $frm->addSelectBox(
-                Labels::getLabel('LBL_OPTION_HAVE_SEPARATE_IMAGE', $this->siteLangId),
+                Labels::getLabel('FRM_OPTION_HAVE_SEPARATE_IMAGE', $this->siteLangId),
                 'option_is_separate_images',
                 $yesNoArr,
                 0,
@@ -230,7 +230,7 @@ trait Options {
                 ''
         )->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Option_is_Color', $this->siteLangId), 'option_is_color', $yesNoArr, 0, array(), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_OPTION_IS_COLOR', $this->siteLangId), 'option_is_color', $yesNoArr, 0, array(), '')->requirements()->setRequired();
 
         return $frm;
     }

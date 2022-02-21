@@ -411,20 +411,20 @@ class AffiliateController extends AffiliateBaseController
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmPaymentInfoForm');
 
-        $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline justify-content-start'));
-        $frm->addTextBox(Labels::getLabel('LBL_Tax_Id', $siteLangId), 'uextra_tax_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Cheque_Payee_Name', $siteLangId), 'uextra_cheque_payee_name');
+        $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline justify-content-start'));
+        $frm->addTextBox(Labels::getLabel('FRM_TAX_ID', $siteLangId), 'uextra_tax_id');
+        $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $siteLangId), 'uextra_cheque_payee_name');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Bank_Name', $siteLangId), 'ub_bank_name');
-        $frm->addTextBox(Labels::getLabel('LBL_Account_Holder_Name', $siteLangId), 'ub_account_holder_name');
-        $frm->addTextBox(Labels::getLabel('LBL_Bank_Account_Number', $siteLangId), 'ub_account_number');
-        $frm->addTextBox(Labels::getLabel('LBL_Swift_Code', $siteLangId), 'ub_ifsc_swift_code');
-        $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $siteLangId), 'ub_bank_address');
+        $frm->addTextBox(Labels::getLabel('FRM_BANK_NAME', $siteLangId), 'ub_bank_name');
+        $frm->addTextBox(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $siteLangId), 'ub_account_holder_name');
+        $frm->addTextBox(Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $siteLangId), 'ub_account_number');
+        $frm->addTextBox(Labels::getLabel('FRM_SWIFT_CODE', $siteLangId), 'ub_ifsc_swift_code');
+        $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $siteLangId), 'ub_bank_address');
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_PayPal_Email_Account', $siteLangId), 'uextra_paypal_email_id');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $siteLangId), 'uextra_paypal_email_id');
         $fld->requirements()->setEmail();
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Register', $siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REGISTER', $siteLangId));
         $frm->setFormTagAttribute('onsubmit', 'setupAffiliateRegister(this); return(false);');
         return $frm;
     }
@@ -433,13 +433,13 @@ class AffiliateController extends AffiliateBaseController
     {
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAffiliateSharingForm');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Friends_Email', $siteLangId), 'email');
-        $str = Labels::getLabel('LBL_Use_commas_separate_emails', $siteLangId);
-        $str .= ", " . Labels::getLabel("LBL_Do_not_use_space_and_comma_at_end_of_string", $siteLangId);
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_FRIENDS_EMAIL', $siteLangId), 'email');
+        $str = Labels::getLabel('FRM_USE_COMMAS_SEPARATE_EMAILS', $siteLangId);
+        $str .= ", " . Labels::getLabel("FRM_DO_NOT_USE_SPACE_AND_COMMA_AT_END_OF_STRING", $siteLangId);
         $fld->htmlAfterField = ' <small>(' . $str . ')</small>';
         $fld->requirements()->setRequired();
-        $frm->addTextArea(Labels::getLabel('L_Personal_Message', $siteLangId), 'message');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('L_Invite_Your_Friends', $siteLangId));
+        $frm->addTextArea(Labels::getLabel('FRM_PERSONAL_MESSAGE', $siteLangId), 'message');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_INVITE_YOUR_FRIENDS', $siteLangId));
         return $frm;
     }
 
@@ -464,13 +464,13 @@ class AffiliateController extends AffiliateBaseController
     private function getUserSearchForm()
     {
         $frm = new Form('frmUserSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
-        $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
+        $arr_options = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $arr_options1 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Active_Users', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE_USERS', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EMAIL_VERIFIED', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');

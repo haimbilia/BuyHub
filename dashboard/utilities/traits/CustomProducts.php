@@ -75,8 +75,8 @@ trait CustomProducts
     {
         $frm = new Form('frmProductOptions', array('id' => 'frmProductOptions'));
         $frm->addHtml('', 'product_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Option_Groups', $this->siteLangId), 'option_name');
-        $fld1->htmlAfterField = '<div class=""><small><a href="javascript:void(0);" onclick="optionForm(0);">' . Labels::getLabel('LBL_Add_New_Option', $this->siteLangId) . '</a></small></div><div class="row"><div class="col-md-12"><ul class="list--vertical" id="product_options_list"></ul></div>';
+        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_OPTION_GROUPS', $this->siteLangId), 'option_name');
+        $fld1->htmlAfterField = '<div class=""><small><a href="javascript:void(0);" onclick="optionForm(0);">' . Labels::getLabel('FRM_ADD_NEW_OPTION', $this->siteLangId) . '</a></small></div><div class="row"><div class="col-md-12"><ul class="list--vertical" id="product_options_list"></ul></div>';
         $frm->addHiddenField('', 'product_id', '', array('id' => 'product_id'));
 
         return $frm;
@@ -1000,8 +1000,8 @@ trait CustomProducts
     {
         $frm = new Form('frmSearchCustomProduct');
         $frm->addTextBox('', 'keyword');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
@@ -1012,8 +1012,8 @@ trait CustomProducts
 
         $frm = new Form('frmTag', array('id' => 'frmTag'));
         $frm->addHiddenField('', 'tag_id', $tag_id);
-        $frm->addRequiredField(Labels::getLabel("LBL_Tag_Name", $this->siteLangId), 'tag_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel("FRM_TAG_NAME", $this->siteLangId), 'tag_name');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("BTN_SAVE_CHANGES", $this->siteLangId));
         return $frm;
     }
 
@@ -1021,42 +1021,42 @@ trait CustomProducts
     {
         $frm = new Form('frmTagLang', array('id' => 'frmTagLang'));
         $frm->addHiddenField('', 'tag_id', $tag_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Tag_Name', $this->siteLangId), 'tag_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_TAG_NAME', $this->siteLangId), 'tag_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Update", $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("BTN_UPDATE", $this->siteLangId));
         return $frm;
     }
 
     private function getLinksForm($product_id = 0)
     {
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $product_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $frm = new Form('frmLinks', array('id' => 'frmLinks'));
-        $frm->addTextBox(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'product_name');
+        $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'product_name');
 
-        $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Category', $this->siteLangId), 'choose_links');
+        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'choose_links');
         $fld2 = $frm->addHtml('', 'addNewOptionLink', '</a><div id="product_links_list" class="col-xs-10" ></div>');
         $fld1->attachField($fld2);
         $frm->addHiddenField('', 'product_brand_id');
 
-        $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Tag', $this->siteLangId), 'tag_name');
+        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_TAG', $this->siteLangId), 'tag_name');
         $fld1->htmlAfterField = '<div class="col-md-12"><small><a href="javascript:void(0);" onclick="addTagForm(0);">' . Labels::getLabel('LBL_Tag_Not_Found?_Click_here_to_', $this->siteLangId) . ' ' . Labels::getLabel('LBL_Add_New_Tag', $this->siteLangId) . '</a></small></div><div class="row"><div class="col-md-12"><ul class="list--vertical" id="product-tag"></ul></div>';
 
         //$frm->addHtml('','product-tag','');
 
         $frm->addHiddenField('', 'product_id', $product_id);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("BTN_SAVE_CHANGES", $this->siteLangId));
         return $frm;
     }
 
@@ -1072,13 +1072,13 @@ trait CustomProducts
                 $defaultLang = false;
             }
             $frm->addRequiredField(
-                Labels::getLabel('LBL_Specification_Name', $this->siteLangId),
+                Labels::getLabel('FRM_SPECIFICATION_NAME', $this->siteLangId),
                 'prod_spec_name[' . $langId . ']',
                 '',
                 $attr
             );
             $frm->addRequiredField(
-                Labels::getLabel('LBL_Specification_Value', $this->siteLangId),
+                Labels::getLabel('FRM_SPECIFICATION_VALUE', $this->siteLangId),
                 'prod_spec_value[' . $langId . ']',
                 '',
                 $attr
@@ -1086,7 +1086,7 @@ trait CustomProducts
         }
         $frm->addHiddenField('', 'product_id');
         $frm->addHiddenField('', 'prodspec_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
 
         return $frm;
     }
@@ -1095,19 +1095,19 @@ trait CustomProducts
     {
         $imgTypesArr = $this->getSeparateImageOptions($product_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
         $languagesAssocArr = Language::getAllNames();
 		
 		if(count($languagesAssocArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
+			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
 		} else  {
 			$lang_id = array_key_first($languagesAssocArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
        
-		$fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+		$fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield">';
-        $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</span>';
+        $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('FRM_PLEASE_KEEP_IMAGE_DIMENSIONS_GREATER_THAN_500_X_500', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
         $frm->addHiddenField('', 'product_id', $product_id);
@@ -1134,9 +1134,9 @@ trait CustomProducts
     private function getCustomProductImagesForm()
     {
         $frm = new Form('frmCustomProductImage');
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(S):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '</div><br/><span class="form-text text-muted">' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</span>';
+        $fldImg->htmlAfterField = '</div><br/><span class="form-text text-muted">' . Labels::getLabel('FRM_PLEASE_KEEP_IMAGE_DIMENSIONS_GREATER_THAN_500_X_500', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'product_id');
         return $frm;
     }
@@ -1146,11 +1146,11 @@ trait CustomProducts
         $langId = FatUtility::int($langId);
         $frm = new Form('frmCustomProductLang');
         $frm->addHiddenField('', 'product_id')->requirements()->setRequired();;
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Product_Name', $langId), 'product_name');
-        /* $frm->addTextArea( Labels::getLabel('LBL_Short_Description', $langId),'product_short_description');         */
-        $frm->addTextBox(Labels::getLabel('LBL_YouTube_Video', $langId), 'product_youtube_video');
-        $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $langId), 'product_description');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
+        /* $frm->addTextArea( Labels::getLabel('FRM_SHORT_DESCRIPTION', $langId),'product_short_description');         */
+        $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO', $langId), 'product_youtube_video');
+        $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $fld->htmlBeforeField = '<div class="editor-bar">';
         $fld->htmlAfterField = '</div>';
 
@@ -1158,10 +1158,10 @@ trait CustomProducts
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 
