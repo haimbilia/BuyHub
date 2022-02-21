@@ -14,10 +14,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         $data['otherButtons'][] = [
             'attr' => [
                 'href' => UrlHelper::generateUrl('Seller', 'shop'),
-                'class' => 'btn-outline-brand',
+                'class' => 'btn btn-outline-gray btn-icon',
                 'title' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
             ],
-            'label' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+                            </use>
+                        </svg>' . Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
         ];
     }
 
@@ -25,13 +28,16 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         $data['otherButtons'][] = [
             'attr' => [
                 'href' => UrlHelper::generateUrl('seller', 'products'),
-                'class' => 'btn-outline-brand',
+                'class' => 'btn btn-outline-gray btn-icon',
                 'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
             ],
-            'label' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+                            </use>
+                        </svg>' . Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
         ];
     }
-    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-md-8">
