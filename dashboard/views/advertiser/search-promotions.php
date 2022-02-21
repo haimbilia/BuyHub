@@ -99,7 +99,11 @@ foreach ($arrListing as $sn => $row) {
                             'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
                             "onclick" => "promotionForm(" . $row['promotion_id'] . ")"
                         ),
-                        '<i class="fa fa-edit"></i>',
+                        '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                         true
                     );
                 }
@@ -111,7 +115,11 @@ foreach ($arrListing as $sn => $row) {
                         'href' => UrlHelper::generateUrl('advertiser', 'analytics', array($row['promotion_id'])),
                         'class' => 'button small green', 'title' => Labels::getLabel('LBL_Analytics', $siteLangId)
                     ),
-                    '<i class="far fa-file-alt"></i>',
+                    '<svg class="svg" width="18" height="18">
+                    <use
+                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                    </use>
+                </svg>',
                     true
                 );
 

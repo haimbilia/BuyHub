@@ -87,9 +87,11 @@ if (null != $fld) {
                         $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                         $li = $ul->appendElement("li");
 
-                        $li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'target' => '_blank', 'onclick' => $linkOnClick, 'class' => '', 'title' => Labels::getLabel('LBL_Click_to_download', $siteLangId)), '<i class="fa fa-download"></i>', true);
-
-                        // $li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'class'=>'', 'title'=>Labels::getLabel('LBL_Click_to_open', $siteLangId)), '<i class="fa fa-download"></i>', true);
+                        $li->appendElement('a', array('href' => $row['opddl_downloadable_link'], 'target' => '_blank', 'onclick' => $linkOnClick, 'class' => '', 'title' => Labels::getLabel('LBL_Click_to_download', $siteLangId)), '<svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                        </use>
+                    </svg>', true);
 
                         /* $li = $ul->appendElement("li");
 						$li->appendElement('a', array('href'=> 'javascript:void(0)', 'id'=>'dataLink', 'data-link'=>$row['opddl_downloadable_link'], 'onclick'=>'copyToClipboard(this)',
@@ -116,7 +118,11 @@ if (null != $fld) {
                     if ($row['downloadable']) {
                         if (1 > $opId) {
                             $li = $ul->appendElement("li");
-                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('Buyer', 'downloadDigitalLinksFile', array($row['op_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_DOWNLOAD_LINKS', $siteLangId)), '<i class="fa fa-download"></i>', true);
+                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('Buyer', 'downloadDigitalLinksFile', array($row['op_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_DOWNLOAD_LINKS', $siteLangId)), '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            </use>
+                        </svg>', true);
                         }
                     }
                     break;

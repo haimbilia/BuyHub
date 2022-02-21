@@ -87,7 +87,10 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                 </td>
                                                 <td>
                                                     <ul class="actions">
-                                                        <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
+                                                        <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                    </use>
+                                                                </svg></a></li>
                                                         <?php if ($canCancelOrder) { ?> <li><a href="<?php echo UrlHelper::generateUrl('buyer', 'orderCancellationRequest', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li> <?php } ?>
                                                         <?php if ($canSubmitFeedback && $isValidForReview) { ?> <li><a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>"><i class="fa fa-star"></i></a>
                                                             </li> <?php } ?> <?php if ($canReturnRefund) { ?> <li><a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>"><i class="fas fa-dollar-sign"></i></a></li> <?php } ?>
@@ -231,7 +234,10 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                     <ul class="actions">
                                                         <li>
                                                             <a title="<?php echo Labels::getLabel('LBL_View_Request', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'ViewOrderReturnRequest', array($row['orrequest_id'])); ?>">
-                                                                <i class="fa fa-eye"></i>
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                    </use>
+                                                                </svg>
                                                             </a>
                                                         </li>
                                                     </ul>

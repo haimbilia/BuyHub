@@ -19,7 +19,7 @@
                         'title' => Labels::getLabel('BTN_NEW_RECORD', $siteLangId)
                     ],
                     'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                                     </use>
                                 </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
                 ],
@@ -104,7 +104,11 @@
                                         'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
                                         "onclick" => "getShopCollectionGeneralForm(" . $row['scollection_id'] . ")"
                                     ),
-                                    '<i class="fa fa-edit"></i>',
+                                    '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                                     true
                                 );
 

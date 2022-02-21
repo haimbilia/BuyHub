@@ -1,12 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($langFrm);
 $langFrm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'setupPromotionLang(this); return(false);');
 
-$langFrm->developerTags['colClassPrefix'] = 'col-md-';
-$langFrm->developerTags['fld_default_col'] = 6;
-
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotionId . ", this.value);");
+
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
 
 ?>
 <div class="col-md-12">
