@@ -81,11 +81,12 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		});
 	};
 
-	promotionLangForm = function (promotionId, langId, autoFillLangData = 0) {
+	promotionLangForm = function (promotionId, langId, autoFillLangData = 0) {		
 		$('#promotionsChildBlockJs').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Advertiser', 'promotionLangForm', [promotionId, langId, autoFillLangData]), '', function (t) {
 			fcom.removeLoader();
-			$('#promotionsChildBlockJs').html(t);
+			$('#promotionsChildBlockJs').html(t);	
+			setNavTab('lang');		
 		});
 	};
 
@@ -107,15 +108,13 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 
 	setupPromotion = function (frm) {
 		if (!$(frm).validate()) return;
-		var data = fcom.frmData(frm);
-		console.log(data);
+		var data = fcom.frmData(frm);		
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotion'), data, function (t) {
 			if (t.langId) {
 				promotionForm(t.promotionId);
-				promotionLangForm(t.promotionId, t.langId);
+				promotionLangForm(t.promotionId, t.langId);				
 				return;
-			}
-			//promotionForm(t.promotionId);
+			}			
 			return;
 		});
 	};
@@ -129,6 +128,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 				return;
 			} else if (typeof t.noMediaTab == undefined || t.noMediaTab == null) {
 				promotionMediaForm(t.promotionId);
+				setNavTab('media');
 			}
 			//promotionForm(t.promotionId);
 			return;

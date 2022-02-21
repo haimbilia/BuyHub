@@ -151,7 +151,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $minBudget = FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0);
                 break;
             case Promotion::TYPE_PRODUCT:
-                $selProdId = $post['promotion_record_id'];
+                $selProdId = FatApp::getPostedData('promotion_record_id', FatUtility::VAR_INT, 0);
 
                 $srch = new ProductSearch($this->siteLangId);
                 $srch->joinSellerProducts();
@@ -638,7 +638,7 @@ class AdvertiserController extends AdvertiserBaseController
         return $srch;
     }
 
-    public function getTypeData($promotionId, $promotionType = 0)
+    private function getTypeData($promotionId, $promotionType = 0)
     {
         $promotionType = FatUtility::int($promotionType);
         $promotionId = FatUtility::int($promotionId);
@@ -708,11 +708,6 @@ class AdvertiserController extends AdvertiserBaseController
             'label' => $label,
             'value' => $value
         ];
-
-        /*  $this->set('promotionType', $promotionType);
-        $this->set('label', $label);
-        $this->set('value', $value);
-        $this->_template->render(false, false, 'json-success.php'); */
     }
 
     public function promotions()
@@ -826,27 +821,38 @@ class AdvertiserController extends AdvertiserBaseController
                 'slide_target'
             ));
             $rs = $srch->getResultSet();
-            $promotions = FatApp::getDb()->fetch($rs);
-            $promotionType = $promotions['promotion_type'];
-            if ($promotions) {
-                $promotions['promotion_start_time'] = date('H:i', strtotime($promotions['promotion_start_time']));
-                $promotions['promotion_end_time'] = date('H:i', strtotime($promotions['promotion_end_time']));
-                if ($promotions['promotion_type'] == Promotion::TYPE_SHOP) {
-                    $promotions['promotion_shop_cpc'] = $promotions['promotion_cpc'];
-                } elseif ($promotions['promotion_type'] == Promotion::TYPE_PRODUCT) {
-                    $promotions['promotion_product_cpc'] = $promotions['promotion_cpc'];
-                } elseif ($promotions['promotion_type'] == Promotion::TYPE_SLIDES) {
-                    $promotions['promotion_slides_cpc'] = $promotions['promotion_cpc'];
+            $promotionDetails = FatApp::getDb()->fetch($rs);
+            $promotionType = $promotionDetails['promotion_type'];
+            if ($promotionDetails) {
+                $promotionDetails['promotion_start_time'] = date('H:i', strtotime($promotionDetails['promotion_start_time']));
+                $promotionDetails['promotion_end_time'] = date('H:i', strtotime($promotionDetails['promotion_end_time']));
+                if ($promotionDetails['promotion_type'] == Promotion::TYPE_SHOP) {
+                    $promotionDetails['promotion_shop_cpc'] = $promotionDetails['promotion_cpc'];
+                } elseif ($promotionDetails['promotion_type'] == Promotion::TYPE_PRODUCT) {
+                    $promotionDetails['promotion_product_cpc'] = $promotionDetails['promotion_cpc'];
+                } elseif ($promotionDetails['promotion_type'] == Promotion::TYPE_SLIDES) {
+                    $promotionDetails['promotion_slides_cpc'] = $promotionDetails['promotion_cpc'];
                 }
 
-                $typeData = $this->getTypeData($promotions['promotion_id'], $promotions['promotion_type']);
+                $typeData = $this->getTypeData($promotionDetails['promotion_id'], $promotionDetails['promotion_type']);
                 $this->recordData = ['id' => $typeData['value'], 'label' => $typeData['label']];
             }
         }
 
+        $srch = Shop::getSearchObject(true, $this->siteLangId);
+        $srch->addCondition('shop_user_id', '=', $userId);
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('ifnull(shop_name,shop_identifier) as shop_name', 'shop_id'));
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        if (false != $row) {
+            $promotionDetails['promotion_shop'] = $row['shop_name'];
+        }
+
 
         $frm = $this->getPromotionForm($promotionId);
-        $frm->fill($promotions);
+        $frm->fill($promotionDetails);
 
         $this->set('frm', $frm);
         $this->set('promotionId', $promotionId);
