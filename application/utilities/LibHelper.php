@@ -22,6 +22,7 @@ class LibHelper extends FatUtility
         if (true === MOBILE_APP_API_CALL) {
             $message = strip_tags($message);
         }
+        header('Content-Type: application/json; charset=utf-8');
         FatUtility::dieJsonError($message);
     }
 
@@ -40,11 +41,13 @@ class LibHelper extends FatUtility
             } else {
                 $message = strip_tags($message);
             }
+            header('Content-Type: application/json; charset=utf-8');
             FatUtility::dieJsonError($message);
         }
 
         $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
         if (true === $json || 'json' == $fOutMode) {
+            header('Content-Type: application/json; charset=utf-8');
             FatUtility::dieJsonError($message);
         }
 
@@ -73,10 +76,12 @@ class LibHelper extends FatUtility
             } else {
                 $message = strip_tags($message);
             }
+            header('Content-Type: application/json; charset=utf-8');
             FatUtility::dieJsonSuccess($message);
         }
 
         if (true === $json) {
+            header('Content-Type: application/json; charset=utf-8');
             FatUtility::dieJsonSuccess($message);
         }
 
@@ -88,6 +93,7 @@ class LibHelper extends FatUtility
     public static function dieJsonSuccess($arr = [])
     {
         $arr['status'] = true;
+        header('Content-Type: application/json; charset=utf-8');
         FatUtility::dieJsonSuccess($arr);
     }
 

@@ -264,12 +264,12 @@ class ShippingProfileController extends SellerBaseController
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         foreach ($languages as $langId => $langName) {
             if ($langId == $siteDefaultLangId) {
-                $fld = $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('LBL_Profile_Name', $this->siteLangId)]);
+                $fld = $frm->addRequiredField(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId)]);
             } else {
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('LBL_Profile_Name', $this->siteLangId)]);
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId) . " " . $langName, 'shipprofile_name[' . $langId . ']', '', ['placeholder' => Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId)]);
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 }

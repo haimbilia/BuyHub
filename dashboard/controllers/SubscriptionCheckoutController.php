@@ -648,7 +648,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             CommonHelper::addCaptchaField($frm);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm_Payment', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_CONFIRM_PAYMENT', $langId));
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'plugin_id');
         return $frm;
@@ -671,8 +671,8 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmRewards');
-        $frm->addTextBox(Labels::getLabel('LBL_Reward_Points', $langId), 'redeem_rewards', '', array('placeholder' => Labels::getLabel('LBL_Use_Reward_Point', $langId)));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_REWARD_POINTS', $langId), 'redeem_rewards', '', array('placeholder' => Labels::getLabel('LBL_Use_Reward_Point', $langId)));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
         return $frm;
     }
 
@@ -712,9 +712,9 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmPromoCoupons');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('LBL_Enter_Your_code', $langId)));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_COUPON_CODE', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('LBL_Enter_Your_code', $langId)));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
         return $frm;
     }
 

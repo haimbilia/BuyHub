@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?php echo '<?xml version="1.0" encoding="utf-8" ?>'; ?>
 <!-- Generator: Adobe Illustrator 26.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	y="0px" viewBox="0 0 1130 1160" enable-background="new 0 0 1130 1160"
-	xml:space="preserve">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1130 1160" enable-background="new 0 0 1130 1160" xml:space="preserve">
 	<g>
 		<rect fill="#FFFFFF" width="1130" height="1160" />
 		<g>
@@ -11,54 +9,43 @@
 				c-0.6,0-1-0.4-1-1V679C753.4,678.4,753.8,678,754.4,678z" />
 			</g>
 			<g>
-				<path id="D_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2"
-					d="M754.4,678h334
+				<path id="D_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="M754.4,678h334
 				c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1h-334c-0.6,0-1-0.4-1-1V679C753.4,678.4,753.8,678,754.4,678z" />
 			</g>
 			<g transform="translate(40 35)">
 				<g transform="translate(0 23)">
 					<g>
 						<g>
-							<path id="E_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#1FB6FF"
-								d="M961.4,761.9v5.1c0,0.6-0.4,1-1,1
+							<path id="E_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#1FB6FF" d="M961.4,761.9v5.1c0,0.6-0.4,1-1,1
 							c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H770.4c-9.4,0-17-7.6-17-17V695c0-9.4,7.6-17,17-17h174c9.4,0,17,7.6,17,17V761.9z" />
 						</g>
 						<defs>
-							<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="753.4" y="678"
-								width="208" height="90">
+							<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="753.4" y="678" width="208" height="90">
 								<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 							</filter>
 						</defs>
 
-						<mask maskUnits="userSpaceOnUse" x="753.4" y="678" width="208" height="90"
-							id="W_00000143605468411096123540000015526036646893948346_">
+						<mask maskUnits="userSpaceOnUse" x="753.4" y="678" width="208" height="90" id="W_00000143605468411096123540000015526036646893948346_">
 							<g filter="url(#Adobe_OpacityMaskFilter)">
 
-								<path id="E_00000119100966728062202090000001529257343349271963_" fill-rule="evenodd"
-									clip-rule="evenodd" fill="#FFFFFF" d="
+								<path id="E_00000119100966728062202090000001529257343349271963_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 								M961.4,761.9v5.1c0,0.6-0.4,1-1,1c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H770.4c-9.4,0-17-7.6-17-17V695c0-9.4,7.6-17,17-17h174
 								c9.4,0,17,7.6,17,17V761.9z" />
 							</g>
 						</mask>
 						<g mask="url(#W_00000143605468411096123540000015526036646893948346_)">
-							<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js data-colorselector-js fill="<?php echo $themeColor; ?>"
-								d="M753.4,678h208v90h-208V678z" />
+							<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js data-colorselector-js fill="<?php echo $themeColor; ?>" d="M753.4,678h208v90h-208V678z" />
 						</g>
 					</g>
 
-					<text transform="matrix(1 0 0 1 901.9945 752.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="11px" letter-spacing="1">12:24</text>
-					<text transform="matrix(1 0 0 1 769.3645 701.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">Sed vulputate ac ex nec</text>
-					<text transform="matrix(1 0 0 1 769.3645 719.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">imperdiet. Curabitur</text>
-					<text transform="matrix(1 0 0 1 769.3645 737.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">bibendum neque.</text>
+					<text transform="matrix(1 0 0 1 901.9945 752.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="11px" letter-spacing="1">12:24</text>
+					<text transform="matrix(1 0 0 1 769.3645 701.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Sed vulputate ac ex nec</text>
+					<text transform="matrix(1 0 0 1 769.3645 719.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">imperdiet. Curabitur</text>
+					<text transform="matrix(1 0 0 1 769.3645 737.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">bibendum neque.</text>
 				</g>
 				<g transform="translate(216 73)">
 					<g>
-						<circle id="F_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698"
-							r="20" />
+						<circle id="F_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698" r="20" />
 					</g>
 
 					<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABnCAYAAAAdQVz5AAAACXBIWXMAABsRAAAbEQEEnGAvAAAA
@@ -451,31 +438,23 @@ J4QQiUoIYydI94miV5hKDwoZYZjik3+yEt+PR4lJ6XLvl9psf6r81umZ0ixtblhwjnP8C/4KMABv
 eCz2rnotuAAAAABJRU5ErkJggg==" transform="matrix(0.41 0 0 0.41 752.3939 677.9351)">
 					</image>
 				</g>
-				<text transform="matrix(1 0 0 1 905.8265 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="13px">Jasmeen</text>
+				<text transform="matrix(1 0 0 1 905.8265 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Jasmeen</text>
 				<g transform="translate(0 238)">
 					<g transform="translate(0 23)">
 						<g>
-							<path id="G_1_" fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>"
-								d="M961.4,784.9v7.2c0,0.6-0.4,1-1,1
+							<path id="G_1_" fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M961.4,784.9v7.2c0,0.6-0.4,1-1,1
 							c-0.3,0-0.6-0.1-0.8-0.4l-6.4-7.8H770.4c-9.4,0-17-7.6-17-17V695c0-9.4,7.6-17,17-17h174c9.4,0,17,7.6,17,17V784.9z" />
 						</g>
 
-						<text transform="matrix(1 0 0 1 901.9945 775.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-							font-size="11px" letter-spacing="1">12:25</text>
-						<text transform="matrix(1 0 0 1 769.3645 701.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-							font-size="13px">Nunc diam diam, venenatis</text>
-						<text transform="matrix(1 0 0 1 769.3645 719.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-							font-size="13px">ac mattis ut, suscipit ut</text>
-						<text transform="matrix(1 0 0 1 769.3645 737.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-							font-size="13px">nulla. Sed lacus ipsum,</text>
-						<text transform="matrix(1 0 0 1 769.3645 755.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-							font-size="13px">dignissim sed.</text>
+						<text transform="matrix(1 0 0 1 901.9945 775.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="11px" letter-spacing="1">12:25</text>
+						<text transform="matrix(1 0 0 1 769.3645 701.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Nunc diam diam, venenatis</text>
+						<text transform="matrix(1 0 0 1 769.3645 719.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">ac mattis ut, suscipit ut</text>
+						<text transform="matrix(1 0 0 1 769.3645 737.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">nulla. Sed lacus ipsum,</text>
+						<text transform="matrix(1 0 0 1 769.3645 755.0411)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">dignissim sed.</text>
 					</g>
 					<g transform="translate(216 98)">
 						<g>
-							<circle id="H_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698"
-								r="20" />
+							<circle id="H_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698" r="20" />
 						</g>
 
 						<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABnCAYAAAAdQVz5AAAACXBIWXMAABsRAAAbEQEEnGAvAAAA
@@ -869,27 +848,20 @@ dSMVOditBZHDBIhz8HgFr4fhxH6WZ3WrIwjA3EYjp9pnevw4oEhm2K8Y4YCsF34UtUJFa8S2tqvV
 1kGJ4/j9ZDyG0YmcyN/ITwEGANP+tULXg2nEAAAAAElFTkSuQmCC" transform="matrix(0.41 0 0 0.41 752.8646 677.5411)">
 						</image>
 					</g>
-					<text transform="matrix(1 0 0 1 903.8265 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">Jasmeen</text>
+					<text transform="matrix(1 0 0 1 903.8265 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Jasmeen</text>
 				</g>
 				<g transform="translate(0 122)">
-					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#979797" stroke-opacity="0.15"
-						d="M802.8,784.4l4.6-5.7
+					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#979797" stroke-opacity="0.15" d="M802.8,784.4l4.6-5.7
 					h185c9.1,0,16.5-7.4,16.5-16.5V718c0-9.1-7.4-16.5-16.5-16.5h-174c-9.1,0-16.5,7.4-16.5,16.5v66.1c0,0.3,0.2,0.5,0.5,0.5
 					C802.5,784.6,802.7,784.5,802.8,784.4L802.8,784.4z" />
 
-					<text transform="matrix(1 0 0 1 949.9944 770.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="11px" letter-spacing="1">12:25</text>
-					<text transform="matrix(1 0 0 1 817.3645 725.0411)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">Morbi maximus lacus ex, sed</text>
-					<text transform="matrix(1 0 0 1 817.3645 743.0411)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">molestie diam convallis ac.</text>
-					<text transform="matrix(1 0 0 1 801.3645 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="13px">Scarlett</text>
+					<text transform="matrix(1 0 0 1 949.9944 770.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>" font-size="11px" letter-spacing="1">12:25</text>
+					<text transform="matrix(1 0 0 1 817.3645 725.0411)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Morbi maximus lacus ex, sed</text>
+					<text transform="matrix(1 0 0 1 817.3645 743.0411)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">molestie diam convallis ac.</text>
+					<text transform="matrix(1 0 0 1 801.3645 690.0411)" fill="#8097B1" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Scarlett</text>
 					<g transform="translate(0 67)">
 						<g>
-							<circle id="I_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698"
-								r="20" />
+							<circle id="I_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="773.4" cy="698" r="20" />
 						</g>
 
 						<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABnCAYAAAAdQVz5AAAACXBIWXMAABsRAAAbEQEEnGAvAAAA
@@ -1274,19 +1246,15 @@ kfzNz9/8/M3PX7Of/1+AAQAIQTm06Xa/+QAAAABJRU5ErkJggg==" transform="matrix(0.41 0 0
 				H398.7c-0.7,0-1.3-0.6-1.3-1.3V508.4C397.4,507.7,398,507.1,398.7,507.1z" />
 			</g>
 			<g>
-				<path id="J_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2"
-					d="M398.7,507.1
+				<path id="J_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="M398.7,507.1
 				h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H398.7c-0.7,0-1.3-0.6-1.3-1.3V508.4
 				C397.4,507.7,398,507.1,398.7,507.1z" />
 			</g>
-			<text transform="matrix(1 0 0 1 510.4945 625.415)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="18.855px"> Sed vulputate ac</text>
-			<text transform="matrix(1 0 0 1 510.4945 591.766)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="60.336px">25m</text>
+			<text transform="matrix(1 0 0 1 510.4945 625.415)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="18.855px"> Sed vulputate ac</text>
+			<text transform="matrix(1 0 0 1 510.4945 591.766)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="60.336px">25m</text>
 			<g>
 
-				<circle opacity="0.15" fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3"
-					enable-background="new    " cx="459" cy="578.7" r="31.4" />
+				<circle opacity="0.15" fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" enable-background="new    " cx="459" cy="578.7" r="31.4" />
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M451.6,578.6h9.1v-1.8h-9.1
 				C451.6,576.8,451.6,578.6,451.6,578.6z M451.6,574.9h12.7v-1.8h-12.7V574.9z M466.1,582.2h-4.5v4.4c-2.1-0.4-3.6-2.3-3.6-4.5
 				h-8.2v-12.6h16.4L466.1,582.2L466.1,582.2z M466.1,567.7h-16.4c-1,0-1.8,0.8-1.8,1.8v12.7c0,1,0.8,1.8,1.8,1.8h6.7
@@ -1298,18 +1266,14 @@ kfzNz9/8/M3PX7Of/1+AAQAIQTm06Xa/+QAAAABJRU5ErkJggg==" transform="matrix(0.41 0 0
 			c0.6,0,1,0.4,1,1v147c0,0.6-0.4,1-1,1h-333c-0.6,0-1-0.4-1-1v-147C41.9,508,42.3,507.6,42.9,507.6z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M66.4,601.1h132c2.2,0,4,1.8,4,4v32c0,2.2-1.8,4-4,4h-132
 			c-2.2,0-4-1.8-4-4v-32C62.4,602.9,64.2,601.1,66.4,601.1z" />
-			<text transform="matrix(1 0 0 1 89.9675 625.125)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Edit Profile</text>
+			<text transform="matrix(1 0 0 1 89.9675 625.125)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Edit Profile</text>
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M220.4,601.1h132c2.2,0,4,1.8,4,4
 				v32c0,2.2-1.8,4-4,4h-132c-2.2,0-4-1.8-4-4v-32C216.4,602.9,218.2,601.1,220.4,601.1z" />
-				<text data-secondarycolor-js transform="matrix(1 0 0 1 253.6196 625.125)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="15px">Message</text>
+				<text data-secondarycolor-js transform="matrix(1 0 0 1 253.6196 625.125)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Message</text>
 			</g>
-			<text transform="matrix(1 0 0 1 134.3645 574.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Sales Manager</text>
-			<text transform="matrix(1 0 0 1 134.3645 554.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Jasmeen</text>
+			<text transform="matrix(1 0 0 1 134.3645 574.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Sales Manager</text>
+			<text transform="matrix(1 0 0 1 134.3645 554.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Jasmeen</text>
 			<g>
 				<circle id="M_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#031B4E" cx="94.4" cy="561.1" r="30" />
 			</g>
@@ -1692,19 +1656,15 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				H754.7c-0.7,0-1.3-0.6-1.3-1.3V508.4C753.4,507.7,754,507.1,754.7,507.1z" />
 			</g>
 			<g>
-				<path id="N_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2"
-					d="M754.7,507.1
+				<path id="N_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="M754.7,507.1
 				h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H754.7c-0.7,0-1.3-0.6-1.3-1.3V508.4
 				C753.4,507.7,754,507.1,754.7,507.1z" />
 			</g>
-			<text transform="matrix(1 0 0 1 866.4945 625.415)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="18.855px">Sed lacus ipsum</text>
-			<text transform="matrix(1 0 0 1 866.4945 591.766)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="60.336px">8.09</text>
+			<text transform="matrix(1 0 0 1 866.4945 625.415)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="18.855px">Sed lacus ipsum</text>
+			<text transform="matrix(1 0 0 1 866.4945 591.766)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="60.336px">8.09</text>
 			<g>
 
-				<circle opacity="0.15" fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3"
-					enable-background="new    " cx="815" cy="578.7" r="31.4" />
+				<circle opacity="0.15" fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" enable-background="new    " cx="815" cy="578.7" r="31.4" />
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M805.8,573.8V570h1.9v1.9h1.9V570h3.8v1.9h1.9V570h3.8v1.9h1.9
 				V570h1.9v3.8H805.8z M805.8,585.2h17.1v-9.5h-17.1V585.2z M821,568.1v-1.9h-1.9v1.9h-3.8v-1.9h-1.9v1.9h-3.8v-1.9h-1.9v1.9h-3.8
 				v19h20.9v-19H821L821,568.1z" />
@@ -1712,12 +1672,10 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 		</g>
 		<g>
 			<g>
-				<path id="B_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2"
-					d="M399.4,41.1h688
+				<path id="B_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="M399.4,41.1h688
 				c1.2,0,2.1,0.4,2.1,1v444c0,0.6-0.8,1-2.1,1h-688c-1.2,0-2.1-0.4-2.1-1v-444C397.4,41.5,398.2,41.1,399.4,41.1z" />
 			</g>
-			<text transform="matrix(1 0 0 1 414.3645 85.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">Integer Maximus Ante</text>
+			<text transform="matrix(1 0 0 1 414.3645 85.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Integer Maximus Ante</text>
 			<g>
 				<path id="A" fill-rule="evenodd" clip-rule="evenodd" fill="#BFC5D2" d="M1038.6,82.6c-0.8,0-1.5-0.7-1.5-1.5
 				c0-0.8,0.7-1.5,1.5-1.5c0.8,0,1.5,0.7,1.5,1.5C1040.1,81.9,1039.4,82.6,1038.6,82.6z M1044.6,82.6c-0.8,0-1.5-0.7-1.5-1.5
@@ -1726,37 +1684,26 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			</g>
 			<g>
 
-				<path opacity="0.304" fill="none" stroke="#8097B1" stroke-width="0.7833" stroke-linecap="square"
-					stroke-dasharray="3.1333,3.1333,3.1333" enable-background="new    " d="
+				<path opacity="0.304" fill="none" stroke="#8097B1" stroke-width="0.7833" stroke-linecap="square" stroke-dasharray="3.1333,3.1333,3.1333" enable-background="new    " d="
 				M606.9,135.9V342 M756.1,135.9V342 M903.1,135.9V342 M1052.1,135.9V342" />
 
-				<path opacity="0.378" fill="none" stroke="#8097B1" stroke-width="0.7833" stroke-linecap="square"
-					stroke-dasharray="3.1333,3.1333,3.1333,3.1333" enable-background="new    " d="
+				<path opacity="0.378" fill="none" stroke="#8097B1" stroke-width="0.7833" stroke-linecap="square" stroke-dasharray="3.1333,3.1333,3.1333,3.1333" enable-background="new    " d="
 				M458.6,290.3h594.5 M457.7,236.4h594.5 M458.6,185.9h594.5 M457.7,135.3h594.5" />
 			</g>
 			<path fill="none" stroke="#E0E7FF" stroke-linecap="square" d="M457.1,136.3v205.5 M457.7,342.2h594.5" />
-			<text transform="matrix(1 0 0 1 428.7245 291.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">25</text>
-			<text transform="matrix(1 0 0 1 436.8695 343.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">0</text>
-			<text transform="matrix(1 0 0 1 495.3745 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Jan</text>
-			<text transform="matrix(1 0 0 1 572.2588 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Feb</text>
-			<text transform="matrix(1 0 0 1 650.3644 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">March</text>
-			<text transform="matrix(1 0 0 1 427.9895 238.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">50</text>
-			<text transform="matrix(1 0 0 1 429.8346 188.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">75</text>
-			<text transform="matrix(1 0 0 1 420.9995 141.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">100</text>
+			<text transform="matrix(1 0 0 1 428.7245 291.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">25</text>
+			<text transform="matrix(1 0 0 1 436.8695 343.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">0</text>
+			<text transform="matrix(1 0 0 1 495.3745 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Jan</text>
+			<text transform="matrix(1 0 0 1 572.2588 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Feb</text>
+			<text transform="matrix(1 0 0 1 650.3644 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">March</text>
+			<text transform="matrix(1 0 0 1 427.9895 238.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">50</text>
+			<text transform="matrix(1 0 0 1 429.8346 188.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">75</text>
+			<text transform="matrix(1 0 0 1 420.9995 141.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">100</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M504.2,219.3c1.7,0,3,1.3,3,3v116.4c0,1.7-1.3,3-3,3
 			c-1.7,0-3-1.3-3-3V222.3C501.2,220.6,502.6,219.3,504.2,219.3z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M516.8,199.2c1.3,0.4,2.1,1.6,2.1,3
 			v136.3c0,1.5-1,2.8-2.4,3.1c-1.9,0.4-3.6-1.1-3.6-2.9V202.1C512.9,200.1,514.7,198.6,516.8,199.2z" />
-			<text transform="matrix(1 0 0 1 854.7496 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">May</text>
+			<text transform="matrix(1 0 0 1 854.7496 360.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">May</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M863.5,219.3c1.7,0,3,1.3,3,3v116.4c0,1.7-1.3,3-3,3s-3-1.3-3-3
 			V222.3C860.5,220.6,861.9,219.3,863.5,219.3z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M876.1,199.2c1.3,0.4,2.1,1.6,2.1,3
@@ -1769,34 +1716,25 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			V160.5C663.7,158.9,665.1,157.5,666.7,157.5z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M678.3,140.7c1.7,0,3,1.3,3,3v195
 			c0,1.7-1.3,3-3,3s-3-1.3-3-3v-195C675.3,142,676.7,140.7,678.3,140.7z" />
-			<text transform="matrix(1 0 0 1 949.9554 360.1248)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">June</text>
+			<text transform="matrix(1 0 0 1 949.9554 360.1248)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">June</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M962.1,167.5c1.7,0,3,1.3,3,3v168.1c0,1.7-1.3,3-3,3s-3-1.3-3-3
 			V170.5C959.1,168.9,960.5,167.5,962.1,167.5z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M973.7,180.7c1.7,0,3,1.3,3,3v155
 			c0,1.7-1.3,3-3,3s-3-1.3-3-3v-155C970.7,182,972.1,180.7,973.7,180.7z" />
-			<text transform="matrix(1 0 0 1 754.8948 360.1248)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">April</text>
+			<text transform="matrix(1 0 0 1 754.8948 360.1248)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">April</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M764.7,177.5c1.7,0,3,1.3,3,3v158.1c0,1.7-1.3,3-3,3s-3-1.3-3-3
 			V180.5C761.7,178.9,763.1,177.5,764.7,177.5z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M776.3,160.7c1.7,0,3,1.3,3,3v175
 			c0,1.7-1.3,3-3,3s-3-1.3-3-3v-175C773.3,162,774.7,160.7,776.3,160.7z" />
-			<text transform="matrix(1 0 0 1 591.9663 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="34px">1,555</text>
-			<text transform="matrix(1 0 0 1 609.9663 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Silver</text>
-			<circle fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " cx="597.5"
-				cy="446" r="5.5" />
-			<text transform="matrix(1 0 0 1 432.3647 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="34px">1,009</text>
-			<text transform="matrix(1 0 0 1 450.3647 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Bronze</text>
+			<text transform="matrix(1 0 0 1 591.9663 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="34px">1,555</text>
+			<text transform="matrix(1 0 0 1 609.9663 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Silver</text>
+			<circle fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " cx="597.5" cy="446" r="5.5" />
+			<text transform="matrix(1 0 0 1 432.3647 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="34px">1,009</text>
+			<text transform="matrix(1 0 0 1 450.3647 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Bronze</text>
 			<circle fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" cx="437.9" cy="446" r="5.5" />
-			<text transform="matrix(1 0 0 1 763.8643 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Gold</text>
+			<text transform="matrix(1 0 0 1 763.8643 450.554)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Gold</text>
 			<circle fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" cx="752.4" cy="446" r="5.5" />
-			<text transform="matrix(1 0 0 1 746.9663 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="34px">3,079</text>
+			<text transform="matrix(1 0 0 1 746.9663 427.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="34px">3,079</text>
 		</g>
 		<g>
 			<g>
@@ -1804,12 +1742,10 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				c-0.6,0-1-0.4-1-1v-444C41.4,41.5,41.8,41.1,42.4,41.1z" />
 			</g>
 			<g>
-				<path id="O_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2"
-					d="M42.4,41.1h334
+				<path id="O_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="M42.4,41.1h334
 				c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1h-334c-0.6,0-1-0.4-1-1v-444C41.4,41.5,41.8,41.1,42.4,41.1z" />
 			</g>
-			<text transform="matrix(1 0 0 1 61.3645 85.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">Pellentesque Habitant Morbi</text>
+			<text transform="matrix(1 0 0 1 61.3645 85.125)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Pellentesque Habitant Morbi</text>
 			<g>
 				<path id="A_1_" fill-rule="evenodd" clip-rule="evenodd" fill="#BFC5D2" d="M342.4,82.6c-0.8,0-1.5-0.7-1.5-1.5
 				c0-0.8,0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5C343.9,81.9,343.2,82.6,342.4,82.6z M348.4,82.6c-0.8,0-1.5-0.7-1.5-1.5
@@ -1826,18 +1762,15 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				<g transform="translate(13 125)">
 					<defs>
 
-						<filter id="Adobe_OpacityMaskFilter_00000003078770217012791440000000158835698150785470_"
-							filterUnits="userSpaceOnUse" x="41.4" y="-53.9" width="190" height="203">
+						<filter id="Adobe_OpacityMaskFilter_00000003078770217012791440000000158835698150785470_" filterUnits="userSpaceOnUse" x="41.4" y="-53.9" width="190" height="203">
 							<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 						</filter>
 					</defs>
 
-					<mask maskUnits="userSpaceOnUse" x="41.4" y="-53.9" width="190" height="203"
-						id="b_00000137100443185113520680000013597812715559622019_">
+					<mask maskUnits="userSpaceOnUse" x="41.4" y="-53.9" width="190" height="203" id="b_00000137100443185113520680000013597812715559622019_">
 						<g filter="url(#Adobe_OpacityMaskFilter_00000003078770217012791440000000158835698150785470_)">
 
-							<path id="Q_00000071544567272241703510000009288270233412537518_" fill-rule="evenodd"
-								clip-rule="evenodd" fill="#FFFFFF" d="
+							<path id="Q_00000071544567272241703510000009288270233412537518_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 							M136.4,41.1l-36,111.5l-58.5-40L136.4,41.1z" />
 						</g>
 					</mask>
@@ -1849,26 +1782,21 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 							</g>
 							<defs>
 
-								<filter id="Adobe_OpacityMaskFilter_00000139973469470904051320000004589523382457643410_"
-									filterUnits="userSpaceOnUse" x="46.4" y="168.1" width="90" height="76">
+								<filter id="Adobe_OpacityMaskFilter_00000139973469470904051320000004589523382457643410_" filterUnits="userSpaceOnUse" x="46.4" y="168.1" width="90" height="76">
 									<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 								</filter>
 							</defs>
 
-							<mask maskUnits="userSpaceOnUse" x="46.4" y="168.1" width="90" height="76"
-								id="c_00000082339651874339432980000013341548218425113250_">
-								<g
-									filter="url(#Adobe_OpacityMaskFilter_00000139973469470904051320000004589523382457643410_)">
+							<mask maskUnits="userSpaceOnUse" x="46.4" y="168.1" width="90" height="76" id="c_00000082339651874339432980000013341548218425113250_">
+								<g filter="url(#Adobe_OpacityMaskFilter_00000139973469470904051320000004589523382457643410_)">
 
-									<path id="R_00000122706379949179020950000012267797107926226364_" fill-rule="evenodd"
-										clip-rule="evenodd" fill="#FFFFFF" d="
+									<path id="R_00000122706379949179020950000012267797107926226364_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 									M136.4,213.1c42.5,0,77-34.5,77-77s-34.5-77-77-77s-77,34.5-77,77S93.9,213.1,136.4,213.1z M136.4,231.1
 									c-52.5,0-95-42.5-95-95s42.5-95,95-95s95,42.5,95,95S188.9,231.1,136.4,231.1z" />
 								</g>
 							</mask>
 							<g mask="url(#c_00000082339651874339432980000013341548218425113250_)">
-								<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3"
-									d="M46.4,168.1h90v76h-90V168.1z" />
+								<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M46.4,168.1h90v76h-90V168.1z" />
 							</g>
 						</g>
 					</g>
@@ -1876,18 +1804,15 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				<g transform="translate(0 32)">
 					<defs>
 
-						<filter id="Adobe_OpacityMaskFilter_00000142140670273714704890000006989476883114353836_"
-							filterUnits="userSpaceOnUse" x="48.4" y="39.1" width="196" height="190">
+						<filter id="Adobe_OpacityMaskFilter_00000142140670273714704890000006989476883114353836_" filterUnits="userSpaceOnUse" x="48.4" y="39.1" width="196" height="190">
 							<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 						</filter>
 					</defs>
 
-					<mask maskUnits="userSpaceOnUse" x="48.4" y="39.1" width="196" height="190"
-						id="d_00000152252909643455620080000001552492932448397223_">
+					<mask maskUnits="userSpaceOnUse" x="48.4" y="39.1" width="196" height="190" id="d_00000152252909643455620080000001552492932448397223_">
 						<g filter="url(#Adobe_OpacityMaskFilter_00000142140670273714704890000006989476883114353836_)">
 
-							<path id="S_00000176008548177691229370000013967001973228823706_" fill-rule="evenodd"
-								clip-rule="evenodd" fill="#FFFFFF" d="
+							<path id="S_00000176008548177691229370000013967001973228823706_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 							M149.4,134.1l-107.5,103l1.5-195.5L149.4,134.1z" />
 						</g>
 					</mask>
@@ -1899,26 +1824,21 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 							</g>
 							<defs>
 
-								<filter id="Adobe_OpacityMaskFilter_00000072992216864789975420000004183081903611229582_"
-									filterUnits="userSpaceOnUse" x="35.4" y="69.1" width="101" height="156">
+								<filter id="Adobe_OpacityMaskFilter_00000072992216864789975420000004183081903611229582_" filterUnits="userSpaceOnUse" x="35.4" y="69.1" width="101" height="156">
 									<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 								</filter>
 							</defs>
 
-							<mask maskUnits="userSpaceOnUse" x="35.4" y="69.1" width="101" height="156"
-								id="e_00000089554455569930648970000014165605561519843750_">
-								<g
-									filter="url(#Adobe_OpacityMaskFilter_00000072992216864789975420000004183081903611229582_)">
+							<mask maskUnits="userSpaceOnUse" x="35.4" y="69.1" width="101" height="156" id="e_00000089554455569930648970000014165605561519843750_">
+								<g filter="url(#Adobe_OpacityMaskFilter_00000072992216864789975420000004183081903611229582_)">
 
-									<path id="T_00000099630891281455012390000003040040091504578468_" fill-rule="evenodd"
-										clip-rule="evenodd" fill="#FFFFFF" d="
+									<path id="T_00000099630891281455012390000003040040091504578468_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 									M136.4,213.1c42.5,0,77-34.5,77-77s-34.5-77-77-77s-77,34.5-77,77S93.9,213.1,136.4,213.1z M136.4,231.1
 									c-52.5,0-95-42.5-95-95s42.5-95,95-95s95,42.5,95,95S188.9,231.1,136.4,231.1z" />
 								</g>
 							</mask>
 							<g mask="url(#e_00000089554455569930648970000014165605561519843750_)">
-								<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3"
-									d="M35.4,69.1h101v156h-101V69.1z" />
+								<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M35.4,69.1h101v156h-101V69.1z" />
 							</g>
 						</g>
 					</g>
@@ -1926,18 +1846,15 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				<g transform="translate(7)">
 					<defs>
 
-						<filter id="Adobe_OpacityMaskFilter_00000070832367090298751630000000830839699810778497_"
-							filterUnits="userSpaceOnUse" x="41.4" y="56.1" width="200" height="211">
+						<filter id="Adobe_OpacityMaskFilter_00000070832367090298751630000000830839699810778497_" filterUnits="userSpaceOnUse" x="41.4" y="56.1" width="200" height="211">
 							<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 						</filter>
 					</defs>
 
-					<mask maskUnits="userSpaceOnUse" x="41.4" y="56.1" width="200" height="211"
-						id="f_00000081620395325998744780000007485043411264461751_">
+					<mask maskUnits="userSpaceOnUse" x="41.4" y="56.1" width="200" height="211" id="f_00000081620395325998744780000007485043411264461751_">
 						<g filter="url(#Adobe_OpacityMaskFilter_00000070832367090298751630000000830839699810778497_)">
 
-							<path id="U_00000183929898989569658050000014345915305101185195_" fill-rule="evenodd"
-								clip-rule="evenodd" fill="#FFFFFF" d="
+							<path id="U_00000183929898989569658050000014345915305101185195_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 							M143.4,171.1l-102-82.5l102-47V171.1z" />
 						</g>
 					</mask>
@@ -1949,67 +1866,51 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 							</g>
 							<defs>
 
-								<filter id="Adobe_OpacityMaskFilter_00000163061314212826820090000004191110290277021865_"
-									filterUnits="userSpaceOnUse" x="54.4" y="30.1" width="106" height="89">
+								<filter id="Adobe_OpacityMaskFilter_00000163061314212826820090000004191110290277021865_" filterUnits="userSpaceOnUse" x="54.4" y="30.1" width="106" height="89">
 									<feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
 								</filter>
 							</defs>
 
-							<mask maskUnits="userSpaceOnUse" x="54.4" y="30.1" width="106" height="89"
-								id="g_00000161610645448936026370000001221991104731713673_">
-								<g
-									filter="url(#Adobe_OpacityMaskFilter_00000163061314212826820090000004191110290277021865_)">
+							<mask maskUnits="userSpaceOnUse" x="54.4" y="30.1" width="106" height="89" id="g_00000161610645448936026370000001221991104731713673_">
+								<g filter="url(#Adobe_OpacityMaskFilter_00000163061314212826820090000004191110290277021865_)">
 
-									<path id="V_00000097472548497172708760000008454948603611211662_" fill-rule="evenodd"
-										clip-rule="evenodd" fill="#FFFFFF" d="
+									<path id="V_00000097472548497172708760000008454948603611211662_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="
 									M141.4,213.1c39.8,0,72-32.2,72-72s-32.2-72-72-72s-72,32.2-72,72S101.6,213.1,141.4,213.1z M141.4,241.1
 									c-55.2,0-100-44.8-100-100s44.8-100,100-100s100,44.8,100,100S196.6,241.1,141.4,241.1z" />
 								</g>
 							</mask>
 							<g mask="url(#g_00000161610645448936026370000001221991104731713673_)">
-								<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>"
-									d="M54.4,30.1h106v89h-106V30.1z" />
+								<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M54.4,30.1h106v89h-106V30.1z" />
 							</g>
 						</g>
 					</g>
 				</g>
-				<text transform="matrix(1 0 0 1 116.8645 174.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="34px">14.5</text>
-				<text transform="matrix(1 0 0 1 176.3645 156.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="15px">%</text>
-				<text transform="matrix(1 0 0 1 120.7215 192.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">ULTRICES</text>
-				<text transform="matrix(1 0 0 1 122.5975 206.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">MATTIS</text>
+				<text transform="matrix(1 0 0 1 116.8645 174.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="34px">14.5</text>
+				<text transform="matrix(1 0 0 1 176.3645 156.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">%</text>
+				<text transform="matrix(1 0 0 1 120.7215 192.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">ULTRICES</text>
+				<text transform="matrix(1 0 0 1 122.5975 206.125)" fill="#B0BAC9" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">MATTIS</text>
 			</g>
-			<text transform="matrix(1 0 0 1 94.3645 414.125)" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Donec nec 1</text>
+			<text transform="matrix(1 0 0 1 94.3645 414.125)" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Donec nec 1</text>
 			<circle data-secondarycolor-js fill-rule="evenodd" clip-rule="evenodd" fill="<?php echo $secondaryThemeColor; ?>" cx="78.4" cy="410.1" r="6" />
 			<circle fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" cx="78.4" cy="444.1" r="6" />
-			<text transform="matrix(1 0 0 1 94.3645 448.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Morbi eleifend</text>
+			<text transform="matrix(1 0 0 1 94.3645 448.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Morbi eleifend</text>
 			<circle fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" cx="234.4" cy="410.1" r="6" />
-			<text transform="matrix(1 0 0 1 250.3645 414.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Curabitur</text>
+			<text transform="matrix(1 0 0 1 250.3645 414.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Curabitur</text>
 			<circle fill-rule="evenodd" clip-rule="evenodd" fill="#464D53" cx="234.4" cy="444.1" r="6" />
-			<text transform="matrix(1 0 0 1 250.3645 448.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Nam hendrerit</text>
+			<text transform="matrix(1 0 0 1 250.3645 448.125)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Nam hendrerit</text>
 		</g>
 		<g>
 			<g>
 
-				<path id="O_00000047021452104841960290000003592156994459829932_" fill-rule="evenodd" clip-rule="evenodd"
-					fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="
+				<path id="O_00000047021452104841960290000003592156994459829932_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="
 				M43.5,677.5h687.9c1.2,0,2.1,0.2,2.1,0.4v169.2c0,0.2-0.8,0.4-2.1,0.4H43.5c-1.2,0-2.1-0.2-2.1-0.4V677.9
 				C41.4,677.7,42.2,677.5,43.5,677.5z" />
 			</g>
-			<text transform="matrix(1 0 0 1 71.3645 714.0928)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">Recent Searches</text>
+			<text transform="matrix(1 0 0 1 71.3645 714.0928)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Recent Searches</text>
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" data-colorselector-js fill="<?php echo $themeColor; ?>" d="M161.4,770.7H87.7c-8.5,0-15.5-6.9-15.5-15.5l0,0
 				c0-8.5,6.9-15.5,15.5-15.5h73.7c8.5,0,15.5,6.9,15.5,15.5l0,0C176.9,763.8,169.9,770.7,161.4,770.7z" />
-				<text transform="matrix(1 0 0 1 82.3642 759.2692)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Donec Nec 2</text>
+				<text transform="matrix(1 0 0 1 82.3642 759.2692)" data-colorselector-js fill="<?php echo $themeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Donec Nec 2</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M161.2,764.9L161.2,764.9c-5.3,0-9.7-4.3-9.7-9.7v0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7v0C170.8,760.6,166.5,764.9,161.2,764.9z" />
@@ -2023,8 +1924,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M268.8,770.7h-67c-8.3,0-15-6.7-15-15v-1c0-8.3,6.7-15,15-15h67
 				c8.3,0,15,6.7,15,15v1C283.7,764,277,770.7,268.8,770.7z" />
-				<text transform="matrix(1 0 0 1 197.0376 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Curabitur</text>
+				<text transform="matrix(1 0 0 1 197.0376 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Curabitur</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M268.5,764.9L268.5,764.9c-5.3,0-9.7-4.3-9.7-9.7v0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7v0C278.2,760.6,273.8,764.9,268.5,764.9z" />
@@ -2038,8 +1938,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M375.7,770.7h-67c-8.3,0-15-6.7-15-15v-1c0-8.3,6.7-15,15-15h67
 				c8.3,0,15,6.7,15,15v1C390.6,764,383.9,770.7,375.7,770.7z" />
-				<text transform="matrix(1 0 0 1 303.9086 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Morbi Ele</text>
+				<text transform="matrix(1 0 0 1 303.9086 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Morbi Ele</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M374.4,764.9L374.4,764.9c-5.3,0-9.7-4.3-9.7-9.7v0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7v0C384,760.6,379.7,764.9,374.4,764.9z" />
@@ -2053,8 +1952,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M508.5,770.7h-92.4c-8.5,0-15.5-6.9-15.5-15.5l0,0
 				c0-8.5,6.9-15.5,15.5-15.5h92.4c8.5,0,15.5,6.9,15.5,15.5l0,0C523.9,763.8,517,770.7,508.5,770.7z" />
-				<text transform="matrix(1 0 0 1 410.7795 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Ultrices Mattis</text>
+				<text transform="matrix(1 0 0 1 410.7795 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Ultrices Mattis</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M509.8,764.9L509.8,764.9c-5.3,0-9.7-4.3-9.7-9.7l0,0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7l0,0C519.4,760.5,515.1,764.9,509.8,764.9z" />
@@ -2069,8 +1967,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M622.7,770.7H549c-8.5,0-15.5-6.9-15.5-15.5l0,0
 				c0-8.5,6.9-15.5,15.5-15.5h73.7c8.5,0,15.5,6.9,15.5,15.5l0,0C638.2,763.8,631.2,770.7,622.7,770.7z" />
 				<g>
-					<text transform="matrix(1 0 0 1 543.6614 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-						font-size="12px">Donec Nec 3</text>
+					<text transform="matrix(1 0 0 1 543.6614 759.2692)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Donec Nec 3</text>
 				</g>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M622.5,764.9L622.5,764.9c-5.3,0-9.7-4.3-9.7-9.7v0
@@ -2085,8 +1982,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M153.3,825.5h-67c-8.3,0-15-6.7-15-15v-1c0-8.3,6.7-15,15-15h67
 				c8.3,0,15,6.7,15,15v1C168.2,818.8,161.5,825.5,153.3,825.5z" />
-				<text transform="matrix(1 0 0 1 81.5376 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Curabitur</text>
+				<text transform="matrix(1 0 0 1 81.5376 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Curabitur</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M153,819.7L153,819.7c-5.3,0-9.7-4.3-9.7-9.7v0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7v0C162.7,815.4,158.3,819.7,153,819.7z" />
@@ -2100,8 +1996,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M260.2,825.5h-67c-8.3,0-15-6.7-15-15v-1c0-8.3,6.7-15,15-15h67
 				c8.3,0,15,6.7,15,15v1C275.1,818.8,268.4,825.5,260.2,825.5z" />
-				<text transform="matrix(1 0 0 1 188.4086 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Morbi Ele</text>
+				<text transform="matrix(1 0 0 1 188.4086 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Morbi Ele</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M258.9,819.7L258.9,819.7c-5.3,0-9.7-4.3-9.7-9.7v0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7v0C268.5,815.4,264.2,819.7,258.9,819.7z" />
@@ -2115,8 +2010,7 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 			<g>
 				<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M393,825.5h-92.4c-8.5,0-15.5-6.9-15.5-15.5l0,0
 				c0-8.5,6.9-15.5,15.5-15.5H393c8.5,0,15.5,6.9,15.5,15.5l0,0C408.4,818.6,401.5,825.5,393,825.5z" />
-				<text transform="matrix(1 0 0 1 295.2795 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-					font-size="12px">Ultrices Mattis</text>
+				<text transform="matrix(1 0 0 1 295.2795 814.094)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="12px">Ultrices Mattis</text>
 				<g>
 					<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M394.3,819.7L394.3,819.7c-5.3,0-9.7-4.3-9.7-9.7l0,0
 					c0-5.3,4.3-9.7,9.7-9.7h0c5.3,0,9.7,4.3,9.7,9.7l0,0C403.9,815.4,399.6,819.7,394.3,819.7z" />
@@ -2131,26 +2025,20 @@ jPvtfM3/vwADAACyD8y2EYeQAAAAAElFTkSuQmCC" transform="matrix(0.61 0 0 0.61 63.864
 		<g>
 			<g>
 
-				<path id="O_00000049930809944035904790000003872466759334319530_" fill-rule="evenodd" clip-rule="evenodd"
-					fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="
+				<path id="O_00000049930809944035904790000003872466759334319530_" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#F1F2F3" stroke-width="2" d="
 				M45.5,868.6h685.9c1.2,0,2.1,0.2,2.1,0.6v254.3c0,0.3-0.8,0.6-2.1,0.6H45.5c-1.2,0-2.1-0.2-2.1-0.6V869.2
 				C43.4,868.9,44.3,868.6,45.5,868.6z" />
 			</g>
-			<text transform="matrix(1 0 0 1 63.4452 905.1927)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">Collections</text>
+			<text transform="matrix(1 0 0 1 63.4452 905.1927)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">Collections</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M255.5,1008.9H77.1c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
 			h178.4c6.7,0,12,5.4,12,12v54C267.6,1003.5,262.2,1008.9,255.5,1008.9z" />
 			<path fill-rule="evenodd" clip-rule="evenodd" data-secondarycolor-js fill="<?php echo $secondaryThemeColor; ?>" enable-background="new    " d="M479.1,1008.9H299.6
 			c-6.7,0-12.1-5.4-12.1-12.1v-53.9c0-6.7,5.4-12.1,12.1-12.1h179.5c6.7,0,12.1,5.4,12.1,12.1v53.9
 			C491.2,1003.5,485.8,1008.9,479.1,1008.9z" />
-			<text transform="matrix(1 0 0 1 144.1484 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Bettie</text>
-			<text transform="matrix(1 0 0 1 144.1488 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">145 Photos</text>
-			<text data-secondarycolor-js transform="matrix(1 0 0 1 365.5579 964.1711)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Scarlett</text>
-			<text data-secondarycolor-js transform="matrix(1 0 0 1 365.5582 982.7737)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">369 Photos</text>
+			<text transform="matrix(1 0 0 1 144.1484 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Bettie</text>
+			<text transform="matrix(1 0 0 1 144.1488 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">145 Photos</text>
+			<text data-secondarycolor-js transform="matrix(1 0 0 1 365.5579 964.1711)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Scarlett</text>
+			<text data-secondarycolor-js transform="matrix(1 0 0 1 365.5582 982.7737)" fill="<?php echo $secondaryThemeColorInverse; ?>" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">369 Photos</text>
 
 			<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAABmCAYAAAA53+RiAAAACXBIWXMAABYlAAAWJQFJUiTwAAAA
 GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAVdVJREFUeNrsvQeYZWd5JviddHMO
@@ -2543,30 +2431,22 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 			</image>
 			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M255.5,1107.9H77.1c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
 			h178.4c6.7,0,12,5.4,12,12v54C267.6,1102.5,262.2,1107.9,255.5,1107.9z" />
-			<text transform="matrix(1 0 0 1 144.1484 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Peter</text>
-			<text transform="matrix(1 0 0 1 144.1488 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">245 Photos</text>
+			<text transform="matrix(1 0 0 1 144.1484 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Peter</text>
+			<text transform="matrix(1 0 0 1 144.1488 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">245 Photos</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M703.4,1107.9H525c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
 			h178.4c6.7,0,12,5.4,12,12v54C715.4,1102.5,710,1107.9,703.4,1107.9z" />
-			<text transform="matrix(1 0 0 1 592.0049 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">David</text>
-			<text transform="matrix(1 0 0 1 592.0052 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">655 Photos</text>
+			<text transform="matrix(1 0 0 1 592.0049 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">David</text>
+			<text transform="matrix(1 0 0 1 592.0052 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">655 Photos</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M701.2,1008.9H522.8c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
 			h178.4c6.7,0,12,5.4,12,12v54C713.3,1003.5,707.9,1008.9,701.2,1008.9z" />
-			<text transform="matrix(1 0 0 1 589.8435 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Jasmeen</text>
-			<text transform="matrix(1 0 0 1 589.844 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">225 Photos</text>
+			<text transform="matrix(1 0 0 1 589.8435 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Jasmeen</text>
+			<text transform="matrix(1 0 0 1 589.844 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">225 Photos</text>
 			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M479.1,1107.9H299.6c-6.7,0-12.1-5.4-12.1-12.1v-53.9
 			c0-6.7,5.4-12.1,12.1-12.1h179.5c6.7,0,12.1,5.4,12.1,12.1v53.9C491.2,1102.5,485.8,1107.9,479.1,1107.9z" />
-			<text transform="matrix(1 0 0 1 366.6112 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="15px">Natasha</text>
-			<text transform="matrix(1 0 0 1 366.6116 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>"
-				font-size="13px">105 Photos</text>
+			<text transform="matrix(1 0 0 1 366.6112 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Natasha</text>
+			<text transform="matrix(1 0 0 1 366.6116 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">105 Photos</text>
 
-				<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAABmCAYAAAA53+RiAAAACXBIWXMAABYlAAAWJQFJUiTwAAAA
+			<image overflow="visible" enable-background="new    " width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAABmCAYAAAA53+RiAAAACXBIWXMAABYlAAAWJQFJUiTwAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAVdVJREFUeNrsvQeYZWd5JviddHMO
 				lWNXR3W31JJaLYGEZMACIcB4MRjPOjCMPcBO2DHenRl71+N9/Hi96zRrr+0NDth4bAYwDkSBQAEQ
 				yi21ulsdq7tyuFV16+Z80r7f959qYByGOMazLlH0rRvOPef/0vt+4T9E//DzXfmjfbef4MzxkxnT
@@ -2954,25 +2834,25 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				wBeNwfRKCHayuaRZq3XpmsQZRSlPFRXFO+uazjeaHxouMP/cAd17ZPCtrfQurfr7som4s1qqOEDU
 				dDS1aNpFQTCaObVYrpRFThT5DpPhoNesL5h1UsbUqk216aW4LMuR4Hos7AqvLyXzBa8gqNe9c64i
 				nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 944.8788)">
-						</image>
-						<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M255.5,1107.9H77.1c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
-							h178.4c6.7,0,12,5.4,12,12v54C267.6,1102.5,262.2,1107.9,255.5,1107.9z"/>
-						<text transform="matrix(1 0 0 1 144.1484 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Peter</text>
-						<text transform="matrix(1 0 0 1 144.1488 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">245 Photos</text>
-						<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M703.4,1107.9H525c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
-							h178.4c6.7,0,12,5.4,12,12v54C715.4,1102.5,710,1107.9,703.4,1107.9z"/>
-						<text transform="matrix(1 0 0 1 592.0049 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">David</text>
-						<text transform="matrix(1 0 0 1 592.0052 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">655 Photos</text>
-						<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M701.2,1008.9H522.8c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
-							h178.4c6.7,0,12,5.4,12,12v54C713.3,1003.5,707.9,1008.9,701.2,1008.9z"/>
-						<text transform="matrix(1 0 0 1 589.8435 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Jasmeen</text>
-						<text transform="matrix(1 0 0 1 589.844 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">225 Photos</text>
-						<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M479.1,1107.9H299.6c-6.7,0-12.1-5.4-12.1-12.1v-53.9
-							c0-6.7,5.4-12.1,12.1-12.1h179.5c6.7,0,12.1,5.4,12.1,12.1v53.9C491.2,1102.5,485.8,1107.9,479.1,1107.9z"/>
-						<text transform="matrix(1 0 0 1 366.6112 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Natasha</text>
-						<text transform="matrix(1 0 0 1 366.6116 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">105 Photos</text>
-						
-							<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
+			</image>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M255.5,1107.9H77.1c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
+							h178.4c6.7,0,12,5.4,12,12v54C267.6,1102.5,262.2,1107.9,255.5,1107.9z" />
+			<text transform="matrix(1 0 0 1 144.1484 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Peter</text>
+			<text transform="matrix(1 0 0 1 144.1488 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">245 Photos</text>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M703.4,1107.9H525c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
+							h178.4c6.7,0,12,5.4,12,12v54C715.4,1102.5,710,1107.9,703.4,1107.9z" />
+			<text transform="matrix(1 0 0 1 592.0049 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">David</text>
+			<text transform="matrix(1 0 0 1 592.0052 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">655 Photos</text>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M701.2,1008.9H522.8c-6.7,0-12-5.4-12-12v-54c0-6.7,5.4-12,12-12
+							h178.4c6.7,0,12,5.4,12,12v54C713.3,1003.5,707.9,1008.9,701.2,1008.9z" />
+			<text transform="matrix(1 0 0 1 589.8435 964.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Jasmeen</text>
+			<text transform="matrix(1 0 0 1 589.844 982.7737)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">225 Photos</text>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F1F2F3" d="M479.1,1107.9H299.6c-6.7,0-12.1-5.4-12.1-12.1v-53.9
+							c0-6.7,5.4-12.1,12.1-12.1h179.5c6.7,0,12.1,5.4,12.1,12.1v53.9C491.2,1102.5,485.8,1107.9,479.1,1107.9z" />
+			<text transform="matrix(1 0 0 1 366.6112 1063.1711)" fill="#2E384D" font-family="<?php echo $googleFontFamily; ?>" font-size="15px">Natasha</text>
+			<text transform="matrix(1 0 0 1 366.6116 1081.7738)" fill="#8798AD" font-family="<?php echo $googleFontFamily; ?>" font-size="13px">105 Photos</text>
+
+			<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAb2NJREFUeNrsvXnQtvdV3/dI76tX
 				qyVblm0tlizJ+yJvYGO8gHHY2pKGNIRpFkxoCV0yNE07Q2cy+YM/M2HaZighMZNJS4BCSGhIUwjg
 				YCZg7LAEgxfZMrItS7Ila7UtWbIlS+r5Pn4+bz766nc/y7tosd9r5pr7vq/7Wn/XOb+zfc85W1un
@@ -3475,8 +3355,8 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				OXxbPnfWMEu23TEMcscXv/jFu2688cYHv1a9WqcY5im2fN/3fd9ZQ9ixecJEqe55ztZXGkodGeI+
 				yjTDFAmu5vdZsz32UZjlKNMEgjLHbn/Of2GiL84ahrlrjrtt1ntvuOGGh0+N+Mld/n8BBgBklOZ6
 				6alRugAAAABJRU5ErkJggg==" transform="matrix(0.25 0 0 0.25 527.3016 944.85)">
-				</image>
-				<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
+			</image>
+			<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAwP9JREFUeNrsvfmzHVeSHpbnVN31
 				3bfigQAILmCz2dy6iW5Oz3h6pqXRSDNSaLSPLNsa7QrtIVuyI/Q/2OEfHA45wqHf/IMdYclW2LLD
 				Usjh8HgU3ZqZHjZBEADJbu4AARDrw1vvVlXH+WXmOVX3LdgIkOxpPMble7hr3aqTJzO//PJLokc/
@@ -4345,8 +4225,8 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				hI1owJ5opUCSXvnL/BnLbINsLNm1rJFd5XDwajNrXVu/b2X96ae/Wr17p941mLf944v/9z9OE+/m
 				E5/CcPayI5jnnKXFX2EwLaBjoKvMBtQsYUSAAKjBsK2UI85TxmXORlNVYw7NJsPhcAyT4bBsXBT5
 				IM/L1bLyV9qT5NrTn/vq5N0rfncf/78AAwDOWkHDn0L24wAAAABJRU5ErkJggg==" transform="matrix(0.25 0 0 0.25 79.4452 1043.8501)">
-				</image>
-				<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
+			</image>
+			<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAA/gtJREFUeNrsvXm0r2lVHvi+7zf8
 				pjOfc6eqWwPKIDiAtqJMIgraIgpOaIwYWU7p1THL5dKVTtpei/6jTRPXstuoi6UGMIgESxQ1EUTQ
 				QhtMYsCsaAAjFFV1q+505uk3fsPb+3n2fr9ziXFAEQq4p9avzrnn/IZv2PN+9rOdu/11++v21+2v
@@ -5489,8 +5369,8 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				z+wMA/aUDjvkCv89dpAwz86zxFsLJ+y0yH/zBDvqiYYrFs+Yv3ft8luoOn2lTlfJTg6HuQXx/oMw
 				6mN2T7cbXntxxrvDVFWGnb6Rb2ej5+cVaMtaOUiJAzV7vV6Ld4AmJ90tSK2wI7SMu7VXVhV/bmCn
 				yfoQC+ClLjkPJ0Ydfr7K8dpC5bPFN3z6rsHpq/HE3P6vAAMAXnIjlYs2Z94AAAAASUVORK5CYII=" transform="matrix(0.25 0 0 0.25 301.9079 944.9)">
-				</image>
-				<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
+			</image>
+			<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAA5MBJREFUeNrsvWmQLdlxHnbOqaq7
 				39t7v2W2N8BgBjMgsVAkTRIgBZoEGZS4SpwgRBECCFIQuAwJKkDQixxGhPVL/mX7h//qh+2wTIdt
 				2WE7aFtkSEGIFGnQIkUAJNbBrK9f78vdq+o4v8w8p6pu95sZAANgAL43KHT37dv33qo6eTLzyy+/
@@ -6520,8 +6400,8 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				WE8ADX/2w2/7eqYV26m3EpVGe3R4bCKmhON62PJzwPj0arOrbW+X9LXlRS2/vqp32y09k8noU7mc
 				Pf/yy73xZLJfKG4anE363LMY169f79drbYNLr77fr3a4J6n3jD4Ct2IalmE+9d4s6+jn879x/Y8A
 				AwD3GRsiiEXfnQAAAABJRU5ErkJggg==" transform="matrix(0.25 0 0 0.25 301.9079 1043.9)">
-				</image>
-				<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
+			</image>
+			<image overflow="visible" enable-background="new    " width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADMCAYAAAA/IkzyAAAACXBIWXMAACxKAAAsSgF3enRNAAAA
 				GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAA3LtJREFUeNrsvWm0bddVHjjX2nuf
 				/tz+vk7dkyzjSFiybEsyajCSAIkebLATG0xBFaEacEj9yagf9cM/atTISP5UjZGkRo3KYIRKAYmp
 				QSAuyhioQSoxRYCQpGhkU7GxjGzp9e/d9jR777VqfnPOtfc+9z07BtwI/I59dO897zT77L2+Nbtv
@@ -7515,7 +7395,7 @@ nNiJ/Y/9FmAAJqRTjEPGGj0AAAAASUVORK5CYII=" transform="matrix(0.5 0 0 0.5 79.4452 
 				tfdAfXJmrsYDXksgbvTQBy0sLOx4jx2D+ehvnb8uFAdxOIeGUcYBPItf+SQZDO6ilkd1jwaDBkTP
 				gYyniNYSoGeJJBoMxlOYnSRDdD9oLIwUW+l1MppBIuJOnISNlVpv9WqltX7vr34vdr7x/+32HwEG
 				AML4RE+Nt67NAAAAAElFTkSuQmCC" transform="matrix(0.25 0 0 0.25 527.3016 1043.9)">
-				</image>
+			</image>
 		</g>
 	</g>
 </svg>

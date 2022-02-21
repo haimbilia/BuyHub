@@ -74,7 +74,7 @@ class ShippingPackagesController extends SellerBaseController {
     private function getSearchForm() {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('FRM_KEYWORD', $this->siteLangId)));
         
         HtmlHelper::addSearchButton($frm);
         return $frm;
@@ -84,14 +84,14 @@ class ShippingPackagesController extends SellerBaseController {
         $unitTypeArray = ShippingPackage::getUnitTypes($this->siteLangId);
         $frm = new Form('frmShippingPackages');
         $frm->addHiddenField('', 'shippack_id');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), 'shippack_name');
-        $frm->addFloatField(Labels::getLabel('LBL_Length', $this->siteLangId), 'shippack_length');
-        $frm->addFloatField(Labels::getLabel('LBL_Width', $this->siteLangId), 'shippack_width');
-        $frm->addFloatField(Labels::getLabel('LBL_Height', $this->siteLangId), 'shippack_height');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_NAME', $this->siteLangId), 'shippack_name');
+        $frm->addFloatField(Labels::getLabel('FRM_LENGTH', $this->siteLangId), 'shippack_length');
+        $frm->addFloatField(Labels::getLabel('FRM_WIDTH', $this->siteLangId), 'shippack_width');
+        $frm->addFloatField(Labels::getLabel('FRM_HEIGHT', $this->siteLangId), 'shippack_height');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Unit', $this->siteLangId), 'shippack_units', $unitTypeArray, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_UNIT', $this->siteLangId), 'shippack_units', $unitTypeArray, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
 
         return $frm;
     }

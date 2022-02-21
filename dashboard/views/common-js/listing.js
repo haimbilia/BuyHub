@@ -32,6 +32,15 @@ $(document).on("click", ".navTabsJs a", function (e) {
 });
 
 (function () {
+    setNavTab = function (type) {
+        $('.navTabsJs').find('a').removeClass('active');
+        $(".navTabsJs a").each(function () {
+            if ($(this).attr('data-tab') == type) {
+                $(this).addClass('active');
+            }
+        });
+    };
+
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {
             $.ykmsg.error(langLbl.controllerNameRequired);

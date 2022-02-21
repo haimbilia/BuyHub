@@ -186,7 +186,7 @@ class OrderPayment extends Orders
             }
 
             $totalPaymentPaid = $this->getOrderPaymentPaid($paymentOrderId);
-            $orderBalance = ($orderDetails['order_net_amount'] - $totalPaymentPaid);
+            $orderBalance = (($orderDetails['order_net_amount'] - 1) - $totalPaymentPaid);
 
             if ($orderBalance <= 0) {
                 $this->addOrderPaymentHistory($paymentOrderId, $orderPaymentStatus, Labels::getLabel('LBL_Received_Payment', $defaultSiteLangId), 1);

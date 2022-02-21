@@ -14,8 +14,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
         'siteLangId' => $siteLangId
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-    <div class="communication">
-        <?php if (empty($arrListing)) { ?>
+    <?php if (empty($arrListing)) { ?>
+        <div class="row">
             <div class="col-md-12">
                 <div class="card mb-0 h-100">
                     <div class="card-body">
@@ -27,7 +27,9 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                     </div>
                 </div>
             </div>
-        <?php } else { ?>
+        </div>
+    <?php } else { ?>
+        <div class="communication">
             <div class="communication-nav">
                 <div class="card mb-0 h-100">
                     <div class="communication-search">
@@ -95,45 +97,11 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                     ?>
                 </div>
             </div>
-        <?php
+            <?php
             $doNotshowMessages = true;
             $threadListing = [current($arrListing)];
             require_once(CONF_THEME_PATH . 'account/view-thread.php');
-        } ?>
-    </div>
-    <!-- <div class="content-body">
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card card-search">
-                        <div class="card-body">
-                            <div id="withdrawalReqForm"></div>
-                            <div class="replaced">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <?php
-                                        /* $submitFld = $frmSearch->getField('btn_submit');
-                                        $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-
-                                        $fldClear = $frmSearch->getField('btn_clear');
-                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
-                                        echo $frmSearch->getFormHtml(); */
-                                        ?>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="messageListing"><?php /* echo Labels::getLabel('LBL_Loading..', $siteLangId); */ ?></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+            ?>
+        </div>
+    <?php } ?>
 </div>

@@ -1,5 +1,4 @@
 <?php
-
 class AccountController extends LoggedUserController
 {
     public function __construct($action)
@@ -2723,15 +2722,15 @@ class AccountController extends LoggedUserController
     private function getBankInfoForm()
     {
         $frm = new Form('frmBankInfo');
-        $frm->addRequiredField(Labels::getLabel('M_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('M_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
-        $fld = $frm->addRequiredField(Labels::getLabel('M_Account_Number', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $this->siteLangId), 'ub_account_holder_name', '');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $this->siteLangId), 'ub_account_number', '');
         $fld->requirement->setRequired(true);
 
-        $ifsc = $frm->addRequiredField(Labels::getLabel('M_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $ifsc = $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $this->siteLangId), 'ub_ifsc_swift_code', '');
         $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
 
-        $frm->addTextArea(Labels::getLabel('M_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
+        $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
         $htm = '<div class="info p-3">
                     <span>
                         <svg class="svg">
@@ -2741,7 +2740,7 @@ class AccountController extends LoggedUserController
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -2749,29 +2748,29 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('changePwdFrm');
         $curPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_CURRENT_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
             'current_password'
         );
         $curPwd->requirements()->setRequired();
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
             'new_password'
         );
-        $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</span>';
+        $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('FRM_EXAMPLE_PASSWORD', $this->siteLangId), 'User@123') . '</span>';
         $newPwd->requirements()->setRequired();
         $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_CONFIRM_NEW_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId),
             'conf_new_password'
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        /* $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_CONFIRM_PASSWORD_NOT_MATCHED',
+        /* $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('FRM_CONFIRM_PASSWORD_NOT_MATCHED',
         $this->siteLangId)); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -2869,7 +2868,7 @@ class AccountController extends LoggedUserController
                 $fld->htmlAfterField = '<p class="note">' . $field['sformfield_comment'] . '</p>';
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -3160,10 +3159,10 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
-        $frm->addSelectBox(Labels::getLabel('LBL_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '');
+        $frm->addSelectBox(Labels::getLabel('FRM_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('FRM_BOTH-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
@@ -3174,7 +3173,7 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmSendMessage');
         $frm->addHiddenField('', 'message_thread_id');
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $langId), 'message_text', '')->requirements()->setRequired(true);
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $langId), 'message_text', '')->requirements()->setRequired(true);
         return $frm;
     }
 
@@ -3190,8 +3189,8 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmBankInfo');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Auto_Renew_Subscription', $this->siteLangId), 'user_autorenew_subscription', $activeInactiveArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_AUTO_RENEW_SUBSCRIPTION', $this->siteLangId), 'user_autorenew_subscription', $activeInactiveArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -3200,7 +3199,7 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmRechargeWallet');
         $fld = $frm->addFloatField('', 'amount');
         //$fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Add_Credits', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD_CREDITS', $langId));
         return $frm;
     }
 
@@ -3291,11 +3290,11 @@ class AccountController extends LoggedUserController
     private function getRequestDataForm()
     {
         $frm = new Form('frmRequestdata');
-        $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '', array('readonly' => 'readonly'));
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $this->siteLangId), 'user_name', '', array('readonly' => 'readonly'));
-        $purposeFld = $frm->addTextArea(Labels::getLabel('LBL_PURPOSE_OF_REQUEST_DATA', $this->siteLangId), 'ureq_purpose');
+        $frm->addTextBox(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $this->siteLangId), 'user_name', '', array('readonly' => 'readonly'));
+        $purposeFld = $frm->addTextArea(Labels::getLabel('FRM_PURPOSE_OF_REQUEST_DATA', $this->siteLangId), 'ureq_purpose');
         $purposeFld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Request', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REQUEST', $this->siteLangId));
         return $frm;
     }
 
@@ -3633,10 +3632,10 @@ class AccountController extends LoggedUserController
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addCheckBox(Labels::getLabel("FRM_FUNCTIONAL", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("FRM_STATISTICAL_ANALYSIS", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("FRM_PERSONALISE_EXPERIENCE", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

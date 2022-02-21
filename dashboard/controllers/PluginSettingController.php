@@ -121,7 +121,7 @@ class PluginSettingController extends LoggedUserController
         $frm = new Form('frm' . $keyName);
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
         $envFld->requirement->setRequired(true);
         foreach ($labelsArr as $colName => $colLabel) {
             $htmlAfterField = $fieldFn = "";
@@ -172,7 +172,7 @@ class PluginSettingController extends LoggedUserController
             }
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 

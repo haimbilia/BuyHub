@@ -16,9 +16,17 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
     echo $frm->getFormTag(); ?>
     <div class="content-header">
         <div class="content-header-title">
-            <h2><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
-            <span class="text-muted"> <span class="required"></span> required
-                information</span>
+            <h2>
+                <a class="back" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                    <svg class="svg" width="24" height="24">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                        </use>
+                    </svg>
+                </a>
+                <?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?>
+            </h2>
+            <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', $this->variables, false); ?>
+            <!-- span class="text-muted"> <span class="required"></span> DUMMY INFORMATION</span -->
         </div>
         <?php
         $langFld =  $frm->getField('lang_id');
@@ -29,7 +37,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
@@ -43,10 +51,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <div class="content-header-toolbar">
             <div class="input-group">
                 <?php
-                    echo $langFld->getHtml();
+                echo $langFld->getHtml();
                 ?>
             </div>
-        </div>      
+        </div>
     </div>
     <div class="content-body">
         <div class="add-stock">
@@ -460,7 +468,7 @@ echo $imgFrm->getFormHtml();
 
         $('#addProductfrm .optionValuesJs').each(function(index) {
             tagifyOptionValue("#" + $(this).attr('id'));
-        });        
+        });
         <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);

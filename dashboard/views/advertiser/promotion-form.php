@@ -12,8 +12,9 @@ if (User::isSeller()) {
     $shopCpcFld->setWrapperAttribute('class', 'promotion_shop_fld');
     $shopCpcFld->htmlAfterField = '<p class="note">' . Labels::getLabel('MSG_PPC_cost_per_click_for_shop', $siteLangId) . '</p>';
 
-    $productFld = $frm->getField('promotion_record_id');    
+    $productFld = $frm->getField('promotion_record_id');
     $productFld->setFieldTagAttribute('id', 'promotionProductJs');
+    $productFld->setWrapperAttribute('class', 'promotion_product_fld');
     $productFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_product.', $siteLangId) . '</p>';
 
     $productCpcFld = $frm->getField('promotion_product_cpc');
@@ -49,14 +50,13 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs">
-            <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
-
-            <a class="nav-link <?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+            <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $promotionId; ?>)" data-tab="general"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
+            <a class="nav-link <?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?> data-tab="lang">
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
             <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
             <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+                <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?> data-tab="media"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
             <?php } ?>
         </nav>
     </div>
@@ -107,50 +107,9 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
             if (promotionType == PROMOTION_TYPE_SLIDES) {
                 $(".slide_url_fld").show();
             }
-
-           /*  fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'getTypeData', [<?php echo $promotionId; ?>, promotionType]), '', function(t) {
-                $.mbsmessage.close();
-                if (t.promotionType == PROMOTION_TYPE_SHOP) {
-                    $("input[name='promotion_shop']").val(t.label);
-                } else if (t.promotionType == PROMOTION_TYPE_PRODUCT) {
-                    $("input[name='promotion_product']").val(t.label);
-                }
-                $("input[name='promotion_record_id']").val(t.value);
-            }); */
         });
 
         $("select[name='promotion_type']").trigger('change');
 
-        /*  $('input[name=\'promotion_product\']').autocomplete({
-             'classes': {
-                 "ui-autocomplete": "custom-ui-autocomplete"
-             },
-             'source': function(request, response) {
-                 $.ajax({
-                     url: fcom.makeUrl('Advertiser', 'autoCompleteSelprods'),
-                     data: {
-                         keyword: request['term'],
-                         fIsAjax: 1
-                     },
-                     dataType: 'json',
-                     type: 'post',
-                     success: function(json) {
-                         response($.map(json, function(item) {
-                             return {
-                                 label: item['name'],
-                                 value: item['name'],
-                                 id: item['id']
-                             };
-                         }));
-                     },
-                 });
-             },
-             'select': function(event, ui) {
-                 $("input[name='promotion_record_id']").val(ui.item.id);
-             }
-         }); */
-
-        
-         
     });
 </script>
