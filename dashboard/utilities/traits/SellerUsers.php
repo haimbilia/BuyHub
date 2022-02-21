@@ -63,37 +63,37 @@ trait SellerUsers
     {
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'user_id', $userId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->siteLangId), 'user_name');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'user_username');
+        $frm->addRequiredField(Labels::getLabel('FRM_FULL_NAME', $this->siteLangId), 'user_name');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'user_username');
         $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
         $fld->requirements()->setRequired();
         $fld->requirements()->setUsername();
-        $fld = $frm->addEmailField(Labels::getLabel('LBL_User_Email', $this->siteLangId), 'user_email', '');
+        $fld = $frm->addEmailField(Labels::getLabel('FRM_USER_EMAIL', $this->siteLangId), 'user_email', '');
         $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phoneFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone');
+        $phoneFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone');
         $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
+        $phoneFld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
         if ($userId == 0) {
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $this->siteLangId), 'user_password');
+            $fld = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $this->siteLangId), 'user_password');
             $fld->requirements()->setRequired();
             $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
-            $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
-            $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $this->siteLangId), 'confirm_password');
+            $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+            $fld1 = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_PASSWORD', $this->siteLangId), 'confirm_password');
             $fld1->requirements()->setRequired();
-            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $this->siteLangId));
+            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('FRM_PASSWORD', $this->siteLangId));
         }
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('Lbl_Status', $this->siteLangId), 'user_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'user_active', $activeInactiveArr, '', array(), '');
 
         return $frm;
     }
@@ -282,18 +282,18 @@ trait SellerUsers
     {
         $frm = new Form('changePwdFrm');
         $frm->addHiddenField('', 'user_id', $userId);
-        $newPwd = $frm->addPasswordField(Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId), 'new_password');
+        $newPwd = $frm->addPasswordField(Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId), 'new_password');
         $newPwd->requirements()->setRequired();
         $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_CONFIRM_NEW_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId),
             'conf_new_password'
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
         return $frm;
     }
 
@@ -344,9 +344,9 @@ trait SellerUsers
     {
         $permissionArr = UserPrivilege::getPermissionArr($this->siteLangId);
         $frm = new Form('frmAllAccess');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->siteLangId), 'permissionForAll', $permissionArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PERMISSION_FOR_ALL_MODULES', $this->siteLangId), 'permissionForAll', $permissionArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_APPLY_TO_ALL', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
         return $frm;
     }
 
