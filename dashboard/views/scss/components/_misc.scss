@@ -857,41 +857,6 @@ a:hover {
 
 //reward point
 
-.total-balance {
-    min-height: 120px;
-    padding: 1.5rem;
-    background-color: #fff4c5;
-    background-repeat: no-repeat;
-    background-position: bottom #{$end-direction};
-    background-size: 40%;
-    display: flex;
-    align-items: center;
-    line-height: normal;
-    @include media-breakpoint-down(md) {
-        padding: 1rem;
-    }
-    &_inner {
-        display: flex;
-        flex-direction: column;
-        font-size: 0.8rem;
-        position: relative;
-        z-index: 1;
-        color: #000;
-        margin-#{$end-direction}: 1.5rem;
-        &:last-child {
-            margin-#{$end-direction}: 0;
-        }
-        p {
-            font-weight: 300;
-        }
-        .value {
-            font-weight: 600;
-            font-size: 1.8rem;
-            color: currentColor;
-        }
-    }
-}
-
 .points-timeline {
     padding-#{$start-direction}: 50px;
     margin: 0 auto;
@@ -914,11 +879,15 @@ a:hover {
         padding-#{$end-direction}: 0;
     }
     &__block {
+        width: 100%;
         display: flex;
         justify-content: space-between;
         padding: 0;
         padding-#{$end-direction}: 2rem;
         white-space: normal !important;
+        background-color: transparent;
+        border-color: transparent;
+        text-align: #{$start-direction};
         cursor: pointer;
         &.dropdown-toggle:after {
             transition: 0.35s ease all;
@@ -936,7 +905,7 @@ a:hover {
             }
         }
         &_title {
-            //font-weight: 500;
+            font-weight: 500;
             font-size: 0.85rem;
             line-height: 1;
             color: $txt-body;
@@ -947,15 +916,10 @@ a:hover {
             color: $txt-gray;
             margin-bottom: 5px;
         }
-        &_origin {
+        &_expire {
             color: $txt-gray;
             font-size: 0.8rem;
             font-weight: 300;
-        }
-        &_media {
-            max-width: 60px;
-            flex: 0 0 60px;
-            margin-#{$end-direction}: 1rem;
         }
     }
     > li {
@@ -975,62 +939,40 @@ a:hover {
             top: 6px;
             width: 10px;
             height: 10px;
+            display: block;
             border-radius: 50%;
-            background-color: $brand-color;
-            transform: rotate(45deg);
+            background-color: #fff;
+            border: solid 2px $txt-body;
             @include media-breakpoint-down(sm) {
                 top: 0;
             }
         }
-        &:after {
-            //content: "";
-            position: absolute;
-            top: 38px;
-            #{$end-direction}: 30px;
-            margin: auto;
-            height: 12px;
-            width: 12px;
-            border: 1px solid $txt-gray;
-            border-width: 2px 2px 0 0;
-            transform: rotate(45deg);
-        }
-        &:hover {
-            .points-timeline__block_title {
-                color: $txt-body;
-            }
-        }
-        .icn {
-            margin-#{$start-direction}: 3rem;
-        }
+
         &:last-child {
             padding-bottom: 20px;
         }
-        &.redeemed {
-            opacity: 0.8;
+        &.earned {
             &:before {
-                background-color: $bg-gray;
+                border-color: $brand-color;
+            }
+        }
+        &.redeemed {
+            &:before {
+                border-color: $txt-body;
             }
         }
         &.expired {
-            opacity: 0.8;
             &:before {
-                background-color: $bg-gray;
-            }
-        }
-        &.balance {
-            &:before {
-                top: 8px;
+                border-color: $txt-body;
             }
         }
     }
     .points-list-group {
-        background: $bg-gray;
-        border-radius: $radius4;
         display: flex;
         flex-direction: column;
         margin-top: 1rem;
-        margin-#{$start-direction}: 75px;
         max-height: 400px;
+        overflow-y: auto;
         @include media-breakpoint-down(md) {
             margin: 0;
         }
@@ -1041,10 +983,140 @@ a:hover {
             //border-top: $border;
             font-size: 0.8rem;
             color: $txt-gray;
+            margin-bottom: 1rem;
+            border: dashed 1px $border-color;
         }
     }
     .product-profile {
         width: 100%;
         margin: 0;
+    }
+    .date-expire {
+        font-size: 0.8125rem;
+    }
+}
+
+//Coupon
+.list-coupons {
+    font-size: 0.8rem;
+    display: grid;
+    grid-gap: 3.5rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    .list-group-item {
+        border: none;
+        padding: 0rem;
+    }
+    &__img {
+        max-width: 120px;
+    }
+    &__detail {
+        h5 {
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            border: dashed 2px $brand-color;
+            color: $brand-color;
+            display: inline-block;
+        }
+        p {
+            color: $txt-gray;
+        }
+    }
+    .disabled {
+        opacity: 0.5;
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+}
+
+.coupon {
+    display: flex;
+    &__code-img {
+        margin-#{$end-direction}: 25px;
+        position: relative;
+        max-width: 165px;
+    }
+    &__img {
+        width: 165px;
+        height: 165px;
+        @include media-breakpoint-down(sm) {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+        }
+        display: flex;
+        border-radius: 5px;
+        background-color: #dee2e6;
+        overflow: hidden;
+        img {
+            margin: auto;
+        }
+    }
+    &__tag {
+        position: absolute;
+        white-space: nowrap;
+        font-size: 13px;
+        color: #000;
+        background-color: $bg-white;
+        border: 1px dashed #000;
+        padding: 4px 10px;
+        border-radius: 100px;
+        @include media-breakpoint-down(sm) {
+            min-width: inherit;
+        }
+        min-width: 100px;
+        text-align: center;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
+    }
+    &__detail {
+        h6 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding-bottom: 0;
+            margin: 0;
+        }
+        p {
+            padding: 0.7rem 0;
+        }
+        .coupon__highlight {
+            font-size: 0.75rem;
+            color: #808080;
+            display: block;
+        }
+        .coupon__uses-left {
+            display: inline-block;
+            color: #1dc9b7;
+        }
+    }
+    &--notused {
+        .coupon__tag {
+            color: #338e88;
+            border-color: #cdcdcd;
+        }
+        .coupon__img {
+            img {
+                filter: grayscale(1);
+                opacity: 0.5;
+            }
+        }
+        .coupon__detail {
+            h6 {
+                color: #338e88;
+            }
+            p {
+                opacity: 0.4;
+            }
+        }
+        .link-text {
+            color: #b1b1b1;
+            cursor: default;
+            &:after {
+                width: 100%;
+            }
+        }
     }
 }

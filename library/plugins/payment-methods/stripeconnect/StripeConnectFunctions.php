@@ -83,11 +83,11 @@ trait StripeConnectFunctions
     }
 
     /**
-     * createToken - To generate person ID
+     * createPersonTokenId - To generate person ID
      *
      * @return object
      */
-    private function createToken(): object
+    private function createPersonTokenId(): object
     {
         return $this->stripe->tokens->create([
             'pii' => ['id_number' => '000000000'],
@@ -464,5 +464,19 @@ trait StripeConnectFunctions
     private function createCoupon(array $requestParam): object
     {
         return $this->stripe->coupons->create($requestParam);
+    }
+
+    /**
+     * createAccountTokenId
+     *
+     * @return object
+     */
+    private function createAccountTokenId(): object
+    {
+        return $this->stripe->tokens->create([
+            'account' => [
+                'tos_shown_and_accepted' => true
+            ],
+        ]);
     }
 }
