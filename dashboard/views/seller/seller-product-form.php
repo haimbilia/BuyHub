@@ -6,14 +6,9 @@
     $data = [
         'headingLabel' => Labels::getLabel('LBL_Inventory_Setup', $siteLangId),
         'siteLangId' => $siteLangId,
-        'otherButtons' => [
-            [
-                'attr' => [
-                    'href' => UrlHelper::generateUrl('seller', 'products'),
-                    'title' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
-                ],
-                'label' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
-            ],
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('seller', 'products'),
+            'onclick' => '',
         ]
     ];
 
