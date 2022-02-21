@@ -2726,7 +2726,7 @@ class BuyerController extends BuyerBaseController
         $frm = new Form('frmRewardPointSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'convertReward');
-        $frm->addHiddenField('', 'total_record_count', '');       
+        $frm->addHiddenField('', 'total_record_count', '');
         return $frm;
     }
 
