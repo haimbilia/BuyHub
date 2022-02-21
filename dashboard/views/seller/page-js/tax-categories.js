@@ -13,6 +13,7 @@ $(document).ready(function () {
 
 		fcom.ajax(fcom.makeUrl('Seller', 'searchTaxCategories'), data, function (res) {
 			$(dv).html(res);
+			fcom.removeLoader();
 		});
 	};
 
