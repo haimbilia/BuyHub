@@ -146,10 +146,10 @@ class TransactionReportController extends SellerBaseController
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'utxn_date');

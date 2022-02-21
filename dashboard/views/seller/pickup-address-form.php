@@ -210,8 +210,8 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
             rowHtml += '<td>' + fromTimeHtml + '</td>';
             rowHtml += '<td>' + toTimeHtml + '</td>';
             rowHtml += '<td class="align-right"><ul class="actions">';
-            rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="' + siteConstants.webroot + '/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
-            rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="' + siteConstants.webroot + '/images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
+            rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
+            rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
             rowHtml += '</td>';
 
             var addRowBtn = $('.addRowBtn' + day + '-js');

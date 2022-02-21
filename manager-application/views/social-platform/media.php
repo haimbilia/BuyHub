@@ -25,7 +25,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 $frm->addFormTagAttribute('data-callbackfn','mediaFormCallback');
 
 $fld = $frm->getField('image');
-$fld->value = HtmlHelper::getfileInputHtml(
+$fld->value = '<label class="label">'.Labels::getLabel('LBL_ICON', $siteLangId).'</label>'.HtmlHelper::getfileInputHtml(
     ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_BANNER_IMAGE", $siteLangId)],
     $siteLangId,
     ($canEdit ? 'deleteMedia('.$recordId.')' : ''),
@@ -34,11 +34,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'mt-3 dropzone-custom dropzoneContainerJs'
 );
 
-// $htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '1000*563') . '</span>';
-// $htmlAfterField .= '<div id="imageListingJs"></div>';
-// $fld->htmlAfterField = $htmlAfterField;
-
-
+$fld->htmlAfterField = '<span class="form-text text-muted">'. Labels::getLabel('LBL_THIS_WILL_BE_DISPLAYED_IN_30X30_ON_YOUR_STORE.', $siteLangId).'<br/>'. Labels::getLabel('LBL_SVG_IMAGES_ARE_NOT_SUPPORTED_IN_EMAILS.', $siteLangId) .'</span>';
 
 $otherButtons = [
     [

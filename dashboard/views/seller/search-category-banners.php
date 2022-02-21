@@ -34,7 +34,11 @@ foreach ($arrListing as $sn => $row){
 				$ul = $td->appendElement("ul",array('class'=>'actions'),'',true);
 				$li = $ul->appendElement("li");
 				$li->appendElement('a', array('href'=>'javascript:void(0)','onclick'=>'addCategoryBanner('.$row['prodcat_id'].')', 'class'=>'','title'=>Labels::getLabel('LBL_Media',$siteLangId)),
-				'<i class="fa fa-edit"></i>', true);
+				'<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>', true);
 			break;
 			default:
 				$td->appendElement('plaintext', array(), $row[$key],true);

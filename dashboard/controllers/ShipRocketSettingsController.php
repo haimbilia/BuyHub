@@ -16,7 +16,7 @@ class ShipRocketSettingsController extends ShippingServicesSettingsController
             $fld->requirement->setRequired(true);
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 }

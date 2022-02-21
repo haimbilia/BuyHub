@@ -823,7 +823,7 @@ class ReportsController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
@@ -883,10 +883,10 @@ class ReportsController extends SellerBaseController
         }
 
         if (empty($orderDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         } else {
-            $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+            $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
         }
 
         HtmlHelper::addSearchButton($frm);

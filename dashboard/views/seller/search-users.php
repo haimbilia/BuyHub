@@ -66,7 +66,11 @@
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addUserForm(" . $row['user_id'] . ")"),
-                        '<i class="fa fa-edit"></i>',
+                        '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                         true
                     );
 

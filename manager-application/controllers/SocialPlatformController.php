@@ -9,7 +9,7 @@ class SocialPlatformController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewSocialPlatforms();      
+        $this->objPrivilege->canViewSocialPlatforms();
     }
 
     /**
@@ -37,8 +37,9 @@ class SocialPlatformController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_SOCIAL_PLATFORM_SETUP', $this->siteLangId));
+        $this->checkMediaExist = true;
     }
 
     public function index()
@@ -59,10 +60,10 @@ class SocialPlatformController extends ListingBaseController
         $this->getListingData();
 
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js','social-platform/page-js/index.js']);
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));       
-        $this->_template->render(true, true, '_partial/listing/index.php');        
-    }    
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'social-platform/page-js/index.js']);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
+        $this->_template->render(true, true, '_partial/listing/index.php');
+    }
 
     public function search()
     {
@@ -102,6 +103,11 @@ class SocialPlatformController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('splatform_user_id', '=', 0);
+
+        if (isset($post['keyword']) && '' != $post['keyword']) {
+            $condition = $srch->addCondition('splatform_identifier', 'like', '%' . $post['keyword'] . '%');
+            $condition->attachCondition('splatform_title', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
         //splatform_id
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
@@ -117,16 +123,16 @@ class SocialPlatformController extends ListingBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);       
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
     }
-    
+
     public function form()
-    {       
+    {
         $this->checkEditPrivilege();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-       
+
         $frm = $this->getForm();
 
         if (0 < $recordId) {
@@ -136,7 +142,7 @@ class SocialPlatformController extends ListingBaseController
             }
             $frm->fill($data);
         }
-      
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, NULL, true));
@@ -154,9 +160,9 @@ class SocialPlatformController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['splatform_id'];        
+        $recordId = $post['splatform_id'];
         $data = $post;
-        $data['splatform__identifier'] = $data['splatform_title'];
+        $data['splatform_identifier'] = $data['splatform_title'];
 
         $recordObj = new SocialPlatform($recordId);
         $recordObj->assignValues($data, true);
@@ -165,10 +171,10 @@ class SocialPlatformController extends ListingBaseController
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
-       
+
         $this->_template->render(false, false, 'json-success.php');
-    } 
-   
+    }
+
     public function media($recordId)
     {
         $recordId = FatUtility::int($recordId);
@@ -186,9 +192,10 @@ class SocialPlatformController extends ListingBaseController
         $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $recordId);
         $this->set('image', $image);
         $this->set('recordId', $recordId);
-        $this->set('frm', $frm);       
+        $this->set('frm', $frm);
+        $this->set('activeGentab', false);
         $this->checkEditPrivilege(true);
-        $this->set('html', $this->_template->render(false, false, NULL, true));      
+        $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -242,136 +249,69 @@ class SocialPlatformController extends ListingBaseController
 
     public function deleteRecord()
     {
-        $this->objPrivilege->canEditSocialPlatforms();
+        $this->checkEditPrivilege();
 
-        $splatform_id = FatApp::getPostedData('splatformId', FatUtility::VAR_INT, 0);
-        if ($splatform_id < 1) {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($splatform_id);
+        $obj = new SocialPlatform($recordId);
+        if (!$obj->deleteRecord(true)) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
 
     public function deleteSelected()
     {
-        $this->objPrivilege->canEditSocialPlatforms();
-        $splatformIdsArr = FatUtility::int(FatApp::getPostedData('splatform_ids'));
+        $this->checkEditPrivilege();
+        $recordIdArr = FatUtility::int(FatApp::getPostedData('record_ids'));
 
-        if (empty($splatformIdsArr)) {
+        if (empty($recordIdArr)) {
             LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                true
             );
         }
 
-        foreach ($splatformIdsArr as $splatform_id) {
-            if (1 > $splatform_id) {
+        foreach ($recordIdArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($splatform_id);
+            $obj = new SocialPlatform($recordId);
+            if (!$obj->deleteRecord(true)) {
+                LibHelper::exitWithError($obj->getError(), true);
+            }
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($splatform_id)
+    protected function isMediaUploaded($splatformId)
     {
-        $splatform_id = FatUtility::int($splatform_id);
-        if (1 > $splatform_id) {
-            LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
-            );
-        }
-        $obj = new SocialPlatform($splatform_id);
-        if (!$obj->deleteRecord(true)) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-    }
-
-    public function updateStatus()
-    {
-        $this->objPrivilege->canEditSocialPlatforms();
-        $splatformId = FatApp::getPostedData('splatformId', FatUtility::VAR_INT, 0);
-        if (0 >= $splatformId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $data = SocialPlatform::getAttributesById($splatformId, array('splatform_id', 'splatform_active'));
-
-        if ($data == false) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $status = ($data['splatform_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateSocialPlatformStatus($splatformId, $status);
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditSocialPlatforms();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $splatformIdsArr = FatUtility::int(FatApp::getPostedData('splatform_ids'));
-        if (empty($splatformIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
-            );
-        }
-
-        foreach ($splatformIdsArr as $splatformId) {
-            if (1 > $splatformId) {
-                continue;
-            }
-
-            $this->updateSocialPlatformStatus($splatformId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateSocialPlatformStatus($splatformId, $status)
-    {
-        $status = FatUtility::int($status);
-        $splatformId = FatUtility::int($splatformId);
-        if (1 > $splatformId || -1 == $status) {
-            LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
-            );
-        }
-
-        $socialPlatObj = new SocialPlatform($splatformId);
-        if (!$socialPlatObj->changeStatus($status)) {
-            LibHelper::exitWithError($socialPlatObj->getError(), true);
-        }
-    }
-
-    private function isMediaUploaded($splatformId)
-    {
-        if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatformId, 0)) {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatformId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
             return true;
         }
         return false;
     }
 
     private function getForm()
-    {       
+    {
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'splatform_id');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
-       // $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
+        $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
 
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
-		$urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
+        $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
         $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
-		$urlFld->requirements()->setRequired();
+        $urlFld->requirements()->setRequired();
 
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_IF_YOU_HAVE_TO_ADD_A_PLATFORM_ICON_EXCEPT_THIS_SELECT_LIST', $this->siteLangId) . '</small>';
-        
+        $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
@@ -396,9 +336,9 @@ class SocialPlatformController extends ListingBaseController
     {
         $frm = new Form('frmSocialPlatformMedia');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
-        $frm->addHtml('', 'image', '');       
+        $frm->addHtml('', 'image', '');
         return $frm;
-    }    
+    }
 
     protected function getFormColumns(): array
     {
@@ -411,7 +351,7 @@ class SocialPlatformController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'splatform_identifier' => Labels::getLabel('LBL_Title', $this->siteLangId),
-            'splatform_url' => Labels::getLabel('LBL_URL', $this->siteLangId),          
+            'splatform_url' => Labels::getLabel('LBL_URL', $this->siteLangId),
             'splatform_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -423,7 +363,7 @@ class SocialPlatformController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',         
+            'listSerial',
             'splatform_identifier',
             'splatform_url',
             'splatform_active',

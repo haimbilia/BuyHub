@@ -144,11 +144,11 @@ trait SellerCollections
         $frm = new Form('frmShopCollection');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $frm->addHiddenField('', 'scollection_shop_id', $shop_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'scollection_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
+        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'scollection_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'scollection_active', $activeInactiveArr, applicationConstants::YES, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'scollection_active', $activeInactiveArr, applicationConstants::YES, array(), '');
         return $frm;
     }
 
@@ -306,19 +306,19 @@ trait SellerCollections
 		
 		$languages = Language::getAllNames();
 		if(count($languages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+			  $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
 		
-		$frm->addRequiredField(Labels::getLabel('LBL_Collection_Name', $this->siteLangId), 'name');
+		$frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $this->siteLangId), 'name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -421,7 +421,7 @@ trait SellerCollections
     {
         $frm = new Form('frmLinks1', array('id' => 'frmLinks1'));
         $frm->addHiddenField('', 'scp_scollection_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         
         $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div><div class="gap"></div>');
         return $frm;
@@ -470,14 +470,14 @@ trait SellerCollections
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
+			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
         } else  {
 			$langid = array_key_first($bannerTypeArr); 
 			$frm->addHiddenField('', 'lang_id', $langid);
 		}
        
 		
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
         return $frm;
     }
 

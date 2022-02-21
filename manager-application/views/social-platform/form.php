@@ -1,5 +1,14 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$fld = $frm->getField('splatform_active');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
+$fld = $frm->getField('splatform_icon_class');
+$fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IF_YOU_HAVE_TO_ADD_A_PLATFORM_ICON_EXCEPT_THIS_SELECT_LIST', $siteLangId) . '</span>';
+
 $otherButtons = [
     [
         'attr' => [

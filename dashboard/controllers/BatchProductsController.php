@@ -480,7 +480,7 @@ class BatchProductsController extends LoggedUserController
         $frm->addHiddenField('', 'prodgroup_id', $prodgroup_id);
         $frm->addSelectBox('Language', 'lang_id', Language::getAllNames(), '', array(), '');
 
-        $fld = $frm->addButton('', 'prodgroup_image', Labels::getLabel('LBL_Upload_File', $lang_id), array('class' => 'prodgroup-Js btn btn-brand btn-sm', 'id' => 'prodgroup_image', 'data-prodgroup_id' => $prodgroup_id));
+        $fld = $frm->addButton('', 'prodgroup_image', Labels::getLabel('FRM_UPLOAD_FILE', $lang_id), array('class' => 'prodgroup-Js btn btn-brand btn-sm', 'id' => 'prodgroup_image', 'data-prodgroup_id' => $prodgroup_id));
         return $frm;
     }
 
@@ -488,10 +488,10 @@ class BatchProductsController extends LoggedUserController
     {
         $frm = new Form('frmBatch');
         $frm->addHiddenField('', 'prodgroup_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Identifier', $lang_id), 'prodgroup_identifier')->requirements()->setRequired();
-        $frm->addFloatField(Labels::getLabel('LBL_Batch_Price', $lang_id) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'prodgroup_price');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $lang_id), 'prodgroup_active', applicationConstants::getActiveInactiveArr($lang_id), '', array(), '')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $lang_id));
+        $frm->addTextBox(Labels::getLabel('FRM_IDENTIFIER', $lang_id), 'prodgroup_identifier')->requirements()->setRequired();
+        $frm->addFloatField(Labels::getLabel('FRM_BATCH_PRICE', $lang_id) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'prodgroup_price');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $lang_id), 'prodgroup_active', applicationConstants::getActiveInactiveArr($lang_id), '', array(), '')->requirements()->setRequired();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $lang_id));
         return $frm;
     }
 
@@ -499,24 +499,24 @@ class BatchProductsController extends LoggedUserController
     {
         $frm = new Form('frmBatchLang');
         $frm->addHiddenField('', 'prodgroup_id', $prodgroup_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $lang_id), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $lang_id), 'prodgroup_name')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $lang_id), 'prodgroup_name')->requirements()->setRequired();
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $lang_id));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $lang_id));
         return $frm;
     }
 
     private function getBatchSearchForm()
     {
         $frm = new Form('frmBatchSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $frm->addHiddenField('page', 'page', 1);
         $frm->addSubmitButton('', 'btn_submit', '');
         return $frm;
@@ -525,7 +525,7 @@ class BatchProductsController extends LoggedUserController
     private function getBatchProductsForm($prodgroup_id, $lang_id)
     {
         $frm = new Form('frmBatchProducts');
-        $frm->addTextBox(Labels::getLabel('LBL_Add_Products', $lang_id), 'product_name');
+        $frm->addTextBox(Labels::getLabel('FRM_ADD_PRODUCTS', $lang_id), 'product_name');
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'prodgroup_id', $prodgroup_id);
         return $frm;
