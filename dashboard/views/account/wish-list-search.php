@@ -80,7 +80,10 @@
                                                 <div class="text-center">
                                                     <a onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);" href="javascript:void(0)" class="btn btn-outline-gray btn-sm">
                                                         <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
-                                                        <i class="fa fa-eye"></i>
+                                                        <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>'images/retina/sprite-actions.svg#view">
+                                                                        </use>
+                                                                    </svg>
                                                     </a>
                                                 </div>
                                             </div> <?php

@@ -92,7 +92,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     </td>
                                                     <td>
                                                         <ul class="actions">
-                                                            <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
+                                                            <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>'images/retina/sprite-actions.svg#view">
+                                                                        </use>
+                                                                    </svg></a></li>
                                                             <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
                                                                 <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
                                                             <?php } ?>
@@ -256,7 +259,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <ul class="actions">
                                                             <li>
                                                                 <a title="<?php echo Labels::getLabel('LBL_View_Request', $siteLangId); ?>" href="<?php echo $url; ?>">
-                                                                    <i class="fa fa-eye"></i>
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                        </use>
+                                                                    </svg>
                                                                 </a>
                                                             </li>
                                                         </ul>
