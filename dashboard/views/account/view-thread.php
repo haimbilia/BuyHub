@@ -100,31 +100,31 @@ $doNotshowMessages = $doNotshowMessages ?? false;
             </div>
             <?php if (false === $doNotshowMessages) { ?>
                 <div class="card-foot">
-                    <div class="message-send">
-                        <?php
-                        $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
-                        $frm->setFormTagAttribute('class', 'form');
-                        $frm->developerTags['colClassPrefix'] = 'col-md-';
-                        $frm->developerTags['fld_default_col'] = 12;
-                        
-                        $msgFld = $frm->getField('message_text');
-                        $msgFld->developerTags['noCaptionTag'] = true;
-                        $msgFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS', $siteLangId));
-                        $msgFld->setFieldTagAttribute('class', 'message-textarea');?>
 
-                        <?php echo $frm->getFormTag(); ?>
-                            <?php echo $frm->getFieldHtml('message_thread_id'); ?>
-                            <div class="form-group">
-                                <?php echo $frm->getFieldHtml('message_text'); ?>
-                                <button class="btn btn-icon btn-send" type="submit">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
-                                        </use>
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    <?php
+                    $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
+                    $frm->setFormTagAttribute('class', 'form message-send');
+                    $frm->developerTags['colClassPrefix'] = 'col-md-';
+                    $frm->developerTags['fld_default_col'] = 12;
+
+                    $msgFld = $frm->getField('message_text');
+                    $msgFld->developerTags['noCaptionTag'] = true;
+                    $msgFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS', $siteLangId));
+                    $msgFld->setFieldTagAttribute('class', 'message-textarea'); ?>
+
+                    <?php echo $frm->getFormTag(); ?>
+                    <?php echo $frm->getFieldHtml('message_thread_id'); ?>
+
+                    <?php echo $frm->getFieldHtml('message_text'); ?>
+                    <button class="btn btn-icon btn-send" type="submit">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                            </use>
+                        </svg>
+                    </button>
+
+                    </form>
+
                 </div>
             <?php } ?>
         </div>

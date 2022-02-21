@@ -19,7 +19,7 @@
     }
     &-search {
         border-bottom: $border;
-        padding: 20px 0;
+        padding: 27px 0;
         .omni-search {
             border: none !important;
         }
@@ -246,5 +246,15 @@
             font-weight: 500;
             margin: 0;
         }
+    }
+}
+
+.message-send {
+    display: flex;
+    align-items: center;
+    .message-textarea {
+        height: 50px;
+        border-color: transparent !important;
+        resize: none;
     }
 }

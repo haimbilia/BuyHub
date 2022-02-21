@@ -145,7 +145,7 @@ class OptionValuesController extends LoggedUserController
         $frm = new Form('frmOptionValues', array('id' => 'frmOptionValues'));
         $frm->addHiddenField('', 'optionvalue_id', $optionvalue_id);
         $frm->addHiddenField('', 'optionvalue_option_id', $option_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_OPTION_VALUE_IDENTIFIER', $lang_id), 'optionvalue_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_OPTION_VALUE_IDENTIFIER', $lang_id), 'optionvalue_identifier');
 
         $languages = Language::getAllNames();
         $defaultLang = true;
@@ -156,7 +156,7 @@ class OptionValuesController extends LoggedUserController
                 $defaultLang = false;
             }
             $frm->addRequiredField(
-                Labels::getLabel('LBL_OPTION_VALUE_NAME', $lang_id) . ' ' . $langName,
+                Labels::getLabel('FRM_OPTION_VALUE_NAME', $lang_id) . ' ' . $langName,
                 'optionvalue_name' . $langId,
                 '',
                 $attr
@@ -165,7 +165,7 @@ class OptionValuesController extends LoggedUserController
 
         $optionRow = Option::getAttributesById($option_id);
         if ($optionRow && $optionRow['option_is_color']) {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_Option_Value_Color', $this->siteLangId), 'optionvalue_color_code');
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_OPTION_VALUE_COLOR', $this->siteLangId), 'optionvalue_color_code');
             $fld->addFieldTagAttribute('class', 'jscolor');
         }
         return $frm;

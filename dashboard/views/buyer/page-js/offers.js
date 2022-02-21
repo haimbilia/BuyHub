@@ -8,6 +8,7 @@ $(document).ready(function(){
 		$("#listing").html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Buyer','searchOffers'), data, function(res){
 			$("#listing").html(res);
+			fcom.removeLoader();
 		}); 
 	};
 })();

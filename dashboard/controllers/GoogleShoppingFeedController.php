@@ -169,7 +169,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function getServiceAccountForm(): object
     {
         $frm = new Form('frmServiceAccount');
-        $privateKey = $frm->addTextArea(Labels::getLabel('LBL_SERVICE_ACCOUNT_DETAIL', $this->siteLangId), 'service_account');
+        $privateKey = $frm->addTextArea(Labels::getLabel('FRM_SERVICE_ACCOUNT_DETAIL', $this->siteLangId), 'service_account');
         $privateKey->requirements()->setRequired();
         $privateKey->htmlAfterField = $this->settings['plugin_description'];
         return $frm;
@@ -232,15 +232,15 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     {
         $frm = new Form('frmAdsBatch');
         $frm->addHiddenField('', 'adsbatch_id');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'adsbatch_lang_id', Language::getAllNames(), $langId, [], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'adsbatch_lang_id', Language::getAllNames(), $langId, [], '');
         $fld->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('LBL_BATCH_NAME', $langId), 'adsbatch_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_BATCH_NAME', $langId), 'adsbatch_name');
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($langId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TARGET_COUNTRY', $langId), 'adsbatch_target_country_id', $countriesArr, '', []);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TARGET_COUNTRY', $langId), 'adsbatch_target_country_id', $countriesArr, '', []);
         $fld->requirement->setRequired(true);
 
-        $frm->addDateField(Labels::getLabel('LBL_EXPIRY_DATE', $langId), 'adsbatch_expired_on', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_EXPIRY_DATE', $langId), 'adsbatch_expired_on', '', array('readonly' => 'readonly'));
         return $frm;
     }
 
@@ -262,12 +262,12 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             $selectedProductCategory[$this->recordData['abprod_cat_id']] = $this->recordData['abprod_cat_name'];
         }
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_PRODUCT', $this->siteLangId), 'abprod_selprod_id', $selectedProduct, key($selectedProduct), ['placeholder' => Labels::getLabel('LBL_SEARCH_PRODUCT', $this->siteLangId)]);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'abprod_selprod_id', $selectedProduct, key($selectedProduct), ['placeholder' => Labels::getLabel('FRM_SEARCH_PRODUCT', $this->siteLangId)]);
         $fld->requirement->setRequired(true);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_GOOGLE_PRODUCT_CATEGORY', $this->siteLangId), 'abprod_cat_id', $selectedProductCategory, key($selectedProductCategory), ['placeholder' => Labels::getLabel('LBL_SEARCH_GOOGLE_PRODUCT_CATEGORY', $this->siteLangId)]);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_GOOGLE_PRODUCT_CATEGORY', $this->siteLangId), 'abprod_cat_id', $selectedProductCategory, key($selectedProductCategory), ['placeholder' => Labels::getLabel('FRM_SEARCH_GOOGLE_PRODUCT_CATEGORY', $this->siteLangId)]);
         $fld->requirement->setRequired(true);
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_AGE_GROUP', $this->siteLangId), 'abprod_age_group', (self::KEY_NAME)::ageGroup($this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_AGE_GROUP', $this->siteLangId), 'abprod_age_group', (self::KEY_NAME)::ageGroup($this->siteLangId));
         $fld->requirement->setRequired(true);
         return $frm;
     }

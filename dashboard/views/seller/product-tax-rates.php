@@ -44,7 +44,11 @@
                                                 'href' => 'javascript:void(0)', 'class' => '',
                                                 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "changeTaxCategory(" . $selprod_id . ")"
                                             ),
-                                            '<i class="fa fa-edit"></i>',
+                                            '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                                             true
                                         );
                                         if ($row['ptt_seller_user_id'] == $userId) {

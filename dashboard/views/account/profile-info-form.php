@@ -71,7 +71,7 @@ if (User::isAdvertiser() && $parent == 0) {
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
 ?>
 <div class="row justify-content-center">
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="profile-image" id="profileImageFrmBlock">
             <div class="avatar">
                 <?php

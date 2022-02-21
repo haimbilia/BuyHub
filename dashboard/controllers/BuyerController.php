@@ -2712,11 +2712,11 @@ class BuyerController extends BuyerBaseController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmShareEarn');
-        $fld = $frm->addTextArea(Labels::getLabel('L_Friends_Email', $langId), 'email');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_FRIENDS_EMAIL', $langId), 'email');
         // $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
         $fld->requirements()->setRequired();
-        $frm->addTextArea(Labels::getLabel('L_Personal_Message', $langId), 'message');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('L_Invite_Your_Friends', $langId));
+        $frm->addTextArea(Labels::getLabel('FRM_PERSONAL_MESSAGE', $langId), 'message');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_INVITE_YOUR_FRIENDS', $langId));
         return $frm;
     }
 
@@ -2727,9 +2727,6 @@ class BuyerController extends BuyerBaseController
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'convertReward');
         $frm->addHiddenField('', 'total_record_count', '');
-        /* $frm->addTextBox('','keyword');
-          $fldSubmit = $frm->addSubmitButton( '', 'btn_submit', Labels::getLabel('LBL_Search',$langId) );
-          $fldCancel = $frm->addButton( "", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick'=>'clearSearch();') ); */
         return $frm;
     }
 
@@ -2742,12 +2739,12 @@ class BuyerController extends BuyerBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD'), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS'), 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))), '', array(), Labels::getLabel('LBL_Status', $langId));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM'), 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $langId), 'readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_TO'), 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $langId), 'readonly' => 'readonly'));
-        $frm->addTextBox(Labels::getLabel('LBL_PRICE_FROM'), 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox(Labels::getLabel('LBL_PRICE_TO'), 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD'), 'keyword', '', array('placeholder' => Labels::getLabel('FRM_Keyword', $langId)));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS'), 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))), '', array(), Labels::getLabel('FRM_Status', $langId));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM'), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_Date_From', $langId), 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO'), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_Date_To', $langId), 'readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_FROM'), 'price_from', '', array('placeholder' => Labels::getLabel('FRM_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO'), 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
@@ -2759,8 +2756,8 @@ class BuyerController extends BuyerBaseController
         $frm->addHiddenField('', 'op_id');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('FRM_Keyword', $langId)));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
@@ -2769,10 +2766,10 @@ class BuyerController extends BuyerBaseController
     {
         $frm = new Form('frmOrderCancel');
         $orderCancelReasonsArr = OrderCancelReason::getOrderCancelReasonArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Reason_for_cancellation', $langId), 'ocrequest_ocreason_id', $orderCancelReasonsArr, '', array(), Labels::getLabel('LBL_Select_Reason', $langId))->requirements()->setRequired();
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $langId), 'ocrequest_message')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_REASON_FOR_CANCELLATION', $langId), 'ocrequest_ocreason_id', $orderCancelReasonsArr, '', array(), Labels::getLabel('FRM_SELECT_REASON', $langId))->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $langId), 'ocrequest_message')->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Request', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REQUEST', $langId));
         return $frm;
     }
 
@@ -2786,27 +2783,27 @@ class BuyerController extends BuyerBaseController
             }
         }
         $frm = new Form('frmOrderReturnRequest', array('enctype' => "multipart/form-data"));
-        $frm->addSelectBox(Labels::getLabel('LBL_Return_Qty', $langId), 'orrequest_qty', $returnQtyArr, '', array(), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_RETURN_QTY', $langId), 'orrequest_qty', $returnQtyArr, '', array(), '')->requirements()->setRequired();
         $orderReturnReasonsArr = OrderReturnReason::getOrderReturnReasonArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Reason_for_return', $langId), 'orrequest_returnreason_id', $orderReturnReasonsArr, '', array(), Labels::getLabel('LBL_Select_Reason', $langId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_REASON_FOR_RETURN', $langId), 'orrequest_returnreason_id', $orderReturnReasonsArr, '', array(), Labels::getLabel('FRM_SELECT_REASON', $langId))->requirements()->setRequired();
 
         /* if( $opDetail['op_status_id'] != FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") ){
           $requestTypeArr = OrderReturnRequest::getRequestTypeArr($langId);
           unset($requestTypeArr[OrderReturnRequest::RETURN_REQUEST_TYPE_REPLACE]);
-          $frm->addRadioButtons( Labels::getLabel('LBL_Return_Request_Type', $langId), 'orrequest_type', $requestTypeArr, OrderReturnRequest::RETURN_REQUEST_TYPE_REFUND )->requirements()->setRequired();
+          $frm->addRadioButtons( Labels::getLabel('FRM_RETURN_REQUEST_TYPE', $langId), 'orrequest_type', $requestTypeArr, OrderReturnRequest::RETURN_REQUEST_TYPE_REFUND )->requirements()->setRequired();
           } else {
-          $frm->addRadioButtons( Labels::getLabel('LBL_Return_Request_Type', $langId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($langId), OrderReturnRequest::RETURN_REQUEST_TYPE_REFUND )->requirements()->setRequired();
+          $frm->addRadioButtons( Labels::getLabel('FRM_RETURN_REQUEST_TYPE', $langId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($langId), OrderReturnRequest::RETURN_REQUEST_TYPE_REFUND )->requirements()->setRequired();
           } */
 
         // For now untill $requestTypeArr having single value
         $frm->addHiddenField('', 'orrequest_type', OrderReturnRequest::RETURN_REQUEST_TYPE_REFUND);
 
-        $fileFld = $frm->addFileUpload(Labels::getLabel('LBL_Upload_Images', $langId), 'file', array('accept' => 'image/*,.zip'));
+        $fileFld = $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_IMAGES', $langId), 'file', array('accept' => 'image/*,.zip'));
         $fileFld->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
         $fileFld->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('MSG_Only_Image_extensions_and_zip_is_allowed', $this->siteLangId) . '</span>';
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $langId), 'orrmsg_msg')->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $langId), 'orrmsg_msg')->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Request', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REQUEST', $langId));
         return $frm;
     }
 
@@ -2821,16 +2818,16 @@ class BuyerController extends BuyerBaseController
             $fld->setWrapperAttribute('class', 'rating-f');
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $langId), 'spreview_title');
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $langId), 'spreview_description')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'spreview_title');
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $langId), 'spreview_description')->requirements()->setRequired();
 
         $frm->addFileUpload('', 'spreview_image[]', array('accept' => 'image/*', 'data-frm' => 'frmOrderFeedback'));
 
         $arr = ["{website-name}" => FatApp::getConfig("CONF_WEBSITE_NAME_" . $langId)];
-        $frm->addCheckBox(strtr(Labels::getLabel('LBL_I_agree_that_my_review,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId), $arr), 'agree', 1);
+        $frm->addCheckBox(strtr(Labels::getLabel('FRM_I_AGREE_THAT_MY_REVIEW,_including_my_name,_username,_may_be_shared_by_{website-name}_on_its_website_and_mobile_app_to_the_public._Further_details_of_which_are_set_out_in_the_Privacy_Policy_which_I_have_previously_consented', $langId), $arr), 'agree', 1);
         $frm->addHiddenField('', 'op_id', $op_id);
         $frm->addHiddenField('', 'referrer', CommonHelper::redirectUserReferer(true));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Review', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REVIEW', $langId));
         return $frm;
     }
 

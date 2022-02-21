@@ -67,7 +67,10 @@
                                                 </td>
                                                 <td>
                                                     <ul class="actions">
-                                                        <li><a title="<?php echo Labels::getLabel('LBL_Analytics', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('advertiser', 'analytics', array($row['promotion_id'])); ?>"><i class="far fa-file-alt"></i></a></li>
+                                                        <li><a title="<?php echo Labels::getLabel('LBL_Analytics', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('advertiser', 'analytics', array($row['promotion_id'])); ?>"><svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                    </use>
+                                                                </svg></a></li>
                                                     </ul>
                                                 </td>
                                             </tr>

@@ -76,7 +76,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	promotionForm = function (promotionId) {
 		fcom.ajax(fcom.makeUrl('Advertiser', 'promotionForm', [promotionId]), '', function (t) {
 			fcom.removeLoader();
-			$.ykmodal(t, false, 'modal-dialog-vertical-md');
+			$.ykmodal(t);
 			bindProductsAutocomplete();
 		});
 	};

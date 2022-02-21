@@ -112,11 +112,11 @@ class BadgesController extends SellerBaseController
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
         }
 
         HtmlHelper::addSearchButton($frm);

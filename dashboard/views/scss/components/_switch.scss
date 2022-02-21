@@ -153,7 +153,7 @@
                 ~ {
                     .input-helper {
                         &:after {
-                            font-family: "LineAwesome";
+                            //font-family: "LineAwesome";
                             text-decoration: inherit;
                             text-rendering: optimizeLegibility;
                             text-transform: none;
@@ -167,7 +167,7 @@
                 ~ {
                     .input-helper {
                         &:after {
-                            content: "\f17b";
+                            content: "";
                         }
                     }
                 }
@@ -180,7 +180,7 @@
                 ~ {
                     .input-helper {
                         &:after {
-                            font-family: "LineAwesome";
+                            //font-family: "LineAwesome";
                             text-decoration: inherit;
                             text-rendering: optimizeLegibility;
                             text-transform: none;

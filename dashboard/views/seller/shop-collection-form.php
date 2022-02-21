@@ -19,7 +19,6 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
         </div>
     </div>
     <div class="card-body">
-
         <div class="row">
             <div class="col-md-12" id="shopFormBlock">
                 <div id="mediaResponse"></div>
@@ -66,7 +65,4 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                 </div>
             </div>
         </div>
-
-
-
     </div>

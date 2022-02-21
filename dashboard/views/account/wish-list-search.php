@@ -75,13 +75,15 @@
                                         <?php
                                         if ($wishlist['totalProducts'] > 0) {
                                         ?>
-
                                             <div class="wishlists__foot">
                                                 <div class="text-center">
-                                                    <a onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);" href="javascript:void(0)" class="btn btn-outline-gray btn-sm">
-                                                        <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
+                                                    <button class="btn btn-outline-gray btn-icon" type="button" onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);">
+                                                        <svg class="svg btn-icon-start" width="18" height="18">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                            </use>
+                                                        </svg> <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
+
+                                                    </button>
                                                 </div>
                                             </div> <?php
                                                 } ?>

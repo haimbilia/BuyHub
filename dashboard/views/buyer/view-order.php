@@ -179,7 +179,11 @@ if (!$print) { ?>
                                             }
                                             $downloads = '<li>
                                                                 <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
-                                                                <i class="fa fa-download"></i>
+                                                                <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            </use>
+                        </svg>
                                                                 </a>
                                                             </li>';
 
