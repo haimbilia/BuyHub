@@ -220,7 +220,7 @@ if (!empty($googleFontFamilyUrl)) {
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="palette googleFontsJs">
-                            <?php require_once('theme-color-svg.html'); ?>
+                            <?php require_once('theme-color-svg.php'); ?>
                         </div>
                     </div>
                 </div>
