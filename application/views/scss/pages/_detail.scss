@@ -220,16 +220,21 @@
 .detail-content {
     margin-bottom: 3rem;
     .h2 {
-        font-size: 1.3rem;
+        font-size: 1.375rem;
         margin-bottom: 1.5rem;
+        cursor: pointer;
+
+        &:not(.collapsed) {
+            color: $secondary-color;
+        }
     }
 }
 
 .list-specification {
     &-item {
         list-style: none;
-        margin: 1rem 0;
-        padding: 1rem 0;
+        margin: 0;
+        padding: 2rem 0;
         display: flex;
         font-size: 0.85rem;
         color: $txt-gray;

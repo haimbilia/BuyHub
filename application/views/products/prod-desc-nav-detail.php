@@ -26,7 +26,7 @@
             <?php } ?>
             <?php if (trim($product['product_description']) != '') { ?>
                 <div class="detail-content">
-                    <h2 class="h2" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></h2>
+                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></h2>
                     <div id="description" class="collapse" data-bs-parent="#accordionExample">
                         <div class="cms">
                             <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
@@ -36,7 +36,7 @@
             <?php } ?>
             <?php if ($youtube_embed_code) { ?>
                 <div class="detail-content">
-                    <h2 class="h2" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true" aria-controls="collapseOne"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?></h2>
+                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true" aria-controls="collapseOne"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?></h2>
                     <?php if ($youtube_embed_code != "") { ?>
                         <div id="video" class="collapse" data-bs-parent="#accordionExample">
                             <div class="mb-4 video-wrapper">
@@ -48,7 +48,7 @@
             <?php } ?>
             <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
                 <div class="detail-content">
-                    <h2 class="h2" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true" aria-controls="policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?></h2>
+                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true" aria-controls="policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?></h2>
                     <div id="policies" class="collapse" data-bs-parent="#accordionExample">
                         <div class="cms">
                             <?php if ($shop['shop_payment_policy'] != '') { ?>
@@ -71,7 +71,7 @@
             <?php } ?>
             <?php if (!empty($product['selprodComments'])) { ?>
                 <div class="detail-content">
-                    <h2 class="h2" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true" aria-controls="extra_comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?></h2>
+                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true" aria-controls="extra_comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?></h2>
                     <div id="policies" class="collapse" data-bs-parent="#accordionExample">
                         <div class="cms">
                             <p>
