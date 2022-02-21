@@ -39,8 +39,11 @@ $urlFld = $frm->getField('banner_url');
 $urlFld->setWrapperAttribute('class', 'banner_url_fld');
 $urlFld->htmlAfterField = '<p class="note">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_banner.', $siteLangId) . '</p>';
 
-/* $btnSubmitFld = $frm->getField('btn_submit');
-$btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
+$fld = $frm->getField('promotion_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title">

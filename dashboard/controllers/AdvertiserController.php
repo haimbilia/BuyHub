@@ -1458,9 +1458,9 @@ class AdvertiserController extends AdvertiserBaseController
             'class' => 'time',
             'readonly' => 'readonly'
         ));
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'promotion_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'promotion_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);
+
         return $frm;
     }
 

@@ -31,10 +31,11 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 'class' => 'btn btn-outline-gray btn-icon',
                 'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
             ],
-            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
-                            </use>
-                        </svg>' . Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
+            'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+            </use>
+        </svg>',
+            'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
         ];
     }
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
