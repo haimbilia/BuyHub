@@ -21,50 +21,53 @@ HtmlHelper::configureSwitchForCheckbox($fld);
 $fld = $frm->getField('ucp_personalized');
 HtmlHelper::configureSwitchForCheckbox($fld);
 ?>
-<div class="content-wrapper content-space">
-    <?php
-    $data = [
-        'headingLabel' => Labels::getLabel('LBL_COOKIE_PREPERENCES', $siteLangId),
-        'siteLangId' => $siteLangId,
-    ];
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="content-wrapper content-space">
+            <?php
+            $data = [
+                'headingLabel' => Labels::getLabel('LBL_COOKIE_PREPERENCES', $siteLangId),
+                'siteLangId' => $siteLangId,
+            ];
 
-    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
-    <div class="content-body">
-        <div class="card card-tabs">
-            <div class="card-body">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6">
-                        <?php echo $frm->getFormTag(); ?>
-                            <ul class="cookie-preferences">
-                                <li>
-                                    <?php echo $frm->getFieldHtml('ucp_functional'); ?>
-                                    <div class="data">
-                                        <p>
-                                            <?php echo Labels::getLabel('LBL_Functional_Cookies_Information', $siteLangId); ?>
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <?php echo $frm->getFieldHtml('ucp_statistical'); ?>
-                                    <div class="data">
-                                        <p>
-                                            <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <?php echo $frm->getFieldHtml('ucp_personalized'); ?>
-                                    <div class="data">
-                                        <p>
-                                            <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
-                                        </p>
-                                    </div>
-                                </li>
-                            </ul>
-
-                            <?php echo $frm->getFieldHtml('btn_submit'); ?>
-                        <?php echo '</form>'; ?>
-                        <?php echo $frm->getExternalJs();  ?>
+            $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+            <div class="content-body">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <?php echo $frm->getFormTag(); ?>
+                                <ul class="cookie-preferences">
+                                    <li class="cookie-preferences-item">
+                                        <?php echo $frm->getFieldHtml('ucp_functional'); ?>
+                                        <div class="data">
+                                            <p>
+                                                <?php echo Labels::getLabel('LBL_Functional_Cookies_Information', $siteLangId); ?>
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li class="cookie-preferences-item">
+                                        <?php echo $frm->getFieldHtml('ucp_statistical'); ?>
+                                        <div class="data">
+                                            <p>
+                                                <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li class="cookie-preferences-item">
+                                        <?php echo $frm->getFieldHtml('ucp_personalized'); ?>
+                                        <div class="data">
+                                            <p>
+                                                <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="p-4"> <?php echo $frm->getFieldHtml('btn_submit'); ?></div>
+                                <?php echo '</form>'; ?>
+                                <?php echo $frm->getExternalJs();  ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

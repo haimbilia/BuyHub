@@ -78,10 +78,10 @@
 
                                             <div class="wishlists__foot">
                                                 <div class="text-center">
-                                                    <a onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);" href="javascript:void(0)" class="btn btn-outline-gray btn-sm">
+                                                    <button class="btn btn-outline-gray" type="button" onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);">
                                                         <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
+
+                                                    </button>
                                                 </div>
                                             </div> <?php
                                                 } ?>

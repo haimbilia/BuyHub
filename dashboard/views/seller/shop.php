@@ -18,7 +18,7 @@
                 ?>
             </div>
             <div id="shopFormBlock">
-                <div class="card-body ">
+                <div class="card-body">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                 </div>
             </div>
