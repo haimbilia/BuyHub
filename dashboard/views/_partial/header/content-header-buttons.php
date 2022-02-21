@@ -9,7 +9,7 @@ if ($canEdit) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                             </use>
                         </svg><?php echo Labels::getLabel('LBL_ADD_NEW_PRODUCT', $siteLangId); ?>
                     </a>
@@ -112,7 +112,7 @@ if ($canEdit) { ?>
                 $onclick = "addNew()";
                 $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
                 $icon = '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>';
                 $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';

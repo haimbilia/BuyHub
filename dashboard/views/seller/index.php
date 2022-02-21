@@ -93,7 +93,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <td>
                                                         <ul class="actions">
                                                             <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>'images/retina/sprite-actions.svg#view">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                         </use>
                                                                     </svg></a></li>
                                                             <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>

@@ -40,7 +40,11 @@ foreach ($attachments as $sn => $row) {
                             'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $recordId, $requestType, 0, $row['mainfile'])),
                             'target' => '_blank'
                         ),
-                        '<i class="fa fa-download  icon"></i>',
+                        '<svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                        </use>
+                    </svg>',
                         true
                     );
                     $dvElem->appendElement(
@@ -69,7 +73,11 @@ foreach ($attachments as $sn => $row) {
                             'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $requestType, 1, $row['preview'])),
                             'target' => '_blank'
                         ),
-                        '<i class="fa fa-download  icon"></i>',
+                        '<svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                        </use>
+                    </svg>',
                         true
                     );
                     $dvElem->appendElement(

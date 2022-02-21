@@ -16,7 +16,7 @@ $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php');
             'label' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
         ];
     }
-    
+
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
     <div class="content-body">
         <div class="row">

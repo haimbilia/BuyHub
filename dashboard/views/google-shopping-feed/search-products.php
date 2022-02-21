@@ -81,7 +81,11 @@
                             'href' => 'javascript:void(0)',
                             'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => "bindproductform(" . $row['abprod_adsbatch_id'] . ", " . $row['abprod_selprod_id'] . ")"
                         ],
-                        '<i class="fa fa-edit"></i>',
+                        '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                         true
                     );
                     break;
