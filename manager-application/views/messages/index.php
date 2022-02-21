@@ -2,8 +2,8 @@
 <main class="main">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="communication">
-            <?php if (empty($arrListing)) { ?>
+        <?php if (empty($arrListing)) { ?>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card mb-0 h-100">
                         <div class="card-body">
@@ -15,7 +15,9 @@
                         </div>
                     </div>
                 </div>
-            <?php } else { ?>
+            </div>
+        <?php } else { ?>
+            <div class="communication">
                 <div class="communication-nav">
                     <div class="communication-search">
                         <?php
@@ -32,64 +34,63 @@
                         $fld->addFieldtagAttribute('id', 'searchFrmSellerIdJs');
 
                         echo $frmSearch->getFormTag();
-                            echo $frmSearch->getFieldHtml('page');
-                            ?>
-                            <div class="d-flex align-items-center">
-                                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                                <div class="dropdown">
-                                    <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
-                                        <span class="icon">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
-                                                </use>
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
-                                        <div class="form-group">
-                                            <label class="label">
-                                                <?php
-                                                $fld = $frmSearch->getField('message_by');
-                                                echo $fld->getCaption();;
-                                                ?>
-                                            </label>
-                                            <?php echo $frmSearch->getFieldHtml('message_by'); ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="label">
-                                                <?php
-                                                $fld = $frmSearch->getField('message_to');
-                                                echo $fld->getCaption();;
-                                                ?>
-                                            </label>
-                                            <?php echo $frmSearch->getFieldHtml('message_to'); ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="label">
-                                                <?php
-                                                $fld = $frmSearch->getField('date_from');
-                                                echo $fld->getCaption();;
-                                                ?>
-                                            </label>
-                                            <?php echo $frmSearch->getFieldHtml('date_from'); ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="label">
-                                                <?php
-                                                $fld = $frmSearch->getField('date_to');
-                                                echo $fld->getCaption();;
-                                                ?>
-                                            </label>
-                                            <?php echo $frmSearch->getFieldHtml('date_to'); ?>
-                                        </div>
-                                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        echo $frmSearch->getFieldHtml('page');
+                        ?>
+                        <div class="d-flex align-items-center">
+                            <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                            <div class="dropdown">
+                                <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+                                    <span class="icon">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('message_by');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('message_by'); ?>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('message_to');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('message_to'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('date_from');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('date_from'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php
+                                            $fld = $frmSearch->getField('date_to');
+                                            echo $fld->getCaption();;
+                                            ?>
+                                        </label>
+                                        <?php echo $frmSearch->getFieldHtml('date_to'); ?>
+                                    </div>
+                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                                 </div>
                             </div>
+                        </div>
                         </form>
                     </div>
-
 
                     <?php
                     $activeIndex = 0;
@@ -107,11 +108,12 @@
 
 
                 </div>
-            <?php
+                <?php
                 $doNotshowMessages = true;
                 $threadListing = [current($arrListing)];
                 require_once(CONF_THEME_PATH . 'messages/view-thread.php');
-            } ?>
-        </div>
+                ?>
+            </div>
+        <?php } ?>
     </div>
 </main>
