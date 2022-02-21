@@ -38,6 +38,7 @@ class SellerBaseController extends LoggedUserController
             !$isStripeConnectLogin &&
             !FatUtility::isAjaxCall() && 
             UserPrivilege::isUserHasValidSubsription($this->userParentId) && 
+            !empty($action) &&
             !in_array(strtolower($action), ['shopform', 'shop', 'setuprequiredfields'])
         ) {
             if (true === MOBILE_APP_API_CALL) {
