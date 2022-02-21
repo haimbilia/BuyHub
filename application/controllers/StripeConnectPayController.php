@@ -324,7 +324,7 @@ class StripeConnectPayController extends PaymentController
     private function convertInPaisa($amount)
     {
         if (in_array($this->systemCurrencyCode, $this->zeroDecimalCurrencies())) {
-            return $amount;
+            return round($amount);
         }
         $amount = number_format($amount, 2, '.', '');
         return $amount * 100;
