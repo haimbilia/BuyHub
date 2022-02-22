@@ -3121,3 +3121,10 @@ $header-height: 65px;
         }
     }
 }
+
+.lbl-link {
+    display: flex!important;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
