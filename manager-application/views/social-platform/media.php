@@ -26,7 +26,7 @@ $frm->addFormTagAttribute('data-callbackfn','mediaFormCallback');
 
 $fld = $frm->getField('image');
 $fld->value = '<label class="label">'.Labels::getLabel('LBL_ICON', $siteLangId).'</label>'.HtmlHelper::getfileInputHtml(
-    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_BANNER_IMAGE", $siteLangId)],
+    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("LBL_ICON", $siteLangId)],
     $siteLangId,
     ($canEdit ? 'deleteMedia('.$recordId.')' : ''),
     ($canEdit ? 'editDropZoneImages(this)' : ''),

@@ -2,7 +2,7 @@
 
 HtmlHelper::formatFormFields($langFrm);
 
-$langFrm->setFormTagAttribute('data-onclear', "editLangForm('" . $etplCode . "', " . $siteLangId . ");");
+$langFrm->setFormTagAttribute('data-onclear', "editSettingsForm('" .$siteLangId . ");");
 $langFrm->setFormTagAttribute('id', 'frmLangJs');
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return(false);');
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
@@ -24,7 +24,11 @@ if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
 }
 
 $fld = $langFrm->getField('test_email');
-$fld->value = '<a class="btn btn-outline-brand btn-test" href="javascript:void(0)" onclick="sendTestEmail()">' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $siteLangId) . '</a>';
+$fld->value = '<button type="button" class="btn btn-outline-brand btn-test" onclick="sendTestEmail()">
+<svg class="svg btn-icon-start" width="18" height="18">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email"> 
+</use>
+</svg>' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $siteLangId) . '</button>';
 
 $fld = $langFrm->getField('etpl_replacements');
 $repVarArr = array_filter(explode("<br>", $fld->value));
