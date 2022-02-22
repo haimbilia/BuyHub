@@ -1,6 +1,7 @@
+<?php $adminSidebar = $_COOKIE['adminSidebar'] ?? 0; ?>
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
-        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (isset($_COOKIE['adminSidebar'])) { ?>active<?php } ?>" type="button">
+        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button">
             <span class="sidebar-toggle-icon"><span class="toggle-line"></span></span>
         </button>
         <a href="<?php echo UrlHelper::generateUrl(); ?>" class="logo">

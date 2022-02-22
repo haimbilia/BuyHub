@@ -36,7 +36,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true; ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="tabs">
-                    <ul class="tabsNavJs">
+                    <ul class="navTabsJs">
                         <li class="is-active">
                             <a href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                         </li>

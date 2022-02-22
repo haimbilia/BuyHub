@@ -658,12 +658,11 @@ $(document).on("click", "#quickSearchCtrlJs", function () {
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
     if ($(this).hasClass('active')) {
-        // $.removeCookie("adminSidebar");
         $.cookie('adminSidebar', 0, { expires: 30, path: siteConstants.webrootfront });
         $("body").attr("data-sidebar-minimize", "on");
         $(this).removeClass("active");
     } else {
-        $.cookie('adminSidebar', true, { expires: 30, path: siteConstants.webrootfront });
+        $.cookie('adminSidebar', 1, { expires: 30, path: siteConstants.webrootfront });
         $("body").attr("data-sidebar-minimize", "off");
         $(this).addClass("active");
     }
