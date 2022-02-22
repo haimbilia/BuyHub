@@ -1,8 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form');
+
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-onclear', "addEditShipRates(" . $zoneId . ", " . $rateId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupRate(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-';
-$frm->developerTags['fld_default_col'] = 12;
 
 $nameFld = $frm->getField('shiprate_identifier');
 $nameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_will_see_this_at_checkout.", $siteLangId) . "</span>";
@@ -21,37 +22,21 @@ $minFld = $frm->getField('shiprate_min_val');
 $minFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 
 $maxFld = $frm->getField('shiprate_max_val');
-$maxFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
-
-$submitBtnFld = $frm->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
-$submitBtnFld->developerTags['testClass'] = 'testc';
-$submitBtnFld->setWrapperAttribute('class', 'col-auto');
-$submitBtnFld->developerTags['noCaptionTag'] = true; ?>
+$maxFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass); ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tabs">
-                    <ul class="navTabsJs">
-                        <li class="is-active">
-                            <a href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
-                        </li>
-                        <?php foreach ($languages as $key => $langName) { ?>
-                            <li>
-                                <a href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>><?php echo $langName; ?></a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="tabs__content">
-                    <?php echo $frm->getFormHtml(); ?>
-                </div>
-            </div>
-        </div>
+    <div class="form-edit-head">
+        <nav class="nav nav-tabs navTabsJs">
+            <a class="nav-link active" href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
+            <a class="nav-link <?php echo (0 == $rateId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $rateId) ? "onclick='editRateLangForm(" . $zoneId . "," . $rateId . ", " . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+                <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
+            </a>
+        </nav>
+    </div>
+    <div class="form-edit-body loaderContainerJs" id="selectedTabContentJs">
+        <?php echo $frm->getFormHtml(); ?>
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

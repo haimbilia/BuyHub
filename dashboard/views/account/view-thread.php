@@ -113,18 +113,17 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     $msgFld->setFieldTagAttribute('class', 'message-textarea'); ?>
 
                     <?php echo $frm->getFormTag(); ?>
-                    <?php echo $frm->getFieldHtml('message_thread_id'); ?>
+                        <?php echo $frm->getFieldHtml('message_thread_id'); ?>
 
-                    <?php echo $frm->getFieldHtml('message_text'); ?>
-                    <button class="btn btn-icon btn-send" type="submit">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
-                            </use>
-                        </svg>
-                    </button>
-
+                        <?php echo $frm->getFieldHtml('message_text'); ?>
+                        <button class="btn btn-icon btn-send" type="submit">
+                            <svg class="svg" width="20" height="20">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                                </use>
+                            </svg>
+                        </button>
                     </form>
-
+                    <?php echo $frm->getExternalJS(); ?>
                 </div>
             <?php } ?>
         </div>

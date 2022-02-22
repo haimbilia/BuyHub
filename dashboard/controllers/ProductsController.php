@@ -60,7 +60,7 @@ class ProductsController extends SellerBaseController
         $imgFrm = $this->getImageFrm();
         $productOptions = [];
 
-        if (1 < $recordId) {
+        if (0 < $recordId) {
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $updateLangDataobj = new TranslateLangData(Product::DB_TBL_LANG);
                 $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());

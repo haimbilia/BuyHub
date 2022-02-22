@@ -16,6 +16,8 @@ $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);')
 
 $imageFld = $frm->getField('user_profile_image');
 $imageFld->addFieldTagAttribute('onChange', 'popupImage(this)');
+$imageFld->addFieldTagAttribute('class', 'file-upload');
+
 $imageFld->addFieldTagAttribute('accept', 'image/*');
 
 $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true));
@@ -38,14 +40,23 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
 
                     <?php if (!$isNewImage) { ?>
                         <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onclick="popupImage()">
-                            <i class="fa fa-pen"></i>
+                            <svg class="svg" width="12" height="12">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
                         </label>
                         <label class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
-                            <i class="fa fa-times"></i>
+                            <svg class="svg" width="12" height="12">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#times">
+                                </use>
+                            </svg>
                         </label>
                     <?php } else { ?>
                         <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
-                            <i class="fa fa-pen"></i>
+                            <svg class="svg" width="12" height="12">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>
                             <?php echo $imageFld->getHTML(); ?>
                         </label>
                     <?php } ?>

@@ -73,7 +73,7 @@ $(document).ready(function () {
 			success: function (json) {
 				json = $.parseJSON(json);
 				profileImageForm();
-				$(document).trigger('close.facebox');
+				
 			}
 		});
 	};

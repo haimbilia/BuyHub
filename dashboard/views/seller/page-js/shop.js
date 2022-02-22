@@ -691,7 +691,7 @@ $(document).on("change", ".state", function () {
                 }
             },
             beforeSend: function () {
-                $(document).trigger('close.facebox');
+                
                 $(imageDivId).html(getImageTemplate(formData.get('cropped_image').name, blobUrl));
             },
             success: function (ans) {
@@ -776,7 +776,7 @@ $(document).on("change", ".state", function () {
                     $(dv).removeClass('badge-success');
                     $(dv).addClass('text-danger');
                 }
-                $(document).trigger('close.facebox');
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

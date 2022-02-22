@@ -353,7 +353,7 @@ $(document).on('change', '.language-js', function () {
 				}
 				productImages($('#frmCustomProductImage input[name=product_id]').val(), $('.option').val(), $('.language').val());
 				$('#prod_image').val('');
-				//$(document).trigger('close.facebox');
+				//
 				$('#cropperBox-js').css("display", "none");
 				$("#mediaForm-js").css("display", "block");
 			},

@@ -6,15 +6,7 @@
         $data = [
             'headingLabel' => $taxCategory,
             'siteLangId' => $siteLangId,
-            'otherButtons' => [
-                [
-                    'attr' => [
-                        'href' => UrlHelper::generateUrl('seller', 'taxCategories'),
-                        'title' => Labels::getLabel('LBL_Back_To_Tax_Categories', $siteLangId)
-                    ],
-                    'label' => Labels::getLabel('LBL_Back_To_Tax_Categories', $siteLangId)
-                ]
-            ]
+            'headingBackButton' => true           
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">

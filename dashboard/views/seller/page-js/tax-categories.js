@@ -41,7 +41,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpTaxRates'), data, function (t) {
 			reloadList();
-			$(document).trigger('close.facebox');
+			
 		});
 		return false;
 	};
