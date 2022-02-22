@@ -224,7 +224,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 				}
 				$('#form-upload').remove();
 				images(promotionId, langId, banner_screen);
-				$(document).trigger('close.facebox');
+				
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

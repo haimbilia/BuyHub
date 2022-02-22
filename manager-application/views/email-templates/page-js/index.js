@@ -99,7 +99,7 @@
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
             reloadList();
-            $(document).trigger('close.facebox');
+            
         });
     };
 

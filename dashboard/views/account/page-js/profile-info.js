@@ -73,7 +73,7 @@ $(document).ready(function () {
 			success: function (json) {
 				json = $.parseJSON(json);
 				profileImageForm();
-				$(document).trigger('close.facebox');
+				
 			}
 		});
 	};
@@ -142,7 +142,7 @@ $(document).ready(function () {
 				fcom.removeLoader();
 				$('#dispMessage').html(ans.msg);
 				profileInfoForm();
-				$(document).trigger('close.facebox');
+				
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

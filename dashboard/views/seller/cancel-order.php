@@ -5,15 +5,15 @@
     $data = [
         'headingLabel' => Labels::getLabel('LBL_Cancel_Order', $siteLangId),
         'siteLangId' => $siteLangId,
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('Seller', 'sales'),
+            'onclick' => ''
+        ]
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
         <div class="card">
-            <div class="card-head">
-                <h5 class="card-title "><?php echo Labels::getLabel('LBL_Order_Details', $siteLangId); ?></h5>
-                <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Seller', 'sales'); ?>" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_order', $siteLangId); ?></a></div>
-            </div>
             <div class="card-body ">
                 <div class="box__body">
                     <div class="row">
