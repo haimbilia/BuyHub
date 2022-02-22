@@ -77,12 +77,12 @@
                                         ?>
                                             <div class="wishlists__foot">
                                                 <div class="text-center">
-                                                    <button class="btn btn-outline-gray" type="button" onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);">
-                                                        <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
-                                                        <svg class="svg" width="18" height="18">
+                                                    <button class="btn btn-outline-gray btn-icon" type="button" onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);">
+                                                        <svg class="svg btn-icon-start" width="18" height="18">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                             </use>
-                                                        </svg>
+                                                        </svg> <?php echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); ?>
+
                                                     </button>
                                                 </div>
                                             </div> <?php

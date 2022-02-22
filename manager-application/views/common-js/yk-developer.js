@@ -24,7 +24,7 @@ $(function () {
 
     $.extend(fcom, {
         processingCounter: 0,
-        processingClass:'processingJs',
+        processingClass: 'processingJs',
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
                 $("html, body").animate(
@@ -77,11 +77,11 @@ $(function () {
             }
         },
 
-        getLoader: function (addAsNew) {        
-            if(typeof addAsNew === 'undefined'){             
+        getLoader: function (addAsNew) {
+            if (typeof addAsNew === 'undefined') {
                 $(document.body).css({ cursor: "wait" });
                 $(".loaderJs").remove();
-            }            
+            }
             return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
@@ -89,14 +89,14 @@ $(function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
 
-        displayProcessing: function () {          
+        displayProcessing: function () {
             fcom.processingCounter++;
-            $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);            
+            $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
-        
-        closeProcessing: function (counter) {      
+
+        closeProcessing: function (counter) {
             var cls = fcom.processingClass;
-            if(typeof counter !== "undefined"){
+            if (typeof counter !== "undefined") {
                 cls += '-' + counter
             }
             // $("."+ cls).remove(); 
@@ -649,10 +649,10 @@ $(window).keydown(function (e) {
 
 $(document).on("click", "#quickSearchCtrlJs", function () {
     if ($(this).is(":checked")) {
-        $.cookie("quickSearchCtrlJs", 1, {expires: 30, path: siteConstants.webrootfront});
+        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.webrootfront });
         $("#search-main").modal("hide");
     } else {
-        $.cookie("quickSearchCtrlJs", 0, {path: siteConstants.webrootfront});
+        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.webrootfront });
     }
 });
 
@@ -669,3 +669,4 @@ $(document).on("click", ".sidebarOpenerBtnJs", function () {
     $('#sidebar').addClass("animating");
     setInterval(function () { $('#sidebar').removeClass("animating"); }, 2000);
 });
+

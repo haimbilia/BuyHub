@@ -36,12 +36,9 @@ $shopLayout = SHOP::TEMPLATE_ONE;
                 <?php echo $shopBannerFrm->getFormHtml(); ?>
                 <span class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?>
                 </span>
-
                 <ul class="uploaded-media" id="banner-image-listing">
                 </ul>
             </div>
-
-
         </div>
         <div class="col-lg-6">
             <div class="media-block">

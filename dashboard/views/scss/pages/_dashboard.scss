@@ -641,6 +641,7 @@
         display: flex;
         grid-gap: 2rem;
         li {
+            flex: 1;
             // border-top: $border;
             //border-color: lighten($border-color, 05);
             display: flex;

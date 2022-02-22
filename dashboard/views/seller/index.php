@@ -383,14 +383,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
                                 <a href="<?php echo UrlHelper::generateUrl('Seller', 'sales'); ?>">
-                                    <div class="card">
-                                        <div class="card-head">
+                                    <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                                        <div class="card-head border-0">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Sales', $siteLangId); ?></h5>
-                                            <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#my-sales" href="
-                                    <?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#my-sales"></use>
-                                                </svg>
-                                            </i>
                                         </div>
                                         <div class="card-body ">
                                             <div class="stats">
@@ -425,14 +420,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
                             <div class="widget widget-stats">
                                 <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                                    <div class="card">
-                                        <div class="card-head">
+                                    <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                        <div class="card-head border-0">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                            <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#Credits">
-                                                    </use>
-                                                </svg>
-                                            </i>
+
                                         </div>
                                         <div class="card-body ">
                                             <div class="stats">
@@ -457,14 +448,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
                                 <a onclick="redirectfunc('<?php echo UrlHelper::generateUrl('Seller', 'Sales'); ?>', <?php echo FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", null, ''); ?>)" href="javaScript:void(0)">
-                                    <div class="card">
-                                        <div class="card-head">
+                                    <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                        <div class="card-head border-0">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?></h5>
-                                            <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#order">
-                                                    </use>
-                                                </svg>
-                                            </i>
                                         </div>
                                         <div class="card-body">
                                             <div class="stats">
@@ -498,15 +484,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             <?php if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) { ?>
                                 <div class="widget widget-stats">
                                     <a href="<?php echo UrlHelper::generateUrl('Seller', 'subscriptions'); ?>">
-                                        <div class="card">
-                                            <div class="card-head">
+                                        <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-4.png);">
+                                            <div class="card-head border-0">
                                                 <h5 class="card-title">
                                                     <?php echo Labels::getLabel('LBL_Active_Subscription', $siteLangId); ?></h5>
-                                                <i class="icn"><svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#messages" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#messages">
-                                                        </use>
-                                                    </svg>
-                                                </i>
                                             </div>
                                             <div class="card-body ">
                                                 <div class="stats">
@@ -544,14 +525,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <?php if ($userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
                                 <a href="<?php echo UrlHelper::generateUrl('Seller', 'orderReturnRequests'); ?>">
-                                    <div class="card">
-                                        <div class="card-head">
+                                    <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                        <div class="card-head border-0">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?></h5>
-                                            <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#refund" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#refund">
-                                                    </use>
-                                                </svg>
-                                            </i>
+
                                         </div>
                                         <div class="card-body ">
                                             <div class="stats">
@@ -581,17 +558,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <?php if ($userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
                                 <a onclick="redirectfunc('<?php echo UrlHelper::generateUrl('Seller', 'Sales'); ?>', <?php echo FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", null, ''); ?>)" href="javaScript:void(0)">
-                                    <div class="card">
-                                        <div class="card-head">
+                                    <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                                        <div class="card-head border-0">
                                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Cancellation', $siteLangId); ?>
                                             </h5>
-                                            <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#cancel" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#cancel">
-                                                    </use>
-                                                </svg>
-                                            </i>
+
                                         </div>
-                                        <div class="card-body ">
+                                        <div class="card-body">
                                             <div class="stats">
                                                 <div class="stats-number">
                                                     <ul>

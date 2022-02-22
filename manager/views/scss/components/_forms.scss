@@ -131,7 +131,6 @@ $input-color: #474747;
             [dir="rtl"] & {
                 background-position: calc(100% - 13px) center;
             }
-            &::-webkit-search-decoration,
             &::-webkit-search-cancel-button {
                 -webkit-appearance: none;
                 height: 1.25em;

@@ -2377,7 +2377,9 @@ $header-height: 65px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    @include media-breakpoint-up(md) {
+    padding-#{$start-direction}: $side-bar-size-close;
+
+    @media (min-width:1280px){
         padding-#{$start-direction}: $side-bar-size;
     }
 }
@@ -2677,6 +2679,7 @@ $header-height: 65px;
 .list-stats {
     word-break: break-word;
     font-size: 0.85rem;
+    min-width: 250px;
     &-item {
         padding: 0.8rem 0;
         display: flex;
@@ -2992,7 +2995,7 @@ $header-height: 65px;
 .grid-layout {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: minmax(auto, 320px) 2fr;
 }
 .edit-price {
     display: inline-flex;
@@ -3117,4 +3120,11 @@ $header-height: 65px;
             margin-top: 10px;
         }
     }
+}
+
+.lbl-link {
+    display: flex!important;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }

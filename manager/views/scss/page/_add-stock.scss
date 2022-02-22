@@ -4,7 +4,7 @@
 
     @include media-breakpoint-up(lg) {
         display: grid;
-        grid-template-columns: 25% 1fr 25%;
+        grid-template-columns: minmax(auto, 300px) 1fr minmax(auto, 300px);
         grid-gap: 2rem;
     }
 
@@ -56,6 +56,9 @@
         display: flex;
         padding: 20px 25px;
         font-size: 0.8rem;
+        @media (max-width: 1280px) {
+            padding: 20px;
+        }
         &:hover {
             color: currentColor;
             background-color: lighten($bg-gray, 01);
@@ -135,16 +138,16 @@
         background: $bg-placeholder;
         height: 100%;
         position: relative;
-        &[data-ratio="1:1"] {
+        &[data-ratio='1:1'] {
             padding-bottom: calc(100% / (var(--aspect-ratio1)));
         }
-        &[data-ratio="4:3"] {
+        &[data-ratio='4:3'] {
             padding-bottom: calc(100% / (var(--aspect-ratio2)));
         }
-        &[data-ratio="3:4"] {
+        &[data-ratio='3:4'] {
             padding-bottom: calc(100% / (var(--aspect-ratio3)));
         }
-        &[data-ratio="16:9"] {
+        &[data-ratio='16:9'] {
             padding-bottom: calc(100% / (var(--aspect-ratio4)));
         }
         &:hover {
