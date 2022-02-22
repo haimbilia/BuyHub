@@ -9,6 +9,9 @@ $submitFld->developerTags['col'] = 12;
 $submitFld->developerTags['noCaptionTag'] = true;
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 
+HtmlHelper::formatFormFields($frm, 6);
+
+
 $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);');
 
 $usernameFld = $frm->getField('credential_username');
@@ -22,8 +25,7 @@ if (!empty($data['user_phone'])) {
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
     $phoneFld->setFieldTagAttribute('id', 'user-phone');
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
-    $phoneFld->setWrapperAttribute('class', 'position-relative');
-    $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
+    HtmlHelper::setFieldEncryptedValue($phoneFld, CommonHelper::displayEncryptedFieldData($data['user_phone']));
     $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
     $phoneFld->htmlAfterField = '<span toggle="#user-phone" onclick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
@@ -32,11 +34,9 @@ if (!empty($data['user_phone'])) {
 $userDobFld = $frm->getField('user_dob');
 if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
     $userDobFld->setFieldTagAttribute('disabled', 'disabled');
-
+    HtmlHelper::setFieldEncryptedValue($userDobFld, CommonHelper::displayEncryptedDob($data['user_dob']));
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
-    $userDobFld->setWrapperAttribute('class', 'position-relative');
-    $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
     $userDobFld->htmlAfterField = '<span toggle="#user-dob" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
 
@@ -45,9 +45,8 @@ $userDobFld->setFieldTagAttribute('class', 'user_dob_js');
 $emailFld = $frm->getField('credential_email');
 $emailFld->setFieldTagAttribute('disabled', 'disabled');
 $emailFld->setFieldTagAttribute('id', 'user-email');
-$emailFld->setWrapperAttribute('class', 'position-relative');
 $emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
-$emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
+HtmlHelper::setFieldEncryptedValue($emailFld, CommonHelper::displayEncryptedEmail($data['credential_email']));
 $emailFld->htmlAfterField = '<span toggle="#user-email" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 
 
@@ -93,7 +92,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>
-                    </button> 
+                    </button>
                 <?php } else { ?>
                     <label class="btn btn-edit" title="Upload image file">
                         <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
@@ -101,7 +100,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>
-                    </label> 
+                    </label>
                 <?php } ?>
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
