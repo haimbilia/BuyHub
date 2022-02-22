@@ -212,7 +212,7 @@ class ProductsController extends ListingBaseController
         $isSelProdCreatedBySeller = false;
         $isProductAddedByAdmin = true;
         $productOptions = [];
-        if (1 < $recordId) {
+        if (0 < $recordId) {
             $this->setModel([$recordId]);
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);

@@ -93,12 +93,15 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>
-                    </button>
+                    </button> 
                 <?php } else { ?>
-                    <label class="btn" title="Upload image file">
+                    <label class="btn btn-edit" title="Upload image file">
                         <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
-                        <?php echo Labels::getLabel('LBL_Upload', $siteLangId); ?>
-                    </label>
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                    </label> 
                 <?php } ?>
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
@@ -151,6 +154,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
     </div>
 </div>
 <script language="javascript">
+    var cropperHeading = '<?php echo Labels::getLabel('LBL_PROFILE_IMAGE', $siteLangId); ?>';
     $(document).ready(function() {
         getCountryStates($("#user_country_id").val(), <?php echo $stateId; ?>, '#user_state_id');
         $('.user_dob_js').datepicker('option', {
