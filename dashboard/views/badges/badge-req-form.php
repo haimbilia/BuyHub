@@ -31,10 +31,16 @@ if (null != $fld) {
     $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $siteLangId) . '</small>';
     if (0 < $badgeReqId && true === $fileFound) {
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
-                                    <i class="fas fa-download"></i>
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#download">
+                                </use>
+                            </svg>
                                 </a>';
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
-                                    <i class="fas fa-times"></i>
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>
                                 </a>';
     }
 }

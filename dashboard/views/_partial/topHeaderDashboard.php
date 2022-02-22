@@ -31,7 +31,7 @@
                     }
                 }
                 ?>
-                <span class="meta"><?php echo $title; ?></span>
+                <span class="meta"><?php echo strtoupper($title); ?></span>
                 <?php echo $dashTitle; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>

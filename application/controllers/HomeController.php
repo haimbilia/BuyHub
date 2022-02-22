@@ -1439,6 +1439,11 @@ class HomeController extends MyAppController
         $data['canSendSms'] = SmsArchive::canSendSms() ? 1 : 0;
         $data['canAddReview'] = FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 1);
         $data['currency_id'] = $this->siteCurrencyId;
+        $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
+        $data['defaultCountry'] = [
+            'country_id' => $defultCountryId,
+            'country_code' => Countries::getAttributesById($defultCountryId, 'country_code') ?? '',
+        ];
             
         $this->set('data', $data);
         $this->_template->render();
