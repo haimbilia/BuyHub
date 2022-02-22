@@ -4,7 +4,7 @@ if (!empty($fields)) {
     $htm = '<div class="dropdown custom-drag-drop">
                         <button class="btn btn-outline-gray btn-icon dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg class="svg" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#columns">
+                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
                         </use>
                     </svg>
                         </button>
@@ -45,6 +45,10 @@ if (!empty($fields)) {
                     'onclick' => 'exportReport()',
                     'title' => Labels::getLabel('LBL_Export', $siteLangId)
                 ],
+                'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#export">
+                    </use>
+                </svg>',
                 'label' => Labels::getLabel('LBL_Export', $siteLangId)
             ],
         ]

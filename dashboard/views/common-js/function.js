@@ -580,7 +580,7 @@ function setGeoAddress(data) {
 
 function getGeoAddress(data) {
     address = setGeoAddress(data);
-    $(document).trigger('close.facebox');
+    
     displayGeoAddress(address);
 }
 
@@ -669,7 +669,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         }
 
         if (0 < $("#facebox #" + elementId).length) {
-            $(document).trigger('close.facebox');
+            
         }
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);

@@ -34,7 +34,7 @@ if (!empty($excludeLocations)) {
     <div class="form-edit-body loaderContainerJs">
         <div class="row">
             <div class="col-md-12">
-                <form onsubmit="setupZone(this); return(false);" method="post" class="form" id="shippingZoneFrm">
+                <form onsubmit="setupZone(this); return(false);" method="post" class="form modalFormJs" id="shippingZoneFrm" data-onclear="zoneForm(<?php echo $profile_id; ?>, <?php echo $zone_id; ?>)">
                     <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
                     <input type="hidden" name="shipzone_user_id" value="<?php echo $userId; ?>">
                     <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
@@ -177,11 +177,6 @@ if (!empty($excludeLocations)) {
                                     } ?>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row mt-3 justify-content-between">
-                        <div class="col">
-                            <input class="btn btn-brand" type="submit" name="btn_submit" value="<?php echo Labels::getLabel("LBL_Add_Zone", $siteLangId); ?>">
                         </div>
                     </div>
                 </form>

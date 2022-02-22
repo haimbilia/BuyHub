@@ -117,7 +117,7 @@ $(document).ready(function () {
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1 || ans.status == true) {
-                            $(document).trigger('close.facebox');
+                            
                             $(document).trigger('close.mbsmessage');
                             $.systemMessage(ans.msg, 'alert--success');
                         } else {
@@ -180,7 +180,7 @@ $(document).ready(function () {
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1) {
-                            $(document).trigger('close.facebox');
+                            
                             $(document).trigger('close.mbsmessage');
                             $.systemMessage(ans.msg, 'alert--success', false);
                             document.uploadBulkImages.reset();
@@ -232,7 +232,7 @@ $(document).ready(function () {
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
-                    $(document).trigger('close.facebox');
+                    
                     $(document).trigger('close.mbsmessage');
                     $.systemMessage(ans.msg, 'alert--success');
                     searchFiles();

@@ -13,11 +13,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     'href' => UrlHelper::generateUrl('shippingProfile', 'form', [0]),
                     'title' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
                 ],
+                'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>',
                 'label' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
             ]
         ];
     }
-    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-lg-12">

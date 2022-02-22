@@ -254,7 +254,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {
-            $(document).trigger('close.facebox');
+            
             searchProdCategoryRequests(frm);
         });
     };

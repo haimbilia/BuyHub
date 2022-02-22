@@ -32,7 +32,7 @@ $(document).ready(function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateTaxRule'), data, function (t) {
-            $(document).trigger('close.facebox');
+            
             taxRulesSearch(document.frmSearchTaxRules);
         });
     };
