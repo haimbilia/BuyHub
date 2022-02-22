@@ -17,6 +17,7 @@ $IDFld = $colectionForm->getField('scollection_id');
 $IDFld->setFieldTagAttribute('id', "scollection_id");
 $identiFierFld = $colectionForm->getField('scollection_identifier');
 $identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','scollection_id')");
+$inactive = 1 > $scollection_id ? 'fat-inactive' : '';
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -29,13 +30,13 @@ $identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_
             <a class="nav-link active" href="javascript:void(0);" onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
             </a>
-            <a class="nav-link" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
+            <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
             </a>
-            <a class="nav-link" onclick="sellerCollectionProducts(<?php echo $scollection_id ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>">
+            <a class="nav-link <?php echo $inactive; ?>" onclick="sellerCollectionProducts(<?php echo $scollection_id ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>
             </a>
-            <a class="nav-link" onclick="collectionMediaForm(this, <?php echo $scollection_id; ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>">
+            <a class="nav-link <?php echo $inactive; ?>" onclick="collectionMediaForm(this, <?php echo $scollection_id; ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>
             </a>
         </nav>

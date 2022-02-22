@@ -33,14 +33,10 @@ $(document).on("click", ".navTabsJs a", function (e) {
 });
 
 (function () {
-    setNavTab = function (type) {
-        $('.navTabsJs').find('a').removeClass('active');
-        $(".navTabsJs a").each(function () {
-            if ($(this).attr('data-tab') == type) {
-                $(this).addClass('active');
-            }
-        });
-    };
+    markPopupTabActive = function () {
+        $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").removeClass('active');
+        $("." + $.ykmodal.element + " .navTabsJs a[onclick^='" + markPopupTabActive.caller.name + "']").addClass('active');
+    }
 
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {

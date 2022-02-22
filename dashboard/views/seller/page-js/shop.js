@@ -276,6 +276,7 @@ $(document).on("change", ".state", function () {
             shopCollections();
             $.mbsmessage.close();
             if (t.langId > 0) {
+                // getShopCollectionGeneralForm(t.collection_id);
                 editShopCollectionLangForm(t.collection_id, t.langId);
                 return;
             }
@@ -308,6 +309,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
