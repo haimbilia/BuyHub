@@ -40,9 +40,9 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
                         <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onclick="popupImage()">
                             <i class="fa fa-pen"></i>
                         </label>
-                        <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
+                        <label class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <i class="fa fa-times"></i>
-                        </span>
+                        </label>
                     <?php } else { ?>
                         <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
                             <i class="fa fa-pen"></i>
