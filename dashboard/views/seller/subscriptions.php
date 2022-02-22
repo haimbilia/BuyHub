@@ -49,7 +49,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <?php if (!empty($message)) { ?>
-            <div class="info p-3">
+            <div class="info p-3 mb-4">
                 <span>
                     <svg class="svg">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">

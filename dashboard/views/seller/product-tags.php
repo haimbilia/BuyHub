@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frmSearch->getField('lang_id')->addFieldTagAttribute('id','');
+$frmSearch->getField('lang_id')->addFieldTagAttribute('id', '');
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
@@ -20,23 +20,23 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
-                    <?php if(1 < count($languages)) {?>
-                                <div class="content-header-toolbar">
-                                    <div class="input-group">
-                                        <select class="form-control form-select" onchange="langForm(this)"  name="lang_id">
-                                            <?php foreach($languages as $langId => $langName){
-                                                $selectedClass = $langFld->value == $langId ? 'selected':'';
-                                                echo "<option value='$langId' $selectedClass>$langName</option>";
-                                            }
+                        <?php if (1 < count($languages)) { ?>
+                            <div class="row justify-content-end mb-4">
+                                <div class="col-auto">
+                                    <select class="form-control form-select" onchange="langForm(this)" name="lang_id">
+                                        <?php foreach ($languages as $langId => $langName) {
+                                            $selectedClass = $langFld->value == $langId ? 'selected' : '';
+                                            echo "<option value='$langId' $selectedClass>$langName</option>";
+                                        }
                                         ?>
                                     </select>
                                 </div>
-                            <?php } ?>
+                            </div>
+                        <?php } ?>
                         <div id="listing"></div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-

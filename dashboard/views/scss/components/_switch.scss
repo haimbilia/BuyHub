@@ -27,8 +27,8 @@
         position: absolute;
         right: 0;
         top: 0;
-        -webkit-transition: 0.4s;
         transition: 0.4s;
+        width: 42px;
 
         &:before {
             background-color: #fff;
@@ -37,7 +37,7 @@
             content: "";
             height: 12px;
             position: absolute;
-            -webkit-transition: 0.4s;
+
             transition: 0.4s;
             width: 12px;
         }

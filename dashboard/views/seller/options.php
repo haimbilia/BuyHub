@@ -23,7 +23,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             ],
         ];
     }
-
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
