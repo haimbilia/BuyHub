@@ -35,7 +35,7 @@ $(document).on("click", ".navTabsJs a", function (e) {
 (function () {
     markPopupTabActive = function () {
         $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").removeClass('active');
-        $("." + $.ykmodal.element + " .navTabsJs a[onclick^='" + markPopupTabActive.caller.name + "']").addClass('active');
+        $("." + $.ykmodal.element + " .navTabsJs a[onclick^='" + markPopupTabActive.caller.name + "']").addClass('active').removeClass('fat-inactive');
     }
 
     checkControllerName = function () {

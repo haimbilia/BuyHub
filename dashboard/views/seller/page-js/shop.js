@@ -276,7 +276,6 @@ $(document).on("change", ".state", function () {
             shopCollections();
             $.mbsmessage.close();
             if (t.langId > 0) {
-                // getShopCollectionGeneralForm(t.collection_id);
                 editShopCollectionLangForm(t.collection_id, t.langId);
                 return;
             }
@@ -323,6 +322,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -530,6 +530,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
