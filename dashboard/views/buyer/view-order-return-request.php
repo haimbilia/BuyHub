@@ -9,6 +9,7 @@
         $data = [
             'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
             'siteLangId' => $siteLangId,
+            'headingBackButton' => true,
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <?php } ?>
@@ -26,8 +27,7 @@
 
                         <?php if ($canWithdrawRequest) { ?>
                             <a class="btn btn-brand btn-sm no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Buyer', 'WithdrawOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_Withdraw_Request', $siteLangId); ?></a>
-                        <?php } ?>
-                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests'); ?>" class="btn btn-outline-gray btn-sm no-print"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
+                        <?php } ?>                        
                     </div>
                 <?php } ?>
             </div>
