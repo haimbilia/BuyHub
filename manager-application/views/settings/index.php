@@ -41,7 +41,8 @@
                     $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true)                    
 
                 ) { ?>
                     <div class="setting-search">
@@ -352,8 +353,7 @@
                                     <span><?php echo Labels::getLabel('MSG_LIST_OF_EMAIL_NOTIFICATIONS', $siteLangId); ?></span>
                                 </div>
                             </a>
-                        <?php } ?>
-
+                        <?php } ?>         
                         <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('sellerApprovalForm'); ?>">
                                 <div class="setting__icon">
@@ -367,6 +367,22 @@
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $siteLangId); ?></h6>
                                     <span><?php echo Labels::getLabel('MSG_SELLER_INFORMATION_FORM_FIELDS', $siteLangId); ?></span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('SocialPlatform'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SOCIAL_PLATFORM', $siteLangId); ?></h6>
+                                    <span><?php echo Labels::getLabel('MSG_SOCIAL_PLATFORM_FORM_FIELDS', $siteLangId); ?></span>
                                 </div>
                             </a>
                         <?php } ?>

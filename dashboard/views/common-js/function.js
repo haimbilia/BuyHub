@@ -947,3 +947,10 @@ select2 = function (
     }
     select2Selector.$container.addClass("custom-select2");
 };
+
+loadCropperSkeleton = function () {  
+    $("#modalBoxJs").remove();
+    $("body").append(fcom.getModalBody());
+    $("#modalBoxJs").modal("show");
+    $.ykmodal.close();
+};

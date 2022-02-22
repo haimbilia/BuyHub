@@ -18,7 +18,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
             ],
             'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>' . Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
         ];
@@ -32,7 +32,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
             ],
             'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#inventories">
             </use>
         </svg>',
             'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
@@ -98,7 +98,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                         </use>
                                                                     </svg></a></li>
                                                             <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
-                                                                <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
+                                                                <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><svg class="svg btn-icon-start" width="18" height="18">
+                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                                                            </use>
+                                                                        </svg></a></li>
                                                             <?php } ?>
                                                         </ul>
                                                     </td>
