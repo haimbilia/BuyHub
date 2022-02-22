@@ -43,7 +43,7 @@ $btnSubmit->developerTags['colWidthValues'] = [null, null, null, null];
     <div class="form-edit-body loaderContainerJs">
         <div class="row">
             <div class="col-sm-12">
-                <nav class="nav nav-tabs tabsNavJs">
+                <nav class="nav nav-tabs navTabsJs">
                     <a class="nav-link" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);">
                         <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
                     </a>

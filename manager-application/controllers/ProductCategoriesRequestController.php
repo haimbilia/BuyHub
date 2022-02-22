@@ -175,7 +175,7 @@ class ProductCategoriesRequestController extends ListingBaseController
                 $data['prodcat_deleted'] = applicationConstants::NO;
             }
         }
-
+        
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {

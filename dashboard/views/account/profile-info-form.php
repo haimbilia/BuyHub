@@ -22,6 +22,7 @@ if (!empty($data['user_phone'])) {
     $phoneFld->setFieldTagAttribute('disabled', 'disabled');
     $phoneFld->setFieldTagAttribute('id', 'user-phone');
     $phoneFld->setFieldTagAttribute('data-value', $data['user_phone']);
+    $phoneFld->setWrapperAttribute('class', 'position-relative');
     $phoneFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedFieldData($data['user_phone']));
     $handleDisabled = (false == SmsArchive::canSendSms()) ? 1 : 0;
     $phoneFld->htmlAfterField = '<span toggle="#user-phone" onclick ="toggleEncryptedFields(this, ' . $handleDisabled . ', 1)" class="icn-eye fa js-toggle-data fa-eye"></span>';
@@ -34,6 +35,7 @@ if (!empty($data['user_dob']) && $data['user_dob'] != '0000-00-00') {
 
     $userDobFld->setFieldTagAttribute('id', 'user-dob');
     $userDobFld->setFieldTagAttribute('data-value', $data['user_dob']);
+    $userDobFld->setWrapperAttribute('class', 'position-relative');
     $userDobFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedDob($data['user_dob']));
     $userDobFld->htmlAfterField = '<span toggle="#user-dob" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';
 }
@@ -43,6 +45,7 @@ $userDobFld->setFieldTagAttribute('class', 'user_dob_js');
 $emailFld = $frm->getField('credential_email');
 $emailFld->setFieldTagAttribute('disabled', 'disabled');
 $emailFld->setFieldTagAttribute('id', 'user-email');
+$emailFld->setWrapperAttribute('class', 'position-relative');
 $emailFld->setFieldTagAttribute('data-value', $data['credential_email']);
 $emailFld->setFieldTagAttribute('data-encrypted-value', CommonHelper::displayEncryptedEmail($data['credential_email']));
 $emailFld->htmlAfterField = '<span toggle="#user-email" onclick ="toggleEncryptedFields(this)" class="icn-eye fa js-toggle-data fa-eye"></span>';

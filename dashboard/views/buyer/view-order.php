@@ -52,15 +52,7 @@ if (!$print) { ?>
         $data = [
             'headingLabel' => Labels::getLabel('LBL_Order_Details', $siteLangId),
             'siteLangId' => $siteLangId,
-            'otherButtons' => [
-                [
-                    'attr' => [
-                        'href' => UrlHelper::generateUrl('Buyer', 'orders'),
-                        'title' => Labels::getLabel('LBL_Back_to_orders', $siteLangId)
-                    ],
-                    'label' => '<i class="fas fa-arrow-left"></i>'
-                ]
-            ],
+            'headingBackButton' => true
         ];
 
         if (true == $primaryOrder && !$print) {
@@ -68,9 +60,13 @@ if (!$print) { ?>
                 $data['otherButtons'][] = [
                     'attr' => [
                         'href' => UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])),
-                        'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                        'title' => Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId)
                     ],
-                    'label' => Labels::getLabel('LBL_Cancel', $siteLangId)
+                    'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+                        <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#close">
+                        </use>
+                    </svg>',
+                    'label' => Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId)
                 ];
             }
 
