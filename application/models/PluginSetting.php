@@ -153,7 +153,7 @@ class PluginSetting
         $frm->addHiddenField('', 'plugin_id');
 
         foreach ($requirements as $fieldName => $attributes) {
-            $label = 'LBL_' . str_replace(' ', '_', strtoupper($attributes['label']));
+            $label = 'FRM_' . str_replace(' ', '_', strtoupper($attributes['label']));
             $label = Labels::getLabel($label, $langId);
 
             switch ($attributes['type']) {

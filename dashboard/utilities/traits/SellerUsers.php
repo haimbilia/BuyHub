@@ -292,8 +292,7 @@ trait SellerUsers
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
-        $conNewPwdReq->setCompareWith('new_password', 'eq');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
+        $conNewPwdReq->setCompareWith('new_password', 'eq');       
         return $frm;
     }
 

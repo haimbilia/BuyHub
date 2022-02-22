@@ -85,9 +85,9 @@ class PluginSettingController extends LoggedUserController
             $frm = PluginSetting::getForm($requirements, $this->langId);
         }
         
-        if (null == $frm->getField('btn_submit')) {
+        /* if (null == $frm->getField('btn_submit')) {
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
-        }
+        } */
 
         $frm->fill(['keyName' => $this->keyName]);
         return $frm;

@@ -10,7 +10,8 @@ $submitFld->developerTags['col'] = 4;
     <?php
     $data = [
         'headingLabel' => sprintf(Labels::getLabel('LBL_Manage_Permissions_for_%S', $siteLangId), $userData['user_name']),
-        'siteLangId' => $siteLangId
+        'siteLangId' => $siteLangId,
+        'headingBackButton' => true,
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
     <div class="content-body">
