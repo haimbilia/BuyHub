@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($settingFrm);
 
-$settingFrm->setFormTagAttribute('data-onclear', "setupSettings(this);return(false);");
+$settingFrm->setFormTagAttribute('data-onclear', "editSettingsForm($lang_id);");
 $settingFrm->setFormTagAttribute('data-action', "uploadLogo");
 $settingFrm->setFormTagAttribute('id', 'frmLangJs');
 $settingFrm->setFormTagAttribute('onsubmit', 'setupSettings($("#frmLangJs")); return(false);');
