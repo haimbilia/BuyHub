@@ -7,21 +7,21 @@ $frmSrch->developerTags['fld_default_col'] = 12;
 
 $keyFld = $frmSrch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-$keyFld->setWrapperAttribute('class', 'col-lg-6');
-$keyFld->developerTags['col'] = 6;
+$keyFld->setWrapperAttribute('class', 'col-lg-8');
+$keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 $submitBtnFld = $frmSrch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-$submitBtnFld->setWrapperAttribute('class', 'col-lg-3');
-$submitBtnFld->developerTags['col'] = 3;
+$submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
+$submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 
 $clearFld = $frmSrch->getField('btn_clear');
 $clearFld->setFieldTagAttribute('onclick', 'clearSearch(1)');
 $clearFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
-$clearFld->setWrapperAttribute('class', 'col-lg-3');
-$clearFld->developerTags['col'] = 3;
+$clearFld->setWrapperAttribute('class', 'col-lg-2');
+$clearFld->developerTags['col'] = 2;
 $clearFld->developerTags['noCaptionTag'] = true;
 
 $fld = $frmSrch->getField('op_id');
@@ -31,7 +31,7 @@ if (null != $fld) {
 ?>
 <div class="replaced">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <?php echo $frmSrch->getFormHtml(); ?>
             <?php echo $frmSrch->getExternalJS(); ?>
         </div>

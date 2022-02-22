@@ -25,13 +25,13 @@
                 $titleArr = explode(' ', $dashTitle);
                 $title = '';
                 foreach ($titleArr as $val) {
-                    $title .= substr($val, 0, 1);                   
+                    $title .= substr($val, 0, 1);
                     if (strlen($title) == 2) {
                         break;
                     }
                 }
                 ?>
-                <span class="meta"><?php echo $title; ?></span>
+                <span class="meta"><?php echo strtoupper($title); ?></span>
                 <?php echo $dashTitle; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>

@@ -3,10 +3,10 @@ $htm = '';
 if (!empty($fields)) {
     $htm = '<div class="dropdown custom-drag-drop">
                         <button class="btn btn-outline-gray btn-icon dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg class="svg" width="18" height="18">
+                        <svg class="svg btn-icon-start" width="18" height="18">
                         <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
                         </use>
-                    </svg>
+                    </svg>'.Labels::getLabel('LBL_COLUMNS', $siteLangId).'
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
                                 <ul class="list-drag-drop" id="sortable">';
