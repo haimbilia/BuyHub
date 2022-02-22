@@ -172,7 +172,7 @@ class EmailTemplatesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getLangForm($etplCode = '', $lang_id = 0)
+    private function getLangForm($etplCode, $lang_id = 0)
     {
         $frm = new Form('frmEtplLang');
         $frm->addHiddenField('', 'etpl_code', $etplCode);
