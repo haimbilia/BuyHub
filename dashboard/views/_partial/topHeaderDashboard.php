@@ -25,7 +25,7 @@
                 $titleArr = explode(' ', $dashTitle);
                 $title = '';
                 foreach ($titleArr as $val) {
-                    $title .= substr($val, 0, 1);                   
+                    $title .= substr($val, 0, 1);
                     if (strlen($title) == 2) {
                         break;
                     }
@@ -113,6 +113,14 @@
                 </li>
             <?php } ?>
         </ul> <?php */ ?>
+        <div class="search-docs">
+            <span class="svg-icon">
+                <svg class="" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#565656" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+            </span>
+            <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto">
+        </div>
         <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
             <div class="c-header-icon bell">
                 <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
