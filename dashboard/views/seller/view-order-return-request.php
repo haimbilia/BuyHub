@@ -61,7 +61,10 @@ if (null != $btn) {
                             <h6><?php echo Labels::getLabel('LBL_Customer_Detail', $siteLangId); ?></h6>
                             <p><?php echo ($request['buyer_name'] != '') ? '<strong>' . Labels::getLabel('LBL_Customer_Name:', $siteLangId) . '</strong> ' . $request['buyer_name'] : ''; ?></p>
                             <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
-                                <p><strong><?php echo Labels::getLabel('Lbl_Download_attached_file', $siteLangId); ?> </strong> <a href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>"><i class="fa fa-download"></i></a></p>
+                                <p><strong><?php echo Labels::getLabel('Lbl_Download_attached_file', $siteLangId); ?> </strong> <a href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>"><svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
+                                            </use>
+                                        </svg></a></p>
                             <?php } ?>
                         </div>
                     </div>

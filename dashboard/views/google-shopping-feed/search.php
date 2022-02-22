@@ -112,7 +112,11 @@
                                 'title' => Labels::getLabel('LBL_EDIT', $siteLangId),
                                 'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
                             ],
-                            '<i class="fa fa-edit"></i>',
+                            '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                             true
                         );
                         $li = $ul->appendElement('li');

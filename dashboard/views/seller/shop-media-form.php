@@ -31,20 +31,17 @@ $shopLayout = SHOP::TEMPLATE_ONE;
     <div class="row">
         <div id="mediaResponse"></div>
         <div class="col-lg-6">
-            <div class="p-5">
+            <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Banner_Setup', $siteLangId); ?></h5>
                 <?php echo $shopBannerFrm->getFormHtml(); ?>
                 <span class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?>
                 </span>
-
                 <ul class="uploaded-media" id="banner-image-listing">
                 </ul>
             </div>
-
-
         </div>
         <div class="col-lg-6">
-            <div class="p-5">
+            <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Logo_Setup', $siteLangId); ?></h5>
                 <?php echo $shopLogoFrm->getFormHtml(); ?>
                 <span class="form-text text-muted logoPreferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150'); ?></span>

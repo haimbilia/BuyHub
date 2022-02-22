@@ -7,14 +7,7 @@ $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php');
     $data = [
         'headingLabel' => Labels::getLabel('LBL_Promotion_Analytics', $siteLangId) . ' - ' . $promotionDetails['promotion_name'],
         'siteLangId' => $siteLangId,
-    ];
-
-    $data['otherButtons'][] = [
-        'attr' => [
-            'href' => UrlHelper::generateUrl('Advertiser', 'Promotions'),
-            'title' => Labels::getLabel('LBL_My_promotions', $siteLangId)
-        ],
-        'label' => Labels::getLabel('LBL_My_promotions', $siteLangId)
+        'headingBackButton' => true
     ];
 
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
