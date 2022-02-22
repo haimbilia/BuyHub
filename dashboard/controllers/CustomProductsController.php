@@ -49,7 +49,7 @@ class CustomProductsController extends SellerBaseController
         $frm = $this->getForm($langId, $productType, $recordId);
         $imgFrm = $this->getImageFrm($recordId);
         $productOptions = [];
-        if (1 < $recordId) {
+        if (0 < $recordId) {
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $productData = ProductRequest::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, applicationConstants::JOIN_RIGHT);
                 if (!empty($productData['preq_lang_data'])) {

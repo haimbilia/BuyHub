@@ -39,7 +39,7 @@ $exitBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest(
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
 
-HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
+// HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
 
 end($languages);
 if (key($languages) == $selprod_lang_id) {
