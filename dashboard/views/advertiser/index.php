@@ -173,14 +173,10 @@
                     <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
                         <div class="widget widget-stats">
                             <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                                <div class="card">
-                                    <div class="card-head">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                                    <div class="card-head border-0">
                                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                        <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#Credits">
-                                                </use>
-                                            </svg>
-                                        </i>
+
                                     </div>
                                     <div class="card-body ">
                                         <div class="stats">
@@ -204,15 +200,10 @@
                     <?php } ?>
                     <div class="widget widget-stats">
                         <a href="javascript:void(0)" onclick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
-                            <div class="card">
-                                <div class="card-head">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                <div class="card-head border-0">
                                     <h5 class="card-title">
                                         <?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?></h5>
-                                    <i class="icn"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#speaker" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#speaker">
-                                            </use>
-                                        </svg>
-                                    </i>
                                 </div>
                                 <div class="card-body ">
                                     <div class="stats">
@@ -235,16 +226,11 @@
                     </div>
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('advertiser', 'promotionCharges'); ?>">
-                            <div class="card">
-                                <div class="card-head">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Promotions', $siteLangId); ?>
                                     </h5>
-                                    <i class="icn">
-                                        <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#give-money" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-stats.svg#give-money">
-                                            </use>
-                                        </svg>
-                                    </i>
+
                                 </div>
                                 <div class="card-body ">
                                     <div class="stats">
