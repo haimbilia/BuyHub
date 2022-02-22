@@ -2651,8 +2651,8 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
         $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
-        $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId));
+        /* $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
+        $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId)); */
         return $frm;
     }
 
