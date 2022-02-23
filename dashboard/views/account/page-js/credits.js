@@ -45,21 +45,16 @@ $(document).ready(function () {
         $payoutType = $(".payout_type").val();
         if ('-1' == $payoutType) {
             fcom.ajax(fcom.makeUrl('Account', 'requestWithdrawal'), '', function (res) {
-                fcom.removeLoader();
                 $.ykmodal(res);
                 // $(dvForm).html(res);
             });
         } else {
             fcom.ajax(fcom.makeUrl($payoutType, 'getRequestForm'), '', function (res) {
-                fcom.removeLoader();
                 // $(dvForm).html(res);
                 $.ykmodal(res);
             });
         }
-        $(".withdrawForm").removeClass('d-none');
-        $('html, body').animate({
-            scrollTop: $('.withdrawForm').offset().top - 100
-        }, 'slow');
+        fcom.removeLoader();
     };
 
     setupWithdrawalReq = function (frm) {
@@ -72,13 +67,13 @@ $(document).ready(function () {
         });
     };
 
-    closeForm = function () {
+    /* closeForm = function () {
         $(dvForm).html('');
         $(".withdrawForm").addClass('d-none');
         $('html, body').animate({
             scrollTop: $('html, body').offset().top - 100
         }, 'slow');
-    };
+    }; */
 
     setUpWalletRecharge = function (frm) {
         if (!$(frm).validate()) return;
