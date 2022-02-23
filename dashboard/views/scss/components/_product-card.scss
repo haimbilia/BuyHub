@@ -530,7 +530,6 @@
             opacity: 0.8;
         }
         .item__brand {
-            font-style: italic;
         }
         .item__location {
             margin-bottom: 5px;
@@ -635,13 +634,6 @@
             }
 
             &.icn-highlighted {
-                border: none;
-                color: $brand-color;
-                background: #f0f0f0;
-                &:hover {
-                    background: $brand-color;
-                    color: $brand-color-inverse;
-                }
             }
             .svg {
                 width: 14px;

@@ -78,17 +78,9 @@ $(document).on("change", ".state", function () {
 
     addCategoryBanner = function (prodCatId) {
         fcom.ajax(fcom.makeUrl('Seller', 'addCategoryBanner', [prodCatId]), '', function (t) {
-            $.facebox(t);
+            $.ykmodal(t);
         });
     };
-
-    /* categoryBannerLangForm = function( prodCatId, langId ){
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('Seller', 'categoryBannerLangForm',[prodCatId, langId]), '', function(t) {
-                $.facebox(t );
-            });
-        });
-    } */
 
     searchCategoryBanners = function (frm) {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
@@ -196,11 +188,9 @@ $(document).on("change", ".state", function () {
     shopImages = function (imageType, slide_screen, lang_id) {
         fcom.ajax(fcom.makeUrl('Seller', 'shopImages', [imageType, lang_id, slide_screen]), '', function (t) {
             if (imageType == 'logo') {
-                $('#logo-image-listing').html(t);
+                $('#shopLogoHtml').html(t);
             } else if (imageType == 'banner') {
-                $('#banner-image-listing').html(t);
-            } else {
-                $('#bg-image-listing').html(t);
+                $('#shopBannerHtml').html(t);
             }
         });
     };
@@ -254,7 +244,6 @@ $(document).on("change", ".state", function () {
 
     shopCollectionProducts = function (el) {
         $(dv).prepend(fcom.getLoader());
-        // console.log($(el).parent());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollection'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
@@ -269,11 +258,11 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             scollection_id = 0;
         }
-        markSubTabActive();
-        $(dv).prepend(fcom.getLoader());
+        
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dv).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -282,6 +271,7 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
             $(ctabId).data('collectionId', t.collection_id);
+            shopCollections();
             $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
@@ -315,7 +305,8 @@ $(document).on("change", ".state", function () {
         if (typeof (langId) == "undefined" || langId < 0) {
             return false;
         }
-        markSubTabActive();
+        
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -328,7 +319,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markSubTabActive();
+        
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -363,8 +354,8 @@ $(document).on("change", ".state", function () {
         }
         markSubTabActive();
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
-            $('.btn-back').removeClass('d-none');
-            $(dv).html(t);
+            fcom.removeLoader();
+            $.ykmodal(t);
         });
     };
 
@@ -373,10 +364,11 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
             $.mbsmessage.close();
-            /*reloadSocialPlatformsList();*/
+            reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
-                return;
+            } else {
+                closeForm();
             }
 
         });
@@ -404,6 +396,8 @@ $(document).on("change", ".state", function () {
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
                 return;
+            } else {
+                closeForm();
             }
         });
     };
@@ -494,18 +488,17 @@ $(document).on("change", ".state", function () {
     };
 
     pickupAddressForm = function (id, langId = 0) {
-        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
             $.ykmodal(t, false, 'modal-dialog-vertical-md');
-            setTimeout(function () { $('.fromTimeJs').change(); }, 500);
+            setTimeout(function () { $('.fromTime-js').change(); }, 500);
         });
     };
 
     setPickupAddress = function (frm) {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
-            if (1 > $(".slotDaysJs:checked").length) {
+            if (1 > $(".slotDays-js:checked").length) {
                 $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
                 return false;
             }
@@ -533,7 +526,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markSubTabActive();
+        
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -600,10 +593,13 @@ $(document).on("change", ".state", function () {
     };
 
     bannerPopupImage = function (inputBtn) {
-        if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader(), '', 'cropper-body');
-            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t);
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+        if (inputBtn.files && inputBtn.files[0]) {            
+            fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
@@ -620,16 +616,18 @@ $(document).on("change", ".state", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadShopImages', inputBtn);
+               setTimeout(function () { cropImage(file, options, 'uploadShopImages', inputBtn); }, 100);
             });
         }
     };
 
     logoPopupImage = function (inputBtn) {
-        if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader(), '', 'cropper-body');
-            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t);
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+        if (inputBtn.files && inputBtn.files[0]) {          
+            fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
                 var minHeight = document.frmShopLogo.logo_min_height.value;
@@ -651,30 +649,25 @@ $(document).on("change", ".state", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadShopImages', inputBtn);
+                setTimeout(function () { cropImage(file, options, 'uploadShopImages', inputBtn); }, 100);
             });
         }
     };
 
     uploadShopImages = function (formData) {
-        var frmName = formData.get("frmName");
-        var imageDivId = 'banner-image-listing';
+        var frmName = formData.get("frmName");      
         if ('frmShopLogo' == frmName) {
             var langId = document.frmShopLogo.lang_id.value;
             var fileType = document.frmShopLogo.file_type.value;
             var imageType = 'logo';
-            var ratio_type = $('input[name="ratio_type"]:checked').val();
-            imageDivId = '#logo-image-listing';
+            var ratio_type = $('input[name="ratio_type"]:checked').val();           
         } else {
             var langId = document.frmShopBanner.lang_id.value;
             var slideScreen = document.frmShopBanner.slide_screen.value;
             var fileType = document.frmShopBanner.file_type.value;
             var imageType = 'banner';
-            var ratio_type = 0;
-            imageDivId = '#banner-image-listing';
+            var ratio_type = 0;            
         }
-
-        let blobUrl = URL.createObjectURL(formData.get('cropped_image'));
 
         formData.append('slide_screen', slideScreen);
         formData.append('lang_id', langId);
@@ -689,32 +682,16 @@ $(document).on("change", ".state", function () {
             data: formData,
             cache: false,
             contentType: false,
-            processData: false,
-            uploadProgress: function (e) {
-                if (e.lengthComputable) {
-                    let percentComplete = (e.loaded * 100) / e.total;
-                    $("#" + blobUrl.substring(blobUrl.lastIndexOf('/') + 1) + " .progress-bar").width(percentComplete + "%");
-                }
-            },
-            beforeSend: function () {
-                $(document).trigger('close.facebox');
-                $(imageDivId).html(getImageTemplate(formData.get('cropped_image').name, blobUrl));
-            },
+            processData: false,           
             success: function (ans) {
-                $.mbsmessage.close();
-                $('.text-danger').remove();
-                $('#input-field' + fileType).html(ans.msg);
+                $("#modalBoxJs").modal("hide");
+                $.mbsmessage.close();                      
                 if (ans.status == true) {
                     $.mbsmessage(ans.msg, true, 'alert--success');
-                    $('#input-field' + fileType).removeClass('text-danger');
-                    $('#input-field' + fileType).addClass('badge-success');
-                    $('#form-upload').remove();
                     shopImages(imageType, slideScreen, langId);
                 } else {
                     $.mbsmessage(ans.msg, true, 'alert--danger');
-                    $('#input-field' + fileType).removeClass('badge-success');
-                    $('#input-field' + fileType).addClass('text-danger');
-                }
+                } 
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -724,9 +701,9 @@ $(document).on("change", ".state", function () {
 
     collectionPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader(), '', 'cropper-body');
+            $.ykmodal(fcom.getLoader(), '', 'cropper-body');
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t);
+                $.ykmodal(t);
                 var file = inputBtn.files[0];
                 var options = {
                     aspectRatio: 16 / 9,
@@ -782,7 +759,7 @@ $(document).on("change", ".state", function () {
                     $(dv).removeClass('badge-success');
                     $(dv).addClass('text-danger');
                 }
-                $(document).trigger('close.facebox');
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -924,19 +901,19 @@ $(document).on("change", ".state", function () {
     }
 
     markSubTabActive = function () {
-        let currentTabEle = $(ctabId + ' li').find("a[onclick^='" + markSubTabActive.caller.name + "']").closest('li');
-        currentTabEle.siblings().removeClass('is-active');
-        currentTabEle.addClass('is-active');
+        $(ctabId + ' a.active').removeClass('active');
+        $(ctabId + " a[onclick^='" + markSubTabActive.caller.name + "']").addClass('active');
     }
 
 })();
 
 function bindAutoComplete() {
     $("select[name='scp_selprod_id']").select2({
+        dropdownParent: $("select[name='scp_selprod_id']").closest('.modal'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
         allowClear: true,
-        //placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
+        placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
         ajax: {
             url: fcom.makeUrl('seller', 'autoCompleteProducts'),
             dataType: 'json',

@@ -47,7 +47,7 @@ $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
 
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-inventory');
+$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
 $inventoryForm->setCustomRendererClass('FormRendererBS');
 $inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col-3';
@@ -66,7 +66,7 @@ $fld = $inventoryForm->getField('btn_submit');
 $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 
 $fld = $inventoryForm->getField('btn_clear');
-$fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block clearBtn--js');
+$fld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block clearBtn--js');
 $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
 ?>
 <div class="row">
@@ -718,11 +718,9 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
         }
 
         viewProdOptions = function(productId) {
-            $.facebox(function() {
-                fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
-                    var res = $.parseJSON(t);
-                    fcom.updateFaceboxContent(res.html);
-                });
+            fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
+                var res = $.parseJSON(t);
+                $.ykmodal(res.html);
             });
         };
 

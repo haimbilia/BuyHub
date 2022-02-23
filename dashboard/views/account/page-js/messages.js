@@ -36,7 +36,6 @@ $(document).ready(function () {
 	};
 
 	viewThread = function (obj) {
-		console.log(obj);
 		var currEle = $(obj);
 		var threadId = currEle.data('threadId');
 		$('.listItemJs.is-active').removeClass('is-active');

@@ -44,7 +44,7 @@ class AddressesController extends LoggedUserController
         $data_to_be_save = $post;
         $data_to_be_save['addr_record_id'] = $this->userId;
         $data_to_be_save['addr_type'] = Address::TYPE_USER;
-        $data_to_be_save['addr_lang_id'] = $this->siteLangId;
+        $data_to_be_save['addr_lang_id'] = $post['lang_id'];
         $addressObj->assignValues($data_to_be_save, true);
         if (!$addressObj->save()) {
             if (true === MOBILE_APP_API_CALL) {

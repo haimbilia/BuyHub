@@ -1,10 +1,14 @@
 <?php
+$fld = $productSeoLangForm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 if (!empty($translatorSubscriptionKey) && $selprod_lang_id != $siteDefaultLangId) { ?>
     <div class="row justify-content-end">
-        <div class="col-auto mb-4">
-            <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
+        <div class="col-auto">
+            <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editProductMetaTagLangForm(<?php echo $selprodId; ?>, <?php echo $selprod_lang_id; ?>)">
         </div>
     </div>
 <?php } ?>
@@ -30,18 +34,18 @@ $nextBtn->setWrapperAttribute('class', "text-right");
 $nextBtn->developerTags['noCaptionTag'] = true;
 
 $exitBtn = $productSeoLangForm->getField('btn_exit');
-$exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
+$exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
 $exitBtn->setfieldTagAttribute('onclick', "setupProductLangMetaTag(this.closest('form'), 1)");
 $exitBtn->developerTags['col'] = 6;
 $exitBtn->developerTags['noCaptionTag'] = true;
 
-HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
+// HtmlHelper::configureCheckboxLabel($productSeoLangForm, 'auto_update_other_langs_data');
 
 end($languages);
 if (key($languages) == $selprod_lang_id) {
     $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
     $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
-    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
+    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-gray");
 } ?>
 
 <div id="dvForm">

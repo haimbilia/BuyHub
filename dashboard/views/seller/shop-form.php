@@ -37,7 +37,7 @@ $btnSubmit = $shopFrm->getField('btn_submit');
 /* $btnSubmit->developerTags['noCaptionTag'] = true; */
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 ?>
-<div class="card-body "> 
+<div class="card-body ">
     <?php echo $shopFrm->getFormHtml(); ?>
     <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
         <div class="g-map" id="map"></div>

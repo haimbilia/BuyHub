@@ -95,19 +95,37 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                                 </div>
                             </div>
                     <?php }
-                        $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
-                        $frm->setFormTagAttribute('class', 'form');
-                        $frm->developerTags['colClassPrefix'] = 'col-md-12';
-                        $frm->developerTags['fld_default_col'] = 12;
-                        $submitFld = $frm->getField('btn_submit');
-                        $submitFld->developerTags['noCaptionTag'] = true;
-                        $submitFld->setFieldTagAttribute('class', "btn btn-brand");
-                        $fld = $frm->getField('message_text');
-                        $fld->attachField($submitFld);
-                        echo $frm->getFormHtml();
                     } ?>
                 </div>
             </div>
+            <?php if (false === $doNotshowMessages) { ?>
+                <div class="card-foot p-0">
+
+                    <?php
+                    $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
+                    $frm->setFormTagAttribute('class', 'form message-send');
+                    $frm->developerTags['colClassPrefix'] = 'col-md-';
+                    $frm->developerTags['fld_default_col'] = 12;
+
+                    $msgFld = $frm->getField('message_text');
+                    $msgFld->developerTags['noCaptionTag'] = true;
+                    $msgFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS', $siteLangId));
+                    $msgFld->setFieldTagAttribute('class', 'message-textarea'); ?>
+
+                    <?php echo $frm->getFormTag(); ?>
+                    <?php echo $frm->getFieldHtml('message_thread_id'); ?>
+
+                    <?php echo $frm->getFieldHtml('message_text'); ?>
+                    <button class="btn btn-icon btn-send" type="submit">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                            </use>
+                        </svg>
+                    </button>
+                    </form>
+                    <?php echo $frm->getExternalJS(); ?>
+                </div>
+            <?php } ?>
         </div>
     </div>
 
@@ -122,7 +140,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     <ul class="list__group">
                         <li class="list__group-item">
                             <div class="list__group-icon">
-                                <svg class="svg">
+                                <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-mail">
                                     </use>
                                 </svg>
@@ -135,7 +153,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                         <?php if (!empty($fromPhoneNo)) { ?>
                             <li class="list__group-item">
                                 <div class="list__group-icon">
-                                    <svg class="svg">
+                                    <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
                                         </use>
                                     </svg>

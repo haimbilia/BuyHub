@@ -63,11 +63,12 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {
         $.ykmodal(fcom.getLoader());
     }
-    if (0 > $(".navTabsJs .nav-link").length) {
-        $(".navTabsJs .nav-link.active").click();
-    } else {
-        var onClear = $(".modalFormJs").data("onclear");
+
+    var onClear = $(".modalFormJs").data("onclear");
+    if ('undefined' != typeof onClear) {
         eval(onClear);
+    } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
+        $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
     }
 });
 

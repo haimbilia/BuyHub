@@ -147,13 +147,12 @@ class StatesController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = States::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = States::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(state_name,state_identifier) as state_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

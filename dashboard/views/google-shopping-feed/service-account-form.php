@@ -1,47 +1,25 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frm->setFormTagAttribute('class', 'form');
+HtmlHelper::formatFormFields($frm);
+
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-onclear', "serviceAccountForm();");
 $frm->setFormTagAttribute('id', 'pluginForm');
 $frm->setFormTagAttribute('onsubmit', 'setuppluginform(this); return(false);');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl($keyName, 'setup'));
 $frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12; 
-
-$btnSubmit = $frm->getField('btn_submit');
-$btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
+$frm->developerTags['fld_default_col'] = 12;
 
 $serviceAccount = $frm->getField('service_account');
 ?>
-
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo $serviceAccount->getCaption(); ?></h5>
+    <h5 class="modal-title">
+        <?php echo $serviceAccount->getCaption(); ?>
+    </h5>
 </div>
-<div class="modal-body">
-    <div class="box__body">
-        <div class="form__subcontent">
-            <?php echo $frm->getFormTag();?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="field-set">
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frm->getFieldHtml('service_account'); ?></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="field-set">
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('btn_submit'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <?php echo $frm->getExternalJS();?>
-        </div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

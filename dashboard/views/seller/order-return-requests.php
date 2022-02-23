@@ -7,7 +7,7 @@ $orrequestDateToFld = $frmSearch->getField('orrequest_date_to');
 $orrequestDateToFld->setFieldTagAttribute('class', 'field--calender');
 $orrequestDateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Date_to', $siteLangId));
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [

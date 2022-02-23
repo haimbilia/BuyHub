@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?> 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> 
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -12,7 +12,7 @@
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Offers', $siteLangId); ?></h5>
                 </div> -->
                 <div class="card-body">
-                    <div id="listing" class="row"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
+                    <div id="listing"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                 </div>
             </div>
         </div>

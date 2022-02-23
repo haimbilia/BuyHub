@@ -14,7 +14,7 @@ if (null != $btnFld) {
 
 $btnFld = $frm->getField('btn_clear');
 if (null != $btnFld) {
-    $btnFld->addFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+    $btnFld->addFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
     $btnFld->addFieldTagAttribute('onclick', 'clearForm();');
     $btnFld->developerTags['col'] = 2;
     $btnFld->setWrapperAttribute('class', 'col-6 col-lg-2');

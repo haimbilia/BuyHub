@@ -10,6 +10,7 @@ $(document).ready(function(){
 		$("#cancelOrderRequestsListing").html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Buyer','orderCancellationRequestSearch'), data, function(res){
 			$("#cancelOrderRequestsListing").html(res);
+			fcom.removeLoader();
 		}); 
 	};
 	

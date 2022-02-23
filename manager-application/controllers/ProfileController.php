@@ -63,9 +63,10 @@ class ProfileController extends ListingBaseController
             LibHelper::exitWithError($this->_adminProfileObj->getError(), true);
         }
 
-        unset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name']);
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name'] = $post['admin_name'];
-
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_email'] = $post['admin_email'];
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_username'] = $post['admin_username'];
+        
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }

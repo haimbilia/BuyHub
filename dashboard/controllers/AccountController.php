@@ -1,5 +1,4 @@
 <?php
-
 class AccountController extends LoggedUserController
 {
     public function __construct($action)
@@ -201,7 +200,7 @@ class AccountController extends LoggedUserController
         //send notification to admin
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_USER,
-            'notification_record_id' => $userObj->getMainTableRecordId(),
+            'notification_record_id' => $supplier_request_id,
             'notification_user_id' => $this->userId,
             'notification_label_key' => ($approval_request) ? Notification::NEW_SUPPLIER_APPROVAL_NOTIFICATION : Notification::NEW_SELLER_APPROVED_NOTIFICATION,
             'notification_added_on' => date('Y-m-d H:i:s'),
@@ -936,7 +935,7 @@ class AccountController extends LoggedUserController
 
         $mode = 'Add';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId);
-        if ($file_row != false) {
+        if ($file_row != false  && 0 < $file_row['afile_id']) {
             $mode = 'Edit';
         }
 
@@ -994,7 +993,6 @@ class AccountController extends LoggedUserController
             if (!$fileHandlerObj->isUploadedFile($_FILES['org_image']['tmp_name'])) {
                 FatUtility::dieJsonError($fileHandlerObj->getError());
             }
-
             if (!$res = $fileHandlerObj->saveImage($_FILES['org_image']['tmp_name'], AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId, 0, $_FILES['org_image']['name'], -1, true)) {
                 $message = Labels::getLabel($fileHandlerObj->getError(), $this->siteLangId);
                 FatUtility::dieJsonError($message);
@@ -2369,105 +2367,6 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    /* public function viewMessages($threadId, $messageId = 0)
-    {
-        $this->userPrivilege->canViewMessages($this->userId);
-        $threadId = FatUtility::int($threadId);
-        $messageId = FatUtility::int($messageId);
-        if (1 > $threadId) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $threadData = Thread::getAttributesById($messageId, array('thread_id,thread_type'));
-        if ($threadData == false) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        $attr = array(
-            'IFNULL(shop_name, shop_identifier) as shop_name',
-            'shop_id',
-            'shop_updated_on',
-        );
-        $shopDetails = Shop::getAttributesByUserId($this->userId, $attr, false, $this->siteLangId);
-        $srch = new MessageSearch();
-
-        $srch->joinThreadMessage();
-        $srch->joinMessagePostedFromUser();
-        $srch->joinMessagePostedToUser();
-        $srch->joinThreadStartedByUser();
-        if ($threadData['thread_type'] == Thread::THREAD_TYPE_SHOP) {
-            $srch->joinShops($this->siteLangId);
-        } elseif ($threadData['thread_type'] == Thread::THREAD_TYPE_PRODUCT) {
-            $srch->joinProducts($this->siteLangId);
-        }
-
-        $parentAndThierChildIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
-
-        $srch->joinOrderProducts();
-        $srch->joinOrderProductStatus();
-        $srch->addMultipleFields(array('tth.*', 'top.op_invoice_number'));
-        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
-        $srch->addCondition('tth.thread_id', '=', 'mysql_func_' . $threadId, 'AND', true);
-        if ($messageId) {
-            $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
-        }
-
-        $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndThierChildIds);
-        $cnd->attachCondition('ttm.message_to', 'IN', $parentAndThierChildIds, 'OR');
-        $rs = $srch->getResultSet();
-        $threadDetails = FatApp::getDb()->fetch($rs);
-
-        if ($threadDetails == false) {
-            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            CommonHelper::redirectUserReferer();
-        }
-
-        if (false === MOBILE_APP_API_CALL) {
-            $frmSrch = $this->getMsgSearchForm($this->siteLangId);
-            $frmSrch->fill(array('thread_id' => $threadId));
-            $frm = $this->sendMessageForm($this->siteLangId);
-            $frm->fill(array('message_thread_id' => $threadId, 'message_id' => $messageId));
-        }
-
-        $threadObj = new Thread($threadId);
-        if (!$threadObj->markMessageReadFromUserArr($threadId, $parentAndThierChildIds)) {
-            if (true === MOBILE_APP_API_CALL) {
-                Message::addErrorMessage(strip_tags(current($threadObj->getError())));
-            }
-            Message::addErrorMessage($threadObj->getError());
-            CommonHelper::redirectUserReferer();
-        }
-
-        if (false === MOBILE_APP_API_CALL) {
-            $this->set('frmSrch', $frmSrch);
-            $this->set('frm', $frm);
-        }
-        $this->set('canEditMessages', $this->userPrivilege->canEditMessages($this->userId, true));
-        $this->set('threadDetails', $threadDetails);
-        $this->set('threadTypeArr', Thread::getThreadTypeArr($this->siteLangId));
-        $this->set('loggedUserId', $this->userId);
-        $this->set('loggedUserName', ucfirst(UserAuthentication::getLoggedUserAttribute('user_name')));
-        $this->set('shopDetails', $shopDetails);
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-        $this->_template->render();
-    } */
-
     public function threadMessageSearch()
     {
         $this->userPrivilege->canViewMessages($this->userId);
@@ -2637,7 +2536,7 @@ class AccountController extends LoggedUserController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -2752,8 +2651,8 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
         $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
-        $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId));
+        /* $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
+        $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId)); */
         return $frm;
     }
 
@@ -2822,15 +2721,15 @@ class AccountController extends LoggedUserController
     private function getBankInfoForm()
     {
         $frm = new Form('frmBankInfo');
-        $frm->addRequiredField(Labels::getLabel('M_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('M_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
-        $fld = $frm->addRequiredField(Labels::getLabel('M_Account_Number', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_BANK_NAME', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $this->siteLangId), 'ub_account_holder_name', '');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_NUMBER', $this->siteLangId), 'ub_account_number', '');
         $fld->requirement->setRequired(true);
 
-        $ifsc = $frm->addRequiredField(Labels::getLabel('M_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $ifsc = $frm->addRequiredField(Labels::getLabel('FRM_IFSC_SWIFT_CODE', $this->siteLangId), 'ub_ifsc_swift_code', '');
         $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
 
-        $frm->addTextArea(Labels::getLabel('M_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
+        $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
         $htm = '<div class="info p-3">
                     <span>
                         <svg class="svg">
@@ -2840,7 +2739,7 @@ class AccountController extends LoggedUserController
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -2848,29 +2747,29 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('changePwdFrm');
         $curPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_CURRENT_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
             'current_password'
         );
         $curPwd->requirements()->setRequired();
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
             'new_password'
         );
-        $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</span>';
+        $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('FRM_EXAMPLE_PASSWORD', $this->siteLangId), 'User@123') . '</span>';
         $newPwd->requirements()->setRequired();
         $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_CONFIRM_NEW_PASSWORD', $this->siteLangId),
+            Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId),
             'conf_new_password'
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        /* $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_CONFIRM_PASSWORD_NOT_MATCHED',
+        /* $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('FRM_CONFIRM_PASSWORD_NOT_MATCHED',
         $this->siteLangId)); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -2968,7 +2867,7 @@ class AccountController extends LoggedUserController
                 $fld->htmlAfterField = '<p class="note">' . $field['sformfield_comment'] . '</p>';
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -3259,13 +3158,13 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword', '');
-        $frm->addSelectBox(Labels::getLabel('LBL_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('LBL_Both-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '');
+        $frm->addSelectBox(Labels::getLabel('FRM_CREDIT_TYPE', $langId), 'debit_credit_type', array(-1 => Labels::getLabel('FRM_BOTH-Debit/Credit', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -3273,8 +3172,7 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmSendMessage');
         $frm->addHiddenField('', 'message_thread_id');
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $langId), 'message_text', '')->requirements()->setRequired(true);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $langId));
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $langId), 'message_text', '')->requirements()->setRequired(true);
         return $frm;
     }
 
@@ -3290,8 +3188,8 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmBankInfo');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Auto_Renew_Subscription', $this->siteLangId), 'user_autorenew_subscription', $activeInactiveArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_AUTO_RENEW_SUBSCRIPTION', $this->siteLangId), 'user_autorenew_subscription', $activeInactiveArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -3300,7 +3198,7 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmRechargeWallet');
         $fld = $frm->addFloatField('', 'amount');
         //$fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Add_Credits', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD_CREDITS', $langId));
         return $frm;
     }
 
@@ -3328,18 +3226,18 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false);
     }
 
-    public function addAddressForm($addr_id)
+    public function addAddressForm(int $addr_id = 0, int $langId = 0)
     {
-        $addr_id = FatUtility::int($addr_id);
-        $addressFrm = $this->getUserAddressForm($this->siteLangId);
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+        $addressFrm = $this->getUserAddressForm($langId);
 
         $stateId = 0;
 
         if ($addr_id > 0) {
-            $address = new Address($addr_id, $this->siteLangId);
+            $address = new Address($addr_id, $langId);
             $data = $address->getData(Address::TYPE_USER, $this->userId);
             if (empty($data)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $langId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
             $stateId = $data['addr_state_id'];
@@ -3349,6 +3247,7 @@ class AccountController extends LoggedUserController
         $this->set('addr_id', $addr_id);
         $this->set('stateId', $stateId);
         $this->set('addressFrm', $addressFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -3390,11 +3289,11 @@ class AccountController extends LoggedUserController
     private function getRequestDataForm()
     {
         $frm = new Form('frmRequestdata');
-        $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '', array('readonly' => 'readonly'));
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $this->siteLangId), 'user_name', '', array('readonly' => 'readonly'));
-        $purposeFld = $frm->addTextArea(Labels::getLabel('LBL_PURPOSE_OF_REQUEST_DATA', $this->siteLangId), 'ureq_purpose');
+        $frm->addTextBox(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $this->siteLangId), 'user_name', '', array('readonly' => 'readonly'));
+        $purposeFld = $frm->addTextArea(Labels::getLabel('FRM_PURPOSE_OF_REQUEST_DATA', $this->siteLangId), 'ureq_purpose');
         $purposeFld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send_Request', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND_REQUEST', $this->siteLangId));
         return $frm;
     }
 
@@ -3732,10 +3631,10 @@ class AccountController extends LoggedUserController
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
+        $frm->addCheckBox(Labels::getLabel("FRM_FUNCTIONAL", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("FRM_STATISTICAL_ANALYSIS", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("FRM_PERSONALISE_EXPERIENCE", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

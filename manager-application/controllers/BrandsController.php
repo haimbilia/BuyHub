@@ -111,7 +111,7 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'ifnull(brand_name, brand_identifier) as brand_name'), true);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -183,7 +183,7 @@ class BrandsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -223,7 +223,7 @@ class BrandsController extends ListingBaseController
     {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
-
+        
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
@@ -445,7 +445,7 @@ class BrandsController extends ListingBaseController
         $prodBrandLangFrm = $this->getLangForm($brand_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($brand_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($brand_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }

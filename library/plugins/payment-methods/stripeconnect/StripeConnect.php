@@ -67,6 +67,7 @@ class StripeConnect extends PaymentMethodBase
     public const REQUEST_CAPTURE_PAYMENT = 28;
     public const REQUEST_CREATE_ACCOUNT_LINKS = 29;
     public const REQUEST_CREATE_COUPON = 30;
+    public const REQUEST_CREATE_ACCOUNT_TOKEN = 31;
 
     public const PAYMENT_RESPONSE_INTENT_TYPE_SUCCESS = 'payment_intent.succeeded';
 
@@ -189,11 +190,11 @@ class StripeConnect extends PaymentMethodBase
             if (false === $this->doRequest(self::REQUEST_CREATE_ACCOUNT)) {
                 return false;
             }
-        } 
+        }
 
         return true;
     }
-    
+
     /**
      * requestAccountLinks
      *
@@ -209,7 +210,7 @@ class StripeConnect extends PaymentMethodBase
             'type' => 'account_onboarding',
             'collect' => 'eventually_due'
         ];
-        
+
         $this->resp = $this->doRequest(self::REQUEST_CREATE_ACCOUNT_LINKS, $requestParam);
         if (false === $this->resp) {
             return false;
@@ -405,6 +406,11 @@ class StripeConnect extends PaymentMethodBase
             return false;
         }
 
+        $accountToken = $this->getAccountToken();
+        if (empty($accountToken)) {
+            return false;
+        }
+
         $data = [
             'type' => 'custom',
             'country' => strtoupper($this->userData['country_code']),
@@ -414,9 +420,10 @@ class StripeConnect extends PaymentMethodBase
                 'transfers',
             ],
             'settings' => $this->getPayoutSettingsArr(),
-            'default_currency' => $this->systemCurrencyCode
+            'default_currency' => $this->systemCurrencyCode,
+            'account_token' => $accountToken
         ];
-        
+
         $this->resp = $this->create($data);
         if (false === $this->resp) {
             return false;
@@ -426,6 +433,36 @@ class StripeConnect extends PaymentMethodBase
         return $this->updateUserMeta('stripe_account_id', $this->resp->id);
     }
 
+    /**
+     * getAccountToken
+     *
+     * @return string
+     */
+    private function getAccountToken(): string
+    {
+        $accountToken = $this->getUserMeta('stripe_account_token');
+        if (empty($accountToken)) {
+            if (false === $this->createAccountToken()) {
+                return '';
+            }
+            $accountToken = $this->getUserMeta('stripe_account_token');
+        }
+        return (string)$accountToken;
+    }
+
+    /**
+     * createAccountToken
+     *
+     * @return string
+     */
+    private function createAccountToken(): bool
+    {
+        $this->resp = $this->doRequest(self::REQUEST_CREATE_ACCOUNT_TOKEN);
+        if (false === $this->resp) {
+            return false;
+        }
+        return $this->updateUserMeta('stripe_account_token', $this->resp->id);
+    }
 
     /**
      * getPersonToken
@@ -451,7 +488,7 @@ class StripeConnect extends PaymentMethodBase
      */
     private function createPersonToken(): bool
     {
-        $this->resp = $this->createToken();
+        $this->resp = $this->createPersonTokenId();
         if (false === $this->resp) {
             return false;
         }
@@ -560,7 +597,7 @@ class StripeConnect extends PaymentMethodBase
             ],
         ];
     }
-    
+
     /**
      * initialFormSubmitted
      *
@@ -1238,19 +1275,14 @@ class StripeConnect extends PaymentMethodBase
         }
         return true;
     }
-
-    /**
-     * fetchCards
-     *
-     * @return bool
-     */
+    
     public function fetchCards(): bool
     {
-        if (false === $this->loadCustomer()) {
+        if (false === $this->loadSavedCards()) {
             return false;
         }
-        $customerInfo = $this->getResponse()->toArray();
-        $this->resp = (array) $customerInfo['sources']['data'];
+        $cardsInfo = $this->getResponse()->toArray();
+        $this->resp = (array) $cardsInfo['data'];
         return true;
     }
 
@@ -1343,7 +1375,7 @@ class StripeConnect extends PaymentMethodBase
         FatCache::set('stripePayoutDays' . $this->langId, FatUtility::convertToJson($days), '.txt');
         return $days;
     }
-    
+
     /**
      * getOtherPaymentMethods
      *
@@ -1362,7 +1394,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return $paymentMethodsArr;
     }
-    
+
     /**
      * bindCoupon
      *
@@ -1490,6 +1522,9 @@ class StripeConnect extends PaymentMethodBase
                     break;
                 case self::REQUEST_CREATE_COUPON:
                     return $this->createCoupon($requestParam);
+                    break;
+                case self::REQUEST_CREATE_ACCOUNT_TOKEN:
+                    return $this->createAccountTokenId();
                     break;
             }
         } catch (\Stripe\Exception\CardException $e) {

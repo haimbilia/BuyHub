@@ -1,60 +1,46 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$langFrm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
+HtmlHelper::formatFormFields($langFrm);
+
+$langFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+$langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'setupPromotionLang(this); return(false);');
 
-$langFrm->developerTags['colClassPrefix'] = 'col-md-';
-$langFrm->developerTags['fld_default_col'] = 6;
-
 $langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $promotionId . ", this.value);");
-
-$btnSubmitFld = $langFrm->getField('btn_submit');
-$btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
+$langFld->setfieldTagAttribute('onChange', "promotionLangForm(" . $recordId . ", this.value);");
+$translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+    $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="promotionLangForm(' . $recordId . ', ' . $langId . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                            </use>
+                        </svg>
+                    </a>';
+}
 ?>
-<div id="listing">
-    <div class="card-head">
-        <h5 class="card-title">
-            <a title="<?php echo Labels::getLabel('LBL_PROMOTION_LIST', $siteLangId); ?>" class="back" href="javascript:void(0)" onclick="searchRecords()" data-bs-toggle="tootip">
-                <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                    </use>
-                </svg>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_PROMOTION_SETUP'); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-head">
+        <nav class="nav nav-tabs navTabsJs">
+            <a class="nav-link" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $recordId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
+            <a class="nav-link active" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='promotionLangForm(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?>>
+                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
-            <?php echo Labels::getLabel('LBL_BACK_TO_PROMOTION_LIST', $siteLangId); ?>
-        </h5>
+            <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
+                <a class="nav-link" href="javascript:void(0)" <?php if ($recordId > 0) { ?> onclick="promotionMediaForm(<?php echo $recordId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+            <?php } ?>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="row ">
+    <div class="form-edit-body loaderContainerJs sectionbody space">
+        <div class="row" id="promotionsChildBlockJs">
             <div class="col-md-12">
-                <div class="tabs tabs--small   tabs--scroll clearfix setactive-js rtl">
-                    <ul>
-                        <li><a href="javascript:void(0);" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                        <li class="is-active">
-                            <a href="javascript:void(0);">
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>> <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="tabs__content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?php
-                            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                            $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-                            if (!empty($translatorSubscriptionKey) && $promotion_lang_id != $siteDefaultLangId) { ?>
-                                <div class="col-auto mb-4">
-                                    <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="promotionLangForm(<?php echo $promotionId; ?>, <?php echo $promotion_lang_id; ?>, 1)">
-                                </div>
-                            <?php } ?>
-                            <?php echo $langFrm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
+                <?php echo $langFrm->getFormHtml(); ?>
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

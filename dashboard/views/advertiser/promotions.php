@@ -1,29 +1,28 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Promotions', $siteLangId),
+        'headingLabel' => Labels::getLabel('LBL_PROMOTIONS', $siteLangId),
         'siteLangId' => $siteLangId,
     ];
     if ($canEdit) {
         $data['otherButtons'][] = [
             'attr' => [
                 'onclick' => 'promotionForm()',
-                'title' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
+                'class' => 'btn btn-outline-gray btn-icon',
+                'title' => Labels::getLabel('LBL_ADD_PROMOTION', $siteLangId)
             ],
-            'label' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
+            'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+            </use>
+        </svg>',
+            'label' => Labels::getLabel('LBL_NEW', $siteLangId)
         ];
     }
-    $data['otherButtons'][] = [
-        'attr' => [
-            'onclick' => 'reloadList()',
-            'title' => Labels::getLabel('LBL_My_promotions', $siteLangId)
-        ],
-        'label' => Labels::getLabel('LBL_My_promotions', $siteLangId)
-    ];
-    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-md-12">

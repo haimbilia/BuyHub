@@ -133,7 +133,7 @@ class SlidesController extends ListingBaseController
                 'slide_target', 'slide_active', 'slide_display_order', 'slide_img_updated_on', 'slidelang_slide_id',
                 'slidelang_lang_id', 'IFNULL(slide_title, slide_identifier) AS slide_title'
             ];
-            $data = Slides::getAttributesByLangId($langId, $recordId, $fields, true);
+            $data = Slides::getAttributesByLangId($langId, $recordId, $fields, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -224,7 +224,7 @@ class SlidesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -261,7 +261,7 @@ class SlidesController extends ListingBaseController
         $langFrm = $this->getLangForm($langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -337,7 +337,7 @@ class SlidesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

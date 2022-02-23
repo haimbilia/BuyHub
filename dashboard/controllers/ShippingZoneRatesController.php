@@ -136,6 +136,16 @@ class ShippingZoneRatesController extends SellerBaseController
             Message::addErrorMessage($srObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(ShippingRate::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($rateId)) {
+                Message::addErrorMessage($updateLangDataobj->getError());
+                FatUtility::dieJsonError(Message::getHtml());
+            }
+        }
+
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $key => $langName) {
@@ -216,34 +226,34 @@ class ShippingZoneRatesController extends SellerBaseController
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_identifier');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RATE_IDENTIFIER', $this->siteLangId), 'shiprate_identifier');
 
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'shiprate_cost');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
 
         $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
 
-        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
+        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);
 
-        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
+        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeReq->setRequired(true);
 
-        $frm->addFloatField(Labels::getLabel('LBL_Minimum', $this->siteLangId), 'shiprate_min_val');
+        $frm->addFloatField(Labels::getLabel('FRM_MINIMUM', $this->siteLangId), 'shiprate_min_val');
 
-        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
+        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('FRM_MINIMUM', $this->siteLangId));
         $fldMinUnReq->setRequired(false);
 
-        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
+        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('FRM_MINIMUM', $this->siteLangId));
         $fldMinReq->setRequired(true);
         $fldMinReq->setFloatPositive();
         $fldMinReq->setRange('0.001', '99999999');
 
-        $frm->addFloatField(Labels::getLabel('LBL_Maximum', $this->siteLangId), 'shiprate_max_val');
+        $frm->addFloatField(Labels::getLabel('FRM_MAXIMUM', $this->siteLangId), 'shiprate_max_val');
 
-        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
+        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('FRM_MAXIMUM', $this->siteLangId));
         $fldMaxUnReq->setRequired(false);
 
-        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
+        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('FRM_MAXIMUM', $this->siteLangId));
         $fldMaxReq->setRequired(true);
         $fldMaxReq->setFloatPositive();
         $fldMaxReq->setRange('0.001', '99999999');
@@ -258,21 +268,29 @@ class ShippingZoneRatesController extends SellerBaseController
         $cndFld->requirements()->addOnChangerequirementUpdate(1, 'eq', 'shiprate_condition_type', $fldCndTypeReq);
         $cndFld->requirements()->addOnChangerequirementUpdate(0, 'eq', 'shiprate_condition_type', $fldCndTypeUnReq);
 
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
-        //$fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
         return $frm;
     }
 
     private function getLangForm($zoneId = 0, $rateId = 0, $langId = 0)
     {
+        $langId = 0 < $langId ? $langId : $this->siteLangId;
         $frm = new Form('frmRateLang');
         $frm->addHiddenField('', 'zone_id', $zoneId);
         $frm->addHiddenField('', 'rate_id', $rateId);
-        $frm->addHiddenField('', 'lang_id', $langId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_name');
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
-        //$fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
-        // $fld->attachField($fldCancel);
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        } else {
+            $langId = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $langId);
+        }
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $langId), 'shiprate_name');
+        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
 }

@@ -197,6 +197,9 @@ $frm->developerTags['fld_default_col'] = 12;
             </div> 
 
             </form>
+            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+            <?php } ?>
         </div>
     </div>
 </div>

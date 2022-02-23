@@ -23,7 +23,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div id="returnOrderRequestsListing"></div>
-                        <span class="gap"></span>
+
                     </div>
                 </div>
             </div>

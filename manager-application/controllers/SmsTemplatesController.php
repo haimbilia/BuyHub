@@ -115,7 +115,7 @@ class SmsTemplatesController extends ListingBaseController
         $tempFrm = $this->getTemplateForm($stplCode, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(SmsTemplate::DB_TBL);
-            $translatedData = $updateLangDataobj->getTranslatedData($stplCode, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($stplCode, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -149,11 +149,10 @@ class SmsTemplatesController extends ListingBaseController
         $fld->requirements()->setRequired(true);
         $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_CAPTION', $langId), 'replacement_caption', '<h3>' . Labels::getLabel('FRM_REPLACEMENT_VARS', $langId) . '</h3>');
         $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $langId), 'stpl_replacements', '');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+      
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+        $languages = Language::getAllNames();
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -190,7 +189,7 @@ class SmsTemplatesController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(SmsTemplate::DB_TBL);
-            if (false === $updateLangDataobj->updateTranslatedData($stplCode)) {
+            if (false === $updateLangDataobj->updateTranslatedData($stplCode, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

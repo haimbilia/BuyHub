@@ -2,6 +2,8 @@
 
 class ImportInstructionsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_IMPORT_INSTRUCTIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class ImportInstructionsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_IMPORT_INSTRUCTIONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->set('pageData', $pageData);
@@ -96,7 +98,7 @@ class ImportInstructionsController extends ListingBaseController
     public function langForm($autoFillLangData = 0)
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, CommonHelper::getDefaultFormLangId());
 
         if (1 > $recordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -106,13 +108,13 @@ class ImportInstructionsController extends ListingBaseController
         $langFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Extrapage::getAttributesByLangId($langId, $recordId);
+            $langData = Extrapage::getAttributesByLangId($langId, $recordId, ['*','IFNULL(epage_label,epage_identifier) as epage_label'], applicationConstants::JOIN_RIGHT);           
         }
 
         if ($langData) {
@@ -167,7 +169,7 @@ class ImportInstructionsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -201,13 +203,10 @@ class ImportInstructionsController extends ListingBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('FRM_SECTION_TITLE', $langId), 'epage_label');
-
         $frm->addHtmlEditor(Labels::getLabel('FRM_SECTION_CONTENT', $langId), 'epage_content');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $languages = Language::getAllNames();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $langId == CommonHelper::getDefaultFormLangId()) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -227,7 +226,7 @@ class ImportInstructionsController extends ListingBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('importInstructionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 

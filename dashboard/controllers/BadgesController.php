@@ -112,15 +112,15 @@ class BadgesController extends SellerBaseController
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
@@ -159,11 +159,11 @@ class BadgesController extends SellerBaseController
         $badgeType = current(FatApp::getParameters());
         $className = Badge::TYPE_BADGE == $badgeType ? Labels::getLabel('LBL_BADGES', $this->siteLangId) : Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
         $url = UrlHelper::generateUrl(LibHelper::getControllerName(), 'list', [$badgeType]);
-        if ($action == 'list') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
-            $this->nodes[] = array('title' => $title);
-        }
+    
+        $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+        $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
+        $this->nodes[] = array('title' => $title);
         return $this->nodes;
     }
 }

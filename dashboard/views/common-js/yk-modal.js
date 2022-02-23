@@ -66,7 +66,7 @@
         },
         isSideBarView: function () {
             return !!$(".fixed-right." + $.ykmodal.element).length;
-        },
+        }
     });
 
     function init(modalClass, dialogClass) {
@@ -80,9 +80,7 @@
             $("." + $.ykmodal.element).addClass('fixed-right');
         }
 
-        if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass)
-        }
+        $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', 'modal-dialog ' + dialogClass);
     }
 
     function fillYKModalFromHref(href) {

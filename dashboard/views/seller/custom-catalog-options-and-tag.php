@@ -43,7 +43,7 @@
                             <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover">
-                                    <input class="tag_name" type="text" name="tag_name" id="get-tags"  value='<?php echo htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8'); ?>'>
+                                    <input class="tag_name" type="text" name="tag_name" id="get-tags" value='<?php echo htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8'); ?>'>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                 <div class="caption-wraper"><label class="field_label"></label></div>
                 <div class="field-wraper">
                     <div class="field_cover">
-                        <input type="button" class="btn btn-outline-brand" onclick= "productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
+                        <input type="button" class="btn btn-outline-gray" onclick="productAttributeAndSpecificationsFrm(<?php echo $preqId; ?>)" value="<?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
@@ -69,60 +69,61 @@
                 <div class="field-wraper">
                     <div class="field_cover">
                         <input type="hidden" name="preq_id" value="<?php echo $preqId; ?>">
-                        <input type="button" class="btn btn-brand" onclick= "<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> customCatalogProductImages(<?php echo $preqId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
+                        <input type="button" class="btn btn-brand" onclick="<?php if ($productType == Product::PRODUCT_TYPE_DIGITAL) { ?> customCatalogProductImages(<?php echo $preqId; ?>) <?php } else { ?> productShipping(<?php echo $preqId; ?>) <?php } ?>" value="<?php echo Labels::getLabel('LBL_Save_And_Next', $siteLangId); ?>">
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 <script type="text/javascript">
-
-    $("document").ready(function () {
+    $("document").ready(function() {
         var preq_id = '<?php echo $preqId; ?>';
 
-       upcListing(preq_id);
+        upcListing(preq_id);
 
-        addTagData = function (e) {
+        addTagData = function(e) {
             var tag_id = e.detail.tag.id;
             var tag_name = e.detail.tag.title;
             if (tag_id == '') {
                 var data = 'tag_id=0&tag_name=' + tag_name
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupTag'), data, function (t) {
-                    var dataLang = 'tag_id=' + t.tagId + '&tag_name=' + tag_name + '&lang_id=0';                 
-                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + t.tagId, function (t3) {
+                fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupTag'), data, function(t) {
+                    var dataLang = 'tag_id=' + t.tagId + '&tag_name=' + tag_name + '&lang_id=0';
+                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + t.tagId, function(t3) {
                         var tagifyId = e.detail.tag.__tagifyId;
                         $('[__tagifyid=' + tagifyId + ']').attr('id', t.tagId);
                     });
-                    
+
                 });
             } else {
-                fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + tag_id, function (t) { });
+                fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + tag_id, function(t) {});
             }
         }
 
-        removeTagData = function (e) {
+        removeTagData = function(e) {
             var tag_id = e.detail.tag.id;
             removeProductTag(preq_id, tag_id);
         }
-        
-        
-        getTagsAutoComplete = function(e){
+
+
+        getTagsAutoComplete = function(e) {
             var keyword = e.detail.value;
             tagify.loading(true).dropdown.hide.call(tagify)
             var list = [];
-            fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), {keyword:keyword}, function(t) {          
+            fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), {
+                keyword: keyword
+            }, function(t) {
                 var ans = $.parseJSON(t);
-                for (i = 0; i < ans.length; i++) {            
+                for (i = 0; i < ans.length; i++) {
                     list.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].tag_name, 
+                        "id": ans[i].id,
+                        "value": ans[i].tag_name,
                     });
-                } 
+                }
                 tagify.settings.whitelist = list;
                 tagify.loading(false).dropdown.show.call(tagify, keyword);
-            });       
+            });
         }
 
         tagify = new Tagify(document.querySelector('input[name=tag_name]'), {
@@ -133,7 +134,7 @@
 
 
 
-        addOption = function (e) {
+        addOption = function(e) {
             var option_id = e.detail.tag.id;
             if (option_id == '') {
                 var tagifyId = e.detail.tag.__tagifyId;
@@ -143,29 +144,31 @@
             }
         }
 
-        removeOption = function (e) {
+        removeOption = function(e) {
             var option_id = e.detail.tag.id;
             removeProductOption(preq_id, option_id);
         }
-        
-            
-        getOptionsAutoComplete = function(e){
+
+
+        getOptionsAutoComplete = function(e) {
             var keyword = e.detail.value;
             tagifyOption.loading(true).dropdown.hide.call(tagifyOption);
             var listOptions = [];
-            fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), {keyword:keyword}, function(t) {           
+            fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), {
+                keyword: keyword
+            }, function(t) {
                 var ans = $.parseJSON(t);
-                for (i = 0; i < ans.length; i++) {            
+                for (i = 0; i < ans.length; i++) {
                     listOptions.push({
-                        "id" : ans['results'][i].id,
-                        "value" : ans['results'][i].text,
+                        "id": ans['results'][i].id,
+                        "value": ans['results'][i].text,
                     });
-                }            
+                }
                 tagifyOption.settings.whitelist = listOptions;
-                tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);            
+                tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
             });
 
-        }; 
+        };
         tagifyOption = new Tagify(document.querySelector('input[name=option_groups]'), {
             whitelist: [],
             delimiters: "#",

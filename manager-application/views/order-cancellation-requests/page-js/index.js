@@ -24,7 +24,7 @@ $(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
             searchOrderCancellationRequests(document.frmRequestSearch);
-            $(document).trigger('close.facebox');
+            
         });
     };
 

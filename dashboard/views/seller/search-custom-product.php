@@ -53,7 +53,11 @@ foreach ($arrListing as $sn => $row) {
                 $li->appendElement(
                     'a',
                     array( 'class'=>'', 'title'=>Labels::getLabel('LBL_Edit', $siteLangId),"href"=>UrlHelper::generateUrl('products', 'form', array($row['product_id']))),
-                    '<i class="fa fa-edit"></i>',
+                    '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>',
                     true
                 );
 

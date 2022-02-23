@@ -21,7 +21,7 @@ $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide"); ?>
         <div class="row">
             <div class="col-lg-12">
                 <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
-                <span class="gap"></span>
+
             </div>
         </div>
     </div>

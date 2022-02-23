@@ -164,7 +164,7 @@ class StripePayController extends PaymentController
         }
 
         if (in_array($this->systemCurrencyCode, $this->zeroDecimalCurrencies())) {
-            return $amount;
+            return round($amount);
         }
 
         $amount = number_format($amount, 2, '.', '');

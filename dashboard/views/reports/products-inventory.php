@@ -6,7 +6,7 @@ $sortOrder = $frmSrch->getField('sortOrder');
 $sortOrder->setFieldTagAttribute('id', 'sortOrder');
 
 $reportsData = [
-    'pageTitle' => Labels::getLabel('LBL_Products_Inventory_Report', $siteLangId),
+    'pageTitle' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $siteLangId),
     'siteLangId' => $siteLangId,
     'frmSearch' => $frmSrch,
     'actionButtons' =>  [],

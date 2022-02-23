@@ -6,14 +6,9 @@
     $data = [
         'headingLabel' => Labels::getLabel('LBL_Inventory_Setup', $siteLangId),
         'siteLangId' => $siteLangId,
-        'otherButtons' => [
-            [
-                'attr' => [
-                    'href' => UrlHelper::generateUrl('seller', 'products'),
-                    'title' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
-                ],
-                'label' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
-            ],
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('seller', 'products'),
+            'onclick' => '',
         ]
     ];
 
@@ -23,7 +18,7 @@
         <div class="card card-tabs">
             <?php if ($product_type == Product::PRODUCT_TYPE_DIGITAL) { ?>
                 <div class="card-head">
-                    <nav class="nav nav-tabs tabsNavJs">
+                    <nav class="nav nav-tabs navTabsJs">
                         <a class="nav-link tabs_001" rel="tabs_001" href="javascript:void(0)">
                             <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
                             </i>

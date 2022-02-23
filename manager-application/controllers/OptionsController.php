@@ -130,7 +130,7 @@ class OptionsController extends ListingBaseController {
         $hideListBox = false;
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = Option::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = Option::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(option_name,option_identifier) as option_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

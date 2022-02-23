@@ -25,7 +25,7 @@ trait RecordOperations
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }       
@@ -84,13 +84,20 @@ trait RecordOperations
         $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($this->mainTableRecordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($this->mainTableRecordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId, null, true);
+            $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId, NULL, applicationConstants::JOIN_RIGHT);
+            if(isset($langData[$this->modelObj::tblFld('name')])  && empty($langData[$this->modelObj::tblFld('name')])){
+                $langData[$this->modelObj::tblFld('name')] =  $langData[$this->modelObj::tblFld('identifier')];
+            }
+            if(isset($langData[$this->modelObj::tblFld('title')])  && empty($langData[$this->modelObj::tblFld('title')])){
+                $langData[$this->modelObj::tblFld('title')] =  $langData[$this->modelObj::tblFld('identifier')];
+            }
+        
         }
 
         if ($langData) {

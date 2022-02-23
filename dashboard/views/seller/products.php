@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -33,7 +33,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <script>
     jQuery(document).ready(function($) {
         $(".initTooltip").click(function() {
-            $.facebox({
+            $.ykmodal({
                 div: '#inventoryToolTip'
             }, 'catalog-bg');
         });

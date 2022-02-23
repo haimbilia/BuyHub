@@ -25,13 +25,13 @@
                 $titleArr = explode(' ', $dashTitle);
                 $title = '';
                 foreach ($titleArr as $val) {
-                    $title .= substr($val, 0, 1);                   
+                    $title .= substr($val, 0, 1);
                     if (strlen($title) == 2) {
                         break;
                     }
                 }
                 ?>
-                <span class="meta"><?php echo $title; ?></span>
+                <span class="meta"><?php echo strtoupper($title); ?></span>
                 <?php echo $dashTitle; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
@@ -39,17 +39,33 @@
             <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-anim choose-dashboard" aria-labelledby="dashboardDropdown">
                 <?php if (User::canViewSupplierTab()) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>"><?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">S</span>
+                                <?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?>
+                            </div>
+
+                        </a>
                     </li>
                 <?php } ?>
                 <?php if (User::canViewBuyerTab()) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>"><?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">B</span>
+                                <?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?>
+                            </div>
+                        </a>
                     </li>
                 <?php } ?>
                 <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>"><?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">A</span>
+                                <?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?>
+                            </div>
+                        </a>
                     </li>
                 <?php } ?>
             </ul>
@@ -113,6 +129,14 @@
                 </li>
             <?php } ?>
         </ul> <?php */ ?>
+        <div class="search-docs" data-bs-toggle="modal" data-bs-target="#search-main">
+            <span class="svg-icon">
+                <svg class="" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#565656" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+            </span>
+            <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto">
+        </div>
         <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
             <div class="c-header-icon bell">
                 <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">

@@ -36,7 +36,7 @@ class ShippingZoneRatesController extends ListingBaseController {
                         'shiprate_cost',
                         'shiprate_min_val',
                         'shiprate_max_val',
-                            ], true);
+                            ], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

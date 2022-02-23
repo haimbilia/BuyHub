@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php');
 $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
 $sharingFrm->addFormTagAttribute('class', 'form');
 $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
@@ -169,13 +169,10 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                 <div class="widget-scroll">
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                            <div class="card">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
                                 <div class="card-head">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                    <i class="icn"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#Credits"></use>
-                                        </svg>
-                                    </i>
+
                                 </div>
                                 <div class="card-body ">
                                     <div class="stats">
@@ -198,14 +195,9 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     </div>
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                            <div class="card">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
                                 <div class="card-head">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Revenue', $siteLangId); ?></h5>
-                                    <i class="icn">
-                                        <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue"></use>
-                                        </svg>
-                                    </i>
                                 </div>
                                 <div class="card-body ">
                                     <div class="stats">
@@ -227,7 +219,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                         </a>
                     </div>
                     <div class="widget widget-stats">
-                        <div class="card">
+                        <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
                             <div class="card-head">
                                 <h5 class="card-title">
                                     <?php echo Labels::getLabel('LBL_Share_and_earn_commission_on_every_purchase', $siteLangId) ?>
@@ -235,7 +227,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </div>
                             <div class="card-body ">
                                 <div class="stats">
-                                    <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
+                                    <a href="javascript:void(0)" class="btn btn-outline-gray btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
                                 </div>
                             </div>
                         </div>

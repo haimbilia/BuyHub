@@ -119,7 +119,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'removeProduct', [productId]), '', function (t) {
             var profileId = $('input[name="profile_id"]').val();
             searchProducts(profileId);
-            $(document).trigger('close.facebox');
+            
         });
     }
 
@@ -266,7 +266,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'deleteRate', [rateId]), '', function (t) {
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
-            $(document).trigger('close.facebox');
+            
         });
     }
 

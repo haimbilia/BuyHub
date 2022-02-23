@@ -1,12 +1,12 @@
 function setSiteDefaultLang(langId) {
+    $.cookie('defaultAdminSiteLang', langId, { expires: 10, path: siteConstants.webrootfront });
     fcom.updateWithAjax(
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
         function (res) {
-            $.cookie('defaultAdminSiteLang', res.langId);
             setTimeout(function () {
                 window.location.reload(1);
-            }, 5000);
+            }, 6000);
         }
     );
 }
@@ -399,7 +399,7 @@ $(document).ready(function () {
 
     /* alert-text close */
     $(".closeAlertJs").on("click", function () {
-        $.cookie($(this).attr("data-name"), true);
+        $.cookie($(this).attr("data-name"), true, { expires: 30, path: siteConstants.webrootfront });
     });
     /* alert-text close */
 

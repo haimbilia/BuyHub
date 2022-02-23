@@ -1,64 +1,64 @@
-$(document).ready(function(){
+$(document).ready(function () {
 	searchAddresses();
 });
 
-(function() {
+(function () {
 	var runningAjaxReq = false;
 	var dv = '#listing';
 
-	checkRunningAjax = function(){
-		if( runningAjaxReq == true ){
+	checkRunningAjax = function () {
+		if (runningAjaxReq == true) {
 			console.log(runningAjaxMsg);
 			return;
 		}
 		runningAjaxReq = true;
 	};
 
-	searchAddresses = function(){
+	searchAddresses = function () {
 		$(dv).prepend(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('Account','searchAddresses'),'',function(res){
-            fcom.removeLoader();
+		fcom.ajax(fcom.makeUrl('Account', 'searchAddresses'), '', function (res) {
+			fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
 
-	addAddressForm = function(id){
-		$(dv).prepend(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('Account', 'addAddressForm', [id]), '', function(t) {
-            fcom.removeLoader();
-			$(dv).html(t);
+	addAddressForm = function (id, langId = 0) {
+		fcom.ajax(fcom.makeUrl('Account', 'addAddressForm', [id, langId]), '', function (t) {
+			fcom.removeLoader();
+			$.ykmodal(t);
 		});
 	};
 
-	setupAddress = function(frm){
+	setupAddress = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress'), data, function(t) {
-			if($(frm.addr_id).val() == 0){
+		fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress'), data, function (t) {
+			searchAddresses();
+			closeForm();
+			if ($(frm.addr_id).val() == 0) {
 				setDefaultAddress(t.addr_id);
 			}
-			searchAddresses();
 		});
 	};
 
-	setDefaultAddress = function(id, e){
-		if( !confirm(langLbl.confirmDefault) ){
+	setDefaultAddress = function (id, e) {
+		if (!confirm(langLbl.confirmDefault)) {
 			e.preventDefault();
-			return false;
+			return;
 		}
-		data='id='+id;
-		fcom.updateWithAjax(fcom.makeUrl('Addresses','setDefault'),data,function(res){
+		data = 'id=' + id;
+		fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setDefault'), data, function (res) {
 			searchAddresses();
 		});
 	};
 
-	removeAddress = function(id){
+	removeAddress = function (id) {
 		var agree = confirm(langLbl.confirmDelete);
-		if( !agree ){
+		if (!agree) {
 			return false;
 		}
-		data='id='+id;
-		fcom.updateWithAjax(fcom.makeUrl('Addresses','deleteRecord'),data,function(res){
+		data = 'id=' + id;
+		fcom.updateWithAjax(fcom.makeUrl('Addresses', 'deleteRecord'), data, function (res) {
 			searchAddresses();
 		});
 	};

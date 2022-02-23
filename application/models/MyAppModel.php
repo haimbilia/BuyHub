@@ -236,7 +236,7 @@ class MyAppModel extends FatModel
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false, $active = NULL, $deleted =  NULL)
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, ?int $primaryTableJoinType = NULL, $active = NULL, $deleted =  NULL)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
@@ -244,13 +244,19 @@ class MyAppModel extends FatModel
 
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
-        if (true === $includePrimaryTable) {
-            $srch->joinTable(static::DB_TBL, 'RIGHT JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId);
+
+        if (NULL !== $primaryTableJoinType) {
+            $joinTypes = applicationConstants::getJoinTypes();
+            if (!array_key_exists($primaryTableJoinType, $joinTypes)) {
+                trigger_error('INVALID_JOIN_TYPE', E_ERROR);
+            }
+            $srch->joinTable(static::DB_TBL, $joinTypes[$primaryTableJoinType] . ' JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId,'m');
         }
+
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-        if ($includePrimaryTable) {
+        if (NULL !== $primaryTableJoinType) {
             $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $recordId, 'AND', true);
             $cond = $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', 'mysql_func_' . FatUtility::int($langId), 'AND', true);
             $cond->attachCondition('ln.' . $prefix . 'lang_lang_id', 'is', 'mysql_func_NULL', 'OR', true);

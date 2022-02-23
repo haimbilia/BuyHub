@@ -1,75 +1,74 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
-    <div class="content-wrapper content-space">
-        <?php
-        $data = [
-            'headingLabel' => Labels::getLabel('LBL_View_Subscription_Order', $siteLangId),
-            'siteLangId' => $siteLangId,
-        ];
-        $this->includeTemplate('_partial/header/content-header.php', $data, false);
-        ?>
-        <div class="content-body">
-            <div class="card">
-                <div class="card-head">
-                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Order_Details', $siteLangId); ?></h5>
-                    <div class="action">
-                        <?php /* <a href="javascript:window.print();" class="btn btn-brand btn-sm no-print"><?php echo Labels::getLabel('LBL_Print',$siteLangId);?></a> */ ?>
-                        <a href="<?php echo UrlHelper::generateUrl('Seller', 'subscriptions'); ?>" class="btn btn-brand btn-sm no-print"><?php echo Labels::getLabel('LBL_Back_to_Subscription', $siteLangId); ?></a>
+<div class="content-wrapper content-space">
+    <?php
+    $data = [
+        'headingLabel' => Labels::getLabel('LBL_View_Subscription_Order', $siteLangId),
+        'siteLangId' => $siteLangId,
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('Seller', 'subscriptions'),
+            'onclick' => ''
+        ]
+    ];
+    $this->includeTemplate('_partial/header/content-header.php', $data, false);
+    ?>
+    <div class="content-body">
+        <div class="card">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="info--order">
+                            <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </strong><?php echo $orderDetail['user_name']; ?></p>
+                            <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>: </strong><?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
+                                                                                                                echo Labels::getLabel('LBL_Expired', $siteLangId);
+                                                                                                            } else {
+                                                                                                                echo $orderStatuses[$orderDetail['ossubs_status_id']];
+                                                                                                            } ?></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="info--order">
+                            <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $orderDetail['order_number']; ?></p>
+                            <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']); ?></p>
+
+                        </div>
                     </div>
                 </div>
-                <div class="card-body ">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="info--order">
-                                <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </strong><?php echo $orderDetail['user_name']; ?></p>
-                                <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>: </strong><?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
-                                                                                                                    echo Labels::getLabel('LBL_Expired', $siteLangId);
-                                                                                                                } else {
-                                                                                                                    echo $orderStatuses[$orderDetail['ossubs_status_id']];
-                                                                                                                } ?></p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="info--order">
-                                <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $orderDetail['order_number']; ?></p>
-                                <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']); ?></p>
-                                <span class="gap"></span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="gap"></div>
-                    <div class="js-scrollable table-wrap scroll scroll-x">
-                        <table class="table">
-                            <tbody>
-                                <tr class="">
-                                    <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Subscription_Name', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Subscription_Period', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Subscription_Amount', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Product_Upload_Limit', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Inventory_Upload_Limit', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('LBL_Images_Limit', $siteLangId); ?></th>
-                                </tr>
-                                <tr>
-                                    <td><?php echo FatDate::format($orderDetail['order_date_added'], true); ?></td>
-                                    <td><?php echo OrderSubscription::getSubscriptionTitle($orderDetail, $siteLangId); ?></td>
-                                    <td>
-                                        <?php if ($orderDetail['ossubs_from_date'] == 0 || $orderDetail['ossubs_till_date'] == 0) {
-                                            echo Labels::getLabel("LBL_N/A", $siteLangId);
-                                        } else {
-                                            echo FatDate::format($orderDetail['ossubs_from_date']) . " - " . FatDate::format($orderDetail['ossubs_till_date']);
-                                        } ?>
-                                    </td>
-                                    <td><?php echo CommonHelper::displayMoneyFormat($orderDetail['ossubs_price']); ?></td>
-                                    <td><?php echo $orderDetail['ossubs_products_allowed']; ?></td>
-                                    <td><?php echo $orderDetail['ossubs_inventory_allowed']; ?></td>
-                                    <td><?php echo $orderDetail['ossubs_images_allowed']; ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                <div class="js-scrollable table-wrap mt-4">
+                    <table class="table">
+                        <thead>
+                            <tr class="">
+                                <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Subscription_Name', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Subscription_Period', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Subscription_Amount', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Product_Upload_Limit', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Inventory_Upload_Limit', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Images_Limit', $siteLangId); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?php echo FatDate::format($orderDetail['order_date_added'], true); ?></td>
+                                <td><?php echo OrderSubscription::getSubscriptionTitle($orderDetail, $siteLangId); ?></td>
+                                <td>
+                                    <?php if ($orderDetail['ossubs_from_date'] == 0 || $orderDetail['ossubs_till_date'] == 0) {
+                                        echo Labels::getLabel("LBL_N/A", $siteLangId);
+                                    } else {
+                                        echo FatDate::format($orderDetail['ossubs_from_date']) . " - " . FatDate::format($orderDetail['ossubs_till_date']);
+                                    } ?>
+                                </td>
+                                <td><?php echo CommonHelper::displayMoneyFormat($orderDetail['ossubs_price']); ?></td>
+                                <td><?php echo $orderDetail['ossubs_products_allowed']; ?></td>
+                                <td><?php echo $orderDetail['ossubs_inventory_allowed']; ?></td>
+                                <td><?php echo $orderDetail['ossubs_images_allowed']; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>

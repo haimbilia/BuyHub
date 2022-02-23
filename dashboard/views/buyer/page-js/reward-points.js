@@ -13,6 +13,7 @@ $(document).ready(function(){
 		$(dv).html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Buyer','rewardPointsSearch'), data, function(res){
 			$(dv).html(res);
+			fcom.removeLoader();
 		}); 
 	};
 	

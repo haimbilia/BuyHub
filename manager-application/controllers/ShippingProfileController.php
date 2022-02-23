@@ -105,16 +105,18 @@ class ShippingProfileController extends ListingBaseController
         $this->objPrivilege->canEditShippingManagement();
         $profileId = FatUtility::int($profileId);
         $frm = $this->getForm($profileId);
-        $data = [];
+       
         $productCount = 0;
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
         }
 
+        $data = ['lang_id' => $langId];
+
         $pageTitle = Labels::getLabel('LBL_SHIPPING_PROFILE_FORM', $this->siteLangId);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier', 'shipprofile_default'], true);
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier', 'shipprofile_default'], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -127,8 +129,8 @@ class ShippingProfileController extends ListingBaseController
             $name = !empty($data['shipprofile_name']) ? $data['shipprofile_name'] : $data['shipprofile_identifier'];
             $str  = Labels::getLabel('LBL_{PROFILE-NAME}_PROFILE_FORM', $this->siteLangId);
             $pageTitle = CommonHelper::replaceStringData($str, ['{PROFILE-NAME}' => $name]);
-
-            $frm->fill($data);
+           
+            $data['lang_id'] = $langId;
             $prodCountSrch = new SearchBase(ShippingProfileProduct::DB_TBL, 'selsppro');
             $prodCountSrch->doNotCalculateRecords();
             $prodCountSrch->doNotLimitRecords();
@@ -136,6 +138,8 @@ class ShippingProfileController extends ListingBaseController
             $rs = $prodCountSrch->getResultSet();
             $productCount = FatApp::getDb()->totalRecords($rs);
         }
+
+        $frm->fill($data);
 
         $this->set('langId', $langId);
         $this->set('pageTitle', $pageTitle);
@@ -158,7 +162,7 @@ class ShippingProfileController extends ListingBaseController
         $frm = $this->getForm($profileId);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier'], true);
+            $data = ShippingProfile::getAttributesByLangId($langId, $profileId, ['shipprofile_user_id', 'shipprofile_name', 'shipprofile_identifier'], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -175,7 +179,7 @@ class ShippingProfileController extends ListingBaseController
             $autoFillLangData = FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0);
             if (0 < $autoFillLangData) {
                 $updateLangDataobj = new TranslateLangData(ShippingProfile::DB_TBL_LANG);
-                $translatedData = $updateLangDataobj->getTranslatedData($profileId, $langId);
+                $translatedData = $updateLangDataobj->getTranslatedData($profileId, $langId, CommonHelper::getDefaultFormLangId());
                 if (false === $translatedData) {
                     LibHelper::exitWithError($updateLangDataobj->getError(), true);
                 }

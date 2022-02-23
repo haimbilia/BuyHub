@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($mediaFrm, 6);
 $mediaFrm->setFormTagAttribute('class', 'form form--horizontal');
-$mediaFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-$mediaFrm->developerTags['fld_default_col'] = 12;
 $mediaFrm->setFormTagAttribute('onsubmit', 'setupPromotionMedia(this); return(false);');
 
-$uploadfld = $mediaFrm->getField('banner_image');
-$uploadfld->addFieldTagAttribute('onChange', 'popupImage(this)');
+$uploadfld = $mediaFrm->getField('banner_html');
+$uploadfld->developerTags['colWidthValues'] = [null, '12', null, null];
+$uploadfld->value = '<span id="bannerHtml"></span>';
 
 $langFld = $mediaFrm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'banner-language-js');
@@ -15,56 +15,39 @@ $screenFld->addFieldTagAttribute('class', 'banner-screen-js');
 
 $preferredDimensionsStr = '<span class="form-text text-muted uploadimage--info" > ' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $bannerWidth . ' * ' . $bannerHeight) . '</span>';
 
-$htmlAfterField = $preferredDimensionsStr;
-$htmlAfterField .= '<div id="image-listing-js"></div>';
-$uploadfld->htmlAfterField = $htmlAfterField;
+$uploadfld->htmlAfterField = $preferredDimensionsStr;
 
 ?>
-<div id="listing">
-    <div class="card-head">
-        <h5 class="card-title">
-            <a title="<?php echo Labels::getLabel('LBL_PROMOTION_LIST', $siteLangId); ?>" class="back" href="javascript:void(0)" onclick="searchRecords()" data-bs-toggle="tootip">
-                <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                    </use>
-                </svg>
-            </a>
-            <?php echo Labels::getLabel('LBL_BACK_TO_PROMOTION_LIST', $siteLangId); ?>
-        </h5>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_PROMOTION_SETUP'); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-head">
+        <nav class="nav nav-tabs navTabsJs">
+            <a class="nav-link" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $recordId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
+            <a class="nav-link " href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='promotionLangForm(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?>>
+                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+            </a>          
+            <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
+                <a class="nav-link active"  href="javascript:void(0)" <?php if ($recordId > 0) { ?> onclick="promotionMediaForm(<?php echo $recordId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+            <?php } ?>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="row ">
+    <div class="form-edit-body loaderContainerJs sectionbody space">
+        <div class="row" id="promotionsChildBlockJs">
             <div class="col-md-12">
-                <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
-                    <ul>
-                        <li><a href="javascript:void(0);" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                        <li class="<?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>">
-                            <a href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                            <li class="is-active"><a href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="tabs__content">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <?php echo $mediaFrm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
+                <?php echo $mediaFrm->getFormHtml(); ?>
             </div>
         </div>
-    </div>
+    </div>    
 </div>
-
 <script>
     $('input[name=banner_min_width]').val(1350);
     $('input[name=banner_min_height]').val(405);
-    var aspectRatio = 10 / 3;
-    $(document).on('change', '.banner-screen-js', function() {
+    var aspectRatio = 10 / 3;  
+    $(document).off('change', '.banner-screen-js').on('change', '.banner-screen-js', function() {
         var promotionType = <?php echo $promotionType ?>;
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
@@ -88,7 +71,7 @@ $uploadfld->htmlAfterField = $htmlAfterField;
             }
         } else if (promotionType == <?php echo Promotion::TYPE_BANNER ?>) {
             var deviceType = $(this).val();
-            fcom.ajax(fcom.makeUrl('Advertiser', 'getBannerLocationDimensions', [<?php echo $promotionId; ?>, deviceType]), '', function(t) {
+            fcom.ajax(fcom.makeUrl('Advertiser', 'getBannerLocationDimensions', [<?php echo $recordId; ?>, deviceType]), '', function(t) {
                 var ans = $.parseJSON(t);
                 $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, ans.bannerWidth + ' * ' + ans.bannerHeight));
                 $('input[name=banner_min_width]').val(ans.bannerWidth);

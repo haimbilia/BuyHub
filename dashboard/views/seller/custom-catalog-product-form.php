@@ -20,7 +20,7 @@
     ?>
     <div class="content-body">
         <div class="d-flex">
-            <nav class="nav nav-tabs tabsNavJs">
+            <nav class="nav nav-tabs navTabsJs">
                 <a class="nav-link tabs_001" rel="tabs_001" href="javascript:void(0)">
                     <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
                     </i>

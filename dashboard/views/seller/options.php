@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -17,13 +17,12 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     'title' => Labels::getLabel('LBL_Add_Option', $siteLangId)
                 ],
                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                                 </use>
                             </svg>' . Labels::getLabel('LBL_Add_Option', $siteLangId)
             ],
         ];
     }
-
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">

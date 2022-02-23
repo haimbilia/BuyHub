@@ -39,11 +39,11 @@ body {
 a {
     text-decoration: none;
     &:focus-visible {
-        outline: $focus-outline!important;
+        outline: $focus-outline !important;
         box-shadow: none;
     }
 }
-button{
+button {
     &:focus-visible {
         outline: $focus-outline;
         box-shadow: none;
@@ -1191,7 +1191,7 @@ strong {
 
 /**/
 
-@media only screen and (max-width: 1600px) and (min-width: 1280px) {
+@media only screen and (max-width: 1600px) and (min-width: 1440px) {
     .container {
         padding: 0 4rem;
     }
@@ -2377,7 +2377,9 @@ $header-height: 65px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    @include media-breakpoint-up(md) {
+    padding-#{$start-direction}: $side-bar-size-close;
+
+    @media (min-width:1280px){
         padding-#{$start-direction}: $side-bar-size;
     }
 }
@@ -2386,7 +2388,7 @@ $header-height: 65px;
     flex: 1;
     padding-top: 2rem;
     flex: 1;
-    &.isLoading{
+    &.isLoading {
         overflow: hidden;
         position: relative;
     }
@@ -2677,6 +2679,7 @@ $header-height: 65px;
 .list-stats {
     word-break: break-word;
     font-size: 0.85rem;
+    min-width: 250px;
     &-item {
         padding: 0.8rem 0;
         display: flex;
@@ -2992,7 +2995,7 @@ $header-height: 65px;
 .grid-layout {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: minmax(auto, 320px) 2fr;
 }
 .edit-price {
     display: inline-flex;
@@ -3075,19 +3078,16 @@ $header-height: 65px;
     right: 0 !important;
     left: auto !important;
 }
-[dir="rtl"] .iti__country-list{
+[dir="rtl"] .iti__country-list {
     right: 0;
 }
 .ui-datepicker {
     // z-index: $zindex-dropdown !important;
 }
 
-
-
-
 .dropzone {
     .dz-preview {
-        margin: 0!important;
+        margin: 0 !important;
         padding: 1.25rem 0.5rem;
         min-height: 100px;
         background: linear-gradient(to bottom, #efefef, #c9c9c9);
@@ -3095,28 +3095,36 @@ $header-height: 65px;
         min-width: 160px;
         width: 160px;
         .dz-progress {
-            width: 100%!important;
-            left: 0!important;
+            width: 100% !important;
+            left: 0 !important;
             right: 0;
-            margin: auto!important;
-            height: 8px!important;
-            margin-top: 8px!important;
-            .dz-upload{
-                background: $brand-color!important;
+            margin: auto !important;
+            height: 8px !important;
+            margin-top: 8px !important;
+            .dz-upload {
+                background: $brand-color !important;
             }
         }
-        .dz-image{
-            display: none!important;
+        .dz-image {
+            display: none !important;
         }
-        .dz-details{
-            padding: 1rem!important;
+        .dz-details {
+            padding: 1rem !important;
         }
-        .dz-details, .dz-progress-text, .dz-progress {
-            position: relative!important;
+        .dz-details,
+        .dz-progress-text,
+        .dz-progress {
+            position: relative !important;
         }
-        .dz-remove{
+        .dz-remove {
             margin-top: 10px;
         }
-        
     }
+}
+
+.lbl-link {
+    display: flex!important;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }

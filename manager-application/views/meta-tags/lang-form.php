@@ -9,8 +9,7 @@ $langFrm->setFormTagAttribute('onsubmit', 'setupLangMetaTag(this, "' . $metaType
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editMetaTagLangForm(" . $metaId . ", this.value, '" . $metaType . "', " . $metaTagRecordId . ");");
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
+if (!empty($translatorSubscriptionKey) && $lang_id != CommonHelper::getDefaultFormLangId()) {
     $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
     $onclick = "editMetaTagLangForm(" . $metaId . ", " . $lang_id . ", '" . $metaType . "', " . $metaTagRecordId . ", 1)";
     $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="'. $onclick .'" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">

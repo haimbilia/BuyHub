@@ -9,50 +9,50 @@ $frm->setFormTagAttribute('onsubmit', "setupDigitalDownload($('#digitalDownloadF
 $frm->setFormTagAttribute('data-onclear', "digitalDownloadsForm($type)");
 
 $fld = $frm->getField('option_comb_id');
-if($fld){
+if ($fld) {
     $fld->addFieldTagAttribute('id', "digitalFrmOptionId");
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('record_id');
-$fld->addFieldTagAttribute('id', "digitalFrmRecordId");   
+$fld->addFieldTagAttribute('id', "digitalFrmRecordId");
 $fld = $frm->getField('download_type');
 $fld->addFieldTagAttribute('id', "digitalFrmdownloadType");
 
 $fld = $frm->getField('attach_with_existing_orders');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('lang_id');
-if($fld){
+if ($fld) {
     $fld->addFieldTagAttribute('id', "digitalFrmLangId");
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('downloadable_file');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-    $fld->addWrapperAttribute('id','downloadableFileMainJs');
+    $fld->addWrapperAttribute('id', 'downloadableFileMainJs');
 }
 
 $fld = $frm->getField('preview_file');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('product_downloadable_link');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('product_preview_link');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('product_preview_link');
-if($fld){
+if ($fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
@@ -64,7 +64,5 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         <?php echo $frm->getFormHtml(); ?>
         <div id="digitalFrmListJs"></div>
     </div>
-   <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php');?>
-
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
-

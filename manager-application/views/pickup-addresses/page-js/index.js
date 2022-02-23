@@ -171,13 +171,11 @@ $(document).on('change', '#addrStateJs', function () {
         if ($(ele).prop("checked") == true) {
             $(".js-slot-from-" + day).removeAttr('disabled');
             $(".js-slot-to-" + day).removeAttr('disabled');
-            $(".addRowBtnBlock" + day + "-js").removeClass('d-none');
             displayAddRowValues(day, ele);
         } else {
             $(".js-slot-from-" + day).attr('disabled', 'true');
             $(".js-slot-to-" + day).attr('disabled', 'true');
             $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
-            $(".addRowBtnBlock" + day + "-js").addClass('d-none');
         }
     }
 

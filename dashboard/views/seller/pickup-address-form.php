@@ -34,7 +34,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
     </h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs sectionbody space">
+    <div class="form-edit-body loaderContainerJs">
         <div class="row">
             <div class="col-md-12">
                 <?php echo $frm->getFormTag(); ?>
@@ -210,8 +210,8 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
             rowHtml += '<td>' + fromTimeHtml + '</td>';
             rowHtml += '<td>' + toTimeHtml + '</td>';
             rowHtml += '<td class="align-right"><ul class="actions">';
-            rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="' + siteConstants.webroot + '/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
-            rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="' + siteConstants.webroot + '/images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
+            rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
+            rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
             rowHtml += '</td>';
 
             var addRowBtn = $('.addRowBtn' + day + '-js');
@@ -237,14 +237,12 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
             if ($(ele).prop("checked") == true) {
                 $(".js-slot-from-" + day).removeAttr('disabled');
                 $(".js-slot-to-" + day).removeAttr('disabled');
-                $(".addRowBtnBlock" + day + "-js").removeClass('d-none');
                 displayAddRowValues(day, ele);
             } else {
                 $(".js-slot-from-" + day).attr('disabled', 'true');
                 $(".js-slot-to-" + day).attr('disabled', 'true');
                 $(".js-slot-add-" + day).addClass('d-none');
                 $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
-                $(".addRowBtnBlock" + day + "-js").addClass('d-none');
             }
         }
 

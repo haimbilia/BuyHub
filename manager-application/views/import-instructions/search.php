@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => "editLangData(" . $row['epage_id'] . "," . $row['epagelang_lang_id'] . ");",
+                                'onclick' => "editLangData(" . $row['epage_id'] . "," . CommonHelper::getDefaultFormLangId() . ");",
                                 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">

@@ -209,7 +209,7 @@ class StripeConnectPayController extends PaymentController
             }
         } else if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);
-            $packageName = current(SellerPackages::getAttributesByLangId($this->siteLangId, $stipePlanInfo['spplan_spackage_id'], ['COALESCE(spackage_name, spackage_identifier) as spackage_name'], true));
+            $packageName = current(SellerPackages::getAttributesByLangId($this->siteLangId, $stipePlanInfo['spplan_spackage_id'], ['COALESCE(spackage_name, spackage_identifier) as spackage_name'], applicationConstants::JOIN_RIGHT));
             $nickname = Labels::getLabel('MSG_{NAME}_SUBSCRIPTION_PAYMENT', $this->siteLangId);
 
             $priceData = [
@@ -324,7 +324,7 @@ class StripeConnectPayController extends PaymentController
     private function convertInPaisa($amount)
     {
         if (in_array($this->systemCurrencyCode, $this->zeroDecimalCurrencies())) {
-            return $amount;
+            return round($amount);
         }
         $amount = number_format($amount, 2, '.', '');
         return $amount * 100;

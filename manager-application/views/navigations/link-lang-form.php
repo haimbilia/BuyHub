@@ -34,8 +34,7 @@ $displayLangTab = false;
 HtmlHelper::formatFormFields($langFrm);
 
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-if (!empty($translatorSubscriptionKey) && $nav_lang_id != $siteDefaultLangId) {
+if (!empty($translatorSubscriptionKey) && $nav_lang_id != CommonHelper::getDefaultFormLangId()) {
     $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
     $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="linkLangForm(' . $nav_id . ', ' . $nlink_id . ', ' . $nav_lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                 <svg class="svg" width="18" height="18">

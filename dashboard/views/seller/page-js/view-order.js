@@ -31,11 +31,9 @@ $(document).ready(function () {
 
     trackOrder = function (trackingNumber, courier, orderNumber) {
         $.mbsmessage(langLbl.processing, false, 'alert--process');
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
-                $.mbsmessage.close();
-                $.facebox(res);
-            });
+        fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
+            $.mbsmessage.close();
+            $.ykmodal(res);
         });
     };
 
@@ -94,11 +92,9 @@ $(document).ready(function () {
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         fcom.displayProcessing();
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-                $.mbsmessage.close();
-                $.facebox(res);
-            });
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
+            $.mbsmessage.close();
+            $.ykmodal(res);
         });
     }
 
@@ -141,31 +137,29 @@ $(document).ready(function () {
     }
 
     getPickupForm = function (opId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
-                $.facebox(res);
-                if (0 < $('.date--js').length) {
-                    $('.date--js').datepicker({
-                        minDate: new Date(),
-                        dateFormat: 'yy-mm-dd'
-                    });
-                }
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
+            $.ykmodal(res);
+            if (0 < $('.date--js').length) {
+                $('.date--js').datepicker({
+                    minDate: new Date(),
+                    dateFormat: 'yy-mm-dd'
+                });
+            }
 
-                if (0 < $('.dateTime--js').length) {
-                    $('.dateTime--js').datetimepicker({
-                        minDate: new Date(),
-                        format: 'Y-m-d H:i'
-                    });
-                }
+            if (0 < $('.dateTime--js').length) {
+                $('.dateTime--js').datetimepicker({
+                    minDate: new Date(),
+                    format: 'Y-m-d H:i'
+                });
+            }
 
-                if (0 < $('.time--js').length) {
-                    $('.time--js').datetimepicker({
-                        datepicker: false,
-                        format: 'H:i',
-                        step: 30
-                    });
-                }
-            });
+            if (0 < $('.time--js').length) {
+                $('.time--js').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i',
+                    step: 30
+                });
+            }
         });
     }
     createPickup = function (frm) {
@@ -190,10 +184,8 @@ $(document).ready(function () {
         });
     };
     shippingRatesForm = function (opId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
-                $.facebox(res);
-            });
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+            $.ykmodal(res);
         });
     }
     setUpShippingRate = function (frm) {
@@ -214,7 +206,7 @@ $(document).ready(function () {
     };
 
     copyContent = function (obj) {
-        var text = $(obj).siblings('.trackingNumberJs').text().trim();      
+        var text = $(obj).siblings('.trackingNumberJs').text().trim();
         var elem = document.createElement("textarea");
         document.body.appendChild(elem);
         elem.value = text;

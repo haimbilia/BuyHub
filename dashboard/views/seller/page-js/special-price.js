@@ -1,74 +1,6 @@
 $(document).ready(function () {
     searchRecords(document.frmRecordSearch);
     $(".date_js").datepicker("option", { minDate: new Date() });
-
-    $("select[name='product_name']")
-        .select2({
-            closeOnSelect: true,
-            dir: langLbl.layoutDirection,
-            allowClear: true,
-            placeholder: $("select[name='product_name']").attr("placeholder"),
-            ajax: {
-                url: fcom.makeUrl("Seller", "autoCompleteProducts"),
-                dataType: "json",
-                delay: 250,
-                method: "post",
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page,
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    return {
-                        results: data.products,
-                        pagination: {
-                            more: params.page < data.pageCount,
-                        },
-                    };
-                },
-                cache: true,
-            },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return result.name;
-            },
-            templateSelection: function (result) {
-                return result.name || result.text;
-            },
-        })
-        .on("select2:selecting", function (e) {
-            var parentForm = $(this).closest("form").attr("id");
-            var item = e.params.args.data;
-            $("#" + parentForm + " input[name='splprice_selprod_id']").val(item.id);
-            //currObj.val((ui.item.label).replace(/<[^>]+>/g, ''));
-            $("#" + parentForm + " input[name='splprice_start_date']").removeAttr(
-                "disabled"
-            );
-            $("#" + parentForm + " input[name='splprice_end_date']").removeAttr(
-                "disabled"
-            );
-            $("#" + parentForm + " input[name='splprice_price']").removeAttr(
-                "disabled"
-            );
-            var currentPrice = langLbl.currentPrice + ": " + item.price;
-            $("#" + parentForm + " .js-prod-price").html(currentPrice);
-            $("#" + parentForm + " .js-prod-price").attr("data-price", item.price);
-        })
-        .on("select2:unselecting", function (e) {
-            var parentForm = $(this).closest("form").attr("id");
-            $("#" + parentForm + " input[name='splprice_selprod_id']").val("");
-            $("#" + parentForm + " input[name='splprice_start_date']")
-                .attr("disabled", "disabled")
-                .val("");
-            $("#" + parentForm + " input[name='splprice_end_date']")
-                .attr("disabled", "disabled")
-                .val("");
-            $("#" + parentForm + " input[name='splprice_price']")
-                .attr("disabled", "disabled")
-                .val("");
-        });
 });
 
 $(document).on("keyup", ".js-special-price", function () {
@@ -200,6 +132,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             }
         );
     };
+
     updateSpecialPriceRow = function (frm, selProd_id) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
@@ -208,7 +141,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             data,
             function (t) {
                 if (t.status == true) {
-                    if (1 > frm.addMultiple.value || 0 < selProd_id) {
+                    if (0 < selProd_id) {
                         if (1 > selProd_id) {
                             frm.elements["splprice_selprod_id"].value = "";
                         }
@@ -224,14 +157,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
                     $(".js-discount-percentage").html("");
                     $(".js-prod-price").html("");
                     searchRecords(document.frmRecordSearch);
-                }
-                $(document).trigger("close.facebox");
-                if (0 < frm.addMultiple.value) {
-                    var splPriceRow = $("#" + frm.id)
-                        .parent()
-                        .parent();
-                    splPriceRow.siblings(".divider:first").remove();
-                    splPriceRow.remove();
+                    closeForm();
                 }
             }
         );
@@ -295,5 +221,12 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         }
         sibling.fadeIn();
         currObj.addClass("hidden");
+    };
+
+    addNew = function () {
+        fcom.ajax(fcom.makeUrl('Seller', "addSpecialPriceForm"), "", function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        }, { fOutMode: 'json' });
     };
 })();
