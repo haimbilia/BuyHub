@@ -21,7 +21,7 @@ $dateToFld->setFieldTagAttribute('class', 'field--calender');
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div id="ordersListing"></div>
-                        <span class="gap"></span>
+
                     </div>
                 </div>
             </div>

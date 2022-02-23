@@ -64,7 +64,7 @@ if (null != $btn) {
                         </div>
                     </div>
                 </div>
-                <div class="gap"></div>
+
                 <?php if (!empty($request)) { ?>
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
@@ -90,7 +90,7 @@ if (null != $btn) {
                             </tbody>
                         </table>
                     </div>
-                    <div class="gap"></div>
+
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
                             <thead>
@@ -133,7 +133,7 @@ if (null != $btn) {
                 <?php } ?>
 
                 <?php echo ($canEdit) ? $returnRequestMsgsForm->getFormHtml() : ''; ?>
-                <div class="gap"></div>
+
                 <div class="messageListBlock--js">
                     <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
                     <div id="loadMoreBtnDiv"></div>

@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $headingBackButton = $headingBackButton ?? false;
 ?>
@@ -12,14 +12,14 @@ $headingBackButton = $headingBackButton ?? false;
                     $href = $headingBackButton['href'] ?? 'javascript:void(0);';
                     $onclick = $headingBackButton['onclick'] ?? 'history.back()';
                 ?>
-                    <a class="back" href="<?php echo $href; ?>" onclick="<?php echo $onclick; ?>">
+                    <button class="btn btn-back back" type="button" href="<?php echo $href; ?>" onclick="<?php echo $onclick; ?>">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                             </use>
                         </svg>
-                    </a>
+                    </button>
                 <?php } ?>
-                
+
                 <?php echo $headingLabel; ?>
             </h2>
         <?php }

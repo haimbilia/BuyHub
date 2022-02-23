@@ -36,7 +36,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                                 <a class="btn btn-brand btn-sm" href="javascript:void(0);" onclick="removeShopBanner(<?php echo $img['afile_record_id']; ?>,<?php echo $img['afile_lang_id']; ?>)"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
                             </div>
 
-                            <span class="gap"></span>
+
                         <?php } ?>
                     </div>
                 </div>

@@ -66,4 +66,3 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
 
 
 </div>
-<div class="gap"></div>

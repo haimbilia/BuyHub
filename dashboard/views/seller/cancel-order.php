@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="gap"></div>
+
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
                             <thead>
@@ -87,7 +87,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="gap"></div>
+
 
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -208,7 +208,7 @@
                     </div>
 
 
-                    <span class="gap"></span>
+
                     <?php if (!empty($orderDetail['comments'])) { ?>
                         <div class="section--repeated js-scrollable table-wrap">
                             <h5><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
@@ -237,7 +237,7 @@
                         </div>
                     <?php } ?>
                     <?php if (!$notEligible) { ?>
-                        <div class="gap"></div>
+
                         <div class="section--repeated no-print cancelReason-js">
                             <h5><?php echo Labels::getLabel('LBL_Reason_for_cancellation', $siteLangId); ?></h5>
                             <?php

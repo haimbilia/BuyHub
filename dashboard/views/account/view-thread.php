@@ -99,7 +99,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 </div>
             </div>
             <?php if (false === $doNotshowMessages) { ?>
-                <div class="card-foot">
+                <div class="card-foot p-0">
 
                     <?php
                     $frm->setFormTagAttribute('onSubmit', 'sendMessage(this); return false;');
@@ -113,15 +113,15 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     $msgFld->setFieldTagAttribute('class', 'message-textarea'); ?>
 
                     <?php echo $frm->getFormTag(); ?>
-                        <?php echo $frm->getFieldHtml('message_thread_id'); ?>
+                    <?php echo $frm->getFieldHtml('message_thread_id'); ?>
 
-                        <?php echo $frm->getFieldHtml('message_text'); ?>
-                        <button class="btn btn-icon btn-send" type="submit">
-                            <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
-                                </use>
-                            </svg>
-                        </button>
+                    <?php echo $frm->getFieldHtml('message_text'); ?>
+                    <button class="btn btn-icon btn-send" type="submit">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                            </use>
+                        </svg>
+                    </button>
                     </form>
                     <?php echo $frm->getExternalJS(); ?>
                 </div>

@@ -68,42 +68,34 @@
 @-webkit-keyframes bell-shake {
     1% {
         -webkit-transform: rotateZ(15deg);
-
         transform-origin: 50% 0%;
     }
     2% {
         -webkit-transform: rotateZ(-15deg);
-
         transform-origin: 50% 0%;
     }
     3% {
         -webkit-transform: rotateZ(20deg);
-
         transform-origin: 50% 0%;
     }
     4% {
         -webkit-transform: rotateZ(-20deg);
-
         transform-origin: 50% 0%;
     }
     5% {
         -webkit-transform: rotateZ(15deg);
-
         transform-origin: 50% 0%;
     }
     6% {
         -webkit-transform: rotateZ(-15deg);
-
         transform-origin: 50% 0%;
     }
     7% {
         -webkit-transform: rotateZ(0);
-
         transform-origin: 50% 0%;
     }
     100% {
         -webkit-transform: rotateZ(0);
-
         transform-origin: 50% 0%;
     }
 }
@@ -209,6 +201,9 @@
         border-top-#{$end-direction}-radius: 4px;
         padding: 10px 1rem;
 
+        &.scrolled {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5%), inset 0 -1px 0 rgba(0, 0, 0, 0.15%);
+        }
         @include media-breakpoint-up(lg) {
             padding-left: $content-space;
             padding-right: $content-space;
@@ -323,10 +318,11 @@
         .search-docs {
             display: flex;
             position: relative;
+            margin-#{$end-direction}: 10px;
             .svg-icon {
                 position: absolute;
                 #{$start-direction}: 1rem;
-                top: 9px;
+                top: 7px;
 
                 .svg {
                     height: 1.15rem;
@@ -573,12 +569,32 @@
             font-size: 0.85rem;
         }
     }
+    .meta-block {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        .meta-img {
+            $meta-size: 30px;
+            margin-#{$end-direction}: 6px;
+            display: block;
+            text-align: center;
+            width: $meta-size;
+            height: $meta-size;
+            line-height: $meta-size;
+            border-radius: 50%;
+            background-color: $bg-brand-light;
+            color: $brand-color;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+    }
 }
 
 .content-wrapper {
     &.content-space {
         flex: 1;
         padding: $content-space;
+        padding-bottom: 0;
         //min-height: calc(100vh - 100px);
         @include media-breakpoint-down(lg) {
             padding: 2rem;
@@ -593,7 +609,6 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1.5rem;
-
         @include media-breakpoint-down(lg) {
             flex-direction: column;
             align-items: inherit;
@@ -614,11 +629,17 @@
                 color: $body-color;
                 font-size: 1.7rem;
                 font-weight: 500;
+                display: inline-flex;
+                align-items: center;
             }
             i {
                 font-size: 0.8rem;
                 margin-#{$start-direction}: 5px;
             }
+        }
+        .btn-back {
+            padding: 0;
+            margin-#{$end-direction}: 10px;
         }
     }
 }

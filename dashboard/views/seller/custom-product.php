@@ -47,7 +47,7 @@ $cancelBtnFld->developerTags['col'] = 2;
                 <div class="replaced">
                     <?php echo $frmSearchCustomProduct->getFormHtml(); ?>
                 </div>
-                <span class="gap"></span>
+
                 <?php echo $frmSearchCustomProduct->getExternalJS(); ?>
                 <div id="listing">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>

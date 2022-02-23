@@ -59,7 +59,7 @@
                                 /*$vendorShopUrl = UrlHelper::generateUrl('Shops', 'View', array($request['op_shop_id']));*/
                                 echo ($request['op_shop_name'] != '') ? '<strong>' . Labels::getLabel('LBL_Shop_Name', $siteLangId) . ':</strong> ' . $request['op_shop_name'] . '<br/>' : ''; ?>
                             </p>
-                            <span class="gap"></span>
+
                         </div>
                     </div>
                 </div>
@@ -141,12 +141,12 @@
                 <?php if (!$print) { ?>
                     <div class="no-print">
                         <?php echo $returnRequestMsgsSrchForm->getFormHtml(); ?>
-                        <div class="gap"></div>
+
                         <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
                         <div id="loadMoreBtnDiv"></div>
                         <ul class="messages-list" id="messagesList"></ul>
 
-                        <div class="gap"></div>
+
                         <?php if ($request && ($request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED && $request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN)) {
                             $frmMsg->setFormTagAttribute('onSubmit', 'setUpReturnOrderRequestMessage(this); return false;');
                             $frmMsg->setFormTagAttribute('class', 'form');

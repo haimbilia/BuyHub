@@ -39,17 +39,33 @@
             <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-anim choose-dashboard" aria-labelledby="dashboardDropdown">
                 <?php if (User::canViewSupplierTab()) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>"><?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">S</span>
+                                <?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?>
+                            </div>
+
+                        </a>
                     </li>
                 <?php } ?>
                 <?php if (User::canViewBuyerTab()) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>"><?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">B</span>
+                                <?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?>
+                            </div>
+                        </a>
                     </li>
                 <?php } ?>
                 <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
-                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>"><?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img">A</span>
+                                <?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?>
+                            </div>
+                        </a>
                     </li>
                 <?php } ?>
             </ul>

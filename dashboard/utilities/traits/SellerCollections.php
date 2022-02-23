@@ -13,9 +13,9 @@ trait SellerCollections
     {
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        if(false == $shopDetails){
+        if (false == $shopDetails) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml()); 
+            FatUtility::dieWithError(Message::getHtml());
         }
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
@@ -181,7 +181,7 @@ trait SellerCollections
 
         $shopOriginalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $shop_id . '/' . $collection_id;
         if ($post['urlrewrite_custom'] == '') {
-            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array( 'smt' => 'urlrewrite_original = ?', 'vals' => array($shopOriginalUrl)));
+            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($shopOriginalUrl)));
         } else {
             $shop = new Shop($shop_id);
             $shop->setupCollectionUrl($post['urlrewrite_custom'], $collection_id);
@@ -286,7 +286,7 @@ trait SellerCollections
             $data['scollection_id'] = $row['scollectionlang_scollection_id'];
             $data['lang_id'] = $row['scollectionlang_lang_id'];
             $data['name'] = $row['scollection_name'];
-            $shopColLangFrm ->fill($data);
+            $shopColLangFrm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
@@ -303,16 +303,16 @@ trait SellerCollections
     {
         $frm = new Form('frmMetaTagLang');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $this->siteLangId), 'name');
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $this->siteLangId), 'name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -328,7 +328,7 @@ trait SellerCollections
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-		$scollection_id = FatUtility::int($post['scollection_id']);
+        $scollection_id = FatUtility::int($post['scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -339,11 +339,11 @@ trait SellerCollections
         }
         $frm = $this->getCollectionLangForm($scollection_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $post['lang_id'] =  array_key_first($languages); 
-		}
-		$record = new ShopCollection($scollection_id);
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $post['lang_id'] =  array_key_first($languages);
+        }
+        $record = new ShopCollection($scollection_id);
 
         if (!$record->addUpdateShopCollectionLang($post)) {
             Message::addErrorMessage($record->getError());
@@ -422,8 +422,8 @@ trait SellerCollections
         $frm = new Form('frmLinks1', array('id' => 'frmLinks1'));
         $frm->addHiddenField('', 'scp_scollection_id');
         $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-        
-        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div><div class="gap"></div>');
+
+        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div>');
         return $frm;
     }
 
@@ -469,14 +469,14 @@ trait SellerCollections
         $frm = new Form('frmCollectionMedia');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
-        } else  {
-			$langid = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $langid);
-		}
-       
-		
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
+        } else {
+            $langid = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $langid);
+        }
+
+
         $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
         return $frm;
     }
@@ -485,13 +485,13 @@ trait SellerCollections
     {
         $scollection_id = FatUtility::int($scollection_id);
         $lang_id = FatUtility::int($lang_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = FatUtility::int($lang_id);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
         $this->commonShopCollection();
         if (1 > $scollection_id) {
             FatUtility::dieWithError($this->str_invalid_request);
@@ -516,15 +516,15 @@ trait SellerCollections
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
-		$scollection_id = FatApp::getPostedData('scollection_id', FatUtility::VAR_INT, 0);
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
+        $scollection_id = FatApp::getPostedData('scollection_id', FatUtility::VAR_INT, 0);
 
         if ($scollection_id == 0) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -537,8 +537,7 @@ trait SellerCollections
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id)
-        ) {
+        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id)) {
             Message::addErrorMessage($fileHandlerObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }

@@ -631,8 +631,9 @@ a:hover {
     flex: 1;
     padding: 1rem 0;
     .actions {
-        border-radius: $radius-common;
-        border: $border;
+        // border-radius: $radius-common;
+        border: none;
+        // border: $border;
         li {
             .actions-link {
                 text-align: center;
@@ -645,7 +646,7 @@ a:hover {
                 line-height: $input-line-height;
                 border-radius: $input-border-radius;
                 width: 4rem;
-                border-#{$end-direction}: $border;
+                border: $border;
                 margin: 0;
                 cursor: pointer;
                 &:before {
@@ -653,15 +654,9 @@ a:hover {
                     content: normal;
                 }
                 &:hover {
-                    // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%);
-                    @include bg-brand();
+                    border-color: $brand-color;
+                    background-color: $brand-color;
                     color: $brand-color-inverse;
-                }
-            }
-            &:last-child {
-                a {
-                    border: none;
                 }
             }
         }

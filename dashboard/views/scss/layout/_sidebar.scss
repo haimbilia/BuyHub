@@ -1,4 +1,4 @@
-$sidebar-width: 250px;
+$sidebar-width: 280px;
 
 .sidebar {
     border-top-#{$start-direction}-radius: 4px;
@@ -23,7 +23,8 @@ $sidebar-width: 250px;
         display: flex;
         // justify-content: flex-end;
         align-items: center;
-        padding: 1rem;
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
         height: 71px;
         //border-bottom: $border;
         //position: absolute;
@@ -44,7 +45,7 @@ $sidebar-width: 250px;
     }
 
     &-body {
-        padding: 1rem;
+        padding: 1rem 2rem;
         height: 100%;
         max-height: none;
         width: auto;
@@ -52,7 +53,7 @@ $sidebar-width: 250px;
         width: 100% !important;
     }
     &-foot {
-        padding: 1rem;
+        padding: 1rem 2rem;
     }
 
     .hamburger-toggle {
