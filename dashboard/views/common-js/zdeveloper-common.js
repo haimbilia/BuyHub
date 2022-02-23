@@ -13,6 +13,15 @@ $(window).on("load", function () {
     }
 });
 
+$(window).scroll(function () {
+    var scroll = $(window).scrollTop();
+    if (scroll >= 50) {
+        $("#header-dashboard").addClass("scrolled");
+    } else {
+        $("#header-dashboard").removeClass("scrolled");
+    }
+});
+
 $(document).ready(function () {
     $(document).on("click", ".selectItem--js", function () {
         if ($(this).prop("checked") == false) {
@@ -26,21 +35,22 @@ $(document).ready(function () {
         }
         showFormActionsBtns();
     });
-    if (0 < $(".js-widget-scroll").length) {
-        slickWidgetScroll();
-    }
-    $(document).on("click", ".accordianheader", function () {
+
+    /*  if (0 < $(".js-widget-scroll").length) {
+         slickWidgetScroll();
+     } */
+    /* $(document).on("click", ".accordianheader", function () {
         $(this).next(".accordianbody").slideToggle();
         $(this).parent().parent().siblings().children().children().next().slideUp();
         return false;
-    });
-    if (
-        "rtl" == langLbl.layoutDirection &&
-        0 < $("[data-simplebar]").length &&
-        1 > $("[data-simplebar-direction='rtl']").length
-    ) {
-        $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
-    }
+    }); */
+    /*  if (
+         "rtl" == langLbl.layoutDirection &&
+         0 < $("[data-simplebar]").length &&
+         1 > $("[data-simplebar-direction='rtl']").length
+     ) {
+         $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
+     } */
     $(document).on("keyup", "input.otpVal-js", function (e) {
         if ("" != $(this).val()) {
             $(this).removeClass("is-invalid");
@@ -66,7 +76,7 @@ installJsColor = function () {
     }
 };
 installJsColor();
-unlinkSlick = function () {
+/* unlinkSlick = function () {
     $(".js-widget-scroll").slick("unslick");
 };
 slickWidgetScroll = function () {
@@ -79,7 +89,7 @@ slickWidgetScroll = function () {
             480: 1,
         })
     );
-};
+}; */
 invalidOtpField = function () {
     $("input.otpVal-js")
         .val("")
@@ -667,10 +677,10 @@ function defaultSetUpLogin(frm, v) {
 
     });
     $(document).bind("reveal.facebox", function () {
-        
+
     });
     $(window).on("orientationchange", function () {
-        
+
     });
     $(document).bind("loading.facebox", function () {
         $("#facebox .content").addClass("fbminwidth");
