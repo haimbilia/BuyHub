@@ -54,33 +54,37 @@
                                                             <td style="padding:15px;border-right: 1px solid #ddd;">
                                                                 <h4 style="margin:0;font-size:18px;font-weight:bold;padding-bottom: 5px;"><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></h4>
                                                                 <p style="margin:0;padding-bottom: 15px;">
-                                                                    <?php $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br/>';
-                                                                    if ($orderDetail['billingAddress']['oua_address1'] != '') {
-                                                                        $billingAddress .= $orderDetail['billingAddress']['oua_address1'] . '<br/>';
-                                                                    }
+                                                                    <?php
+                                                                    $billingAddress = Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId);
+                                                                    if (!empty($orderDetail['billingAddress'])) {
+                                                                        $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br/>';
+                                                                        if ($orderDetail['billingAddress']['oua_address1'] != '') {
+                                                                            $billingAddress .= $orderDetail['billingAddress']['oua_address1'] . '<br/>';
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_address2'] != '') {
-                                                                        $billingAddress .= $orderDetail['billingAddress']['oua_address2'] . '<br/>';
-                                                                    }
+                                                                        if ($orderDetail['billingAddress']['oua_address2'] != '') {
+                                                                            $billingAddress .= $orderDetail['billingAddress']['oua_address2'] . '<br/>';
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_city'] != '') {
-                                                                        $billingAddress .= $orderDetail['billingAddress']['oua_city'] . ', ';
-                                                                    }
+                                                                        if ($orderDetail['billingAddress']['oua_city'] != '') {
+                                                                            $billingAddress .= $orderDetail['billingAddress']['oua_city'] . ', ';
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_state'] != '') {
-                                                                        $billingAddress .= $orderDetail['billingAddress']['oua_state'] . ', ';
-                                                                    }
+                                                                        if ($orderDetail['billingAddress']['oua_state'] != '') {
+                                                                            $billingAddress .= $orderDetail['billingAddress']['oua_state'] . ', ';
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_country'] != '') {
-                                                                        $billingAddress .= $orderDetail['billingAddress']['oua_country'];
-                                                                    }
+                                                                        if ($orderDetail['billingAddress']['oua_country'] != '') {
+                                                                            $billingAddress .= $orderDetail['billingAddress']['oua_country'];
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_zip'] != '') {
-                                                                        $billingAddress  .= '-' . $orderDetail['billingAddress']['oua_zip'];
-                                                                    }
+                                                                        if ($orderDetail['billingAddress']['oua_zip'] != '') {
+                                                                            $billingAddress  .= '-' . $orderDetail['billingAddress']['oua_zip'];
+                                                                        }
 
-                                                                    if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                                                        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+                                                                        if ($orderDetail['billingAddress']['oua_phone'] != '') {
+                                                                            $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+                                                                        }
                                                                     }
                                                                     ?>
                                                                     <?php echo $billingAddress; ?>
@@ -170,7 +174,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <td style="padding:15px;">
-                                                                <p><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $orderDetail['op_order_id']; ?> </p>
+                                                                <p><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $orderDetail['order_number']; ?> </p>
                                                                 <p><strong><?php echo Labels::getLabel('LBL_Invoice_Number', $siteLangId); ?>:</strong> <?php echo $orderDetail['op_invoice_number']; ?></p>
                                                                 <p><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?>:</strong>
                                                                     <?php
@@ -208,7 +212,7 @@
                                                 <table width="100%" border="0" cellpadding="10px" cellspacing="0">
                                                     <tbody>
                                                         <tr>
-                                                            <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; " colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1: 2;  ?>"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                                                            <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; " colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1 : 2;  ?>"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
                                                             <?php if ($orderDetail['op_tax_collected_by_seller']) { ?>
                                                                 <th style="padding:10px; font-size:12px;text-align: center; border-bottom:1px solid #ddd;">
                                                                     <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
@@ -225,7 +229,7 @@
                                                         </tr>
                                                         <tr>
                                                             <?php $volumeDiscount = CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT'); ?>
-                                                            <td style="padding:10px; font-size:12px;text-align: left;" colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1: 2;  ?>">
+                                                            <td style="padding:10px; font-size:12px;text-align: left;" colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1 : 2;  ?>">
                                                                 <?php
                                                                 echo ($orderDetail['op_selprod_title'] != '') ? $orderDetail['op_selprod_title'] : $orderDetail['op_product_name'];
                                                                 echo '<br>';
@@ -354,7 +358,7 @@
                                                     <table width="100%" border="0" cellpadding="10px" cellspacing="0" style="">
                                                         <tbody>
                                                             <tr>
-                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="<?php echo (2 + count($orderDetail['taxOptions']) );?> "><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
+                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="<?php echo (2 + count($orderDetail['taxOptions'])); ?> "><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="padding:10px; font-size:12px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?></th>
@@ -433,4 +437,4 @@
             </td>
         </tr>
     </tbody>
-</table> 
+</table>

@@ -150,11 +150,10 @@ class NavigationsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Navigations::getAttributesByLangId($this->siteLangId, $recordId, null, true);
+            $data = Navigations::getAttributesByLangId($this->siteLangId, $recordId, ['*','IFNULL(nav_name,nav_identifier) as nav_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
-            }
-            $data['nav_name'] = $data['nav_name'] ?? $data['nav_identifier'];
+            }           
             $frm->fill($data);
         }
 
@@ -200,11 +199,11 @@ class NavigationsController extends ListingBaseController
                 $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
             LibHelper::exitWithError($msg, true);
-        }
+        }       
 
-        $this->setLangData($record, [
-            $record::tblFld('name') => $post[$record::tblFld('name')]
-        ]);
+        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), [$record::tblFld('name') => $post[$record::tblFld('name')]])) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
@@ -290,7 +289,8 @@ class NavigationsController extends ListingBaseController
             $srch->doNotCalculateRecords();
             $srch->addCondition('nlink_id', '=', $nlinkId);
             $rs = $srch->getResultSet();
-            $nlinkRow = FatApp::getDb()->fetch($rs);
+            $nlinkRow = FatApp::getDb()->fetch($rs);          
+            $nlinkRow['nlink_caption'] = $nlinkRow['nlink_caption'] ?? $nlinkRow['nlink_identifier'];
             $frm->fill($nlinkRow);
         }
         $this->set('nav_id', $navId);
@@ -397,7 +397,7 @@ class NavigationsController extends ListingBaseController
         $langFrm = $this->getLinksLangForm($langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(NavigationLinks::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($nlinkId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($nlinkId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }

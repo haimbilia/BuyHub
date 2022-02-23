@@ -74,7 +74,7 @@ class FaqController extends ListingBaseController
 
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $faqCategory = FaqCategory::getAttributesByLangId($this->siteLangId, $faqCatId, 'faqcat_name', true);
+        $faqCategory = FaqCategory::getAttributesByLangId($this->siteLangId, $faqCatId, 'faqcat_name', applicationConstants::JOIN_RIGHT);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $faqCategory ? Labels::getLabel('LBL_FAQ_CATEGORY', $this->siteLangId) . ' : ' . $faqCategory : LibHelper::getControllerName(true);
         $this->setModel();
@@ -176,7 +176,6 @@ class FaqController extends ListingBaseController
         }
         $frm = $this->getForm($faqCatId);
 
-
         if (0 < $recordId) {
             $srch = Faq::getSearchObject($this->siteLangId);
             $srch->addCondition('faq_faqcat_id', '=', $faqCatId);
@@ -189,6 +188,7 @@ class FaqController extends ListingBaseController
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $data['faqCatId'] = $faqCatId;
+            $data['faq_title'] = !empty($data['faq_title']) ? $data['faq_title'] : $data['faq_identifier'];
             $frm->fill($data);
         }
 
@@ -213,8 +213,8 @@ class FaqController extends ListingBaseController
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'faq_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey)) {
+        $languages = Language::getAllNames();
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -300,13 +300,13 @@ class FaqController extends ListingBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Faq::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Faq::getAttributesByLangId($langId, $recordId, null, true);
+            $langData = Faq::getAttributesByLangId($langId, $recordId, null, applicationConstants::JOIN_RIGHT);
         }
         $faqCatId = Faq::getAttributesById($recordId, 'faq_faqcat_id');
         $langData['faq_id'] = $recordId;
@@ -335,25 +335,16 @@ class FaqController extends ListingBaseController
      * @return void
      */
     private function getLangForm(int $langId = 0)
-    {
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $langId = 1 > $langId ? $siteLangId : $langId;
+    {        
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmFaqLang');
-        $frm->addHiddenField('', 'faq_id');
-        $siteLangId = $this->siteLangId;
+        $frm->addHiddenField('', 'faq_id');     
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'faq_title');
         $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'faq_content');
 
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
         return $frm;
     }
-
 
     public function langSetup()
     {
@@ -388,7 +379,7 @@ class FaqController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Faq::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

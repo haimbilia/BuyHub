@@ -1,7 +1,7 @@
 <?php
 $pNameFld = $frm->getField('shipprofile_name');
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-if (!empty($translatorSubscriptionKey) && $langId != $siteDefaultLangId) {
+if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
     $pNameFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
     $pNameFld->htmlAfterField = '<a href="javascript:void(0);" onclick="loadLangData(1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                         <svg class="svg" width="18" height="18">

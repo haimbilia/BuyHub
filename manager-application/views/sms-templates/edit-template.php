@@ -11,8 +11,7 @@ $fld = $tempFrm->getField('lang_id');
 $fld->setfieldTagAttribute('onChange', "editStplData('" . $stplCode . "', this.value);");
 if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
     $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-    $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-    if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
+    if (!empty($translatorSubscriptionKey) && $lang_id != CommonHelper::getDefaultFormLangId()) {
         $fld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
         $fld->htmlAfterField = '<a href="javascript:void(0);" onclick="editStplData(\'' . $stplCode . '\', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                             <svg class="svg" width="18" height="18">
@@ -45,7 +44,9 @@ if (!empty($repVarArr))  {
     }
     $repVarHtml .= '</ul>';
     $fld->value = $repVarHtml;
-} ?>
+}
+
+?>
 
 <div class="modal-header">
     <h5 class="modal-title">

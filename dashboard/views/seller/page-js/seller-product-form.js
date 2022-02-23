@@ -37,7 +37,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			$(".tabs_panel").html('');
 			$(".tabs_panel").hide();
 			$("#tabs_001").show();
-			$(".tabsNavJs > a").removeClass('active');
+			$(".navTabsJs > a").removeClass('active');
 			$("a[rel='tabs_001']").addClass('active');
 			$("#tabs_001").html(t);
 		});
@@ -189,7 +189,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		$(".tabs_panel").html('');
 		$(".tabs_panel").hide();
 		$("#tabs_002").show();
-		$(".tabsNavJs  > a").removeClass('active');
+		$(".navTabsJs  > a").removeClass('active');
 		$("a[rel='tabs_002']").addClass('active');
 		$("#tabs_002").html('<div class="col-md-12" id="digital_download_form"></div> <div class="col-md-12" class="dd-list"><div class="row" id="digital_download_list"></div></div>');
 		$(".downloadType-js").each(function () {

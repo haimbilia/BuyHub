@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php');
 $frm->setFormTagAttribute('id', 'bankInfoFrm');
 $frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-md-';

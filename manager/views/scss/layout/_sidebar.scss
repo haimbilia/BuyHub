@@ -268,7 +268,6 @@ $space: 25px;
                     transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
                 }
                 &:hover,
-                &:focus,
                 &.active {
                     &::before {
                         opacity: 1;

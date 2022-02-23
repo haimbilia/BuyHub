@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<nav class="nav nav-tabs tabsNavJs">
+<nav class="nav nav-tabs navTabsJs">
     <?php if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
         <a class="nav-link active tabs_001 customCatalogReq--js" rel="tabs_001" href="javascript:void(0)" onclick="searchCustomCatalogProducts()">
             <?php echo Labels::getLabel('LBL_Marketplace_Products_Requests', $siteLangId); ?> 

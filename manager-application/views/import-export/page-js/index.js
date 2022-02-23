@@ -90,7 +90,7 @@ $(document).ready(function () {
                 fcom.closeProcessing();
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
-                    $(document).trigger('close.facebox');
+                    
                     $.ykmsg.success(ans.msg);
                     loadForm('bulk_media');
                 } else {
@@ -121,7 +121,7 @@ $(document).ready(function () {
                         if (ans.status == 1) {
                             frm.reset();
                             $("#importFileName").html("");
-                            $(document).trigger('close.facebox');
+                            
                             $.ykmsg.success(ans.msg);
                             loadForm('import');
                         } else {

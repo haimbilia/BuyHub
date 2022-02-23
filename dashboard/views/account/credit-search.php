@@ -1,14 +1,14 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php $arr_flds = array(
-        'utxn_id'    =>    Labels::getLabel('LBL_Txn_ID', $siteLangId),
-        'utxn_gateway_txn_id'    =>    Labels::getLabel('LBL_GATEWAY_TXN_ID', $siteLangId),
-        'utxn_date'    =>    Labels::getLabel('LBL_Date', $siteLangId),
-        'utxn_credit' =>    Labels::getLabel('LBL_Credit', $siteLangId),
-        'utxn_debit'    =>    Labels::getLabel('LBL_Debit', $siteLangId),
-        'balance'    =>    Labels::getLabel('LBL_Balance', $siteLangId),
-        'utxn_comments'    =>    Labels::getLabel('LBL_Comments', $siteLangId),
-        'utxn_status'    =>    Labels::getLabel('LBL_Status', $siteLangId),
+        'utxn_id'    =>    Labels::getLabel('LBL_TXN_ID', $siteLangId),
+        /*  'utxn_gateway_txn_id'    =>    Labels::getLabel('LBL_GATEWAY_TXN_ID', $siteLangId), */
+        'utxn_date'    =>    Labels::getLabel('LBL_DATE', $siteLangId),
+        'utxn_transaction' =>    Labels::getLabel('LBL_CREDIT/DEBIT', $siteLangId),
+        /* 'utxn_debit'    =>    Labels::getLabel('LBL_DEBIT', $siteLangId), */
+        'balance'    =>    Labels::getLabel('LBL_BALANCE', $siteLangId),
+        'utxn_comments'    =>    Labels::getLabel('LBL_COMMENTS', $siteLangId),
+        'utxn_status'    =>    Labels::getLabel('LBL_STATUS', $siteLangId),
     );
 
     $tbl = new HtmlElement('table', array('class' => 'table'));
@@ -38,14 +38,18 @@
                 case 'utxn_status':
                     $td->appendElement('span', array('class' => 'badge badge-inline ' . $statusClassArr[$row[$key]]), $statusArr[$row[$key]], true);
                     break;
-                case 'utxn_credit':
-                    $txt = CommonHelper::displayMoneyFormat($row[$key]);
+                case 'utxn_transaction':
+                    if ($row['utxn_debit'] > 0) {
+                        $txt = '-' . CommonHelper::displayMoneyFormat($row['utxn_debit']);
+                    } else {
+                        $txt = CommonHelper::displayMoneyFormat($row['utxn_credit']);
+                    }
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'utxn_debit':
+                    /*  case 'utxn_debit':
                     $txt = CommonHelper::displayMoneyFormat($row[$key]);
                     $td->appendElement('plaintext', array(), $txt, true);
-                    break;
+                    break; */
                 case 'balance':
                     $txt = CommonHelper::displayMoneyFormat($row[$key]);
                     $td->appendElement('plaintext', array(), $txt, true);

@@ -29,7 +29,10 @@ if (null != $btn) {
                     <div class="payable-form__body" id="paymentFormElement-js">
                        <h6><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?></h6>
                         <?php echo $frm->getFormHtml(); ?>
-                    </div>  
+                    </div> 
+                    <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                        <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+                    <?php } ?>
             </div>
         </div>
 </section>

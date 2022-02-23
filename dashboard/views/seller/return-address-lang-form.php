@@ -1,5 +1,5 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $frm->setFormTagAttribute('id', 'returnAddressLangFrm');
 $frm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
 $frm->developerTags['colClassPrefix'] = 'col-md-';
@@ -17,24 +17,24 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $langFld = $frm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "returnAddressLangForm(this.value);");
+
+$fld = $frm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 ?>
 
 <div class="col-md-12">
-<?php
-$translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) {
+    <?php
+    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+    $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+    if (!empty($translatorSubscriptionKey) && $formLangId != $siteDefaultLangId) {
     ?>
-    <div class="row justify-content-end">
-        <div class="col-auto mb-4">
-            <input class="btn btn-brand"
-                   type="button"
-                   value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                   onclick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <input class="btn btn-outline-gray btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="returnAddressLangForm(<?php echo $formLangId; ?>, 1)">
+            </div>
         </div>
-    </div>
-<?php } ?>
-<?php echo $frm->getFormHtml(); ?>
+    <?php } ?>
+    <?php echo $frm->getFormHtml(); ?>
 </div>
-
-

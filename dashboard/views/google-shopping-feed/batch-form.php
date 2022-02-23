@@ -1,21 +1,31 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('id', 'adsBatchForm');
 $frm->setFormTagAttribute('onsubmit', 'setupBatch(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 2;
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('dir', $formLayout);
+$frm->setFormTagAttribute('data-onclear', "batchForm(" . $adsBatchId . ")");
 
 $adsbatch_name = $frm->getField('adsbatch_name');
-$adsbatch_name->developerTags['col'] = 2;
-
-$btnFld = $frm->getField('btn_submit');
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-brand');
-
-$btnFld = $frm->getField('btn_clear');
-$btnFld->addFieldTagAttribute('class', 'btn btn-block btn-outline-brand');
+$adsbatch_name->addFieldTagAttribute('placeholder', $adsbatch_name->getCaption());
 
 $fld = $frm->getField('adsbatch_expired_on');
-$fld->addFieldTagAttribute('class', 'date_js');
+$fld->addFieldTagAttribute('class', 'field--calender date_js');
+$fld->addFieldTagAttribute('placeholder', $fld->getCaption()); 
 
-echo $frm->getFormHtml();
+$langFld = $frm->getField('adsbatch_lang_id');
+$langFld->setFieldTagAttribute('onChange', "batchForm(" . $adsBatchId . ", this.value);");
+?>
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_BATCH_SETUP', $langId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>

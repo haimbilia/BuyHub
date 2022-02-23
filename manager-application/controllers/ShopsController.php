@@ -99,7 +99,7 @@ class ShopsController extends ListingBaseController
         $frm = $this->getForm($shop_id);
         $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < $shop_id) {
-            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, null, true);
+            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, ['*','IFNULL(shop_name,shop_identifier) as shop_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -453,8 +453,7 @@ class ShopsController extends ListingBaseController
         $fld->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'shop_state', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'shop_postalcode');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addRequiredField(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'shop_postalcode');     
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
         $fld->requirements()->setInt();
@@ -475,6 +474,11 @@ class ShopsController extends ListingBaseController
 
         $this->appendLangFormFields($frm, $this->siteLangId);
 
+        /* $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        } */
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
         return $frm;
@@ -486,8 +490,7 @@ class ShopsController extends ListingBaseController
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_SHOP_NAME', $lang_id), 'shop_name');
-        $this->appendLangFormFields($frm);
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        $this->appendLangFormFields($frm);      
         return $frm;
     }
 
@@ -500,10 +503,12 @@ class ShopsController extends ListingBaseController
         $frm->addTextarea(Labels::getLabel('FRM_DELIVERY_POLICY', $lang_id), 'shop_delivery_policy');
         $frm->addTextarea(Labels::getLabel('FRM_REFUND_POLICY', $lang_id), 'shop_refund_policy');
         $frm->addTextarea(Labels::getLabel('FRM_ADDITIONAL_INFORMATION', $lang_id), 'shop_additional_info');
-        $frm->addTextarea(Labels::getLabel('FRM_SELLER_INFORMATION', $lang_id), 'shop_seller_info');
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $frm->addTextarea(Labels::getLabel('FRM_SELLER_INFORMATION', $lang_id), 'shop_seller_info');      
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
+
+        $languageArr = Language::getDropDownList();
+
+        if (!empty($translatorSubscriptionKey) && $lang_id == CommonHelper::getDefaultFormLangId() && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;

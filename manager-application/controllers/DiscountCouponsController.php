@@ -149,7 +149,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $isExpired = false;
         if (0 < $recordId) {
-            $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
+            $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -392,7 +392,7 @@ class DiscountCouponsController extends ListingBaseController
         }
         $this->checkEditPrivilege(true);
 
-        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
         if (empty($couponData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, false, true);
             CommonHelper::redirectUserReferer();
@@ -460,7 +460,7 @@ class DiscountCouponsController extends ListingBaseController
         }
         $this->checkEditPrivilege(true);
 
-        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
         if (empty($couponData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
             CommonHelper::redirectUserReferer();
@@ -616,7 +616,7 @@ class DiscountCouponsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title', 'coupon_code'], true);
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title', 'coupon_code'], applicationConstants::JOIN_RIGHT);
         if ($couponData == false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -835,7 +835,7 @@ class DiscountCouponsController extends ListingBaseController
                 $urlParts = explode('/', $url);
                 $title = Labels::getLabel('LBL_LINKS', $this->siteLangId);
                 if (isset($urlParts[2])) {
-                    $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $urlParts[2], ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+                    $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $urlParts[2], ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
                     if (!empty($couponData)) {
                         $this->nodes[] = ['title' => current($couponData)];
                     }

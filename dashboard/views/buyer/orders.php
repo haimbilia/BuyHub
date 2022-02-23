@@ -1,59 +1,16 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-/* 
-$frmOrderSrch->setFormTagAttribute('onSubmit', 'searchOrders(this); return false;');
-$frmOrderSrch->setFormTagAttribute('class', 'form');
-$frmOrderSrch->developerTags['colClassPrefix'] = 'col-md-';
-$frmOrderSrch->developerTags['fld_default_col'] = 12;
 
-$keywordFld = $frmOrderSrch->getField('keyword');
-$keywordFld->setWrapperAttribute('class', 'col-lg-4');
-$keywordFld->developerTags['col'] = 4;
-$keywordFld->developerTags['noCaptionTag'] = true;
-
-$statusFld = $frmOrderSrch->getField('status');
-$statusFld->setWrapperAttribute('class', 'col-lg-4');
-$statusFld->developerTags['col'] = 4;
-$statusFld->developerTags['noCaptionTag'] = true;
-
-$dateFromFld = $frmOrderSrch->getField('date_from');
+$dateFromFld = $frmSearch->getField('date_from');
 $dateFromFld->setFieldTagAttribute('class', 'field--calender');
-$dateFromFld->setWrapperAttribute('class', 'col-lg-2');
-$dateFromFld->developerTags['col'] = 2;
-$dateFromFld->developerTags['noCaptionTag'] = true;
 
-$dateToFld = $frmOrderSrch->getField('date_to');
+$dateToFld = $frmSearch->getField('date_to');
 $dateToFld->setFieldTagAttribute('class', 'field--calender');
-$dateToFld->setWrapperAttribute('class', 'col-lg-2');
-$dateToFld->developerTags['col'] = 2;
-$dateToFld->developerTags['noCaptionTag'] = true;
-
-$priceFromFld = $frmOrderSrch->getField('price_from');
-$priceFromFld->setWrapperAttribute('class', 'col-lg-2');
-$priceFromFld->developerTags['col'] = 2;
-$priceFromFld->developerTags['noCaptionTag'] = true;
-
-$priceToFld = $frmOrderSrch->getField('price_to');
-$priceToFld->setWrapperAttribute('class', 'col-lg-2');
-$priceToFld->developerTags['col'] = 2;
-$priceToFld->developerTags['noCaptionTag'] = true;
-
-$submitBtnFld = $frmOrderSrch->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
-$submitBtnFld->setWrapperAttribute('class', 'col-lg-2');
-$submitBtnFld->developerTags['col'] = 2;
-$submitBtnFld->developerTags['noCaptionTag'] = true;
-
-$cancelBtnFld = $frmOrderSrch->getField('btn_clear');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-lg-2');
-$cancelBtnFld->developerTags['col'] = 2;
-$cancelBtnFld->developerTags['noCaptionTag'] = true; */
-?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
+?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Order_History', $siteLangId),
+        'headingLabel' => Labels::getLabel('LBL_MY_ORDERS', $siteLangId),
         'siteLangId' => $siteLangId,
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
@@ -64,7 +21,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true; */
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div id="ordersListing"></div>
-                        <span class="gap"></span>
+
                     </div>
                 </div>
             </div>

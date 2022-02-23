@@ -1,4 +1,4 @@
-$avatar: 'avatar';
+$avatar: "avatar";
 .#{$avatar} {
     position: relative;
     display: inline-block;
@@ -13,47 +13,13 @@ $avatar: 'avatar';
             height: 68px;
         }
     }
-    &__upload:not(.yk-avatar-label) {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        right: -10px;
-        top: -10px;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-color: $bg-white;
-        box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-        input {
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden;
-            opacity: 0;
-            display: none;
-        }
-    }
 }
 
 .avatar {
-    &__upload {
-        i {
-            color: $brand-color;
-            font-size: 0.9rem;
-        }
-        &:hover {
-            transition: all 0.3s;
-            // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-            i {
-                color: #ffffff;
-            }
-        }
-    }
+    &__upload,
     &__cancel {
+        display: flex;
+        align-items: center;
         cursor: pointer;
         align-items: center;
         justify-content: center;
@@ -61,23 +27,19 @@ $avatar: 'avatar';
         top: auto;
         right: -10px;
         bottom: -5px;
-        width: 22px;
-        height: 22px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         background-color: $bg-white;
         box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.1);
-        display: none;
-        i {
-            transition: all 0.3s;
-            color: $txt-gray;
-            font-size: 0.9rem;
-        }
-        &:hover {
-            i {
-                transition: all 0.3s;
-                color: $brand-color;
-            }
-        }
+    }
+
+    .file-upload {
+        opacity: 0;
+    }
+    &__cancel {
+        bottom: 0;
+        top: auto;
     }
     &.#{$avatar}-changed {
         .#{$avatar}__cancel {
@@ -91,8 +53,8 @@ $avatar: 'avatar';
             }
             &:hover {
                 // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+                // color:  lighten($brand-color, 55%);
+                @include bg-brand();
                 i {
                     color: #ffffff;
                 }

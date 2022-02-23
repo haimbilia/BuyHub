@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage . '); ?>
 
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Shipping_Services_tracking_detail', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Shipping_Services_tracking_detail', $siteLangId); ?></h5>
 </div>
-<div class="modal-body">
-    <div class="modal-body">
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
         <ul class="timeline" id="timeline">
-            <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) {?>
+            <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) { ?>
                 <li class="event" data-date="">
                     <a href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank" class="link"><?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?></a>
                     <hr>
@@ -27,5 +27,5 @@
             } ?>
         </ul>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
-

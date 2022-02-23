@@ -212,7 +212,7 @@ class ProductsController extends ListingBaseController
         $isSelProdCreatedBySeller = false;
         $isProductAddedByAdmin = true;
         $productOptions = [];
-        if (1 < $recordId) {
+        if (0 < $recordId) {
             $this->setModel([$recordId]);
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
@@ -223,7 +223,7 @@ class ProductsController extends ListingBaseController
                 $productData = current($translatedData);
                 $productData += $this->modelObj::getAttributesById($recordId);
             } else {
-                $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, true);
+                $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, applicationConstants::JOIN_RIGHT);
             }
 
             if (empty($productData)) {
@@ -260,7 +260,7 @@ class ProductsController extends ListingBaseController
             $productData['product_tags'] = json_encode($tagData);
 
             if (1 < $productData['product_brand_id']) {
-                $brandData = Brand::getAttributesByLangId($langId, $productData['product_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                $brandData = Brand::getAttributesByLangId($langId, $productData['product_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $brandData) {
                     $fld = $frm->getField('product_brand_id');
                     $fld->options = [$productData['product_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
@@ -271,7 +271,7 @@ class ProductsController extends ListingBaseController
             if (!empty($productCategories)) {
                 $selectedCat = current($productCategories)['prodcat_id'];
                 $productData['ptc_prodcat_id'] = $selectedCat;
-                $catData = ProductCategory::getAttributesByLangId($langId, $selectedCat, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+                $catData = ProductCategory::getAttributesByLangId($langId, $selectedCat, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $catData) {
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
@@ -295,7 +295,7 @@ class ProductsController extends ListingBaseController
 
             if (false != $prodShippingDetails) {
                 $productData['ps_from_country_id'] = $prodShippingDetails['ps_from_country_id'];
-                $countryData = Countries::getAttributesByLangId($langId, $prodShippingDetails['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], true, applicationConstants::YES);
+                $countryData = Countries::getAttributesByLangId($langId, $prodShippingDetails['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
                 if (false != $countryData) {
                     $fld = $frm->getField('ps_from_country_id');
                     $fld->options = [$prodShippingDetails['ps_from_country_id'] => $countryData[Countries::tblFld('name')] ?? $countryData[Tax::tblFld('code')]];

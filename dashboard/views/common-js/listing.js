@@ -1,7 +1,12 @@
 /* Reset result on clear(cross) icon on keyword search field. */
 $(document).on("search", "input[type='search']", function () {
-    if ("" == $(this).val()) {
+    if ("" == $(this).val() && typeof searchRecords === 'function') {
         searchRecords(document.frmRecordSearch);
+    }
+
+    var callback = $(this).data('callback');
+    if ("" == $(this).val() && typeof callback !== 'undefined') {
+        eval(callback);
     }
 });
 /* Reset result on clear(cross) icon on keyword search field. */
@@ -10,16 +15,32 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {
         $.ykmodal(fcom.getLoader());
     }
-    if (0 > $(".navTabsJs .nav-link").length) {
-        $(".navTabsJs .nav-link.active").click();
-    } else {
-        var onClear = $(".modalFormJs").data("onclear");
+
+    var onClear = $(".modalFormJs").data("onclear");
+    if ('undefined' != typeof onClear) {
         eval(onClear);
+    } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
+        $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
+    } else {
+        $.ykmodal.close();
     }
+    fcom.removeLoader();
 });
 
+$(document).on("click", ".navTabsJs a", function (e) {
+    if ($(this).hasClass('fat-inactive')) {
+        return;
+    }
+    $(this).siblings('a.active').removeClass('active');
+    $(this).addClass('active');
+});
 
 (function () {
+    markPopupTabActive = function () {
+        $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").removeClass('active');
+        $("." + $.ykmodal.element + " .navTabsJs a[onclick^='" + markPopupTabActive.caller.name + "']").addClass('active').removeClass('fat-inactive');
+    }
+
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {
             $.ykmsg.error(langLbl.controllerNameRequired);
@@ -30,6 +51,7 @@ $(document).on("click", ".resetModalFormJs", function (e) {
 
     clearSearch = function () {
         document.frmRecordSearch.reset();
+        $(document.frmRecordSearch.page).val(1);
         searchRecords(document.frmRecordSearch);
     };
 
@@ -73,8 +95,11 @@ $(document).on("click", ".resetModalFormJs", function (e) {
             }
         });
     };
-    
+
     closeForm = function () {
         $.ykmodal.close();
-    }
+    };
+
+
 })();
+

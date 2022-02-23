@@ -8,7 +8,7 @@
             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></h5>
             <div class="action">
                 <a class="btn btn-brand btn-sm" href="javascript:void(0); " onclick="sellerProductVolumeDiscountForm(<?php echo $selprod_id; ?>, 0);"><?php echo Labels::getLabel('LBL_Add_New_Volume_Discount', $siteLangId) ?></a>
-                <!-- <a class="btn btn-outline-brand btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount', array($selprod_id)); ?>" target="_blank"><?php echo Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId) ?></a> -->
+                <!-- <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount', array($selprod_id)); ?>" target="_blank"><?php echo Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId) ?></a> -->
             </div>
         <?php } ?>
         <div class="card-body ">
@@ -45,7 +45,11 @@
                                     case 'action':
                                         $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                                         $li = $ul->appendElement("li");
-                                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductVolumeDiscountForm(" . $selprod_id . ", " . $row['voldiscount_id'] . ")"), '<i class="fa fa-edit"></i>', true);
+                                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductVolumeDiscountForm(" . $selprod_id . ", " . $row['voldiscount_id'] . ")"), '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>', true);
                                         $li = $ul->appendElement("li");
                                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductVolumeDiscount(" . $row['voldiscount_id'] . ")"), '<i class="icn">
                                         <svg class="svg" width="18" height="18">

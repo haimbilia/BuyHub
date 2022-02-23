@@ -1,20 +1,31 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($images)) {
-	$htmlAfterField = '<div class="gap"></div><ul class="image-listing">';
-	foreach ($images as $bannerImg) {
-		$imgUrl =  '';
-		switch ($promotionType) {
-			case Promotion::TYPE_BANNER:
-				$imgUrl = UrlHelper::generateFullUrl('Banner', 'Thumb', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], $bannerImg['afile_screen']), CONF_WEBROOT_FRONTEND);
-				break;
-			case Promotion::TYPE_SLIDES:
-				$imgUrl = UrlHelper::generateFullUrl('Image', 'Slide', array($bannerImg['afile_record_id'], $bannerImg['afile_screen'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND);
-				break;
-		}
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-		$htmlAfterField .= '<li><p>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '</p><p>' . $screenTypeArr[$bannerImg['afile_screen']] . '</p><img src="' . $imgUrl . '"> <a href="javascript:void(0);" onclick="removePromotionBanner(' . $promotionId . ',' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ',' . $bannerImg['afile_screen'] . ')" class="closeimg">x</a>';
+$imgArr = [];
+if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {   
+	$imgUrl = '';
+	$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+	switch ($promotionType) {
+		case Promotion::TYPE_BANNER:
+			$imgUrl = UrlHelper::generateFullUrl('Banner', 'Thumb', array($image['afile_record_id'], $image['afile_lang_id'], $image['afile_screen']), CONF_WEBROOT_FRONTEND);
+			break;
+		case Promotion::TYPE_SLIDES:
+			$imgUrl = UrlHelper::generateFullUrl('Image', 'Slide', array($image['afile_record_id'], $image['afile_screen'], $image['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND);
+			break;
 	}
-	$htmlAfterField .= '</li></ul>';
-	echo $htmlAfterField;
-}
-?>
+
+	$imgUrl = UrlHelper::getCachedUrl($imgUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgArr = [
+        'url' => $imgUrl ."?". $uploadedTime,
+        'name' => $image['afile_name'],
+        'afile_id' => $image['afile_id'],
+    ]; 
+ } 
+
+ echo HtmlHelper::getfileInputHtml(
+    ['onChange' => 'popupImage(this)', 'accept' => 'image/*', 'data-name' =>  Labels::getLabel("FRM_PROMOTION_MEDIA", $siteLangId)],
+    $siteLangId,
+    ($canEdit ? 'removePromotionBanner(' . $promotionId . ',\'' . $image['afile_record_id'] . '\',' . $image['afile_lang_id'] .',' . $image['afile_screen'].')' :''),
+    ($canEdit ? 'editDropZoneImages(this)': ''),
+    $imgArr,
+    'mt-3 dropzone-custom dropzoneContainerJs'
+);

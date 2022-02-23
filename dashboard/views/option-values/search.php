@@ -42,7 +42,11 @@ foreach ($arrListing as $sn => $row) {
 				$li = $ul->appendElement("li");
 				$li->appendElement('a', array('href' => 'javascript:void(0)',
 				'class' => 'button small green', 'title' => Labels::getLabel('LBL_EDIT', $langId),
-				"onclick" => "optionValueForm(".$row['optionvalue_option_id'].",".$row['optionvalue_id'].")"), '<i class="fa fa-edit"></i>', true);
+				"onclick" => "optionValueForm(".$row['optionvalue_option_id'].",".$row['optionvalue_id'].")"), '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>', true);
 
 				$li = $ul->appendElement("li");
 				$li->appendElement('a', array('href' => "javascript:void(0)",
@@ -62,7 +66,7 @@ if (count($arrListing) == 0) {
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        fcom.resetFaceboxHeight();
+        
     });
 </script>
 <script>

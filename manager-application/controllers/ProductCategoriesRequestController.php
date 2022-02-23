@@ -143,7 +143,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = ProductCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('prodcat_parent', 'prodcat_name', 'prodcat_id', 'prodcat_identifier', 'prodcat_active', 'prodcat_status'), true);
+            $data = ProductCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('prodcat_parent', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'prodcat_id', 'prodcat_identifier', 'prodcat_active', 'prodcat_status'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -175,7 +175,7 @@ class ProductCategoriesRequestController extends ListingBaseController
                 $data['prodcat_deleted'] = applicationConstants::NO;
             }
         }
-
+        
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {

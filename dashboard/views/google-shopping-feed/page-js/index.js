@@ -1,33 +1,32 @@
 var keyName = 'GoogleShoppingFeed';
 $(document).ready(function () {
-    batchForm();
-    search();
+    searchRecords();
 });
 
 (function () {
     var dv = '#listing';
-    var batchSetup = '#batchSetup';
 
-    search = function () {
+    searchRecords = function (frm) {
         if (1 > $(dv).length) {
             return false;
         }
+        var data = '';
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+        
         $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(keyName, 'search'), '', function (res) {
+        fcom.ajax(fcom.makeUrl(keyName, 'search'), data, function (res) {
             fcom.removeLoader();
             $(dv).html(res);
         });
     };
 
-    batchForm = function (adsBatchId = 0) {
-        if (1 > $(batchSetup).length) {
-            return false;
-        }
-        $(batchSetup).prepend(fcom.getLoader());
-        $('html, body').animate({ scrollTop: $(batchSetup).offset().top - 150 }, 'slow');
-        fcom.ajax(fcom.makeUrl(keyName, 'batchForm', [adsBatchId]), '', function (res) {
+    batchForm = function (adsBatchId = 0, langId = 0) {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(keyName, 'batchForm', [adsBatchId, langId]), '', function (res) {
             fcom.removeLoader();
-            $(batchSetup).html(res);
+            $.ykmodal(res);
             $('.date_js').datepicker('option', {
                 minDate: new Date()
             });
@@ -35,10 +34,10 @@ $(document).ready(function () {
     };
 
     serviceAccountForm = function () {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl(keyName, 'serviceAccountForm'), '', function (res) {
-                $.facebox(res);
-            });
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(keyName, 'serviceAccountForm'), '', function (res) {
+            $.ykmodal(res);
+            fcom.removeLoader();
         });
     };
 
@@ -51,8 +50,9 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupBatch'), data, function (t) {
-            batchForm();
-            search();
+            fcom.removeLoader();
+            searchRecords();
+            closeForm();
         });
     }
 
@@ -62,7 +62,7 @@ $(document).ready(function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'deleteBatch', [adsBatchId]), '', function (t) {
-            search();
+            searchRecords();
         });
     }
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupServiceAccountForm'), data, function (t) {
-            $(document).trigger('close.facebox');
+            
             location.reload();
         });
     }
@@ -83,7 +83,16 @@ $(document).ready(function () {
             } else {
                 $.mbsmessage(t.msg, true, 'alert--danger');
             }
-            search();
+            searchRecords();
         });
     }
+
+    goToSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmSearchPaging;
+        $(frm.page).val(page);
+        searchRecords(frm);
+    };
 })();

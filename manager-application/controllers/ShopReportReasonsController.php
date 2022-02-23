@@ -125,7 +125,7 @@ class ShopReportReasonsController extends ListingBaseController
         }
 
         if (0 < $recordId) {
-            $data = ShopReportReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('reportreason_id', 'reportreason_title'), true);
+            $data = ShopReportReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('reportreason_id', 'IFNULL(reportreason_title,reportreason_identifier) as reportreason_title'), applicationConstants::JOIN_RIGHT);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);

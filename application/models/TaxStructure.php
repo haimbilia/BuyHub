@@ -305,7 +305,7 @@ class TaxStructure extends MyAppModel
     public function addUpdateCombinedData($post, $parentId): bool
     {
         $parentId = FatUtility::int($parentId);
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
 
         unset($post['taxstr_id']);
 

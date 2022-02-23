@@ -6,8 +6,9 @@ $shopLogoFrm->developerTags['fld_default_col'] = 12;
 $ratioFld = $shopLogoFrm->getField('ratio_type');
 $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
 $fld = $shopLogoFrm->getField('shop_logo');
-$fld->addFieldTagAttribute('class', 'btn btn-sm');
-$fld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
+//$fld->addFieldTagAttribute('class', 'btn btn-sm');
+//$fld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
+$fld->value= '<span id="shopLogoHtml"></span>';
 
 $shopBannerFrm->setFormTagAttribute('onsubmit', 'setupShopMedia(this); return(false);');
 $shopBannerFrm->setFormTagAttribute('class', 'form');
@@ -16,8 +17,10 @@ $shopBannerFrm->developerTags['fld_default_col'] = 12;
 $screenFld = $shopBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 $fld = $shopBannerFrm->getField('shop_banner');
-$fld->addFieldTagAttribute('class', 'btn  btn-sm');
-$fld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
+$fld->value= '<span id="shopBannerHtml"></span>';
+
+
+//$fld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
 
 $shopBackgroundImageFrm->setFormTagAttribute('onsubmit', 'setupShopMedia(this); return(false);');
 $shopBackgroundImageFrm->developerTags['colClassPrefix'] = 'col-md-';
@@ -30,36 +33,24 @@ $shopLayout = SHOP::TEMPLATE_ONE;
 <div class="card-body">
     <div class="row">
         <div id="mediaResponse"></div>
-        <div class="col-md-6">
-            <div class="preview">
+        <div class="col-lg-6">
+            <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Banner_Setup', $siteLangId); ?></h5>
-                <small class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?></small>
-                <div class="gap"></div>
                 <?php echo $shopBannerFrm->getFormHtml(); ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="uploaded-media" id="banner-image-listing">
-                        </ul>
-                    </div>
-                </div>
+                <span class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?>
+                </span>              
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="preview">
+        <div class="col-lg-6">
+            <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Logo_Setup', $siteLangId); ?></h5>
-                <small class="form-text text-muted logoPreferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150'); ?></small>
-                <div class="gap"></div>
                 <?php echo $shopLogoFrm->getFormHtml(); ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="uploaded-media" id="logo-image-listing">
-                        </ul>
-                    </div>
-                </div>
+                <span class="form-text text-muted logoPreferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150'); ?></span>
+
             </div>
+
         </div>
     </div>
-
 </div>
 
 <script>

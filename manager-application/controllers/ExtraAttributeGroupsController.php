@@ -163,7 +163,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $extraAttrGroupLangFrm = $this->getLangForm($eattrgroup_id, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
-            $translatedData = $updateLangDataobj->getTranslatedData($eattrgroup_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($eattrgroup_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
@@ -214,7 +214,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
-            if (false === $updateLangDataobj->updateTranslatedData($eattrgroup_id)) {
+            if (false === $updateLangDataobj->updateTranslatedData($eattrgroup_id, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }

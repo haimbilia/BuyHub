@@ -142,7 +142,7 @@ class SellerApprovalFormController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         if (0 < $recordId) {
-            $data = SupplierFormFields::getAttributesByLangId($this->siteLangId, $recordId, null, true);
+            $data = SupplierFormFields::getAttributesById($recordId);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

@@ -37,9 +37,9 @@ class ProductProfitReportController extends SellerBaseController
         }
         $srchFrm = $this->getSearchForm($fields);
 
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData()); 
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);        
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
 
@@ -72,14 +72,14 @@ class ProductProfitReportController extends SellerBaseController
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post); 
+        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
         $srch->doNotCalculateRecords();
         switch ($sortBy) {
             default:
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-                        
+
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -115,8 +115,8 @@ class ProductProfitReportController extends SellerBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $srch->setPageSize($pagesize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -139,11 +139,11 @@ class ProductProfitReportController extends SellerBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
 
         return $frm;
     }

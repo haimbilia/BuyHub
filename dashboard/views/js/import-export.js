@@ -1,78 +1,67 @@
-(function() {
-	exportForm = function(actionType){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm',[actionType]), '', function(t) {
-				$.facebox(t );
-			});
+(function () {
+	exportForm = function (actionType) {
+		fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
-	exportData = function(frm,actionType){
+	exportData = function (frm, actionType) {
 		if (!$(frm).validate()) return;
-		document.frmImportExport.action = fcom.makeUrl( 'ImportExport', 'exportData',[actionType] );
+		document.frmImportExport.action = fcom.makeUrl('ImportExport', 'exportData', [actionType]);
 		document.frmImportExport.submit();
 	};
 
-	exportMediaForm = function(actionType){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm',[actionType]), '', function(t) {
-				$.facebox(t );
-			});
+	exportMediaForm = function (actionType) {
+		fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
-	exportMedia = function(frm,actionType){
+	exportMedia = function (frm, actionType) {
 		if (!$(frm).validate()) return;
-		document.frmImportExport.action = fcom.makeUrl( 'ImportExport', 'exportMedia',[actionType] );
+		document.frmImportExport.action = fcom.makeUrl('ImportExport', 'exportMedia', [actionType]);
 		document.frmImportExport.submit();
 	};
 
-	importForm = function(actionType){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ImportExport', 'importForm',[actionType]), '', function(t) {
-				$.facebox(t );
-			});
+	importForm = function (actionType) {
+		fcom.ajax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
-	getInstructions = function(actionType){
-		console.log('called');
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions',[actionType]), '', function(t) {
-				$.facebox(t );
-			});
+	getInstructions = function (actionType) {
+		fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
-	importMediaForm = function(actionType){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm',[actionType]), '', function(t) {
-				$.facebox(t );
-			});
+	importMediaForm = function (actionType) {
+		fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
+			$.ykmodal(t);
 		});
 	};
 
-	importFile = function(method,actionType){
-		var data = new FormData(  );
+	importFile = function (method, actionType) {
+		var data = new FormData();
 		$inputs = $('#frmImportExport input[type=text],#frmImportExport select,#frmImportExport input[type=hidden]');
-		$inputs.each(function() { data.append( this.name,$(this).val());});
-		$.mbsmessage(langLbl.processing,false,'alert--process');
-		$.each( $('#import_file')[0].files, function(i, file) {
+		$inputs.each(function () { data.append(this.name, $(this).val()); });
+		$.mbsmessage(langLbl.processing, false, 'alert--process');
+		$.each($('#import_file')[0].files, function (i, file) {
 			$('#fileupload_div').prepend(fcom.getLoader());
 			data.append('import_file', file);
 			$.ajax({
-				url : fcom.makeUrl('ImportExport', method,[actionType]),
+				url: fcom.makeUrl('ImportExport', method, [actionType]),
 				type: "POST",
-				data : data,
+				data: data,
 				processData: false,
 				contentType: false,
-				success: function(t){
+				success: function (t) {
 					fcom.removeLoader();
 					try {
 						var ans = $.parseJSON(t);
-						if( ans.status == 1 ){
+						if (ans.status == 1) {
 							// reloadList();
-							$(document).trigger('close.facebox');
+							
 							$(document).trigger('close.mbsmessage');
 							$.systemMessage(ans.msg, 'alert--success');
 						} else {
@@ -80,31 +69,31 @@
 							$(document).trigger('close.mbsmessage');
 							$.systemMessage(ans.msg, 'alert--danger');
 						}
-                        
-                        if (typeof ans.CSVfileUrl !== 'undefined') {
-                            location.href = ans.CSVfileUrl;
-                        }
+
+						if (typeof ans.CSVfileUrl !== 'undefined') {
+							location.href = ans.CSVfileUrl;
+						}
 					}
-					catch(exc){
+					catch (exc) {
 						$(document).trigger('close.mbsmessage');
-						$.systemMessage( t ,'alert--danger' );
+						$.systemMessage(t, 'alert--danger');
 					}
 				},
-				error: function(jqXHR, textStatus, errorThrown){
+				error: function (jqXHR, textStatus, errorThrown) {
 					alert("Error Occured.");
 				}
 			});
 		});
 	};
 
-	showHideExtraFld = function(type,BY_ID_RANGE,BY_BATCHES){
-		if( type == BY_ID_RANGE ){
+	showHideExtraFld = function (type, BY_ID_RANGE, BY_BATCHES) {
+		if (type == BY_ID_RANGE) {
 			$(".range_fld").show();
 			$(".batch_fld").hide();
-		}else if( type == BY_BATCHES ){
+		} else if (type == BY_BATCHES) {
 			$(".range_fld").hide();
 			$(".batch_fld").show();
-		}else{
+		} else {
 			$(".range_fld").hide();
 			$(".batch_fld").hide();
 		}

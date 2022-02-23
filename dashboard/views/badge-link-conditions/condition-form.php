@@ -4,11 +4,7 @@ $listingLabel = Labels::getLabel('LBL_RECORDS', $siteLangId);
 $headingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITION_SETUP_FORM', $siteLangId);
 $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_LINKED_RECORDS', $siteLangId);
 
-$otherButtons = [
-    'onclick' => 'backToListing();',
-    'title' => Labels::getLabel('LBL_BACK', $siteLangId),
-    'label' => '<i class="fas fa-arrow-left"></i>',
-];
+$headingBackButton = true;
 
 $data = [
     'siteLangId' => $siteLangId,
@@ -30,7 +26,7 @@ if (!empty($frmSearch)) {
 
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {
-        $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+        $fld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
         $fld->setFieldTagAttribute('onclick', 'clearSearch()');
         $fld->developerTags['col'] = 2;
     }

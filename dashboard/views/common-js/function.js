@@ -508,20 +508,18 @@ function getLocation() {
 function accessLocation(force = false) {
     var location = getLocation();
     if ("" == location.lat || "" == location.lng || "" == location.countryCode || force) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Home', 'accessLocation', [], siteConstants.webrootfront), '', function (t) {
-                try {
-                    var json = $.parseJSON(t);
-                    if (1 > json.status) {
-                        $.mbsmessage(json.msg, false, 'alert--danger');
-                    }
-                    $.facebox.close();
-                    return false;
-                } catch (exc) {
-                    $.facebox(t);
-                    googleAddressAutocomplete();
+        fcom.ajax(fcom.makeUrl('Home', 'accessLocation', [], siteConstants.webrootfront), '', function (t) {
+            try {
+                var json = $.parseJSON(t);
+                if (1 > json.status) {
+                    $.mbsmessage(json.msg, false, 'alert--danger');
                 }
-            });
+                $.ykmodal.close();
+                return false;
+            } catch (exc) {
+                $.ykmodal(t);
+                googleAddressAutocomplete();
+            }
         });
     }
 }
@@ -582,7 +580,7 @@ function setGeoAddress(data) {
 
 function getGeoAddress(data) {
     address = setGeoAddress(data);
-    $(document).trigger('close.facebox');
+    
     displayGeoAddress(address);
 }
 
@@ -671,7 +669,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         }
 
         if (0 < $("#facebox #" + elementId).length) {
-            $(document).trigger('close.facebox');
+            
         }
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);
@@ -949,3 +947,22 @@ select2 = function (
     }
     select2Selector.$container.addClass("custom-select2");
 };
+
+var autoOpenSideBar = true;
+$(document).on("hidden.bs.modal", "#modalBoxJs", function () {
+    if (autoOpenSideBar) {
+        $.ykmodal.show();
+    }
+});
+
+loadCropperSkeleton = function (reopenSideBarOnClose = true) {  
+    autoOpenSideBar = reopenSideBarOnClose;
+    $("#modalBoxJs").remove();
+    $("body").append(fcom.getModalBody());
+    $("#modalBoxJs").modal("show");
+    $.ykmodal.close();
+};
+
+editDropZoneImages = function (obj) {
+    $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
+}

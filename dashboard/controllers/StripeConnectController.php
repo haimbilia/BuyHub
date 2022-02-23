@@ -324,26 +324,26 @@ class StripeConnectController extends PaymentMethodBaseController
                     'non_profit' => Labels::getLabel('LBL_NON_PROFIT', $this->siteLangId),
                     'government_entity' => Labels::getLabel('LBL_GOVERNMENT_ENTITY_(_US_ONLY_)', $this->siteLangId)
                 ];
-                $fld = $frm->addSelectBox($labelStr, 'business_type', $options, $businessType, [], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, 'business_type', $options, $businessType, [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (in_array(end($labelParts), $this->stripeConnect->boolParams)) {
                 $options = [
                     0 => Labels::getLabel('LBL_NO', $this->siteLangId),
                     1 => Labels::getLabel('LBL_YES', $this->siteLangId)
                 ];
-                $fld = $frm->addSelectBox($labelStr, $name, $options, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, $options, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (false !== strpos($field, 'verification.document') || false !== strpos($field, 'verification.additional_document')) {
                 /* if (empty($this->stripeConnect->getRelationshipPersonId())) {
                     continue;
                 } */
                 if (false !== strpos($field, 'verification.additional_document')) {
-                    $lbl = Labels::getLabel("LBL_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT", $this->siteLangId);
+                    $lbl = Labels::getLabel("FRM_INDIVIDUAL_ADDITIONAL_IDENTIFYING_DOCUMENT", $this->siteLangId);
                 } else {
-                    $lbl = Labels::getLabel("LBL_IDENTIFYING_DOCUMENT,_EITHER_A_PASSPORT_OR_LOCAL_ID_CARD", $this->siteLangId);
+                    $lbl = Labels::getLabel("FRM_IDENTIFYING_DOCUMENT,_EITHER_A_PASSPORT_OR_LOCAL_ID_CARD", $this->siteLangId);
                 }
 
-                $lblFront = $lbl . ' (' . Labels::getLabel("LBL_FRONT", $this->siteLangId) . ')';
-                $lblBack = $lbl . ' (' . Labels::getLabel("LBL_BACK", $this->siteLangId) . ')';
-                $htmlAfterField .= Labels::getLabel("LBL_THE_UPLOADED_FILE_NEEDS_TO_BE_A_COLOR_IMAGE_(SMALLER_THAN_8,000PX_BY_8,000px),_IN_JPG,_PNG,_OR_PDF_FORMAT,_AND_LESS_THAN_10_MB_IN_SIZE.", $this->siteLangId);
+                $lblFront = $lbl . ' (' . Labels::getLabel("FRM_FRONT", $this->siteLangId) . ')';
+                $lblBack = $lbl . ' (' . Labels::getLabel("FRM_BACK", $this->siteLangId) . ')';
+                $htmlAfterField .= Labels::getLabel("FRM_THE_UPLOADED_FILE_NEEDS_TO_BE_A_COLOR_IMAGE_(SMALLER_THAN_8,000PX_BY_8,000px),_IN_JPG,_PNG,_OR_PDF_FORMAT,_AND_LESS_THAN_10_MB_IN_SIZE.", $this->siteLangId);
 
                 $fld = $frm->addFileUpload($lblFront, $name . '[front]');
                 $fld2 = $frm->addFileUpload($lblBack, $name . '[back]');
@@ -367,35 +367,35 @@ class StripeConnectController extends PaymentMethodBaseController
                     }
                 }
 
-                $fld = $frm->addSelectBox($labelStr, $name, [], '', ['class' => (empty($stateFldClass) ? 'state' : $stateFldClass), 'disabled' => 'disabled', 'data-country' => $country], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, [], '', ['class' => (empty($stateFldClass) ? 'state' : $stateFldClass), 'disabled' => 'disabled', 'data-country' => $country], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (false !== strpos($field, 'month')) {
                 $months = [];
                 for ($i = 1; $i <= 12; $i++) {
                     $months[$i] = $i;
                 }
-                $fld = $frm->addSelectBox($labelStr, $name, $months, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, $months, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (false !== strpos($field, 'day')) {
                 $days = [];
                 for ($i = 1; $i <= 31; $i++) {
                     $days[$i] = $i;
                 }
-                $fld = $frm->addSelectBox($labelStr, $name, $days, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, $days, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (false !== strpos($field, 'year')) {
                 $years = [];
                 for ($i = 1900; $i <= (date('Y') - 13); $i++) {
                     $years[$i] = $i;
                 }
-                $fld = $frm->addSelectBox($labelStr, $name, $years, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, $years, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif (false !== strpos($field, 'country')) {
                 $stateFldClass = md5($name);
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
-                $fld = $frm->addSelectBox($labelStr, $name, $countriesArr, '', ['class' => 'country', 'data-statefield' => $stateFldClass], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fld = $frm->addSelectBox($labelStr, $name, $countriesArr, '', ['class' => 'country', 'data-statefield' => $stateFldClass], Labels::getLabel('FRM_SELECT', $this->siteLangId));
             } elseif ('tos_acceptance' == $field) {
                 $fld = $frm->addCheckBox('', 'tos_acceptance', 1);
             } elseif (false !== strpos($field, 'mcc')) {
                 $frm->addHiddenField('', $name, '', ['class' => 'mccValue-js' . $j]);
-                $placeholder = Labels::getLabel('LBL_SEARCH...', $this->siteLangId);
+                $placeholder = Labels::getLabel('FRM_SEARCH...', $this->siteLangId);
                 $fld = $frm->addSelectBox($labelStr, 'merchantCatCode', [], '', ['class' => 'mcc--js', 'data-valfld' => 'mccValue-js' . $j, 'placeholder' => $placeholder], $placeholder);
             } elseif (false !== strpos($field, 'phone')) {
                 $fld = $frm->addTextBox($labelStr, $name, '', ['class' => 'phone-js onlyFlag--js']);
@@ -412,8 +412,8 @@ class StripeConnectController extends PaymentMethodBaseController
         }
 
         if (0 < $j) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONTINUE', $this->siteLangId));
-            $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearForm();'));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONTINUE', $this->siteLangId));
+            $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearForm();'));
         }
 
         return $frm;

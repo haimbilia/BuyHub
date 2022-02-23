@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -18,7 +18,7 @@
                 ?>
             </div>
             <div id="shopFormBlock">
-                <div class="card-body ">
+                <div class="card-body">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                 </div>
             </div>

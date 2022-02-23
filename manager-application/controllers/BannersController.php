@@ -73,7 +73,7 @@ class BannersController extends ListingBaseController
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
 
-        $bannerLocation = BannerLocation::getAttributesByLangId($this->siteLangId, $bannerLocationId, 'blocation_name', true);
+        $bannerLocation = BannerLocation::getAttributesByLangId($this->siteLangId, $bannerLocationId, 'blocation_name', applicationConstants::JOIN_RIGHT);
         $pageTitle = $bannerLocation ? Labels::getLabel('LBL_BANNERS_LOCATION', $this->siteLangId) . ' : ' . $bannerLocation : LibHelper::getControllerName(true);
         $this->setModel();
 
@@ -164,10 +164,12 @@ class BannersController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'banner_target', $linkTargetsArr, '', array(), '');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+       
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'banner_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey)) {
+        $languageArr = Language::getDropDownList();
+        
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -262,7 +264,7 @@ class BannersController extends ListingBaseController
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Banner::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId,CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
@@ -301,13 +303,13 @@ class BannersController extends ListingBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Banner::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
+            if (false === $translatedData) {              
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Banner::getAttributesByLangId($langId, $recordId, null, true);
+            $langData = Banner::getAttributesByLangId($langId, $recordId);
         }
 
         $bannerLocationId = Banner::getAttributesById($recordId, 'banner_blocation_id');

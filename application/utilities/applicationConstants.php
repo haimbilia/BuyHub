@@ -80,6 +80,11 @@ class applicationConstants
     public const CLASS_WARNING = 'badge-warning';
     public const CURRENCY_SEPARATOR_DECIMAL = '.';
     public const CURRENCY_SEPARATOR_COMMA = ',';
+    /*[ join type */
+    public const JOIN_LEFT = 1;
+    public const JOIN_RIGHT = 2;
+    public const JOIN_INNER = 3;
+    /* join type ]*/
 
     public static function getWeightUnitsArr($langId, $unitOnly = false)
     {
@@ -492,5 +497,10 @@ class applicationConstants
             return $defaultOrder;
         }
         return $sortOrder;
+    }
+
+    public static function getJoinTypes(): array
+    {
+        return [static::JOIN_LEFT => 'LEFT', static::JOIN_RIGHT => 'RIGHT', static::JOIN_INNER => 'INNER'];
     }
 }

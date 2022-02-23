@@ -1,12 +1,32 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<div class="card-head">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Social_Platforms', $siteLangId); ?></h5>
-    <div class="">
-        <?php if ($canEdit) { ?>
-            <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" onclick="addForm(0)"><?php echo Labels::getLabel('LBL_Add_Social_Platform', $siteLangId); ?></a>
-        <?php } ?>
-    </div>
+<div class="card-head border-0 pt-4">
+    <h5 class="card-title"><?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS', $siteLangId); ?></h5>
+    <?php
+    if ($canEdit) {
+        $btnData = [
+            'siteLangId' => $siteLangId,
+            'canEdit' => $canEdit
+        ];
+
+        if ($canEdit) {
+            $btnData['listTopButtons'] = [
+                [
+                    'attr' => [
+                        'class' => 'btn btn-outline-gray btn-icon btn-add',
+                        'onclick' => 'addForm(0)',
+                        'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
+                    ],
+                    'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
+                ],
+            ];
+        }
+        $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
+    }
+    ?>
 </div>
 <div class="card-body">
     <div class="js-scrollable table-wrap scroll scroll-x">
@@ -73,7 +93,11 @@
                     case 'action':
                         $ul = $td->appendElement("ul", array("class" => "actions"));
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"), '<i class="fa fa-edit"></i>', true);
+                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"), '<svg class="svg" width="18" height="18">
+        <use
+            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+        </use>
+    </svg>', true);
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['splatform_id'] . ")"), '<i class="fa fa-trash"></i>', true);
                         break;

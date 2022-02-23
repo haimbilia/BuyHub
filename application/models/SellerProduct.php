@@ -1027,6 +1027,11 @@ class SellerProduct extends MyAppModel
     public static function specialPriceForm($langId)
     {
         $frm = new Form('frmSellerProductSpecialPrice');
+        $frm->addHiddenField('', 'splprice_selprod_id');
+        $frm->addHiddenField('', 'splprice_id');
+        $prodName = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $langId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $langId)));
+        $prodName->requirements()->setRequired();
+
         $fld = $frm->addFloatField(Labels::getLabel('FRM_SPECIAL_PRICE', $langId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
         $fld->requirements()->setPositive();
         $fld = $frm->addDateField(Labels::getLabel('FRM_PRICE_START_DATE', $langId), 'splprice_start_date', '', array('readonly' => 'readonly'));
@@ -1036,11 +1041,6 @@ class SellerProduct extends MyAppModel
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('FRM_PRICE_START_DATE', $langId));
 
-        $frm->addHiddenField('', 'splprice_selprod_id');
-        $frm->addHiddenField('', 'splprice_id');
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
-        $fld1->attachField($fld2);
         return $frm;
     }
 
@@ -1050,13 +1050,11 @@ class SellerProduct extends MyAppModel
 
         $frm->addHiddenField('', 'voldiscount_selprod_id', 0);
         $frm->addHiddenField('', 'voldiscount_id', 0);
-        $qtyFld = $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_QUANTITY", $langId), 'voldiscount_min_qty');
-        //$qtyFld->requirements()->setRange(self::VOL_DISCOUNT_MIN_QTY, self::VOL_DISCOUNT_MAX_QTY);
+        $prodName = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $langId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $langId)));
+        $prodName->requirements()->setRequired();
+        $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_QUANTITY", $langId), 'voldiscount_min_qty');
         $discountFld = $frm->addFloatField(Labels::getLabel("FRM_DISCOUNT_IN_(%)", $langId), "voldiscount_percentage");
         $discountFld->requirements()->setPositive();
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
-        $fld2 = $frm->addButton('', 'btn_cancel', Labels::getLabel('BTN_CANCEL', $langId), array('onClick' => 'javascript:$("#sellerProductsForm").html(\'\')'));
-        $fld1->attachField($fld2);
         return $frm;
     }
 

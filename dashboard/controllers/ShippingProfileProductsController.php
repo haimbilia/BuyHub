@@ -93,7 +93,7 @@ class ShippingProfileProductsController extends SellerBaseController {
         $frm->addHiddenField('', 'shippro_shipprofile_id', $profileId);
         $frm->addHiddenField('', 'shippro_product_id', '');
         $fld = $frm->addTextBox(Labels::getLabel('', $this->siteLangId), 'product_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

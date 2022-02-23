@@ -1,12 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-onclear', "addBadgeReqForm(" . $badgeReqId . ", " . $badgeId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupBadgeReq(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 6;
 
-$submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-brand');
-$submitFld->developerTags['noCaptionTag'] = true;
+$fld = $frm->getField('blinkcond_from_date');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('blinkcond_to_date');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $fld = $frm->getField('badgelink_record_id');
 if (null != $fld) {
@@ -25,31 +31,29 @@ if (null != $fld) {
     $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $siteLangId) . '</small>';
     if (0 < $badgeReqId && true === $fileFound) {
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
-                                    <i class="fas fa-download"></i>
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#download">
+                                </use>
+                            </svg>
                                 </a>';
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
-                                    <i class="fas fa-times"></i>
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>
                                 </a>';
     }
 }
 
 ?>
-<div class="box__head row">
-    <h4 class="col"><?php echo Labels::getLabel('LBL_REQUEST_TO_BIND_BADGE', $siteLangId); ?></h4>
-    <div class="section__toolbar col-auto">
-        <a href="javascript:void(0);" onclick="backToListing();" title="Back" class="btn-clean btn-sm btn-icon btn-secondary ">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-    </div>
+<div class="modal-header">
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_REQUEST_TO_BIND_BADGE', $siteLangId) ?></h5>
 </div>
-<div class="box__body">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form__subcontent">
-                <?php echo $frm->getFormHtml(); ?>
-            </div>
-        </div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 <script>
     var RECORD_TYPE_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_PRODUCT; ?>;

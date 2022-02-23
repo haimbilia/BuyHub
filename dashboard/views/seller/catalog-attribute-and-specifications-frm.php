@@ -17,7 +17,7 @@ $codFld->developerTags['cbHtmlAfterCheckbox'] = ''; */
 
 $btnBackFld = $productFrm->getField('btn_back');
 $btnBackFld->setFieldTagAttribute('onclick', 'customCatalogProductForm(' . $preqId . ');');
-$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");
+$btnBackFld->setFieldTagAttribute('class', "btn btn-outline-gray");
 $btnBackFld->value = Labels::getLabel('LBL_Back', $siteLangId);
 
 $btnSubmit = $productFrm->getField('btn_submit');

@@ -77,7 +77,7 @@ class LoggedUserController extends DashboardBaseController
     }
 
     private function initCommonValues()
-    {       
+    {
         $this->userPrivilege = UserPrivilege::getInstance();
         $this->set('userPrivilege', $this->userPrivilege);
     }
@@ -89,33 +89,33 @@ class LoggedUserController extends DashboardBaseController
         $frm->addHiddenField('', 'total_record_count');
         $fld = $frm->addTextBox('', 'op_invoice_number');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $langId), 'ocrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_FROM_DATE', $langId), 'ocrequest_date_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_TO_DATE', $langId), 'ocrequest_date_to', '', array('readonly' => 'readonly'));
-        
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $langId), 'ocrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_FROM_DATE', $langId), 'ocrequest_date_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_TO_DATE', $langId), 'ocrequest_date_to', '', array('readonly' => 'readonly'));
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 
     protected function getOrderReturnRequestsSearchForm($langId)
-    {   
+    {
         $frm = new Form('frmOrderReturnRequest');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'total_record_count');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $langId), 'keyword');
-        $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $langId), 'orrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderReturnRequest::getRequestStatusArr($langId), '', array(), '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword');
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $langId), 'orrequest_status', array('-1' => Labels::getLabel('FRM_STATUS_DOES_NOT_MATTER', $langId)) + OrderReturnRequest::getRequestStatusArr($langId), '', array(), '');
         $returnRquestArray = OrderReturnRequest::getRequestTypeArr($langId);
         if (count($returnRquestArray) > applicationConstants::YES) {
-            $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_TYPE', $langId), 'orrequest_type', array('-1' => Labels::getLabel('FRM_REQUEST_TYPE_DOES_NOT_MATTER', $langId)) + $returnRquestArray, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $langId), 'orrequest_type', array('-1' => Labels::getLabel('FRM_REQUEST_TYPE_DOES_NOT_MATTER', $langId)) + $returnRquestArray, '', array(), '');
         } else {
-            $frm->addHiddenField(Labels::getLabel('LBL_REQUEST_TYPE', $langId), 'orrequest_type', '-1');
+            $frm->addHiddenField(Labels::getLabel('FRM_REQUEST_TYPE', $langId), 'orrequest_type', '-1');
         }
-        $frm->addDateField(Labels::getLabel('LBL_DATE_FORM', $langId), 'orrequest_date_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_DATE_TO', $langId), 'orrequest_date_to', '', array('readonly' => 'readonly'));
-        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FORM', $langId), 'orrequest_date_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'orrequest_date_to', '', array('readonly' => 'readonly'));
+
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
         return $frm;
     }
 

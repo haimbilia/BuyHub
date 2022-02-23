@@ -42,26 +42,25 @@ trait BadgeRequestSetup
 
         if (0 < $badgeReqId || 0 < $badgeId) {
             $frm->addHiddenField('', 'badge_id', $badgeId);
-            $frm->addDateTimeField(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
-            $frm->addDateTimeField(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+            $frm->addDateTimeField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+            $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
         } else {
             $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SELECT_BADGE', $this->siteLangId), 'badge_id', $approvalRequiredBadges, '', [], '');
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_BADGE', $this->siteLangId), 'badge_id', $approvalRequiredBadges, '', [], '');
             $fld->requirements()->setRequired(true);
         }
 
         if (0 < $badgeReqId) {
             $frm->addHiddenField('', 'breq_record_type', );
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('FRM_RECORD_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
         }
 
-        $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
+        $frm->addFileUpload(Labels::getLabel('FRM_REFERENCE', $this->siteLangId), 'breq_file');
 
-        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'breq_message');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_REQUEST", $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
         return $frm;
     }
 
@@ -225,9 +224,9 @@ trait BadgeRequestSetup
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
 
-        $this->set('badgeId', $badgeId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
+        $this->set('badgeId', $badgeId);
         $this->_template->render(false, false, 'badges/badge-req-form.php');
     }
 

@@ -124,7 +124,7 @@ class OrderCancelReasonsController extends ListingBaseController
         }
 
         if (0 < $recordId) {
-            $data = OrderCancelReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('ocreason_id', 'ocreason_identifier', 'ocreason_title'), true);
+            $data = OrderCancelReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('ocreason_id', 'ocreason_identifier', 'IFNULL(ocreason_title,ocreason_identifier) as ocreason_title'), applicationConstants::JOIN_RIGHT);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);

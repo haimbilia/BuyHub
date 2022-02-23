@@ -1,11 +1,10 @@
-
 <div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Catalog_info',$siteLangId) ;?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Catalog_info', $siteLangId); ?></h5>
 </div>
-<div class="modal-body">
-    <div class="white--bg padding20">
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12 clearfix">
+            <div class="col-lg-6">
                 <?php if ($productImagesArr) { ?>
                     <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                         <?php foreach ($productImagesArr as $afile_id => $image) {
@@ -25,52 +24,47 @@
                     <div class="item__main"><img src="<?php echo $mainImgUrl; ?>"></div>
                 <?php } ?>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
-                <div class="product-description">
+            <div class="col-lg-6">
+                <div class="">
+                    <h3><?php echo $product['product_name']; ?></h3>
                     <div class="product-description-inner">
-                        <div class="products_title"><?php echo $product['product_name']; ?></div>
-                        <div class="gap"></div>
-                        <div class="cms">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</th>
-                                        <td><?php echo $product['prodcat_name']; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</th>
-                                        <td><?php echo ($product['brand_name']) ? $product['brand_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?>:</th>
-                                        <td><?php echo $product['product_model']; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th><?php echo Labels::getLabel('LBL_Minimum_Selling_Price', $siteLangId); ?>:</th>
-                                        <td><?php echo CommonHelper::displayMoneyFormat($product['product_min_selling_price']); ?></td>
-                                    </tr>
-                                    <?php $saleTaxArr = Tax::getSaleTaxCatArr($siteLangId);
-                                    if (isset($product['ptt_taxcat_id']) && array_key_exists($product['ptt_taxcat_id'], $saleTaxArr)) { ?>
-                                        <tr>
-                                            <th><?php echo Labels::getLabel('LBL_Tax_Category', $siteLangId); ?>:</th>
-                                            <td><?php echo $saleTaxArr[$product['ptt_taxcat_id']]; ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
-                        </div>
+                        <ul class="list-stats list-stats-double mt-4">
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo $product['prodcat_name']; ?></span>
+                            </li>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo ($product['brand_name']) ? $product['brand_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?></span>
+                            </li>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo $product['product_model']; ?></span>
+                            </li>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_Minimum_Selling_Price', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($product['product_min_selling_price']); ?></span>
+                            </li>
+                            <?php $saleTaxArr = Tax::getSaleTaxCatArr($siteLangId);
+                            if (isset($product['ptt_taxcat_id']) && array_key_exists($product['ptt_taxcat_id'], $saleTaxArr)) { ?>
+                                <li class="list-stats-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_Tax_Category', $siteLangId); ?>:</span>
+                                    <span class="value"><?php echo $saleTaxArr[$product['ptt_taxcat_id']]; ?></span>
+                                </li>
+                            <?php } ?>
+                        </ul>
                         <?php if (count($productSpecifications) > 0) { ?>
-                            <div class="gap"></div>
-                            <div class="box box--gray box--radius box--space">
+                            <div class="mt-4">
                                 <div class="h6"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>:</div>
                                 <div class="list list--specification">
-                                    <ul>
+                                    <ul class="list-stats">
                                         <?php $count = 1;
                                         foreach ($productSpecifications as $key => $specification) {
                                             if ($count > 5) {
                                                 continue;
                                             } ?>
-                                            <li><?php echo '<span>' . $specification['prodspec_name'] . " :</span> " . $specification['prodspec_value']; ?></li>
+                                            <li class="list-stats-item">
+                                                <?php echo '<span>' . $specification['prodspec_name'] . " :</span> " . $specification['prodspec_value']; ?></li>
                                         <?php $count++;
                                         } ?>
                                         <?php /*if (count($productSpecifications)>5) { ?>
@@ -85,6 +79,7 @@
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 <script>
     var layoutDirection = '<?php echo CommonHelper::getLayoutDirection(); ?>';

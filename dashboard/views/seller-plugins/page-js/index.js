@@ -31,20 +31,16 @@
     };
 
     editSettingForm = function (keyName) {
-
-        $.facebox(function () {
-            var data = 'keyName=' + keyName;
-            fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
-                try {
-                    res = jQuery.parseJSON(t);
-                    $.facebox(res.msg);
-                } catch (e) {
-                    $.facebox(t);
-                }
-                fcom.resetFaceboxHeight();
-            });
+        var data = 'keyName=' + keyName;
+        fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
+            try {
+                res = jQuery.parseJSON(t);
+                $.ykmodal(res.msg);
+            } catch (e) {
+                $.ykmodal(t);
+            }
+            
         });
-
     };
 
     setupPluginsSettings = function (frm) {
@@ -52,7 +48,7 @@
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
-            $(document).trigger('close.facebox');
+            
         });
     };
 
