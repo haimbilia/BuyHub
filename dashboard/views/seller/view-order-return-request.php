@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php
 $returnRequestMsgsForm->addHiddenField('', 'isSeller', 1);
 $btn = $frmMsg->getField('btn_submit');

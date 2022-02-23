@@ -20,7 +20,7 @@ $pagesTabsData = ([
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php $this->includeTemplate('_partial/header/content-header.php', $pagesTabsData, false); ?>

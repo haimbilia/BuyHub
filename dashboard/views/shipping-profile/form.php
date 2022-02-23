@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php');
 
 $frm->setFormTagAttribute('onSubmit', 'setupProfile(this); return false;');
 $frm->setFormTagAttribute('class', 'form ');

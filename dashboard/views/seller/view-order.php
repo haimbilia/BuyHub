@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (!$print) {
-    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+    $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php
 }
 

@@ -16,9 +16,9 @@ $(window).on("load", function () {
 $(window).scroll(function () {
     var scroll = $(window).scrollTop();
     if (scroll >= 50) {
-        $("#header-dashboard").addClass("scrolled");
+        $('body').addClass("scrolled");
     } else {
-        $("#header-dashboard").removeClass("scrolled");
+        $('body').removeClass("scrolled");
     }
 });
 

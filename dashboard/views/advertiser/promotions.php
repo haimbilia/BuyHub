@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
