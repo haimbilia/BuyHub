@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+<?php $this->includeTemplate('_partial/dashboardNavigation.php');
 $htm = '';
 if (!empty($fields)) {
     $htm = '<div class="dropdown custom-drag-drop">

@@ -24,5 +24,5 @@
             </div>
         </div>
     </section>
-    <div class="gap"></div>
+
 </div>

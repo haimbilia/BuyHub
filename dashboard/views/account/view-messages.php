@@ -51,8 +51,8 @@
                                     <span class="item__price">
                                         <?php if ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_ORDER_PRODUCT) {
                                         ?> <?php
-                                            } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) {
-                                                ?> <?php
+                                        } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) {
+                                            ?> <?php
                                                 } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_PRODUCT) { ?>
                                             <p><?php echo CommonHelper::displayMoneyFormat($threadDetails['selprod_price']); ?></p>
                                         <?php } ?>
@@ -69,8 +69,8 @@
                 </div>
             </div>
         </div>
-        <div class="gap"></div>
-        <div class="gap"></div>
+
+
         <div class="card">
             <div class="card-body">
                 <?php echo $frmSrch->getFormHtml(); ?> <div id="loadMoreBtnDiv"></div>

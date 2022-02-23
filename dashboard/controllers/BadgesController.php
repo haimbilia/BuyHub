@@ -159,11 +159,11 @@ class BadgesController extends SellerBaseController
         $badgeType = current(FatApp::getParameters());
         $className = Badge::TYPE_BADGE == $badgeType ? Labels::getLabel('LBL_BADGES', $this->siteLangId) : Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
         $url = UrlHelper::generateUrl(LibHelper::getControllerName(), 'list', [$badgeType]);
-        if ($action == 'list') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
-            $this->nodes[] = array('title' => $title);
-        }
+    
+        $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+        $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
+        $this->nodes[] = array('title' => $title);
         return $this->nodes;
     }
 }

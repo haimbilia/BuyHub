@@ -6,7 +6,7 @@ $dateFromFld->setFieldTagAttribute('class', 'field--calender');
 
 $dateToFld = $frmSearch->getField('date_to');
 $dateToFld->setFieldTagAttribute('class', 'field--calender');
-?> <?php $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
+?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -21,7 +21,7 @@ $dateToFld->setFieldTagAttribute('class', 'field--calender');
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div id="ordersListing"></div>
-                        <span class="gap"></span>
+
                     </div>
                 </div>
             </div>

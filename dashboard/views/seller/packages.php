@@ -22,7 +22,7 @@
                             if (in_array($currentActivePlanId, $planIds)) {
                                 $selectedClass = 'is-active';
                             } ?>
-                            <li class="packages-box-item box <?php echo $packageArrClass[$inc] . " " . $selectedClass ?>">
+                            <li class="packages-box-item packagesBoxJs box <?php echo $packageArrClass[$inc] . " " . $selectedClass ?>">
                                 <div class="packages-box-head">
                                     <div class="name"><?php echo $package['spackage_name']; ?>
                                         <span><?php echo $package['spackage_text']; ?></span>

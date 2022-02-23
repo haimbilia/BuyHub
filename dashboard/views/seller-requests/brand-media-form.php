@@ -14,48 +14,48 @@ $preferredDimensionsStr = ' <small class="form-text text-muted preferredDimensio
 
 $htmlAfterField = $preferredDimensionsStr;
 if (!empty($brandImages)) {
-	$htmlAfterField .= '<div class="gap"></div><div class="row"><div class="col-lg-12 col-md-12"><div id="imageupload_div"><ul class="inline-images">';
-	foreach ($brandImages as $bannerImg) {
-		$htmlAfterField .= '<li>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '<img src="' . UrlHelper::generateFullUrl('Image', 'brandReal', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND) . '"> <a href="javascript:void(0);" onclick="removeBrandLogo(' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ')" class="deleteLink"><i class="fa fa-times"></i></a>';
-		$lang_name = Labels::getLabel('LBL_All', $siteLangId);
-		if ($bannerImg['afile_lang_id'] > 0) {
-			$lang_name = $languages[$bannerImg['afile_lang_id']];
-		}
-		$htmlAfterField .= '<p class=""><strong> ' . Labels::getLabel('LBL_Language', $siteLangId) . ':</strong> ' . $lang_name . '</p>';
-	}
-	$htmlAfterField .= '</li></ul></div></div></div>';
+    $htmlAfterField .= '<div class="row"><div class="col-lg-12 col-md-12"><div id="imageupload_div"><ul class="inline-images">';
+    foreach ($brandImages as $bannerImg) {
+        $htmlAfterField .= '<li>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '<img src="' . UrlHelper::generateFullUrl('Image', 'brandReal', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND) . '"> <a href="javascript:void(0);" onclick="removeBrandLogo(' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ')" class="deleteLink"><i class="fa fa-times"></i></a>';
+        $lang_name = Labels::getLabel('LBL_All', $siteLangId);
+        if ($bannerImg['afile_lang_id'] > 0) {
+            $lang_name = $languages[$bannerImg['afile_lang_id']];
+        }
+        $htmlAfterField .= '<p class=""><strong> ' . Labels::getLabel('LBL_Language', $siteLangId) . ':</strong> ' . $lang_name . '</p>';
+    }
+    $htmlAfterField .= '</li></ul></div></div></div>';
 }
 $fld->htmlAfterField = $htmlAfterField;
 echo $brandReqMediaFrm->getFormHtml();
 if (!empty($brandImages)) { ?>
-	<div class="gap"></div>
-	<div class="row">
-		<div class="col-lg-12 col-md-12">
-			<div id="imageupload_div">
-				<ul class="inline-images">
-					<?php
-					foreach ($brandImages as $bannerImg) {
-						$htmlAfterField .= '<li>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '<img src="' . UrlHelper::generateFullUrl('Image', 'brandReal', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND) . '"> <hr><a href="javascript:void(0);" onclick="removeBrandLogo(' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ')" class="deleteLink white"><i class="fa fa-times"></i></a>';
-						$lang_name = Labels::getLabel('LBL_All', $siteLangId);
-						if ($bannerImg['afile_lang_id'] > 0) {
-							$lang_name = $languages[$bannerImg['afile_lang_id']];
-						}
-						$htmlAfterField .= '<p class=""><strong> ' . Labels::getLabel('LBL_Language', $siteLangId) . ':</strong> ' . $lang_name . '</p>';
-					} ?>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div id="imageupload_div">
+                <ul class="inline-images">
+                    <?php
+                    foreach ($brandImages as $bannerImg) {
+                        $htmlAfterField .= '<li>' . $bannerTypeArr[$bannerImg['afile_lang_id']] . '<img src="' . UrlHelper::generateFullUrl('Image', 'brandReal', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND) . '"> <hr><a href="javascript:void(0);" onclick="removeBrandLogo(' . $bannerImg['afile_record_id'] . ',' . $bannerImg['afile_lang_id'] . ')" class="deleteLink white"><i class="fa fa-times"></i></a>';
+                        $lang_name = Labels::getLabel('LBL_All', $siteLangId);
+                        if ($bannerImg['afile_lang_id'] > 0) {
+                            $lang_name = $languages[$bannerImg['afile_lang_id']];
+                        }
+                        $htmlAfterField .= '<p class=""><strong> ' . Labels::getLabel('LBL_Language', $siteLangId) . ':</strong> ' . $lang_name . '</p>';
+                    } ?>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <?php } ?>
 
 <script>
-	var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-	$(document).on('change', '.prefRatio-js', function() {
-		if ($(this).val() == ratioTypeSquare) {
-			$('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));
-		} else {
-			$('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
-		}
-	});
+    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+    $(document).on('change', '.prefRatio-js', function() {
+        if ($(this).val() == ratioTypeSquare) {
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));
+        } else {
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
+        }
+    });
 </script>

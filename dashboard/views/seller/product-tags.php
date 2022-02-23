@@ -2,7 +2,7 @@
 
 $frmSearch->getField('lang_id')->addFieldTagAttribute('id', '');
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php

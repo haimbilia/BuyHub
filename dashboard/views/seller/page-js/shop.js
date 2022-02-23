@@ -320,7 +320,6 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
-        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -528,7 +527,6 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
-        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();

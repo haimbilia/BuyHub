@@ -62,7 +62,6 @@ if (!empty($excludeLocations)) {
                                 <i class="input-helper"></i>
                                 <?php echo Labels::getLabel("LBL_REST_OF_THE_WORLD", $siteLangId); ?>
                             </label>
-
                         </div>
                         <div class="checkbox_container--js">
                             <?php
@@ -80,7 +79,6 @@ if (!empty($excludeLocations)) {
                                         <div class="list-zones-head zone-name--js">
                                             <label class="checkbox zone--js" data-zoneid="<?php echo $zone['zone_id']; ?>">
                                                 <input type="checkbox" name="shiploc_zone_ids[]" value="<?php echo $zone['zone_id']; ?>" class="countries-js checkbox_zone_<?php echo $zone['zone_id']; ?>" <?php echo ($countCounties == $totalCountries && $countCounties != 0) ? 'checked' : ''; ?>>
-
                                                 <?php echo $zone['zone_name']; ?>
                                             </label>
                                             <label class="out-of-state dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">

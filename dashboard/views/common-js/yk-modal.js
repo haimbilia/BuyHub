@@ -47,7 +47,7 @@
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
                 $(contentBody + " .modal-body").addClass(bodyClass);
             }
-            
+
             $.ykmodal.show();
         },
         close: function () {
@@ -66,7 +66,7 @@
         },
         isSideBarView: function () {
             return !!$(".fixed-right." + $.ykmodal.element).length;
-        },
+        }
     });
 
     function init(modalClass, dialogClass) {

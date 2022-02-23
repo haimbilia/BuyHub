@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <?php
 $returnRequestMsgsForm->addHiddenField('', 'isSeller', 1);
 $btn = $frmMsg->getField('btn_submit');
@@ -13,14 +13,9 @@ if (null != $btn) {
     $data = [
         'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
         'siteLangId' => $siteLangId,
-        'otherButtons' => [
-            [
-                'attr' => [
-                    'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
-                    'title' => Labels::getLabel('LBL_Back_To_Return_Requests', $siteLangId)
-                ],
-                'label' => Labels::getLabel('LBL_Back_To_Return_Requests', $siteLangId)
-            ]
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
+            'onclick' => ''
         ]
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
@@ -69,7 +64,7 @@ if (null != $btn) {
                         </div>
                     </div>
                 </div>
-                <div class="gap"></div>
+
                 <?php if (!empty($request)) { ?>
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
@@ -95,7 +90,7 @@ if (null != $btn) {
                             </tbody>
                         </table>
                     </div>
-                    <div class="gap"></div>
+
                     <div class="js-scrollable table-wrap scroll scroll-x">
                         <table class="table table-justified">
                             <thead>
@@ -138,7 +133,7 @@ if (null != $btn) {
                 <?php } ?>
 
                 <?php echo ($canEdit) ? $returnRequestMsgsForm->getFormHtml() : ''; ?>
-                <div class="gap"></div>
+
                 <div class="messageListBlock--js">
                     <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
                     <div id="loadMoreBtnDiv"></div>

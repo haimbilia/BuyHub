@@ -72,7 +72,7 @@
 
 
                             if ($cartSummary['orderNetAmount'] <= 0) { ?>
-                                <div class="gap"></div>
+
                                 <div>
                                     <h6>
                                         <strong> <?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
@@ -84,7 +84,7 @@
                                         $confirmPaymentFrm->developerTags['colClassPrefix'] = 'col-md-';
                                         $confirmPaymentFrm->developerTags['fld_default_col'] = 12;
                                         echo $confirmPaymentFrm->getFormHtml(); ?>
-                                        <div class="gap"></div>
+
                                         <script type="text/javascript">
                                             function confirmOrder(frm) {
                                                 var data = fcom.frmData(frm);

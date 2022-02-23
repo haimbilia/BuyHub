@@ -38,7 +38,7 @@ if (null != $fld) {
         </div>
     </div>
 </div>
-<span class="gap"></span>
+
 <div class="js-scrollable table-wrap scroll scroll-x">
     <?php $arr_flds = array(
         'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),

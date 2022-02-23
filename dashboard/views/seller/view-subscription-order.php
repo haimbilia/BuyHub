@@ -1,22 +1,19 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
     $data = [
         'headingLabel' => Labels::getLabel('LBL_View_Subscription_Order', $siteLangId),
         'siteLangId' => $siteLangId,
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('Seller', 'subscriptions'),
+            'onclick' => ''
+        ]
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false);
     ?>
     <div class="content-body">
         <div class="card">
-            <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Order_Details', $siteLangId); ?></h5>
-                <div class="action">
-                    <?php /* <a href="javascript:window.print();" class="btn btn-brand btn-sm no-print"><?php echo Labels::getLabel('LBL_Print',$siteLangId);?></a> */ ?>
-                    <a href="<?php echo UrlHelper::generateUrl('Seller', 'subscriptions'); ?>" class="btn btn-brand btn-sm no-print"><?php echo Labels::getLabel('LBL_Back_to_Subscription', $siteLangId); ?></a>
-                </div>
-            </div>
             <div class="card-body ">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">

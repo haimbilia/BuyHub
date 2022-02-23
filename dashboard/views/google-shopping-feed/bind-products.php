@@ -52,7 +52,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');  ?>
                         <div id="listing">
                             <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>
-                        <span class="gap"></span>
+
                     </div>
                 </div>
             </div>

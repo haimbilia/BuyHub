@@ -6,7 +6,7 @@ $dateFromFld->setFieldTagAttribute('class', 'field--calender');
 $dateToFld = $frmSearch->getField('date_to');
 $dateToFld->setFieldTagAttribute('class', 'field--calender');
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
