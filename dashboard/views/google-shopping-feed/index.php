@@ -67,6 +67,8 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
 
 <?php if (!empty($merchantId) && empty($serviceAccInfo) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
     <script>
-        serviceAccountForm();
+        $(document).ready(function () {
+            serviceAccountForm();
+        });
     </script>
 <?php }

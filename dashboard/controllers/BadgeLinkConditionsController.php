@@ -782,12 +782,17 @@ class BadgeLinkConditionsController extends SellerBaseController
             '{OBJECT-TYPE}' => $this->objectTypeName,
             '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
-        switch ($action) {
-            case 'list':
-                $this->nodes = [
-                    ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl($this->objectCtrlName)],
-                    ['title' => $pageTitle]
-                ];
+
+        if ($action == 'list') {
+            $this->nodes = [
+                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl($this->objectCtrlName)],
+                ['title' => $pageTitle]
+            ];
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($this->objectTypeName), 'href' => UrlHelper::generateUrl($this->objectCtrlName));
+            $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;
     }

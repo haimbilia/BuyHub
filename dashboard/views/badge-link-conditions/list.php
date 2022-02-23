@@ -6,14 +6,9 @@ $headingLabel .= ' <span class="badge badge-inline label-info rounded-pill">' . 
 
 $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITIONS_LIST', $siteLangId);
 
-$otherButtons = [
-    [
-        'attr' => [
-            'href' => UrlHelper::generateUrl('Badges', 'list', [$badgeType]),
-            'title' => Labels::getLabel('LBL_BACK', $siteLangId)
-        ],
-        'label' => '<i class="fas fa-arrow-left"></i>'
-    ]
+$headingBackButton = [
+    'href' => UrlHelper::generateUrl('Badges', 'list', [$badgeType]),
+    'onclick' => ''
 ];
 
 if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
@@ -22,7 +17,11 @@ if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'require
             'href' => UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$badgeType, $badgeId]),
             'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)
         ],
-        'label' => '<i class="fa fa-plus"></i>'
+        'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>',
+        'label' => Labels::getLabel('LBL_NEW', $siteLangId)
     ];
 }
 
