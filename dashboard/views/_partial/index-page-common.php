@@ -5,6 +5,7 @@ $newRecordBtn = $newRecordBtn ?? false;
 $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
 $otherButtons = isset($otherButtons) && is_array($otherButtons) ? $otherButtons : [];
 $listingLabel = isset($listingLabel) ? $listingLabel : "";
+$headingBackButton = $headingBackButton ?? false;
 $pagesTabsData = ([
     'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
@@ -14,6 +15,7 @@ $pagesTabsData = ([
     'headingLabel' => $headingLabel,
     'newRecordBtn' => $newRecordBtn,
     'newRecordBtnAttrs' => $newRecordBtnAttrs,
+    'headingBackButton' => $headingBackButton,
 ] + $otherTabsData);
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
