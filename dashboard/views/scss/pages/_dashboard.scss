@@ -213,7 +213,8 @@
         position: sticky;
         top: 0;
         #{$end-direction}: 0;
-        z-index: 10;
+        // z-index: 10;
+        z-index: 1021;
         width: 100%;
         height: 71px;
         display: flex;
@@ -310,6 +311,43 @@
         }
         .bell-shake-delay {
             animation: bell-shake 40s ease 3s infinite;
+        }
+
+        .search-docs {
+            display: flex;
+            position: relative;
+            .svg-icon {
+                position: absolute;
+                #{$start-direction}: 1rem;
+                top: 9px;
+
+                .svg {
+                    height: 1.15rem;
+                    width: 1.15rem;
+                }
+            }
+
+            &::after {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 1.5rem;
+                padding-right: 0.25rem;
+                padding-left: 0.25rem;
+                font-size: 0.75rem;
+                color: #6c757d;
+                content: "Ctrl + /";
+                border: 1px solid #dee2e6;
+                border-radius: 0.125rem;
+            }
+
+            .form-control {
+                padding-#{$start-direction}: 2.5rem;
+                padding-#{$end-direction}: 4rem;
+            }
         }
     }
     .short-links {
@@ -913,11 +951,15 @@
 }
 
 .auto-renew {
+    width: auto;
     display: flex;
-    align-items: flex-end;
-    p {
-        display: inline-block;
-        margin: 0 15px;
+    align-items: center;
+    white-space: nowrap;
+    padding-#{$start-direction}: 50px;
+    font-weight: 500;
+
+    .toggle-switch {
+        width: auto;
     }
     .switch-links {
         display: inline-block;

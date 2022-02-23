@@ -33,15 +33,10 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         $data = [
             'headingLabel' => Labels::getLabel('LBL_View_Sale_Order', $siteLangId),
             'siteLangId' => $siteLangId,
-            'otherButtons' => [
-                [
-                    'attr' => [
-                        'href' => UrlHelper::generateUrl('Seller', 'sales'),
-                        'title' => Labels::getLabel('LBL_Back_to_orders', $siteLangId)
-                    ],
-                    'label' => '<i class="fas fa-arrow-left"></i>'
-                ]
-            ],
+            'headingBackButton' => [
+                'href' => UrlHelper::generateUrl('Seller', 'sales'),
+                'onclick' => '',
+            ]
         ];
 
         if ($canCancelOrder && $canEdit) {
@@ -50,6 +45,10 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                     'href' => UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id'])),
                     'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
                 ],
+                'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#test">
+                                </use>
+                            </svg>',
                 'label' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
             ];
         }

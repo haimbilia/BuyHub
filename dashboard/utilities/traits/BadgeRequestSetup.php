@@ -61,7 +61,6 @@ trait BadgeRequestSetup
         $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'breq_message');
 
         $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("BTN_REQUEST", $this->siteLangId));
         return $frm;
     }
 
@@ -225,9 +224,9 @@ trait BadgeRequestSetup
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
 
-        $this->set('badgeId', $badgeId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
+        $this->set('badgeId', $badgeId);
         $this->_template->render(false, false, 'badges/badge-req-form.php');
     }
 

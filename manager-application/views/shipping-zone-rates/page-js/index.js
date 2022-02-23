@@ -67,7 +67,7 @@ $(document).ready(function () {
                 editZoneLangForm(t.zoneId, t.langId);
                 return;
             }
-            $(document).trigger('close.facebox');
+            
         });
     };
 
@@ -87,7 +87,7 @@ $(document).ready(function () {
                 editZoneLangForm(t.zoneId, t.langId);
                 return;
             }
-            $(document).trigger('close.facebox');
+            
         });
     };
 

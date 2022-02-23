@@ -90,7 +90,7 @@
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
                             //reloadList();
-                            $(document).trigger('close.facebox');
+                            
                             $(document).trigger('close.mbsmessage');
                             $.ykmsg.success(ans.msg);
                         } else {

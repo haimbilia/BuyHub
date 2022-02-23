@@ -308,6 +308,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -321,6 +322,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -528,6 +530,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -691,7 +694,7 @@ $(document).on("change", ".state", function () {
                 }
             },
             beforeSend: function () {
-                $(document).trigger('close.facebox');
+                
                 $(imageDivId).html(getImageTemplate(formData.get('cropped_image').name, blobUrl));
             },
             success: function (ans) {
@@ -776,7 +779,7 @@ $(document).on("change", ".state", function () {
                     $(dv).removeClass('badge-success');
                     $(dv).addClass('text-danger');
                 }
-                $(document).trigger('close.facebox');
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

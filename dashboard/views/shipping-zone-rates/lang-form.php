@@ -1,66 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$langFrm->setCustomRendererClass('FormRendererBS');
-
-$langFrm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
-$langFrm->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
-$langFrm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
-$langFrm->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
-$langFrm->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
-$langFrm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
-$langFrm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
-
-$langFrm->setFormTagAttribute('class', 'form');
+HtmlHelper::formatFormFields($langFrm);
+$langFrm->setFormTagAttribute('dir', $formLayout);
+$langFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+$langFrm->setFormTagAttribute('data-onclear', "editRateLangForm(" . $zoneId . ", " . $rateId . ", " . $langId . ");");
 $langFrm->setFormTagAttribute('onsubmit', 'setupLangRate(this); return(false);');
 
 
-//$langFrm->developerTags['colClassPrefix'] = 'col-sm-4 col-md-';
-//$langFrm->developerTags['fld_default_col'] = 12;
-/*
-$cancelFld = $langFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('onclick', 'clearForm(); return false;');
-$cancelFld->setFieldTagAttribute('class', 'btn btn-outline-gray');
-$cancelFld->developerTags['noCaptionTag'] = true;
-$cancelFld->developerTags['colClassBeforeWidth'] = 'col-auto';
-$cancelFld->developerTags['colWidthClasses'] = [null, null, null, null];
-$cancelFld->developerTags['colWidthValues'] = [null, null, null, null];
- * 
- */
+$langFld = $langFrm->getField('lang_id');
+$langFld->setfieldTagAttribute('onChange', "editRateLangForm(" . $zoneId . ", " . $rateId . ", this.value);");
 
-$btnSubmit = $langFrm->getField('btn_submit');
-$btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
-$btnSubmit->developerTags['noCaptionTag'] = true;
-$btnSubmit->developerTags['colClassBeforeWidth'] = 'col';
-$btnSubmit->developerTags['colWidthClasses'] = [null, null, null, null];
-$btnSubmit->developerTags['colWidthValues'] = [null, null, null, null];
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 
-
-?>
-
-<div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
-</div>
-<div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
-        <div class="row">
-            <div class="col-sm-12">
-                <nav class="nav nav-tabs tabsNavJs">
-                    <a class="nav-link" href="javascript:void(0);" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);">
-                        <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
-                    </a>
-                    <?php
-                    foreach ($languages as $key => $langName) {
-                        $class = ($langId == $key) ? 'active' : ''; ?>
-                        <a class="nav-link <?php echo $class; ?>" href="javascript:void(0);" <?php if ($rateId > 0) { ?> onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $key; ?>);" <?php } ?>>
-                            <?php echo $langName; ?>
-                        </a>
-                    <?php
-                    } ?>
-                </nav>
-                <div class="tabs__content" dir="<?php echo $formLayout; ?>">
-                    <?php echo $langFrm->getFormHtml(); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
-</div>
+echo $langFrm->getFormHtml();

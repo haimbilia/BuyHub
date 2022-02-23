@@ -9,7 +9,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
     if ($canEdit && !$noRecordFound) {
         $otherBtnHtml = '<div class="dropdown">
-                                <button class="btn btn-outline-gray dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-gray dropdown-toggle" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     ' . Labels::getLabel('LBL_New_Request', $siteLangId) . '
                                 </button>
                                 

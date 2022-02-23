@@ -41,17 +41,19 @@ $(document).ready(function () {
     };
 
     withdrawalReqForm = function () {
-        $(dvForm).prepend(fcom.getLoader());
+        // $(dvForm).prepend(fcom.getLoader());
         $payoutType = $(".payout_type").val();
         if ('-1' == $payoutType) {
             fcom.ajax(fcom.makeUrl('Account', 'requestWithdrawal'), '', function (res) {
                 fcom.removeLoader();
-                $(dvForm).html(res);
+                $.ykmodal(res);
+                // $(dvForm).html(res);
             });
         } else {
             fcom.ajax(fcom.makeUrl($payoutType, 'getRequestForm'), '', function (res) {
                 fcom.removeLoader();
-                $(dvForm).html(res);
+                // $(dvForm).html(res);
+                $.ykmodal(res);
             });
         }
         $(".withdrawForm").removeClass('d-none');

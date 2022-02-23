@@ -277,7 +277,7 @@ updateVerificationFile = function (inputBtn, fileType) {
                 }
                 $.ykmsg.success(ans.msg);
                 getForm(document.frmConfiguration.form_type.value);
-                $(document).trigger('close.facebox');
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {

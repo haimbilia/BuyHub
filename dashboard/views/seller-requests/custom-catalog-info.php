@@ -6,12 +6,12 @@
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12 clearfix">
+            <div class="col-md-3 clearfix">
                 <div id="img-static" class="product-detail-gallery">
                     <img src="<?php echo UrlHelper::generateFileUrl('Image', 'customProduct', array($product['preq_id'], 'MEDIUM', 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) ?>">
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+            <div class="col-md-9">
                 <div class="product-description">
                     <div class="product-description-inner">
                         <div class="products_title"><?php echo $product['product_name']; ?></div>
@@ -50,5 +50,4 @@
             </div>
         </div>
     </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

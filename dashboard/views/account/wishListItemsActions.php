@@ -15,7 +15,7 @@ if (isset($products) && 0 < count($products)) {
             <li title="<?php echo Labels::getLabel('LBL_MOVE_TO_OTHER_WISHLIST', $siteLangId); ?>" data-bs-toggle="tooltip" data-bs-placement="top">
                 <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="viewWishList(0, this, event, <?php echo $uwlist_id; ?>);">
                     <svg class="svg btn-icon-start" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#test">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#move">
                         </use>
                     </svg>
                     <span><?php echo Labels::getLabel('LBL_MOVE', $siteLangId); ?></span>
@@ -26,7 +26,7 @@ if (isset($products) && 0 < count($products)) {
         <li title='<?php echo Labels::getLabel('LBL_MOVE_TO_CART', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
             <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);">
                 <svg class="svg btn-icon-start" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#test">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
                     </use>
                 </svg>
                 <span><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>

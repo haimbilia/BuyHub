@@ -2,8 +2,6 @@
 $frm->setFormTagAttribute('onsubmit', 'updateUserPassword(this); return(false);');
 $frm->setFormTagAttribute('class', 'form form--horizontal');
 $frm->developerTags['fld_default_col'] = 12;
-$submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', "btn btn-brand");
 $newPwd = $frm->getField('new_password');
 $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') . '</span>';
 ?>

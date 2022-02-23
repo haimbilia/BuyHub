@@ -16,25 +16,25 @@ $frmSrch->developerTags['fld_default_col'] = 12;
             <div class="content-body">
                 <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
                     <div class="card-head border-0">
-                        <h5 class="card-title">Current Reward Points</h5>
+                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_CURRENT_REWARD_POINTS', $siteLangId); ?></h5>
                     </div>
                     <div class="card-body">
                         <div class="stats">
                             <div class="stats-number">
                                 <ul>
-                                    <li><span class="total">Reward Points Balance:</span>
-                                        <span class="total-numbers"> 2220 </span>
+                                    <li><span class="total"><?php echo Labels::getLabel('LBL_REWARD_POINT_BALANCE', $siteLangId); ?>:</span>
+                                        <span class="total-numbers"> <?php echo $totalRewardPoints; ?> </span>
                                     </li>
                                     <li>
-                                        <span class="total">Worth:</span>
-                                        <span class="total-numbers">$444.00</span>
+                                        <span class="total"><?php echo Labels::getLabel('LBL_WORTH', $siteLangId); ?>:</span>
+                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($totalRewardPoints)); ?></span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <?php /* ?>
                 <div class="card">
                     <div class="card-body">
                         <ul class="points-timeline" id="points-timeline">
@@ -169,21 +169,10 @@ $frmSrch->developerTags['fld_default_col'] = 12;
                     </div>
 
                 </div>
-
+                <?php  */ ?>
                 <div class="card">
-                    <div class="card-head">
-                        <h5 class="card-title">
-                            <?php echo Labels::getLabel('LBL_Current_Reward_Points', $siteLangId); ?> (<?php echo $totalRewardPoints; ?>) -
-                            <?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($totalRewardPoints)); ?>
-                        </h5>
-                    </div>
-
                     <div class="card-body">
-                        <!-- <h2><?php echo Labels::getLabel("LBL_Reward_Point_History", $siteLangId); ?></h2> -->
                         <div id="rewardPointsListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
-
-
-
                     </div>
                 </div>
             </div>

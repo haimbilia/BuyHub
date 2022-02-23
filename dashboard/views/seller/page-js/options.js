@@ -72,7 +72,7 @@ $(document).ready(function () {
 				optionValueForm(t.optionId, 0);
 				return;
 			}
-			$(document).trigger('close.facebox');
+			
 		});
 	};
 

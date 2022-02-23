@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<div class="card-head">
+<div class="card-head border-0 pt-4">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS', $siteLangId); ?></h5>
     <?php
     if ($canEdit) {
@@ -13,7 +13,7 @@
             $btnData['listTopButtons'] = [
                 [
                     'attr' => [
-                        'class' => 'btn btn-outline-gray btn-icon',
+                        'class' => 'btn btn-outline-gray btn-icon btn-add',
                         'onclick' => 'addForm(0)',
                         'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
                     ],

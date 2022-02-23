@@ -73,7 +73,7 @@ $(document).ready(function () {
 			success: function (json) {
 				json = $.parseJSON(json);
 				profileImageForm();
-				$(document).trigger('close.facebox');
+				
 			}
 		});
 	};
@@ -87,44 +87,48 @@ $(document).ready(function () {
 	}
 
 	popupImage = function (inputBtn) {
-		if (inputBtn) {
-			if (inputBtn.files && inputBtn.files[0]) {
-				$.ykmodal(fcom.getLoader(), '', 'cropper-body');
-				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
-					$.ykmodal(t);
-					var file = inputBtn.files[0];
-					var options = {
-						aspectRatio: 1 / 1,
-						preview: '.img-preview',
-						imageSmoothingQuality: 'high',
-						imageSmoothingEnabled: true,
-						crop: function (e) {
-							var data = e.detail;
-						}
-					};
-					$(inputBtn).val('');
-					return cropImage(file, options, 'saveProfileImage', inputBtn);
-				});
-			}
-		} else {
-			$.ykmodal(fcom.getLoader(), '', 'cropper-body');
-			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
-				$.ykmodal(t);
-				var container = document.querySelector('.img-container');
-				var image = container.getElementsByTagName('img').item(0);
-				var options = {
-					aspectRatio: 1 / 1,
-					preview: '.img-preview',
-					imageSmoothingQuality: 'high',
-					imageSmoothingEnabled: true,
-					crop: function (e) {
-						var data = e.detail;
-					}
-				};
-				return cropImage(image, options, 'saveProfileImage');
-			});
-		}
-	};
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text(cropperHeading);
+        if (inputBtn) {
+            if (inputBtn.files && inputBtn.files[0]) {
+                fcom.updateWithAjax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
+                    $("#modalBoxJs .modal-body").html(t.body);
+                    $("#modalBoxJs .modal-footer").html(t.footer);
+                    var file = inputBtn.files[0];
+                    var options = {
+                        aspectRatio: 1 / 1,
+                        preview: '.img-preview',
+                        imageSmoothingQuality: 'high',
+                        imageSmoothingEnabled: true,
+                        crop: function (e) {
+                            var data = e.detail;
+                        }
+                    };
+                    $(inputBtn).val('');
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
+                    return;
+                });
+            }
+        } else {
+            fcom.updateWithAjax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                var container = document.querySelector('.img-container');
+                var image = container.getElementsByTagName('img').item(0);
+                var options = {
+                    aspectRatio: 1 / 1,
+                    preview: '.img-preview',
+                    imageSmoothingQuality: 'high',
+                    imageSmoothingEnabled: true,
+                    crop: function (e) {
+                        var data = e.detail;
+                    }
+                };
+                setTimeout(function () { cropImage(image, options, 'saveProfileImage'); }, 100);
+                return
+            });
+        }
+    };
 
 	saveProfileImage = function (formData) {
 		$.ajax({
@@ -140,9 +144,9 @@ $(document).ready(function () {
 			},
 			success: function (ans) {
 				fcom.removeLoader();
-				$('#dispMessage').html(ans.msg);
-				profileInfoForm();
-				$(document).trigger('close.facebox');
+				fcom.displaySuccessMessage(ans.msg);
+				$("#modalBoxJs").modal("hide");
+				profileInfoForm();				
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

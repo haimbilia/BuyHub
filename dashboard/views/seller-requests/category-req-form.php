@@ -1,5 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('data-onclear', "addCategoryReqForm(" . $categoryReqId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupCategoryReq(this); return(false);');
 
 if ($auto_update_other_langs_data) {
@@ -7,9 +10,6 @@ if ($auto_update_other_langs_data) {
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
     $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
-$submitFld = $frm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-brand');
-$submitFld->developerTags['noCaptionTag'] = true;
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Category', $siteLangId) : Labels::getLabel('LBL_New_Category', $siteLangId) ?></h5>
@@ -20,7 +20,9 @@ $submitFld->developerTags['noCaptionTag'] = true;
             <div class="row">
                 <div class="col-md-12">
                     <div class="form__subcontent">
-                        <?php echo $frm->getFormTag(); ?>
+                        <?php echo $frm->getFormTag();
+                        echo $frm->getFieldHtml('prodcat_id'); ?>
+                        
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">
@@ -93,18 +95,6 @@ $submitFld->developerTags['noCaptionTag'] = true;
                                 </div>
                             </div>
                         <?php } ?>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="field-set">
-                                    <div class="field-wraper">
-                                        <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('btn_submit'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php echo $frm->getFieldHtml('prodcat_id'); ?>
                         </form>
                         <?php echo $frm->getExternalJS(); ?>
                     </div>

@@ -580,7 +580,7 @@ function setGeoAddress(data) {
 
 function getGeoAddress(data) {
     address = setGeoAddress(data);
-    $(document).trigger('close.facebox');
+    
     displayGeoAddress(address);
 }
 
@@ -669,7 +669,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         }
 
         if (0 < $("#facebox #" + elementId).length) {
-            $(document).trigger('close.facebox');
+            
         }
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);
@@ -946,4 +946,11 @@ select2 = function (
         select2Selector.$container.addClass("w-100");
     }
     select2Selector.$container.addClass("custom-select2");
+};
+
+loadCropperSkeleton = function () {  
+    $("#modalBoxJs").remove();
+    $("body").append(fcom.getModalBody());
+    $("#modalBoxJs").modal("show");
+    $.ykmodal.close();
 };

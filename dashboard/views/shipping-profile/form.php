@@ -18,18 +18,12 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
     $data = [
         'headingLabel' => Labels::getLabel('LBL_Shipping_Profiles', $siteLangId),
         'siteLangId' => $siteLangId,
-        'otherButtons' => [
-            [
-                'attr' => [
-                    'href' => UrlHelper::generateUrl('shippingProfile'),
-                    'title' => Labels::getLabel('LBL_back', $siteLangId)
-                ],
-                'label' => Labels::getLabel('LBL_back', $siteLangId)
-            ]
-        ],
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('shippingProfile'),
+            'onclick' => ''
+        ]
     ];
-    $this->includeTemplate('_partial/header/content-header.php', $data, false);
-    ?>
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row mb-4">
             <div class="col-lg-12">
@@ -43,16 +37,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group mb-0">
-                                    <?php
-                                    /*
-                                        if (!empty($profileData) && $profileData['shipprofile_default'] == 1) {
-                                            $pNameFld->addFieldTagAttribute('readonly', 'true');
-                                            $pNameFld->addFieldTagAttribute('disabled', 'true');
-                                        }
-                                         * 
-                                         */
-
-                                    echo $pNameFld->getHtml(); ?>
+                                    <?php echo $pNameFld->getHtml(); ?>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -61,20 +46,11 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                     echo $frm->getFieldHtml('shipprofile_id');
                                     echo $frm->getFieldHtml('shipprofile_user_id');
                                     echo $frm->getFieldHtml('btn_submit');
-                                    /*
-                                        if (empty($profileData) || ((isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1))) {
-                                            echo $frm->getFieldHtml('btn_submit');
-                                        }
-                                         * 
-                                         */
-
                                     ?>
                                 </div>
                             </div>
                         </div>
-                        <?php
-                        if (!empty($languages) && count($languages) > 1) {
-                        ?>
+                        <?php if (!empty($languages) && count($languages) > 1) { ?>
                             <div class="accordion my-4" id="specification-accordion">
                                 <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
                                     <span>
@@ -110,53 +86,46 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                                 </div>
                                             <?php } ?>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
+                        <?php } ?>
+                        </form>
+                        <?php echo $frm->getExternalJs(); ?>
                     </div>
-                <?php
-                        }
-                ?>
-                </form>
-                <?php echo $frm->getExternalJs(); ?>
-
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col-lg-12">
-            <div class="card" id="product-section--js"> </div>
-        </div>
-    </div>
-    <?php if (empty($profileData) || ((isset($profileData['shipprofile_default'])))) { ?>
         <div class="row mb-4">
-            <div class="col-md-12 mb-4">
-                <div class="card">
-                    <div class="card-head">
-                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
-                        </h5>
-                        <div class="action">
-                            <?php if ($canEdit) { ?>
-                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>"><i class="fa fa-plus"></i> <?php echo Labels::getLabel('LBL_ADD', $siteLangId); ?>
-                                </a>
-                            <?php } ?>
+            <div class="col-lg-12">
+                <div class="card" id="product-section--js"> </div>
+            </div>
+        </div>
+        <?php if (empty($profileData) || ((isset($profileData['shipprofile_default'])))) { ?>
+            <div class="row mb-4">
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-head">
+                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
+                            </h5>
+                            <div class="action">
+                                <?php if ($canEdit) { ?>
+                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>">
+                                        <svg class="svg btn-icon-start" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+                                            </use>
+                                        </svg><?php echo Labels::getLabel('LBL_ADD', $siteLangId); ?>
+                                    </a>
+                                <?php } ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>">
-                        <div id="listing-zones"></div>
+                        <div class="card-body">
+                            <input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>">
+                            <div id="listing-zones"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!--<div class="col-md-5 mb-4">
-                        <div class="card">
-                            <div id="ship-section--js"></div>
-                        </div>
-                    </div>-->
-        </div>
-    <?php } ?>
-</div>
+        <?php } ?>
+    </div>
 </div>
