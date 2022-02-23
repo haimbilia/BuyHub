@@ -87,7 +87,7 @@ $(document).ready(function () {
 	}
 
 	popupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
