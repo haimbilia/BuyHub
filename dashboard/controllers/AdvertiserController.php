@@ -433,14 +433,10 @@ class AdvertiserController extends AdvertiserBaseController
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langIdKey => $langName) {
-            if ($langIdKey > $langId) {
-                $newTabLangId = $langIdKey;
+            if (!$row = Promotion::getAttributesByLangId($langIdKey, $promotionId)) {
+                $newTabLangId = $langId;
                 break;
             }
-            /* if(!$row = Promotion::getAttributesByLangId($langIdKey,$promotionId)){
-              $newTabLangId = $langId;
-              break;
-              } */
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));

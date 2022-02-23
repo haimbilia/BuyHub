@@ -17,7 +17,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>',
-                'label' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
+                'label' => Labels::getLabel('LBL_NEW', $siteLangId)
             ]
         ];
     }

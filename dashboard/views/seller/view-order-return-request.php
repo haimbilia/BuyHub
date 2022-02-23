@@ -13,14 +13,9 @@ if (null != $btn) {
     $data = [
         'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
         'siteLangId' => $siteLangId,
-        'otherButtons' => [
-            [
-                'attr' => [
-                    'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
-                    'title' => Labels::getLabel('LBL_Back_To_Return_Requests', $siteLangId)
-                ],
-                'label' => Labels::getLabel('LBL_Back_To_Return_Requests', $siteLangId)
-            ]
+        'headingBackButton' => [
+            'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
+            'onclick' => ''
         ]
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>

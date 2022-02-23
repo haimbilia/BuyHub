@@ -308,6 +308,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         
+        markPopupTabActive();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();

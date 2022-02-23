@@ -21,7 +21,10 @@ $(document).on("click", ".resetModalFormJs", function (e) {
         eval(onClear);
     } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
         $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
+    } else {
+        $.ykmodal.close();
     }
+    fcom.removeLoader();
 });
 
 $(document).on("click", ".navTabsJs a", function (e) {
@@ -33,14 +36,10 @@ $(document).on("click", ".navTabsJs a", function (e) {
 });
 
 (function () {
-    setNavTab = function (type) {
-        $('.navTabsJs').find('a').removeClass('active');
-        $(".navTabsJs a").each(function () {
-            if ($(this).attr('data-tab') == type) {
-                $(this).addClass('active');
-            }
-        });
-    };
+    markPopupTabActive = function () {
+        $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").removeClass('active');
+        $("." + $.ykmodal.element + " .navTabsJs a[onclick^='" + markPopupTabActive.caller.name + "']").addClass('active').removeClass('fat-inactive');
+    }
 
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {

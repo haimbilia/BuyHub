@@ -107,9 +107,10 @@ $(document).ready(function () {
             $.mbsmessage(langLbl.saveProfileFirst, true, 'alert--danger');
             return;
         }
-        $.ykmodal(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
             $.ykmodal(t);
+            fcom.closeAlertMessage();
             fcom.removeLoader();
         });
     };

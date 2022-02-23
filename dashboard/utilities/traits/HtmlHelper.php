@@ -213,4 +213,10 @@ class HtmlHelper
         $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
         $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
     }
+
+    public static function setFieldEncryptedValue($fld, $value)
+    {   
+        $fld->developerTags['fldWidthValues'] = ['cover position-relative', null, null, null];
+        $fld->setFieldTagAttribute('data-encrypted-value', $value);
+    }
 }
