@@ -84,25 +84,25 @@ class Extrapage extends MyAppModel
         }
 
         return array(
-        static::CONTACT_US_CONTENT_BLOCK => Labels::getLabel('LBL_Contact_Us_Content_Block', $langId),
-        static::LOGIN_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_Login_Page_Right_Block', $langId),
-        static::REGISTRATION_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_Registration_Page_Right_Block', $langId),
-        static::FORGOT_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_Forgot_Page_Right_Block', $langId),
-        static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_Reset_Page_Right_Block', $langId),
-        static::SELLER_PAGE_BLOCK1 => Labels::getLabel('LBL_Seller_Page_Block1', $langId),
-        static::SELLER_PAGE_BLOCK2 => Labels::getLabel('LBL_Seller_Page_Block2', $langId),
-        static::SELLER_PAGE_BLOCK3 => Labels::getLabel('LBL_Seller_Page_Block3', $langId),
-        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_Seller_Banner_Slogan', $langId),
-        static::SUBSCRIPTION_PAGE_BLOCK => Labels::getLabel('LBL_Subscription_Page_Block', $langId),
-        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_Advertiser_Banner_Slogan', $langId),
-        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_Affiliate_Banner_Slogan', $langId),
+        static::CONTACT_US_CONTENT_BLOCK => Labels::getLabel('LBL_CONTACT_US_CONTENT_BLOCK', $langId),
+        static::LOGIN_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_LOGIN_PAGE_RIGHT_BLOCK', $langId),
+        static::REGISTRATION_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_REGISTRATION_PAGE_RIGHT_BLOCK', $langId),
+        static::FORGOT_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_FORGOT_PAGE_RIGHT_BLOCK', $langId),
+        static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_RESET_PAGE_RIGHT_BLOCK', $langId),
+        static::SELLER_PAGE_BLOCK1 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK1', $langId),
+        static::SELLER_PAGE_BLOCK2 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK2', $langId),
+        static::SELLER_PAGE_BLOCK3 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK3', $langId),
+        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
+        static::SUBSCRIPTION_PAGE_BLOCK => Labels::getLabel('LBL_SUBSCRIPTION_PAGE_BLOCK', $langId),
+        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
+        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
         );
     }
 
     public function updatePageContent($data = array())
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -156,9 +156,9 @@ class Extrapage extends MyAppModel
         }
 
         return array(
-        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_Seller_Banner_Slogan', $langId),
-        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_Advertiser_Banner_Slogan', $langId),
-        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_Affiliate_Banner_Slogan', $langId),
+        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
+        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
+        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
         );
     }
 
@@ -188,7 +188,7 @@ class Extrapage extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -216,7 +216,7 @@ class Extrapage extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -239,7 +239,7 @@ class Extrapage extends MyAppModel
     {
         $toLangId = FatUtility::int($toLangId);
         if (empty($data) || $toLangId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

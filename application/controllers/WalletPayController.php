@@ -16,7 +16,7 @@ class WalletPayController extends MyAppController
         $subsSessionOrderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
 
         if (!$orderId || (false === MOBILE_APP_API_CALL && ((!empty($sessionOrderId) && $orderId != $sessionOrderId) || (!empty($subsSessionOrderId)) && $orderId != $subsSessionOrderId))) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -28,7 +28,7 @@ class WalletPayController extends MyAppController
         }
 
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $message = Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId);
+            $message = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -56,7 +56,7 @@ class WalletPayController extends MyAppController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            $message = Labels::getLabel('MSG_Invalid_Access.', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -84,13 +84,13 @@ class WalletPayController extends MyAppController
         }
 
         if (true === MOBILE_APP_API_CALL) {
-            $this->set('msg', Labels::getLabel("MSG_Payment_from_wallet_made_successfully", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("SUC_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render();
         }
 
         if ($isAjaxCall) {
             $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
-            $this->set('msg', Labels::getLabel("MSG_Payment_from_wallet_made_successfully", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("SUC_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
         FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
@@ -122,7 +122,7 @@ class WalletPayController extends MyAppController
         $isAjaxCall = FatUtility::isAjaxCall();
 
         if (!UserAuthentication::isUserLogged()) {
-            $message = Labels::getLabel('MSG_Your_Session_seems_to_be_expired', $this->siteLangId);
+            $message = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -133,7 +133,7 @@ class WalletPayController extends MyAppController
             CommonHelper::redirectUserReferer();
         }
         if ($orderId == '' || ((isset($_SESSION['wallet_recharge_cart']) && !empty($_SESSION['wallet_recharge_cart']) && $orderId != $_SESSION['wallet_recharge_cart']["order_id"]))) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -157,7 +157,7 @@ class WalletPayController extends MyAppController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -193,13 +193,13 @@ class WalletPayController extends MyAppController
     {
         $plugin_id = FatUtility::int($plugin_id);
         if (!$plugin_id) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Invalid_Request!", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_INVALID_REQUEST!", $this->siteLangId));
         }
 
         if (!UserAuthentication::isUserLogged()) {
             /* Message::addErrorMessage( Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId) );
             FatUtility::dieWithError( Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
         }
 
         $srch = Orders::getSearchObject();
@@ -214,7 +214,7 @@ class WalletPayController extends MyAppController
         if (!$orderInfo) {
             /* Message::addErrorMessage( Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId) );
             $this->set('error', Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         //commonHelper::printArray($orderInfo);
@@ -228,7 +228,7 @@ class WalletPayController extends MyAppController
         $paymentMethod = FatApp::getDb()->fetch($pmRs);
         //var_dump($paymentMethod);
         if (!$paymentMethod) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Selected_Payment_method_not_found!", $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel("ERR_SELECTED_PAYMENT_METHOD_NOT_FOUND!", $this->siteLangId));
         }
 
         $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['plugin_code']);
@@ -256,7 +256,7 @@ class WalletPayController extends MyAppController
         if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
             CommonHelper::addCaptchaField($frm);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm_Payment', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_PAYMENT', $langId));
         $frm->addHiddenField('', 'order_type');
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'plugin_id');
@@ -284,13 +284,13 @@ class WalletPayController extends MyAppController
             $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
             $paymentMethodRow = Plugin::getAttributesById($plugin_id);
             if (!$paymentMethodRow || $paymentMethodRow['plugin_active'] != Plugin::ACTIVE) {
-                Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel("ERR_INVALID_PAYMENT_METHOD,_PLEASE_CONTACT_WEBADMIN.", $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
 
             $order_id = FatApp::getPostedData("order_id", FatUtility::VAR_STRING, "");
             if ($order_id == '') {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
             $orderObj = new Orders();
@@ -305,7 +305,7 @@ class WalletPayController extends MyAppController
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
             if (!$orderInfo) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
 
@@ -330,13 +330,13 @@ class WalletPayController extends MyAppController
 
         $paymentMethodRow = Plugin::getAttributesById($plugin_id);
         if (!$paymentMethodRow || $paymentMethodRow['plugin_active'] != Plugin::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_PAYMENT_METHOD,_PLEASE_CONTACT_WEBADMIN.", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
-                Message::addErrorMessage(Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
                 //FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
             }
@@ -345,7 +345,7 @@ class WalletPayController extends MyAppController
         $frm = $this->getPaymentTabForm($this->siteLangId);
         $post = $frm->getFormDataFromArray($post);
         if (!isset($post['order_id']) || $post['order_id'] == '') {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $orderObj = new Orders();
@@ -360,7 +360,7 @@ class WalletPayController extends MyAppController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

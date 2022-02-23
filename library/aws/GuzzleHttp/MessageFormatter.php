@@ -1,4 +1,5 @@
 <?php
+
 namespace GuzzleHttp;
 
 use Psr\Http\Message\MessageInterface;
@@ -87,7 +88,7 @@ class MessageFormatter
                         break;
                     case 'req_headers':
                         $result = trim($request->getMethod()
-                                . ' ' . $request->getRequestTarget())
+                            . ' ' . $request->getRequestTarget())
                             . ' HTTP/' . $request->getProtocolVersion() . "\r\n"
                             . $this->headers($request);
                         break;

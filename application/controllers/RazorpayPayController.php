@@ -33,7 +33,7 @@ class RazorpayPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -109,7 +109,7 @@ class RazorpayPayController extends PaymentController
                 $error = "ERROR:Request to Razorpay Failed";
             }
             if ($success === true) {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $razorpay_payment_id, $paymentGatewayCharge, Labels::getLabel("L_Received_Payment", $this->siteLangId), $result);
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $razorpay_payment_id, $paymentGatewayCharge, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $result);
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($merchant_order_id)));
             } else {
                 $orderPaymentObj->addOrderPaymentComments($error . ' Payment Failed! Check Razorpay dashboard for details of Payment Id:' . $razorpay_payment_id);             
@@ -128,7 +128,7 @@ class RazorpayPayController extends PaymentController
 
         $frm->addHiddenField('', 'razorpay_payment_id', '', array('id' => 'razorpay_payment_id'));
         $frm->addHiddenField('', 'merchant_order_id', $orderId, array('id' => 'merchant_order_id'));
-        $frm->addButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+        $frm->addButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         return $frm;
     }
 

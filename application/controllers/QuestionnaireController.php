@@ -12,11 +12,11 @@ class QuestionnaireController extends MyAppController
         $questionnaireId = FatApp::getPostedData('qfeedback_questionnaire_id', FatUtility::VAR_INT, 0);
         $userEmail = FatApp::getPostedData('qfeedback_user_email', FatUtility::VAR_STRING);
         if ($questionnaireId <= 0 || empty($userEmail)) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         if ($record = $this->hasUserPostedFeedback($userEmail, $questionnaireId)) {
-            Message::addErrorMessage(Labels::getLabel('Msg_You_have_already_posted_Feedback_to_this_questionnarie', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_HAVE_ALREADY_POSTED_FEEDBACK_TO_THIS_QUESTIONNARIE', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         $srch = new QuestionnairesSearch($this->siteLangId);
@@ -40,7 +40,7 @@ class QuestionnaireController extends MyAppController
 
         $feedback = new QuestionnaireFeedback();
         if ($feedback->isQuestionnaireAnsweredFromIP($_SERVER['REMOTE_ADDR'], $post['qfeedback_user_email'])) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Feedback_already_posted_from_this_IP', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_FEEDBACK_ALREADY_POSTED_FROM_THIS_IP', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         $feedbackData = array(
@@ -69,7 +69,7 @@ class QuestionnaireController extends MyAppController
             $fieldName = 'question_' . $question['question_id'];
             if ($question['question_required'] == 1 && !isset($post[$fieldName])) {
                 $isValid = false;
-                Message::addErrorMessage(sprintf(Labels::getLabel('Lbl_%s_is_Mandatory', $this->siteLangId), $question['question_title']));
+                Message::addErrorMessage(sprintf(Labels::getLabel('ERR_%S_IS_MANDATORY', $this->siteLangId), $question['question_title']));
             }
         }
         if ($isValid == false) {
@@ -83,7 +83,7 @@ class QuestionnaireController extends MyAppController
                 $feedback->addAnswerToQuestion(array('qta_qfeedback_id' => $feedbackId, 'qta_question_id' => $question['question_id'], 'qta_answers' => $post[$fieldName]));
             }
         }
-        Message::addMessage(Labels::getLabel('Msg_Feedback_sent_successfuly', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('SUC_FEEDBACK_SENT_SUCCESSFULY', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
@@ -127,9 +127,9 @@ class QuestionnaireController extends MyAppController
     {
         $frm = new Form('frmQuestionnaire');
         $frm->addHiddenField('', 'qfeedback_questionnaire_id', $questionnaireId);
-        $frm->addRequiredField(Labels::getLabel('Lbl_Name', $langId), 'qfeedback_user_name');
-        $frm->addEmailField(Labels::getLabel('Lbl_Email', $langId), 'qfeedback_user_email');
-        $frm->addSelectBox(Labels::getLabel('Lbl_Gender', $langId), 'qfeedback_user_gender', applicationConstants::getGenderArr($langId), '', [], Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_Name', $langId), 'qfeedback_user_name');
+        $frm->addEmailField(Labels::getLabel('FRM_Email', $langId), 'qfeedback_user_email');
+        $frm->addSelectBox(Labels::getLabel('FRM_Gender', $langId), 'qfeedback_user_gender', applicationConstants::getGenderArr($langId), '', [], Labels::getLabel('FRM_Select', $langId))->requirements()->setRequired();
 
         $srch = new QuestionnairesSearch();
         $srch->joinQuestionnarieToQuestions();
@@ -161,12 +161,12 @@ class QuestionnaireController extends MyAppController
                 break;
 
             case Questions::TYPE_RATING_5:
-                $fld = $frm->addSelectBox($question['question_title'], $fieldName, $arr_rating_5, "", array('class' => "star-rating"), Labels::getLabel('L_Rate', $langId));
+                $fld = $frm->addSelectBox($question['question_title'], $fieldName, $arr_rating_5, "", array('class' => "star-rating"), Labels::getLabel('FRM_Rate', $langId));
                 $fld->setWrapperAttribute('class', 'rating-f');
                 break;
 
             case Questions::TYPE_RATING_10:
-                $fld = $frm->addSelectBox($question['question_title'], $fieldName, $arr_rating_10, "", array('class' => "star-rating"), Labels::getLabel('L_Rate', $langId));
+                $fld = $frm->addSelectBox($question['question_title'], $fieldName, $arr_rating_10, "", array('class' => "star-rating"), Labels::getLabel('FRM_Rate', $langId));
                 $fld->setWrapperAttribute('class', 'rating-f');
                 break;
             }
@@ -180,7 +180,7 @@ class QuestionnaireController extends MyAppController
                 /* } */
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Send', $this->siteLangId));
         return $frm;
     }
 }

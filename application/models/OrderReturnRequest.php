@@ -41,7 +41,7 @@ class OrderReturnRequest extends MyAppModel
 
         return array(
             /* static::RETURN_REQUEST_TYPE_REPLACE => Labels::getLabel( 'LBL_Order_Request_Type_Replace', $langId ), */
-            static::RETURN_REQUEST_TYPE_REFUND => Labels::getLabel('LBL_Order_Request_Type_Refund', $langId),
+            static::RETURN_REQUEST_TYPE_REFUND => Labels::getLabel('LBL_ORDER_REQUEST_TYPE_REFUND', $langId),
         );
     }
 
@@ -64,11 +64,11 @@ class OrderReturnRequest extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::RETURN_REQUEST_STATUS_PENDING => Labels::getLabel('LBL_Return_Request_Status_Pending', $langId),
-            static::RETURN_REQUEST_STATUS_ESCALATED => Labels::getLabel('LBL_Return_Request_Status_Escalated', $langId),
-            static::RETURN_REQUEST_STATUS_REFUNDED => Labels::getLabel('LBL_Return_Request_Status_Refunded', $langId),
-            static::RETURN_REQUEST_STATUS_WITHDRAWN => Labels::getLabel('LBL_Return_Request_Status_Withdrawn', $langId),
-            static::RETURN_REQUEST_STATUS_CANCELLED => Labels::getLabel('LBL_Return_Request_Status_Cancelled', $langId),
+            static::RETURN_REQUEST_STATUS_PENDING => Labels::getLabel('LBL_RETURN_REQUEST_STATUS_PENDING', $langId),
+            static::RETURN_REQUEST_STATUS_ESCALATED => Labels::getLabel('LBL_RETURN_REQUEST_STATUS_ESCALATED', $langId),
+            static::RETURN_REQUEST_STATUS_REFUNDED => Labels::getLabel('LBL_RETURN_REQUEST_STATUS_REFUNDED', $langId),
+            static::RETURN_REQUEST_STATUS_WITHDRAWN => Labels::getLabel('LBL_RETURN_REQUEST_STATUS_WITHDRAWN', $langId),
+            static::RETURN_REQUEST_STATUS_CANCELLED => Labels::getLabel('LBL_RETURN_REQUEST_STATUS_CANCELLED', $langId),
         );
     }
 
@@ -89,7 +89,7 @@ class OrderReturnRequest extends MyAppModel
         $langId = FatUtility::int($langId);
         $user_id = FatUtility::int($user_id);
         if ($orrequest_id < 1 || $langId < 1 || $user_id < 1) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
         $db = FatApp::getDb();
         $dataToUpdate = array('orrequest_status' => static::RETURN_REQUEST_STATUS_ESCALATED);
@@ -98,7 +98,7 @@ class OrderReturnRequest extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
-        $orrmsg_msg = str_replace('{website_name}', FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId), Labels::getLabel('LBL_Return_Request_Escalated_to', $langId));
+        $orrmsg_msg = str_replace('{website_name}', FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId), Labels::getLabel('LBL_RETURN_REQUEST_ESCALATED_TO', $langId));
         $dataToSave = array(
             'orrmsg_orrequest_id' => $orrequest_id,
             'orrmsg_from_user_id' => $user_id,
@@ -122,7 +122,7 @@ class OrderReturnRequest extends MyAppModel
         $orderLangId = FatUtility::int($orderLangId);
 
         if ($orrequest_id < 1 || $langId < 1 || $op_id < 1 || $orderLangId < 1) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED', $this->commonLangId), E_USER_ERROR);
         }
         $db = FatApp::getDb();
 
@@ -133,7 +133,7 @@ class OrderReturnRequest extends MyAppModel
             return false;
         }
 
-        $orrmsg_msg = Labels::getLabel('LBL_Return_Request_Withdrawn', $this->commonLangId);
+        $orrmsg_msg = Labels::getLabel('ERR_RETURN_REQUEST_WITHDRAWN', $this->commonLangId);
         $dataToSave = array(
             'orrmsg_orrequest_id' => $orrequest_id,
             'orrmsg_from_user_id' => $user_id,
@@ -151,7 +151,7 @@ class OrderReturnRequest extends MyAppModel
         }
 
         $oObj = new Orders();
-        $oObj->addChildProductOrderHistory($op_id, $orderLangId, FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS"), Labels::getLabel('MSG_Buyer_Withdrawn_Return_Request', $orderLangId), 1);
+        $oObj->addChildProductOrderHistory($op_id, $orderLangId, FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS"), Labels::getLabel('MSG_BUYER_WITHDRAWN_RETURN_REQUEST', $orderLangId), 1);
         return true;
     }
 
@@ -162,7 +162,7 @@ class OrderReturnRequest extends MyAppModel
         $user_id = FatUtility::int($user_id);
 
         if ($orrequest_id < 1 || $langId < 1) {
-            trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed!', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENT_PASSED!', $this->commonLangId), E_USER_ERROR);
         }
         $db = FatApp::getDb();
 
@@ -183,7 +183,7 @@ class OrderReturnRequest extends MyAppModel
         $requestRow = $db->fetch($rs);
 
         if (!$requestRow) {
-            $this->error = Labels::getLabel("ERR_Invalid_Request", $this->commonLangId);
+            $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $this->commonLangId);
             return false;
         }
 
@@ -213,7 +213,7 @@ class OrderReturnRequest extends MyAppModel
             $approved_by_person_name = FatApp::getConfig('CONF_WEBSITE_NAME_' . $orderLangId);
         }
 
-        $orrmsg_msg = str_replace("{approved_by_person_name}", $approved_by_person_name, Labels::getLabel('LBL_Return_Request_Approved_By', $orderLangId));
+        $orrmsg_msg = str_replace("{approved_by_person_name}", $approved_by_person_name, Labels::getLabel('LBL_RETURN_REQUEST_APPROVED_BY', $orderLangId));
         $dataToSave = array(
             'orrmsg_orrequest_id' => $orrequest_id,
             'orrmsg_from_user_id' => $user_id,
@@ -248,9 +248,9 @@ class OrderReturnRequest extends MyAppModel
             }
         }
 
-        $approvedByLabel = sprintf(Labels::getLabel('MSG_Approved_Return_Request', $orderLangId), $requestRow['op_shop_owner_name']);
+        $approvedByLabel = sprintf(Labels::getLabel('LBL_APPROVED_RETURN_REQUEST', $orderLangId), $requestRow['op_shop_owner_name']);
         if (!$user_id && AdminAuthentication::isAdminLogged()) {
-            $approvedByLabel = sprintf(Labels::getLabel('MSG_Approved_Return_Request', $orderLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $orderLangId));
+            $approvedByLabel = sprintf(Labels::getLabel('LBL_APPROVED_RETURN_REQUEST', $orderLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $orderLangId));
         }
         if (true == $oObj->addChildProductOrderHistory($requestRow['orrequest_op_id'], $orderLangId, FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS"), $approvedByLabel, 1, '', 0, $moveRefundInWallet)) {
             if (true === $canRefundToCard) {

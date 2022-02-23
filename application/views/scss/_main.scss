@@ -1,16 +1,19 @@
-//
 @import "bootstrap/bootstrap";
 @import "bootstrap/variables";
 //
-@import "themes/theme";
+@import "themes/variables";
+
 //
 @import "layout/header";
-@import "layout/nav";
+@import "layout/mega-menu";
+@import "layout/offcanvas-menu";
+@import "layout/mmenu";
+//@import "layout/mega-nav";
 @import "layout/footer";
 //
 @import "components/main-search";
+@import "components/carousels";
 @import "components/accordion";
-@import "components/categories";
 @import "components/tagify";
 @import "components/auto-complete";
 @import "components/avtar";
@@ -25,10 +28,8 @@
 @import "components/cookies";
 @import "components/data-not-found";
 @import "components/dropdown";
-@import "components/featured-shop";
 @import "components/fetured-slider";
 @import "components/form";
-@import "components/ftshops";
 @import "components/graph";
 @import "components/hamburger";
 @import "components/heart";
@@ -53,19 +54,19 @@
 @import "components/slider";
 @import "components/social-profiles";
 @import "components/star-rating";
+@import "components/ratings";
 @import "components/steps";
 @import "components/sticky-head-demo";
 @import "components/system-messages";
 @import "components/table";
 @import "components/tabs";
-@import "components/top-brands";
 @import "components/wrap-drop";
 @import "components/auto-suggestions";
 @import "components/misc";
 @import "components/cards";
 @import "components/switch";
 @import "components/print";
-@import "components/progress-checkout";
+//@import "components/progress-checkout";
 @import "components/list-group";
 @import "components/media-more";
 @import "components/bg";
@@ -88,6 +89,17 @@
 @import "components/cart-summary";
 @import "components/list-cart";
 @import "components/product-profile";
+
+@import "components/collection-product";
+@import "components/collection-shop";
+@import "components/collection-category";
+@import "components/collection-brands";
+@import "components/collection-banner";
+@import "components/collection-faq";
+@import "components/collection-incentives";
+@import "components/collection-newsletter";
+
+// @import "components/collection-faq";
 //
 @import "vendors/animate";
 @import "vendors/fontawesome";
@@ -106,7 +118,7 @@
 @import "pages/offline";
 @import "pages/blog";
 @import "pages/cart";
-@import "pages/category";
+//@import "pages/category";
 @import "pages/checkout";
 @import "pages/contact";
 @import "pages/detail";

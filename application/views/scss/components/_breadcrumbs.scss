@@ -1,4 +1,4 @@
-.breadcrumbs {
+.breadcrumb {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -6,31 +6,30 @@
         display: flex;
         margin: 0;
         align-items: center;
-        -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         li {
             position: relative;
             padding: 0;
-            padding-#{$end-direction}: 25px;
-            font-size: 0.875rem;
-            vertical-align: top;
+            margin: 5px 0;
+            margin-#{$end-direction}: 1rem;
+            color: $txt-body;
+            font-size: 0.8125rem;
             display: block;
             font-weight: 400;
             line-height: 1.5;
             &:before {
+                line-height: inherit;
+                padding: 0 !important;
                 position: absolute;
-                #{$end-direction}: 10px;
-                top: calc(50% - 3px);
-                content: "";
-                height: 7px;
-                width: 7px;
-                border: solid 1px darken($border-color, 50%);
-                border-width: 1px 1px 0 0;
-                transform: rotate(45deg);
-                [dir="rtl"] & {
-                    #{$end-direction}: 13px;
-                    transform: rotate(-136deg);
-                }
+                #{$end-direction}: -1rem;
+                content: "/" !important;
+                // border: solid 1px darken($border-color, 50%);
+                // border-width: 1px 1px 0 0;
+                // transform: rotate(45deg);
+                // [dir="rtl"] & {
+                //     #{$end-direction}: 13px;
+                //     transform: rotate(-136deg);
+                // }
             }
             &:last-child {
                 padding-#{$end-direction}: 0;
@@ -39,25 +38,25 @@
                 }
             }
             a {
-                color: lighten($body-color, 30);
+                color: $txt-gray;
                 font-size: inherit;
                 display: block;
                 line-height: inherit;
             }
         }
     }
-    &--center {
+    &-center {
         ul {
             justify-content: center;
         }
     }
-    &--right {
+    &-right {
         color: #fff;
         ul {
             justify-content: flex-end;
         }
     }
-    &--white {
+    &-white {
         color: #fff;
         ul {
             li {

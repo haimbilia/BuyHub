@@ -1,7 +1,7 @@
 .list-group-item {
     background: transparent;
     border: $border;
-    -webkit-animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-up .3s ease-out 1;
+    -webkit-animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
 }
 
@@ -25,13 +25,13 @@
 
 .list-group-sm {
     .list-group-item {
-        padding: 1.25rem 1.25rem
+        padding: 1.25rem 1.25rem;
     }
 }
 
 .list-group-xs {
     .list-group-item {
-        padding: 1rem 1rem
+        padding: 1rem 1rem;
     }
 }
 
@@ -69,7 +69,7 @@
         transition-delay: 250ms;
         margin-#{$end-direction}: 15px;
         a {
-            color: $body-color;
+            color: $txt-body;
             .svg {
                 fill: currentColor;
                 opacity: 0.6;

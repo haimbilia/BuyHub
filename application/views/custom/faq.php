@@ -4,15 +4,14 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6">
-                    <div class="section-head section--head--center mb-0">
-                        <div class="section__heading">
-                            <h1><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId);?></h1>
+                    <div class="section-head section-head-center mb-0">
+                        <div class="section-heading">
+                            <h1><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h1>
                         </div>
                     </div>
                     <div class="faqsearch">
                         <form name="frmSearchFaqs" class="form" action="javascript:void(0);">
-                            <input placeholder="Search" class="faq-input no-focus"
-                                data-field-caption="Enter your question" type="search" name="question" value="">
+                            <input placeholder="Search" class="faq-input no-focus" data-field-caption="Enter your question" type="search" name="question" value="">
                         </form>
                     </div>
                 </div>
@@ -24,7 +23,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <?php if ($recordCount > 0) { ?>
-                    <div class="faq-filters mb-4" id="categoryPanel"></div>
+                        <div class="faq-filters mb-4" id="categoryPanel"></div>
                     <?php } ?>
                     <ul class="faqlist" id="listing"></ul>
                 </div>
@@ -32,67 +31,68 @@
         </div>
     </section>
     <script>
-    var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
-    var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
+        var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
+        var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
     </script>
     <script>
-    var clics = 0;
-    $(document).ready(function() {
-        $('.faqanswer').hide();
-        $('#faqcloseall').hide();
-        $(document).on("click", 'h3', function() {
-            $(this).next('.faqanswer').toggle(function() {
-                $(this).next('.faqanswer');
-            }, function() {
-                $(this).next('.faqanswer').fadeIn('fast');
-            });
-            if ($(this).hasClass('faqclose')) {
-                $(this).removeClass('faqclose');
-            } else {
-                $(this).addClass('faqclose');
-            };
-            if ($('.faqclose').length >= 3) {
-                $('#faqcloseall').fadeIn('fast');
-            } else {
-                $('#faqcloseall').hide();
-                var yolo = $('.faqclose').length
-                console.log(yolo);
-            }
-        }); //Close Function Click
-    }); //Close Function Ready
-    $(document).on("click", '#faqcloseall', function() {
-        $('.faqanswer').fadeOut(200);
-        $('h3').removeClass('faqclose');
-        $('#faqcloseall').fadeOut('fast');
-    });
-    //search box
-    $(function() {
-        $(document).on("keyup", '.faq-input', function() {
-            // Get user input from search box
-            var filter_text = $(this).val();
+        var clics = 0;
+        $(document).ready(function() {
+            $('.faqanswer').hide();
+            $('#faqcloseall').hide();
+            $(document).on("click", 'h3', function() {
+                $(this).next('.faqanswer').toggle(function() {
+                    $(this).next('.faqanswer');
+                }, function() {
+                    $(this).next('.faqanswer').fadeIn('fast');
+                });
+                if ($(this).hasClass('faqclose')) {
+                    $(this).removeClass('faqclose');
+                } else {
+                    $(this).addClass('faqclose');
+                };
+                if ($('.faqclose').length >= 3) {
+                    $('#faqcloseall').fadeIn('fast');
+                } else {
+                    $('#faqcloseall').hide();
+                    var yolo = $('.faqclose').length
+                    console.log(yolo);
+                }
+            }); //Close Function Click
+        }); //Close Function Ready
+        $(document).on("click", '#faqcloseall', function() {
+            $('.faqanswer').fadeOut(200);
+            $('h3').removeClass('faqclose');
+            $('#faqcloseall').fadeOut('fast');
+        });
+        //search box
+        $(function() {
+            $(document).on("keyup", '.faq-input', function() {
+                // Get user input from search box
+                var filter_text = $(this).val();
+                $('.faqlist h3').each(function() {
+                    if ('' !== filter_text) {
+                        var startAt = $(this).text().toLowerCase().indexOf(filter_text
+                            .toLowerCase());
+                        if (startAt >= 0) {
+                            var endAt = filter_text.length;
+                            var content = $(this).text();
+                            filter_text = content.substr(startAt, endAt);
+                            var replaceWith = "<span class='js--highlightText'>" + filter_text +
+                                "</span>";
+                            var content = $(this).text();
+                            $(this).siblings(".faqanswer").slideDown();
+                            $(this).html(content.replace(filter_text, replaceWith));
+                        } else {
+                            $(this).text($(this).text());
+                            $(this).siblings(".faqanswer").slideUp();
+                        }
 
-            $('.faqlist h3').each(function() {
-                if ('' !== filter_text) {
-                    var startAt = $(this).text().toLowerCase().indexOf(filter_text.toLowerCase());
-                    if (startAt >= 0) {
-                        var endAt = filter_text.length;
-                        var content = $(this).text();
-                        filter_text = content.substr(startAt, endAt);
-                        var replaceWith = "<span class='js--highlightText'>" + filter_text +
-                            "</span>";
-                        var content = $(this).text();
-                        $(this).siblings(".faqanswer").slideDown();
-                        $(this).html(content.replace(filter_text, replaceWith));
                     } else {
                         $(this).text($(this).text());
-                        $(this).siblings(".faqanswer").slideUp();
+                        $('.faqlist h3').siblings(".faqanswer").slideUp();
                     }
-                } else {
-                    $(this).text($(this).text());
-                    $('.faqlist h3').siblings(".faqanswer").slideUp();
-                }
-            })
+                })
+            });
         });
-    });
     </script>
 </div>

@@ -63,7 +63,7 @@ class DigitalDownload extends MyAppModel
     public function saveLink( $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
         if (1 > $this->getMainTableRecordId()) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -191,8 +191,16 @@ class DigitalDownload extends MyAppModel
             $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
             $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
             $frm->addHiddenField('', 'download_type', $type);
-        } 
-        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');      
+        } else {
+            $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+            $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        }
+        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
+        // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
+        // $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
+
+        // $frm->addHiddenField('', 'product_id');
+        // $frm->addHiddenField('', 'selprod_id');
 
         $frm->addHiddenField('', 'record_id', $recordId);
 
@@ -267,7 +275,7 @@ class DigitalDownload extends MyAppModel
         }
 
         if ($message == '') {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId()) . __LINE__;
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()) . __LINE__;
         }
         FatUtility::dieJsonError($message);
     }

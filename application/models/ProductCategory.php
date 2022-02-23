@@ -32,12 +32,12 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('ERR_Language_Id_not_specified.', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $arr = array(
-            static::REQUEST_PENDING => Labels::getLabel('LBL_Pending', $langId),
-            static::REQUEST_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-            static::REQUEST_CANCELLED => Labels::getLabel('LBL_Cancelled', $langId)
+            static::REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            static::REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+            static::REQUEST_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId)
         );
         return $arr;
     }
@@ -856,7 +856,7 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if (!$langId) {
-            trigger_error(Labels::getLabel('ERR_Language_Not_Specified', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_NOT_SPECIFIED', $langId), E_USER_ERROR);
         }
         return static::getProdCatParentChildWiseArr($langId, 0, false, true);
     }
@@ -1235,7 +1235,7 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1256,7 +1256,7 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1287,7 +1287,7 @@ class ProductCategory extends MyAppModel
     {
         $toLangId = FatUtility::int($toLangId);
         if (empty($data) || $toLangId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1657,4 +1657,25 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         return $srch;
     }
+
+
+    public static function isParentCategory($prodCat_id)
+    {
+        $srch = static::getSearchObject();
+        $srch->addCondition('prodcat_parent', '=', 0);
+        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('prodcat_id', '=', $prodCat_id);
+        $srch->addMultipleFields(array('prodcat_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs);
+        if (empty($records)) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

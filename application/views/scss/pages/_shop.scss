@@ -54,6 +54,7 @@
 }
 
 .shop-information {
+    text-align: center;
     width: 100%;
     max-width: 300px;
     background: $bg-white;
@@ -105,7 +106,7 @@
             flex-direction: column;
             align-items: center;
         }
-        .shop-name {
+        .shop-title {
             margin-bottom: 1rem;
             span {
                 margin-top: 5px;
@@ -143,12 +144,14 @@
 }
 
 .shop-nav {
+    background: #fff;
     flex: 1;
     margin-#{$start-direction}: 4rem;
     @include media-breakpoint-down(md) {
         margin: 0;
     }
     ul {
+        border: $border;
         display: flex;
         @include media-breakpoint-down(md) {
             padding: 1rem 0;
@@ -157,30 +160,80 @@
             justify-content: flex-start;
         }
         li {
+            flex: 1;
+            text-align: center;
+
+            &:last-child {
+                a {
+                    border-#{$end-direction}: none;
+                }
+            }
             a {
-                border-radius: 4px;
-                background: #fff;
+                border-#{$end-direction}: $border;
                 color: $txt-gray;
                 font-size: 0.85rem;
                 padding: 0.8rem 1rem;
-                margin: 0 5px;
+                margin: 0;
                 display: block;
                 font-weight: 500;
                 position: relative;
-                box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+
                 @include media-breakpoint-down(md) {
-                    & {
-                        white-space: nowrap;
-                    }
+                    white-space: nowrap;
                 }
                 &:hover {
                     background: $brand-color;
                     color: $brand-color-inverse;
                 }
             }
-            &.is--active a {
-                background: $brand-color;
-                color: $brand-color-inverse;
+            &.is--active {
+                a {
+                    background: $brand-color;
+                    color: $brand-color-inverse;
+                }
+            }
+        }
+    }
+}
+
+.shop-btn-group {
+    max-width: 350px;
+    a.btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: $radius-common;
+        margin: 2px;
+        padding: 0;
+        min-width: 1%;
+        background-color: #fff !important;
+        color: $txt-gray;
+        .icn {
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+        &.is-active {
+            background: $brand-color !important;
+            color: $brand-color-inverse !important;
+            border-color: $brand-color !important;
+        }
+        &:hover {
+            background: $brand-color !important;
+            color: $brand-color-inverse !important;
+            border-color: $brand-color !important;
+        }
+    }
+    .share-icon {
+        .icn {
+            svg {
+                margin: -2px auto 0;
+                width: 16px;
+                height: 16px;
+                fill: $brand-color;
             }
         }
     }

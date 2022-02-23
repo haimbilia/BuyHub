@@ -15,8 +15,19 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 
 }
 
+if($imageType == 'icon'){
+    $popup = 'iconPopupImage';
+    $label = Labels::getLabel("FRM_CATEGORY_ICON", $siteLangId);
+} elseif ($imageType == 'banner') {
+    $popup = 'bannerPopupImage';
+    $label = Labels::getLabel("FRM_CATEGORY_BANNER_IMAGE", $siteLangId);
+} elseif ($imageType == 'thumb') {
+    $popup = 'thumbPopupImage';
+    $label = Labels::getLabel("FRM_CATEGORY_THUMB", $siteLangId);
+}
+
 echo HtmlHelper::getfileInputHtml(
-    ['onChange' => ($imageType == 'icon' ? 'iconPopupImage' : 'bannerPopupImage') . '(this)', 'accept' => 'image/*', 'data-name' => $imageType == 'icon' ? Labels::getLabel("FRM_CATEGORY_ICON", $siteLangId) : Labels::getLabel("FRM_CATEGORY_BANNER_IMAGE", $siteLangId), 'data-file_type' => $imageType],
+    ['onChange' => $popup . '(this)', 'accept' => 'image/*', 'data-name' => $label, 'data-file_type' => $imageType],
     $siteLangId,
     ($canEdit ? 'deleteCatImage(' . $image['afile_id'] . ',' . $image['afile_record_id'] . ',\'' . $imageType . '\',' . $image['afile_lang_id'] . ',' . $image['afile_screen'] . ')' : ''),
     ($canEdit ? 'editDropZoneImages(this)' : ''),

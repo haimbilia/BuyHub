@@ -18,11 +18,11 @@ $data = array(
     'orderNetAmount' => $orderNetAmount
 );
 $data['netPayable'] = array(
-    'key' => Labels::getLabel('LBL_Net_Payable', $siteLangId),
+    'key' => Labels::getLabel('LBL_NET_PAYABLE', $siteLangId),
     'value' => CommonHelper::displayMoneyFormat($orderNetAmount)
 );
 
 if (empty(array_filter($paymentMethods)) || empty(array_filter($orderInfo))) {
     $status = applicationConstants::OFF;
-    $msg = Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $siteLangId);
+    $msg = Labels::getLabel("ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
 }

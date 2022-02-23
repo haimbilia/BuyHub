@@ -26,7 +26,7 @@ class CashOnDeliveryPayController extends MyAppController
 
         $token = FatApp::getPostedData('_token', FatUtility::VAR_STRING, '');
         if (!empty($token) && !UserAuthentication::isUserLogged('', $token)) {
-            Message::addErrorMessage(Labels::getLabel('L_Invalid_Token', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_TOKEN', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'ViewOrder', array($orderInfo['id'])));
         }
         /* Avoid payment for digital products [ */

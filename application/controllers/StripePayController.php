@@ -56,7 +56,7 @@ class StripePayController extends PaymentController
     public function charge($orderId)
     {
         if (empty(trim($orderId))) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
         }
 
@@ -87,12 +87,12 @@ class StripePayController extends PaymentController
         if (array_key_exists($this->systemCurrencyCode, $this->minChargeAmountCurrencies())) {
             $stripeMinAmount = $this->minChargeAmountCurrencies()[$this->systemCurrencyCode];
             if ($stripeMinAmount > $paymentAmount) {
-                $this->error = CommonHelper::replaceStringData(Labels::getLabel('MSG_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
+                $this->error = CommonHelper::replaceStringData(Labels::getLabel('ERR_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
             }
         }
 
         if (!$orderInfo['id']) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
         } elseif ($orderInfo && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
             /* $checkPayment = $this->doPayment($payableAmount, $orderInfo); */
@@ -123,7 +123,7 @@ class StripePayController extends PaymentController
                 }
             }
         } else {
-            $message = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -174,19 +174,19 @@ class StripePayController extends PaymentController
     private function getPaymentForm($orderId)
     {
         $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('StripePay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND), 'class' => "form form--normal"));
-        $frm->addRequiredField(Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
-        $frm->addRequiredField(Labels::getLabel('LBL_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
+        $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
+        $frm->addRequiredField(Labels::getLabel('FRM_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
         $today = getdate();
         $data['year_expire'] = array();
         for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
             $data['year_expire'][strftime('%Y', mktime(0, 0, 0, 1, 1, $i))] = strftime('%Y', mktime(0, 0, 0, 1, 1, $i));
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
-        $frm->addPasswordField(Labels::getLabel('LBL_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
+        $frm->addPasswordField(Labels::getLabel('FRM_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired();
         /* $frm->addCheckBox(Labels::getLabel('LBL_SAVE_THIS_CARD_FOR_FASTER_CHECKOUT',$this->siteLangId), 'cc_save_card','1'); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
 
         return $frm;
     }
@@ -196,7 +196,7 @@ class StripePayController extends PaymentController
         $stripeToken = FatApp::getPostedData('stripeToken', FatUtility::VAR_STRING, '');
 
         if (empty($stripeToken)) {
-            $message = Labels::getLabel('MSG_The_Stripe_Token_was_not_generated_correctly', $this->siteLangId);
+            $message = Labels::getLabel('ERR_THE_STRIPE_TOKEN_WAS_NOT_GENERATED_CORRECTLY', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
                 FatUtility::dieJsonError($message);
             }
@@ -268,7 +268,7 @@ class StripePayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($_POST['order_id']);
 
-        $message = Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);
+        $message = Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);
         if (strtolower($charge['status']) == 'succeeded') {
 
             /* Recording Payment in DB */
@@ -278,7 +278,7 @@ class StripePayController extends PaymentController
             if (!in_array($this->systemCurrencyCode, $this->zeroDecimalCurrencies())) {
                 $payment_amount = $payment_amount / 100;
             }
-            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['id'], ($payment_amount), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($charge));
+            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['id'], ($payment_amount), Labels::getLabel("SUC_Received_Payment", $this->siteLangId), json_encode($charge));
             /* End Recording Payment in DB */
             if (false === MOBILE_APP_API_CALL) {
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($_POST['order_id'])));

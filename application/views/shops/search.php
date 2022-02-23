@@ -22,14 +22,14 @@ if (!empty($allShops)) {
                             </div>
                             <!-- Shop Badge  -->
                             <?php
-                                $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
-                                $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-                                ?>
-                            <!-- Shop Badge  -->    
+                            $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
+                            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                            ?>
+                            <!-- Shop Badge  -->
                             <div class="ftshops_item_head_right">
                                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
-                                    <div class="products__rating"> <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                                    <div class="product-ratings"> <i class="icn"><svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                                             </svg></i> <span class="rate"><?php echo  round($shop['shopRating'], 1); ?><span></span></span>
                                     </div>
                                 <?php } ?>

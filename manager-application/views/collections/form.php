@@ -2,10 +2,14 @@
 $frm->addFormTagAttribute('data-onclear', 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');');
 
 $collectionNameFld = $frm->getField('collection_name');
+$collectionNameFld->developerTags['colWidthValues'] = [null, '6', null, null];
+
 $fld = $frm->getField('blocation_promotion_cost');
 if (null != $fld) {
-    $collectionNameFld->developerTags['colWidthValues'] = [null, '6', null, null];
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+} else{
+    $collectionLayoutTypeFld = $frm->getField('collection_layout_type');
+    $collectionLayoutTypeFld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('collection_for_web');

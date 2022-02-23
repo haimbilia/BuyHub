@@ -9,9 +9,7 @@
     animation-fill-mode: both;
 }
 
-
 /*animation by pawan*/
-
 
 /*@-webkit-keyframes hvr-pop {
     50% {
@@ -96,7 +94,7 @@
 
 #facebox .content .pop-up-title {
     font-weight: 300;
-    color: $body-color;
+    color: $txt-body;
     font-size: 1.5rem;
     text-align: center;
     /*margin-bottom: 20px;*/
@@ -146,11 +144,11 @@
     max-width: 450px;
 }
 
-#facebox .content>p:first-child {
+#facebox .content > p:first-child {
     margin-top: 0;
 }
 
-#facebox .content>p:last-child {
+#facebox .content > p:last-child {
     margin-bottom: 0;
 }
 
@@ -186,18 +184,17 @@
     background: #000;
 }
 
-#facebox .close.close--white {}
+#facebox .close.close--white {
+}
 
 #facebox .close.close--white:before,
 #facebox .close.close--white:after {
     background: #ffffff;
 }
 
-
 /* #facebox .content.faceboxFixed {
     position: fixed;
 } */
-
 
 /*
 #facebox .close:hover{animation: spin180 0.4s;-webkit-animation: spin180 0.4s;}
@@ -228,7 +225,7 @@
 }
 
 #facebox .close:hover img {
-    opacity: 1.0;
+    opacity: 1;
 }
 
 #facebox .loading {

@@ -112,7 +112,7 @@ class Common
         /* $frm->addSelectBox('', 'category', $categoriesArr, '', array(), Labels::getLabel('LBL_All', CommonHelper::getLangId()) ); */
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'category');
-        $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId()));
+       /*  $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId())); */
         return $frm;
     }
 
@@ -192,8 +192,8 @@ class Common
         $frm = new Form('frmNewsLetter');
         $frm->setRequiredStarWith('');
         $fld1 = $frm->addEmailField('', 'email');
-        $fld2 = $frm->addSubmitButton('', 'btnSubmit', Labels::getLabel('LBL_Subscribe', $langId));
-        $fld1->attachField($fld2);
+        //$fld2 = $frm->addSubmitButton('', 'btnSubmit', Labels::getLabel('LBL_Subscribe', $langId));
+        //$fld1->attachField($fld2);
         $frm->setJsErrorDisplay('afterfield');
         return $frm;
     }

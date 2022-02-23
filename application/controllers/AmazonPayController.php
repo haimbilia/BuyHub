@@ -88,13 +88,13 @@ class AmazonPayController extends PaymentController
     public function get_details($orderId)
     {
         if (strtolower($_SERVER['REQUEST_METHOD']) != 'post') {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
         $postedData = FatApp::getPostedData();
         if (!isset($postedData['orderReferenceId']) && !isset($postedData['addressConsentToken'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         } elseif (strlen($postedData['orderReferenceId']) <= 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }        
         $this->paymentInitiated($orderId);
         $config = array(
@@ -135,19 +135,19 @@ class AmazonPayController extends PaymentController
             }
             FatUtility::dieJsonError($response->toJson());
         } else {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
     }
     public function doPayment($orderId)
     {
         if (strtolower($_SERVER['REQUEST_METHOD']) != 'post') {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
         $postedData = FatApp::getPostedData();
         if (!isset($postedData['amazon_order_reference_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         } elseif (strlen($postedData['amazon_order_reference_id']) <= 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_POST_REQUEST', $this->siteLangId));
         }
 
         $config = array(
@@ -202,7 +202,7 @@ class AmazonPayController extends PaymentController
                         $responsearray['close'] = json_decode($response->toJson());
                         if ($client->success) {
                             /* Recording Payment in DB */
-                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $postedData['amazon_order_reference_id'], $paymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($responsearray));
+                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $postedData['amazon_order_reference_id'], $paymentAmount, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($responsearray));
                             /* End Recording Payment in DB */
                         }
                         if ($client->success) {
@@ -213,7 +213,7 @@ class AmazonPayController extends PaymentController
             }
             FatUtility::dieJsonError($responsearray);
         } else {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
     }
 

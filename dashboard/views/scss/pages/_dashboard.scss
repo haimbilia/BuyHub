@@ -594,7 +594,7 @@
         }
         &-title {
             h2 {
-                color: $body-color;
+                color: $txt-body;
                 font-size: 1.7rem;
                 font-weight: 500;
                 display: inline-flex;
@@ -625,7 +625,7 @@
             }
             a {
                 font-size: 1.125rem;
-                color: $body-color;
+                color: $txt-body;
                 display: block;
                 padding: 10px 30px;
                 line-height: 1;
@@ -718,7 +718,7 @@
                 font-weight: normal;
             }
             .msg__detail {
-                color: lighten($body-color, 50%);
+                color: lighten($txt-body, 50%);
             }
         }
     }
@@ -742,7 +742,7 @@
         color: $txt-gray;
     }
     .msg__title {
-        color: $body-color;
+        color: $txt-body;
         font-weight: 500;
         display: block;
         margin-bottom: 0;
@@ -775,7 +775,7 @@
     }
     .profile__desc {
         line-height: 1.5;
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         font-size: 0.8125rem;
     }
     .profile__pic {
@@ -819,7 +819,7 @@
         a {
             display: block;
             padding: 8px;
-            color: $body-color;
+            color: $txt-body;
             font-size: 0.9em;
             border-bottom: $border;
         }
@@ -1226,7 +1226,7 @@
 
 .results-side {
     font-size: 1em;
-    color: $body-color;
+    color: $txt-body;
     .newly-added {
         font-size: 2.5rem;
         line-height: 1;
@@ -1254,7 +1254,7 @@
             border-bottom: $border;
             font-size: 0.9em;
             > a {
-                color: $body-color;
+                color: $txt-body;
                 padding: 10px;
                 display: block;
             }
@@ -1364,7 +1364,7 @@ input.sp-input {
         margin-bottom: 1rem;
         p {
             font-size: 0.88rem;
-            color: lighten($body-color, 20%);
+            color: lighten($txt-body, 20%);
         }
     }
 }
@@ -1417,10 +1417,10 @@ input.sp-input {
                 left: 8px;
                 top: 10px;
                 border-radius: 50%;
-                background: $body-color;
+                background: $txt-body;
             }*/
             strong {
-                color: $body-color;
+                color: $txt-body;
                 font-size: 0.85rem;
                 font-weight: 500;
                 margin-bottom: 0.5rem;
@@ -1443,7 +1443,7 @@ input.sp-input {
         height: 100%;
         .title {
             text-transform: uppercase;
-            color: $body-color;
+            color: $txt-body;
             font-weight: 500;
             display: block;
             margin-bottom: 0.3rem;
@@ -1547,7 +1547,7 @@ input.sp-input {
         align-items: center;
         a {
             flex: 1;
-            color: $body-color;
+            color: $txt-body;
             text-align: center;
             padding: 0.6rem 1rem;
             display: block;
@@ -1585,7 +1585,7 @@ input.sp-input {
         font-weight: 500;
         font-size: 0.9rem;
         line-height: 1.5;
-        color: $body-color;
+        color: $txt-body;
     }
     .tag {
         margin: 0 5px;

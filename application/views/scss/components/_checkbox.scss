@@ -63,7 +63,6 @@
     transition: all 0.15s ease-out 0s;
     border: $border;
     background: #fff;
-    color: #fff;
     cursor: pointer;
     display: inline-block;
     margin-#{$end-direction}: 0.5rem;
@@ -71,14 +70,16 @@
     outline: none;
     position: relative;
     z-index: 1;
-    border-radius: $radius2;
+    border-radius: 1px;
     vertical-align: middle;
 }
 
 .checkbox input:checked,
 .radio input:checked {
-    background: $brand-color;
-    color: $brand-color-inverse;
+    // background: $brand-color;
+    // color: $brand-color-inverse;
+    background: #000;
+    color: #fff;
 }
 
 .checkbox input:checked::before,
@@ -86,7 +87,7 @@
     height: 9px;
     width: 6px;
     position: absolute;
-    content: '';
+    content: "";
     display: inline-block;
     font-size: 1rem;
     text-align: center;
@@ -101,10 +102,10 @@
 
 .checkbox input:checked::after,
 .radio input:checked::after {
-    animation: click-wave 0.65s;
-    background: $brand-color;
-    color: $brand-color-inverse;
-    content: '';
+    //animation: click-wave 0.65s;
+    background: #000;
+    color: #fff;
+    content: "";
     display: block;
     position: relative;
     z-index: 100;
@@ -112,7 +113,7 @@
 
 .checkbox input:checked,
 .radio input:checked {
-    border-color: $brand-color;
+    border-color: #000;
 }
 
 .radio input {
@@ -122,7 +123,6 @@
 .radio input::after {
     border-radius: 50%;
 }
-
 
 /*toggles*/
 
@@ -139,7 +139,7 @@
     display: inline-block;
     vertical-align: top;
     position: relative;
-    color: lighten($body-color, 50%);
+    color: lighten($txt-body, 50%);
     font-size: 0.8em;
 }
 
@@ -185,13 +185,13 @@
     position: absolute;
     #{$start-direction}: 4px;
     top: 3px;
-    transition: all ease .3s;
+    transition: all ease 0.3s;
 }
 
 .switch-button.is--active:after {
     #{$start-direction}: auto;
     #{$end-direction}: 4px;
-    transition: all ease .3s;
+    transition: all ease 0.3s;
 }
 
 .switch-links a.is--active {

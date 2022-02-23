@@ -43,7 +43,7 @@ class CollectionsController extends MyAppController
         $collection_id = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
 
         if ($collection_id < 1) {
-            $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -357,12 +357,12 @@ class CollectionsController extends MyAppController
                     break;
                 default:            
                     if (true === MOBILE_APP_API_CALL) {
-                        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_COLLECTION', $this->siteLangId));
+                        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLLECTION', $this->siteLangId));
                     }
                     break;
             }
         } else if (true === MOBILE_APP_API_CALL) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_COLLECTION', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLLECTION', $this->siteLangId));
         }
 
         $this->set('collection', $collection);

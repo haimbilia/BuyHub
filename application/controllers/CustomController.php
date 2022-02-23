@@ -5,7 +5,7 @@ class CustomController extends MyAppController
     public function contactUs()
     {
         $contactFrm = $this->contactUsForm();
-
+        $contactFrm->addSecurityToken();
         $termsAndConditionsLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
@@ -36,8 +36,8 @@ class CustomController extends MyAppController
     public function contactSubmit()
     {
         $frm = $this->contactUsForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        
         if (false === $post) {
             $message = $frm->getValidationErrors();
             if (true === MOBILE_APP_API_CALL) {
@@ -46,9 +46,10 @@ class CustomController extends MyAppController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
-
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
-            $message = Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId);
+            $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -65,17 +66,17 @@ class CustomController extends MyAppController
 
             $email = new EmailHandler();
             if (!$email->sendContactFormEmail($emailId, $this->siteLangId, $post)) {
-                $message = Labels::getLabel('MSG_email_not_sent_server_issue', $this->siteLangId);
+                $message = Labels::getLabel('ERR_EMAIL_NOT_SENT_SERVER_ISSUE', $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
             } else {
-                Message::addMessage(Labels::getLabel('MSG_your_message_sent_successfully', $this->siteLangId));
+                Message::addMessage(Labels::getLabel('SUC_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
             }
 
             if (true === MOBILE_APP_API_CALL) {
-                $this->set('msg', Labels::getLabel('MSG_your_message_sent_successfully', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
                 $this->_template->render();
             }
 
@@ -416,13 +417,13 @@ class CustomController extends MyAppController
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
 
-                $nodes[] = array('title' => Labels::getLabel('LBL_Faq', $this->siteLangId), 'href' => UrlHelper::generateUrl('custom', 'Faq'));
+                $nodes[] = array('title' => Labels::getLabel('MSG_FAQ', $this->siteLangId), 'href' => UrlHelper::generateUrl('custom', 'Faq'));
                 $nodes[] = array('title' => $records['faqcat_name']);
 
                 break;
 
             case 'faq':
-                $nodes[] = array('title' => Labels::getLabel('LBL_Faq', $this->siteLangId), 'href' => UrlHelper::generateUrl('custom', 'Faq'));
+                $nodes[] = array('title' => Labels::getLabel('MSG_FAQ', $this->siteLangId), 'href' => UrlHelper::generateUrl('custom', 'Faq'));
                 break;
 
             default:
@@ -434,7 +435,7 @@ class CustomController extends MyAppController
 
     public function paymentFailed()
     {
-        $textMessage = sprintf(Labels::getLabel('MSG_customer_failure_order', $this->siteLangId), UrlHelper::generateUrl('custom', 'contactUs'));
+        $textMessage = sprintf(Labels::getLabel('MSG_CUSTOMER_FAILURE_ORDER', $this->siteLangId), UrlHelper::generateUrl('custom', 'contactUs'));
         $this->set('textMessage', $textMessage);
         if (!FatApp::getConfig('CONF_MAINTAIN_CART_ON_PAYMENT_FAILURE', FatUtility::VAR_INT, applicationConstants::NO) && isset($_SESSION['cart_order_id']) && $_SESSION['cart_order_id'] != '') {
             $cartOrderId = $_SESSION['cart_order_id'];
@@ -521,7 +522,7 @@ class CustomController extends MyAppController
         $user = [];
         if ($orderInfo['order_user_id'] > 0) {
             if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != UserAuthentication::getLoggedUserId(true)) {
-                $message = Labels::getLabel("LBL_INVALID_ORDER", $this->siteLangId);
+                $message = Labels::getLabel("ERR_INVALID_ORDER", $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     LibHelper::dieJsonError(current($message));
                 }
@@ -587,19 +588,19 @@ class CustomController extends MyAppController
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
                 '{account}' => '<a href="' . UrlHelper::generateUrl('seller') . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '" class="link">' . Labels::getLabel('MSG_My_Subscription', $this->siteLangId) . '</a>',
+                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
             );
-            $textMessage = Labels::getLabel('MSG_subscription_success_order_{account}_{subscription}', $this->siteLangId);
+            $textMessage = Labels::getLabel('MSG_SUBSCRIPTION_SUCCESS_ORDER_{account}_{subscription}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Credits', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_ACCOUNT', $this->siteLangId) . '</a>',
+                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_CREDITS', $this->siteLangId) . '</a>',
             );
-            $textMessage = Labels::getLabel('MSG_wallet_success_order_{account}_{credits}', $this->siteLangId);
+            $textMessage = Labels::getLabel('MSG_WALLET_SUCCESS_ORDER_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } else {
-            $message = Labels::getLabel('MSG_INVALID_ORDER_TYPE', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_ORDER_TYPE', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
@@ -607,7 +608,7 @@ class CustomController extends MyAppController
         }
 
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            $textMessage = str_replace('{contactus}', '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '" class="link">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>', Labels::getLabel('MSG_guest_success_order_{contactus}', $this->siteLangId));
+            $textMessage = str_replace('{contactus}', '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '" class="link">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>', Labels::getLabel('MSG_GUEST_SUCCESS_ORDER_{contactus}', $this->siteLangId));
         }
 
         if (UserAuthentication::isGuestUserLogged()) {
@@ -725,7 +726,7 @@ class CustomController extends MyAppController
         //echo $sharingUrl; die();
 
         if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE")) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Refferal_module_no_longer_active", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_REFFERAL_MODULE_NO_LONGER_ACTIVE", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $userSrchObj = User::getSearchObject();
@@ -737,7 +738,7 @@ class CustomController extends MyAppController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row || $userReferralCode == '' || $row['user_referral_code'] != $userReferralCode || $sharingUrl == '') {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Referral_code", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_REFERRAL_CODE", $this->siteLangId));
         }
 
         /* NOT HANDLED:, if user entered referral url with referral code and any abc string, then still that computer system will save the referral code and upon signing up will credit points to referral user as per the logic implemented in application. */
@@ -758,7 +759,7 @@ class CustomController extends MyAppController
     private function getSearchFaqForm()
     {
         $frm = new Form('frmSearchFaqs');
-        $frm->addTextbox(Labels::getLabel('LBL_Enter_your_question', $this->siteLangId), 'question');
+        $frm->addTextbox(Labels::getLabel('FRM_ENTER_YOUR_QUESTION', $this->siteLangId), 'question');
         $frm->addSubmitButton('', 'btn_submit', '');
         return $frm;
     }
@@ -773,20 +774,20 @@ class CustomController extends MyAppController
     private function contactUsForm()
     {
         $frm = new Form('frmContact');
-        $frm->addRequiredField(Labels::getLabel('LBL_Your_Name', $this->siteLangId), 'name', '');
-        $frm->addEmailField(Labels::getLabel('LBL_Your_Email', $this->siteLangId), 'email', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_YOUR_NAME', $this->siteLangId), 'name', '');
+        $frm->addEmailField(Labels::getLabel('FRM_YOUR_EMAIL', $this->siteLangId), 'email', '');
 
         $frm->addHiddenField('', 'phone_dcode');
-        $fld_phn = $frm->addRequiredField(Labels::getLabel('LBL_Your_Phone', $this->siteLangId), 'phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $fld_phn = $frm->addRequiredField(Labels::getLabel('FRM_YOUR_PHONE', $this->siteLangId), 'phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $fld_phn->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
+        $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
 
-        $frm->addTextArea(Labels::getLabel('LBL_Your_Message', $this->siteLangId), 'message', '')->requirements()->setRequired();
-
+        $frm->addTextArea(Labels::getLabel('FRM_YOUR_MESSAGE', $this->siteLangId), 'message', '')->requirements()->setRequired();
+        
         CommonHelper::addCaptchaField($frm);
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Terms_Condition_And_Privacy_Policy_is_mandatory.', $this->siteLangId));
+        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_TERMS_CONDITION_AND_PRIVACY_POLICY_IS_MANDATORY.', $this->siteLangId));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
@@ -860,7 +861,7 @@ class CustomController extends MyAppController
     public function deleteErrorLogFiles($hoursBefore = '4')
     {
         if (!ImportexportCommon::deleteErrorLogFiles($hoursBefore)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_hours', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_HOURS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
     }

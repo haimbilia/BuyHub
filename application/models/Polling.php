@@ -58,9 +58,9 @@ class Polling extends MyAppModel
         }
 
         return array(
-        static::POLLING_TYPE_PRODUCTS => Labels::getLabel('LBL_Products', $langId),
-        static::POLLING_TYPE_CATEGORY => Labels::getLabel('LBL_Category', $langId),
-        static::POLLING_TYPE_GENERIC => Labels::getLabel('LBL_Generic', $langId),
+        static::POLLING_TYPE_PRODUCTS => Labels::getLabel('LBL_PRODUCTS', $langId),
+        static::POLLING_TYPE_CATEGORY => Labels::getLabel('LBL_CATEGORY', $langId),
+        static::POLLING_TYPE_GENERIC => Labels::getLabel('LBL_GENERIC', $langId),
         );
     }
 
@@ -72,9 +72,9 @@ class Polling extends MyAppModel
         }
 
         return array(
-        static::RESPONSE_TYPE_YES => Labels::getLabel('LBL_Yes', $langId),
-        static::RESPONSE_TYPE_NO => Labels::getLabel('LBL_No', $langId),
-        static::RESPONSE_TYPE_MAY_BE => Labels::getLabel('LBL_May_Be', $langId),
+        static::RESPONSE_TYPE_YES => Labels::getLabel('LBL_YES', $langId),
+        static::RESPONSE_TYPE_NO => Labels::getLabel('LBL_NO', $langId),
+        static::RESPONSE_TYPE_MAY_BE => Labels::getLabel('LBL_MAY_BE', $langId),
         );
     }
 
@@ -109,7 +109,7 @@ class Polling extends MyAppModel
         $polling_id = FatUtility::int($polling_id);
         $prodcat_id = FatUtility::int($prodcat_id);
         if (!$polling_id || !$prodcat_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_TBL_POLLING_TO_CATEGORY);
@@ -130,7 +130,7 @@ class Polling extends MyAppModel
         $polling_id = FatUtility::int($polling_id);
         $prodcat_id = FatUtility::int($prodcat_id);
         if (!$polling_id || !$prodcat_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_TBL_POLLING_TO_CATEGORY, array('smt' => 'ptc_polling_id = ? AND ptc_prodcat_id = ?', 'vals' => array($polling_id, $prodcat_id) ))) {
@@ -145,7 +145,7 @@ class Polling extends MyAppModel
         $polling_id = FatUtility::int($polling_id);
         $product_id = FatUtility::int($product_id);
         if (!$polling_id || !$product_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_TBL_POLLING_TO_PRODUCTS);
@@ -166,7 +166,7 @@ class Polling extends MyAppModel
         $polling_id = FatUtility::int($polling_id);
         $product_id = FatUtility::int($product_id);
         if (!$polling_id || !$product_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_TBL_POLLING_TO_PRODUCTS, array('smt' => 'ptp_polling_id = ? AND ptp_product_id = ?', 'vals' => array($polling_id, $product_id) ))) {

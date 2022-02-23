@@ -12,7 +12,7 @@ foreach ($paymentMethods as $key => $val) {
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="section-head  section--head--center">
-                    <div class="section__heading">
+                    <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_ADD_MONEY_TO_WALLET', $siteLangId); ?></h2>
                     </div>
                 </div>
@@ -29,16 +29,15 @@ foreach ($paymentMethods as $key => $val) {
                         <div class="col-md-12">
                             <section id="payment" class="section-checkout">
                                 <div class="payment-area">
-                                    <ul class="nav nav-payments <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
+                                    <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
                                         <?php foreach ($paymentMethods as $key => $val) {
                                             $pmethodCode = $val['plugin_code'];
                                             $pmethodId = $val['plugin_id'];
                                             $pmethodName = $val['plugin_name']; ?>
-                                            <li class="nav-item">
-                                                <a class="nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
-                                                    <div class="payment-box">
-                                                        <span><?php echo $pmethodName; ?></span>
-                                                    </div>
+                                            <li class="payments-nav-item">
+                                                <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                                    <?php echo $pmethodName; ?>
+
                                                 </a>
                                             </li>
                                         <?php

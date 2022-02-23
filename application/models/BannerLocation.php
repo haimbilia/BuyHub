@@ -177,7 +177,7 @@ class BannerLocation extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -204,7 +204,7 @@ class BannerLocation extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

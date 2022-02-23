@@ -51,7 +51,7 @@ body {
 }
 
 .cvv {
-    float: left
+    float: left;
 }
 
 .ccExpiryMonth,
@@ -91,7 +91,7 @@ body {
     color: #333;
 }
 
-@media only screen and (max-width:768px) {
+@media only screen and (max-width: 768px) {
     .payment-page {
         height: auto;
     }
@@ -113,7 +113,7 @@ body {
     padding: 30px 50px;
 }
 
-.make-payment-wrapper .row>.column {
+.make-payment-wrapper .row > .column {
     -webkit-padding-end: 30px;
     -moz-padding-end: 30px;
     padding-#{$end-direction}: 30px;
@@ -226,12 +226,12 @@ body {
 
 .form--payment .caption-wraper {
     .field_label {
-        font-size: .9rem;
+        font-size: 0.9rem;
         font-weight: 600;
         letter-spacing: 0.3px;
         margin: 0;
         display: block;
-        color: $body-color;
+        color: $txt-body;
         @include media-breakpoint-down(sm) {
             font-size: 1rem;
         }
@@ -256,7 +256,7 @@ body {
     // color: #8b90a6;
     outline: none;
     @include media-breakpoint-down(sm) {
-        font-size: .9rem;
+        font-size: 0.9rem;
     }
     &:focus {
         outline: none;
@@ -287,7 +287,7 @@ body {
     border-radius: 0px;
     outline: none;
     @include media-breakpoint-down(sm) {
-        font-size: .9rem;
+        font-size: 0.9rem;
     }
     &:focus {
         outline: none;
@@ -355,7 +355,7 @@ body {
     }
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
     .payable-amount {
         display: flex;
         flex-direction: column;

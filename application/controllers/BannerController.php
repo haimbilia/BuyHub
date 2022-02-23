@@ -10,7 +10,7 @@ class BannerController extends MyAppController
     {
         $bannerId = FatUtility::int($bannerId);
         if (1 > $bannerId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
         $srch = new BannerSearch($this->siteLangId, true);
@@ -24,7 +24,7 @@ class BannerController extends MyAppController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
@@ -169,6 +169,7 @@ class BannerController extends MyAppController
         AttachedFile::displayImage($image_name, $w, $h, 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
     }
 
+    
     public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
@@ -264,7 +265,7 @@ class BannerController extends MyAppController
     {
         $frameId = FatUtility::int($frameId);
         if (1 > $frameId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $this->set('frameId', $frameId);

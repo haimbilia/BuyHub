@@ -503,8 +503,11 @@ class SlidesController extends ListingBaseController
         }
 
         $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, false);
+        $slideDimensions = ImageDimension::getSlideData();    
+
         $this->set('image', $slideImage);
         $this->set('recordId', $recordId);
+        $this->set('slideDimensions',$slideDimensions);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
         $this->set('langId', $langId);
@@ -528,8 +531,8 @@ class SlidesController extends ListingBaseController
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_HOME_PAGE_BANNER);
-        $frm->addHiddenField('', 'min_width', 1350);
-        $frm->addHiddenField('', 'min_height', 405);
+        $frm->addHiddenField('', 'min_width', 2000);
+        $frm->addHiddenField('', 'min_height', 666);
         $frm->addHTML('', 'slide_image', '');
         return $frm;
     }

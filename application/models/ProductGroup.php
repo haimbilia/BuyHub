@@ -40,7 +40,7 @@ class ProductGroup extends MyAppModel
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $selprod_id = FatUtility::int($selprod_id);
         if (!$prodgroup_id || !$selprod_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             ;
             return false;
         }
@@ -74,7 +74,7 @@ class ProductGroup extends MyAppModel
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $selprod_id = FatUtility::int($selprod_id);
         if ($prodgroup_id <= 0 || $selprod_id <= 0) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             ;
             return false;
         }
@@ -92,7 +92,7 @@ class ProductGroup extends MyAppModel
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $selprod_id = FatUtility::int($selprod_id);
         if ($prodgroup_id <= 0 || $selprod_id <= 0) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             ;
             return false;
         }

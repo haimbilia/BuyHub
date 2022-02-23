@@ -49,7 +49,7 @@ class CategoryController extends MyAppController
 
         if (false == $category) {
             if (true === MOBILE_APP_API_CALL) {
-                $message = Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId);
+                $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
             FatUtility::exitWithErrorCode(404);
@@ -88,9 +88,9 @@ class CategoryController extends MyAppController
 
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         $moreSellersArr = [];
-        if($get['vtype'] == 'map'){            
-            if(0 < count($products)){           
-                $selprodCodes = array_column($products, 'selprod_code');               
+        if ($get['vtype'] == 'map') {
+            if (0 < count($products)) {
+                $selprodCodes = array_column($products, 'selprod_code');
                 $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
@@ -167,6 +167,11 @@ class CategoryController extends MyAppController
                 $h = 100;
                 AttachedFile::displayImage($image_name, $w, $h);
                 break;
+            case 'l':
+                $w = 400;
+                $h = 400;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
             case 'COLLECTION_PAGE':
                 $w = 45;
                 $h = 41;
@@ -203,6 +208,33 @@ class CategoryController extends MyAppController
         }
     }
 
+
+    public function thumb($catId, $langId = 0, $sizeType = '')
+    {
+        $catId = FatUtility::int($catId);
+        $langId = FatUtility::int($langId);
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $catId, 0, $langId);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+
+        switch (strtoupper($sizeType)) {
+            case 'ICON':
+                $w = 300;
+                $h = 300;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'THUMB':
+                $w = 60;
+                $h = 60;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            default:
+                AttachedFile::displayOriginalImage($image_name);
+                break;
+        }
+    }
+
+
     public function sellerBanner($shopId, $prodCatId, $langId = 0, $sizeType = '')
     {
         $shopId = FatUtility::int($shopId);
@@ -229,7 +261,7 @@ class CategoryController extends MyAppController
         }
     }
 
-    public function banner($prodCatId, $langId = 0, $sizeType = '',$afileId = 0, $screen = 0, $displayUniversalImage = true)
+    public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)
     {
         $default_image = 'product_default_image.jpg';
         $prodCatId = FatUtility::int($prodCatId);
@@ -246,7 +278,7 @@ class CategoryController extends MyAppController
 
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 250;
@@ -368,10 +400,10 @@ class CategoryController extends MyAppController
         $categoryName = $post['categoryName'];
         $categoryId = FatUtility::int($post['categoryId']);
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('LBL_Lang_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANG_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (1 > $categoryId) {
-            trigger_error(Labels::getLabel('LBL_Brand_Id_not_Specified', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_BRAND_ID_NOT_SPECIFIED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = productCategory::getSearchObject($langId);
         $srch->addOrder('m.prodcat_active', 'DESC');
@@ -382,7 +414,7 @@ class CategoryController extends MyAppController
         $rs = $srch->getResultSet();
         $records = $srch->recordCount();
         if ($records > 0) {
-            FatUtility::dieJsonError(sprintf(Labels::getLabel('LBL_%s_not_available', $this->siteLangId), $categoryName));
+            FatUtility::dieJsonError(sprintf(Labels::getLabel('ERR_%S_NOT_AVAILABLE', $this->siteLangId), $categoryName));
         }
         FatUtility::dieJsonSuccess(array());
     }

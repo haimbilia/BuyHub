@@ -4,7 +4,6 @@
 </script>
 
 <button class="order-summary-toggle" data-trigger="order-summary">
-
     <span class="order-summary-toggle__inner">
         <span class="order-summary-toggle__icon-wrapper me-2">
             <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__icon">
@@ -24,26 +23,22 @@
             <span class="total-recap__final-price" id="netAmountSummary"></span>
         </span>
     </span>
-
 </button>
 
-<section class="section" data-content="">
+<section class="" data-content="">
     <div class="container">
         <div class="checkout-page">
-            <main class="main checkout-content-js"> </main>
-            <aside class="sidebar" data-close-on-click-outside=" ">
-                <div class="sidebar__content">
-                    <div id="order-summary" class="order-summary summary-listing-js">
+            <main class="checkout-page_main checkout-content-js"> </main>
+            <aside class="checkout-page_aside sidebar" data-close-on-click-outside="">
 
-                    </div>
+                <div id="order-summary" class="order-summary summary-listing-js">
                     <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
                 </div>
+
             </aside>
         </div>
     </div>
 </section>
-
-
 <input id="hasAddress" class="d-none" value="<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1 ?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

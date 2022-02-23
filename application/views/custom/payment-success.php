@@ -206,7 +206,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-7">
                                                 <div class="bg-gray h-100 rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart list-cart-page">
+                                                    <ul class="list-cart">
                                                         <?php
                                                         $shippingCharges = $subTotal = 0;
                                                         $selProdTotalSpecialPrice = 0;
@@ -220,29 +220,28 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                     $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
                                                                 }
                                                         ?>
-                                                                <li>
-                                                                    <div class="cell cell_product">
+                                                                <li class="list-cart-item">
+                                                                    <div class="block-img">
                                                                         <div class="product-profile">
-                                                                            <div class="product-profile__thumbnail">
+                                                                            <div class="product-profile-thumbnail">
                                                                                 <a href="<?php echo $productUrl; ?>">
                                                                                     <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>">
                                                                                 </a>
                                                                                 <span class="product-qty"><?php echo $product['op_qty']; ?></span>
                                                                             </div>
-                                                                            <div class="product-profile__data">
-                                                                                <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
+                                                                            <div class="product-profile-data">
+                                                                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                                                                 <div class="options">
                                                                                     <p class=""> <?php echo $product['op_selprod_options']; ?></p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="cell cell_price">
-                                                                        <div class="product-price">
+                                                                    <div class="block-detail">
+                                                                        <div class="products-price">
                                                                             <?php
                                                                             $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
                                                                             echo CommonHelper::displayMoneyFormat($txnAmount);
-
                                                                             $shippingCharges += $product['op_actual_shipping_charges'];
                                                                             ?>
                                                                         </div>
@@ -251,10 +250,10 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                             <?php }
                                                         } else {
                                                             foreach ($products as $subscription) { ?>
-                                                                <li><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
-                                                                <li><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
-                                                                <li><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
-                                                                <li><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
+                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
+                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
+                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
+                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
                                                         <?php }
                                                         } ?>
                                                     </ul>
@@ -315,16 +314,16 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_rounding_off']); ?></span>
                                                                 </li>
                                                             <?php } ?>
-                                                            <li class="hightlighted">
+                                                            <li class="highlighted">
                                                                 <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
                                                             </li>
                                                             <?php
                                                             $totalSaving =  $selProdTotalSpecialPrice + $orderInfo['order_discount_total'] + $orderInfo['order_volume_discount_total'];
                                                             if (0 < $totalSaving) { ?>
-                                                                <li class="text-success">
+                                                                <li class="">
                                                                     <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
+                                                                    <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
                                                                 </li>
                                                             <?php } ?>
 
