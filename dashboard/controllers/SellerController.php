@@ -2207,28 +2207,25 @@ class SellerController extends SellerBaseController
             $lang_id = array_key_first($languages);
         }
 
-
-        $shop_id = 0;
-        $stateId = 0;
+        $shop_id = 0;       
         $bannerAttachments = array();
         $logoAttachments = array();
         $backgroundAttachments = array();
 
         if (!false == $shopDetails) {
             $shop_id = $shopDetails['shop_id'];
-            $stateId = $shopDetails['shop_state_id'];
 
             if ($imageType == 'logo') {
-                $logoAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
-                $this->set('images', $logoAttachments);
+                $logoAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
+                $this->set('image', $logoAttachments);
                 $this->set('imageFunction', 'shopLogo');
             } elseif ($imageType == 'banner') {
-                $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false, $slide_screen);
-                $this->set('images', $bannerAttachments);
+                $bannerAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false, $slide_screen);
+                $this->set('image', $bannerAttachments);
                 $this->set('imageFunction', 'shopBanner');
             } else {
-                $backgroundAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
-                $this->set('images', $backgroundAttachments);
+                $backgroundAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
+                $this->set('image', $backgroundAttachments);
                 $this->set('imageFunction', 'shopBackgroundImage');
             }
         }
@@ -2236,6 +2233,7 @@ class SellerController extends SellerBaseController
         $this->set('shopDetails', $shopDetails);
         $this->set('shop_id', $shop_id);
         $this->set('languages', applicationConstants::getAllLanguages());
+        $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
@@ -3834,7 +3832,8 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'shop_logo', array('accept' => 'image/*', 'data-frm' => 'frmShopLogo'));
+        //$frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'shop_logo', array('accept' => 'image/*', 'data-frm' => 'frmShopLogo'));
+        $frm->addHTML('', 'shop_logo', '');
         return $frm;
     }
 
@@ -3876,7 +3875,8 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_BANNER);
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'shop_banner', array('accept' => 'image/*', 'data-frm' => 'frmShopBanner'));
+        // $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'shop_banner', array('accept' => 'image/*', 'data-frm' => 'frmShopBanner'));
+        $frm->addHTML('', 'shop_banner', '');
         return $frm;
     }
 

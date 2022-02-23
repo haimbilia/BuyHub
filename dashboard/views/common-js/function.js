@@ -948,9 +948,21 @@ select2 = function (
     select2Selector.$container.addClass("custom-select2");
 };
 
-loadCropperSkeleton = function () {  
+var autoOpenSideBar = true;
+$(document).on("hidden.bs.modal", "#modalBoxJs", function () {
+    if (autoOpenSideBar) {
+        $.ykmodal.show();
+    }
+});
+
+loadCropperSkeleton = function (reopenSideBarOnClose = true) {  
+    autoOpenSideBar = reopenSideBarOnClose;
     $("#modalBoxJs").remove();
     $("body").append(fcom.getModalBody());
     $("#modalBoxJs").modal("show");
     $.ykmodal.close();
 };
+
+editDropZoneImages = function (obj) {
+    $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
+}

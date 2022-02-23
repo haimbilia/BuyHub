@@ -556,7 +556,7 @@ class PromotionsController extends ListingBaseController
             $srch->joinShops(0, false, false);
             $srch->addCondition('promotion_id', '=', $recordId);
 
-            $srch->addMultipleFields(array('promotion_id', 'promotion_identifier', 'promotion_name', 'promotion_user_id', 'promotion_type', 'promotion_budget', 'promotion_duration', 'promotion_start_date', 'promotion_end_date', 'promotion_start_time', 'promotion_end_time', 'promotion_active', 'promotion_approved', 'ifnull(shop_identifier,shop_name) as promotion_shop', 'banner_url', 'banner_target', 'banner_blocation_id', 'slide_url', 'slide_target', 'promotion_record_id'));
+            $srch->addMultipleFields(array('promotion_id', 'promotion_identifier', 'IFNULL(promotion_name,promotion_identifier) as promotion_name', 'promotion_user_id', 'promotion_type', 'promotion_budget', 'promotion_duration', 'promotion_start_date', 'promotion_end_date', 'promotion_start_time', 'promotion_end_time', 'promotion_active', 'promotion_approved', 'ifnull(shop_identifier,shop_name) as promotion_shop', 'banner_url', 'banner_target', 'banner_blocation_id', 'slide_url', 'slide_target', 'promotion_record_id'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
