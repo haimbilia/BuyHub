@@ -190,11 +190,11 @@ class StripeConnect extends PaymentMethodBase
             if (false === $this->doRequest(self::REQUEST_CREATE_ACCOUNT)) {
                 return false;
             }
-        } 
+        }
 
         return true;
     }
-    
+
     /**
      * requestAccountLinks
      *
@@ -210,7 +210,7 @@ class StripeConnect extends PaymentMethodBase
             'type' => 'account_onboarding',
             'collect' => 'eventually_due'
         ];
-        
+
         $this->resp = $this->doRequest(self::REQUEST_CREATE_ACCOUNT_LINKS, $requestParam);
         if (false === $this->resp) {
             return false;
@@ -423,7 +423,7 @@ class StripeConnect extends PaymentMethodBase
             'default_currency' => $this->systemCurrencyCode,
             'account_token' => $accountToken
         ];
-        
+
         $this->resp = $this->create($data);
         if (false === $this->resp) {
             return false;
@@ -449,7 +449,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return (string)$accountToken;
     }
-    
+
     /**
      * createAccountToken
      *
@@ -597,7 +597,7 @@ class StripeConnect extends PaymentMethodBase
             ],
         ];
     }
-    
+
     /**
      * initialFormSubmitted
      *
@@ -1275,19 +1275,14 @@ class StripeConnect extends PaymentMethodBase
         }
         return true;
     }
-
-    /**
-     * fetchCards
-     *
-     * @return bool
-     */
+    
     public function fetchCards(): bool
     {
-        if (false === $this->loadCustomer()) {
+        if (false === $this->loadSavedCards()) {
             return false;
         }
-        $customerInfo = $this->getResponse()->toArray();
-        $this->resp = (array) $customerInfo['sources']['data'];
+        $cardsInfo = $this->getResponse()->toArray();
+        $this->resp = (array) $cardsInfo['data'];
         return true;
     }
 
@@ -1380,7 +1375,7 @@ class StripeConnect extends PaymentMethodBase
         FatCache::set('stripePayoutDays' . $this->langId, FatUtility::convertToJson($days), '.txt');
         return $days;
     }
-    
+
     /**
      * getOtherPaymentMethods
      *
@@ -1399,7 +1394,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return $paymentMethodsArr;
     }
-    
+
     /**
      * bindCoupon
      *

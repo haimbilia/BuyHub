@@ -11,7 +11,7 @@ $ocrequestDateToFld = $frmSearch->getField('ocrequest_date_to');
 $ocrequestDateToFld->setFieldTagAttribute('class', 'field--calender');
 $ocrequestDateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Date_to', $siteLangId));
 
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
