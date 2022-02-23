@@ -935,7 +935,7 @@ class AccountController extends LoggedUserController
 
         $mode = 'Add';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId);
-        if ($file_row != false  && 0 < $file_row['afile_id'] ) {
+        if ($file_row != false  && 0 < $file_row['afile_id']) {
             $mode = 'Edit';
         }
 
@@ -986,7 +986,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
         $updatedAt = date('Y-m-d H:i:s');
-        $uploadedTime = AttachedFile::setTimeParam($updatedAt);      
+        $uploadedTime = AttachedFile::setTimeParam($updatedAt);
 
         if (isset($_FILES['org_image']['tmp_name'])) {
             $fileHandlerObj = new AttachedFile();
@@ -997,7 +997,7 @@ class AccountController extends LoggedUserController
                 $message = Labels::getLabel($fileHandlerObj->getError(), $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
-        }  
+        }
 
         if (isset($_FILES['cropped_image']['tmp_name'])) {
             $fileHandlerObj = new AttachedFile();

@@ -21,7 +21,10 @@ $(document).on("click", ".resetModalFormJs", function (e) {
         eval(onClear);
     } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
         $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
+    } else {
+        $.ykmodal.close();
     }
+    fcom.removeLoader();
 });
 
 $(document).on("click", ".navTabsJs a", function (e) {

@@ -68,42 +68,42 @@
 @-webkit-keyframes bell-shake {
     1% {
         -webkit-transform: rotateZ(15deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     2% {
         -webkit-transform: rotateZ(-15deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     3% {
         -webkit-transform: rotateZ(20deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     4% {
         -webkit-transform: rotateZ(-20deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     5% {
         -webkit-transform: rotateZ(15deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     6% {
         -webkit-transform: rotateZ(-15deg);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     7% {
         -webkit-transform: rotateZ(0);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
     100% {
         -webkit-transform: rotateZ(0);
-        -webkit-transform-origin: 50% 0%;
+
         transform-origin: 50% 0%;
     }
 }
@@ -170,6 +170,7 @@
 .my-dashboard {
     min-height: 100%;
     background-color: #dae2f4;
+    padding: 2rem 4rem;
     // height: auto;
     //background: $bg-gray;
     // background: url(dashboard/images/retina/bg-dots.svg) no-repeat 0 0;
@@ -195,16 +196,19 @@
         min-height: 100%;
         //height: inherit;
         margin: 0 auto;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: $sidebar-width 1fr;
+        flex-direction: row;
         //overflow: hidden;
-        background-color: $bg-body;
+        // background-color: $bg-body;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: $shadow1;
     }
     .header-dashboard {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        border-top-#{$end-direction}-radius: 4px;
+        padding: 10px 1rem;
+
         @include media-breakpoint-up(lg) {
             padding-left: $content-space;
             padding-right: $content-space;
@@ -221,8 +225,11 @@
         justify-content: space-between;
         align-items: center;
         transition: all 0.3s ease-out;
-        background-color: $bg-white;
-        box-shadow: $shadow-theme;
+        // background-color: $bg-white;
+        // box-shadow: 0 1px 5px 0 rgba(41, 85, 115, 0.21%);
+        //box-shadow: $shadow-theme;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(3px);
 
         .header-icons-group {
             display: flex;
@@ -523,7 +530,7 @@
         // padding-top: 72px;
         transition: all 0.3s ease-out;
         @include media-breakpoint-up(lg) {
-            padding-#{$start-direction}: $sidebar-width;
+            //padding-#{$start-direction}: $sidebar-width;
         }
     }
     .ui-widget.ui-widget-content {
