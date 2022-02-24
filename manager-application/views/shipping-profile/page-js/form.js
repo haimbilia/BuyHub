@@ -360,6 +360,7 @@ $(document).on('keyup', '.continentJs', function () {
         }
     });
 });
+
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
         $('.checkbox_container--js input[type="checkbox"]').each(function (index) {
