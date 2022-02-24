@@ -15,7 +15,7 @@ $(window).on("load", function () {
 
 $(window).scroll(function () {
     var scroll = $(window).scrollTop();
-    if (scroll >= 50) {
+    if (scroll >= 70) {
         $('body').addClass("scrolled");
     } else {
         $('body').removeClass("scrolled");
