@@ -207,7 +207,6 @@ $input-color: #474747;
     }
     input {
         &[type="submit"] {
-
             @include submit;
             &:hover,
             &:focus {

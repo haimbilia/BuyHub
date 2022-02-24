@@ -162,7 +162,10 @@
 .my-dashboard {
     min-height: 100%;
     background-color: #dae2f4;
-    padding: 2rem 4rem;
+    @include media-breakpoint-up(lg) {
+        padding: 2rem 4rem;
+    }
+
     // height: auto;
     //background: $bg-gray;
     // background: url(dashboard/images/retina/bg-dots.svg) no-repeat 0 0;
@@ -188,19 +191,21 @@
         min-height: 100%;
         //height: inherit;
         margin: 0 auto;
-        display: grid;
-        grid-template-columns: $sidebar-width 1fr;
-        flex-direction: row;
         //overflow: hidden;
         // background-color: $bg-body;
         background-color: #fff;
         border-radius: 4px;
         box-shadow: $shadow1;
+        @include media-breakpoint-up(lg) {
+            display: grid;
+            grid-template-columns: $sidebar-width 1fr;
+            flex-direction: row;
+        }
     }
     .header-dashboard {
-        border-top-#{$end-direction}-radius: 4px;
         padding: 10px 1rem;
         @include media-breakpoint-up(lg) {
+            border-top-#{$end-direction}-radius: 4px;
             padding-left: $content-space;
             padding-right: $content-space;
         }
@@ -565,6 +570,7 @@
         flex: 1;
         padding-left: $content-space;
         padding-right: $content-space;
+        padding-top: 1rem;
 
         //min-height: calc(100vh - 100px);
         @include media-breakpoint-down(lg) {
@@ -645,30 +651,6 @@
                     border-color: $brand-color;
                 }
             }
-        }
-    }
-}
-
-.widget-scroll {
-    margin-bottom: 1rem;
-
-    .widget-stats {
-        padding-bottom: 8px;
-        min-height: 166px;
-        @include media-breakpoint-down(sm) {
-            min-height: inherit;
-            margin: 1rem 0;
-            padding: 0 5px;
-        }
-        .icn svg {
-            width: 28px;
-            height: 28px;
-            fill: $brand-color !important;
-        }
-        .card,
-        .box--share {
-            min-height: inherit;
-            //min-height: 188px;
         }
     }
 }

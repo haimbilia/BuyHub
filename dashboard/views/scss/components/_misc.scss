@@ -1115,3 +1115,55 @@ a:hover {
         }
     }
 }
+
+//shipping zone
+.list-zones {
+    &-search {
+        top: 0;
+        margin-bottom: 2rem;
+    }
+    &-head {
+        display: flex;
+        //background-color: $bg-gray;
+        margin: 0;
+        padding: 1rem 0;
+        font-weight: 500;
+        position: relative;
+        //border: $border;
+        border-radius: $radius-common;
+        &-arrow {
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            margin-#{$start-direction}: auto;
+            position: relative;
+        }
+    }
+    .list-states {
+        background: $bg-gray;
+        //padding: 1.5rem;
+        border-radius: $radius-common;
+        padding-#{$start-direction}: 2rem;
+        list-style: none;
+        &-item {
+            // display: flex;
+            // align-items: center;
+            //padding: 0.5rem 0;
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    .out-of-state {
+        position: relative;
+        background-color: transparent;
+        border: none;
+        margin-#{$start-direction}: auto;
+        margin-#{$end-direction}: 1rem;
+        padding-#{$end-direction}: 1.2rem;
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+}

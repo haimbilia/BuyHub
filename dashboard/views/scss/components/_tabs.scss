@@ -3,6 +3,10 @@
     justify-content: flex-start;
     align-items: center;
     border: none;
+    @include media-breakpoint-down(md) {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
     .nav-item {
         + .nav-item {
             padding-#{$start-direction}: 2rem;

@@ -586,7 +586,7 @@
     margin: 0;
     color: $txt-gray;
     @include media-breakpoint-down(sm) {
-        flex-wrap: wrap;
+        //flex-wrap: wrap;
     }
     > li {
         display: inline-block;
