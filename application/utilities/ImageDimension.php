@@ -407,6 +407,8 @@ class ImageDimension extends FatUtility
         }
 
         $arr =  [
+        
+            
             self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 52],
             self::VIEW_THUMB => ['width' => 61, 'height' => 61],
             self::VIEW_LISTING_PAGE => ['width' => 530, 'height' => 530],
@@ -441,9 +443,6 @@ class ImageDimension extends FatUtility
         ];
 
         if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
             return $arr[$sizeType];
         }
 
