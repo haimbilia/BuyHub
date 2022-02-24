@@ -35,14 +35,19 @@ class ImageDimension extends FatUtility
     public const TYPE_REVIEW_IMAGE = 32;
     public const TYPE_BADGE_ICON = 33;
     public const TYPE_BADGE_REQUEST_IMAGE = 34;
-
+    public const TYPE_USER_PROFILE_IMAGE = 35;
+    public const TYPE_CATEGORY_IMAGE = 36;
+    public const TYPE_CATEGORY_ICON = 37;
+    public const TYPE_CATEGORY_THUMB = 38;
+    public const TYPE_CATEGORY_SELLER_BANNER = 39;
+    public const TYPE_CATEGORY_BANNER = 40;
 
 
     public const VIEW_DESKTOP = 'DESKTOP';
     public const VIEW_MOBILE = 'MOBILE';
     public const VIEW_TABLET = 'TABLET';
     public const VIEW_THUMB = 'THUMB';
-
+    public const VIEW_WIDE  = 'WIDE';
     public const VIEW_MINI_THUMB = 'MINITHUMB';
     public const VIEW_MINI = 'MINI';
     public const VIEW_EXTRA_SMALL = 'EXTRA-SMALL';
@@ -64,8 +69,13 @@ class ImageDimension extends FatUtility
     public const VIEW_SHOP = 'SHOP';
     public const VIEW_ICON = 'ICON';
     public const VIEW_LARGE = 'LARGE';
+    public const VIEW_HOME_PAGE_BANNER_TOP_LAYOUT = "TOPLAYOUT";
+    public const VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT = "MIDDLELAYOUT";
+    public const VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT = "BOTTOMLAYOUT";
+    public const VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT = "PRODUCTLAYOUT";
+    public const VIEW_CROPED = "CROPED";
 
-
+    
 
     public static function getData(int $type, $sizeType = ''): array
     {
@@ -76,6 +86,7 @@ class ImageDimension extends FatUtility
         switch ($type) {
             case self::TYPE_SLIDE:
                 $imageDimensions = self::getSlideData($sizeType);
+
                 break;
             case self::TYPE_PRODUCTS:
                 $imageDimensions = self::getProductImageData($sizeType);
@@ -173,11 +184,39 @@ class ImageDimension extends FatUtility
             case self::TYPE_BADGE_REQUEST_IMAGE:
                 $imageDimensions = self::getBadgeRequestImageData($sizeType);
                 break;
+            case self::TYPE_USER_PROFILE_IMAGE:
+                $imageDimensions = self::getUserProfileImageData($sizeType);
+                break;
+            case self::TYPE_BANNER:
+                $imageDimensions = self::getBannerImageData($sizeType);
+                break;
+            case self::TYPE_CATEGORY_IMAGE:
+                $imageDimensions = self::getCategoryImage($sizeType);
+                break;
+            case self::TYPE_CATEGORY_ICON:
+                $imageDimensions = self::getCategoryIcon($sizeType);
+                break;
+            case self::TYPE_CATEGORY_THUMB:
+                $imageDimensions = self::getCategoryThumb($sizeType);
+                break;
+            case self::TYPE_CATEGORY_SELLER_BANNER:
+                $imageDimensions = self::getCategorySellerBanner($sizeType);
+                break;
+            case self::TYPE_CATEGORY_BANNER:
+                $imageDimensions = self::getCategoryBanner($sizeType);
+                break;
         }
-        foreach ($imageDimensions as $key => $val) {
-            $imageDimensions[$key]['aspectRatio'] = "1:1";
-            //$imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val['width'], $val['height']);
+
+
+        if (empty($sizeType)) {
+            foreach ($imageDimensions as $key => $val) {
+                $imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val['width'], $val['height']);
+            }
+        } else {
+
+            $imageDimensions[$sizeType]['aspectRatio'] = self::getAspectRatio($imageDimensions['width'], $imageDimensions['height']);
         }
+
 
 
         return $imageDimensions;
@@ -205,6 +244,7 @@ class ImageDimension extends FatUtility
             }
             return $arr[$sizeType];
         }
+
 
         return $arr;
     }
@@ -314,21 +354,13 @@ class ImageDimension extends FatUtility
             $sizeType = substr($sizeType, 4);
         }
 
-        /* 
-        switch (strtoupper($sizeType)) {
-            case 'TEMP1':
-                $w = 2000;
-                $h = 500;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-           
-        } */
-
-
+      
         $arr =  [
             self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
             self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
             self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
+            self::VIEW_WIDE => ['width' => 1320, 'height' => 320],
 
 
         ];
@@ -788,6 +820,7 @@ class ImageDimension extends FatUtility
 
     public static function getTestimonialImageData(string $sizeType = ''): array
     {
+
         if (substr($sizeType, 0, 4) == 'webp') {
             $sizeType = substr($sizeType, 4);
         }
@@ -799,12 +832,15 @@ class ImageDimension extends FatUtility
 
         ];
 
+
         if (!empty($sizeType)) {
             if (!array_key_exists($sizeType, $arr)) {
                 return $arr[self::VIEW_DEFAULT];
             }
+
             return $arr[$sizeType];
         }
+
 
         return $arr;
     }
@@ -932,6 +968,28 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
+    public static function getUserProfileImageData(string $sizeType = ''): array
+    {
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
+            self::VIEW_CROPED => ['width' => 230, 'height' => 230],
+
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+
+
     public static function getBadgeRequestImageData(string $sizeType = ''): array
     {
         if (substr($sizeType, 0, 4) == 'webp') {
@@ -953,8 +1011,149 @@ class ImageDimension extends FatUtility
     }
 
 
+    public static function getCategoryImage(string $sizeType = ''): array
+    {
 
 
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
+            self::VIEW_LARGE => ['width' => 400, 'height' => 400],
+            self::VIEW_COLLECTION_PAGE => ['width' => 45, 'height' => 41],
+
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+
+    public static function getCategoryIcon(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
+            self::VIEW_COLLECTION_PAGE => ['width' => 48, 'height' => 48],
+
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+    public static function getCategoryThumb(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 60, 'height' => 60],
+            self::VIEW_ICON => ['width' => 300, 'height' => 300],
+
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+    public static function getCategorySellerBanner(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
+            self::VIEW_ICON => ['width' => 1320, 'height' => 320],
+
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+
+    public static function getCategoryBanner(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
+            self::VIEW_MEDIUM => ['width' => 600, 'height' => 150],
+            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
+            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+
+
+
+    public static function getBannerImageData(string $sizeType = ''): array
+    {
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+
+        $arr =  [
+
+            self::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT => ['width' => 1350, 'height' => 405],
+            self::VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT => ['width' => 600, 'height' => 338],
+            self::VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT => ['width' => 600, 'height' => 198],
+            self::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT => ['width' => 600, 'height' => 198],
+            self::VIEW_THUMB => ['width' => 200, 'height' => 50],
+            self::VIEW_MINI_THUMB => ['width' => 52, 'height' => 42],
+
+        ];
+
+
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
 
     public static function getBannerData(string $sizeType = '', $layout): array
     {

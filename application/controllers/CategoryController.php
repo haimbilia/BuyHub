@@ -150,8 +150,8 @@ class CategoryController extends MyAppController
     {
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
-        if ($afile_id > 0) {
-            $res = AttachedFile::getAttributesById($afile_id);
+        if ($afileId > 0) {
+            $res = AttachedFile::getAttributesById($afileId);
             if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_CATEGORY_IMAGE) {
                 $file_row = $res;
             }
@@ -161,26 +161,18 @@ class CategoryController extends MyAppController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'l':
-                $w = 400;
-                $h = 400;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'COLLECTION_PAGE':
-                $w = 45;
-                $h = 41;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_IMAGE, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+
+
+      
     }
 
     public function icon($catId, $langId = 0, $sizeType = '')
@@ -190,22 +182,15 @@ class CategoryController extends MyAppController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, $sizeType);
 
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'COLLECTION_PAGE':
-                $w = 48;
-                $h = 48;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+
+       
     }
 
 
@@ -216,22 +201,14 @@ class CategoryController extends MyAppController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB, $sizeType);
 
-        switch (strtoupper($sizeType)) {
-            case 'ICON':
-                $w = 300;
-                $h = 300;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'THUMB':
-                $w = 60;
-                $h = 60;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+       
     }
 
 
@@ -244,21 +221,17 @@ class CategoryController extends MyAppController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shopId, $prodCatId, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 250;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'WIDE':
-                $w = 1320;
-                $h = 320;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_SELLER_BANNER, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+
+
+       
     }
 
     public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)
@@ -279,36 +252,16 @@ class CategoryController extends MyAppController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 250;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            case 'MEDIUM':
-                $w = 600;
-                $h = 150;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            case 'MOBILE':
-                $w = 640;
-                $h = 360;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'TABLET':
-                $w = 1024;
-                $h = 360;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'DESKTOP':
-                $w = 2000;
-                $h = 500;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
+
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'],$default_image);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
+       
     }
 
     public function getBreadcrumbNodes($action)

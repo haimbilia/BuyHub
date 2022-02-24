@@ -680,7 +680,7 @@ class HomeController extends MyAppController
                                 );
                             }
 
-                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'HomePageBannerTopLayout', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType())) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'BannerImage', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType(),'TOPLAYOUT')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                             $banner['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
                             $banner['banner_url_type'] = $urlTypeData['urlType'];

@@ -294,13 +294,13 @@ if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'
             foreach ($slideArr as $slideScreen) {
                 switch ($slideScreen['afile_screen']) {
                     case applicationConstants::SCREEN_MOBILE:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE));
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, 'PRODUCTLAYOUT'));
                         break;
                     case applicationConstants::SCREEN_IPAD:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD));
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, 'PRODUCTLAYOUT'));
                         break;
                     case applicationConstants::SCREEN_DESKTOP:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'productDetailPageBanner', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP));
+                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'PRODUCTLAYOUT'));
                         break;
                 }
             }
