@@ -33,11 +33,17 @@ foreach ($arrListing as $sn => $row) {
             <?php if (!empty($row['vendor'])) { ?>
                 <span class="timeline-v4__item-user-name">
                     <a data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>" href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="timeline-v4__item-link user-profile user-profile-sm">
-                        <figure class="user-profile_photo">
-                            <?php 
+                    <?php 
                             $uploadedTime = AttachedFile::setTimeParam($row['user_updated_on']);
-                            $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($row['vendor_id'], 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                            <img width="40" height="40" title="<?php echo CommonHelper::displayText($row['vendor']); ?>" alt="<?php echo CommonHelper::displayText($row['vendor']); ?>" src="<?php echo $userImageUrl; ?>">
+                            $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($row['vendor_id'], ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $getUserAspectRatio = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_MINI_THUMB);
+                             ?>
+                        <figure class="user-profile_photo" data-ratio="<?php echo $getUserAspectRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio']; ?>">
+                           
+                          
+    
+
+                            <img  data-aspect-ratio="<?php echo $getUserAspectRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio']; ?>" width="<?php echo $getUserAspectRatio['width']; ?>" height="<?php echo $getUserAspectRatio['height']; ?>"  title="<?php echo CommonHelper::displayText($row['vendor']); ?>" alt="<?php echo CommonHelper::displayText($row['vendor']); ?>" src="<?php echo $userImageUrl; ?>">
                         </figure>
                         <div class="user-profile_data"><?php echo CommonHelper::displayText($row['vendor']); ?></div>
                     </a>
