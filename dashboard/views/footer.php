@@ -93,20 +93,31 @@
 </footer>
 </main>
 </div>
-<div class="modal" id="search-main">
+<div class="modal fade" id="search-main">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body p-5">
-                <?php
-                if (User::canViewSupplierTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) &&  $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S') {
-                    $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
-                } elseif (User::canViewAdvertiserTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])  && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad') {
-                    $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php');
-                } elseif (User::canViewAffiliateTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE') {
-                    $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
-                } else {
-                    $this->includeTemplate('_partial/buyerDashboardNavigation.php');
-                } ?>
+                <div class="quick-search">
+                    <form method="get" class="form  quick-search-form">
+                        <div class="quick-search-head">
+                            <input id="quickSearchJs" type="search" class="form-control" placeholder="Go To..">
+                        </div>
+                        <div class="quick-search-body">
+                            <?php
+                            if (User::canViewSupplierTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) &&  $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S') {
+                                $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+                            } elseif (User::canViewAdvertiserTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])  && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad') {
+                                $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php');
+                            } elseif (User::canViewAffiliateTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE') {
+                                $this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+                            } else {
+                                $this->includeTemplate('_partial/buyerDashboardNavigation.php');
+                            } ?>
+                        </div>
+                    </form>
+                </div>
+
+
 
             </div>
             <div class="modal-footer">
