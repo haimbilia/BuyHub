@@ -509,6 +509,7 @@ Updates/Fixes :
     => 062336 - iOS: When the user tries to remove the reward points, Incorrect message is coming. [APP]
     => 062606 - on checkout app page base payment current amount not coming [9.3.1]
     => 062668 - Stripe pay won't charge correctly if payment amount belongs to Zero Decimal currency
+    => 062782 - Admin UI: Same priority is showing for the different order's status and rearrangement of the order status is also not working properly.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

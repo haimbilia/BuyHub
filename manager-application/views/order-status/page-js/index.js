@@ -37,14 +37,15 @@ $(document).ajaxComplete(function () {
                 bindData.then(
                     function (value) {
                         fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function (res) {
-                            fcom.removeLoader();
                             fcom.closeProcessing();
+                            fcom.removeLoader();
                             var ans = JSON.parse(res);
-                            if (ans.status == 1) {
-                                $.ykmsg.success(ans.msg);
+                            if (ans.status != 1) {
+                                $.ykmsg.error(ans.msg);
                                 return;
                             }
-                            $.ykmsg.error(ans.msg);
+                            $.ykmsg.success(ans.msg);
+                            reloadList();
                         });
                     },
                     function (error) {
