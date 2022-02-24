@@ -839,16 +839,17 @@ class AccountController extends LoggedUserController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
+
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
+
     }
 
     public function profileInfo()

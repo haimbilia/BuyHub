@@ -3,6 +3,7 @@ $(document).ready(function () {
     searchZone(profileId);
     searchProductsSection(profileId);
 });
+
 (function () {
     setupProfile = function (frm) {
         if (!$(frm).validate()) return;
@@ -384,14 +385,25 @@ $(document).on('keyup', "input[name='product_name']", function () {
     }
 });
 
+/* Reset result on clear(cross) icon on keyword search field. */
+$(document).on("search", "." + $.ykmodal.element + " input[type='search']", function () {
+    if ("" == $(this).val()) {
+        $(".continentJs").trigger("keyup");
+    }
+});
+/* Reset result on clear(cross) icon on keyword search field. */
+
 $(document).on('keyup', '.continentJs', function () {
     var filter = $(this).val();
-    if (filter.length <= 0) {
-        $('.zones--js .filter-country--js, .zones--js li, .zones--js .zone-name--js').show();
-        $('.zones--js').show().removeClass('li-display');
+    if (filter.length <= 1) {
+        $('.zones--js').find(".filter-country--js").show();
+        $('.zones--js').find(".country--js").show();
+        $('.zones--js').find(".zone-name--js").show();
+        $('.zones--js').find(".zones--js").show();
+        $('.zones--js').find(".list-zones li").show();
         return;
     }
-    $('.zones--js .zone-name--js').each(function () {
+    $('.zones--js').find(".zone-name--js").each(function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).hide();
             $(this).closest('.zones--js').removeClass('li-display');
@@ -401,8 +413,9 @@ $(document).on('keyup', '.continentJs', function () {
         }
     });
 
-    $('.zones--js .country--js').each(function () {
+    $('.zones--js').find(".country--js").each(function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
+            $(this).closest('.filter-country--js').hide();
             $(this).closest('.filter-country--js').removeClass('li-display');
         } else {
             $(this).closest('.filter-country--js').show();
@@ -410,7 +423,7 @@ $(document).on('keyup', '.continentJs', function () {
         }
     });
 
-    $('.list-zones ul.childUlJs li').each(function () {
+    $('.list-zones').find("ul li").each(function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).hide();
             $(this).removeClass('li-display');
@@ -421,15 +434,12 @@ $(document).on('keyup', '.continentJs', function () {
     });
 
     $('.li-display').each(function () {
-        $(this).show();
-        $(this).find('li').show();
         $(this).closest('.zones--js').find('.zone-name--js').show();
-    });
-
-    $('.zones--js').each(function () {
-        if (1 > $(this).find('li.li-display').length && !$(this).hasClass('li-display')) {
-            $(this).hide();
+        $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
+        if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').show();
+        } else {
+            $(this).closest('.zones--js').find('.filter-country--js.li-display li').show();
         }
-
     });
 });
