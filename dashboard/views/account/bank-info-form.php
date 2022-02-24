@@ -16,9 +16,9 @@ $fld->setFieldTagAttribute('class', "btn btn-brand");
 $fld = $frm->getField('bank_info_safety_text');
 $fld->developerTags['col'] = 12;
 ?>
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="content-wrapper content-space">
+<div class="content-wrapper content-space">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
             <?php
             $data = [
                 'headingLabel' => Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId),

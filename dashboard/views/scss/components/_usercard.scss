@@ -5,8 +5,8 @@
     background-repeat: no-repeat;
     padding: 2rem 1rem;
     // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+    // color:  lighten($brand-color, 55%);
+    @include bg-brand();
     .user-card__avatar {
         .badge {
             width: 60px;
@@ -139,11 +139,11 @@
 }
 
 .user-card-v3 {
-    $card3: '&';
+    $card3: "&";
     display: flex;
     align-items: center;
     #{&}__avatar {
-        >img {
+        > img {
             height: 120px;
             width: 120px;
             border-radius: 7px;
@@ -174,7 +174,7 @@
                 display: flex;
                 align-items: center;
                 padding-bottom: 0.8rem;
-                >i {
+                > i {
                     line-height: 0;
                     font-size: 1.4rem;
                 }
@@ -445,6 +445,7 @@
             width: 100%;
             max-width: 47px;
             height: 47px;
+            width: max-content;
         }
         span {
             width: 47px;

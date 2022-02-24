@@ -5,6 +5,7 @@
     border: none;
     @include media-breakpoint-down(md) {
         flex-wrap: nowrap;
+        overflow: hidden;
         overflow-x: auto;
     }
     .nav-item {
