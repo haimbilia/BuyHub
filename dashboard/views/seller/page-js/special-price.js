@@ -81,7 +81,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmRecordSearchSpecialPricePaging;
+        var frm = document.frmSearchSpecialPricePaging;
         $(frm.page).val(page);
         searchRecords(frm);
     };

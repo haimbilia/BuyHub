@@ -7,32 +7,15 @@
         <div class="dropdown dashboard-user">
             <button class="btn dropdown-toggle-custom dropdown-toggle collapsed no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 <?php
-                $dashTitle = '';
-                switch ($activeTab) {
-                    case 'S':
-                        $dashTitle = Labels::getLabel('LBL_SELLER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'B':
-                        $dashTitle = Labels::getLabel('LBL_BUYER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'Ad':
-                        $dashTitle = Labels::getLabel('LBL_ADVERTISER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'AFFILIATE':
-                        $dashTitle = Labels::getLabel('LBL_AFFILIATE_DASHBOARD', $siteLangId);
-                        break;
-                }
-                $titleArr = explode(' ', $dashTitle);
-                $title = '';
-                foreach ($titleArr as $val) {
-                    $title .= substr($val, 0, 1);
-                    if (strlen($title) == 2) {
-                        break;
-                    }
-                }
+                $dashboardArr = [
+                    'S' => Labels::getLabel('NAV_SELLER_DASHBOARD', $siteLangId),
+                    'B' => Labels::getLabel('NAV_BUYER_DASHBOARD', $siteLangId),
+                    'Ad' => Labels::getLabel('NAV_ADVERTISER_DASHBOARD', $siteLangId),
+                    'AFFILIATE' => Labels::getLabel('NAV_AFFILIATE_DASHBOARD', $siteLangId),
+                ];
                 ?>
-                <span class="meta"><?php echo strtoupper($title); ?></span>
-                <?php echo $dashTitle; ?>
+                <span class="meta"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr[$activeTab]); ?></span>
+                <?php echo $dashboardArr[$activeTab]; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
 
@@ -41,8 +24,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">S</span>
-                                <?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['S']); ?></span>
+                                <?php echo $dashboardArr['S']; ?>
                             </div>
 
                         </a>
@@ -52,8 +35,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">B</span>
-                                <?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['B']); ?></span>
+                                <?php echo $dashboardArr['B']; ?>
                             </div>
                         </a>
                     </li>
@@ -62,8 +45,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">A</span>
-                                <?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['Ad']); ?></span>
+                                <?php echo $dashboardArr['Ad']; ?>
                             </div>
                         </a>
                     </li>

@@ -9,15 +9,7 @@ $bodyClass = ($controllerName == 'Home') ? 'home' : 'inner';
 
 if (strtolower($controllerName) != 'subscriptioncheckout') {
     $bodyClass = 'my-dashboard';
-    $expanded = 'sidebar-is-reduced';
-    if (!array_key_exists('openSidebar', $_COOKIE)) {
-        setcookie('openSidebar', 1, 0, CONF_WEBROOT_FRONTEND);
-    }
-    if (array_key_exists('openSidebar', $_COOKIE) && 0 < $_COOKIE['openSidebar'] && array_key_exists('screenWidth', $_COOKIE) && applicationConstants::MOBILE_SCREEN_WIDTH < $_COOKIE['screenWidth']) {
-        $expanded = 'sidebar-is-expanded';
-    }
-
-    $bodyClass = $bodyClass . ' ' . $expanded;
+    $bodyClass = $bodyClass;
 }
 
 
