@@ -1,14 +1,21 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($images)) { 
-     $uploadedTime = AttachedFile::setTimeParam($images['afile_updated_at']);?>
-<ul class="uploaded-media-list">
-    <li>
-        <div class="uploaded-img">
-             <a class="close-layer" href="javascript:void(0);" onclick="removeCollectionImage(<?php echo $scollection_id; ?>,<?php echo $lang_id; ?>)"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
-            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($images['afile_record_id'], $images['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_Collection_Image', $siteLangId); ?>">
-        </div>
-        <small class="form-text text-muted"><?php echo $languages[$images['afile_lang_id']]; ?></small>
-      
-    </li>
-</ul>
-<?php } ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+$imgArr = [];
+if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {   	
+	$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);	    
+    $imgArr = [
+        'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($image['afile_record_id'], $image['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+        'name' => $image['afile_name'],
+        'afile_id' => $image['afile_id'],
+    ]; 
+ } 
+
+ echo HtmlHelper::getfileInputHtml(
+    ['onChange' => 'collectionPopupImage(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("LBL_COLLECTION_IMAGE", $lang_id)],
+    $lang_id,
+    ($canEdit ? 'removeCollectionImage(' . $scollection_id . "," . $lang_id .')' :''),
+    ($canEdit ? 'editDropZoneImages(this)': ''),
+    $imgArr,
+    'mt-3 dropzone-custom dropzoneContainerJs'
+);
+

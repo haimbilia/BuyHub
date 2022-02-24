@@ -30,6 +30,12 @@ class FatTemplate
         $this->variables[$name] = $value;
     }
 
+     /** get Variables **/
+    public function get($name)
+    {
+        return $this->variables[$name] ?? NULL;
+    }
+
     protected function writeMetaTags($returnArr = false)
     {
         if (method_exists('MetaTagsWriter', 'getMetaTags')) {

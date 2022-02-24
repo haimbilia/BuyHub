@@ -374,6 +374,10 @@ function animation(obj) {
         }
         $(obj).next().html(siteConstants.webroot + str);
     };
+
+    getIdentifier = function (obj) {       
+        $(obj).next().html(langLbl.systemIdentifier + " : "+ obj.value);
+    };
 })();
 
 /* scroll tab active function */
