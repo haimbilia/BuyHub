@@ -510,6 +510,7 @@ Updates/Fixes :
     => 062606 - on checkout app page base payment current amount not coming [9.3.1]
     => 062668 - Stripe pay won't charge correctly if payment amount belongs to Zero Decimal currency
     => 062400	Admin UI: Admin is not able to switch between languages smoothly
+    => 061647 - Admin UI: "Approve" order status is showing for the physical order while updating the paid order's status under the order's details section
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
