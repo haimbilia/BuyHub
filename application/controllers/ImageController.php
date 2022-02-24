@@ -52,14 +52,14 @@ class ImageController extends FatController
         $file_row = false;
 
         $objectName = 'AttachedFile';
-        if($fileType == $objectName::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP){
+        if ($fileType == $objectName::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
             $objectName = 'AttachedFileTemp';
-        }else{
+        } else {
             $fileType =  $objectName::FILETYPE_CUSTOM_PRODUCT_IMAGE;
         }
 
         if ($afile_id > 0) {
-            $res = $objectName::getAttributesById($afile_id);           
+            $res = $objectName::getAttributesById($afile_id);
             if (!false == $res && $res['afile_type'] == $fileType) {
                 $file_row = $res;
             }
@@ -352,7 +352,7 @@ class ImageController extends FatController
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, $sizeType);
 
-        if ($sizeType) {
+        if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
 
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
@@ -381,8 +381,9 @@ class ImageController extends FatController
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, $sizeType);
 
-        if ($sizeType) {
+        if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
 
+          
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);

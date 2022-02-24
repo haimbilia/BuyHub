@@ -911,21 +911,15 @@ class ShopsController extends MyAppController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 250;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'WIDE':
-                $w = 1320;
-                $h = 320;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+        
     }
 
     private function getShopInfo($shop_id)

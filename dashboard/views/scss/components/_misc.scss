@@ -996,7 +996,10 @@ a:hover {
     font-size: 0.8rem;
     display: grid;
     grid-gap: 3.5rem 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    }
     .list-group-item {
         border: none;
         padding: 0rem;
@@ -1165,5 +1168,25 @@ a:hover {
         display: block;
         font-size: 0.8rem;
         font-weight: 500;
+    }
+}
+
+.block-social {
+    height: auto;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    &:hover {
+        color: #fff;
+    }
+
+    .svg {
+        width: 46px;
+        height: 46px;
+        margin-bottom: 1.5rem;
     }
 }

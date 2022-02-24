@@ -6,7 +6,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 	$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
 	switch ($promotionType) {
 		case Promotion::TYPE_BANNER:
-			$imgUrl = UrlHelper::generateFullUrl('Banner', 'Thumb', array($image['afile_record_id'], $image['afile_lang_id'], $image['afile_screen']), CONF_WEBROOT_FRONTEND);
+			$imgUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($image['afile_record_id'], $image['afile_lang_id'], $image['afile_screen'], 'THUMB'), CONF_WEBROOT_FRONTEND);
 			break;
 		case Promotion::TYPE_SLIDES:
 			$imgUrl = UrlHelper::generateFullUrl('Image', 'Slide', array($image['afile_record_id'], $image['afile_screen'], $image['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONTEND);

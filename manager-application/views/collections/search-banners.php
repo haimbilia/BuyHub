@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'banner_img':
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
-                $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
+                $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'action':

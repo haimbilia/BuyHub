@@ -14,12 +14,14 @@ $(window).on("load", function () {
 });
 
 $(window).scroll(function () {
-    var scroll = $(window).scrollTop();
-    if (scroll >= 70) {
-        $('body').addClass("scrolled");
-    } else {
-        $('body').removeClass("scrolled");
-    }
+    body_height = $("body").position();
+    scroll_position = $(window).scrollTop();
+
+    if (body_height.top < scroll_position)
+        $("body").addClass("scrolled");
+    else
+        $("body").removeClass("scrolled");
+
 });
 
 $(document).ready(function () {

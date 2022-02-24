@@ -2207,7 +2207,7 @@ class SellerController extends SellerBaseController
             $lang_id = array_key_first($languages);
         }
 
-        $shop_id = 0;       
+        $shop_id = 0;
         $bannerAttachments = array();
         $logoAttachments = array();
         $backgroundAttachments = array();
@@ -4801,6 +4801,23 @@ class SellerController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
+    public function getReturnAddress()
+    {
+        $userId = $this->userParentId;
+        $userObj = new User($userId);
+        $addressData = $userObj->getUserReturnAddress($this->siteLangId);
+        $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+
+        if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $this->set('addressData', (array)$addressData);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->_template->render(false, false);
+    }
+
     public function returnAddressForm()
     {
         $userId = $this->userParentId;
@@ -4809,11 +4826,11 @@ class SellerController extends SellerBaseController
         $stateId = 0;
 
         $userObj = new User($userId);
-        $data = $userObj->getUserReturnAddress();
+        $addressData = $userObj->getUserReturnAddress($this->siteLangId);
 
-        if ($data != false) {
-            $frm->fill($data);
-            $stateId = $data['ura_state_id'];
+        if ($addressData != false) {
+            $frm->fill($addressData);
+            $stateId = $addressData['ura_state_id'];
         }
 
 
@@ -4824,14 +4841,6 @@ class SellerController extends SellerBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $shop_id = 0;
-
-        if (!false == $shopDetails) {
-            $shop_id = $shopDetails['shop_id'];
-        }
-
-        $this->set('shop_id', $shop_id);
-        $this->set('language', Language::getAllNames());
         $this->set('siteLangId', $this->siteLangId);
         $this->set('frm', $frm);
         $this->set('stateId', $stateId);
@@ -4863,7 +4872,20 @@ class SellerController extends SellerBaseController
         }
         $newTabLangId = $this->siteLangId;
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteReturnAddress()
+    {
+        $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
+        $userId = $this->userParentId;
+        $userObj = new User($userId);
+        if (false === $userObj->deleteUserReturnAddress()) {
+            Message::addErrorMessage(Labels::getLabel($userObj->getError(), $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -5008,8 +5030,6 @@ class SellerController extends SellerBaseController
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -5038,7 +5058,6 @@ class SellerController extends SellerBaseController
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -5074,7 +5093,7 @@ class SellerController extends SellerBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function specialPrice($selProd_id = 0)
     {
         $this->userPrivilege->canViewSpecialPrice(UserAuthentication::getLoggedUserId());
@@ -5656,20 +5675,15 @@ class SellerController extends SellerBaseController
         $address = new Address(0, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
 
-        if ($addresses) {
-            $this->set('addresses', $addresses);
-        } else {
-            if (true === MOBILE_APP_API_CALL) {
-                $this->set('addresses', array());
-            }
-            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
-        }
+        $this->set('addresses', (array) $addresses);
+
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart($userId);
             $shipping_address_id = $cartObj->getCartShippingAddress();
             $this->set('shippingAddressId', $shipping_address_id);
             $this->_template->render();
         }
+
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
         $this->set('shop_id', $shop_id);
         $this->set('language', Language::getAllNames());
