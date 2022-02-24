@@ -6,7 +6,6 @@ trait RecordOperations
 {
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-
         $recordId = $classObj->getMainTableRecordId();
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
             Message::addErrorMessage($classObj->getError());

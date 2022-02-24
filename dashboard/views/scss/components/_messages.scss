@@ -1,17 +1,25 @@
 .communication {
-    display: grid;
-    grid-gap: 1rem;
-    border-radius: 1rem;
-    grid-template-columns: 300px auto 300px;
-    grid-template-areas: "nav content sidebar";
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: 300px auto 300px;
+        grid-template-areas: "nav content sidebar";
+    }
+    //border-radius: 1rem;
 
     &-nav {
         background-color: $bg-white;
         grid-area: nav;
+        @include media-breakpoint-down(lg) {
+            margin-bottom: 1rem;
+        }
         // background-color: $bg-gray;
     }
     &-content {
         grid-area: content;
+        @include media-breakpoint-down(lg) {
+            margin-bottom: 1rem;
+        }
     }
     &-sidebar {
         grid-area: sidebar;
