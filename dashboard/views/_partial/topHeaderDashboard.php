@@ -129,26 +129,24 @@
                 </li>
             <?php } ?>
         </ul> <?php */ ?>
-        <button class="search-docs" data-bs-toggle="modal" data-bs-target="#search-main">
+        <button class="c-header-icon btn quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#icon-search">
                 </use>
             </svg>
         </button>
         <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
-            <div class="c-header-icon bell">
-                <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
-                    <i class="icn">
-                        <svg class="svg bell-shake-delay" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
-                            </use>
-                        </svg>
-                    </i>
-                    <span class="h-badge">
-                        <span class="heartbit">
-                        </span>
-                        <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
-            </div>
+            <a class="c-header-icon bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
+                <svg class="svg bell-shake-delay" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
+                    </use>
+                </svg>
+
+                <span class="h-badge">
+
+
+                    <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
+
         <?php } ?>
 
         <ul class="short-links">
