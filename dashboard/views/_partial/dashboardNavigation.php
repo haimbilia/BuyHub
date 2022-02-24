@@ -1,6 +1,6 @@
 <?php $siteLangId = CommonHelper::getLangId(); ?>
 <sidebar class="sidebar no-print" id="sidebar" data-close-on-click-outside="sidebar">
-    <div class=""> <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
+    <div class="sidebar-sticky"> <?php require CONF_THEME_PATH . '_partial/dashboardNavigationTop.php'; ?>
         <div class="sidebar-body sidebarMenuJs" id="scrollElement-js">
             <?php
             if (User::canViewSupplierTab() && isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) &&  $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S') {
