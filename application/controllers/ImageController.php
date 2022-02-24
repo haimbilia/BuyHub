@@ -1056,7 +1056,7 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, $sizeType);
-
+    
         if ($sizeType) {
 
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
