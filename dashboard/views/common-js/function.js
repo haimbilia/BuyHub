@@ -4,41 +4,6 @@ if (getCookie("screenWidth") != screen.width) {
     $.ajax({ url: fcom.makeUrl('Custom', 'updateScreenResolution', [screen.width, screen.height], siteConstants.webrootfront) });
 }
 
-var Dashboard = function () {
-    var menuChangeActive = function (el) {
-        var hasSubmenu = $(el).hasClass("has-submenu");
-        $(global.menuClass + " .is-active").removeClass("is-active");
-        $(el).addClass("is-active");
-    };
-    var sidebarChangeWidth = function () {
-        if ($("body").hasClass('sidebar-is-reduced')) {
-            $("body").removeClass('sidebar-is-reduced').addClass('sidebar-is-expanded');
-            $("<div class='sidebar-overlay--js'></div>").appendTo("body");
-            var visibility = 1;
-        } else {
-            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced');
-            $("div.sidebar-overlay--js").remove();
-            var visibility = 0;
-        }
-        $.ajax({ url: fcom.makeUrl('Custom', 'setupSidebarVisibility', [visibility], siteConstants.webrootfront) });
-        // $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
-        $(".hamburger-toggle").toggleClass("is-opened");
-        setTimeout(function () {
-            unlinkSlick();
-            slickWidgetScroll();
-        }, 500);
-    };
-    return {
-        init: function init() {
-            $(document).on("click", ".js-hamburger, .sidebar-overlay--js", sidebarChangeWidth);
-            $(document).on("click", ".js-menu li", function (e) {
-                menuChangeActive(e.currentTarget);
-            });
-        }
-    };
-}();
-Dashboard.init();
-
 /*Ripple*/
 $('[ripple]').on('click', function (e) {
     var rippleDiv = $('<div class="ripple" />'),

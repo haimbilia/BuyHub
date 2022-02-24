@@ -66,7 +66,7 @@ class CollectionSearch extends SearchBase
         $langId = (0 < $langId) ? $langId : $this->langId;
         
         if (!$this->joinCollectionRecords) {
-            trigger_error(Labels::getLabel('ERR_joinCollectionRecords_must_be_joined.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_JOINCOLLECTIONRECORDS_MUST_BE_JOINED.', $this->commonLangId), E_USER_ERROR);
         }
 
         $now = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');

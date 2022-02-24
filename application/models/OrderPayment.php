@@ -189,7 +189,7 @@ class OrderPayment extends Orders
             $orderBalance = (($orderDetails['order_net_amount'] - 1) - $totalPaymentPaid);
 
             if ($orderBalance <= 0) {
-                $this->addOrderPaymentHistory($paymentOrderId, $orderPaymentStatus, Labels::getLabel('LBL_Received_Payment', $defaultSiteLangId), 1);
+                $this->addOrderPaymentHistory($paymentOrderId, $orderPaymentStatus, Labels::getLabel('SUC_RECEIVED_PAYMENT', $defaultSiteLangId), 1);
 
                 $notificationData = array(
                     'notification_record_type' => Notification::TYPE_ORDER,
@@ -237,7 +237,7 @@ class OrderPayment extends Orders
                     'utxn_gateway_txn_id' => $txnId,
                     'utxn_status' => Transactions::STATUS_COMPLETED,
                     'utxn_order_id' => $orderDetails["order_id"],
-                    'utxn_comments' => sprintf(Labels::getLabel('LBL_Loaded_Money_to_Wallet', $defaultSiteLangId), $formattedOrderValue),
+                    'utxn_comments' => sprintf(Labels::getLabel('LBL_LOADED_MONEY_TO_WALLET', $defaultSiteLangId), $formattedOrderValue),
                     'utxn_type' => Transactions::TYPE_LOADED_MONEY_TO_WALLET
                 );
                 if (!$txnId = $transObj->addTransaction($txnDataArr)) {
@@ -252,7 +252,7 @@ class OrderPayment extends Orders
             /* ] */
             return true;
         } else {
-            $this->error = Labels::getLabel('ERR_Invalid_Order', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->commonLangId);
             return false;
         }
     }
@@ -334,7 +334,7 @@ class OrderPayment extends Orders
         if (!empty($orderInfo)) {
             $this->addOrderPaymentHistory($paymentOrderId, Orders::ORDER_PAYMENT_PENDING, $comments, $notify);
         } else {
-            $this->error = Labels::getLabel('ERR_Invalid_Order', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->commonLangId);
             return false;
         }
         return true;
@@ -347,7 +347,7 @@ class OrderPayment extends Orders
         $userWalletBalance = User::getUserBalance($orderInfo["order_user_id"]);
 
         if ($userWalletBalance < $amountToBeCharge) {
-            $this->error = Message::addErrorMessage(Labels::getLabel('MSG_Wallet_Balance_is_less_than_amount_to_be_charge', $defaultSiteLangId));
+            $this->error = Message::addErrorMessage(Labels::getLabel('ERR_WALLET_BALANCE_IS_LESS_THAN_AMOUNT_TO_BE_CHARGE', $defaultSiteLangId));
             return false;
         }
 
@@ -388,7 +388,7 @@ class OrderPayment extends Orders
             return false;
         }
 
-        $this->addOrderPayment(Labels::getLabel('LBL_User_Wallet', $defaultSiteLangId), 'W-' . time(), $amountToBeCharge, Labels::getLabel("LBL_Received_Payment", $defaultSiteLangId), Labels::getLabel('LBL_Payment_From_User_Wallet', $defaultSiteLangId), true);
+        $this->addOrderPayment(Labels::getLabel('LBL_USER_WALLET', $defaultSiteLangId), 'W-' . time(), $amountToBeCharge, Labels::getLabel("LBL_RECEIVED_PAYMENT", $defaultSiteLangId), Labels::getLabel('LBL_PAYMENT_FROM_USER_WALLET', $defaultSiteLangId), true);
         return true;
     }
 
@@ -398,7 +398,7 @@ class OrderPayment extends Orders
         $orderInfo = $this->attributes;
 
         if ($amountToBeCharge > 0) {
-            $this->error = Labels::getLabel('ERR_Invalid_Order', $defaultSiteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $defaultSiteLangId);
             return false;
         }
 
@@ -414,9 +414,9 @@ class OrderPayment extends Orders
         $transObj->assignValues($txnArray);
         if (!$transObj->save()) { $this->error = $transObj->getError(); return false;} */
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
-            $txnComment = sprintf(Labels::getLabel('LBL_Product_Purchased_%s', $defaultSiteLangId), $formattedOrderValue);
+            $txnComment = sprintf(Labels::getLabel('MSG_PRODUCT_PURCHASED_%s', $defaultSiteLangId), $formattedOrderValue);
         } else {
-            $txnComment = sprintf(Labels::getLabel('LBL_Subscription_Purchased_%s', $defaultSiteLangId), $formattedOrderValue);
+            $txnComment = sprintf(Labels::getLabel('MSG_SUBSCRIPTION_PURCHASED_%s', $defaultSiteLangId), $formattedOrderValue);
         }
         $txnDataArr = array(
             'utxn_user_id' => $orderInfo["order_user_id"],
@@ -435,7 +435,7 @@ class OrderPayment extends Orders
         $emailNotificationObj->sendTxnNotification( $txnId, $defaultSiteLangId ); */
         /* ] */
 
-        $this->addOrderPayment(Labels::getLabel('LBL_User_Wallet', $defaultSiteLangId), 'W-' . time(), $amountToBeCharge, Labels::getLabel("LBL_Received_Payment", $defaultSiteLangId), Labels::getLabel('LBL_Payment_From_User_Wallet', $defaultSiteLangId), true);
+        $this->addOrderPayment(Labels::getLabel('LBL_USER_WALLET', $defaultSiteLangId), 'W-' . time(), $amountToBeCharge, Labels::getLabel("LBL_RECEIVED_PAYMENT", $defaultSiteLangId), Labels::getLabel('LBL_PAYMENT_FROM_USER_WALLET', $defaultSiteLangId), true);
         return true;
     }
 

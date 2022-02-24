@@ -63,12 +63,12 @@ class OrderProduct extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::CHARGE_TYPE_TAX => Labels::getLabel('LBL_Order_Product_Tax_Charges', $langId),
-            static::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_Order_Product_Discount_Charges', $langId),
-            static::CHARGE_TYPE_SHIPPING => Labels::getLabel('LBL_Order_Product_Shipping_Charges', $langId),
+            static::CHARGE_TYPE_TAX => Labels::getLabel('LBL_ORDER_PRODUCT_TAX_CHARGES', $langId),
+            static::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_DISCOUNT_CHARGES', $langId),
+            static::CHARGE_TYPE_SHIPPING => Labels::getLabel('LBL_ORDER_PRODUCT_SHIPPING_CHARGES', $langId),
             /* static::CHARGE_TYPE_BATCH_DISCOUNT=>Labels::getLabel('LBL_Order_Product_Batch_Discount', $langId), */
-            static::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_Order_Product_Reward_Point', $langId),
-            static::CHARGE_TYPE_VOLUME_DISCOUNT => Labels::getLabel('LBL_Order_Product_Volume_Discount', $langId),
+            static::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_REWARD_POINT', $langId),
+            static::CHARGE_TYPE_VOLUME_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_VOLUME_DISCOUNT', $langId),
         );
     }
 
@@ -270,7 +270,7 @@ class OrderProduct extends MyAppModel
     {
         $frm = new Form('additional_attachments');
         $frm->addHiddenField('', 'op_id');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         return $frm;
     }
         

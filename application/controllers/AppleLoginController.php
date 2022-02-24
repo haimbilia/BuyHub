@@ -27,11 +27,11 @@ class AppleLoginController extends SocialMediaAuthController
 
         if (isset($post['id_token'])) {
             if (false === MOBILE_APP_API_CALL && $_SESSION['appleSignIn']['state'] != $post['state']) {
-                $message = Labels::getLabel('MSG_AUTHORIZATION_SERVER_RETURNED_AN_INVALID_STATE_PARAMETER', $this->siteLangId);
+                $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_INVALID_STATE_PARAMETER', $this->siteLangId);
                 $this->setErrorAndRedirect($message, true);
             }
             if (isset($post['error'])) {
-                $message = Labels::getLabel('MSG_AUTHORIZATION_SERVER_RETURNED_AN_ERROR: ', $this->siteLangId);
+                $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_ERROR: ', $this->siteLangId);
                 $message .= htmlspecialchars($post['error']);
                 $this->setErrorAndRedirect($message, true);
             }
@@ -44,7 +44,7 @@ class AppleLoginController extends SocialMediaAuthController
     
             if (false === $appleUserInfo) {
                 if (!isset($claims['email'])) {
-                    $message = Labels::getLabel('MSG_UNABLE_TO_FETCH_USER_INFO', $this->siteLangId);
+                    $message = Labels::getLabel('ERR_UNABLE_TO_FETCH_USER_INFO', $this->siteLangId);
                     $this->setErrorAndRedirect($message, true);
                 }
                 $email = $claims['email'];

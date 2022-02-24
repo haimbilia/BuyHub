@@ -205,7 +205,7 @@ class HtmlHelper
                 break;
         }
     }
-    
+
     public static function configureCheckboxLabel(&$frm, $fldName)
     {
         $fld = $frm->getField($fldName);
@@ -215,10 +215,10 @@ class HtmlHelper
     }
 
     public static function setFieldEncryptedValue($fld, $value)
-    {   
+    {
         $fld->developerTags['fldWidthValues'] = ['cover position-relative', null, null, null];
         $fld->setFieldTagAttribute('data-encrypted-value', $value);
-    }    
+    }
 
     /**
      * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl' ,'afile_id'=> 66]
@@ -322,5 +322,18 @@ class HtmlHelper
     public static function getIdentifierText($identifier, $langId){
 
         return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) ." : ".$identifier;
+    }
+    
+    public static function displayWordsFirstLetter($keyword, int $len = 2)
+    {
+        $titleArr = explode(' ', $keyword);
+        $title = '';
+        foreach ($titleArr as $val) {
+            $title .= substr($val, 0, 1);
+            if (strlen($title) == $len) {
+                break;
+            }
+        }
+        return strtoupper($title);
     }
 }

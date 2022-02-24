@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="11" viewBox="0 0 17 11">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="crop" width="17" height="11" transform="translate(0 0.473)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Vector_Smart_Object" data-name="Vector Smart Object" transform="translate(0 -0.473)" clip-path="url(#clip-path)">
+    <g id="Group_2" data-name="Group 2">
+      <rect id="Rectangle_2" data-name="Rectangle 2" width="17" height="11" transform="translate(0 0.473)" fill="#022169"/>
+      <path id="Path_35" data-name="Path 35" d="M15,.473l-5,3v-3H6v3l-4-3H0v1l3,2H0v4H3l-3,3v1H2l4-3v3h4v-3l5,3h2v-1l-4-3h4v-4H13l4-2v-1Z" fill="#fff"/>
+      <path id="Path_36" data-name="Path 36" d="M6,7.81l-6,4H1l5-4Z" transform="translate(0 -0.338)" fill="#eb0029"/>
+      <path id="Path_37" data-name="Path 37" d="M15.45.473l-5,3h1l6-3Z" transform="translate(-0.45)" fill="#eb0029"/>
+      <path id="Path_38" data-name="Path 38" d="M0,.473l4,3H6l-6-3Z" fill="#eb0029"/>
+      <path id="Path_39" data-name="Path 39" d="M11.491,7.81l6,4v-1l-5-3Z" transform="translate(-0.491 -0.338)" fill="#eb0029"/>
+      <path id="Path_40" data-name="Path 40" d="M7,.473v4H0v2H7v5H9v-5h8v-2H9v-4Z" fill="#eb0029"/>
+    </g>
+  </g>
+</svg>

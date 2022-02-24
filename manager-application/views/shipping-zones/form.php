@@ -64,8 +64,7 @@ if (!empty($excludeLocations)) {
                             </label>
                         </div>
                         <div class="checkbox_container--js">
-                            <?php
-                            if (!empty($zones)) {
+                            <?php if (!empty($zones)) {
                                 foreach ($zones as $zone) {
                                     $countCounties = 0;
                                     if (!empty($zoneCountries)) {
@@ -73,8 +72,7 @@ if (!empty($excludeLocations)) {
                                         $countCounties = count(array_unique($cZoneCountries));
                                     }
                                     $countries = (isset($zone['countries'])) ? $zone['countries'] : array();
-                                    $totalCountries = count($countries);
-                            ?>
+                                    $totalCountries = count($countries); ?>
                                     <div class="zones--js">
                                         <div class="list-zones-head zone-name--js">
                                             <label class="checkbox zone--js" data-zoneid="<?php echo $zone['zone_id']; ?>">
@@ -87,8 +85,7 @@ if (!empty($excludeLocations)) {
                                         </div>
                                         <?php if (!empty($countries)) { ?>
                                             <ul class="zones-states--js zone-countries--js list-states collapse  zone_<?php echo $zone['zone_id']; ?>" id="zone_<?php echo $zone['zone_id']; ?>">
-                                                <?php
-                                                foreach ($countries as $country) {
+                                                <?php foreach ($countries as $country) {
                                                     $statesCount = count($country['states']);
                                                     $countryId = $country['country_id'];
                                                     $disabled = '';
@@ -103,8 +100,7 @@ if (!empty($excludeLocations)) {
                                                     }
                                                     if (!empty($excludeCountryStates) && isset($excludeCountryStates[$countryId])) {
                                                         $disabled = 'disabled';
-                                                    }
-                                                ?>
+                                                    } ?>
                                                     <li class="list-states-item filter-country--js">
                                                         <div class="list-zones-head">
                                                             <label class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
@@ -122,8 +118,6 @@ if (!empty($excludeLocations)) {
                                                                 </label>
                                                             <?php } ?>
                                                         </div>
-
-
 
                                                         <?php if (!empty($country['states'])) { ?>
                                                             <ul class="list-states collapse country_<?php echo $countryId; ?>" class="" id="state_list_<?php echo $countryId; ?>">
@@ -156,34 +150,21 @@ if (!empty($excludeLocations)) {
                                                                 <?php } ?>
                                                             </ul>
                                                         <?php } ?>
-
                                                     </li>
-                                                <?php }
-                                                ?>
+                                                <?php } ?>
                                             </ul>
                                         <?php } ?>
-                                <?php
-                                    echo "</div>";
-                                }
-                            }
-                                ?>
-
                                     </div>
+                            <?php }
+                            } ?>
+
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
     </div>
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col">
-                <button type="button" name="btn_reset_form" class="btn btn-outline-brand resetModalFormJs">Reset</button>
-            </div>
-            <div class="col-auto">
-                <button type="button" name="btn_save" class="btn btn-brand submitBtnJs">Save</button>
-            </div>
-        </div>
-    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 
 <?php if (0 < $zone_id) { ?>

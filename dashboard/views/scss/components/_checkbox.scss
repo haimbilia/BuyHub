@@ -49,8 +49,6 @@
 
 .checkbox input,
 .radio input {
-    
-    
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
@@ -90,7 +88,7 @@
     height: 9px;
     width: 6px;
     position: absolute;
-    content: '';
+    content: "";
     display: inline-block;
     font-size: 1rem;
     text-align: center;
@@ -110,7 +108,7 @@
     animation: click-wave 0.65s;
     background: $brand-color;
     color: $brand-color-inverse;
-    content: '';
+    content: "";
     display: block;
     position: relative;
     z-index: 100;
@@ -129,7 +127,6 @@
     border-radius: 50%;
 }
 
-
 /*toggles*/
 
 .switch-links {
@@ -145,7 +142,7 @@
     display: inline-block;
     vertical-align: top;
     position: relative;
-    color: lighten($body-color, 50%);
+    color: lighten($txt-body, 50%);
     font-size: 0.8em;
 }
 
@@ -191,15 +188,15 @@
     position: absolute;
     #{$start-direction}: 4px;
     top: 3px;
-    -webkit-transition: all ease .3s;
-    transition: all ease .3s;
+    -webkit-transition: all ease 0.3s;
+    transition: all ease 0.3s;
 }
 
 .switch-button.is--active:after {
     #{$start-direction}: auto;
     #{$end-direction}: 4px;
-    -webkit-transition: all ease .3s;
-    transition: all ease .3s;
+    -webkit-transition: all ease 0.3s;
+    transition: all ease 0.3s;
 }
 
 .switch-links a.is--active {

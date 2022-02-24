@@ -391,8 +391,8 @@ class BannersController extends ListingBaseController
         $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
         $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
-        $frm->addHiddenField('', 'min_width', 1350);
-        $frm->addHiddenField('', 'min_height', 405);
+        $frm->addHiddenField('', 'min_width', 2000);
+        $frm->addHiddenField('', 'min_height', 666);
         $frm->addHTML('', 'banner_image', '');
         return $frm;
     }

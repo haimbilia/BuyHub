@@ -3,7 +3,7 @@
 $userIdFld = $frm->getField('user_id');
 $userId = $userIdFld->value;
 
-$frm->setFormTagAttribute('class', 'form form-otp otpForm-js');
+$frm->setFormTagAttribute('class', 'form form-login form-otp otpForm-js');
 $frm->developerTags['fld_default_col'] = 2;
 $frm->setFormTagAttribute('name', 'frmGuestLoginOtp');
 $frm->setFormTagAttribute('id', 'frmGuestLoginOtp');
@@ -62,7 +62,6 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
         </div>
     </div>
     <?php echo $frm->getFieldHtml('user_id'); ?>
-
     </form>
     <?php echo $frm->getExternalJs(); ?>
 </div>

@@ -59,7 +59,7 @@ if ($showAddToFavorite) {
                         ?>
                             <a class="favourite <?php echo ($product['ufp_id']) ? 'is-active' : ''; ?>" onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
                                 <i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
+                                    <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                         </use>
                                     </svg>
@@ -68,7 +68,7 @@ if ($showAddToFavorite) {
                         <?php } else { ?>
                             <a class="favourite wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
                                 <i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
+                                    <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                         </use>
                                     </svg>
@@ -80,7 +80,7 @@ if ($showAddToFavorite) {
                 <li>
                     <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
                         <i class="icn">
-                            <svg class="svg" width="16px" height="16px">
+                            <svg class="svg" width="16" height="16">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
                                 </use>
                             </svg>
@@ -91,17 +91,20 @@ if ($showAddToFavorite) {
         <div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-
-                    <div class="modal-body"> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
+                    </div>
+                    <div class="modal-body">
+
                         <div class="share-wrap">
                             <h6><?php echo Labels::getLabel('Lbl_Share_this_via', $siteLangId); ?></h6>
                             <ul class="social-sharing">
                                 <li class="social-facebook">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -109,7 +112,7 @@ if ($showAddToFavorite) {
                                 <li class="social-twitter">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -117,7 +120,7 @@ if ($showAddToFavorite) {
                                 <li class="social-pintrest">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -125,7 +128,7 @@ if ($showAddToFavorite) {
                                 <li class="social-email">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
                                                 </use>
                                             </svg>
                                         </i>

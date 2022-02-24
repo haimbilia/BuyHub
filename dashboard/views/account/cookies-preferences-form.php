@@ -21,9 +21,9 @@ HtmlHelper::configureSwitchForCheckbox($fld);
 $fld = $frm->getField('ucp_personalized');
 HtmlHelper::configureSwitchForCheckbox($fld);
 ?>
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="content-wrapper content-space">
+<div class="content-wrapper content-space">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
             <?php
             $data = [
                 'headingLabel' => Labels::getLabel('LBL_COOKIE_PREPERENCES', $siteLangId),

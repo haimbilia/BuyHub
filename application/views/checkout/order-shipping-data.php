@@ -24,6 +24,7 @@ if (!empty($orderShippingData)) {
                                             $pictureAttr = [
                                                 'webpImageUrl' => $imageWebpUrl,
                                                 'jpgImageUrl' => $imageUrl,
+                                                'imageUrl' => $imageUrl,
                                                 'alt' => $data['op_selprod_title'],
                                                 'siteLangId' => $siteLangId,
                                             ];

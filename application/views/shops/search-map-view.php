@@ -2,7 +2,7 @@
 $markers = [];
 if (!empty($allShops)) {
 ?>
-    <div class="interactive-stores__list stores">
+    <div class="interactive-stores-list stores">
         <div class="d-flex align-items-center pb-3">
             <h4 class="block-heading"><?php echo Labels::getLabel('LBL_STORES', $siteLangId); ?></h4>
             <div class="stores-count ms-auto">
@@ -17,8 +17,8 @@ if (!empty($allShops)) {
                 <ul class="gmap-list">
                     <li>
                         <div class="product-profile">
-                            <div class="product-profile__thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '"></div>
-                            <div class="product-profile__data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
+                            <div class="product-profile-thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '"></div>
+                            <div class="product-profile-data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
                         </div>
                     </li>
                 </ul>';
@@ -43,9 +43,9 @@ if (!empty($allShops)) {
                                 <p class="location"> <?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?> </p>
                                 <div class="store__detail-foot">
                                     <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
-                                        <div class="products__rating">
+                                        <div class="product-ratings">
                                             <i class="icn"><svg class="svg">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                                                 </svg></i> <span class="rate"><?php echo  round($shop['shopRating'], 1); ?><span></span></span>
                                         </div>
                                     <?php } ?>

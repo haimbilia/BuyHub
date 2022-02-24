@@ -1,8 +1,8 @@
-<div class="products_foot">
-	<?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
+<div class="products-foot">
+    <?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
     <?php if(round($product['prod_rating'])>0 ){ ?>
-    <div class="products__rating"> <i class="icn"><svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+    <div class="product-ratings"> <i class="icn"><svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
         </svg></i> <?php if(round($product['prod_rating'])>0 ){ ?>
       <span class="rate"><?php echo round($product['prod_rating'],1);?></span>
       <?php } ?>
@@ -13,8 +13,8 @@
       <?php }?>
     </div>
 <?php }  ?>
-    <?php } */?>
-	<div class="products_category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']));?>"><?php echo $product['prodcat_name'];?> </a></div>
-	<div class="products_title"><a title="<?php echo $product['selprod_title'];?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));?>"><?php echo $product['selprod_title'];?> </a></div>
-	<?php include(CONF_THEME_PATH.'_partial/collection/product-price.php');?>
+    <?php } */ ?>
+    <div class="products-category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo $product['prodcat_name']; ?> </a></div>
+    <div class="products-title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?> </a></div>
+    <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
 </div>

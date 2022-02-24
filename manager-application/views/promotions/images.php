@@ -7,7 +7,7 @@ if (!empty($bannerImgArr)) { ?>
         $uploadedTime = AttachedFile::setTimeParam($bannerImg['afile_updated_at']);
         switch ($promotionType) {
             case Promotion::TYPE_BANNER:
-                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'Thumb', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], $bannerImg['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'BannerImage', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], $bannerImg['afile_screen'], 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 break;
             case Promotion::TYPE_SLIDES:
                 $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'Slide', array($bannerImg['afile_record_id'], $bannerImg['afile_screen'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');

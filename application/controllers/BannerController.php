@@ -10,7 +10,7 @@ class BannerController extends MyAppController
     {
         $bannerId = FatUtility::int($bannerId);
         if (1 > $bannerId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
         $srch = new BannerSearch($this->siteLangId, true);
@@ -24,7 +24,7 @@ class BannerController extends MyAppController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
@@ -84,92 +84,41 @@ class BannerController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
-    public function HomePageBannerTopLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
+    public function BannerImage($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
-        $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
-        $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
-        $w = 1350;
-        $h = 405;
-        /*Desktop default value need to update in DB*/
-        if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
-            $w = $bannerDimensions['blocation_banner_width'];
-        }
-        if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
-            $h = $bannerDimensions['blocation_banner_height'];
-        }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
-    }
-
-    // For Mobile API
-    public function HomePageBannerMiddleLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
-    {
-        $bannerId = FatUtility::int($bannerId);
-        $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
-        $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
-        $w = 600;
-        $h = 338;
-        /*Desktop default value need to update in DB*/
-        if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
-            $w = $bannerDimensions['blocation_banner_width'];
-        }
-        if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
-            $h = $bannerDimensions['blocation_banner_height'];
-        }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
-    }
-
-    public function HomePageBannerBottomLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
-    {
-        $bannerId = FatUtility::int($bannerId);
-        $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
-        $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
-        $w = 600;
-        $h = 198;
-        /*Desktop default value need to update in DB*/
-        if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
-            $w = $bannerDimensions['blocation_banner_width'];
-        }
-        if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
-            $h = $bannerDimensions['blocation_banner_height'];
-        }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
-    }
-
-    public function productDetailPageBanner($bannerId, $langId = 0, $screen = 0, $sizeType = '')
-    {
-        $bannerId = FatUtility::int($bannerId);
-        $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
-        $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
-        $w = 600;
-        $h = 198;
-        /*Desktop default value need to update in DB*/
-        if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
-            $w = $bannerDimensions['blocation_banner_width'];
-        }
-        if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
-            $h = $bannerDimensions['blocation_banner_height'];
-        }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
-    }
-
-    public function thumb($bannerId, $langId = 0, $screen = 0, $sizeType = '')
-    {
-        $this->showBanner($bannerId, $langId, 200, 50, $screen, $sizeType);
-    }
-
-    public function showBanner($bannerId, $langId, $w = '200', $h = '200', $screen = 0, $sizeType = '')
-    {
-        $bannerId = FatUtility::int($bannerId);
-        $langId = FatUtility::int($langId);
 
         $fileRow = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $bannerId, 0, $langId, true, $screen);
         $image_name = isset($fileRow['afile_physical_path']) ? $fileRow['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        AttachedFile::displayImage($image_name, $w, $h, 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BANNER, $sizeType);
+
+        if ($sizeType != ImageDimension::VIEW_MINI_THUMB) {
+
+
+            $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
+            $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
+            if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
+                $imageDimensions['width'] = $bannerDimensions['blocation_banner_width'];
+            }
+            if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
+                $imageDimensions['height'] = $bannerDimensions['blocation_banner_height'];
+            }
+        }
+       
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, 'banner-default-image.png');
+        }
     }
 
-    public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')
+
+
+
+    /*  public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $langId = FatUtility::int($langId);
@@ -178,7 +127,7 @@ class BannerController extends MyAppController
         $image_name = isset($fileRow['afile_physical_path']) ? $fileRow['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         AttachedFile::displayOriginalImage($image_name, '', '', true);
-    }
+    } */
 
     public function categories()
     {
@@ -264,7 +213,7 @@ class BannerController extends MyAppController
     {
         $frameId = FatUtility::int($frameId);
         if (1 > $frameId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $this->set('frameId', $frameId);

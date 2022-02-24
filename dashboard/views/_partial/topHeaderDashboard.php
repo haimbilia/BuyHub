@@ -7,32 +7,15 @@
         <div class="dropdown dashboard-user">
             <button class="btn dropdown-toggle-custom dropdown-toggle collapsed no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 <?php
-                $dashTitle = '';
-                switch ($activeTab) {
-                    case 'S':
-                        $dashTitle = Labels::getLabel('LBL_SELLER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'B':
-                        $dashTitle = Labels::getLabel('LBL_BUYER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'Ad':
-                        $dashTitle = Labels::getLabel('LBL_ADVERTISER_DASHBOARD', $siteLangId);
-                        break;
-                    case 'AFFILIATE':
-                        $dashTitle = Labels::getLabel('LBL_AFFILIATE_DASHBOARD', $siteLangId);
-                        break;
-                }
-                $titleArr = explode(' ', $dashTitle);
-                $title = '';
-                foreach ($titleArr as $val) {
-                    $title .= substr($val, 0, 1);
-                    if (strlen($title) == 2) {
-                        break;
-                    }
-                }
+                $dashboardArr = [
+                    'S' => Labels::getLabel('NAV_SELLER_DASHBOARD', $siteLangId),
+                    'B' => Labels::getLabel('NAV_BUYER_DASHBOARD', $siteLangId),
+                    'Ad' => Labels::getLabel('NAV_ADVERTISER_DASHBOARD', $siteLangId),
+                    'AFFILIATE' => Labels::getLabel('NAV_AFFILIATE_DASHBOARD', $siteLangId),
+                ];
                 ?>
-                <span class="meta"><?php echo strtoupper($title); ?></span>
-                <?php echo $dashTitle; ?>
+                <span class="meta"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr[$activeTab]); ?></span>
+                <?php echo $dashboardArr[$activeTab]; ?>
                 <i class="dropdown-toggle-custom-arrow"></i>
             </button>
 
@@ -41,8 +24,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'S') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Seller'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">S</span>
-                                <?php echo Labels::getLabel('Lbl_Seller', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['S']); ?></span>
+                                <?php echo $dashboardArr['S']; ?>
                             </div>
 
                         </a>
@@ -52,8 +35,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'B') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Buyer'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">B</span>
-                                <?php echo Labels::getLabel('Lbl_Buyer', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['B']); ?></span>
+                                <?php echo $dashboardArr['B']; ?>
                             </div>
                         </a>
                     </li>
@@ -62,8 +45,8 @@
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>">
                             <div class="meta-block">
-                                <span class="meta-img">A</span>
-                                <?php echo Labels::getLabel('Lbl_Advertiser', $siteLangId); ?>
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['Ad']); ?></span>
+                                <?php echo $dashboardArr['Ad']; ?>
                             </div>
                         </a>
                     </li>
@@ -129,28 +112,24 @@
                 </li>
             <?php } ?>
         </ul> <?php */ ?>
-        <div class="search-docs" data-bs-toggle="modal" data-bs-target="#search-main">
-            <span class="svg-icon">
-                <svg class="" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#565656" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-            </span>
-            <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto">
-        </div>
+        <button class="c-header-icon btn quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#icon-search">
+                </use>
+            </svg>
+        </button>
         <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
-            <div class="c-header-icon bell">
-                <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
-                    <i class="icn">
-                        <svg class="svg bell-shake-delay" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
-                            </use>
-                        </svg>
-                    </i>
-                    <span class="h-badge">
-                        <span class="heartbit">
-                        </span>
-                        <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
-            </div>
+            <a class="c-header-icon bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
+                <svg class="svg bell-shake-delay" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
+                    </use>
+                </svg>
+
+                <span class="h-badge">
+
+
+                    <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
+
         <?php } ?>
 
         <ul class="short-links">

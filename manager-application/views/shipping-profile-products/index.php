@@ -9,7 +9,7 @@ $proFld->developerTags['noCaptionTag'] = true;
 $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Product...', $siteLangId));
 ?>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 searchFormJs" style="display:none;">
         <?php echo $frm->getFormHtml(); ?></form>
     </div>
 </div>

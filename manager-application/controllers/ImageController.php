@@ -23,7 +23,15 @@ class ImageController extends FatController
         }
         $image_name = isset($file_row['afile_physical_path']) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS , $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'],$default_image);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
+        }
+      /*   switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
@@ -39,7 +47,7 @@ class ImageController extends FatController
                 $w = 400;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
-        }
+        } */
     }
 
     public function siteAdminLogo($lang_id = 0, $sizeType = '')
@@ -82,7 +90,16 @@ class ImageController extends FatController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE , $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'],$default_image);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
+        }
+        
+       /*  switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
@@ -96,7 +113,7 @@ class ImageController extends FatController
             default:
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
-        }
+        } */
     }
 
     public function badgeRequest($recordId, $w = 0, $h = 0)

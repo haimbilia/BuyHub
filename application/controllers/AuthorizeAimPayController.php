@@ -54,7 +54,7 @@ class AuthorizeAimPayController extends PaymentController
             $this->set('frm', $frm);
             $this->set('paymentAmount', $paymentAmount);
         } else {
-            $this->set('error', Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            $this->set('error', Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
@@ -84,19 +84,19 @@ class AuthorizeAimPayController extends PaymentController
     private function getPaymentForm($orderId = '')
     {
         $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('AuthorizeAimPay', 'send', array($orderId)), 'class' => "form form--normal"));
-        $frm->addRequiredField(Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
-        $frm->addRequiredField(Labels::getLabel('LBL_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
+        $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
+        $frm->addRequiredField(Labels::getLabel('FRM_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
         $today = getdate();
         $data['year_expire'] = array();
         for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
             $data['year_expire'][strftime('%Y', mktime(0, 0, 0, 1, 1, $i))] = strftime('%Y', mktime(0, 0, 0, 1, 1, $i));
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
-        $frm->addPasswordField(Labels::getLabel('LBL_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
+        $frm->addPasswordField(Labels::getLabel('FRM_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired(true);
         /* $frm->addCheckBox(Labels::getLabel('LBL_SAVE_THIS_CARD_FOR_FASTER_CHECKOUT',$this->siteLangId), 'cc_save_card','1'); */
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
         return $frm;
     }
 
@@ -117,7 +117,7 @@ class AuthorizeAimPayController extends PaymentController
         }
 
         if (true === $invalidCardDetail) {
-            $message['error'] = Labels::getLabel("MSG_Invalid_card_detail", $this->siteLangId);
+            $message['error'] = Labels::getLabel("ERR_INVALID_CARD_DETAIL", $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
 
@@ -153,7 +153,7 @@ class AuthorizeAimPayController extends PaymentController
             // Create order information
             $order = new AnetAPI\OrderType();
             $order->setInvoiceNumber($orderId);
-            $orderPaymentGatewayDescription = sprintf(Labels::getLabel("MSG_Order_Payment_Gateway_Description", $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+            $orderPaymentGatewayDescription = sprintf(Labels::getLabel("MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION", $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
             $order->setDescription($orderPaymentGatewayDescription);
 
             // Set the customer's Bill To address
@@ -208,30 +208,30 @@ class AuthorizeAimPayController extends PaymentController
                     $tresponse = $response->getTransactionResponse();
 
                     if ($tresponse != null && $tresponse->getMessages() != null) {
-                        $str = Labels::getLabel("Successfully created transaction with Transaction ID: {txn-id}", $this->siteLangId);
+                        $str = Labels::getLabel("MSG_SUCCESSFULLY_CREATED_TRANSACTION_WITH_TRANSACTION_ID: {txn-id}", $this->siteLangId);
                         $message = str_replace("{txn-id}", $tresponse->getTransId(), $str) . "\n";
 
-                        $str = Labels::getLabel("Transaction Response Code: {txn-resp-code}", $this->siteLangId);
+                        $str = Labels::getLabel("MSG_TRANSACTION_RESPONSE_CODE: {txn-resp-code}", $this->siteLangId);
                         $decription = str_replace("{txn-resp-code}", $tresponse->getResponseCode(), $str) . "\n";
 
-                        $str = Labels::getLabel("Message Code: {msg-code}", $this->siteLangId);
+                        $str = Labels::getLabel("MSG_MESSAGE CODE: {msg-code}", $this->siteLangId);
                         $decription .= str_replace("{msg-code}", $tresponse->getMessages()[0]->getCode(), $str) . "\n";
 
-                        $str = Labels::getLabel("Auth Code: {auth-code}", $this->siteLangId);
+                        $str = Labels::getLabel("MSG_AUTH_CODE: {auth-code}", $this->siteLangId);
                         $decription .= str_replace("{auth-code}", $tresponse->getAuthCode(), $str) . "\n";
 
-                        $str = Labels::getLabel("Description: {description}", $this->siteLangId);
+                        $str = Labels::getLabel("MSG_DESCRIPTION: {description}", $this->siteLangId);
                         $decription .= str_replace("{description}", $tresponse->getMessages()[0]->getDescription(), $str) . "\n";
 
-                        if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tresponse->getTransId(), $orderPaymentAmount, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), $message)) {
-                            $json['error'] = Labels::getLabel('MSS_Transaction_Failed', $this->siteLangId);
+                        if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tresponse->getTransId(), $orderPaymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $message)) {
+                            $json['error'] = Labels::getLabel('ERR_TRANSACTION_FAILED', $this->siteLangId);
                         } else {
                             $json['msg'] = $message;
                             $json['description'] = $decription;
                             $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
                         }
                     } else {
-                        $json['errorMsg'] = Labels::getLabel('Transaction Failed', $this->siteLangId);
+                        $json['errorMsg'] = Labels::getLabel('ERR_TRANSACTION_FAILED', $this->siteLangId);
                         if ($tresponse->getErrors() != null) {
                             $json['error'] = $tresponse->getErrors()[0]->getErrorText();
                             $json['errorCode'] = $tresponse->getErrors()[0]->getErrorCode();
@@ -239,7 +239,7 @@ class AuthorizeAimPayController extends PaymentController
                     }
                     // Or, print errors if the API request wasn't successful
                 } else {
-                    $json['errorMsg'] = Labels::getLabel('MSG_Transaction Failed', $this->siteLangId);
+                    $json['errorMsg'] = Labels::getLabel('ERR_TRANSACTION_FAILED', $this->siteLangId);
                     $tresponse = $response->getTransactionResponse();
                     if ($tresponse != null && $tresponse->getErrors() != null) {
                         $json['error'] = $tresponse->getErrors()[0]->getErrorText();
@@ -250,10 +250,10 @@ class AuthorizeAimPayController extends PaymentController
                     }
                 }
             } else {
-                $json['error'] = Labels::getLabel('MSG_No_response_returned', $this->siteLangId);
+                $json['error'] = Labels::getLabel('ERR_NO_RESPONSE_RETURNED', $this->siteLangId);
             }
         } else {
-            $json['error'] = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
+            $json['error'] = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
         }
         echo json_encode($json);
     }

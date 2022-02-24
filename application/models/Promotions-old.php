@@ -42,7 +42,7 @@ class Promotions extends MyAppModel
         unset($data['promotion_id']);
         unset($data['promotion_user_id']);
         if (($promotion_user_id < 1)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
         if (isset($data['promotion_banner_url']) && $data['promotion_banner_url'] != '') {
@@ -588,7 +588,7 @@ class Promotions extends MyAppModel
             $txnArray["utxn_debit"] = $charged_amount;
             $txnArray["utxn_credit"] = 0;
             $txnArray["utxn_status"] = 1;
-            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('LBL_Charges_for_promotion_from_duration', $this->langId), $formatted_request_value, FatDate::format($assign_fields['pcharge_start_date'], true), FatDate::format($assign_fields['pcharge_end_date'], true), $assign_fields['pcharge_clicks']);
+            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('LBL_CHARGES_FOR_PROMOTION_FROM_DURATION', $this->langId), $formatted_request_value, FatDate::format($assign_fields['pcharge_start_date'], true), FatDate::format($assign_fields['pcharge_end_date'], true), $assign_fields['pcharge_clicks']);
             if ($txn_id = $transObj->addTransaction($txnArray)) {
                 $emailNotificationObj = new Emailnotifications();
                 $emailNotificationObj->sendTxnNotification($txn_id);

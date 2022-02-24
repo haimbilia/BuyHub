@@ -56,7 +56,7 @@ class PaypalPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -64,7 +64,7 @@ class PaypalPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
         $this->set('orderInfo', $orderInfo);
@@ -127,7 +127,7 @@ class PaypalPayController extends PaymentController
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         if ('COMPLETED' != $post['status']) {         
             SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
-            $msg = Labels::getLabel("MSG_PAYMENT_FAILED_:_{STATUS}", $this->siteLangId);
+            $msg = Labels::getLabel("ERR_PAYMENT_FAILED_:_{STATUS}", $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $post['status']]);
             $orderPaymentObj->addOrderPaymentComments($msg);
             $this->setErrorAndRedirect($msg, true);
@@ -144,7 +144,7 @@ class PaypalPayController extends PaymentController
         }
 
         /* Recording Payment in DB */
-        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paypalOrderId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
+        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paypalOrderId, $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
         /* End Recording Payment in DB */
         $json['redirecUrl'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
         FatUtility::dieJsonSuccess($json);

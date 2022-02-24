@@ -6,7 +6,7 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <div class="section-head mb-0">
-                        <div class="section__heading">
+                        <div class="section-heading">
                             <h2 class="mb-0">FAQ</h2>
                             <div class="breadcrumbs breadcrumbs--white">
                                 <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
@@ -27,7 +27,7 @@
                     <div id="listing"></div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <h3><?php echo Labels::getLabel( 'LBL_Few_More_Questions', $siteLangId)?></h3>
+                    <h3><?php echo Labels::getLabel('LBL_Few_More_Questions', $siteLangId) ?></h3>
                     <div id="categoryPanel"></div>
                 </div>
             </div>
@@ -36,9 +36,8 @@
             <div class="gap"></div>
             <div class="divider"></div>
             <div class="text-center  pt-5">
-                <h3><?php echo Labels::getLabel( 'LBL_Still_need_help', $siteLangId)?> ?</h3>
-                <a href="<?php echo UrlHelper::generateUrl('custom' , 'contact-us'); ?>"
-                    class="btn btn-secondary"><?php echo Labels::getLabel( 'LBL_Contact_Customer_Care', $siteLangId)?>
+                <h3><?php echo Labels::getLabel('LBL_Still_need_help', $siteLangId) ?> ?</h3>
+                <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?>
                 </a>
             </div>
 
@@ -47,6 +46,6 @@
 
 </div>
 <script>
-var faqcatId = '<?php echo $faqCatId ?>';
-var faqId = '<?php echo $faqId ?>';
+    var faqcatId = '<?php echo $faqCatId ?>';
+    var faqId = '<?php echo $faqId ?>';
 </script>

@@ -24,12 +24,12 @@ class AttrGroupAttribute extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
         return array(
-        static::ATTRTYPE_NUMBER => Labels::getLabel('LBL_Number', $langId),
-        static::ATTRTYPE_DECIMAL => Labels::getLabel('LBL_Decimal', $langId),
-        static::ATTRTYPE_SELECT_BOX => Labels::getLabel('LBL_(Drop_Down)_Select_Box', $langId),
+        static::ATTRTYPE_NUMBER => Labels::getLabel('LBL_NUMBER', $langId),
+        static::ATTRTYPE_DECIMAL => Labels::getLabel('LBL_DECIMAL', $langId),
+        static::ATTRTYPE_SELECT_BOX => Labels::getLabel('LBL_(DROP_DOWN)_SELECT_BOX', $langId),
         );
     }
 
@@ -37,10 +37,10 @@ class AttrGroupAttribute extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
         return array(
-        static::ATTRTYPE_TEXT => Labels::getLabel('LBL_Text', $langId),
+        static::ATTRTYPE_TEXT => Labels::getLabel('LBL_TEXT', $langId),
         );
     }
 
@@ -53,7 +53,7 @@ class AttrGroupAttribute extends MyAppModel
     public function addUpdateAttributes($attrgrp_id, $data)
     {
         if (!$attrgrp_id) {
-            $this->error = Labels::getLabel('ERR_Attribute_Group_not_selected!', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_ATTRIBUTE_GROUP_NOT_SELECTED!', $this->commonLangId);
             return false;
         }
 

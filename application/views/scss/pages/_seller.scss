@@ -23,7 +23,7 @@
                 margin-#{$start-direction}: 1rem;
                 a {
                     &:hover {
-                        color: $brand-color-inverse
+                        color: $brand-color-inverse;
                     }
                 }
             }
@@ -75,7 +75,7 @@
             display: block;
             font-size: 0.8em;
             padding: 6px 10px;
-            color: $body-color
+            color: $txt-body;
         }
         &:first-child {
             padding-#{$start-direction}: 0;
@@ -154,7 +154,7 @@
     margin: 3.125rem 0;
     padding: 20px;
     background: rgba(255, 255, 255, 0.95);
-    color: $body-color;
+    color: $txt-body;
     width: 100%;
     border-radius: $radius4;
 }
@@ -198,7 +198,7 @@
             margin-#{$end-direction}: 30px;
         }
         p {
-            color: lighten($body-color, 50%);
+            color: lighten($txt-body, 50%);
         }
     }
 }
@@ -292,7 +292,7 @@
         overflow-x: auto;
         li {
             font-size: 0.85em;
-            color: $body-color;
+            color: $txt-body;
             margin-#{$end-direction}: 1rem;
             &:first-child {
                 margin-#{$start-direction}: 0;

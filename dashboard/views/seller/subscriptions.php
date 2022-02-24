@@ -52,7 +52,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="info p-3 mb-4">
                 <span>
                     <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                         </use>
                     </svg><?php echo $message; ?>
                 </span>

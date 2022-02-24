@@ -7,7 +7,7 @@ $frm->developerTags['fld_default_col'] = 12; */
 
 
 <div class="section-head">
-    <div class="section__heading">
+    <div class="section-heading">
         <h2><?php echo Labels::getLabel('LBL_Seller_Registration', $siteLangId); ?></h2>
     </div>
 </div>
@@ -84,11 +84,11 @@ $frm->developerTags['fld_default_col'] = 12; */
                 $fld = str_replace("</label>", "", $fld);
                 echo $fld;
                 ?>
-                 
+
                 <?php echo sprintf(
                     Labels::getLabel('LBL_I_agree_to_the_terms_conditions', $siteLangId),
                     "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>'
-                ); ?> 
+                ); ?>
             </label>
             <?php if ($frm->getField('user_newsletter_signup')) { ?>
                 <span class="gap"></span>
@@ -99,7 +99,7 @@ $frm->developerTags['fld_default_col'] = 12; */
                     $fld = str_replace("</label>", "", $fld);
                     echo $fld;
                     ?>
-                     </label>
+                </label>
             <?php } ?>
         </div>
     </div>
@@ -111,14 +111,14 @@ $frm->developerTags['fld_default_col'] = 12; */
                 <label class="field_label"></label>
             </div>
             <div class="field-wraper">
-                <div class="field_cover"> 
-                    <?php echo $frm->getFieldHTML('user_id'); ?> 
-                    <?php 
+                <div class="field_cover">
+                    <?php echo $frm->getFieldHTML('user_id'); ?>
+                    <?php
                     $btn = $frm->getField('btn_submit');
                     $btn->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
-                    echo $frm->getFieldHTML('btn_submit'); 
-                    ?> 
-            </div>
+                    echo $frm->getFieldHTML('btn_submit');
+                    ?>
+                </div>
             </div>
         </div>
     </div>

@@ -1,13 +1,19 @@
+:root {
+    --secondary-color: #0795e6;
+    --secondary-color-alpha: 7, 149, 230;
+}
+
 //default colors
 $dark-color: #888;
 $blue: var(--brand-color);
 $primary: #ff3a59;
+$black: #000;
 //dynamic theme colors
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
-$secondary-color: #6dcdef;
+$secondary-color: #0795e6;
 $secondary-color-inverse: #ffffff;
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
@@ -18,16 +24,21 @@ $text-muted: #888888 !default;
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;
+$border-black: solid 1px $black;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
+//outline
+$outline: solid 1px $border-color;
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+$bg-secondary-light: rgba(var(--secondary-color-alpha), 0.1);
 $bg-light: #f3f4f5;
 $bg-gray: #f3f4f5;
 $gray-light: #f3f4f5;
 $bg-placeholder: rgba(0, 0, 0, 0.03);
+
 //shadow
 
 $shadow-rgb: var(--shadow-rgb);
@@ -50,11 +61,13 @@ $radius4: 4px;
 $radius3: 3px;
 $radius2: 2px;
 $radius1: 1px;
+$radius-common: 1px;
 //messages
 $success-color: #1dc9b7;
 $warning-color: #ffb822;
 $info-color: #5578eb;
 $danger-color: #fd397a;
+$star-color: #ff3a59;
 
 //Bg brand
 @mixin bg-brand {
@@ -66,6 +79,27 @@ $danger-color: #fd397a;
     margin: {
         left: auto;
         right: auto;
+    }
+}
+//Transitions
+@mixin staggered_transitions($nth: 1, $items: 2, $initial: 0, $step: 0.1) {
+    @for $i from $nth through $items {
+        &:nth-of-type(#{$i}) {
+            animation-delay: #{$initial}s;
+        }
+        $initial: $initial + $step;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
     }
 }
 

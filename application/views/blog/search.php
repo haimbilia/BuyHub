@@ -1,15 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<section class="section post-detail">
+<section class="">
     <div class="container">
-        <div class="row">
-            <div class="col-xl-9 col-lg-8 mb-4 mb-md-0">
-                <div class="posted-content">
-                    <div id="blogs-listing-js" class="row"></div>
-                </div>
+        <div class="blog-detail">
+            <div class="blog-detail-left">
+                <div class="collection-2" id="blogs-listing-js"></div>
             </div>
-            <div class="col-xl-3 col-lg-4">
-                <?php $this->includeTemplate('_partial/blogSidePanel.php', array('popularPostList' => $popularPostList, 'featuredPostList' => $featuredPostList)); ?>
-            </div>
+            <?php $this->includeTemplate('_partial/blogSidePanel.php', array('popularPostList' => $popularPostList, 'featuredPostList' => $featuredPostList)); ?>
+
         </div>
     </div>
 </section>

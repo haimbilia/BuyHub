@@ -6,7 +6,7 @@
     li {
         padding: 0;
         opacity: 0;
-        transition: all .1s ease-in-out;
+        transition: all 0.1s ease-in-out;
         margin-#{$start-direction}: -10px;
         &:first-child {
             margin-#{$start-direction}: 0;
@@ -16,36 +16,36 @@
             transition-delay: 75ms;
         }
         &:nth-child(2) {
-            -webkit-transition-delay: .15s;
-            transition-delay: .15s;
+            -webkit-transition-delay: 0.15s;
+            transition-delay: 0.15s;
         }
         &:nth-child(3) {
-            -webkit-transition-delay: .30s;
-            transition-delay: .30s;
+            -webkit-transition-delay: 0.3s;
+            transition-delay: 0.3s;
         }
         &:nth-child(4) {
-            -webkit-transition-delay: .45s;
-            transition-delay: .45s;
+            -webkit-transition-delay: 0.45s;
+            transition-delay: 0.45s;
         }
         &:nth-child(5) {
-            -webkit-transition-delay: .60s;
-            transition-delay: .60s;
+            -webkit-transition-delay: 0.6s;
+            transition-delay: 0.6s;
         }
         &:nth-child(6) {
-            -webkit-transition-delay: .75s;
-            transition-delay: .75s;
+            -webkit-transition-delay: 0.75s;
+            transition-delay: 0.75s;
         }
         &:nth-child(7) {
-            -webkit-transition-delay: .90s;
-            transition-delay: .90s;
+            -webkit-transition-delay: 0.9s;
+            transition-delay: 0.9s;
         }
         &:nth-child(8) {
-            -webkit-transition-delay: .105s;
-            transition-delay: .105s;
+            -webkit-transition-delay: 0.105s;
+            transition-delay: 0.105s;
         }
         &:nth-child(9) {
-            -webkit-transition-delay: .130s;
-            transition-delay: .130s;
+            -webkit-transition-delay: 0.13s;
+            transition-delay: 0.13s;
         }
         .circle {
             width: 30px;
@@ -66,7 +66,7 @@
                 max-width: 16px;
                 height: 16px;
                 width: 100%;
-                fill: $body-color;
+                fill: $txt-body;
             }
             &.plus-more {
                 text-align: center;

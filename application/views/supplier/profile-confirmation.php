@@ -1,5 +1,5 @@
 <div class="section-head">
-    <div class="section__heading">
+    <div class="section-heading">
         <h2><?php echo Labels::getLabel('LBL_Seller_Registration', $siteLangId); ?></h2>
     </div>
 </div>
@@ -13,7 +13,7 @@
 <div class="message message--success align--center cms">
     <i class="fa fa-check-circle"></i>
     <div class="section-head  section--head--center">
-        <div class="section__heading">
+        <div class="section-heading">
             <h2><?php echo Labels::getLabel('MSG_Congratulations', $siteLangId); ?>!</h2>
         </div>
     </div>

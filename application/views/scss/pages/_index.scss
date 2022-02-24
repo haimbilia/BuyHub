@@ -1,22 +1,16 @@
 .hero-slider {
     position: relative;
-    padding-top: 20px;
     margin: 0 auto;
     text-align: center;
-    @include media-breakpoint-down(sm) {
-        padding-top: 10px;
-    }
-    .hero-item {
+    &-item {
         margin: 0;
         position: relative;
-        padding: 0 10px;
+        padding: 0;
         @include media-breakpoint-down(sm) {
-            padding: 0 5px;
         }
     }
-    .hero-media {
+    &-media {
         background-color: $bg-gray;
-        border-radius: $radius4;
         overflow: hidden;
         img {
             margin: 0 auto;
@@ -47,23 +41,28 @@
         #{$end-direction}: calc(50% - 38vw);
     }
     .slick-dots {
-        padding: 0;
+        padding: 0.5rem 1rem;
         position: absolute;
-        bottom: 10px;
+        bottom: 50px;
         #{$start-direction}: 0;
         #{$end-direction}: 0;
         margin: 0 auto;
         text-align: center;
+        background-color: #fff;
+        box-shadow: $shadow3;
+        border-radius: 20px;
+        display: inline-block;
+        width: max-content;
         li {
             vertical-align: middle;
             display: inline-block;
-            margin: 0 3px;
-            width: 13px;
-            height: 3px;
-            border-radius: $radius1;
+            margin: 0 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid transparent;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.5);
-            -webkit-transition: all 0.5s ease-in-out;
+            background: #464646;
             transition: all 0.5s ease-in-out;
             button {
                 background: none;
@@ -71,177 +70,10 @@
                 text-indent: -9999999px;
             }
             &.slick-active {
-                background: $brand-color;
-                color: $brand-color-inverse;
-                width: 30px;
-                border-radius: 15px;
+                background: #fff;
+                border-color: var(--brand-color);
             }
         }
-    }
-}
-
-.banner-wrappers {
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-    @include media-breakpoint-down(sm) {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    .banner-ppc {
-        border-radius: $radius4;
-        overflow: hidden;
-        .advertise__block {
-            margin-bottom: 2rem;
-            display: block;
-        }
-        img {
-            margin: 0 auto;
-            display: inline-block;
-        }
-    }
-}
-
-.slick-arrow {
-    position: absolute;
-    top: calc(50% - 20px);
-    background-color: #fff;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: none;
-    text-indent: -999999px;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.collection-corner {
-    .products {
-        border-color: #fff;
-        outline-color: #fff;
-        margin: 0 1rem 1.5rem;
-        border-radius: 2px;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-        @include media-breakpoint-down(sm) {
-            margin: 0 5px 1.5rem;
-        }
-    }
-}
-
-.slider-testimonials {
-    text-align: center;
-    margin: 0rem auto;
-    padding-left: 4rem;
-    padding-right: 4rem;
-    padding-bottom: 2rem;
-    position: relative;
-    display: flex;
-    @include media-breakpoint-down(md) {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    @include media-breakpoint-down(sm) {
-        overflow: hidden;
-        overflow-x: auto;
-    }
-    .slick-arrow {
-        width: 48px;
-        height: 48px;
-        background-color: rgba(255, 255, 255, 0.5);
-        border: none;
-        opacity: 0;
-        transition: all 0.2s ease-in-out;
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-    &:hover {
-        .slick-arrow {
-            transform: scale(1);
-            opacity: 1;
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.9);
-            }
-        }
-    }
-    .slide-item {
-        flex: 1;
-        max-width: 450px;
-        margin: auto;
-        padding: 0 1rem;
-        -webkit-transition: all 0.5s ease-in-out;
-        transition: all 0.5s ease-in-out;
-        @include media-breakpoint-down(sm) {
-            width: 60%;
-            flex: 0 0 60%;
-            max-width: 60%;
-        }
-        &.slick-slide {
-            opacity: 0.4;
-            filter: grayscale(100);
-            &.slick-current {
-                opacity: 1;
-                filter: grayscale(0);
-            }
-        }
-        &__text {
-            background: $bg-white;
-            color: $bg-white-inverse;
-            border-radius: $radius4;
-            padding: 2rem;
-            padding-top: 4rem;
-            padding-bottom: 3rem;
-            margin: 10px 0;
-            text-align: center;
-            font-size: 0.85rem;
-            min-height: 250px;
-            position: relative;
-            box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-            &:before {
-                position: absolute;
-                left: 0;
-                right: 0;
-                top: 1.5rem;
-                width: 2rem;
-                height: 2rem;
-                margin: auto;
-                content: "";
-                background: url(images/retina/left-quote.svg) no-repeat center;
-                background-size: 100%;
-                opacity: 0.6;
-            }
-        }
-        &__from {
-            display: flex;
-            align-items: center;
-            margin: 0 auto;
-            margin-top: -4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            position: relative;
-            .user-pic {
-                max-width: 70px;
-                border-radius: 50%;
-                border: solid 4px #fff;
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-                margin: 1rem;
-            }
-            .name {
-                display: block;
-                font-size: 0.8rem;
-                font-weight: 500;
-            }
-            .designation {
-                font-size: 0.75rem;
-                font-weight: 300;
-            }
-        }
-    }
-    .slick-center & {
-        background-color: #fff;
-        color: $body-color;
     }
 }
 
@@ -281,62 +113,6 @@
     }
 }
 
-.list-faqs {
-    max-width: 60%;
-    margin: 0 auto;
-    margin-top: 2rem;
-    @include media-breakpoint-down(lg) {
-        max-width: none;
-    }
-    ul {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        li {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: $radius4;
-            border: $border;
-            h5 {
-                font-size: 1.1rem;
-                margin: 0;
-            }
-            p {
-                line-height: 1.7;
-                font-size: 0.9rem;
-                color: $txt-gray;
-                margin-top: 1rem;
-            }
-        }
-    }
-    .faq_trigger {
-        position: relative;
-        display: block;
-        font-weight: 500;
-        padding-#{$end-direction}: 2rem;
-        &:after,
-        &:before {
-            background: $body-color;
-            content: '';
-            height: 2px;
-            position: absolute;
-            right: 0;
-            top: calc(50% - 1px);
-            width: 12px;
-        }
-        &:before {
-            transform: rotate(90deg);
-            transition: all 0.2s ease-in-out;
-        }
-        &[aria-expanded='true']:before {
-            transform: rotate(0deg);
-        }
-    }
-    .faq_data {
-        margin-top: 2rem;
-    }
-}
-
 //FEATURED SECTION CSS HERE
 @include media-breakpoint-down(sm) {
     .tabs--mobileview {
@@ -360,14 +136,14 @@
 .featured-products {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    .items {
+    .item {
         .products {
-            &_body {
-                .products_img {
+            &-body {
+                .products-img {
                     margin: 0;
                 }
             }
-            &_foot {
+            &-foot {
                 position: absolute;
                 left: 0;
                 right: 0;
@@ -411,7 +187,7 @@
                 }
             }
             &:hover {
-                .products_foot {
+                .products-foot {
                     * {
                         opacity: 1;
                     }
@@ -423,7 +199,7 @@
         }
     }
     &[data-view="1"] {
-        .items {
+        .item {
             grid-column-start: 5;
             grid-column-end: 9;
             @include media-breakpoint-down(lg) {
@@ -437,7 +213,7 @@
         }
     }
     &[data-view="2"] {
-        .items {
+        .item {
             &:first-child {
                 grid-column-start: 4;
                 grid-column-end: 7;
@@ -460,7 +236,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 4;
@@ -497,7 +273,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 2;
@@ -535,7 +311,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child,
                 &:nth-child(2) {
@@ -589,7 +365,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 1;
@@ -662,7 +438,7 @@
         @include media-breakpoint-down(sm) {
             grid-template-columns: repeat(2, 1fr);
         }
-        .items {
+        .item {
             @include media-breakpoint-up(md) {
                 &:first-child {
                     grid-column-start: 2;

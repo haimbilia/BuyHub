@@ -39,24 +39,24 @@ if ($vtype == 'list') {
                     } else if (isset($product['ribbons'])) {
                         $selProdRibbons = $product['ribbons'];
                     }
-                    
-                    $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?> 
-                    <div class="items">
+
+                    $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
+                    <div class="item">
                         <!--product tile-->
                         <div class="products">
                             <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product, 'siteLangId' => $siteLangId], false); ?>
                             <?php if ($product['in_stock'] == 0) { ?>
                                 <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                             <?php } ?>
-                            <div class="products_body">
+                            <div class="products-body">
                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                     <div class="not-available"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                             </use>
                                         </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
                                 <?php } ?>
-                                <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product, 'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
-                                <div class="products_img">
+
+                                <div class="products-img">
                                     <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                     <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
                                         <?php
@@ -66,6 +66,7 @@ if ($vtype == 'list') {
                                             'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
                                             'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'ratio' => '1:1',
+                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'siteLangId' => $siteLangId,
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
                                             'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name'],
@@ -75,12 +76,12 @@ if ($vtype == 'list') {
                                     </a>
                                 </div>
                             </div>
-                            <div class="products_foot">
-                                <div class="products_category">
+                            <div class="products-foot">
+                                <div class="products-category">
                                     <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?>
                                     </a>
                                 </div>
-                                <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
+                                <div class="products-title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
                                     </a></div>
                                 <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
                             </div>

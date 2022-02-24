@@ -1,13 +1,21 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if ($relatedProductsRs) { ?>
     <div class="container">
-        <div class="section-head section--head--center">
-            <div class="section__heading">
+        <div class="section-head section-head-center">
+            <div class="section-heading">
                 <h2><?php echo Labels::getLabel('LBL_Similar_Products', $siteLangId); ?>
                 </h2>
             </div>
+            <div class="section-action">
+                <div class="slider-controls">
+                    <button class="btn btn-prev" type="button" data-href="#product-listing"> <span class=""></span>
+                    </button>
+                    <button class="btn btn-next" type="button" data-href="#product-listing"> <span class=""></span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div id="similar-product" class="js-collection-corner collection-corner" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+        <div class="js-carousel product-listing related-products" id="product-listing" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
             <?php
             $tLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
             $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];
@@ -24,32 +32,32 @@ if ($relatedProductsRs) { ?>
                 <!--product tile-->
                 <div class="products">
                     <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
-                    <div class="products_body">
-                        <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $rProduct, 'siteLangId' => $siteLangId, 'selProdRibbons' => $selProdRibbons), false); ?>
+                    <div class="products-body">
+
                         <?php $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']); ?>
-                        <div class="products_img">
+                        <div class="products-img">
                             <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                 <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
                                 <img data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
                             </a>
                         </div>
                     </div>
-                    <div class="products_foot">
+                    <div class="products-foot">
                         <?php /* if(round($rProduct['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
-                <div class="products__rating">
+                <div class="product-ratings">
                     <i class="icn"><svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                               ></use>
                         </svg></i> <span class="rate"><?php echo round($rProduct['prod_rating'],1);?></span>
                     <?php if(round($rProduct['prod_rating'])==0 ){  ?> <span class="be-first"> <a
                             href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?>
                         </a> </span> <?php } ?>
                 </div> <?php } */ ?>
-                        <div class="products_category">
+                        <div class="products-category">
                             <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                             </a>
                         </div>
-                        <div class="products_title">
+                        <div class="products-title">
                             <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr($rProduct['selprod_title'], 0, 50) . "..." : $rProduct['selprod_title']; ?>
                             </a>
                         </div>

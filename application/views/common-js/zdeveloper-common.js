@@ -41,10 +41,7 @@ $(document).ready(function () {
     ) {
         $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
     }
-    $(document).on("click", ".loginRegBtn--js", function () {
-        $(".container-form").toggleClass("sign-up");
-        $("#sign-up").toggleClass("is-opened");
-    });
+
 });
 $(document).on("keyup", "input.otpVal-js", function (e) {
     if ("" != $(this).val()) {
@@ -1011,13 +1008,13 @@ $(document).ready(function () {
                 if (t.html.length > 0) {
                     if (!searchSuggestionsJs.find("div").hasClass("search-suggestions")) {
                         searchSuggestionsJs.html(
-                            '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a><div class="search-suggestions" id="tagsSuggetionList"></div>'
+                            '<div class="search-suggestions" id="tagsSuggetionList"></div>'
                         );
                     }
                     $("#tagsSuggetionList").html(t.html);
                 } else {
                     searchSuggestionsJs.html(
-                        '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a>'
+                        ''
                     );
                 }
             },

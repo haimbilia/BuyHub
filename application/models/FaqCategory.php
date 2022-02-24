@@ -47,8 +47,8 @@ class FaqCategory extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::FAQ_PAGE => Labels::getLabel('LBL_Faq_Page', $langId),
-        static::SELLER_PAGE => Labels::getLabel('LBL_Seller_Page', $langId)
+        static::FAQ_PAGE => Labels::getLabel('LBL_FAQ_PAGE', $langId),
+        static::SELLER_PAGE => Labels::getLabel('LBL_SELLER_PAGE', $langId)
         );
     }
 

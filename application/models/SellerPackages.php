@@ -82,9 +82,9 @@ class SellerPackages extends MyAppModel
     public static function getPackageTypes()
     {
         return array(
-            '' => Labels::getLabel('LBL_Select_Plan', CommonHelper::getLangId()),
-            SellerPackages::FREE_TYPE => Labels::getLabel('LBL_Free_Plan', CommonHelper::getLangId()),
-            SellerPackages::PAID_TYPE => Labels::getLabel('LBL_Paid_Plan', CommonHelper::getLangId()),
+            '' => Labels::getLabel('LBL_SELECT_PLAN', CommonHelper::getLangId()),
+            SellerPackages::FREE_TYPE => Labels::getLabel('LBL_FREE_PLAN', CommonHelper::getLangId()),
+            SellerPackages::PAID_TYPE => Labels::getLabel('LBL_PAID_PLAN', CommonHelper::getLangId()),
         );
     }
     public static function getAllowedLimit($userId, $langId, $key = '')
