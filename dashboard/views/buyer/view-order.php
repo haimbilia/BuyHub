@@ -364,7 +364,7 @@ if (!$print) { ?>
         fcom.ajax(fcom.makeUrl('buyer', 'downloadDigitalProductFromLink', [linkId, opId]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.systemMessage(ans.msg, 'alert--danger');
+                fcom.displayErrorMessage(ans.msg);
                 return false;
             }
             /* var dataLink = $(this).attr('data-link');
@@ -375,9 +375,9 @@ if (!$print) { ?>
     }
 
     trackOrder = function(trackingNumber, courier, orderNumber) {
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $.ykmodal(res);
         });
     };

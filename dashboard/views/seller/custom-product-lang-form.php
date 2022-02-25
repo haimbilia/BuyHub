@@ -71,7 +71,7 @@ if (null != $fld) {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupCustomProductLang'), data, function(t) {
             runningAjaxReq = false;
-            $.mbsmessage.close();
+            $.ykmsg.close();
             fcom.resetEditorInstance();
 
             if (t.lang_id > 0) {

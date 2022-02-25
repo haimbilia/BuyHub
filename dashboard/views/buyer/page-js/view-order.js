@@ -15,7 +15,7 @@ $(document).ready(function () {
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $.ykmodal(res);
         });
     }
@@ -33,7 +33,7 @@ $(document).ready(function () {
         } else {
             $.ykmodal(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
-                $.mbsmessage.close();
+                $.ykmsg.close();
                 $.ykmodal(ans, false, 'modal-dialog-vertical-md opShippingChargesJs');
             });
         }
@@ -45,7 +45,7 @@ $(document).ready(function () {
         } else {
             $.ykmodal(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
-                $.mbsmessage.close();
+                $.ykmsg.close();
                 $.ykmodal(ans, false, 'modal-dialog-vertical-md opTaxChargesJs');
             });
         }

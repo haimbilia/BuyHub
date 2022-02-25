@@ -93,7 +93,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
         });
     };
 
@@ -102,7 +102,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             searchBrandRequests(frm);
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
@@ -159,15 +159,12 @@ $(document).on("change", '[name="breq_record_type"]', function () {
     checkUniqueBrandName = function (obj, $langId, $brandId) {
         data = "brandName=" + $(obj).val() + "&langId= " + $langId + "&brandId= " + $brandId;
         fcom.ajax(fcom.makeUrl('Brands', 'checkUniqueBrandName'), data, function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $res = $.parseJSON(t);
 
             if ($res.status == 0) {
                 $(obj).val('');
-
-                $alertType = 'alert--danger';
-
-                $.mbsmessage($res.msg, true, $alertType);
+                fcom.displayErrorMessage($res.msg);
             }
 
         });
@@ -324,14 +321,14 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $.mbsmessage(langLbl.processing, false, 'alert--process');
+                fcom.displayProcessing();
             },
             success: function (ans) {
-                var className = (ans.status == 1 ? 'alert--success' : 'alert--danger');
-                $.mbsmessage(ans.msg, true, className);
                 if (1 > ans.status) {
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                 }
+                fcom.displaySuccessMessage(ans.msg);
                 backToListing();
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -367,7 +364,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -381,7 +378,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return [data.shopData];
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -430,7 +427,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
                 JSONObj = JSON.parse(badgeLinkRecordIds);
                 if (JSONObj.includes(e.params.args.data.id)) {
                     selector.val('').trigger('change');
-                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    fcom.displayErrorMessage(langLbl.alreadySelected);
                     return false;
                 }
                 JSONObj.push(e.params.args.data.id);
@@ -488,7 +485,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         fcom.ajax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestRefFile', [badgeReqId]), '', function (t) {
             var res = $.parseJSON(t);
             if (1 > res.status) {
-                $.systemMessage(res.msg, 'alert--danger');
+                fcom.displayErrorMessage(res.msg);
                 return false;
             }
             $('.refFile--js').remove();

@@ -586,7 +586,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     searchProducts = function (frm) {
         var keyword = $.trim($(frm.keyword).val());
         if (3 > keyword.length || '' === keyword) {
-            $.mbsmessage(langLbl.searchString, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.searchString);
             return;
         }
         $("input[id=keyword]").val(keyword);
@@ -753,14 +753,14 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     };
 
     resendOtp = function (userId, getOtpOnly = 0) {
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, 'alert--danger');
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.mbsmessage(t.msg, true, 'alert--success');
+            fcom.displaySuccessMessage(t.msg);
             startOtpInterval();
         });
         return false;
@@ -774,7 +774,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
             } else {
-                $.systemMessage(t.msg, 'alert--danger', true);
+                fcom.displayErrorMessage(t.msg);
                 invalidOtpField();
             }
         });

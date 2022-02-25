@@ -112,14 +112,14 @@ $(document).on('change', '.icon-language-js', function () {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $.mbsmessage(langLbl.processing, false, 'alert--process');
+                fcom.displayProcessing();
             },
             success: function (ans) {
-                var className = (ans.status == 1 ? 'alert--success' : 'alert--danger');
-                $.mbsmessage(ans.msg, true, className);
                 if (1 > ans.status) {
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                 }
+                fcom.displaySuccessMessage(ans.msg);
                 backToListing();
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -139,7 +139,7 @@ $(document).on('change', '.icon-language-js', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -153,7 +153,7 @@ $(document).on('change', '.icon-language-js', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return [data.shopData];
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -201,7 +201,7 @@ $(document).on('change', '.icon-language-js', function () {
                 JSONObj = JSON.parse(badgeLinkRecordIds);
                 if (JSONObj.includes(e.params.args.data.id)) {
                     selector.val('').trigger('change');
-                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    fcom.displayErrorMessage(langLbl.alreadySelected);
                     return false;
                 }
                 JSONObj.push(e.params.args.data.id);

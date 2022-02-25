@@ -3,12 +3,12 @@ $("document").ready(function () {
 		event.preventDefault();
 		var selectedPackage = $(this).closest('.packagesBoxJs');
 		if (selectedPackage.find('input[name=packages]:checked').val() == '' || selectedPackage.find('input[name=packages]:checked').val() == 0 || selectedPackage.find('input[name=packages]:checked').val() == undefined) {
-			$.mbsmessage(langLbl.selectPlan, true, 'alert--danger');
+			fcom.displayErrorMessage(langLbl.selectPlan);
 			return false;
 		}
 
 		if (currentActivePlanId != undefined && currentActivePlanId == selectedPackage.find('input[name=packages]:checked').val()) {
-			$.mbsmessage(langLbl.alreadyHaveThisPlan, true, 'alert--danger');
+			fcom.displayErrorMessage(langLbl.alreadyHaveThisPlan);
 			return false;
 		}
 

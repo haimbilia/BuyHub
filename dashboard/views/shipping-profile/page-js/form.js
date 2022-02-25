@@ -61,11 +61,11 @@ $(document).ready(function () {
     setupProfileProduct = function (frm) {
         if (!$(frm).validate()) return;
         if ($('input[name="shipprofile_id"]').val() <= 0) {
-            $.mbsmessage(langLbl.saveProfileFirst, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.saveProfileFirst);
             return;
         }
         if ('' == $('input[name="shippro_product_id"]').val()) {
-            $.mbsmessage(langLbl.selectProduct, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.selectProduct);
             return;
         }
         var data = fcom.frmData(frm);
@@ -105,13 +105,13 @@ $(document).ready(function () {
 
     zoneForm = function (profileId, zoneId) {
         if (profileId <= 0) {
-            $.mbsmessage(langLbl.saveProfileFirst, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.saveProfileFirst);
             return;
         }
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
             $.ykmodal(t);
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -144,7 +144,7 @@ $(document).ready(function () {
 
     setupZone = function (frm) {
         if ($('input[name="rest_of_the_world"]:checked').length < 1 && $('input[name="shiploc_zone_ids[]"]:checked').length < 1 && $('input[name="c_id[]"]:checked').length < 1 && $('input[name="s_id[]"]:checked').length < 1) {
-            $.mbsmessage(langLbl.minimumOneLocationRequired, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.minimumOneLocationRequired);
             return;
         }
 

@@ -284,7 +284,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
             if (fromTime == '' && toTime != '') {
                 $(toElement).val("");
-                $.ykmsg.error(langLbl.invalidFromTime);
+                fcom.displayErrorMessage(langLbl.invalidFromTime);
                 return false;
             }
 

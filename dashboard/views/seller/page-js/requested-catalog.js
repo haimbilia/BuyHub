@@ -60,7 +60,7 @@ $(document).ready(function () {
 		$(dv).prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'catalogRequestMessageSearch'), data, function (ans) {
 			fcom.removeLoader();
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if (append == 1) {
 				$(dv).find('.loader-yk').remove();
 				$(dv).prepend(ans.html);
@@ -96,7 +96,7 @@ $(document).ready(function () {
 				validator.validate();
 				if (!validator.isValid()) return;
 
-				$.mbsmessage(langLbl.processing, true, 'alert--process alert');
+				fcom.displayProcessing();
 				$.ajax({
 					url: fcom.makeUrl('Seller', 'setupCatalogRequest'),
 					type: 'post',
@@ -107,9 +107,8 @@ $(document).ready(function () {
 					processData: false,
 
 					success: function (ans) {
-						$.mbsmessage(ans.msg, true, 'alert--success');
+						fcom.displaySuccessMessage(ans.msg);
 						if (ans.status == true) {
-							$.mbsmessage(t.msg);
 							searchRequestedCatalog(document.frmCatalogReqSearchPaging);
 						}
 					},
@@ -129,7 +128,7 @@ $(document).ready(function () {
 		}
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteRequestedCatalog'), 'scatrequest_id=' + scatrequest_id, function (t) {
 			searchRequestedCatalog(document.frmCatalogReqSearchPaging);
-			$.mbsmessage.close();
+			$.ykmsg.close();
 		});
 	};
 
