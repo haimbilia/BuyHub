@@ -157,6 +157,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                 var ans = $.parseJSON(t);
                 if (1 > ans.status) {
                     $.mbsmessage(ans.msg, true, 'alert--danger');
+                    $('#tabs-container').html(ans.msg);
                     return false;
                 } else if ('undefined' != typeof ans.redirect) {
                     location.href = ans.redirect;

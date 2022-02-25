@@ -2,49 +2,23 @@
 class CustomRouter
 {
     public static function setRoute(&$controller, &$action, &$queryString)
-    { 
+    {
         $langId = CommonHelper::getLangId();
-        $userType = null;
         define('LANG_CODES_ARR', Language::getAllCodesAssoc());
 
         if ('app-api' == $controller) {
-            define('MOBILE_APP_API_CALL', true);
-            define('MOBILE_APP_API_VERSION', str_replace('v', '', $action));
-
-            if (!array_key_exists(0, $queryString)) {
-                $arr = array('status' => -1, 'msg' => "Invalid Request");
-                die(json_encode($arr));
-            }
-
-            $controller = $queryString[0];
-            array_shift($queryString);
-
-            if (!array_key_exists(0, $queryString)) {
-                $queryString[0] = '';
-            }
-
-            $action = $queryString[0];
-            if ($controller != '' && $action == '') {
-                $action = 'index';
-            }
-
-            array_shift($queryString);
-
-            $token = null;
-
-            if (array_key_exists('HTTP_X_USER_TYPE', $_SERVER)) {
-                $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
-            }
+            self::setAPIRoute($controller, $action, $queryString);
         } else {
             /* [ Handled lang code in url */
             if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && in_array(strtoupper($controller), LANG_CODES_ARR)) {
-                $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
+                // $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
                 $langCodes = array_flip(LANG_CODES_ARR);
-                if (in_array(strtoupper($controller), LANG_CODES_ARR)) {
+                $langId = $langCodes[strtoupper($controller)];
+                /* if (in_array(strtoupper($controller), LANG_CODES_ARR)) {
                     $langId = $langCodes[strtoupper($controller)];
-                }
+                } */
                 $langId = ($langId > 0) ? $langId : CommonHelper::getLangId();
-                setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
+                setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONTEND);
 
                 $controller = ($action == 'index') ? 'Home' : $action;
                 if (!array_key_exists(0, $queryString)) {
@@ -58,9 +32,10 @@ class CustomRouter
 
             define('MOBILE_APP_API_CALL', false);
             define('MOBILE_APP_API_VERSION', '');
+            define('MOBILE_APP_USER_TYPE', null);
         }
         define('SYSTEM_LANG_ID', $langId);
-        define('MOBILE_APP_USER_TYPE', $userType);
+
 
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
@@ -74,7 +49,7 @@ class CustomRouter
         if (defined('SYSTEM_FRONT') && SYSTEM_FRONT === true/*  && !FatUtility::isAjaxCall() */) {
             $url = urldecode($_SERVER['REQUEST_URI']);
 
-            if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) { 
+            if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) {
                 return;
             }
 
@@ -127,8 +102,7 @@ class CustomRouter
                 }
             }
 
-
-            if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) { 
+            if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) {
                 return;
             }
             /*]*/
@@ -168,5 +142,36 @@ class CustomRouter
                 $action = 'error404';
             }
         }
+    }
+
+    public static function setAPIRoute(&$controller, &$action, &$queryString)
+    {
+        define('MOBILE_APP_API_CALL', true);
+        define('MOBILE_APP_API_VERSION', str_replace('v', '', $action));
+        $userType = null;
+
+        if (!array_key_exists(0, $queryString)) {
+            $arr = array('status' => -1, 'msg' => "Invalid Request");
+            die(json_encode($arr));
+        }
+
+        $controller = $queryString[0];
+        array_shift($queryString);
+
+        if (!array_key_exists(0, $queryString)) {
+            $queryString[0] = '';
+        }
+
+        $action = $queryString[0];
+        if ($controller != '' && $action == '') {
+            $action = 'index';
+        }
+
+        array_shift($queryString);
+
+        if (array_key_exists('HTTP_X_USER_TYPE', $_SERVER)) {
+            $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
+        }
+        define('MOBILE_APP_USER_TYPE', $userType);
     }
 }

@@ -337,7 +337,7 @@ class ProductRequest extends MyAppModel
             return false;
         }
 
-        $db->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        $db->updateFromArray('tbl_products', array('product_img_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;

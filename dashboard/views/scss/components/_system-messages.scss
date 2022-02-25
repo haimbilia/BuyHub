@@ -300,8 +300,7 @@
     #{$start-direction}: 50% !important;
     top: 50% !important;
     bottom: auto !important;
-    -webkit-transform: translateX(-50%) !important;
-    transform: translateX(-50%) !important;
+    transform: translateX(-50% * $transform-direction) !important;
 }
 
 .alert--positioned-top-full {

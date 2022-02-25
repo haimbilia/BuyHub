@@ -2379,7 +2379,7 @@ $header-height: 65px;
     flex-direction: column;
     padding-#{$start-direction}: $side-bar-size-close;
 
-    @media (min-width:1280px){
+    @media (min-width: 1280px) {
         padding-#{$start-direction}: $side-bar-size;
     }
 }
@@ -2939,7 +2939,7 @@ $header-height: 65px;
         right: 0;
         z-index: 99;
         transition: transform 0.3s ease-out;
-        transform: translateX(100%);
+        transform: translateX(100% * $transform-direction);
     }
     .card-head {
         flex-direction: row;
@@ -2949,7 +2949,7 @@ $header-height: 65px;
     }
 
     &.show {
-        transform: translateX(0);
+        transform: translateX(0 * $transform-direction);
     }
 }
 
@@ -2980,14 +2980,21 @@ $header-height: 65px;
 
 .txt-description {
     display: inline-flex;
+    white-space: nowrap;
     min-width: 190px;
     .btn-view {
-        background-color: transparent;
-        border: none;
+        background-color: $bg-gray;
+        border: $border;
         padding: 0;
         margin: 0;
-        height: auto;
-        color: $txt-gray;
+        margin-#{$start-direction}: 5px;
+        color: $txt-body;
+        width: 1.8rem;
+        height: 1rem;
+        border-radius: 3px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -3123,7 +3130,7 @@ $header-height: 65px;
 }
 
 .lbl-link {
-    display: flex!important;
+    display: flex !important;
     width: 100%;
     align-items: center;
     justify-content: space-between;

@@ -4,7 +4,7 @@
 ?>
 
 <ul class="list-group list-coupons">
-    <?php /*
+    <?php 
     foreach ($offers as $row) {
         $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']); ?>
         <li class="list-group-item ">
@@ -36,8 +36,8 @@
                 </div>
             </div>
         </li>
-    <?php } */ ?>
-    <?php ?> <li class="list-group-item ">
+    <?php } ?>
+    <?php /* ?> <li class="list-group-item ">
         <div class="coupon coupon--notused">
             <div class="coupon__code-img">
                 <div class="coupon__img">
@@ -85,5 +85,5 @@
             </div>
         </div>
     </li>
-    <?php ?>
+    <?php  */?>
 </ul>
