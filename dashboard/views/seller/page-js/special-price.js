@@ -109,7 +109,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
 
     deleteSelected = function () {
         if (typeof $(".selectItem--js:checked").val() === "undefined") {
-            $.mbsmessage(langLbl.atleastOneRecord, "alert--danger");
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return false;
         }
         var agree = confirm(langLbl.confirmDelete);
@@ -123,10 +123,10 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
-                    $.mbsmessage(ans.msg, true, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     $(".formActionBtn-js").addClass("disabled");
                 } else {
-                    $.mbsmessage(ans.msg, true, "alert--danger");
+                    fcom.displayErrorMessage(ans.msg);
                 }
                 searchRecords(document.frmRecordSearch);
             }
@@ -178,7 +178,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             value = parseFloat(value);
             if (Number.isNaN(value)) {
                 currObj.attr("value", oldValue).val(oldValue);
-                $.systemMessage(langLbl.notANumber, "alert--danger", true);
+                fcom.displayErrorMessage(langLbl.notANumber);
                 return;
             }
             oldValue = parseFloat(oldValue);
@@ -197,7 +197,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
                 function (t) {
                     var ans = $.parseJSON(t);
                     if (ans.status != 1) {
-                        $.systemMessage(ans.msg, "alert--danger", true);
+                        fcom.displayErrorMessage(ans.msg);
                         value = oldValue;
                         updatedValue = displayOldValue;
                     } else {

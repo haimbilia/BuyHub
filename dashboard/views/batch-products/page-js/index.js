@@ -92,7 +92,7 @@ $(document).ready(function () {
 
     updateProductToGroup = function (prodgroup_id, selprod_id) {
         fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'updateProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
-            //$.mbsmessage.close();
+            //$.ykmsg.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
@@ -101,7 +101,7 @@ $(document).ready(function () {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) { return false; }
         fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'removeProductToGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
-            //$.mbsmessage.close();
+            //$.ykmsg.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
@@ -110,7 +110,7 @@ $(document).ready(function () {
         var agree = confirm(langLbl.setMainProduct);
         if (!agree) { return false; }
         fcom.updateWithAjax(fcom.makeUrl('BatchProducts', 'setMainProductFromGroup'), 'prodgroup_id=' + prodgroup_id + '&selprod_id=' + selprod_id, function (t) {
-            //$.mbsmessage.close();
+            //$.ykmsg.close();
             reloadBatchProducts(prodgroup_id);
         });
     }
@@ -168,7 +168,7 @@ $(document).on('click', '.prodgroup-Js', function () {
                     $(node).val($val);
                 },
                 success: function (ans) {
-                    $.mbsmessage(ans.msg, true, 'alert--success');
+                    fcom.displaySuccessMessage(ans.msg);
                     $('.text-danger').remove();
                     $('#input-field' + fileType).html(ans.msg);
                     if (ans.status == true) {

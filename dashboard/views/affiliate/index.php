@@ -334,14 +334,14 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
             description: "<?php echo str_replace(array("\n", "\r", "\r\n"), ' ', sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_" . $siteLangId, FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId))) ?>",
         }, function(response) {
             if (response !== null && typeof response.post_id !== 'undefined') {
-                $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+                fcom.displaySuccessMessage(langLbl.thanksForSharing);
                 /* $("#fb_ajax").html(langLbl.thanksForSharing); */
             }
         });
     }
 
     function twitter_shared(name) {
-        $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+        fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
     }
 </script>

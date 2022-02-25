@@ -143,7 +143,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -157,7 +157,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         } else if (RECORD_TYPE_SHOP == recordType) {
             return [data.shopData];
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -209,7 +209,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
                 JSONObj = JSON.parse(badgeLinkRecordIds);
                 if (JSONObj.includes(record.id)) {
                     selector.val('').trigger('change');
-                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    fcom.displayErrorMessage(langLbl.alreadySelected);
                     return false;
                 }
                 JSONObj.push(record.id);
@@ -323,7 +323,7 @@ $(document).ready(function () {
     } else if (TYPE_RIBBON == badgeType) {
         ribbonForm(blinkcond_id, badgeId);
     } else {
-        $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+        fcom.displayErrorMessage(langLbl.invalidRequest);
         return false;
     }
 });

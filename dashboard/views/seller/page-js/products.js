@@ -11,10 +11,10 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		var ans = $.parseJSON(t);
 		$(frm.selprod_id).val(selprodId);
 		if (ans.status == 0) {
-			$.mbsmessage(ans.msg, false, 'alert--danger');
+			fcom.displayErrorMessage(ans.msg);
 			return;
 		}
-		$.mbsmessage.close();
+		$.ykmsg.close();
 	});
 });
 
@@ -134,9 +134,9 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		fcom.ajax(fcom.makeUrl('Seller', 'changeProductStatus'), data, function (res) {
 			var ans = $.parseJSON(res);
 			if (ans.status == 1) {
-				$.mbsmessage(ans.msg, true, 'alert--success');
+				fcom.displaySuccessMessage(ans.msg);
 			} else {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 				$(obj).prop('checked', !$(obj).prop('checked'));
 			}
 			/* loadSellerProducts(document.frmSearchSellerProducts); */
@@ -145,7 +145,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 
 	addSpecialPrice = function () {
 		if (typeof $(".selectItem--js:checked").val() === 'undefined') {
-			$.mbsmessage(langLbl.atleastOneRecord, true, 'alert--danger');
+			fcom.displayErrorMessage(langLbl.atleastOneRecord);
 			return false;
 		}
 		$("#frmSellerProductsListing").attr({ 'action': fcom.makeUrl('Seller', 'specialPrice'), 'target': "_blank" }).removeAttr('onsubmit').submit();
@@ -154,7 +154,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 
 	addVolumeDiscount = function () {
 		if (typeof $(".selectItem--js:checked").val() === 'undefined') {
-			$.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
+			fcom.displayErrorMessage(langLbl.atleastOneRecord);
 			return false;
 		}
 		$("#frmSellerProductsListing").attr({ 'action': fcom.makeUrl('Seller', 'volumeDiscount'), 'target': "_blank" }).removeAttr('onsubmit').submit();

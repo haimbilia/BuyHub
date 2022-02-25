@@ -155,9 +155,9 @@ $(document).on('change', '.language-js', function () {
 					fcom.removeLoader();
 					var ans = $.parseJSON(t);
 					if (ans.status == 1) {
-						$.mbsmessage(ans.msg, true, 'alert--success');
+						fcom.displaySuccessMessage(ans.msg);
 					} else {
-						$.mbsmessage(ans.msg, true, 'alert--danger');
+						fcom.displayErrorMessage(ans.msg);
 					}
 					productImages($('#frmCustomProductImage input[name=product_id]').val(), $('.option').val(), $('.language').val());
 					$('#prod_image').val('');
@@ -174,7 +174,7 @@ $(document).on('change', '.language-js', function () {
 		if (!agree) { return false; }
 		fcom.ajax(fcom.makeUrl('Seller', 'deleteCustomProductImage', [productId, image_id]), '', function (t) {
 			var ans = $.parseJSON(t);
-			$.mbsmessage(ans.msg, true, 'alert--success');
+			fcom.displaySuccessMessage(ans.msg);
 			if (ans.status == 0) {
 				return;
 			}
@@ -186,7 +186,7 @@ $(document).on('change', '.language-js', function () {
 		fcom.ajax(fcom.makeUrl('Seller', 'checkIfAvailableForInventory', [product_id]), '', function (t) {
 			$res = $.parseJSON(t);
 			if ($res.status == 0) {
-				$.mbsmessage($res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage($res.msg);
 				return false;
 			}
 			window.location.href = fcom.makeUrl('Seller', 'sellerProductForm', [product_id]);
@@ -347,9 +347,9 @@ $(document).on('change', '.language-js', function () {
 			success: function (ans) {
 				fcom.removeLoader();
 				if (ans.status == 1) {
-					$.mbsmessage(ans.msg, true, 'alert--success');
+					fcom.displaySuccessMessage(ans.msg);
 				} else {
-					$.mbsmessage(ans.msg, true, 'alert--danger');
+					fcom.displayErrorMessage(ans.msg);
 				}
 				productImages($('#frmCustomProductImage input[name=product_id]').val(), $('.option').val(), $('.language').val());
 				$('#prod_image').val('');
