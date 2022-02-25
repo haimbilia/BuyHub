@@ -1,5 +1,10 @@
 <div class="app">
     <?php $this->includeTemplate('_partial/navigation/left-navigation.php'); ?>
+    <?php
+
+    $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED);
+
+    ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
             <div class="container-fluid">
@@ -96,17 +101,22 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="header-action__item dropdown header-account">
                                 <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
+                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>" alt="">
                                     </span>
                                 </a>
+
                                 <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+
+
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>">
+                                                <img alt="" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>">
                                             </div>
                                             <div class="profile__detail">
                                                 <h6>

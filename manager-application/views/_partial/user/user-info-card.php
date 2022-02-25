@@ -28,10 +28,12 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
 <div class="user-profile <?php echo $extraClass; ?>">
     <?php if($displayProfileImage){
         $uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
-        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], 'MINITHUMB', true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], ImageDimension::VIEW_MINI_THUMB, true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $getUserAspectRatio = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_MINI_THUMB);
+    
     ?>
-        <figure class="user-profile_photo">
-            <img width="40" height="40" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
+        <figure class="user-profile_photo" data-ratio="<?php echo $getUserAspectRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio']; ?>">
+            <img data-aspect-ratio="<?php echo $getUserAspectRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio']; ?>" width="<?php echo $getUserAspectRatio['width']; ?>" height="<?php echo $getUserAspectRatio['height']; ?>" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
             <?php echo $verifiedBadge; ?>
         </figure>
     <?php } ?>

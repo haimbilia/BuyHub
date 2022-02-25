@@ -4,13 +4,12 @@ $frm->setFormTagAttribute('onsubmit', 'uploadCollectionImage(this); return(false
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $fld = $frm->getField('collection_image');
-$fld->addFieldTagAttribute('class', '');
-$fld->addFieldTagAttribute('onChange', 'collectionPopupImage(this)');
+$fld->value= '<label class="label">'.Labels::getLabel('LBL_UPLOAD_BANNER', $siteLangId).'</label><span id="collectionImageHtml"></span>';
+
+$fld->htmlAfterField ='<span class="form-text text-muted">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '610 x 343').'</span>';
 ?>
 <div class="col-md-12">
-    <small class="form-text text-muted"><?php echo sprintf(Labels::getLabel('MSG_Upload_shop_collection_image_text', $siteLangId), '610*343') ?></small>
-    <?php echo $frm->getFormHtml(); ?>
-    <div id="imageListing"></div>
+    <?php echo $frm->getFormHtml(); ?>  
 </div>
 <script>
     var collectionMediaWidth = '610';

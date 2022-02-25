@@ -23,9 +23,4 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 );
 
 
-
-
-
-
-
 ?>

@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php
+
+use Google\Service\Script;
+
+ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 if (!empty($productsData)) {
     echo '<div class="mt-4"> <ul class="upload__list">';
@@ -17,18 +21,19 @@ if (!empty($productsData)) {
         </li>
         <?php
     }
-    echo '</ul></div>';
-} else {
+    echo '</ul></div>'; ?>
+    <script>
+        $(".searchFormJs").show();
+    </script>
+<?php } else {
     $this->includeTemplate('_partial/no-record-found.php');
 }
 
 $frm = new Form('frmProductListing', array('id' => 'frmProductListing'));
 $frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadListProduct); return(false);');
-echo $frm->getFormTag();
-?>
-</form>
-<?php
+echo $frm->getFormHtml();
+
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging'));
 //$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);

@@ -9,13 +9,14 @@ if (!isset($product)) {
 }
 
 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$getproductAspectRatio = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);
 $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $product['product_identifier'];
 ?>
 
 <div class="product-profile">
-    <div class="product-profile__thumbnail" data-ratio="1:1">
-        <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
+    <div class="product-profile__thumbnail" data-ratio="<?php echo $getproductAspectRatio[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>">
+        <img data-aspect-ratio="<?php echo $getproductAspectRatio[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>">
     </div>
     <div class="product-profile__data">
         <div class="title" title="<?php echo $productTitle; ?>" data-bs-toggle='tooltip' data-bs-placement='top'>
