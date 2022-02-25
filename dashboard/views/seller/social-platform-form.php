@@ -4,6 +4,23 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addForm(" . $splatform_id . ")");
+unset($languages[CommonHelper::getDefaultFormLangId()]);
+
+$fld = $frm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
+$fld = $frm->getField('splatform_active'); 
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+$fld = $frm->getField('splatform_title');
+$fld->setFieldTagAttribute('onkeyup', "getIdentifier(this)");
+$fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $siteLangId) . '</small>';
 
 ?>
 <div class="modal-header">
@@ -14,12 +31,14 @@ $frm->setFormTagAttribute('data-onclear', "addForm(" . $splatform_id . ")");
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs" id="shopFormChildBlockTabsJs">
+            <?php if(0 < count($languages)){ ?>
             <a class="nav-link active" href="javascript:void(0);" onclick="addForm(<?php echo $splatform_id; ?>);" title="<?php echo Labels::getLabel('LBL_General', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
-            </a>
-            <a class="nav-link" href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
+            </a>           
+            <a class="nav-link" href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id ?>,<?php echo array_key_first($languages); ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
+            <?php } ?>
         </nav>
     </div>
     <div class="form-edit-body loaderContainerJs">

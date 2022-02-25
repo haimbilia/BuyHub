@@ -280,6 +280,50 @@ class HtmlHelper
         return   $str;
     }
 
+    public static function configureRadioAsButton(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $str = '<label class="label">' . $fld->getCaption() . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($fld->options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fld->getFieldTagAttribute('class') . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $opValue == $fld->value ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        $str .= '</div>';
+
+        $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
+        $htmlFld->developerTags = $fld->developerTags;
+        return $htmlFld;
+    }
+    /*
+        attach Transalate Iconwith select box
+    */
+    public static function attachTransalateIcon(object $langFld, int $langId, string $onclickFn)
+    {
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+            $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+            $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="' . $onclickFn . '" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                    </use>
+                                </svg>
+                            </a>';
+        }
+    }
+
+    public static function getIdentifierText($identifier, $langId){
+
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) ." : ".$identifier;
+    }
+    
     public static function displayWordsFirstLetter($keyword, int $len = 2)
     {
         $titleArr = explode(' ', $keyword);

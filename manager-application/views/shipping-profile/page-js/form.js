@@ -118,8 +118,7 @@ $(document).ready(function () {
         }
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'removeProduct', [productId]), '', function (t) {
             var profileId = $('input[name="profile_id"]').val();
-            searchProducts(profileId);
-            
+            searchProductsSection(profileId);
         });
     }
 

@@ -359,10 +359,10 @@ class Orders extends MyAppModel
 
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
 
-        $this->setMainTableRecordId($this->getOrderId());        
-        
+        $this->setMainTableRecordId($this->getOrderId());
+
         if (array_key_exists('coupon_id', $discountInfo)) {
-          
+
             $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
                 $this->error = Labels::getLabel('ERR_INVALID_COUPON_CODE', $data['order_language_id']);
@@ -381,12 +381,12 @@ class Orders extends MyAppModel
                 return false;
             }
 
-            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+            if (!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))) {
                 $db->rollbackTransaction();
                 $this->error = FatApp::getDb()->getError();
                 return false;
-            }          
-        }        
+            }
+        }
 
         if (!empty($ordersLangData)) {
             $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => [$this->getOrderId()]));
@@ -932,7 +932,7 @@ class Orders extends MyAppModel
             }
         }
 
-        if (array_key_exists('coupon_id', $discountInfo)) {                  
+        if (array_key_exists('coupon_id', $discountInfo)) {
             $couponInfo = DiscountCoupons::getValidSubscriptionCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->orderId);
             if ($couponInfo == false) {
                 $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
@@ -950,7 +950,7 @@ class Orders extends MyAppModel
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
-            if(!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))){
+            if (!FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($discountInfo['coupon_id'], $data['order_user_id'])))) {
                 $db->rollbackTransaction();
                 $this->error = FatApp::getDb()->getError();
                 return false;
@@ -1235,7 +1235,7 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('b.user_name as buyer_name', 'b.user_phone_dcode as buyer_phone_dcode', 'b.user_phone as buyer_phone', 'bc.credential_email as buyer_email'));
         }
 
-        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id','opshipping_label','opshipping_plugin_id'));
+        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id', 'opshipping_label', 'opshipping_plugin_id'));
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
@@ -2211,6 +2211,9 @@ class Orders extends MyAppModel
                 $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 break;
+            case Product::PRODUCT_TYPE_PHYSICAL:
+                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
+                break;
         }
 
         return $processingStatuses;
@@ -2958,7 +2961,7 @@ class Orders extends MyAppModel
         } else {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
-        
+
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
 }
