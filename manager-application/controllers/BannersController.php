@@ -418,12 +418,14 @@ class BannersController extends ListingBaseController
             $this->set('image', $bannerImge);
         }
 
-        $blocationData = $this->getBannerLocationById($bannerLocationId);
-        $bannerWidth = FatUtility::convertToType($blocationData['blocation_banner_width'], FatUtility::VAR_FLOAT);
-        $bannerHeight = FatUtility::convertToType($blocationData['blocation_banner_height'], FatUtility::VAR_FLOAT);
-
-        $this->set('bannerWidth', $bannerWidth);
-        $this->set('bannerHeight', $bannerHeight);
+        /* $blocationData = $this->getBannerLocationById($bannerLocationId); */
+       /*  $bannerWidth = FatUtility::convertToType($blocationData['blocation_banner_width'], FatUtility::VAR_FLOAT);
+        $bannerHeight = FatUtility::convertToType($blocationData['blocation_banner_height'], FatUtility::VAR_FLOAT); */
+        $getBannerDimensions = ImageDimension::getBannerData();
+        
+        $this->set('getBannerDimensions', $getBannerDimensions);
+       /*  $this->set('bannerWidth', $bannerWidth);
+        $this->set('bannerHeight', $bannerHeight); */
         $this->set('frm', $imageFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('bannerTypeArr', $this->bannerTypeArr());

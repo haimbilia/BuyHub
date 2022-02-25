@@ -19,7 +19,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'dropzone-custom dropzoneContainerJs'
 );
 
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '60*60') . '</span>';
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $getBadgeDimensions['width'].' * '.$getBadgeDimensions['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
@@ -40,7 +40,7 @@ $otherButtons = [
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-    $('input[name=min_width]').val(60);
-    $('input[name=min_height]').val(60);
-    var aspectRatio = 60 / 60;
+    $('input[name=min_width]').val('<?php echo $getBadgeDimensions['width']; ?>');
+    $('input[name=min_height]').val('<?php echo $getBadgeDimensions['height']; ?>');
+    var aspectRatio = <?php echo $ratioJs; ?>;
 </script>
