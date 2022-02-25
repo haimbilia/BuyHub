@@ -515,8 +515,11 @@ form.custom-form {
 
 .form-search {
     .card-head {
-        @include media-breakpoint-down(lg) {
-            align-items: inherit;
+        align-items: inherit;
+        flex-direction: column;
+        gap: 1rem;
+        @include media-breakpoint-up(lg) {
+            flex-direction: row;
         }
     }
     .card-head-label ~ .card-toolbar {

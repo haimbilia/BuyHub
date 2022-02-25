@@ -117,7 +117,10 @@ $sidebar-width: 280px;
 
 .sidebar--on {
     .sidebar {
+        box-shadow: $shadow5;
         transform: translateX(0);
+        overflow-y: auto;
+        height: calc(100% - 66px);
     }
 }
 
