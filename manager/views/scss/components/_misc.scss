@@ -2980,6 +2980,7 @@ $header-height: 65px;
 
 .txt-description {
     display: inline-flex;
+    white-space: nowrap;
     min-width: 190px;
     .btn-view {
         background-color: $bg-gray;
@@ -2987,10 +2988,10 @@ $header-height: 65px;
         padding: 0;
         margin: 0;
         margin-#{$start-direction}: 5px;
-        height: auto;
         color: $txt-body;
-        width: 2rem;
-        border-radius: 7px !important;
+        width: 1.8rem;
+        height: 1rem;
+        border-radius: 3px !important;
         display: flex;
         align-items: center;
         justify-content: center;

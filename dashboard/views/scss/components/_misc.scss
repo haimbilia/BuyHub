@@ -1190,3 +1190,24 @@ a:hover {
         margin-bottom: 1.5rem;
     }
 }
+
+//description limit
+.txt-description {
+    display: inline-flex;
+    white-space: nowrap;
+    min-width: 190px;
+    .btn-view {
+        background-color: $bg-gray;
+        border: $border;
+        padding: 0;
+        margin: 0;
+        margin-#{$start-direction}: 5px;
+        color: $txt-body;
+        width: 1.8rem;
+        height: 1rem;
+        border-radius: 3px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
