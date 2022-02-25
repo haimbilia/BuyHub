@@ -2939,7 +2939,7 @@ $header-height: 65px;
         right: 0;
         z-index: 99;
         transition: transform 0.3s ease-out;
-        transform: translateX(100%);
+        transform: translateX(100% * $transform-direction);
     }
     .card-head {
         flex-direction: row;
@@ -2949,7 +2949,7 @@ $header-height: 65px;
     }
 
     &.show {
-        transform: translateX(0);
+        transform: translateX(0 * $transform-direction);
     }
 }
 

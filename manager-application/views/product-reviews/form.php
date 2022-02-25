@@ -111,11 +111,13 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 $i = 0;
                 foreach ($images as $image) {
                     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($recordId, 0, 'MINITHUMB', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($recordId, 0, 'LARGE', $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $imageReviewDimensions = ImageDimension::getData(ImageDimension::TYPE_REVIEW_IMAGE);
+                   
+                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($recordId, 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($recordId, 0, ImageDimension::VIEW_LARGE, $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $largeImage = "displayImageInFacebox('" . $largeImgUrl . "');";
                     $imageShow =  '<span class="m-2"><a class="uploaded-file " href="javascript:void(0)" onclick="' . $largeImage . '">';
-                    $imageShow .=  '<img class="rounded" src="' . $imgUrl . '">';
+                    $imageShow .=  '<img data-aspect-ratio = "'.$imageReviewDimensions[ImageDimension::VIEW_LARGE]['aspectRatio'].'" class="rounded" src="' . $imgUrl . '">';
                     $imageShow .=  '</a></span>';
                     echo $imageShow;
                 }

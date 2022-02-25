@@ -24,9 +24,10 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'media':
                 $name = $row['badge_name'];
+                $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, ImageDimension::VIEW_THUMB);
                 $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, $siteLangId);
                 $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
+                $td->appendElement('img', ['data-aspect-ratio' => $getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'], 'src' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 break;
             case 'breq_requested_on':
                 $htm = (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? HtmlHelper::formatDateTime($row[$key]) : Labels::getLabel('LBL_NA', $siteLangId);
@@ -35,10 +36,11 @@ foreach ($arrListing as $sn => $row) {
             case 'download':
                 $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $row[BadgeRequest::DB_TBL_PREFIX . 'id']);
                 $fileName = Labels::getLabel('LBL_N/A', $siteLangId);
+                $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_ADMIN_BADGE_REQUEST, ImageDimension::VIEW_THUMB);
                 if ($res !== false && 0 < $res['afile_id']) {
                     $uploadedTime = AttachedFile::setTimeParam($res['afile_updated_at']);
                     $fileName = '<a href="' . UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])) . '" title = "' . Labels::getLabel('MSG_CLICK_TO_DOWNLOAD', $siteLangId) . '">
-                    <img src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($row['breq_id'], ImageDimension::VIEW_THUMB)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/></a>';
+                    <img data-aspect-ratio ="'.$getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'].'" src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($row['breq_id'], ImageDimension::VIEW_THUMB)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/></a>';
                 }
 
                 $td->appendElement('div', ['class' => "text-break"], $fileName, true);

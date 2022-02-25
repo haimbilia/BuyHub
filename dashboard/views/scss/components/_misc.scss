@@ -141,7 +141,7 @@ a:hover {
 
 .not-allowed {
     background: #ededed;
-    color: #888;
+    color: $txt-body;
     cursor: not-allowed !important;
 }
 
@@ -272,7 +272,7 @@ a:hover {
 .info-message {
     background: #f9edbe;
     border: 1px solid #f0c36d;
-    color: #6c6c6c;
+    color: $txt-body;
     font-size: 0.85em;
     line-height: 1.2;
     border-radius: $radius4;
@@ -1067,8 +1067,7 @@ a:hover {
         text-align: center;
         top: -14px;
         left: 50%;
-        transform: translateX(-50%);
-        -webkit-transform: translateX(-50%);
+        transform: translateX(-50% * $transform-direction);
     }
     &__detail {
         h6 {

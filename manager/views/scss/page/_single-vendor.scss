@@ -41,7 +41,7 @@
 
 .multiselect {
     &__placeholder {
-        white-space: nowrap
+        white-space: nowrap;
     }
     &__option {
         font-size: 1rem;
@@ -100,14 +100,13 @@
     }
 }
 
-[v-cloak]>* {
+[v-cloak] > * {
     display: none;
 }
 
 [v-cloak]::before {
     content: "loading...";
 }
-
 
 /**/
 
@@ -249,11 +248,12 @@
                 background: none;
                 padding: 1rem;
                 margin: 25px;
-                transition: all .3s cubic-bezier(.23, 1, .32, 1);
+                transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
                 border: 1px dashed $border-color;
                 border-radius: 4px;
                 /*background: #fdfdfd;*/
-                &:last-child {}
+                &:last-child {
+                }
             }
         }
     }
@@ -264,9 +264,9 @@
         width: 100%;
         height: 100%;
         padding: 10px;
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
+
+        transform: translateX(100% * $transform-direction);
         opacity: 0;
-        transition: all .3s cubic-bezier(.23, 1, .32, 1);
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
 }

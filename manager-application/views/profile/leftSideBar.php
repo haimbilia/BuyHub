@@ -3,7 +3,11 @@
          <div class="widget widget--user-profile-1">
              <div class="widget__head">
                  <div class="widget__media">
-                     <img src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>?t=<?php echo time();?>"
+                     <?php 
+                     $imageProfileDimensions = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED);
+
+                     ?>
+                     <img data-aspect-ratio = "<?php echo $imageProfileDimensions[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>?t=<?php echo time();?>"
                          alt="image">
                  </div>
                  <div class="widget__content">

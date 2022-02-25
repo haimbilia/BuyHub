@@ -268,10 +268,14 @@ class ProductCategoriesRequestController extends ListingBaseController
             $logo = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $logo);
             $this->set('imageFunction', 'icon');
+            $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_THUMB);
+            $this->set('imageDimensions', $imageDimensions);
         } else {
             $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $recordId, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $image);
             $this->set('imageFunction', 'banner');
+            $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
+            $this->set('imageDimensions', $imageDimensions);
         }
 
         $this->set('file_type', $file_type);

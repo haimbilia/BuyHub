@@ -34,7 +34,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     <div class="content-body">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-lg-8 order-2 order-lg-1">
                 <div class="card">
                     <div class="card-head border-0">
                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
@@ -352,7 +352,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4 order-1 order-lg-2 ">
                 <div class="widget-scroll">
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
