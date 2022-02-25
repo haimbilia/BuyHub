@@ -13,6 +13,7 @@ $(document).ready(function(){
 		/*]*/	
 		$(dv).prepend( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Seller','searchProductTags'), data, function(res){
+			fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};

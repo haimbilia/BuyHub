@@ -258,7 +258,7 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             scollection_id = 0;
         }
-
+        showYkModalFooter();
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -307,6 +307,7 @@ $(document).on("change", ".state", function () {
         }
 
         markPopupTabActive();
+        showYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -319,6 +320,8 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
+        markPopupTabActive();
+        showYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -448,9 +451,9 @@ $(document).on("change", ".state", function () {
         }
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
-            fcom.removeLoader();
-            fcom.closeAlertMessage();
             $.ykmodal(t);
+            fcom.removeLoader();
+            fcom.closeAlertMessage();           
         });
     };
 
@@ -459,7 +462,9 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
             getReturnAddress();
-            returnAddressLangForm(t.langId);
+            if(0 < t.langId){
+                //returnAddressLangForm(t.langId);
+            }            
         });
     };
 
@@ -541,7 +546,8 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopupTabActive();        
+        markPopupTabActive();   
+        hideYkModalFooter();     
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -549,6 +555,7 @@ $(document).on("change", ".state", function () {
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
             shopCollectionImages(scollection_id);
+            
         });
     };
 
@@ -914,12 +921,12 @@ $(document).on("change", ".state", function () {
 })();
 
 function bindAutoComplete() {
-    $("select[name='scp_selprod_id']").select2({
-        dropdownParent: $("select[name='scp_selprod_id']").closest('.modal'),
+    $("#scp_selprod_id").select2({
+        dropdownParent:  $("#scp_selprod_id").closest('.modal'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
-        allowClear: true,
-        placeholder: $("select[name='scp_selprod_id']").attr('placeholder'),
+        allowClear: false,
+        placeholder:  $("#scp_selprod_id").attr('placeholder'),
         ajax: {
             url: fcom.makeUrl('seller', 'autoCompleteProducts'),
             dataType: 'json',
@@ -949,15 +956,6 @@ function bindAutoComplete() {
         templateSelection: function (result) {
             return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
         }
-    }).on('select2:selecting', function (e) {
-        var item = e.params.args.data;
-        $('input[name=\'scp_selprod_id\']').val('');
-        $('#selprod-products' + item.id).remove();
-        $('#selprod-products ul ').append('<li id="selprod-products' + item.id + '">' + item.name + '[' + item.product_identifier + ']' + '<i class="remove_link remove_param fa fa-times"></i> <input type="hidden" name="product_ids[]" value="' + item.id + '" /></li>');
-
-        setTimeout(function () {
-            $('select[name=\'scp_selprod_id\']').val('').trigger('change.select2');
-        }, 200);
     });
 
 }

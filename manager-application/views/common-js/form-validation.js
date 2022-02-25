@@ -245,12 +245,14 @@
             var $form = this;
             $form.valid = true;
             this.form.find("input, textarea, select").each(function () {
-                var field = new Field(this, $form.options);
-                field.validate();
-                $form.valid = $form.valid && field.valid;
-                if (0 == $form.options.errordisplay && !field.valid) {
-                    this.focus();
-                    return false;
+                if ('undefined' != typeof $(this).attr('name')) {   
+                    var field = new Field(this, $form.options);
+                    field.validate();
+                    $form.valid = $form.valid && field.valid;
+                    if (0 == $form.options.errordisplay && !field.valid) {
+                        this.focus();
+                        return false;
+                    }
                 }
             });
 
