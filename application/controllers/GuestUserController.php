@@ -428,13 +428,13 @@ class GuestUserController extends MyAppController
         }
 
         $resp = LibHelper::formatResponse(
-                applicationConstants::SUCCESS,
-                Labels::getLabel('SUC_RESULT_FOUND', $this->siteLangId),
-                [
-                    'found' => 1,
-                    'verified' => $data['credential_verified'],
-                ],
-                LibHelper::RC_OK
+            applicationConstants::SUCCESS,
+            Labels::getLabel('SUC_RESULT_FOUND', $this->siteLangId),
+            [
+                'found' => 1,
+                'verified' => $data['credential_verified'],
+            ],
+            LibHelper::RC_OK
         );
         LibHelper::dieJsonResponse($resp);
     }
@@ -807,10 +807,10 @@ class GuestUserController extends MyAppController
     }
 
     public function forgotPassword()
-    {   
+    {
         $withPhone = FatApp::getPostedData('withPhone', FatUtility::VAR_INT, 0);
         $frm = $this->getForgotForm($withPhone);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);   
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
         if (false === $post) {
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
                 FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -819,7 +819,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
         $frm->expireSecurityToken(FatApp::getPostedData());
-        
+
         if (false === MOBILE_APP_API_CALL && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
                 $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
@@ -1304,7 +1304,7 @@ class GuestUserController extends MyAppController
             $fcmToken = FatApp::getPostedData('fcmToken', FatUtility::VAR_STRING, '');
             $userType = FatApp::getPostedData('userType', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
             if (empty($fcmToken)) {
-                FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+                LibHelper::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
 
             $values = User::getUserAuthFcmFormattedData($userType, $fcmToken, null, applicationConstants::NO);
@@ -1316,7 +1316,7 @@ class GuestUserController extends MyAppController
             $this->_template->render();
         }
 
-        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
+        FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $this->siteLangId));
     }
 
     private function getForgotForm($withPhone = 0)
@@ -1562,5 +1562,4 @@ class GuestUserController extends MyAppController
         }
         return $userId;
     }
-
 }

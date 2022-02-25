@@ -9,7 +9,7 @@
         <span class="bar-bot"> </span>
     </div>
     <?php
-    $logoUrl = UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND);
+    $logoUrl = UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId);
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
     $uploadedTime = isset($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
