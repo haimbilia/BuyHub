@@ -478,6 +478,8 @@
 }
 
 .item {
+    max-width: 350px;
+    width: max-content;
     display: flex;
     align-items: flex-start;
     &__pic {
@@ -499,8 +501,7 @@
     }
     &__description {
         font-size: 0.8rem;
-        max-width: 400px;
-        width: max-content;
+
         .item__pic {
             margin-#{$end-direction}: 10px;
         }

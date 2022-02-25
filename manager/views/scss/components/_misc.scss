@@ -2379,7 +2379,7 @@ $header-height: 65px;
     flex-direction: column;
     padding-#{$start-direction}: $side-bar-size-close;
 
-    @media (min-width:1280px){
+    @media (min-width: 1280px) {
         padding-#{$start-direction}: $side-bar-size;
     }
 }
@@ -2982,12 +2982,18 @@ $header-height: 65px;
     display: inline-flex;
     min-width: 190px;
     .btn-view {
-        background-color: transparent;
-        border: none;
+        background-color: $bg-gray;
+        border: $border;
         padding: 0;
         margin: 0;
+        margin-#{$start-direction}: 5px;
         height: auto;
-        color: $txt-gray;
+        color: $txt-body;
+        width: 2rem;
+        border-radius: 7px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -3123,7 +3129,7 @@ $header-height: 65px;
 }
 
 .lbl-link {
-    display: flex!important;
+    display: flex !important;
     width: 100%;
     align-items: center;
     justify-content: space-between;
