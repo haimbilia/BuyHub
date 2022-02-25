@@ -1,5 +1,5 @@
 function setSiteDefaultLang(langId) {
-    $.cookie('defaultAdminSiteLang', langId, { expires: 10, path: siteConstants.webrootfront });
+    $.cookie('defaultAdminSiteLang', langId, { expires: 10, path: siteConstants.rooturl });
     fcom.updateWithAjax(
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
@@ -399,7 +399,7 @@ $(document).ready(function () {
 
     /* alert-text close */
     $(".closeAlertJs").on("click", function () {
-        $.cookie($(this).attr("data-name"), true, { expires: 30, path: siteConstants.webrootfront });
+        $.cookie($(this).attr("data-name"), true, { expires: 30, path: siteConstants.rooturl });
     });
     /* alert-text close */
 
