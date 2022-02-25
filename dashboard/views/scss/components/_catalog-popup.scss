@@ -7,7 +7,6 @@
 
 .delivery-term-data-inner {
     margin: 20px;
-    color: #4c4c4c;
     max-width: 500px;
 
     .heading {
@@ -53,7 +52,6 @@
                 position: absolute;
                 #{$start-direction}: 0;
                 top: 8px;
-                -webkit-transform: rotate(45deg);
                 transform: rotate(45deg);
                 background: #4c4c4c;
             }

@@ -35,7 +35,7 @@
 }
 
 .mfp-container:before {
-    content: '';
+    content: "";
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -96,7 +96,6 @@
 }
 
 .mfp-preloader {
-    color: #cccccc;
     position: absolute;
     top: 50%;
     width: auto;
@@ -108,7 +107,6 @@
 }
 
 .mfp-preloader a {
-    color: #cccccc;
 }
 
 .mfp-preloader a:hover {
@@ -169,7 +167,6 @@ button::-moz-focus-inner {
 }
 
 .mfp-close-btn-in .mfp-close {
-    color: #333333;
 }
 
 .mfp-image-holder .mfp-close,
@@ -185,7 +182,7 @@ button::-moz-focus-inner {
     position: absolute;
     top: 0;
     #{$end-direction}: 0;
-    color: #cccccc;
+
     font-size: 12px;
     line-height: 18px;
 }
@@ -215,7 +212,7 @@ button::-moz-focus-inner {
 .mfp-arrow:after,
 .mfp-arrow .mfp-b,
 .mfp-arrow .mfp-a {
-    content: '';
+    content: "";
     display: block;
     width: 0;
     height: 0;
@@ -305,7 +302,6 @@ button::-moz-focus-inner {
     background: black;
 }
 
-
 /* Main image in popup */
 
 img.mfp-img {
@@ -320,7 +316,6 @@ img.mfp-img {
     margin: 0 auto;
 }
 
-
 /* The shadow behind the image */
 
 .mfp-figure {
@@ -328,7 +323,7 @@ img.mfp-img {
 }
 
 .mfp-figure:after {
-    content: '';
+    content: "";
     position: absolute;
     #{$start-direction}: 0;
     top: 40px;
@@ -344,7 +339,6 @@ img.mfp-img {
 }
 
 .mfp-figure small {
-    color: #bdbdbd;
     display: block;
     font-size: 12px;
     line-height: 14px;
@@ -362,7 +356,7 @@ img.mfp-img {
 .mfp-title {
     text-align: left;
     line-height: 18px;
-    color: #f3f3f3;
+
     word-wrap: break-word;
     padding-#{$end-direction}: 36px;
 }
@@ -375,8 +369,7 @@ img.mfp-img {
     cursor: pointer;
 }
 
-@media screen and (max-width: 800px) and (orientation: landscape),
-screen and (max-height: 300px) {
+@media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
     /**
        * Remove all paddings around the image on small screen
        */

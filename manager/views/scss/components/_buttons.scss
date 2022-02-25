@@ -28,7 +28,6 @@
     &:focus-visible {
         outline: 1px solid #000;
         box-shadow: none;
-
     }
     &:hover {
         outline: none !important;
@@ -132,7 +131,7 @@
         }
         &:hover {
             .arrow {
-                transform: translateX(0.25rem);
+                transform: translateX(0.25rem * $transform-direction);
             }
         }
     }
@@ -178,7 +177,6 @@
     &-input {
         background-color: $bg-gray;
     }
-   
 }
 
 a.link {
@@ -257,8 +255,8 @@ a.link {
     &:hover {
         text-decoration: none;
     }
-    svg{
-        [dir='rtl'] & {
+    svg {
+        [dir="rtl"] & {
             transform: scaleX(-1);
         }
     }

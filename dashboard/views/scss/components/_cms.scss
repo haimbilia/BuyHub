@@ -68,7 +68,7 @@
     &-even {
         background-repeat: no-repeat;
         background-size: cover;
-        color: #000;
+        color: $txt-body;
         padding: 60px 0 80px;
         margin: 2.5rem 0;
         h2 {
@@ -192,7 +192,6 @@
         li {
             position: relative;
             padding: 0 0 15px 0;
-            color: #666;
             margin: 0;
             font-size: 1.1em;
         }
@@ -241,7 +240,6 @@
         }
         &.is-active {
             a {
-                color: #555555;
                 font-weight: 700;
             }
         }
@@ -254,7 +252,6 @@
                 content: "+";
                 font-weight: 600;
                 font-size: 1.25em;
-                color: #888;
                 #{$end-direction}: 10px;
                 top: -4px;
             }
@@ -305,7 +302,6 @@
 
 .listing--check {
     li {
-        color: #666;
         overflow: hidden;
         padding: 0;
         position: relative;
@@ -313,7 +309,6 @@
         white-space: nowrap;
         margin: 0.5rem 0;
         a {
-            color: #666;
             font-size: 14px;
             padding: 0;
             padding-#{$start-direction}: 30px;
@@ -504,7 +499,6 @@
 }
 
 span.subheading {
-    color: #555555;
     display: block;
     font-weight: 300;
     font-size: 1.2rem;

@@ -343,32 +343,6 @@
             border: solid 1px transparent;
         }
 
-        .profile {
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            &-img {
-                margin-#{$end-direction}: 0.875rem;
-                width: 50px;
-                height: 50px;
-                flex: 0 0 50px;
-                max-width: 50px;
-                border-radius: 4px;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            &-detail {
-                .h6 {
-                    font-size: 0.85rem;
-                    margin: 0;
-                }
-                .text-muted {
-                    font-size: 0.75rem;
-                }
-            }
-        }
         &-nav {
             flex-direction: column;
 
@@ -508,6 +482,33 @@
     .header-dashboard {
         height: 70px;
         box-shadow: 0 10px 30px 0 rgba(132, 126, 140, 0.1%);
+    }
+}
+
+.profile {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    &-img {
+        margin-#{$end-direction}: 0.875rem;
+        width: 50px;
+        height: 50px;
+        flex: 0 0 50px;
+        max-width: 50px;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &-detail {
+        .h6 {
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        .text-muted {
+            font-size: 0.75rem;
+        }
     }
 }
 
@@ -1724,7 +1725,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 right: 0;
                 bottom: -1px;
                 width: 30px;
-                transform: translateX(100%);
+                transform: translateX(100% * $transform-direction);
                 transition: box-shadow 0.3s;
                 content: "";
                 pointer-events: none;
@@ -1746,7 +1747,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 bottom: -1px;
                 left: 0;
                 width: 30px;
-                transform: translateX(-100%);
+                transform: translateX(-100% * $transform-direction);
                 transition: box-shadow 0.3s;
                 content: "";
                 pointer-events: none;

@@ -1,6 +1,6 @@
 @keyframes scroll-hint-appear {
     0% {
-        transform: translateX(40px);
+        transform: translateX(40px * $transform-direction);
         opacity: 0;
     }
     10% {
@@ -8,21 +8,21 @@
     }
     50%,
     100% {
-        transform: translateX(-40px);
+        transform: translateX(-40px * $transform-direction);
         opacity: 0;
     }
 }
- 
+
 .scroll-hint.is-right-scrollable {
-    background: linear-gradient(270deg, rgba(0, 0, 0, .15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
 }
 
 .scroll-hint.is-right-scrollable.is-left-scrollable {
-    background: linear-gradient(90deg, rgba(0, 0, 0, .15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0)), linear-gradient(270deg, rgba(0, 0, 0, .15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0)), linear-gradient(270deg, rgba(0, 0, 0, 0.15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
 }
 
 .scroll-hint.is-left-scrollable {
-    background: linear-gradient(90deg, rgba(0, 0, 0, .15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0));
 }
 
 .scroll-hint-icon {
@@ -33,9 +33,9 @@
     width: 120px;
     height: 80px;
     border-radius: 5px;
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     opacity: 0;
-    background: rgba(0, 0, 0, .7);
+    background: rgba(0, 0, 0, 0.7);
     text-align: center;
     padding: 20px 10px 10px 10px;
 }
@@ -52,19 +52,19 @@
 
 .scroll-hint-text {
     font-size: 10px;
-    color: #FFF;
+    color: #fff;
     margin-top: 5px;
 }
 
 .scroll-hint-icon-wrap.is-active .scroll-hint-icon {
-    opacity: .8;
+    opacity: 0.8;
 }
 
 .scroll-hint-icon:before {
     display: inline-block;
     width: 40px;
     height: 40px;
-    color: #FFF;
+    color: #fff;
     vertical-align: middle;
     text-align: center;
     content: "";
@@ -100,7 +100,7 @@
 
 .scroll-hint-icon-white {
     background-color: $bg-white;
-    box-shadow: 0 4px 5px rgba(0, 0, 0, .4);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
 }
 
 .scroll-hint-icon-white:before {
