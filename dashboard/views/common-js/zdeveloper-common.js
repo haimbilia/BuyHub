@@ -998,7 +998,9 @@ function loginPopUpBox(includeGuestLogin) {
 }
 
 function setSiteDefaultLang(langId) {
-    var url = window.location.pathname;
+    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.webrootfront });
+    window.location.reload(1);
+    /* var url = window.location.pathname;
     var srchString = window.location.search;
     var data = "pathname=" + url;
     fcom.ajax(
@@ -1010,7 +1012,7 @@ function setSiteDefaultLang(langId) {
                 window.location.href = ans.redirectUrl + srchString;
             }
         }
-    );
+    ); */
 }
 
 function setSiteDefaultCurrency(currencyId) {

@@ -49,7 +49,7 @@ class AccountController extends LoggedUserController
 
         if ($this->userId < 1 || $requestId < 1) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             //FatUtility::dieJsonError( Message::getHtml() );
         }
 
@@ -67,7 +67,7 @@ class AccountController extends LoggedUserController
 
         if (!$supplierRequest || $supplierRequest['usuprequest_id'] != $requestId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
         }
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
@@ -108,11 +108,11 @@ class AccountController extends LoggedUserController
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
             Message::addErrorMessage(Labels::getLabel('MSG_You_have_already_consumed_max_attempts', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account', 'viewSupplierRequest', array($supplierRequest["usuprequest_id"])));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', 'viewSupplierRequest', array($supplierRequest["usuprequest_id"]), CONF_WEBROOT_DASHBOARD));
         }
 
         if ($supplierRequest && ($p != "reopen")) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account', 'viewSupplierRequest', array($supplierRequest["usuprequest_id"])));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', 'viewSupplierRequest', array($supplierRequest["usuprequest_id"]), CONF_WEBROOT_DASHBOARD));
         }
 
         $data = array('id' => isset($supplierRequest['usuprequest_id']) ? $supplierRequest['usuprequest_id'] : 0);
@@ -834,8 +834,6 @@ class AccountController extends LoggedUserController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
-      
     }
 
     public function profileInfo()
@@ -1099,7 +1097,7 @@ class AccountController extends LoggedUserController
                 if (FatUtility::isAjaxCall()) {
                     FatUtility::dieWithError(Message::getHtml());
                 }
-                FatApp::redirectUser(UrlHelper::generateUrl('Account', 'ProfileInfo'));
+                FatApp::redirectUser(UrlHelper::generateUrl('Account', 'ProfileInfo'), [], CONF_WEBROOT_DASHBOARD);
             }
         }
         /* ] */
@@ -2891,7 +2889,7 @@ class AccountController extends LoggedUserController
         } else {
             Message::addErrorMessage(Labels::getLabel('MSG_No_File_Uploaded', $this->siteLangId));
         }
-        FatApp::redirectUser(UrlHelper::generateUrl('member', 'account'));
+        FatApp::redirectUser(UrlHelper::generateUrl('member', 'account'), [], CONF_WEBROOT_DASHBOARD);
     }
 
     public function escalateOrderReturnRequest($orrequest_id)
@@ -3813,20 +3811,20 @@ class AccountController extends LoggedUserController
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'profileInfo') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'bankInfoForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'cookiesPreferencesForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;

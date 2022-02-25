@@ -11,7 +11,7 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
         $class = get_called_class();
         if (!defined($class . '::KEY_NAME')) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_PLUGIN', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller','', [], CONF_WEBROOT_DASHBOARD));
         }
         $this->keyName = $class::KEY_NAME;
     }
@@ -19,7 +19,7 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
     protected function redirectBack(string $controller = '', string $action = '')
     {
         $controller = empty($controller) ? $this->keyName : $controller;
-        FatApp::redirectUser(UrlHelper::generateUrl($controller, $action));
+        FatApp::redirectUser(UrlHelper::generateUrl($controller, $action, [], CONF_WEBROOT_DASHBOARD));
     }
 
     protected function updateMerchantInfo($detail = [], $redirect = true)

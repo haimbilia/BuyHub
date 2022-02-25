@@ -4,7 +4,6 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
@@ -382,8 +381,6 @@ class HomeController extends MyAppController
         if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1) {
             $langCodeArr = LANG_CODES_ARR;
             if (count($langCodeArr) > 1) {
-                $langIds = array_flip($langCodeArr);
-
                 if (!empty($pathname)) {
                     $existingUrlLangCode = strtoupper(substr(ltrim($pathname, '/'), 0, 2));
                 } else {
@@ -391,10 +388,8 @@ class HomeController extends MyAppController
                 }
 
                 if (in_array($existingUrlLangCode, LANG_CODES_ARR)) {
-                    // $existingUrlLangId = $langIds[$existingUrlLangCode];
                     $pathname = ltrim(substr(ltrim($pathname, '/'), 2), '/');
                 } else {
-                    // $existingUrlLangId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
                     $pathname = ltrim($pathname, '/');
                 }
 
@@ -680,7 +675,7 @@ class HomeController extends MyAppController
                                 );
                             }
 
-                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'BannerImage', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType(),'TOPLAYOUT')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'BannerImage', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType(), 'TOPLAYOUT')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                             $banner['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
                             $banner['banner_url_type'] = $urlTypeData['urlType'];
@@ -1555,7 +1550,7 @@ class HomeController extends MyAppController
             'country_id' => $defultCountryId,
             'country_code' => Countries::getAttributesById($defultCountryId, 'country_code') ?? '',
         ];
-            
+
         $this->set('data', $data);
         $this->_template->render();
     }
