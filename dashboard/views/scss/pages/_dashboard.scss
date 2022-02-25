@@ -620,6 +620,16 @@
         .btn-back {
             padding: 0;
             margin-#{$end-direction}: 10px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $bg-gray;
+            border-radius: 50%;
+            &:hover {
+                background-color: darken($bg-gray, 05);
+            }
         }
     }
 }

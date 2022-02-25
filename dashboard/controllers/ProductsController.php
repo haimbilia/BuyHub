@@ -594,7 +594,7 @@ class ProductsController extends SellerBaseController
         }
 
         if (AttachedFile::FILETYPE_PRODUCT_IMAGE == $fileType) {
-            FatApp::getDb()->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($recordId)));
+            FatApp::getDb()->updateFromArray('tbl_products', array('product_img_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($recordId)));
         }
 
         if (count($languages) > 1) {
@@ -642,7 +642,7 @@ class ProductsController extends SellerBaseController
             LibHelper::exitWithError($productObj->getError(), true);
         }
 
-        FatApp::getDb()->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($recordId)));
+        FatApp::getDb()->updateFromArray('tbl_products', array('product_img_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($recordId)));
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
             $this->set("isDefaultLayout", $data['afile_lang_id'] == 0 && $data['afile_record_subid'] == 0);

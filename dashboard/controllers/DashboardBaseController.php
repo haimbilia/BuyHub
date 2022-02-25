@@ -202,6 +202,7 @@ class DashboardBaseController extends FatController
                     'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
                     'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
                     'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->siteLangId),
+                    'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

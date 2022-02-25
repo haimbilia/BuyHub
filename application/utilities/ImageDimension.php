@@ -41,6 +41,7 @@ class ImageDimension extends FatUtility
     public const TYPE_CATEGORY_THUMB = 38;
     public const TYPE_CATEGORY_SELLER_BANNER = 39;
     public const TYPE_CATEGORY_BANNER = 40;
+    public const TYPE_ADMIN_BADGE_REQUEST = 41;
 
 
     public const VIEW_DESKTOP = 'DESKTOP';
@@ -75,7 +76,7 @@ class ImageDimension extends FatUtility
     public const VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT = "PRODUCTLAYOUT";
     public const VIEW_CROPED = "CROPED";
 
-    
+
 
     public static function getData(int $type, $sizeType = ''): array
     {
@@ -204,6 +205,9 @@ class ImageDimension extends FatUtility
                 break;
             case self::TYPE_CATEGORY_BANNER:
                 $imageDimensions = self::getCategoryBanner($sizeType);
+                break;
+            case self::TYPE_ADMIN_BADGE_REQUEST:
+                $imageDimensions = self::getAdminBadgeRequestImage($sizeType);
                 break;
         }
 
@@ -354,7 +358,7 @@ class ImageDimension extends FatUtility
             $sizeType = substr($sizeType, 4);
         }
 
-      
+
         $arr =  [
             self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
             self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
@@ -407,8 +411,8 @@ class ImageDimension extends FatUtility
         }
 
         $arr =  [
-        
-            
+
+
             self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 52],
             self::VIEW_THUMB => ['width' => 61, 'height' => 61],
             self::VIEW_LISTING_PAGE => ['width' => 530, 'height' => 530],
@@ -1125,6 +1129,24 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
+    public static function getAdminBadgeRequestImage(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+            self::VIEW_THUMB => ['width' => 50, 'height' => 50],
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
 
 
     public static function getBannerImageData(string $sizeType = ''): array

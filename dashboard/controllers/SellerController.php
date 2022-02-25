@@ -2,6 +2,7 @@
 
 class SellerController extends SellerBaseController
 {
+    use RecordOperations;
 
     // use Attributes;
     use Options;
@@ -2268,7 +2269,7 @@ class SellerController extends SellerBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Shop::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($shop_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($shop_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
@@ -3348,20 +3349,21 @@ class SellerController extends SellerBaseController
     {
         $splatform_id = FatUtility::int($splatform_id);
         $frm = $this->getSocialPlatformForm($splatform_id);
-
+        $identifier = '';
         if (0 < $splatform_id) {
-            $data = SocialPlatform::getAttributesById($splatform_id);
+            $data = SocialPlatform::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $splatform_id, array('*', 'IFNULL(splatform_title,splatform_identifier) as splatform_title'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
             $frm->fill($data);
+            $identifier = $data[SocialPlatform::tblFld('identifier')];
         }
 
         $this->set('splatform_id', $splatform_id);
-        $this->set('frm', $frm);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('language', Language::getAllNames());
+        $this->set('identifier', $identifier);
+        $this->set('frm', $frm);       
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
@@ -3378,30 +3380,22 @@ class SellerController extends SellerBaseController
 
         $splatform_id = $post['splatform_id'];
         unset($post['splatform_id']);
-        $data_to_be_save = $post;
-        $data_to_be_save['splatform_user_id'] = $this->userParentId;
+        $data = $post;
+        $data['splatform_user_id'] = $this->userParentId;
+        $data['splatform_identifier'] = $data['splatform_title'];
 
         $recordObj = new SocialPlatform($splatform_id);
-        $recordObj->assignValues($data_to_be_save, true);
+        $recordObj->assignValues($data, true);
         if (!$recordObj->save()) {
             Message::addErrorMessage($recordObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-
         $splatform_id = $recordObj->getMainTableRecordId();
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SocialPlatform::getAttributesByLangId($langId, $splatform_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
 
         $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
-        $this->set('splatformId', $splatform_id);
-        $this->set('langId', $newTabLangId);
+        $this->set('splatformId', $splatform_id);    
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -3418,7 +3412,7 @@ class SellerController extends SellerBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
@@ -3434,7 +3428,7 @@ class SellerController extends SellerBaseController
 
         $this->set('languages', Language::getAllNames());
         $this->set('splatform_id', $splatform_id);
-        $this->set('splatform_lang_id', $lang_id);
+        $this->set('langId', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->_template->render(false, false);
@@ -3450,52 +3444,25 @@ class SellerController extends SellerBaseController
         if (count($languages) > 1) {
             $lang_id = $post['lang_id'];
         } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
+            $lang_id = array_key_first($languages);            
         }
 
-        if ($splatform_id == 0 || $lang_id == 0) {
+        if (1 > $splatform_id || 1 > $lang_id) {
             Message::addErrorMessage('Invalid Request');
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $frm = $this->getSocialPlatformLangForm($splatform_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['splatform_id']);
-        unset($post['lang_id']);
-        $data_to_update = array(
-            'splatformlang_splatform_id' => $splatform_id,
-            'splatformlang_lang_id' => $lang_id,
-            'splatform_title' => $post['splatform_title'],
-        );
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());  
+        if (false === $post) {
+            Message::addErrorMessage(current($frm->getValidationErrors()));
+            FatUtility::dieJsonError(Message::getHtml());
+        }     
 
-        $socialObj = new SocialPlatform($splatform_id);
-        if (!$socialObj->updateLangData($lang_id, $data_to_update)) {
-            Message::addErrorMessage($socialObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+        $recordObj = new SocialPlatform($splatform_id);
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]], $lang_id);
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($splatform_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SocialPlatform::getAttributesByLangId($langId, $splatform_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('splatformId', $splatform_id);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -3655,27 +3622,12 @@ class SellerController extends SellerBaseController
         return $frm;
     }
 
-    private function getSocialPlatformLangForm($splatform_id = 0, $lang_id = 0)
+    protected function getSocialPlatformLangForm($recordId = 0, $langId = 0)
     {
         $frm = new Form('frmSocialPlatformLang');
-        $frm->addHiddenField('', 'splatform_id', $splatform_id);
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-        } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
+        $frm->addHiddenField('', 'splatform_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
         return $frm;
     }
 
@@ -3687,8 +3639,8 @@ class SellerController extends SellerBaseController
             $iconsArr = SocialPlatform::getAvailableIconsArr($this->userParentId, $this->siteLangId);
         }
         $frm = new Form('frmSocialPlatform');
-        $frm->addHiddenField('', 'splatform_id', $splatform_id);
-        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'splatform_identifier');
+        $frm->addHiddenField('', 'splatform_id', $splatform_id);        
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
         $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
         $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
@@ -3696,10 +3648,14 @@ class SellerController extends SellerBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', $iconsArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         if ($splatform_id > 0) {
             $fld->setFieldTagAttribute('disabled', 'disabled');
+        }            
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
+        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', $activeInactiveArr, '', array(), '');
-
         return $frm;
     }
 
@@ -4905,7 +4861,7 @@ class SellerController extends SellerBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(User::DB_TBL_USR_RETURN_ADDR_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($userId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($userId, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());

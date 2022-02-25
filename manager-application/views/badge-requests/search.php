@@ -38,7 +38,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($res !== false && 0 < $res['afile_id']) {
                     $uploadedTime = AttachedFile::setTimeParam($res['afile_updated_at']);
                     $fileName = '<a href="' . UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])) . '" title = "' . Labels::getLabel('MSG_CLICK_TO_DOWNLOAD', $siteLangId) . '">
-                    <img src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($row['breq_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/></a>';
+                    <img src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($row['breq_id'], ImageDimension::VIEW_THUMB)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/></a>';
                 }
 
                 $td->appendElement('div', ['class' => "text-break"], $fileName, true);

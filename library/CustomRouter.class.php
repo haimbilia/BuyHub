@@ -2,7 +2,7 @@
 class CustomRouter
 {
     public static function setRoute(&$controller, &$action, &$queryString)
-    { 
+    {
         $langId = CommonHelper::getLangId();
         $userType = null;
         define('LANG_CODES_ARR', Language::getAllCodesAssoc());
@@ -29,8 +29,6 @@ class CustomRouter
             }
 
             array_shift($queryString);
-
-            $token = null;
 
             if (array_key_exists('HTTP_X_USER_TYPE', $_SERVER)) {
                 $userType = intval($_SERVER['HTTP_X_USER_TYPE']);
@@ -74,7 +72,7 @@ class CustomRouter
         if (defined('SYSTEM_FRONT') && SYSTEM_FRONT === true/*  && !FatUtility::isAjaxCall() */) {
             $url = urldecode($_SERVER['REQUEST_URI']);
 
-            if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) { 
+            if (strpos($url, "index.php?url=") !== false || UrlHelper::staticContentProvider($controller, $action) == true) {
                 return;
             }
 
@@ -128,7 +126,7 @@ class CustomRouter
             }
 
 
-            if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) { 
+            if (!$row && (!isset($customUrl[1]) || (isset($customUrl[1]) && strpos($customUrl[1], 'pagesize') === false))) {
                 return;
             }
             /*]*/
