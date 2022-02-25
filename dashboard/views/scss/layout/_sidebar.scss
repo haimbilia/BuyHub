@@ -13,8 +13,8 @@ $sidebar-width: 280px;
     // background-color: $bg-white;
     // box-shadow: $shadow-theme;
     //border-#{$end-direction}: $border;
-    @include media-breakpoint-down(md) {
-        transform: translateX(-100%);
+    @include media-breakpoint-down(lg) {
+        transform: translateX(-100% * $transform-direction);
         position: fixed;
         z-index: 1022;
         border: none;
@@ -117,7 +117,10 @@ $sidebar-width: 280px;
 
 .sidebar--on {
     .sidebar {
-        transform: translateX(0);
+        box-shadow: $shadow5;
+        transform: translateX(0 * $transform-direction);
+        overflow-y: auto;
+        height: calc(100% - 66px);
     }
 }
 

@@ -17,7 +17,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             color: $brand-color !important;
         }
         &_top {
-            background-color: hsla(0, 0%, 100%, .8);
+            background-color: hsla(0, 0%, 100%, 0.8);
             backdrop-filter: blur(3px);
             position: sticky;
             top: 0;
@@ -30,7 +30,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             position: sticky;
             #{$start-direction}: 0;
             z-index: 2;
-            background-color: hsla(0, 0%, 100%, .8);
+            background-color: hsla(0, 0%, 100%, 0.8);
             backdrop-filter: blur(3px);
             overflow-wrap: break-word;
             &:after {
@@ -39,8 +39,8 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 #{$end-direction}: 0;
                 bottom: -1px;
                 width: 30px;
-                transform: translateX(100%);
-                transition: box-shadow .3s;
+                transform: translateX(100% * $transform-direction);
+                transition: box-shadow 0.3s;
                 content: "";
                 pointer-events: none;
                 box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05);
@@ -50,7 +50,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             position: sticky;
             #{$end-direction}: 0;
             z-index: 2;
-            background-color: hsla(0, 0%, 100%, .8);
+            background-color: hsla(0, 0%, 100%, 0.8);
             backdrop-filter: blur(3px);
             overflow-wrap: break-word;
             &::after {
@@ -59,9 +59,9 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 bottom: -1px;
                 #{$start-direction}: 0;
                 width: 30px;
-                transform: translateX(-100%);
+                transform: translateX(-100% * $transform-direction);
                 transition: box-shadow 0.3s;
-                content: '';
+                content: "";
                 pointer-events: none;
                 box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05);
             }
@@ -88,7 +88,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 th {
                     color: $txt-gray;
                     text-transform: uppercase;
-                    letter-spacing: .1rem;
+                    letter-spacing: 0.1rem;
                     font-weight: 600;
                     background: $bg-white;
                 }

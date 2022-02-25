@@ -998,11 +998,13 @@ function loginPopUpBox(includeGuestLogin) {
 }
 
 function setSiteDefaultLang(langId) {
-    var url = window.location.pathname;
+    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.rooturl });
+    window.location.reload(1);
+    /* var url = window.location.pathname;
     var srchString = window.location.search;
     var data = "pathname=" + url;
     fcom.ajax(
-        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.webrootfront),
+        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.rooturl),
         data,
         function (res) {
             var ans = $.parseJSON(res);
@@ -1010,7 +1012,7 @@ function setSiteDefaultLang(langId) {
                 window.location.href = ans.redirectUrl + srchString;
             }
         }
-    );
+    ); */
 }
 
 function setSiteDefaultCurrency(currencyId) {

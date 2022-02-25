@@ -4,16 +4,17 @@ $imgArr = [];
 $recordId = $image['afile_record_id'];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $uploadedTime = AttachedFile::setTimeParam($bannerDetail['banner_updated_on']);
+    $getBannerRatio = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_THUMB);
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
                 'Banner',
-                'Thumb',
+                'BannerImage',
                 array(
                     $recordId,
                     $image['afile_lang_id'],
                     $image['afile_screen'],
-                    '',
+                    ImageDimension::VIEW_THUMB,
                 ),
                 CONF_WEBROOT_FRONT_URL
             ) . $uploadedTime,
@@ -22,6 +23,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         ),
         'name' => $image['afile_name'],
         'afile_id' => $image['afile_id'],
+        'data-aspect-ratio' => $getBannerRatio[ImageDimension::VIEW_THUMB]['aspectRatio'],
     ];
 }
 

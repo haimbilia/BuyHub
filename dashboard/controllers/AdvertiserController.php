@@ -356,7 +356,7 @@ class AdvertiserController extends AdvertiserBaseController
             $this->set('noMediaTab', 'noMediaTab');
         }
 
-        
+
 
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -773,10 +773,10 @@ class AdvertiserController extends AdvertiserBaseController
             ));
             $rs = $srch->getResultSet();
             $promotionDetails = FatApp::getDb()->fetch($rs);
-            if(false == $promotionDetails){                
+            if (false == $promotionDetails) {
                 Message::addErrorMessage($this->str_invalid_request);
                 FatUtility::dieJsonError(Message::getHtml());
-            } 
+            }
 
             $promotionType = $promotionDetails['promotion_type'];
             if ($promotionDetails) {
@@ -804,7 +804,7 @@ class AdvertiserController extends AdvertiserBaseController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (false != $row) {
-            $promotionDetails['promotion_shop'] = $row['shop_name'];            
+            $promotionDetails['promotion_shop'] = $row['shop_name'];
         }
 
 
@@ -858,7 +858,7 @@ class AdvertiserController extends AdvertiserBaseController
     }
 
     public function promotionMediaForm($recordId = 0)
-    {       
+    {
         $userId = $this->userParentId;
         $recordId = FatUtility::int($recordId);
 
@@ -905,7 +905,7 @@ class AdvertiserController extends AdvertiserBaseController
         ) + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('recordId', $recordId);
         $this->set('languages', Language::getAllNames());
-        $this->set('mediaFrm', $mediaFrm);      
+        $this->set('mediaFrm', $mediaFrm);
         $this->_template->render(false, false);
     }
 
@@ -1114,7 +1114,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         if ($promotionId < 1) {
             Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('advertiser'));
+            FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
         }
         $promotionDetails = Promotion::getAttributesById($promotionId);
         if ($promotionDetails['promotion_user_id'] != $userId) {

@@ -19,22 +19,22 @@ $action = strtolower($action); ?>
         </button>
         <ul class="menu-sub menu-sub-accordion collapse" id="nav-orders" aria-labelledby="" data-parent="#dashboard-menu">
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'orders' || $action == 'vieworder')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'orders' || $action == 'vieworder')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?></span>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'mydownloads')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'MyDownloads'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'mydownloads')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'MyDownloads', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?></span>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'ordercancellationrequests') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'ordercancellationrequests') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequests', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?></span>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'orderreturnrequests' || $action == 'vieworderreturnrequest')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && ($action == 'orderreturnrequests' || $action == 'vieworderreturnrequest')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?></span>
                 </a>
             </li>
@@ -57,18 +57,18 @@ $action = strtolower($action); ?>
             </button>
             <ul class="menu-sub menu-sub-accordion collapse" id="nav-offers" aria-labelledby="" data-parent="#dashboard-menu">
                 <li class="menu-sub-item">
-                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'offers') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'offers'); ?>">
+                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'offers') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'offers', [], CONF_WEBROOT_DASHBOARD); ?>">
                         <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?></span>
                     </a>
                 </li>
                 <li class="menu-sub-item">
-                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'rewardpoints') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'rewardPoints'); ?>">
+                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'rewardpoints') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'rewardPoints', [], CONF_WEBROOT_DASHBOARD); ?>">
                         <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?></span>
                     </a>
                 </li>
                 <?php if (FatApp::getConfig('CONF_ENABLE_REFERRER_MODULE', FatUtility::VAR_INT, 1)) { ?>
                     <li class="menu-sub-item">
-                        <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'shareearn') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn'); ?>">
+                        <a class="menu-sub-link navLinkJs <?php echo ($controller == 'buyer' && $action == 'shareearn') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn', [], CONF_WEBROOT_DASHBOARD); ?>">
                             <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?></span>
                         </a>
                     </li>
@@ -92,7 +92,7 @@ $action = strtolower($action); ?>
         </button>
         <ul class="menu-sub menu-sub-accordion collapse" id="nav-general" aria-labelledby="" data-parent="#dashboard-menu">
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>
                         <?php if ($todayUnreadMessageCount > 0) { ?>
                             <span class="msg-count"><?php echo ($todayUnreadMessageCount < 9) ? $todayUnreadMessageCount : '9+'; ?></span>
@@ -100,7 +100,7 @@ $action = strtolower($action); ?>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'credits') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'credits') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></span>
                 </a>
             </li>
@@ -111,12 +111,12 @@ $action = strtolower($action); ?>
                     $label = Labels::getLabel("LBL_WISHLIST", $siteLangId);
                 }
                 ?>
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'wishlist') ? 'active' : ''; ?>" title="<?php echo $label; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'wishlist'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'wishlist') ? 'active' : ''; ?>" title="<?php echo $label; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'wishlist', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo $label; ?></span>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'savedproductssearch' && $action == 'listing') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Saved_Searches", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SavedProductsSearch', 'listing'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'savedproductssearch' && $action == 'listing') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Saved_Searches", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SavedProductsSearch', 'listing', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel('LBL_Saved_Searches', $siteLangId); ?></span>
                 </a>
             </li>
@@ -138,13 +138,13 @@ $action = strtolower($action); ?>
         </button>
         <ul class="menu-sub menu-sub-accordion collapse" id="nav-profile" aria-labelledby="" data-parent="#dashboard-menu">
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span>
                 </a>
             </li>
             <?php if (!User::isAffiliate()) { ?>
                 <li class="menu-sub-item">
-                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm'); ?>">
+                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm', [], CONF_WEBROOT_DASHBOARD); ?>">
                         <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_BANK_ACCOUNT", $siteLangId); ?></span>
                     </a>
                 </li>
@@ -152,18 +152,18 @@ $action = strtolower($action); ?>
 
             <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1)) { ?>
                 <li class="menu-sub-item">
-                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'cookiesPreferencesForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'cookiesPreferencesForm'); ?>">
+                    <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && ($action == 'cookiesPreferencesForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'cookiesPreferencesForm', [], CONF_WEBROOT_DASHBOARD); ?>">
                         <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_COOKIE_PREFERENCES", $siteLangId); ?></span>
                     </a>
                 </li>
             <?php } ?>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'myaddresses') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'myaddresses') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?></span>
                 </a>
             </li>
             <li class="menu-sub-item">
-                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_UPDATE_CREDENTIALS", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_UPDATE_CREDENTIALS", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?></span>
                 </a>
             </li>

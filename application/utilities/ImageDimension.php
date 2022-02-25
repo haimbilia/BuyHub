@@ -1178,6 +1178,8 @@ class ImageDimension extends FatUtility
 
     public static function getBannerData(string $sizeType = '', $layout): array
     {
+        $sizeType = strtoupper($sizeType);
+
         if (substr($sizeType, 0, 4) == 'webp') {
             $sizeType = substr($sizeType, 4);
         }

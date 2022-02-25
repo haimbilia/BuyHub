@@ -19,13 +19,6 @@
 <h6><?php echo Labels::getLabel('LBL_New_Customer_Sign-Up', $siteLangId); ?></h6>
 <p><?php echo Labels::getLabel('LBL_sign_up_help_description', $siteLangId); ?></p>
 
-<?php
-/* <p class="text--dark"><?php echo sprintf(Labels::getLabel('LBL_New_to',$siteLangId),FatApp::getConfig('CONF_WEBSITE_NAME',$siteLangId));?>?
-<a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>"
-    class="text text--uppercase"><?php echo Labels::getLabel('LBL_Sign_Up',$siteLangId);?></a>
-</p> */
-?>
-
 
 <div class="colscontainer">
     <div class="col__left">

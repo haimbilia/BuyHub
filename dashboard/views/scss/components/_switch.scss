@@ -15,8 +15,7 @@
     }
 
     input:checked + .slider:before {
-        -webkit-transform: translateX(22px);
-        transform: translateX(22px);
+        transform: translateX(22px * $transform-direction);
     }
 
     .slider {

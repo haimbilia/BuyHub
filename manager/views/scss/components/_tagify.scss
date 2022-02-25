@@ -70,7 +70,7 @@
         }
         .tagify__tag__removeBtn {
             opacity: 0;
-            transform: translateX(-6px) scale(0.5);
+            transform: translateX(-6px * $transform-direction) scale(0.5);
             margin-#{$start-direction}: -3ch;
             transition: 0.12s;
         }

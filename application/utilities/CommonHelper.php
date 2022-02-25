@@ -45,7 +45,7 @@ class CommonHelper extends FatUtility
                     }
                 }
 
-                if (SYSTEM_LANG_ID > 0 && count(LANG_CODES_ARR) > 1 && 0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
+                if (SYSTEM_LANG_ID > 0 && count(LANG_CODES_ARR) > 1 && 0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && defined('SYSTEM_FRONT') && SYSTEM_FRONT === true) {
                     self::$_lang_id = SYSTEM_LANG_ID;
                 }
 
@@ -54,7 +54,7 @@ class CommonHelper extends FatUtility
                     if (array_key_exists($_COOKIE['defaultSiteCurrency'], $currencies)) {
                         self::$_currency_id = FatUtility::int(trim($_COOKIE['defaultSiteCurrency']));
                     }
-                }else{                    
+                } else {
                     if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
                         self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
                     }

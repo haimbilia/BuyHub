@@ -183,7 +183,7 @@ class SellerController extends SellerBaseController
         $this->set('classArr', applicationConstants::getClassArr());
         $this->_template->addJs(array('js/chartist.min.js'));
         $this->_template->addJs('js/slick.min.js');
-        $this->_template->render(true, false);
+        $this->_template->render();
     }
 
     public function sales()
@@ -6042,7 +6042,7 @@ class SellerController extends SellerBaseController
     }
 
     // Page Created for Pawan to create new UI for add product. 26/11/2021
-    public function addProductPageUi(Type $var = null)
+    public function addProductPageUi()
     {
         $this->_template->render();
     }

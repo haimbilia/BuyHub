@@ -1,12 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 foreach ($images as $image) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'customProduct', array($image['afile_record_id'], "THUMB", $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'customProduct', array($image['afile_record_id'], ImageDimension::VIEW_THUMB, $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imageCustProdDimensions = ImageDimension::getData(ImageDimension::TYPE_CUSTOM_PRODUCTS, ImageDimension::VIEW_THUMB);
+
+
     if ($isDefaultLayout  == applicationConstants::YES) {
     ?>
         <li id="<?php echo $image['afile_id']; ?>">
             <div class="uploaded-stocks-item" data-ratio="1:1">
-                <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
+                <img data-aspect-ratio = "<?php echo $imageCustProdDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
                 <div class="uploaded-stocks-actions">
                     <?php if ($canEdit) { ?>
                         <ul class="actions">
@@ -26,7 +29,7 @@ foreach ($images as $image) {
     <?php } else { ?>
         <li class="upload__list-item" id="<?php echo $image['afile_id']; ?>">
             <div class="media">
-                <img class="mr-2 product-profile-img" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>" width="50">
+                <img data-aspect-ratio = "<?php echo $imageCustProdDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" class="mr-2 product-profile-img" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>" width="50">
             </div>
             <div class="title"><?php echo $image['afile_name'] ?></div>
             <?php if ($canEdit) { ?>

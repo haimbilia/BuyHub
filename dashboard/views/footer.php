@@ -1,19 +1,19 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <footer class="footer">
-    <div class="row justify-content-between copyright-st">
-        <div class="col-12 col-sm-auto">
-            <p> <?php if (CommonHelper::demoUrl()) {
-                    $replacements = array(
-                        '{YEAR}' => '&copy; ' . date("Y"),
-                        '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
-                        '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>',
-                    );
-                    echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
-                } else {
-                    echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, 'Copyright &copy; ' . date('Y') . ' <a href="https://www.fatbit.com/">FATbit.com');
-                } ?></p>
-        </div>
-        <div class="col-12 col-sm-auto"><?php echo CONF_WEB_APP_VERSION; ?></div>
+    <div class="copyright">
+        <p class="copyright-txt">
+            <?php if (CommonHelper::demoUrl()) {
+                $replacements = array(
+                    '{YEAR}' => '&copy; ' . date("Y"),
+                    '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
+                    '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>',
+                );
+                echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
+            } else {
+                echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, 'Copyright &copy; ' . date('Y') . ' <a href="https://www.fatbit.com/">FATbit.com');
+            } ?>
+        </p>
+        <p class="version"><?php echo CONF_WEB_APP_VERSION; ?></p>
     </div>
     <ul class="mobile-actions">
         <li class="mobile-actions-item" role="none">
