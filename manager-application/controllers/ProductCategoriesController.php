@@ -379,14 +379,23 @@ class ProductCategoriesController extends ListingBaseController
             $catIcon = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1 ? false : true));
             $this->set('image', $catIcon);
             $this->set('imageFunction', 'icon');
+            $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_THUMB);
+            $this->set('imageDimensions', $imageDimensions);
+
+
         } elseif ($imageType == 'banner') {
             $catBanner = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catBanner);
             $this->set('imageFunction', 'banner');
+           
+            $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
+            $this->set('imageDimensions', $imageDimensions);
         } elseif ($imageType == 'thumb') {
             $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catThumb);
             $this->set('imageFunction', 'thumb');
+            $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB, ImageDimension::VIEW_THUMB);
+            $this->set('imageDimensions', $imageDimensions);
         }
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());

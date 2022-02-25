@@ -906,13 +906,13 @@ function loginPopUpBox(includeGuestLogin) {
 }
 
 function setSiteDefaultLang(langId) {
-    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.webrootfront });
+    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.rooturl });
     window.location.reload(1);
     /* var url = window.location.pathname;
     var srchString = window.location.search;
     var data = "pathname=" + url;
     fcom.ajax(
-        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.webrootfront),
+        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.rooturl),
         data,
         function (res) {
             var ans = $.parseJSON(res);

@@ -107,14 +107,13 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
-            }
-            closeForm();
+            }          
         }, { fOutMode: 'json' });
     };
 
     addBrandReqLangForm = function (brandReqId, langId, autoFillLangData = 0) {
         $("#brandReqFormJs").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $("#brandReqFormJs").html(t);
         });
@@ -125,7 +124,6 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'brandReqLangSetup'), data, function (t) {
-
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
@@ -133,8 +131,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             if (t.openMediaForm) {
                 brandMediaForm(t.brandReqId);
                 return;
-            }
-            closeForm();
+            }           
         });
     };
 

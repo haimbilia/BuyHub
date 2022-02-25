@@ -183,7 +183,7 @@ class SellerController extends SellerBaseController
         $this->set('classArr', applicationConstants::getClassArr());
         $this->_template->addJs(array('js/chartist.min.js'));
         $this->_template->addJs('js/slick.min.js');
-        $this->_template->render(true, false);
+        $this->_template->render();
     }
 
     public function sales()
@@ -4788,8 +4788,6 @@ class SellerController extends SellerBaseController
             $frm->fill($addressData);
             $stateId = $addressData['ura_state_id'];
         }
-
-
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
@@ -4826,7 +4824,33 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel($userObj->getError(), $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $newTabLangId = $this->siteLangId;
+        $post['lang_id'] = CommonHelper::getDefaultFormLangId();        
+
+        if (!$userObj->updateUserReturnAddressLang($post)) {
+            Message::addErrorMessage(Labels::getLabel($userObj->getError(), $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData($userObj::DB_TBL_USR_RETURN_ADDR_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($userId, CommonHelper::getDefaultFormLangId())) {
+                Message::addErrorMessage($updateLangDataobj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
+        }  
+
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $languageId => $langName) {
+                $langData = $userObj->getUserReturnAddress($languageId);
+                if (empty($langData['uralang_lang_id'])) {
+                    $newTabLangId = $languageId;
+                    break;
+                }
+            }
+        }
         $this->set('langId', $newTabLangId);
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -4875,8 +4899,6 @@ class SellerController extends SellerBaseController
         if ($data != false) {
             $frm->fill($data);
         }
-
-
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
@@ -4891,8 +4913,7 @@ class SellerController extends SellerBaseController
         }
 
         $this->set('shop_id', $shop_id);
-        $this->set('language', Language::getAllNames());
-        $this->set('siteLangId', $this->siteLangId);
+        $this->set('languages', Language::getAllNames());
         $this->set('frm', $frm);
         $this->set('stateId', $stateId);
         $this->set('formLangId', $langId);
@@ -4973,19 +4994,30 @@ class SellerController extends SellerBaseController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
 
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $this->siteLangId), 'ura_name')->requirement->setRequired(true);;
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'ura_city')->requirement->setRequired(true);;
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS1', $this->siteLangId), 'ura_address_line_1')->requirement->setRequired(true);;
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS2', $this->siteLangId), 'ura_address_line_2');
+
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'ura_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'ura_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
-        /* $frm->addTextBox(Labels::getLabel('FRM_CITY',$this->siteLangId), 'ura_city');     */
-        $zipFld = $frm->addTextBox(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'ura_zip');
-        /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-          $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId)); */
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'ura_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);       
+        $frm->addTextBox(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'ura_zip');
+
         $frm->addHiddenField('', 'ura_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'ura_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
+        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+        
+        
         return $frm;
     }
 
@@ -4993,26 +5025,14 @@ class SellerController extends SellerBaseController
     {
         $formLangId = FatUtility::int($formLangId);
 
-        $frm = new Form('frmReturnAddressLang');
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $formLangId, array(), '');
-        } else {
-            $formLangId = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $formLangId);
-        }
-
-        $frm->addTextBox(Labels::getLabel('FRM_NAME', $formLangId), 'ura_name')->requirement->setRequired(true);;
-        $frm->addTextBox(Labels::getLabel('FRM_CITY', $formLangId), 'ura_city')->requirement->setRequired(true);;
-        $frm->addTextarea(Labels::getLabel('FRM_ADDRESS1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;
-        $frm->addTextarea(Labels::getLabel('FRM_ADDRESS2', $formLangId), 'ura_address_line_2');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $formLangId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
+        $frm = new Form('frmReturnAddressLang');   
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $formLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $formLangId, array(), '');
+        $fld->requirements()->setRequired(); 
+        $fld->requirements()->setInt();
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $formLangId), 'ura_name')->requirement->setRequired(true);       
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS2', $formLangId), 'ura_address_line_2');
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $formLangId), 'ura_city')->requirement->setRequired(true);
 
         return $frm;
     }
@@ -5743,7 +5763,13 @@ class SellerController extends SellerBaseController
         $addressId = FatUtility::int($addressId);
         $frm = new Form('frmPickUpAddress');
         $frm->addHiddenField('', 'addr_id', $addressId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $languages = Language::getAllNames();
+        if(1 < count($languages)){
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
+        }else{
+            $frm->addHiddenField('', 'lang_id', array_key_first($languages));
+        }       
+        
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $langId), 'addr_address1');
@@ -6016,7 +6042,7 @@ class SellerController extends SellerBaseController
     }
 
     // Page Created for Pawan to create new UI for add product. 26/11/2021
-    public function addProductPageUi(Type $var = null)
+    public function addProductPageUi()
     {
         $this->_template->render();
     }

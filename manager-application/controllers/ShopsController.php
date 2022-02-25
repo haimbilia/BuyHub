@@ -259,10 +259,14 @@ class ShopsController extends ListingBaseController
             $logo = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $logo);
             $this->set('imageFunction', 'shopLogo');
+            $imageShopDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);
+            $this->set('imageShopDimensions', $imageShopDimensions);
         } else {
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
-            $this->set('imageFunction', 'shopBanner');
+          
+            $imageShopDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, ImageDimension::VIEW_THUMB);
+            $this->set('imageShopDimensions', $imageShopDimensions);
         }
 
         $this->set('file_type', $file_type);

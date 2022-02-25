@@ -4,9 +4,10 @@ $imgArr = [];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
     $imgArr = [
-        'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], "THUMB", $image['afile_id'], $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+        'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], ImageDimension::VIEW_THUMB, $image['afile_id'], $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
         'name' => $image['afile_name'],
         'afile_id' => $image['afile_id'],
+        'data-aspect-ratio' => $imageBrandDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
     ]; 
  } 
 

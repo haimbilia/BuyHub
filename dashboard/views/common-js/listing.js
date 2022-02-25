@@ -100,6 +100,13 @@ $(document).on("click", ".navTabsJs a", function (e) {
         $.ykmodal.close();
     };
 
+    hideYkModalFooter = function () {
+       $('.contentBodyJs .form-edit-foot').hide();
+    };
+
+    showYkModalFooter = function () {
+        $('.contentBodyJs .form-edit-foot').show();
+    };
 
 })();
 

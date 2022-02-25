@@ -3,6 +3,7 @@
 $imgArr = [];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+    $imageSocialDimensions = ImageDimension::getData(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_THUMB);
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
@@ -10,7 +11,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
                 'SocialPlatform',
                 array(
                     $image['afile_record_id'],
-                    "THUMB" 
+                    ImageDimension::VIEW_THUMB 
                 ),
                 CONF_WEBROOT_FRONT_URL
             ) . $uploadedTime,
@@ -19,6 +20,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         ),
         'name' => $image['afile_name'],
         'afile_id' => $image['afile_id'],
+        'data-aspect-ratio' => $imageSocialDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
     ];
 }
 
