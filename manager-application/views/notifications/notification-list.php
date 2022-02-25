@@ -1,10 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (count($arrListing) > 0) {
 	foreach ($arrListing as $key => $row) {
+		$imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_MINI);
 		$mainDiv = new HtmlElement("div", array("class" => "notification"));
 		$div = $mainDiv->appendElement("div", array("class" => "notification__img"));
 		$div = $div->appendElement("div", array("class" => "icon"));
-		$div->appendElement("img", ['class' => '', 'src' => UrlHelper::generateFullUrl('Image', 'user', array($row['notification_user_id'], 'MINI', true), CONF_WEBROOT_FRONT_URL)]);
+		$div->appendElement("img", ['data-aspect-ratio' => $imageUserDimensions[ImageDimension::VIEW_MINI]['aspectRatio'], 'class' => '', 'src' => UrlHelper::generateFullUrl('Image', 'user', array($row['notification_user_id'], ImageDimension::VIEW_MINI, true), CONF_WEBROOT_FRONT_URL)]);
 
 		$uname = ($row['user_name']) ? $row['user_name'] : Labels::getLabel('LBL_GUEST_USER', $siteLangId);	
 		$div = $mainDiv->appendElement("div", array("class" => "notification__detail"));

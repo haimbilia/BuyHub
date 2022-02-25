@@ -298,12 +298,18 @@ class BrandRequestsController extends ListingBaseController
         }
         if ($file_type == 'logo') {
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB);
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
+
+
         } else {
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
         }
 
         $this->set('file_type', $file_type);

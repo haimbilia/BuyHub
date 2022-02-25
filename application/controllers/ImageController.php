@@ -861,11 +861,11 @@ class ImageController extends FatController
 
         $default_image = 'brand_deafult_image.jpg';
         $banner_id = FatUtility::int($banner_id);
-
+        $sizeType = strtoupper($sizeType);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, $displayUniversalImage, $screen);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-
+      
         $imageDimensions = ImageDimension::getBannerData($sizeType, $collectionLayoutType);
 
         if ($sizeType) {
@@ -873,7 +873,7 @@ class ImageController extends FatController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-        exit;
+      
     }
 
 

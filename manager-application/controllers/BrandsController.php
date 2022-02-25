@@ -299,10 +299,16 @@ class BrandsController extends ListingBaseController
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB);
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
+
         } else {
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
+
         }
 
         $this->set('file_type', $file_type);

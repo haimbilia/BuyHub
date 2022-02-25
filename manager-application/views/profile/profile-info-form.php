@@ -19,7 +19,7 @@ $imageFld->addFieldTagAttribute('onChange', 'popupImage(this)');
 $imageFld->addFieldTagAttribute('class', 'file-upload');
 
 $imageFld->addFieldTagAttribute('accept', 'image/*');
-
+$imageProfileDimensions = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED);
 $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true));
 ?>
 <div class="card">
@@ -35,7 +35,7 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
             <div class="col-lg-3 text-center">
                 <!--begin::Image input-->
                 <div class="avatar avatar-outline avatar-circle" id="user_avatar_3">
-                    <div class="avatar__holder" style="background-image: url('<?php echo $profileImg . "t=?" . time(); ?>')">
+                    <div data-aspect-ratio = "<?php echo $imageProfileDimensions[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" class="avatar__holder" style="background-image: url('<?php echo $profileImg . "t=?" . time(); ?>')">
                     </div>
 
                     <?php if (!$isNewImage) { ?>

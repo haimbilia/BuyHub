@@ -14,10 +14,12 @@ if(null != $fld){
     $imgArr = [];
     if (!empty($pluginLogo) && isset($pluginLogo['afile_id']) && $pluginLogo['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($pluginLogo['afile_updated_at']);
+        $imagePluginDimensions = ImageDimension::getData(ImageDimension::TYPE_PLUGIN_IMAGE, ImageDimension::VIEW_THUMB);
         $imgArr = [
-            'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginLogo['afile_record_id'], "THUMB"), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+            'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginLogo['afile_record_id'], ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
             'name' => $pluginLogo['afile_name'],
             'afile_id' => $pluginLogo['afile_id'],
+            'data-aspect-ratio' => $imagePluginDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
         ];         
      }
 

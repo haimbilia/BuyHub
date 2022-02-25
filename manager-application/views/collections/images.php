@@ -3,10 +3,11 @@
 if (!empty($images)) {
     foreach ($images as $afile_id => $row) {
         $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
-        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'collectionReal', array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", 0, $row['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $imageCollectionDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_IMAGE, ImageDimension::VIEW_THUMB);
+        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'collectionReal', array($row['afile_record_id'], $row['afile_lang_id'], ImageDimension::VIEW_THUMB, 0, $row['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
         <div class="dropzone-uploaded dropzoneUploadedJs">
-            <img src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
+            <img data-aspect-ratio = "<?php echo $imageCollectionDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>"  src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
             <?php if ($canEdit) { ?>
                 <div class="dropzone-uploaded-action">
                     <ul class="actions">

@@ -25,6 +25,8 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
     $imageRecordId = $image['afile_record_id'];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+        $imageCBlockBgDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_THUMB);
+
         $imgArr = [
             'url' => UrlHelper::getCachedUrl(
                 UrlHelper::generateFileUrl(
@@ -33,7 +35,7 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
                     array(
                         $recordId,
                         $image['afile_lang_id'],
-                        "THUMB",
+                        ImageDimension::VIEW_THUMB,
                         $image['afile_type']
                     ),
                     CONF_WEBROOT_FRONT_URL
@@ -43,6 +45,7 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
             ),
             'name' => $image['afile_name'],
             'afile_id' => $image['afile_id'],
+            'data-aspect-ratio' => $imageCBlockBgDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
         ];
     }
     $fld = $frm->getField('cblock_bg_image');
