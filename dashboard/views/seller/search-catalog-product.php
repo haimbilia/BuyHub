@@ -3,7 +3,7 @@
 use PhpParser\Node\Stmt\Label;
 
 defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
         'listserial' => Labels::getLabel('LBL_#', $siteLangId),

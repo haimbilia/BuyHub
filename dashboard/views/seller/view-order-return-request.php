@@ -66,7 +66,7 @@ if (null != $btn) {
                 </div>
 
                 <?php if (!empty($request)) { ?>
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified">
                             <thead>
                                 <tr class="">
@@ -91,7 +91,7 @@ if (null != $btn) {
                         </table>
                     </div>
 
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified">
                             <thead>
                                 <tr class="">

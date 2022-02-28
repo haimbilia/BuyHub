@@ -1,4 +1,7 @@
 $card-space: 25px;
+$card-radius: 1px;
+$card-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
+$card-bg: #fff;
 $card: "card";
 .#{$card} {
     $selfHead: "";
@@ -7,9 +10,9 @@ $card: "card";
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
-    background-color: $bg-white;
-    border-radius: $radius-common;
+    box-shadow: $card-shadow;
+    background-color: $card-bg;
+    border-radius: $card-radius;
     border: none;
     margin-bottom: 20px;
     visibility: visible;

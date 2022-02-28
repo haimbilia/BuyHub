@@ -229,7 +229,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table id="optionsTable-js" class="table table-justified">
                             <thead>
                                 <tr>

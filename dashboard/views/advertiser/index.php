@@ -22,8 +22,8 @@
                             </div>
                         <?php } ?>
                     </div>
-                    <div class="card-body ">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
@@ -99,8 +99,8 @@
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body ">
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="card-table">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr class="">

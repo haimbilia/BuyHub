@@ -67,7 +67,7 @@
 
 
                 <?php if (!empty($request)) { ?>
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified">
                             <thead>
                                 <tr class="">
@@ -92,7 +92,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table">
                             <tbody>
                                 <tr class="">

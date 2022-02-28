@@ -45,8 +45,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
@@ -134,8 +134,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="action"> <?php if (count($offers) > 0) { ?> <a href="<?php echo UrlHelper::generateUrl('buyer', 'offers'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             <?php } ?> </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr class="">
@@ -196,8 +196,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderReturnRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             </div> <?php } ?>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table table-justified">
                                 <thead>
 
@@ -284,8 +284,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderCancellationRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             </div> <?php } ?>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table ">
                                 <thead>
                                     <tr class="">

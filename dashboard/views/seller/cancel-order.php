@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified">
                             <thead>
                                 <tr>
