@@ -15,9 +15,7 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
                         </button>
                     </div>
                 </div>
-                <?php if ($collection['totProducts'] > 6) { ?>
-                    <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
-                <?php }  ?>
+
             </div>
             <div class="product-listing js-carousel product-layout-3" id="product-listing" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
@@ -39,6 +37,9 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
                     echo '</div>';
                 } ?>
             </div>
+            <?php if ($collection['totProducts'] > 6) { ?>
+                <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+            <?php }  ?>
         </div>
     </section>
 <?php } ?>

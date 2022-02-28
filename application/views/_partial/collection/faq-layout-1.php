@@ -16,11 +16,17 @@
             <div class="faq-layout-1">
                 <ul class="nav nav-tabs nav-tabs-center" role="tablist">
                     <?php $count = 0;
-                    foreach ($faqCategories as $faqCatId => $faqCat) { ?>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId; ?>" type="button" role="tab" aria-selected="true">
-                                <?php echo $faqCat['faqcat_name']; ?></button>
-                        </li>
+                    foreach ($faqCategories as $faqCatId => $faqCat) {
+                        if ($count < Collections::LIMIT_FAQ_LAYOUT1) {
+                    ?>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId; ?>" type="button" role="tab" aria-selected="true">
+                                    <?php echo $faqCat['faqcat_name']; ?></button>
+                            </li>
+                        <?php
+                        }
+                        ?>
+
                     <?php $count++;
                     } ?>
                 </ul>

@@ -19,7 +19,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     ($canEdit ? 'removeShopImage(' . $image['afile_id'] . "," . $image['afile_lang_id'] . ",'" . $imageType . "'," . $image['afile_screen'].')' :''),
     ($canEdit ? 'editDropZoneImages(this)': ''),
     $imgArr,
-    'mt-3 dropzone-custom dropzoneContainerJs'
+    'dropzone-custom dropzoneContainerJs'
 );
 
 

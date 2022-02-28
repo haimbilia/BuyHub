@@ -63,11 +63,10 @@ class Collections extends MyAppModel
     public const LIMIT_BRAND_LAYOUT1 = 5;
     public const LIMIT_BRAND_LAYOUT2 = 5;
     public const LIMIT_BLOG_LAYOUT1 = 3;
-    public const LIMIT_FAQ_LAYOUT1 = 6;
+    public const LIMIT_FAQ_LAYOUT1 = 3;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
     public const LIMIT_CONTENT_BLOCK_LAYOUT1 = 1;
     public const LIMIT_COLLECTION_RECORDS = 20;
-
     public const COLLECTION_CRITERIA_PRICE_LOW_TO_HIGH = 1;
     public const COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW = 2;
 
