@@ -24,7 +24,14 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
-                $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_MINI_THUMB);
+                $languages = Language::getAllNames();
+              
+                $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $row['brand_id'], 0, $siteLangId, (count($languages) > 1) ? false : true);
+                
+                $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+                $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+                $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_MINI_THUMB, $aspectRatioType);
+                
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),

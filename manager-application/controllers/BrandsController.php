@@ -277,6 +277,13 @@ class BrandsController extends ListingBaseController
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
+        $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
+        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
+        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
+        $this->set('getBrandRequestLogoSquare',$getBrandRequestLogoSquare);
+        $this->set('getBrandRequestLogoRactangle',$getBrandRequestLogoRactangle);
+        $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
+
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
@@ -299,7 +306,9 @@ class BrandsController extends ListingBaseController
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
-            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB);
+            $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
             $this->set('imageBrandDimensions', $imageBrandDimensions);
 
         } else {

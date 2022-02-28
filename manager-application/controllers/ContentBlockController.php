@@ -218,10 +218,12 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
+
+            $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_DEFAULT);
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
-            $frm->addHiddenField('', 'min_width', 1300);
-            $frm->addHiddenField('', 'min_height', 400);
+            $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
+            $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
         }
         $frm->addHtmlEditor(Labels::getLabel('FRM_Page_Content', $this->siteLangId), 'epage_content');
         $languageArr = Language::getDropDownList();
@@ -230,6 +232,7 @@ class ContentBlockController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
+        $this->set('getImageDimensions', $getImageDimensions);
         return $frm;
     }
 
@@ -255,9 +258,11 @@ class ContentBlockController extends ListingBaseController
             }
             
             $frm->addHTML('', 'cblock_bg_image', '');
+            $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_DEFAULT);
+            $this->set('getImageDimensions', $getImageDimensions);
             $frm->addHiddenField('', 'file_type', $fileType);
-            $frm->addHiddenField('', 'min_width', 1300);
-            $frm->addHiddenField('', 'min_height', 400);
+            $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
+            $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
         }
         $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'epage_content');
 

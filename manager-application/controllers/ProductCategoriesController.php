@@ -168,6 +168,14 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
         }
 
+        $getProdCatBannerDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
+        $getProdCatLogoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
+        $getProdCatthumbDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB,ImageDimension::VIEW_DEFAULT);
+
+        $this->set('getProdCatBannerDimensions', $getProdCatBannerDimensions);
+        $this->set('getProdCatLogoDimensions', $getProdCatLogoDimensions);
+        $this->set('getProdCatthumbDimensions', $getProdCatthumbDimensions);
+
         $isParent = ProductCategory::isParentCategory($recordId);
         $frm = $this->getImagesFrm($recordId, $isParent);
         $this->set('isParent', $isParent);
