@@ -1,5 +1,6 @@
 (function() {
 
+
     $(document).on('change', '#brandlogoLanguageJs', function() {
         var lang_id = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();

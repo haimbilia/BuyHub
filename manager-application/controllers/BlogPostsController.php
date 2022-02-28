@@ -328,6 +328,7 @@ class BlogPostsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getImagesFrm($recordId);
+        
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

@@ -75,10 +75,10 @@ $formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId); ?
     var minWidthBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
-  /*   $(minWidthBaneerEle).val('<?php/*  echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['width']; */ ?>');
-    $(minHeightBaneerEle).val('<?php /* echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['height']; */ ?>'); */
-  /*   $(minWidthLogoEle).val(150);
-    $(minHeightLogoEle).val(150); */
+   $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['width'];  ?>');
+    $(minHeightBaneerEle).val('<?php  echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'); 
+     $(minWidthLogoEle).val('<?php  echo $getBrandRequestLogoSquare[ImageDimension::VIEW_DEFAULT]['width']; ?>');
+    $(minHeightLogoEle).val('<?php  echo $getBrandRequestLogoSquare[ImageDimension::VIEW_DEFAULT]['height']; ?>'); 
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
 
