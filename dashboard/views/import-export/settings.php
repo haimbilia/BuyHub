@@ -1,12 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('onsubmit', 'updateSettings(this); return(false);');
-$frm->setFormTagAttribute('class', 'form');
 
-$frm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-';
-$frm->developerTags['fld_default_col'] = 6;
-
-$fldSubmit = $frm->getField('btn_submit');
-$fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide"); ?>
+HtmlHelper::formatFormFields($frm, 4);
+$frm->setFormTagAttribute('class', 'form form--settings'); ?>
 
 <div class="card-head">
     <?php $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canEditImportExport' => $canEditImportExport, 'canUploadBulkImages' => $canUploadBulkImages);
@@ -20,4 +15,9 @@ $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide"); ?>
             </div>
         </div>
     </div>
+</div>
+<div class="card-foot">
+    <button type="button" class="btn btn-brand  importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
+        <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
+    </button>
 </div>

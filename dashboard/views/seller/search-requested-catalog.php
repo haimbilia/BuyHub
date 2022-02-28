@@ -14,7 +14,7 @@
         >>>>>>> e42a45b9ad02de5db78ed55d89402b60a2dda071
 </div>
 <div class="box__body">
-    <div class="js-scrollable table-wrap scroll scroll-x">
+    <div class="js-scrollable table-wrap table-responsive">
         <?php $arr_flds = array(
             'listserial' => 'Sr.',
             'scatrequest_reference' => Labels::getLabel('LBL_Reference_number', $siteLangId),

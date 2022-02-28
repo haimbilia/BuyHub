@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable">
                             <?php
                             $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed'));
@@ -17,7 +17,6 @@
                                 $thead->appendElement('th', ['width' => $width])
                                     ->appendElement('span')
                                     ->appendElement('plaintext', [], $val, true);
-
                             }
 
                             foreach ($linksTypeArr as $linkType => $label) {
@@ -47,7 +46,7 @@
                                         break;
                                     case 'users':
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
-                                            $userName = $item['user_name'] . ' ( '. $item['credential_username'] .' )';
+                                            $userName = $item['user_name'] . ' ( ' . $item['credential_username'] . ' )';
                                             $tagifyData[] = [
                                                 'id' => $item['user_id'],
                                                 'value' => htmlspecialchars_decode($userName, ENT_QUOTES),
@@ -78,7 +77,7 @@
                                         break;
                                     default:
                                         trigger_error('Invalid Link Type', E_USER_ERROR);
-                                    break;
+                                        break;
                                 }
 
                                 foreach ($fields as $key => $val) {
@@ -91,7 +90,7 @@
                                             break;
                                         default:
                                             $td->appendElement('plaintext', [], $label, true);
-                                        break;
+                                            break;
                                     }
                                 }
                             }

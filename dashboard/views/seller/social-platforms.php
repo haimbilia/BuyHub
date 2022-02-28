@@ -29,7 +29,7 @@
     ?>
 </div>
 <div class="card-body">
-    <div class="js-scrollable table-wrap scroll scroll-x">
+    <div class="js-scrollable table-wrap table-responsive">
         <?php
         $arr_flds = array(
             'listserial' => '#',

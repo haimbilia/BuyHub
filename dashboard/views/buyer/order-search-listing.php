@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
         'order_id'    =>    Labels::getLabel('LBL_Order_ID_Date', $siteLangId),
@@ -90,29 +90,33 @@
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
-                        array('href' => $orderDetailUrl, 'class' => '', 
-                        'title' => Labels::getLabel('LBL_View_Order', $siteLangId)),
+                        array(
+                            'href' => $orderDetailUrl, 'class' => '',
+                            'title' => Labels::getLabel('LBL_View_Order', $siteLangId)
+                        ),
                         '<svg class="svg" width="18" height="18">
                         <use
                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
                         </use>
                     </svg>',
                         true
-                    );                   
+                    );
 
                     if ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($order['op_id']) && $order['cancellation_age'] >= $daysSpent) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => $opCancelUrl, 'class' => '', 
-                            'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)),
+                            array(
+                                'href' => $opCancelUrl, 'class' => '',
+                                'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                            ),
                             '<svg class="svg" width="18" height="18">
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
                             </use>
                         </svg>',
                             true
-                        );                             
+                        );
                     }
                     $canSubmitFeedback = Orders::canSubmitFeedback($order['order_user_id'], $order['order_id'], $order['op_selprod_id']);
                     if ($canSubmitFeedback && $isValidForReview) {
@@ -120,15 +124,17 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => $opFeedBackUrl, 'class' => '', 
-                            'title' => Labels::getLabel('LBL_Feedback', $siteLangId)),
+                            array(
+                                'href' => $opFeedBackUrl, 'class' => '',
+                                'title' => Labels::getLabel('LBL_Feedback', $siteLangId)
+                            ),
                             '<svg class="svg" width="18" height="18">
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#star">
                             </use>
                         </svg>',
                             true
-                        );                         
+                        );
                     }
 
                     if ($canReturnRefund && ($order['return_request'] == 0 && $order['cancel_request'] == 0) && $returnAge >= $daysSpent) {
@@ -136,30 +142,34 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => $opRefundRequestUrl, 'class' => '', 
-                            'title' => Labels::getLabel('LBL_Refund', $siteLangId)),
+                            array(
+                                'href' => $opRefundRequestUrl, 'class' => '',
+                                'title' => Labels::getLabel('LBL_Refund', $siteLangId)
+                            ),
                             '<svg class="svg" width="18" height="18">
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#dollar">
                             </use>
                         </svg>',
                             true
-                        );  
+                        );
                     }
 
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
-                        array('href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");', 
-                        'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)),
+                        array(
+                            'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                            'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
+                        ),
                         '<svg class="svg" width="18" height="18">
                         <use
                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#cart">
                         </use>
                     </svg>',
                         true
-                    ); 
-                   
+                    );
+
                     if (!$order['order_deleted'] && !$order["order_payment_status"] && 'TransferBank' == $order['plugin_code']) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(

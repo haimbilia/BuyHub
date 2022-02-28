@@ -241,10 +241,21 @@ class ProductCategoriesRequestController extends ListingBaseController
                 $data['ratio_type'] = $logo['afile_aspect_ratio'];
             }
         }
+
+        $getCategoryRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
+        $getCategoryRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
+        $getCategoryRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
+
+
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getImageForm($recordId);
         $imageFrm->fill($data);
+
+        $this->set('getCategoryRequestDimensions', $getCategoryRequestDimensions);
+        $this->set('getCategoryRequestLogoSquare', $getCategoryRequestLogoSquare);
+        $this->set('getCategoryRequestLogoRactangle', $getCategoryRequestLogoRactangle);
+
 
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);

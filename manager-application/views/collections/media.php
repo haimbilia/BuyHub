@@ -70,7 +70,7 @@ $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-    $('input[name=min_width]').val(640);
+  /*   $('input[name=min_width]').val(640);
     $('input[name=min_height]').val(480);
-    var aspectRatio = 4 / 3;
+    var aspectRatio = 4 / 3; */
 </script>

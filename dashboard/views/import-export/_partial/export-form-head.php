@@ -25,6 +25,12 @@ if (in_array($actionType, $actionTypeArr)) {
 	$rangeTypeFld->setfieldTagAttribute('onchange', "showHideExtraFld(this.value," . Importexport::BY_ID_RANGE . "," . Importexport::BY_BATCHES . ");");
 }
 
+$tabsAllowedFor = [
+    Importexport::TYPE_PRODUCTS,
+    Importexport::TYPE_BRANDS,
+    Importexport::TYPE_SELLER_PRODUCTS,
+];
+
 $activeContentTab = !empty($activeContentTab) ? 'active' : '';
 $activeMediaTab = !empty($activeMediaTab) ? 'active' : '';
 $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
@@ -38,7 +44,7 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 	</h5>
 </div>
 <div class="modal-body form-edit">
-	<?php if ($displayMediaTab) { ?>
+	<?php if ($displayMediaTab && in_array($actionType, $tabsAllowedFor)) { ?>
 		<div class="form-edit-head">
 			<nav class="nav nav-tabs">
 				<a class="nav-link <?php echo $activeContentTab; ?>" href="javascript:void(0)" onclick="exportForm('<?php echo $actionType; ?>');" title="<?php echo Labels::getLabel('LBL_CONTENT', $siteLangId); ?>">

@@ -75,7 +75,7 @@
             </table>
         </div>
         <div class="cartdetail__footer js-scrollable table-wrap">
-            <table class="table--justify">
+            <table class="table-justify">
                 <tr>
                     <td><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></td>
                     <td><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></td>

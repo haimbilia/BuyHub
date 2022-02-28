@@ -8,7 +8,7 @@
                         <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
                     </div>
                     <div class="card-body">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <?php
                             $arr_flds = array(
                                 'listserial' => Labels::getLabel('LBL_#', $siteLangId),

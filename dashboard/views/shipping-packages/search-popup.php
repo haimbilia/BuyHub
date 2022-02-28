@@ -5,7 +5,7 @@
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
-        <div class="js-scrollable table-wrap scroll scroll-x">
+        <div class="js-scrollable table-wrap table-responsive">
             <?php if (count($arrListing) == 0) {
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
             } else {

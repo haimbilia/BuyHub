@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $siteLangId); ?>
 
 <main class="main mainJs">
@@ -16,7 +16,7 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $site
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
@@ -34,6 +34,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $site
         </div>
     </div>
 </main>
-
-
- 
