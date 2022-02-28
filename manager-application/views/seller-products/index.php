@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId);
@@ -15,14 +15,14 @@ $actionItemsData = $actionItemsData + [
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . 'seller-products/search-form.php'); ?>
                     <?php $this->includeTemplate('_partial/listing/listing-head.php', $actionItemsData, false); ?>
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
                             $tableId = "listingTableJs";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . 'seller-products/search.php');
 
-                            $actionItemsData = $actionItemsData +[
+                            $actionItemsData = $actionItemsData + [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
                                 'performBulkAction' => true /* Used in case of performing bulk action. */
                             ];
@@ -35,5 +35,3 @@ $actionItemsData = $actionItemsData + [
         </div>
     </div>
 </main>
-
- 

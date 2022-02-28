@@ -23,17 +23,17 @@ $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_BANNER', $siteLangId) . 
 
 $iconFld = $frm->getField('cat_icon');
 $iconFld->value = '<div id="icon-imageListingJs"></div>';
-$iconFld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60') . '</span>';
+$iconFld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), ' '.$getProdCatLogoDimensions['width'].'*'.$getProdCatLogoDimensions['height'].'') . '</span>';
 
 
 $bannerFld = $frm->getField('cat_banner');
 $bannerFld->value = '<div id="banner-imageListingJs"></div>';
-$bannerFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
+$bannerFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), ' '.$getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width'].' x '.$getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height'].'') . '</span>';
 
 if($isParent){
 $thumbFld = $frm->getField('cat_thumb');
 $thumbFld->value = '<div id="thumb-imageListingJs"></div>';
-$thumbFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '300 x 300') . '</span>';
+$thumbFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), ' '.$getProdCatthumbDimensions['width'].' x '.$getProdCatthumbDimensions['height'].'') . '</span>';
 
 }
 
@@ -82,32 +82,74 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 
 <script type="text/javascript">
-    $('input[name=banner_min_width]').val(2000);
-    $('input[name=banner_min_height]').val(500);
-    $('input[name=logo_min_width]').val(150);
-    $('input[name=logo_min_height]').val(150);
-    $('input[name=thumb_min_width]').val(300);
-    $('input[name=thumb_min_height]').val(300);
+
+     $('input[name=banner_min_width]').val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+    $('input[name=banner_min_height]').val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+    $('input[name=logo_min_width]').val('<?php echo $getProdCatLogoDimensions['width']; ?>');
+    $('input[name=logo_min_height]').val('<?php echo $getProdCatLogoDimensions['height']; ?>');
+    $('input[name=thumb_min_width]').val('<?php echo $getProdCatthumbDimensions['width']; ?>');
+    $('input[name=thumb_min_height]').val('<?php echo $getProdCatthumbDimensions['height']; ?>'); 
+
+    var getAspectRatioDes = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
+    getAspectRatioDes = getAspectRatioDes.split(":");
+    if (getAspectRatioDes) {
+        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
+    } else {
+        var aspectRatioDes = 4 / 1;
+    }
+
+
     var aspectRatio = 4 / 1;
     $(document).on('change', '.catPrefDimensionsJs', function() {       
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
         if ($(this).val() == screenDesktop) {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+            aspectRatio = aspectRatioDes;
+         /*    $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
             $('input[name=banner_min_width]').val(2000);
-            $('input[name=banner_min_height]').val(500);
-            aspectRatio = 4 / 1;
+            $('input[name=banner_min_height]').val(500); 
+            aspectRatio = 4 / 1;*/
         } else if ($(this).val() == screenIpad) {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
+
+            var getAspectRatioIpad = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
+            getAspectRatioIpad = getAspectRatioIpad.split(":");
+            if (getAspectRatioIpad) {
+                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
+            } else {
+                var aspectRatioIpad = 128 / 45;
+            }
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
+            aspectRatio = aspectRatioIpad;
+
+
+           /*  $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
             $('input[name=banner_min_width]').val(1024);
             $('input[name=banner_min_height]').val(360);
-            aspectRatio = 128 / 45;
+            aspectRatio = 128 / 45; */
         } else {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
+            var getAspectRatioMob = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
+            getAspectRatioMob = getAspectRatioMob.split(":");
+            if (getAspectRatioMob) {
+                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
+            } else {
+                var aspectRatioMob = 16 / 9;
+            }
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+
+            $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            aspectRatio = aspectRatioMob;
+
+          /*   $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
             $('input[name=banner_min_width]').val(640);
             $('input[name=banner_min_height]').val(360);
-            aspectRatio = 16 / 9;
+            aspectRatio = 16 / 9; */
         }
     });
 </script>

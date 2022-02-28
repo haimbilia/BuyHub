@@ -72,7 +72,11 @@ if ($optionIdFld !== null) {
                                     $imageUrl = UrlHelper::generateFullUrl('Image', 'Product', array($recordId, ImageDimension::VIEW_THUMB, 0, $afileId, $langId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_BRAND_LOGO:
-                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB);
+                                    $languages = Language::getAllNames();
+                                    $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, (count($languages) > 1) ? false : true);
+                                    $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+                                    $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
                                     $imageUrl = UrlHelper::generateFullUrl('Image', 'brand', array($recordId, $langId, ImageDimension::VIEW_THUMB, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_BRAND_IMAGE:

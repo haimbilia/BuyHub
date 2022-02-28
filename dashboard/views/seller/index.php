@@ -44,15 +44,16 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-md-8">
                 <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <div class="card">
-                        <div class="card-head">
+                        <div class="card-head border-0">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Sales_Graph', $siteLangId); ?></h5>
                         </div>
-                        <div class="card-body  graph">
+                        <div class="card-body graph">
                             <?php $this->includeTemplate('_partial/seller/sellerSalesGraph.php'); ?> </div>
                     </div>
                     <div class="card">
-                        <div class="card-head">
-                            <h5 class="card-title "><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
+                        <div class="card-head border-0">
+                            <h5 class="card-title ">
+                                <?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
                             </h5>
                             <?php if (count($orders) > 0) { ?>
                                 <div class="action">
@@ -60,8 +61,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body ">
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="card-table">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table table-justified">
                                     <thead>
                                         <tr class="">
@@ -122,7 +123,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 <?php } ?>
                 <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
                     <div class="card">
-                        <div class="card-head">
+                        <div class="card-head border-0">
                             <h5 class="card-title ">
                                 <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5>
                             <?php if (count($transactions) > 0) { ?>
@@ -131,8 +132,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body ">
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="card-table">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table table-justified">
                                     <thead>
                                         <tr class="">
@@ -197,7 +198,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 <?php } ?>
                 <?php if ($userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <div class="card">
-                        <div class="card-head">
+                        <div class="card-head border-0">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Return_requests', $siteLangId); ?>
                             </h5>
                             <?php if (count($returnRequests) > 0) { ?>
@@ -206,8 +207,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body ">
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="card-table">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table table-justified">
                                     <thead>
                                         <tr class="">
@@ -292,7 +293,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     ?>
                 </div> -->
                     <div class="card">
-                        <div class="card-head">
+                        <div class="card-head border-0">
                             <h5 class="card-title ">
                                 <?php echo Labels::getLabel('LBL_Cancellation_requests', $siteLangId); ?></h5>
                             <?php if (count($cancellationRequests) > 0) { ?>
@@ -301,8 +302,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="card-body ">
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                        <div class="card-table">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table table-justified">
                                     <thead>
                                         <tr class="">

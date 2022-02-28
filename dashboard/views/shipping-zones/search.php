@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <?php if (!empty($shipRates)) { ?>
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified table-rates mt-3">
                             <thead>
                                 <tr>
@@ -97,19 +97,19 @@
                                                 <ul class="actions">
                                                     <li>
                                                         <a href="javascript:void(0);" onclick="addEditShipRates(<?php echo $rate['shiprate_shipprozone_id'] ?>, <?php echo $rate['shiprate_id'] ?>);" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>"><i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                </use>
-                                            </svg>
-                                        </i></a>
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                    </use>
+                                                                </svg>
+                                                            </i></a>
                                                     </li>
                                                     <li>
                                                         <a href="javascript:void(0);" onclick="deleteRate(<?php echo $rate['shiprate_id'] ?>)" title="<?php echo Labels::getLabel("LBL_Delete", $siteLangId); ?>"><i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                </use>
-                                            </svg>
-                                        </i></a>
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                    </use>
+                                                                </svg>
+                                                            </i></a>
                                                     </li>
                                                 </ul>
                                             <?php } ?>

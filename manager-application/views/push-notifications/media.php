@@ -59,7 +59,16 @@ if (User::AUTH_TYPE_GUEST != $userAuthType) {
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-    $('input[name=min_width]').val(1000);
-    $('input[name=min_height]').val(563);
-    var aspectRatio = 1000 / 563;
+    $('input[name=min_width]').val('<?php echo $getNotificationDimensions['width']; ?>');
+    $('input[name=min_height]').val('<?php echo $getNotificationDimensions['height']; ?>');
+    var getAspectRatio = '<?php echo $getNotificationDimensions[ImageDimension::VIEW_DEFAULT]['aspectRatio']; ?>';
+    getAspectRatio = getAspectRatio.split(":");
+    if (getAspectRatio) {
+        var getAspectRatio = getAspectRatio[0] / getAspectRatio[1];
+    } else {
+        var getAspectRatio =  1000 / 563;
+    }
+
+
+  
 </script>
