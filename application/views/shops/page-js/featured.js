@@ -23,7 +23,7 @@ $(document).ready(function(){
 		}
 		
 		fcom.updateWithAjax(fcom.makeUrl('Shops','search'), data, function(ans){
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if( append == 1 ){
 				$(document.frmSearchShopsPaging).remove();
 				$(dv).find('.loader-yk').remove();

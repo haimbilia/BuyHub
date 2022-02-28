@@ -21,7 +21,7 @@ class AccountController extends LoggedUserController
     public function index()
     {
         if (UserAuthentication::isGuestUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('home'));
+            FatApp::redirectUser(UrlHelper::generateUrl('home', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $this->siteLangId));
         }
 
         switch ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) {

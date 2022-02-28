@@ -70,7 +70,7 @@ $(document).ready(function () {
 
 	unlinkproducts = function (adsBatchId) {
 		if (typeof $(".selectItem--js:checked").val() === "undefined") {
-			$.mbsmessage(langLbl.atleastOneRecord, "alert--danger");
+			fcom.displayErrorMessage(langLbl.atleastOneRecord);
 			return false;
 		}
 		var agree = confirm(langLbl.confirmDelete);
@@ -78,17 +78,17 @@ $(document).ready(function () {
 			return false;
 		}
 		var data = fcom.frmData(document.getElementById("frmBatchSelprodListing"));
-		$.mbsmessage(langLbl.processing, false, "alert--process");
+		fcom.displayProcessing();
 		fcom.ajax(
 			fcom.makeUrl(keyName, "unlinkProducts", [adsBatchId]),
 			data,
 			function (t) {
 				var ans = $.parseJSON(t);
 				if (ans.status == 1) {
-					$.mbsmessage(ans.msg, true, "alert--success");
+					fcom.displaySuccessMessage(ans.msg);
 					$(".formActionBtn-js").addClass("disabled");
 				} else {
-					$.mbsmessage(ans.msg, true, "alert--danger");
+					fcom.displayErrorMessage(ans.msg);
 				}
 				searchProducts();
 			}

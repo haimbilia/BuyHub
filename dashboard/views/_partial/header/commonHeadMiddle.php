@@ -92,7 +92,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
                 if (CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
                     var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000;
                     setTimeout(function() {
-                        $.systemMessage.close();
+                        $.ykmsg.close();
                     }, time);
                 }
             })();

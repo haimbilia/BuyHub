@@ -45,7 +45,6 @@ if (isset($amazon) && strlen($orderId) > 0 && $orderInfo["order_payment_status"]
                 authRequest = amazon.Login.authorize(loginOptions, "<?php echo UrlHelper::generateUrl('AmazonPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND, false) ?>");
             },
             onError: function(error) {
-                console.log(error);
                 amazon.Login.logout();
                 document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 window.location = '<?php echo UrlHelper::generateUrl('AmazonPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) ?>';

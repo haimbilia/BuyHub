@@ -55,7 +55,7 @@ function setupReviewAbuse(frm){
 		//
 		fcom.updateWithAjax(fcom.makeUrl('Reviews','searchForProduct'), data, function(ans){
 			if( ans.status == 1 ){
-				$.mbsmessage.close();
+				$.ykmsg.close();
 			}
 			if( ans.totalRecords ){
 				$('#reviews-pagination-strip--js').show();

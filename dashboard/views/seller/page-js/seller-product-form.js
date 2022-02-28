@@ -4,10 +4,10 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	fcom.ajax(fcom.makeUrl('Seller', 'checkSellProdAvailableForUser'), data, function (t) {
 		var ans = $.parseJSON(t);
 		if (ans.status == 0) {
-			$.mbsmessage(ans.msg, false, 'alert--danger');
+			fcom.displayErrorMessage(ans.msg);
 			return;
 		}
-		$.mbsmessage.close();
+		$.ykmsg.close();
 	});
 });
 
@@ -156,7 +156,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 				}
 			});
 			if ($("#optionsTable-js > tbody > tr.invalid").length == $("#optionsTable-js > tbody > tr").length) {
-				$.systemMessage(LBL_MANDATORY_OPTION_FIELDS, 'alert--danger');
+				fcom.displayErrorMessage(LBL_MANDATORY_OPTION_FIELDS);
 				return false;
 			}
 
@@ -176,7 +176,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 			var counterString = langLbl.processing_counter.replace("{counter}", (i + 1));
 			counterString = counterString.replace("{count}", varients.length);
 			counterString = langLbl.processing + " " + counterString;
-			$.mbsmessage(counterString, false, 'alert--process alert');
+			$.ykmsg.info(counterString);
 		}
 		if (i == (varients.length - 1)) {
 			/* setTimeout(function() { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000); */
@@ -209,7 +209,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		var getList = getList || false;
 		fcom.displayProcessing(langLbl.requestProcessing);
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductDownloadFrm', [product_id, selprod_id]), '', function (res) {
-			fcom.closeAlertMessage();
+			$.ykmsg.close();
 			$("#digital_download_form").html(res);
 			if (true == getList) {
 				getDigitalDownloads();
@@ -379,8 +379,7 @@ $(document).on('click', '.tabs_002', function () {
 
 		console.log(data);
 
-		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
-
+		fcom.displayProcessing();
 		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function (t) {
 			var ans = $.parseJSON(t);
 			if (ans.status == 0) {
@@ -420,7 +419,7 @@ $(document).on('click', '.tabs_002', function () {
 
 		data.append('prod_ref_type', 1);
 
-		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		fcom.displayProcessing();
 
 		var productId = $("input[name='product_id']").val();
 		var selProdId = $("input[name='selprod_id']").val();
@@ -473,7 +472,7 @@ $(document).on('click', '.tabs_002', function () {
 			data.append('preview_file', file);
 		});
 
-		fcom.displayProcessing(langLbl.requestProcessing, 'alert--process', false);
+		fcom.displayProcessing();
 
 		$.ajax({
 			url: fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),

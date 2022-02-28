@@ -101,7 +101,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
 <script type="text/javascript">
     $("document").ready(function() {
         <?php if (isset($error)) { ?>
-            $.mbsmessage(<?php echo $error; ?>, true, 'alert--danger');
+            fcom.displayErrorMessage(<?php echo $error; ?>);
         <?php } ?>
         <?php if ($isCodOrPayAtStore) { ?>
             $(".intervalTimer-js").parent().parent().hide();
@@ -114,12 +114,12 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action')
         var getExternalLibraryUrl = $(frm).data('external');
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(res) {
             try {
                 var ans = $.parseJSON(res);
                 if (1 > ans.status) {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                 }
 
@@ -132,7 +132,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
                         $("#tabs-container form input[type='submit']").val(langLbl.confirmPayment);
-                        $.mbsmessage(json.msg, true, 'alert--danger');
+                        fcom.displayErrorMessage(json.msg);
                         return;
                     }
 
@@ -152,11 +152,11 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
 
     function loadChargeForm(action) {
         fcom.ajax(action, '', function(t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             try {
                 var ans = $.parseJSON(t);
                 if (1 > ans.status) {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');
+                    fcom.displayErrorMessage(ans.msg);
                     $('#tabs-container').html(ans.msg);
                     return false;
                 } else if ('undefined' != typeof ans.redirect) {
@@ -174,7 +174,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
     }
 
     function sendOtp(frm) {
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
         resendOtp(frm);
     }
 

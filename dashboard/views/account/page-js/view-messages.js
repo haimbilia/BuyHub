@@ -21,7 +21,7 @@ $(document).ready(function(){
 		
 		fcom.updateWithAjax(fcom.makeUrl('Account','threadMessageSearch'), data, function(ans){
             fcom.removeLoader();
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();
 				$(dv).prepend(ans.html);

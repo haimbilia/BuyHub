@@ -561,7 +561,7 @@ function googleCaptcha() {
     if ('' != inputObj.val()) { return; }
 
     var submitBtn = inputObj.parent("form").find('input[type="submit"]');
-    $.mbsmessage(langLbl.loadingCaptcha, false, 'alert--process');
+    fcom.displayProcessing();
     submitBtn.attr({ "disabled": "disabled", "type": "button" });
 
     var counter = 0;
@@ -569,7 +569,7 @@ function googleCaptcha() {
         counter++
         /* Check if not loaded until 30 Sec = counter 150. Because it run 5 times in 1 sec. */
         if (150 == counter) {
-            $.mbsmessage(langLbl.invalidGRecaptchaKeys, true, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidGRecaptchaKeys);
             clearInterval(checkToken);
             return;
         }
@@ -581,11 +581,11 @@ function googleCaptcha() {
                         inputObj.val(token);
                         submitBtn.removeAttr("disabled").attr('type', 'submit');
                         clearInterval(checkToken);
-                        $.mbsmessage.close();
+                        $.ykmsg.close();
                     });
                 }
                 catch (error) {
-                    $.mbsmessage(error, true, 'alert--danger');
+                    fcom.displayErrorMessage(error);
                     return;
                 }
             });
@@ -610,7 +610,7 @@ function loadGeoLocation() {
     }
 
     if (typeof navigator.geolocation == 'undefined') {
-        $.mbsmessage(langLbl.geoLocationNotSupported, true, 'alert--danger');
+        fcom.displayErrorMessage(langLbl.geoLocationNotSupported);
         return false;
     }
 
@@ -620,7 +620,7 @@ function loadGeoLocation() {
         codeLatLng(lat, lng, getGeoAddress);
     }, function (error) {
         if (1 == error.code) {
-            $.mbsmessage(error.message, true, 'alert--danger');
+            fcom.displayErrorMessage(error.message);
         }
     });
 }
@@ -701,7 +701,7 @@ function displayGeoAddress(address) {
 function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'formatted_address', saveCookie = true, callback = 'googleSelectedAddress') {
     if (1 > $("#" + elementId).length) {
         var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
-        $.systemMessage(msg, 'alert--danger');
+        fcom.displayErrorMessage(msg);
         return false;
     }
     var fieldElement = document.getElementById(elementId);
@@ -739,7 +739,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
             address = setGeoAddress(data);           
             if ('' == address) {
                 var msg = (langLbl.fieldNotFound).replace('{field}', field);
-                $.systemMessage(msg, 'alert--danger');
+                fcom.displayErrorMessage(msg);
             }
 
             $("#" + elementId).val(address);

@@ -181,14 +181,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             })
         }, function(response) {
             if (response !== null && typeof response.post_id !== 'undefined') {
-                $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+                fcom.displaySuccessMessage(langLbl.thanksForSharing);
                 /* $("#fb_ajax").html(langLbl.thanksForSharing); */
             }
         });
     }
 
     function twitter_shared(name) {
-        $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+        fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
     }
 </script>

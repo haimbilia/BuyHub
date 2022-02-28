@@ -359,8 +359,27 @@ trait SellerCollections
         }
         $sellProdObj = new ShopCollection();
         $products = $sellProdObj->getShopCollectionProducts($scollection_id, $this->siteLangId);
-
-        $collectionLinkFrm = $this->getCollectionLinksFrm();
+       
+        $collectionLinkFrm = $this->getCollectionLinksFrm();       
+        if (!empty($products)) {
+            $sellerProducts = [];
+            foreach ($products as $key => $val) {
+                $options = SellerProduct::getSellerProductOptions($val['selprod_id'], true, $this->siteLangId);
+                $variantsStr = '';
+                array_walk($options, function ($item, $key) use (&$variantsStr) {
+                    $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+                });
+                $productName = strip_tags(html_entity_decode(($val['product_name'] != '') ? $val['product_name'] : $val['product_identifier'], ENT_QUOTES, 'UTF-8'));
+                $productName .= $variantsStr;
+                $sellerProducts[$val['selprod_id']] = $productName;   
+                
+                $data['scp_selprod_id'] = array_keys($sellerProducts);
+                $fld = $collectionLinkFrm->getField('scp_selprod_id[]');
+                $fld->options = $sellerProducts;
+               
+            }           
+            $data['scp_scollection_id'] = $scollection_id; 
+        }
         $data['scp_scollection_id'] = $scollection_id;
         $collectionLinkFrm->fill($data);
         $this->set('collectionLinkFrm', $collectionLinkFrm);
@@ -374,8 +393,7 @@ trait SellerCollections
     {
         $frm = new Form('frmLinks1', array('id' => 'frmLinks1'));
         $frm->addHiddenField('', 'scp_scollection_id');
-        $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCTS', $this->siteLangId), 'scp_selprod_id[]', [], '', array('id' => 'scp_selprod_id'), false);
         $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div>');
         return $frm;
     }
@@ -389,9 +407,7 @@ trait SellerCollections
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $product_ids = (isset($post['product_ids'])) ? $post['product_ids'] : array();
-
-        unset($post['scp_selprod_id']);
+        $product_ids = (isset($post['scp_selprod_id'])) ? $post['scp_selprod_id'] : array();
 
         if ($scollection_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));

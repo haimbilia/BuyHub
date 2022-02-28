@@ -26,7 +26,7 @@ if (!isset($error)) { ?>
     function confirmOrder(frm) {
         $("form#paymentForm-js").removeAttr('onsubmit');
         var submitBtn = $("form#paymentForm-js input[type='submit']");
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
         submitBtn.attr('disabled', 'disabled');
         $('.redirectingText-js').text('<?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?>');
         $("form#paymentForm-js").submit();

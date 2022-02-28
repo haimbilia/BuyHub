@@ -398,7 +398,7 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
                     if (true == enableGcaptcha) {
                         googleCaptcha();
                     }
-                    $.mbsmessage.close();
+                    $.ykmsg.close();
                 } else {
                     var form = '#tabs-container form';
                     if (0 < $(form).length) {

@@ -27,10 +27,10 @@ $(document).on('blur', "input[name='promotion_budget']", function () {
 			var ans = $.parseJSON(t);
 			if (ans.status == 0) {
 				$("select[name='banner_blocation_id']").val('');
-				$.mbsmessage(ans.msg, false, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 				return;
 			}
-			$.mbsmessage.close();
+			$.ykmsg.close();
 		});
 	}
 });
@@ -216,11 +216,11 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 			},
 			success: function (ans) {
 				fcom.removeLoader();
-				$.mbsmessage.close();
+				$.ykmsg.close();
 				if (ans.status == true) {
-					$.mbsmessage(ans.msg, '', 'alert--success');
+					fcom.displaySuccessMessage(ans.msg);
 				} else {
-					$.mbsmessage(ans.msg, '', 'alert--danger');
+					fcom.displayErrorMessage(ans.msg);
 				}
 				$('#form-upload').remove();
 				$("#modalBoxJs").modal("hide");
@@ -247,9 +247,9 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		fcom.ajax(fcom.makeUrl('Advertiser', 'changePromotionStatus'), data, function (res) {
 			var ans = $.parseJSON(res);
 			if (ans.status == 1) {
-				$.mbsmessage(ans.msg, true, 'alert--success');
+				fcom.displaySuccessMessage(ans.msg);
 			} else {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 			}
 			/* loadSellerProducts(document.frmSearchSellerProducts); */
 		});

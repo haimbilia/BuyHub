@@ -24,7 +24,7 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.mbsmessage(res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(res.msg);
 			} catch (e) {
 				$.ykmodal(t);
 				addOptionForm(optionId);
@@ -67,7 +67,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if (t.optionId > 0) {
 				optionValueForm(t.optionId, 0);
 				return;
@@ -80,7 +80,7 @@ $(document).ready(function () {
 		if (!confirm(langLbl.confirmDelete)) { return; }
 		data = 'id=' + id + '&option_id=' + optionId;
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), data, function (res) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			optionValueListing(optionId);
 			optionValueForm(optionId, 0);
 		});
@@ -129,7 +129,7 @@ $(document).ready(function () {
 					optionForm(t.optionId);
 				}
 			}
-			$.mbsmessage.close();
+			$.ykmsg.close();
 		});
 	};
 
@@ -154,9 +154,9 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('seller', 'deleteSellerOption'), data, function (t) {
 			$res = $.parseJSON(t);
 			if ($res.status == 0) {
-				$.mbsmessage($res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage($res.msg);
 			} else {
-				$.mbsmessage($res.msg, true, 'alert--success');
+				fcom.displaySuccessMessage($res.msg);
 			}
 			reloadList();
 		});

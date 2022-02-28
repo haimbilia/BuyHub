@@ -4,7 +4,7 @@
         <div class="container">
             <div class="breadcrumbs">
                 <ul>
-                    <li><a href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Home', $siteLangId); ?> </a></li>
+                    <li><a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Home', $siteLangId); ?> </a></li>
                     <li><?php echo Labels::getLabel('LBL_Shopping_Cart', $siteLangId); ?> </li>
                 </ul>
             </div>

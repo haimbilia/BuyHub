@@ -68,7 +68,7 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('buyer', 'downloadDigitalProductFromLink', [linkId, opId]), '', function (t) {
 			var ans = $.parseJSON(t);
 			if (ans.status == 0) {
-				$.systemMessage(ans.msg, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 				return false;
 			}
 			location.reload();

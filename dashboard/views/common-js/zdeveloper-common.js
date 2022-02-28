@@ -194,10 +194,10 @@ function selectAll(obj) {
 
 function formAction(frm, callback) {
     if (typeof $(".selectItem--js:checked").val() === "undefined") {
-        $.mbsmessage(langLbl.atleastOneRecord, true, "alert--danger");
+        fcom.displayErrorMessage(langLbl.atleastOneRecord);
         return false;
     }
-    $.mbsmessage(langLbl.processing, true, "alert--process alert");
+    fcom.displayProcessing();
     data = fcom.frmData(frm);
     fcom.updateWithAjax(frm.action, data, function (resp) {
         callback();
@@ -532,7 +532,7 @@ function defaultSetUpLogin(frm, v) {
                     '{"required":false}'
                 );
                 invalidOtpField();
-                $.mbsmessage(langLbl.requiredFields, false, "alert--danger");
+                fcom.displayErrorMessage(langLbl.requiredFields);
                 return false;
             }
         });
@@ -546,17 +546,12 @@ function defaultSetUpLogin(frm, v) {
         fcom.frmData(frm),
         function (t) {
             var ans = JSON.parse(t);
-            if (ans.notVerified == 1) {
-                var autoClose = false;
-            } else {
-                var autoClose = true;
-            }
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, autoClose, "alert--success");
+                fcom.displaySuccessMessage(ans.msg);
                 location.href = ans.redirectUrl;
                 return;
             }
-            $.mbsmessage(ans.msg, autoClose, "alert--danger");
+            fcom.displayErrorMessage(ans.msg);
         }
     );
     return false;
@@ -567,6 +562,8 @@ function defaultSetUpLogin(frm, v) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
+        processingCounter: 0,
+        processingClass: 'processingJs',
         getLoader: function (addAsNew) {
             if (typeof addAsNew === 'undefined') {
                 $(document.body).css({ cursor: "wait" });
@@ -620,51 +617,30 @@ function defaultSetUpLogin(frm, v) {
                 }
             }
         },
-        resetFaceboxHeight: function () {
-            facebocxHeight = screenHeight;
-            var fbContentHeight =
-                parseInt($("#facebox .content").height()) + parseInt(150);
-            setTimeout(function () {
-                $("#facebox .content").css(
-                    "max-height",
-                    parseInt(facebocxHeight) - parseInt(facebocxHeight) / 4 + "px"
-                );
-            }, 700);
-            $("#facebox .content").css("overflow-y", "auto");
-            if (fbContentHeight > screenHeight - parseInt(100)) {
-                $("#facebox .content").css("display", "block");
-            } else {
-                $("#facebox .content").css("max-height", "");
+
+        displayProcessing: function () {
+            fcom.processingCounter++;
+            $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
+        },
+        closeProcessing: function (counter) {
+            var cls = fcom.processingClass;
+            if (typeof counter !== "undefined") {
+                cls += '-' + counter
             }
+            // $("."+ cls).remove(); 
+            $.ykmsg.close();
         },
-        updateFaceboxContent: function (t, cls) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "";
-            }
-            $.ykmodal(t, cls);
-            $.systemMessage.close();
+
+        displaySuccessMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.success(msg);
         },
-        displayProcessing: function (msg, cls, autoclose) {
-            if (typeof msg == "undefined" || msg == "undefined") {
-                msg = langLbl.processing;
-            }
-            $.systemMessage(msg, "alert--process", autoclose);
+
+        displayErrorMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.error(msg);
         },
-        displaySuccessMessage: function (msg, cls, autoclose) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "alert--success";
-            }
-            $.systemMessage(msg, cls, autoclose);
-        },
-        displayErrorMessage: function (msg, cls, autoclose) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "alert--danger";
-            }
-            $.systemMessage(msg, cls, autoclose);
-        },
-        closeAlertMessage: function (msg, cls, autoclose) {
-            $.systemMessage.close();
-        },
+
         getModalBody: function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
@@ -678,63 +654,7 @@ function defaultSetUpLogin(frm, v) {
         },
 
     });
-    $(document).bind("reveal.facebox", function () {
 
-    });
-    $(window).on("orientationchange", function () {
-
-    });
-    $(document).bind("loading.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-    });
-    $(document).bind("afterClose.facebox", function () {
-        $("html").css("overflow", "");
-    });
-    $(document).bind("beforeReveal.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-        $("html").css("overflow", "");
-    });
-    $(document).bind("reveal.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-    });
-    $.systemMessage = function (data, cls, autoClose = true) {
-        $.mbsmessage(data, autoClose, cls);
-    };
-    $.extend($.systemMessage, {
-        settings: {
-            closeimage: siteConstants.webroot + "images/facebox/close.gif",
-        },
-        loading: function () {
-            $(".system_message").show();
-        },
-        fillSysMessage: function (data, cls, autoClose) {
-            if (cls) {
-                $(".system_message").removeClass("alert--process");
-                $(".system_message").removeClass("alert--danger");
-                $(".system_message").removeClass("alert--success");
-                $(".system_message").removeClass("alert--info");
-                $(".system_message").addClass(cls);
-            }
-            $(".system_message .content").html(data);
-            $(".system_message").fadeIn();
-            if (true == autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
-                var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000;
-                setTimeout(function () {
-                    $.systemMessage.close();
-                }, time);
-            }
-        },
-        close: function () {
-            $.mbsmessage.close();
-        },
-    });
-    $(document).bind("close.systemMessage", function () {
-        $.mbsmessage.close();
-    });
-
-    function initialize() {
-        $(".system_message .close").click($.systemMessage.close);
-    }
     $.fn.serialize_without_blank = function () {
         var $form = this,
             result,
@@ -752,17 +672,6 @@ function defaultSetUpLogin(frm, v) {
     };
 })(jQuery);
 $(document).ready(function () {
-    if (
-        $(".system_message").find(".div_error").length > 0 ||
-        $(".system_message").find(".div_msg").length > 0 ||
-        $(".system_message").find(".div_info").length > 0 ||
-        $(".system_message").find(".div_msg_dialog").length > 0
-    ) {
-        $(".system_message").show();
-    }
-    $(".close").click(function () {
-        $(".system_message").hide();
-    });
     addCatalogPopup = function () {
         fcom.ajax(fcom.makeUrl("Seller", "addCatalogPopup"), "", function (t) {
             $.ykmodal(t);
@@ -773,7 +682,7 @@ $(document).ready(function () {
             loginPopUpBox();
             return false;
         }
-        $.mbsmessage.close();
+        $.ykmsg.close();
         fcom.ajax(
             fcom.makeUrl("Account", "markAsFavorite", [selProdId]),
             "",
@@ -797,7 +706,7 @@ $(document).ready(function () {
             loginPopUpBox();
             return false;
         }
-        $.mbsmessage.close();
+        $.ykmsg.close();
         fcom.ajax(
             fcom.makeUrl("Account", "removeFromFavorite", [selProdId]),
             "",
@@ -828,13 +737,13 @@ $(document).ready(function () {
             try {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
-                    $.mbsmessage(ans.msg, true, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     if ("undefined" != typeof ans.redirectUrl) {
                         location.href = ans.redirectUrl;
                     }
                     return;
                 }
-                $.mbsmessage(ans.msg, true, "alert--danger");
+                fcom.displayErrorMessage(ans.msg);
             } catch (err) {
                 $.ykmodal(t);
             }
@@ -844,7 +753,7 @@ $(document).ready(function () {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
         if (1 > defaultLangField.length) {
-            $.systemMessage(langLbl.unknownPrimaryLanguageField, "alert--danger");
+            fcom.displayErrorMessage(langLbl.unknownPrimaryLanguageField);
             return false;
         }
         var proceed = true;
@@ -857,13 +766,13 @@ $(document).ready(function () {
                 stringToTranslate += $(this).attr("name") + "=" + $(this).val();
             } else {
                 $(this).focus();
-                $.systemMessage(langLbl.primaryLanguageField, "alert--danger");
+                fcom.displayErrorMessage(langLbl.primaryLanguageField);
                 proceed = false;
                 return false;
             }
         });
         if (true == proceed) {
-            $.mbsmessage(langLbl.processing, true, "alert--process alert");
+            fcom.displayProcessing();
             fcom.ajax(actionUrl, stringToTranslate, function (t) {
                 var res = $.parseJSON(t);
                 $.each(res, function (langId, values) {
@@ -873,7 +782,6 @@ $(document).ready(function () {
                         );
                     });
                 });
-                $(document).trigger("close.mbsmessage");
             });
         }
     };
@@ -936,7 +844,7 @@ $(document).ready(function () {
                 var ans = $.parseJSON(rsp);
                 console.log(ans);
                 if (ans.status == 0) {
-                    $.mbsmessage(ans.msg, true, "alert--danger");
+                    fcom.displayErrorMessage(ans.msg);
                 } else {
                     $(".cookie-alert").hide("slow");
                     $(".cookie-alert").remove();
@@ -998,13 +906,13 @@ function loginPopUpBox(includeGuestLogin) {
 }
 
 function setSiteDefaultLang(langId) {
-    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.webrootfront });
+    $.cookie('defaultSiteLang', langId, { expires: 10, path: siteConstants.rooturl });
     window.location.reload(1);
     /* var url = window.location.pathname;
     var srchString = window.location.search;
     var data = "pathname=" + url;
     fcom.ajax(
-        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.webrootfront),
+        fcom.makeUrl("Home", "setLanguage", [langId], siteConstants.rooturl),
         data,
         function (res) {
             var ans = $.parseJSON(res);
@@ -1128,12 +1036,7 @@ function stylePhoneNumberFld(
                         dialCode + "-" + iti.getSelectedCountryData().iso2;
                     if (false === hasOnlyFlag) {
                         if ($('input[name="' + elementName + '"]', form).length < 1) {
-                            $.systemMessage(
-                                $(input, form).attr("name") +
-                                " " +
-                                langLbl.dialCodeFieldNotFound,
-                                "alert-danger"
-                            );
+                            fcom.displayErrorMessage($(input, form).attr("name") + " " + langLbl.dialCodeFieldNotFound);
                             return;
                         }
                         $('input[name="' + elementName + '"]', form).val(dialCodeWithPhone);
@@ -1286,7 +1189,7 @@ function fileSizeValidation() {
     if (fsize > langLbl.allowedFileSize) {
         var msg = langLbl.fileSizeExceeded;
         var msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
-        $.mbsmessage(msg, true, "alert--danger");
+        fcom.displayErrorMessage(msg);
         $(this).val("");
         return false;
     }
@@ -1364,7 +1267,7 @@ function DataURIToBlob(dataURI) {
 }
 $(document).on("change", ".multipleImgs--js", function () {
     if ($(this)[0].files.length > 8) {
-        $.mbsmessage(langLbl.uploadImageLimit, true, "alert--danger");
+        fcom.displayErrorMessage(langLbl.uploadImageLimit);
         $(this).val("");
         if (0 < $(".fileRemove--js").length) {
             $(".fileRemove--js").click();

@@ -1,7 +1,7 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
+HtmlHelper::formatFormFields($frm, 6);
 $frm->setFormTagAttribute('id', 'returnAddressFrm');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setReturnAddress(this); return(false);');
@@ -12,6 +12,16 @@ $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $
 
 $stateFld = $frm->getField('ura_state_id');
 $stateFld->setFieldTagAttribute('id', 'ura_state_id');
+
+$fld = $frm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
+unset($languages[CommonHelper::getDefaultFormLangId()]);
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -21,10 +31,12 @@ $stateFld->setFieldTagAttribute('id', 'ura_state_id');
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs">
+        <?php if(0 < count($languages)){ ?>
             <a class="nav-link active" href="javascript:void(0)" onclick="returnAddressForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
-            <a class="nav-link" href="javascript:void(0);" onclick="returnAddressLangForm(<?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
+            <a class="nav-link" href="javascript:void(0);" onclick="returnAddressLangForm(<?php echo array_key_first($languages); ?>)">
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
+            <?php } ?>
         </nav>
     </div>
     <div class="form-edit-body loaderContainerJs sectionbody space">

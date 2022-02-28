@@ -30,9 +30,9 @@ $(document).ready(function () {
     };
 
     trackOrder = function (trackingNumber, courier, orderNumber) {
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $.ykmodal(res);
         });
     };
@@ -45,19 +45,18 @@ $(document).ready(function () {
     }
 
     proceedToShipment = function (opId) {
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         if ('' == $(".shippingUser-js").val()) {
-            $.mbsmessage(langLbl.shippingUser, false, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.shippingUser);
             return;
         }
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, 'alert--danger');
+                fcom.displayErrorMessage(t.msg);
                 return;
             }
-            // $.mbsmessage(t.msg, false, 'alert--success');
 
             var form = "form.markAsShipped-js";
             if (0 < $(form).length) {
@@ -93,7 +92,7 @@ $(document).ready(function () {
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $.ykmodal(res);
         });
     }
@@ -124,10 +123,10 @@ $(document).ready(function () {
             success: function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 0) {
-                    $.systemMessage(ans.msg, 'alert alert--danger');
+                    fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                $.systemMessage(ans.msg, 'alert alert--success');
+                fcom.displaySuccessMessage(ans.msg);
                 setTimeout("pageRedirect(" + opId + ")", 1000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -166,15 +165,15 @@ $(document).ready(function () {
         if (!$(frm).validate()) {
             return;
         }
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, 'alert--danger');
+                fcom.displayErrorMessage(t.msg);
                 return;
             }
-            $.mbsmessage(t.msg, false, 'alert--success');
+            fcom.displaySuccessMessage(t.msg);
             window.location.reload();
         });
     };
@@ -192,15 +191,15 @@ $(document).ready(function () {
         if (!$(frm).validate()) {
             return;
         }
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'setUpShippingRate'), data, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, 'alert--danger');
+                fcom.displayErrorMessage(t.msg);
                 return;
             }
-            $.mbsmessage(t.msg, false, 'alert--success');
+            fcom.displaySuccessMessage(t.msg);
             setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [frm.op_id.value]) }, 300);
         });
     };

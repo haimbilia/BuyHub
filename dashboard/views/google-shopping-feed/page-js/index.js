@@ -14,7 +14,7 @@ $(document).ready(function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-        
+
         $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'search'), data, function (res) {
             fcom.removeLoader();
@@ -70,18 +70,18 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupServiceAccountForm'), data, function (t) {
-            
+
             location.reload();
         });
     }
 
     publishBatch = function (adsBatchId) {
-        $.mbsmessage(langLbl.processing, true, 'alert--process alert');
+        fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'publishBatch', [adsBatchId]), '', function (t) {
             if (t.status == 1) {
-                $.mbsmessage(t.msg, true, 'alert--success');
+                fcom.displaySuccessMessage(t.msg);
             } else {
-                $.mbsmessage(t.msg, true, 'alert--danger');
+                fcom.displayErrorMessage(t.msg);
             }
             searchRecords();
         });

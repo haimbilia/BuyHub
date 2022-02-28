@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
@@ -32,27 +32,28 @@ if (null != $btn) {
             <?php endif; ?>
             <div id="ajax_message"></div>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+                <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
             <?php } ?>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     $("form#paymentForm-js").submit();
+
     function confirmOrder(frm) {
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action');
         var submitBtn = $("form#paymentForm-js input[type='submit']");
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
         submitBtn.attr('disabled', 'disabled');
         fcom.ajax(action, data, function(res) {
             var json = $.parseJSON(res);
             if (1 > json.status) {
                 submitBtn.removeAttr('disabled');
-                $.mbsmessage(json.msg, true, 'alert--danger');
+                fcom.displayErrorMessage(json.msg);
                 return false;
             }
-            $("#paymentFormElement-js").replaceWith(json.html);            
+            $("#paymentFormElement-js").replaceWith(json.html);
             window.location.href = $("form#paymentForm-js").attr('action');
         });
     }

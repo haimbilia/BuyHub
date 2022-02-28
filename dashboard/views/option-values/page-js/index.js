@@ -24,7 +24,7 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.mbsmessage(res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(res.msg);
 			} catch (e) {
 				$.ykmodal(t);
 			}
@@ -37,7 +37,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reloadList();
 			if (t.langId > 0) {
 				optionValueLangForm(t.optionValueId, t.langId);
@@ -57,7 +57,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'langSetup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reloadList();
 			if (t.langId > 0) {
 				optionValueLangForm(t.optionValueId, t.langId);

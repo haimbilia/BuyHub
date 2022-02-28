@@ -18,16 +18,17 @@ $imgArr = [];
 $imageRecordId = $image['afile_record_id'];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+    $getBannerRatio = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_THUMB);
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
                 'Banner',
-                'Thumb',
+                'BannerImage',
                 array(
                     $recordId,
                     $image['afile_lang_id'],
                     $image['afile_screen'],
-                    '',
+                    ImageDimension::VIEW_THUMB,
                 ),
                 CONF_WEBROOT_FRONT_URL
             ) . $uploadedTime,
@@ -36,6 +37,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         ),
         'name' => $image['afile_name'],
         'afile_id' => $image['afile_id'],
+        'data-aspect-ratio' => $getBannerRatio[ImageDimension::VIEW_THUMB]['aspectRatio'],
     ];
 }
 
@@ -54,7 +56,7 @@ $slideImage->value = "<span id='imageListingJs'>" . HtmlHelper::getfileInputHtml
     'mt-3 dropzone-custom dropzoneContainerJs'
 ) . "</span>";
 
-$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $bannerWidth . ' x ' . $bannerHeight) . '</span>';
+$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width'] . ' x ' . $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 $generalTab = [
     'attr' => [
@@ -86,12 +88,19 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var minWidthBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
-    $(minWidthBaneerEle).val(2000);
-    $(minHeightBaneerEle).val(666);
+    $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+    $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
 
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
-    var aspectRatio = 4 / 1;
+    var getAspectRatioDes = '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
+    getAspectRatioDes = getAspectRatioDes.split(":");
+    if (getAspectRatioDes) {
+        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
+    } else {
+        var aspectRatioDes = 4 / 1;
+    }
+
     $(document).on('change', '#slideScreenJs', function(e) {
         e.stopPropagation();
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
@@ -99,20 +108,36 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         var screenMobile = <?php echo applicationConstants::SCREEN_MOBILE ?>;
 
         if ($(this).val() == screenDesktop) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $(minWidthBaneerEle).val(2000);
-            $(minHeightBaneerEle).val(666);
-            aspectRatio = 4 / 1;
+
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+            
+            aspectRatio = aspectRatioDes;
         } else if ($(this).val() == screenIpad) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
-            $(minWidthBaneerEle).val(1024);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 128 / 45;
+            var getAspectRatioIpad = '<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
+            getAspectRatioIpad = getAspectRatioIpad.split(":");
+            if (getAspectRatioIpad) {
+                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
+            } else {
+                var aspectRatioIpad = 128 / 45;
+            }
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
+            aspectRatio = aspectRatioIpad;
         } else {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
-            $(minWidthBaneerEle).val(640);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 16 / 9;
+            var getAspectRatioMob = '<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['aspectRatio']; ?>';
+            getAspectRatioMob = getAspectRatioMob.split(":");
+            if (getAspectRatioMob) {
+                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
+            } else {
+                var aspectRatioMob = 16 / 9;
+            }
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            aspectRatio = aspectRatioMob;
         }
 
         let slideScreen = $(this).val();

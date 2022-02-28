@@ -83,8 +83,7 @@ if (!isset($error)) : ?>
 
                     }, function(createErr, instance) {
                         if (createErr) {
-                            // console.error(createErr);
-                            $.mbsmessage(createErr.name + " : " + createErr.message, false, 'alert--danger');
+                            fcom.displayErrorMessage(createErr.name + " : " + createErr.message);
                             return;
                         }
                         $(".waiting_message").remove();
@@ -107,8 +106,8 @@ if (!isset($error)) : ?>
 
                 }
             } catch (e) {
-                console.log('Execution Error!!');
-                console.log(e.message);
+                // console.log('Execution Error!!');
+                // console.log(e.message);
             }
         };
 

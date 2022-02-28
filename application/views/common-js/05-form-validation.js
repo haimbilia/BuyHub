@@ -551,7 +551,6 @@
             elementObj.attr('data-fatreq', JSON.stringify(arr[i].requirement));
             if (true === fieldsVisibility) {
                 var elementRow = elementObj.closest('.field-set').parent();
-                console.log(elementRow);
                 if (false == arr[i].requirement.required) {
                     elementRow.hide();
                 } else {
@@ -562,6 +561,6 @@
     };
 
     checkUniqueErrorNotify = function (caption, value) {
-        $.systemMessage(caption + " '" + value + "' " + langLbl.isNotAvailable, 'alert--danger');
+        fcom.displayErrorMessage(caption + " '" + value + "' " + langLbl.isNotAvailable);
     };
 })();
