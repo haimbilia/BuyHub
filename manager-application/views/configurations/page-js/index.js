@@ -3,10 +3,10 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl('Configurations', 'testEmail'), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 1) {
-                $.ykmsg.error(ans.msg);
+                $.ykmsg.success(ans.msg);
                 return false;
             }
-            $.ykmsg.success(ans.msg);
+            $.ykmsg.error(ans.msg);
         });
     });
 

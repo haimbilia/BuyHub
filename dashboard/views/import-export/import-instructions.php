@@ -1,24 +1,18 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="nav nav-pills nav-sm">
-    <ul>
-        <li class="is-active"><a class="is-active" href="javascript:void(0);" onclick="getInstructions('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Instructions', $siteLangId); ?></a></li>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-        <li><a href="javascript:void(0);" onclick="importForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?></a></li>
-        <?php if ($displayMediaTab) { ?>
-            <li><a href="javascript:void(0);" onclick="importMediaForm('<?php echo $actionType; ?>');"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-        <?php } ?>
-    </ul>
-</div>
-<div class="">
-    <?php
-    if (!empty($pageData['epage_content'])) {
-    ?>
-        <h3><?php echo $pageData['epage_label']; ?></h3>
-        <hr>
-    <?php
-        echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
-    } else {
-        echo 'Sorry!! No Instructions.';
-    }
-    ?>
-</div>
+$activeInstTab = true;
+require_once(CONF_THEME_PATH . 'import-export/_partial/import-form-head.php'); ?>
+    <div class="form-edit-body loaderContainerJs">
+        <div class="cms">
+            <?php      
+            if (!empty($pageData['epage_content'])) {
+                echo '<h3 class="mb-3" >' . $pageData["epage_label"] . '</h3>';
+                echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
+            } else {
+                echo '<h3 class="mb-3" >' . $pageData["epage_identifier"] . '</h3>';
+                echo FatUtility::decodeHtmlEntities($pageData['epage_default_content']);            
+            }
+            ?>
+        </div>
+    </div>
+</div> <!-- Close </div> This must be placed. Opening tag is inside import-form-head.php file. -->

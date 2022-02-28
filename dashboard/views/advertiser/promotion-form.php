@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm, 6);
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupPromotion(this); return(false);');
 
 if (User::isSeller()) {
