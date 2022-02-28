@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
             case 'brand_logo':
                 $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_MINI_THUMB);
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
-                $brandImage = '<img data-aspect-ratio = "'.$imageBrandDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" width="'.$imageBrandDimensions['width'].'" height="'.$imageBrandDimensions['height'].'" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
+                $brandImage = '<img data-aspect-ratio = "'.$imageBrandDimensions[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'].'" width="'.$imageBrandDimensions['width'].'" height="'.$imageBrandDimensions['height'].'" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
                 $td->appendElement('plaintext', $tdAttr, '<div class="brand-logo">' . $brandImage . '</div>', true);
                 break;
             case 'brand_identifier':
