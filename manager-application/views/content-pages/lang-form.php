@@ -27,7 +27,8 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
     $imgArr = [];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-        $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_THUMB);
+        $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);
+       
         $imgArr = [
             'url' => UrlHelper::getCachedUrl(
                 UrlHelper::generateFileUrl(
@@ -36,17 +37,18 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
                     array(
                         $image['afile_record_id'], 
                         $image['afile_lang_id'], 
-                        ImageDimension::VIEW_THUMB, 
+                        ImageDimension::VIEW_DEFAULT, 
                         $image['afile_type']
                     ), CONF_WEBROOT_FRONT_URL
                 ) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
             ),
             'name' => $image['afile_name'],
             'afile_id' => $image['afile_id'],
-            'data-aspect-ratio' => $imageCBlockBgDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
+            'data-aspect-ratio' => $imageContPageDimensions[ImageDimension::VIEW_DEFAULT]['aspectRatio'],
         ]; 
     } 
     
+   
     $fld->value =  HtmlHelper::getfileInputHtml(
         [
             'onChange' => 'loadImageCropper(this)', 

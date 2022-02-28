@@ -316,8 +316,9 @@ class PushNotificationsController extends ListingBaseController
 
         $this->objPrivilege->canEditPushNotification();
         $mediaFrm = $this->getMediaForm($recordId);
-
+        $getNotificationDimensions = ImageDimension::getData(ImageDimension::TYPE_PUSH_NOTIFICATION,ImageDimension::VIEW_DEFAULT);
         $this->set('recordId', $recordId);
+        $this->set('getNotificationDimensions', $getNotificationDimensions);
         $this->set('langId', $data['pnotification_lang_id']);
         $this->set('pNotificationId', $recordId);
         $this->set('userAuthType', $data['pnotification_user_auth_type']);

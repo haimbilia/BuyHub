@@ -1027,12 +1027,14 @@ class CustomProductsController extends ListingBaseController
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
+        $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CUSTOM_PRODUCTS, ImageDimension::VIEW_DEFAULT);
 
         $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</small>';
-        $frm->addHiddenField('', 'min_width', 500);
-        $frm->addHiddenField('', 'min_height', 500);
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_'.$getImageDimensions['width'].'_x_'.$getImageDimensions['height'].'', $this->siteLangId) . '</small>';
+      
+        $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
+        $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
         $frm->addHiddenField('', 'preq_id', $preq_id);
         return $frm;
     }

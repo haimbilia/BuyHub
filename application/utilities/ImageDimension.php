@@ -42,6 +42,7 @@ class ImageDimension extends FatUtility
     public const TYPE_CATEGORY_SELLER_BANNER = 39;
     public const TYPE_CATEGORY_BANNER = 40;
     public const TYPE_ADMIN_BADGE_REQUEST = 41;
+	 public const TYPE_PUSH_NOTIFICATION = 42;
 
 
     public const VIEW_DESKTOP = 'DESKTOP';
@@ -78,7 +79,7 @@ class ImageDimension extends FatUtility
 
 
 
-    public static function getData(int $type, $sizeType = ''): array
+    public static function getData(int $type, $sizeType = '', $aspectRatioType = 1): array
     {
 
         $sizeType = strtoupper($sizeType);
@@ -108,7 +109,7 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getPromotionMediaImageData($sizeType);
                 break;
             case self::TYPE_BRAND_LOGO:
-                $imageDimensions = self::getBrandLogoImageData($sizeType);
+                $imageDimensions = self::getBrandLogoImageData($sizeType, $aspectRatioType);
                 break;
             case self::TYPE_BRAND_IMAGE:
                 $imageDimensions = self::getBrandImageData($sizeType);
@@ -209,6 +210,9 @@ class ImageDimension extends FatUtility
             case self::TYPE_ADMIN_BADGE_REQUEST:
                 $imageDimensions = self::getAdminBadgeRequestImage($sizeType);
                 break;
+			case self::TYPE_PUSH_NOTIFICATION:
+                $imageDimensions = self::getPushNotification($sizeType);
+                break;	
         }
 
 
@@ -318,7 +322,7 @@ class ImageDimension extends FatUtility
             self::VIEW_THUMB => ['width' => 100, 'height' => 100],
             self::VIEW_SMALL => ['width' => 150, 'height' => 150],
             self::VIEW_MEDIUM => ['width' => 542, 'height' => 480],
-            self::VIEW_DEFAULT => ['width' => 400, 'height' => 400],
+            self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
         ];
 
         if (!empty($sizeType)) {
@@ -404,32 +408,38 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
-    public static function getBrandLogoImageData(string $sizeType = ''): array
+    public static function getBrandLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
         if (substr($sizeType, 0, 4) == 'webp') {
             $sizeType = substr($sizeType, 4);
         }
 
-        $arr =  [
 
 
-            self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 52],
+        $arr[AttachedFile::RATIO_TYPE_RECTANGULAR] =  [
+            
+            self::VIEW_MINI_THUMB => ['width' => 62, 'height' => 35],
+            self::VIEW_THUMB => ['width' => 62, 'height' => 35],
+            self::VIEW_LISTING_PAGE => ['width' => 500, 'height' => 280],
+            self::VIEW_DEFAULT => ['width' => 500, 'height' => 280],
+        ];
+        $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
+        
+            self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 42],
             self::VIEW_THUMB => ['width' => 61, 'height' => 61],
             self::VIEW_LISTING_PAGE => ['width' => 530, 'height' => 530],
             self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
-
-
-
         ];
 
+     
         if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
+            if (!array_key_exists($sizeType, $arr[$aspectRatioType])) {
+                return $arr[$aspectRatioType][self::VIEW_DEFAULT];
             }
-            return $arr[$sizeType];
+            return $arr[$aspectRatioType][$sizeType];
         }
 
-        return $arr;
+        return $arr[$aspectRatioType];
     }
 
     public static function getBrandImageData(string $sizeType = ''): array
@@ -858,6 +868,7 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_THUMB => ['width' => 150, 'height' => 45],
             self::VIEW_COLLECTION_PAGE => ['width' => 45, 'height' => 41],
+			self::VIEW_DEFAULT => ['width' => 1300, 'height' => 400],
         ];
 
         if (!empty($sizeType)) {
@@ -876,6 +887,7 @@ class ImageDimension extends FatUtility
 
         $arr =  [
             self::VIEW_THUMB => ['width' => 100, 'height' => 100],
+			self::VIEW_DEFAULT => ['width' => 1300, 'height' => 400],
 
         ];
 
@@ -1050,6 +1062,7 @@ class ImageDimension extends FatUtility
 
             self::VIEW_THUMB => ['width' => 100, 'height' => 100],
             self::VIEW_COLLECTION_PAGE => ['width' => 48, 'height' => 48],
+			 self::VIEW_DEFAULT => ['width' => 60, 'height' => 60],
 
         ];
 
@@ -1072,7 +1085,7 @@ class ImageDimension extends FatUtility
 
             self::VIEW_THUMB => ['width' => 60, 'height' => 60],
             self::VIEW_ICON => ['width' => 300, 'height' => 300],
-
+			self::VIEW_DEFAULT => ['width' => 300, 'height' => 300],
         ];
 
         if (!empty($sizeType)) {
@@ -1201,14 +1214,14 @@ class ImageDimension extends FatUtility
                 self::VIEW_TABLET => ['width' => 800, 'height' => 600],
                 self::VIEW_THUMB => ['width' => 200, 'height' => 150],
             ];
-        } 
+        }
 
-        if(empty($layout)){
+        if (empty($layout)) {
             $arr =  [
                 self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
                 self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
                 self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-              
+
             ];
         }
 
@@ -1217,7 +1230,7 @@ class ImageDimension extends FatUtility
             $arr[$sizeType]['aspectRatio'] = self::getAspectRatio($arr[$sizeType]['width'], $arr[$sizeType]['height']);
             return $arr[$sizeType];
         }
-        foreach($arr as $key=>$val){
+        foreach ($arr as $key => $val) {
             $arr[$key]['aspectRatio'] = self::getAspectRatio($arr[$key]['width'], $arr[$key]['height']);
         }
 
@@ -1227,6 +1240,30 @@ class ImageDimension extends FatUtility
 
 
 
+	public static function getPushNotification(string $sizeType = ''): array
+    {
+
+
+        if (substr($sizeType, 0, 4) == 'webp') {
+            $sizeType = substr($sizeType, 4);
+        }
+
+        $arr =  [
+
+            self::VIEW_DEFAULT => ['width' => 1000, 'height' => 563],
+           
+        ];
+
+        if (!empty($sizeType)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr;
+    }
+	
+	
+	
+
     public static function getAspectRatio(int $width, int $height)
     {
         $greatestCommonDivisor = static function ($width, $height) use (&$greatestCommonDivisor) {
@@ -1235,5 +1272,26 @@ class ImageDimension extends FatUtility
 
         $divisor = $greatestCommonDivisor($width, $height);
         return $width / $divisor . ':' . $height / $divisor;
+    }
+
+    public static function getUploadRatio()
+    {
+        return $arr =  [
+            '1' => '1:1',
+            '2' => '16:9'
+
+        ];
+    }
+
+    public static function getScreenSizes($type)
+    {
+        $sizetypes = self::getData($type);
+
+        return  $arr =  [
+            self::VIEW_DESKTOP => $sizetypes[self::VIEW_DESKTOP],
+            self::VIEW_MOBILE => $sizetypes[self::VIEW_MOBILE],
+            self::VIEW_TABLET => $sizetypes[self::VIEW_TABLET],
+
+        ];
     }
 }
