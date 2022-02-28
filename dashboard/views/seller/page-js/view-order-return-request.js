@@ -9,7 +9,7 @@ $(document).ready(function () {
 		$(dv).prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'orderReturnRequestMessageSearch'), data, function (ans) {
 			fcom.removeLoader();
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if (append == 1) {
 				$(dv).find('.loader-yk').remove();
 				$(dv).prepend(ans.html);

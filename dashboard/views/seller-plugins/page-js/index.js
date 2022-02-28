@@ -22,9 +22,9 @@
         fcom.ajax(fcom.makeUrl('SellerPlugins', 'changeStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                fcom.displaySuccessMessage(ans.msg);
             } else {
-                $.mbsmessage(ans.msg, true, 'alert--danger');
+                fcom.displayErrorMessage(ans.msg);
             }
             searchPlugin(type);
         });

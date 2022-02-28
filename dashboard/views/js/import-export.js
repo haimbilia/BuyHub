@@ -45,7 +45,7 @@
 		var data = new FormData();
 		$inputs = $('#frmImportExport input[type=text],#frmImportExport select,#frmImportExport input[type=hidden]');
 		$inputs.each(function () { data.append(this.name, $(this).val()); });
-		$.mbsmessage(langLbl.processing, false, 'alert--process');
+		fcom.displayProcessing();
 		$.each($('#import_file')[0].files, function (i, file) {
 			$('#fileupload_div').prepend(fcom.getLoader());
 			data.append('import_file', file);
@@ -60,14 +60,10 @@
 					try {
 						var ans = $.parseJSON(t);
 						if (ans.status == 1) {
-							// reloadList();
-							
-							$(document).trigger('close.mbsmessage');
-							$.systemMessage(ans.msg, 'alert--success');
+							fcom.displaySuccessMessage(ans.msg);
 						} else {
-							$('#fileupload_div').html('');
-							$(document).trigger('close.mbsmessage');
-							$.systemMessage(ans.msg, 'alert--danger');
+							$('#fileupload_div').html('');							
+							fcom.displayErrorMessage(ans.msg);
 						}
 
 						if (typeof ans.CSVfileUrl !== 'undefined') {
@@ -75,8 +71,7 @@
 						}
 					}
 					catch (exc) {
-						$(document).trigger('close.mbsmessage');
-						$.systemMessage(t, 'alert--danger');
+						fcom.displayErrorMessage(t);
 					}
 				},
 				error: function (jqXHR, textStatus, errorThrown) {

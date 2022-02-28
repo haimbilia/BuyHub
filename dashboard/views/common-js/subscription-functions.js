@@ -15,7 +15,7 @@ var subscription = {
           window.location = fcom.makeUrl("SubscriptionCheckout");
         }
         setTimeout(function () {
-          $.mbsmessage.close();
+          $.ykmsg.close();
         }, 3000);
       }
     );
@@ -30,7 +30,7 @@ var subscription = {
           if (ans.status) {
             window.location.href = fcom.makeUrl("seller", "packages");
           }
-          $.mbsmessage.close();
+          $.ykmsg.close();
         }
       );
     }

@@ -49,7 +49,7 @@ echo $frm->getFormTag(); ?>
         var btnEle = $("input[type='submit']", frm);
         var btnText = btnEle.val();
         btnEle.val(langLbl.processing).attr('disabled', 'disabled');
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         var data = fcom.frmData(frm);
         var action = me.attr('action');
         fcom.ajax(action, data, function (t) {
@@ -57,10 +57,10 @@ echo $frm->getFormTag(); ?>
             try {
                 var json = $.parseJSON(t);
                 if (1 > json.status) {
-                    $.mbsmessage(json.msg, false, 'alert--danger');
+                    fcom.displayErrorMessage(json.msg);
                     return false;
                 }
-                $.mbsmessage(json.msg, false, 'alert--success');
+                fcom.displaySuccessMessage(json.msg);
                 if (json['redirect']) {
                     $(location).attr("href", json['redirect']);
                 }

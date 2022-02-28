@@ -17,9 +17,9 @@ $(document).ready(function(){
 	register = function(frm){
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
 		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'register'), data, function(t) {
-			//$.mbsmessage.close();
+			//$.ykmsg.close();
 			if(t.userId > 0){
 				profileActivationForm();
 			}
@@ -39,7 +39,7 @@ $(document).ready(function(){
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'setupSupplierApproval'), data, function(t) {
-			//$.mbsmessage.close();
+			//$.ykmsg.close();
 			if(t.userId > 0){
 				profileConfirmation();
 			}

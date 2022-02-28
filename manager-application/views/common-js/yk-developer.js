@@ -339,10 +339,7 @@ $(function () {
                             "-" +
                             iti.getSelectedCountryData().iso2;
                         if ($('input[name="' + elementName + '"]').length < 1) {
-                            $.systemMessage(
-                                $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
-                                "alert-danger"
-                            );
+                            $.ykmsg.error($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
                             return;
                         }
                         $('input[name="' + elementName + '"]').val(dCode);

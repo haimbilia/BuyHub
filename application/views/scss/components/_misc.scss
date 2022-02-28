@@ -454,19 +454,19 @@ a:hover {
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(-3px, 0) rotate(45deg);
+            transform: translate(-3px * $transform-direction, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(3px, 0) rotate(-45deg);
+            transform: translate(3px * $transform-direction, 0) rotate(-45deg);
         }
     }
     &:not(.show) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(3px, 0) rotate(45deg);
+                transform: translate(3px * $transform-direction, 0) rotate(45deg);
             }
             &:after {
-                transform: translate(-3px, 0) rotate(-45deg);
+                transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
             }
         }
     }

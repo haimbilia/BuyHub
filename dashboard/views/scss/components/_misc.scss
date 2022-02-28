@@ -461,7 +461,7 @@ a:hover {
     position: relative;
     &-arrow {
         position: absolute;
-        transform: translate(-6px, 0);
+        transform: translate(-6px * $transform-direction, 0);
         top: calc(50% - 4px);
         //#{$end-direction}: 25px;
         #{$end-direction}: 0;
@@ -475,19 +475,19 @@ a:hover {
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(0px, 0) rotate(45deg);
+            transform: translate(0px * $transform-direction, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(-6px, 0px) rotate(-45deg);
+            transform: translate(-6px * $transform-direction, 0px) rotate(-45deg);
         }
     }
     &:not(.collapsed) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(-6px, 0px) rotate(45deg);
+                transform: translate(-6px * $transform-direction, 0px) rotate(45deg);
             }
             &:after {
-                transform: translate(0px, 0) rotate(-45deg);
+                transform: translate(0px * $transform-direction, 0) rotate(-45deg);
             }
         }
     }

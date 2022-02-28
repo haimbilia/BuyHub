@@ -244,8 +244,8 @@
 
             var $form = this;
             $form.valid = true;
-            this.form.find("input, textarea, select").each(function () {            
-                if ('undefined' != typeof $(this).attr('name')) {                   
+            this.form.find("input, textarea, select").each(function () {
+                if ('undefined' != typeof $(this).attr('name')) {
                     var field = new Field(this, $form.options);
                     field.validate();
                     $form.valid = $form.valid && field.valid;
@@ -564,6 +564,6 @@
     };
 
     checkUniqueErrorNotify = function (caption, value) {
-        $.systemMessage(caption + " '" + value + "' " + langLbl.isNotAvailable, 'alert--danger');
+        fcom.displayErrorMessage(caption + " '" + value + "' " + langLbl.isNotAvailable);
     };
 })();

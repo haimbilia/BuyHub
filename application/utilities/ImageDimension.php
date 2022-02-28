@@ -1176,7 +1176,7 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
-    public static function getBannerData(string $sizeType = '', $layout): array
+    public static function getBannerData(string $sizeType = '', $layout = ''): array
     {
         $sizeType = strtoupper($sizeType);
 
@@ -1201,12 +1201,24 @@ class ImageDimension extends FatUtility
                 self::VIEW_TABLET => ['width' => 800, 'height' => 600],
                 self::VIEW_THUMB => ['width' => 200, 'height' => 150],
             ];
+        } 
+
+        if(empty($layout)){
+            $arr =  [
+                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
+                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
+                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+              
+            ];
         }
 
 
         if (!empty($sizeType)) {
             $arr[$sizeType]['aspectRatio'] = self::getAspectRatio($arr[$sizeType]['width'], $arr[$sizeType]['height']);
             return $arr[$sizeType];
+        }
+        foreach($arr as $key=>$val){
+            $arr[$key]['aspectRatio'] = self::getAspectRatio($arr[$key]['width'], $arr[$key]['height']);
         }
 
         $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP]['width'], $arr[self::VIEW_DESKTOP]['height']);

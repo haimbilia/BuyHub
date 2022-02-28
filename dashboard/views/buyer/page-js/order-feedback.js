@@ -1,9 +1,9 @@
-(function() {
-	setupFeedback = function(frm) { 
+(function () {
+	setupFeedback = function (frm) {
 		if (!$(frm).validate()) return;
 		let formData = new FormData(frm);
 		formData.delete("spreview_image[]");
-		$('.imgToUpload--js').each(function() {
+		$('.imgToUpload--js').each(function () {
 			const file = DataURIToBlob($(this).attr('src'))
 			formData.append("spreview_image[]", file, $(this).attr('title'));
 		});
@@ -15,24 +15,24 @@
 			cache: false,
 			contentType: false,
 			processData: false,
-			beforeSend: function() {
-				$.mbsmessage(langLbl.processing, false,'alert--process');
+			beforeSend: function () {
+				fcom.displayProcessing();
 			},
-			success: function(ans) {
-				if(ans.status == true){
-					$.mbsmessage( ans.msg, true, 'alert--success');
-					setTimeout(function(){ $.mbsmessage(langLbl.redirecting, true,'alert--process'); location.href = ans.redirectUrl; }, 1500);					
+			success: function (ans) {
+				if (ans.status == true) {
+					fcom.displaySuccessMessage(ans.msg);
+					setTimeout(function () { fcom.displayProcessing(); location.href = ans.redirectUrl; }, 1500);
 					return;
-				}else{
-					$.mbsmessage( ans.msg, true, 'alert--danger');
+				} else {
+					fcom.displayErrorMessage(ans.msg);
 				}
 			},
-			error: function(xhr, ajaxOptions, thrownError) {
+			error: function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});
 
 
-		
+
 	};
 })();	

@@ -77,7 +77,7 @@ $(document).on('click',".link--post-comment-form",function(){
 		}
 
 		fcom.updateWithAjax(fcom.makeUrl('Blog','searchComments'), data, function(ans){
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();
 				$(dv).find('form[name="frmSearchCommentsPaging"]').remove();

@@ -43,7 +43,7 @@ $(document).on("click", ".navTabsJs a", function (e) {
 
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {
-            $.ykmsg.error(langLbl.controllerNameRequired);
+            fcom.displayErrorMessage(langLbl.controllerNameRequired);
             return false;
         }
         return true;

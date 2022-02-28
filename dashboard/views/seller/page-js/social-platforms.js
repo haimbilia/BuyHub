@@ -33,7 +33,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reloadList();
 			if (t.langId > 0) {
 				addLangForm(t.splatformId, t.langId);
@@ -55,7 +55,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reloadList();
 			if (t.langId > 0) {
 				addLangForm(t.splatformId, t.langId);

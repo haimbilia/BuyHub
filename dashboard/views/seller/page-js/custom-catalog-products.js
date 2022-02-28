@@ -76,10 +76,10 @@ $(document).on('change', '.option-js', function () {
 		fcom.ajax(fcom.makeUrl('Seller', 'deleteCustomCatalogProductImage', [preqId, image_id]), '', function (t) {
 			var ans = $.parseJSON(t);
 			if (ans.status == 0) {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 				return;
 			}
-			$.mbsmessage(ans.msg, true, 'alert--success');
+			fcom.displaySuccessMessage(ans.msg);
 			productImages(preqId, $('.option').val(), $('.language').val());
 		});
 	}
@@ -101,7 +101,7 @@ $(document).on('change', '.option-js', function () {
 				success: function (t) {
 					fcom.removeLoader();
 					var ans = $.parseJSON(t);
-					$.mbsmessage(ans.msg, true, 'alert--success');
+					fcom.displaySuccessMessage(ans.msg);
 					productImages($('#frmCustomCatalogProductImage input[name=preq_id]').val(), $('.option').val(), $('.language').val());
 				},
 				error: function (jqXHR, textStatus, errorThrown) {

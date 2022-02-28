@@ -35,7 +35,7 @@ $(document).ready(function(){
 		}
 
 		fcom.ajax(fcom.makeUrl('Blog', 'blogList'), data, function (ans) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			var res = $.parseJSON(ans);
 			$(dv).html(res.html);
 
