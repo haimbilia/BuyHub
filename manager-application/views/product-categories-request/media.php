@@ -81,9 +81,9 @@ $formTitle = Labels::getLabel('LBL_PRODUCT_CATEGORY_REQUESTS_SETUP', $siteLangId
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
 
      $(minWidthBaneerEle).val('<?php  echo $getCategoryRequestDimensions[ImageDimension::VIEW_DESKTOP]['width'];  ?>');
-    $(minHeightBaneerEle).val('<?php  echo $getCategoryRequestDimensions[ImageDimension::VIEW_DESKTOP]['height'];  ?>'); */
-    $(minWidthLogoEle).val('<?php  echo $getCategoryRequestLogoSquare[ImageDimension::VIEW_DEFAULT]['width'];  ?>');
-    $(minHeightLogoEle).val('<?php  echo $getCategoryRequestLogoSquare[ImageDimension::VIEW_DEFAULT]['width'];  ?>');
+    $(minHeightBaneerEle).val('<?php  echo $getCategoryRequestDimensions[ImageDimension::VIEW_DESKTOP]['height'];  ?>'); 
+    $(minWidthLogoEle).val('<?php  echo $getCategoryRequestLogoSquare['width'];  ?>');
+    $(minHeightLogoEle).val('<?php  echo $getCategoryRequestLogoSquare['height'];  ?>');
 
     
     var getAspectRatioDes = '<?php echo $getCategoryRequestDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
