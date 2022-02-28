@@ -3,6 +3,12 @@ $(document).on("change", '[name="breq_record_type"]', function () {
     $('table.recordListing--js tr').remove();
 });
 
+$(document).on('change', '#brandlogoLanguageJs', function () {
+    var lang_id = $(this).val();
+    var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
+    brandMediaForm(brand_id,lang_id);
+});
+
 (function () {
     var runningAjaxReq = false;
     var dv = '#listing';
@@ -135,9 +141,9 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         });
     };
 
-    brandMediaForm = function (brandReqId) {
+    brandMediaForm = function (brandReqId,langId = 0) {
         $("#brandReqFormJs").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId,langId]), '', function (t) {
             fcom.removeLoader();
             $("#brandReqFormJs").html(t);
         });
@@ -148,8 +154,8 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeBrandLogo', [brandReqId, langId]), '', function (t) {
-            brandMediaForm(brandReqId);
-            reloadList();
+            brandMediaForm(brandReqId,langId);
+            searchBrandRequests();
         });
     }
 
@@ -171,10 +177,12 @@ $(document).on("change", '[name="breq_record_type"]', function () {
     };
 
     brandPopupImage = function (inputBtn) {
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
-                $('#cropperBox-js').html(t);
-                $("#brandMediaForm-js").css("display", "none");
+            fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var ratioType = document.frmBrandMedia.ratio_type.value;
                 var aspectRatio = 1 / 1;
                 if (ratioType == ratioTypeRectangular) {
@@ -191,7 +199,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
                 };
                 var file = inputBtn.files[0];
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadBrandLogo', inputBtn);
+               setTimeout(function () { cropImage(file, options, 'uploadBrandLogo', inputBtn); }, 100);          
             });
         }
     };
@@ -210,24 +218,13 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             data: formData,
             cache: false,
             contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $('#loader-js').prepend(fcom.getLoader());
-            },
-            complete: function () {
-                $('#loader-js').prepend(fcom.getLoader());
-            },
+            processData: false,           
             success: function (ans) {
-                fcom.removeLoader();
-                $('.text-danger').remove();
-                $('#input-field').html(ans.msg);
-                if (ans.status == true) {
-                    $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('badge-success');
-                    brandMediaForm(ans.brandId);
-                } else {
-                    $('#input-field').removeClass('badge-success');
-                    $('#input-field').addClass('text-danger');
+                fcom.removeLoader();              
+                $("#modalBoxJs").modal("hide");        
+                if (ans.status == true) {          
+                    brandMediaForm(ans.brandId , langId);
+                    fcom.displaySuccessMessage(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
