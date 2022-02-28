@@ -16,7 +16,7 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 <script type="text/javascript">
     $("document").ready(function() {
         <?php if (isset($error)) { ?>
-            $.systemMessage(<?php echo $error; ?>);
+            fcom.displaySuccessMessage(<?php echo $error; ?>);
         <?php } ?>
     });
 

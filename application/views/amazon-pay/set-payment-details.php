@@ -106,8 +106,6 @@ if(isset($amazon) && strlen($orderId) > 0 &&  $orderInfo["order_payment_status"]
 								logout();
 							}
 						} catch(e) {
-							console.log(e.message);
-							//console.log(data);
 							logout();
 						}
 					});
@@ -120,7 +118,6 @@ if(isset($amazon) && strlen($orderId) > 0 &&  $orderInfo["order_payment_status"]
 					designMode: 'responsive'
 				},
 				onError: function (error) {
-					console.log(error);
 					logout();
 				}
 			}).bind("addressBookWidgetDiv");
@@ -132,7 +129,6 @@ if(isset($amazon) && strlen($orderId) > 0 &&  $orderInfo["order_payment_status"]
 					designMode: 'responsive'
 				},
 				onError: function (error) {
-					console.log(error);
 					logout();
 				}
 			}).bind("walletWidgetDiv");

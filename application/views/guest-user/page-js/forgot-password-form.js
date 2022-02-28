@@ -6,16 +6,16 @@
 			if( t.status == 1){
 				location.href = fcom.makeUrl('GuestUser', 'loginForm');
 			}else{
-				$.systemMessage(t.msg,'alert--danger');				
+				fcom.displayErrorMessage(t.msg);				
 			}
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			return;
 		});
     };
     forgotPwdForm = function(withPhone = 0) {
-        $.systemMessage(langLbl.processing,'alert--process', false);
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl( 'GuestUser', 'forgotPasswordForm', [withPhone, 0]), '', function(t) {
-            $.systemMessage.close();
+            $.ykmsg.close();
             $('.forgotPwForm').html(t);
 		});
     };
@@ -23,15 +23,15 @@
     getOtpForm = function (frm){
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        $.systemMessage(langLbl.processing,'alert--process', false);
+        fcom.displayProcessing();
 		fcom.ajax(frm.action, data, function(t) {
             t = $.parseJSON(t);
             if(1 > t.status){
-                $.systemMessage(t.msg,'alert--danger', false);
+                fcom.displayErrorMessage(t.msg);
                 googleCaptcha();
                 return false;
             }
-            $.systemMessage.close();
+            $.ykmsg.close();
             $('#otpFom').html(t.html);
             startOtpInterval();
         });
@@ -46,7 +46,7 @@
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
             } else {
-                $.systemMessage(t.msg, 'alert--danger', true);
+                fcom.displayErrorMessage(t.msg);
                 invalidOtpField();
             }
         });	
@@ -54,14 +54,14 @@
     };
 
     resendOtp = function (userId, getOtpOnly = 0){
-        $.systemMessage(langLbl.processing,'alert--process', false);
+        fcom.displayProcessing();
 		fcom.ajax(fcom.makeUrl( 'GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function(t) {
             t = $.parseJSON(t);
             if(typeof t.status != 'undefined' &&  1 > t.status){
-                $.systemMessage(t.msg,'alert--danger', false);
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.systemMessage(t.msg,'alert--success', false);
+            fcom.displaySuccessMessage(t.msg);
             startOtpInterval();
         });
         return false;

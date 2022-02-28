@@ -111,7 +111,7 @@ foreach ($paymentMethods as $key => $val) {
                 try {
                     var json = $.parseJSON(t);
                     if (typeof json.status != 'undefined' && 1 > json.status) {
-                        $.systemMessage(json.msg, 'alert--danger');
+                        fcom.displayErrorMessage(json.msg);
                         return false;
                     }
                     if (typeof json.html != 'undefined') {

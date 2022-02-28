@@ -3,7 +3,7 @@
 <section class="payment-section">
     <div class="payable-amount">
         <div class="payable-amount__head">
-            <div class="payable-amount--header">              
+            <div class="payable-amount--header">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
             <div class="payable-amount--decription">
@@ -15,7 +15,7 @@
         <div class="payable-amount__body payment-from">
             <?php
             if (!isset($error)) {
-                ?>
+            ?>
                 <?php echo $frm->getFormTag(); ?>
                 <div class="payable-form__body">
                     <div class="waiting_message">
@@ -26,17 +26,17 @@
                         </p>
                     </div>
                     <div id="dropin-container"></div>
-                    <?php echo $frm->getExternalJs(); ?>                       
-                </div>                   
+                    <?php echo $frm->getExternalJs(); ?>
+                </div>
                 <div class="payable-form__footer">
                     <div class="row">
-                        <div class="col-md-6">                                    
+                        <div class="col-md-6">
                             <?php
                             $btn = $frm->getField('btn_submit');
                             $btn->addFieldTagAttribute('class', 'btn btn-secondary');
                             $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
                             echo $frm->getFieldHtml('btn_submit');
-                            ?> 
+                            ?>
                         </div>
                         <div class="col-md-6 d-md-block d-none">
                             <?php if (FatUtility::isAjaxCall()) { ?>
@@ -45,16 +45,16 @@
                                 </a>
                             <?php } else { ?>
                                 <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
-                            <?php } ?>                        
+                            <?php } ?>
                         </div>
-                    </div>  
-                </div> 
+                    </div>
+                </div>
                 </form>
             <?php } else { ?>
                 <div class="alert alert--danger"><?php echo $error ?></div>
             <?php } ?>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+                <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
             <?php } ?>
         </div>
     </div>
@@ -62,7 +62,7 @@
 <?php
 if (isset($clientToken)) {
     if (!FatUtility::isAjaxCall()) {
-        ?>
+?>
         <script src="https://js.braintreegateway.com/web/dropin/1.14.1/js/dropin.min.js"></script>
     <?php } ?>
     <script type="text/javascript">
@@ -106,16 +106,16 @@ if (isset($clientToken)) {
                             }
                         }
 
-                    }, function (createErr, instance) {
+                    }, function(createErr, instance) {
                         if (createErr) {
                             // console.error(createErr);
-                            $.mbsmessage(createErr.name + " : " + createErr.message, false, 'alert--danger');
+                            fcom.displayErrorMessage(createErr.name + " : " + createErr.message);
                             return;
                         }
                         $(".waiting_message").remove();
                         $("#submit-button").removeAttr('disabled');
-                        button.addEventListener('click', function () {
-                            instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+                        button.addEventListener('click', function() {
+                            instance.requestPaymentMethod(function(requestPaymentMethodErr, payload) {
                                 // Submit payload.nonce to your server
                                 var form = $("#frmPaymentForm");
                                 var nonce = payload.nonce;
@@ -132,12 +132,12 @@ if (isset($clientToken)) {
 
                 }
             } catch (e) {
-                console.log('Execution Error!!');
-                console.log(e.message);
+                // console.log('Execution Error!!');
+                // console.log(e.message);
             }
         }
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             var paymentAmount = "<?php echo $paymentAmount; ?>";
             var currencyCode = "<?php echo $currencyCode; ?>";
             var clientToken = "<?php echo $clientToken; ?>";

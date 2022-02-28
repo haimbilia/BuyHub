@@ -55,7 +55,7 @@ function setupReviewAbuse(frm){
 
 		fcom.updateWithAjax(fcom.makeUrl('Reviews','searchForShop'), data, function(ans){
 
-			$.mbsmessage.close();
+			$.ykmsg.close();
 
 			if(ans.totalRecords){
 				$('#reviews-pagination-strip--js').show();
@@ -97,7 +97,7 @@ function setupReviewAbuse(frm){
 		isHelpful = (isHelpful) ? isHelpful : 0;
 		var data = 'reviewId='+reviewId+'&isHelpful=' + isHelpful;
 		fcom.updateWithAjax(fcom.makeUrl('Reviews','markHelpful'), data, function(ans){
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reviews(document.frmReviewSearch);
 		});
 	}

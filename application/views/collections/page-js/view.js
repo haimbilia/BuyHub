@@ -7,7 +7,7 @@ $(document).ready(function () {
     searchCollections = function (frm, append) {
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('Collections', 'search'), data, function (ans) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $(dv).html(ans);
         });
     };

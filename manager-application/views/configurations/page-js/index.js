@@ -188,7 +188,7 @@ $(document).ready(function () {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {
-                    $.systemMessage(xhr.responseText, 'alert--danger');
+                    $.ykmsg.error(xhr.responseText);
                     return;
                 }
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -281,7 +281,7 @@ updateVerificationFile = function (inputBtn, fileType) {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {
-                    $.systemMessage(xhr.responseText, 'alert--danger');
+                    $.ykmsg.error(xhr.responseText);
                     return;
                 }
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
