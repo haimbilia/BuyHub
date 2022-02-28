@@ -31,7 +31,7 @@ function setupReviewAbuse(frm){
 				$(".rev_"+reviewId+"_1 span").text("("+ans.data.helpful+")");
 				$(".rev_"+reviewId+"_0 span").text("("+ans.data.notHelpful+")");
 			}
-			$.mbsmessage.close();
+			$.ykmsg.close();
 		});
 	}
 

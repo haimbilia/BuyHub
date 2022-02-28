@@ -5,6 +5,7 @@ HtmlHelper::formatFormFields($frm, 6);
 $frm->setFormTagAttribute('id', 'returnAddressFrm');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setReturnAddress(this); return(false);');
+$frm->setFormTagAttribute('data-onclear', "returnAddressForm()");
 
 $countryFld = $frm->getField('ura_country_id');
 $countryFld->setFieldTagAttribute('id', 'ura_country_id');

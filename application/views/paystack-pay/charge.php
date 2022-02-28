@@ -49,13 +49,13 @@ if (null != $btn) {
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action');
         var submitBtn = $("form#paymentForm-js input[type='submit']");
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+        fcom.displayProcessing();
         submitBtn.attr('disabled', 'disabled');
         fcom.ajax(action, data, function(res) {
             var json = $.parseJSON(res);
             if (1 > json.status) {
                 submitBtn.removeAttr('disabled');
-                $.mbsmessage(json.msg, true, 'alert--danger');
+                fcom.displayErrorMessage(json.msg;
                 return false;
             }
             $("#paymentFormElement-js").replaceWith(json.html);            

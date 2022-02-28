@@ -59,7 +59,7 @@ var fcom = {
 		var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
 		var dvdebug = $('<div />').append(dbmsg);
 		dvdebug.appendTo($('#dv-bg-processes'));
-        
+
 		$.ajax({
 			method: "POST",
 			url: url,
@@ -125,44 +125,18 @@ var fcom = {
 		}
 	},
 
-	updateWithAjax: function (url, data, fn, options, processMsg) {
-
-		if (typeof processMsg == undefined || processMsg == null) {
-			processMsg = true;
-		}
-		if (processMsg) {
-			$.mbsmessage(langLbl.requestProcessing, false, 'alert--process alert');
-		}
+	updateWithAjax: function (url, data, fn, options, autoClose = true) {
+		fcom.displayProcessing();
+		let processingClass = fcom.processingCounter;
 		var o = $.extend(true, { fOutMode: 'json' }, options);
 		this.ajax(url, data, function (ans) {
-			fcom.closeAlertMessage();
+			fcom.closeProcessing(processingClass);
+			fcom.removeLoader();
 			if (ans.status != 1) {
-				$(document).trigger('close.mbsmessage');
-				$.systemMessage(ans.msg, 'alert--danger');
-				/* Custom Code[ */
-				if (ans.redirectUrl) {
-					setTimeout(function () { window.location.href = ans.redirectUrl }, 3000);
-				}
-				/* ] */
+				fcom.displayErrorMessage(ans.msg);
 				return;
 			}
-
-			if (ans.alertType) {
-				$alertType = ans.alertType;
-			} else {
-				$alertType = 'alert--success';
-			}
-
-			if (processMsg) {
-				$.mbsmessage(ans.msg, true, $alertType);
-			}
-
-			if (CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
-				var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000;
-				setTimeout(function () {
-					$.systemMessage.close();
-				}, time);
-			}
+			fcom.displaySuccessMessage(ans.msg);
 			fn(ans);
 		}, o);
 	},

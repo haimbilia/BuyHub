@@ -27,7 +27,10 @@ $(document).ready(function () {
             $(dv).html(t);
         });
     };
-    updateSettings = function (frm) {
+
+
+    updateSettings = function (formName) {
+        let frm = document.forms[formName];
         var data = fcom.frmData(frm);
         $(settingDv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
@@ -40,9 +43,10 @@ $(document).ready(function () {
         if (actionType == inventoryUpdate) {
             location.href = fcom.makeUrl('seller', 'exportInventory');
         } else {
+            fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
-                fcom.removeLoader();
-                $(exportDv).html(t);
+                fcom.closeProcessing();
+                $.ykmodal(t, true);
             });
         }
     };
@@ -54,8 +58,10 @@ $(document).ready(function () {
     };
 
     exportMediaForm = function (actionType) {
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
-            $(exportDv).html(t);
+            $.ykmodal(t, true);
+            fcom.removeLoader();
         });
     };
 
@@ -70,7 +76,7 @@ $(document).ready(function () {
             inventoryUpdateForm();
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), formData, function (t) {
-                $(importDv).html(t);
+                $.ykmodal(t);
             });
         }
     };
@@ -80,14 +86,14 @@ $(document).ready(function () {
             importForm(actionType);
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
-                $(importDv).html(t);
+                $.ykmodal(t);
             });
         }
     };
 
     importMediaForm = function (actionType) {
         fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
-            $(importDv).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -247,7 +253,7 @@ $(document).ready(function () {
 
     inventoryUpdateForm = function () {
         fcom.ajax(fcom.makeUrl('Seller', 'InventoryUpdateForm'), '', function (t) {
-            $(importDv).html(t);
+            $.ykmodal(t);
         });
     };
 

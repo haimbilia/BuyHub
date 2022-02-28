@@ -939,7 +939,10 @@ strong {
 }
 
 /**/
-
+mark,
+.mark {
+    padding: 0;
+}
 .todo-list {
     padding: 0;
     margin: 0;
@@ -2894,19 +2897,19 @@ $header-height: 65px;
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(3px, 0) rotate(45deg);
+            transform: translate(3px * $transform-direction, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(-3px, 0) rotate(-45deg);
+            transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
         }
     }
     &:not(.collapsed) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(-3px, 0) rotate(45deg);
+                transform: translate(-3px * $transform-direction, 0) rotate(45deg);
             }
             &:after {
-                transform: translate(3px, 0) rotate(-45deg);
+                transform: translate(3px * $transform-direction, 0) rotate(-45deg);
             }
         }
     }

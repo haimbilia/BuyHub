@@ -24,7 +24,7 @@ searchBlogs = function(keyword, form){
 		data +='&keyword='+keyword;
 	}
 	fcom.ajax(fcom.makeUrl('Blog', 'blogList'), data, function (ans) {
-		$.mbsmessage.close();
+		$.ykmsg.close();
 		var res = $.parseJSON(ans);
 		$(dv).html(res.html);
 

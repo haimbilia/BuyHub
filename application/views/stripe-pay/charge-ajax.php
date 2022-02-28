@@ -88,7 +88,7 @@ if (isset($client_secret)) { ?>
                             if ('' != stripeToken && 'undefined' != typeof stripeToken) {
                                 return;
                             }
-                            $.mbsmessage(langLbl.processing, true, 'alert--process');
+                            fcom.displayProcessing();
                             // prop('disabled', true);
                             $('.alert--danger').remove();
 

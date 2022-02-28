@@ -3,7 +3,6 @@
     <?php
     HtmlHelper::formatFormFields($frm, 6);
     $frm->setFormTagAttribute('class', 'form form--settings');
-    $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
     echo $frm->getFormHtml();
     ?>
 </div>

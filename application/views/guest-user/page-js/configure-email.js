@@ -47,12 +47,12 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
-        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Account', 'getOtp', [updateToDbFrm]), data, function (t) {
-            $.systemMessage.close();
+            $.ykmsg.close();
             t = $.parseJSON(t);
             if (typeof t.status != 'undefined' && 1 > t.status) {
-                $.systemMessage(t.msg, 'alert--danger', false);
+                fcom.displayErrorMessage(t.msg);
                 $(frm.btn_submit).removeAttr('disabled');
                 return false;
             }
@@ -79,14 +79,14 @@ $(document).ready(function () {
 
     resendOtp = function (phone = '', dialCode = '') {
         var postparam = (1 == phone) ? '' : "user_phone=" + phone + "&user_phone_dcode=" + dialCode;
-        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Account', 'resendOtp'), postparam, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.systemMessage(t.msg, 'alert--danger', false);
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.systemMessage(t.msg, 'alert--success', false);
+            fcom.displaySuccessMessage(t.msg);
             startOtpInterval();
         });
         return false;
@@ -95,15 +95,15 @@ $(document).ready(function () {
     validateOtp = function (frm, updateToDbFrm = 1) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Account', 'validateOtp', [updateToDbFrm]), data, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.systemMessage(t.msg, 'alert--danger', false);
+                fcom.displayErrorMessage(t.msg);
                 invalidOtpField();
                 return false;
             }
-            $.systemMessage.close();
+            $.ykmsg.close();
             location.href = fcom.makeUrl();
         });
         return false;

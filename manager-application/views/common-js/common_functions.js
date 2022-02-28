@@ -136,7 +136,7 @@ function googleCaptcha() {
                     });
             });
         } else if ("undefined" === typeof grecaptcha) {
-            $.mbsmessage(langLbl.invalidGRecaptchaKeys, true, "alert--danger");
+            $.ykmsg.error(langLbl.invalidGRecaptchaKeys);
         }
     }, 200);
 }

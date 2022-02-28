@@ -11,7 +11,7 @@
         //=== Render paypal Buttons
         paypal.Buttons({
             onError: function(err) {
-                $.mbsmessage(err.message, false, 'alert--danger');
+                fcom.displayErrorMessage(err.message);
                 return;
             },
             style: {
@@ -19,25 +19,25 @@
             },
             //=== Call your server to create an order
             createOrder: function(data, actions) {
-                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
+                fcom.displayProcessing();
                 return fetch(fcom.makeUrl('PaypalPay', 'createOrder', ['<?php echo $orderInfo['id']; ?>']), {
                     method: "POST",
                 }).then(function(res) {
                     return res.json();
                 }).then(function(data) {
-                    $.mbsmessage(langLbl.waitingForResponse, false, 'alert--process');
+                    $.ykmsg.info(langLbl.waitingForResponse);
                     if (!data.success && (data.message || data.msg)) {
                         var msg = typeof data.msg != 'undefined' ? data.msg : data.message;
-                        $.mbsmessage(msg, true, 'alert--danger');
+                        fcom.displayErrorMessage(msg);
                         return;
                     }
-                    $.mbsmessage.close();
+                    $.ykmsg.close();
                     return data.id;
                 });
             },
             //=== Call your server to save the transaction
             onApprove: function(data, actions) {
-                $.mbsmessage(langLbl.waitingForResponse, false, 'alert--process');
+                $.ykmsg.info(langLbl.waitingForResponse);
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
                 }).then(function(res) {
@@ -51,13 +51,13 @@
                         data: data,
                         dataType: 'json',
                         beforeSend: function() {
-                            $.mbsmessage(langLbl.updatingRecord, false, 'alert--info');
+                            $.ykmsg.info(langLbl.updatingRecord);
                         },
                         success: function(resp) {
                             if (1 > resp.status) {
-                                $.mbsmessage(resp.msg, false, 'alert--danger');
+                                fcom.displayErrorMessage(resp.msg);
                             } else {
-                                $.mbsmessage(resp.msg, false, 'alert--success');
+                                fcom.displaySuccessMessage(resp.msg);
                                 setTimeout(function() {
                                     window.location.href = resp.redirecUrl;
                                 }, 100);

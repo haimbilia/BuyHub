@@ -51,7 +51,6 @@ var submitBtnNode = null;
             });
         });
     } catch (e) {
-        console.log(e.message);
         logout();
     }
 })(jQuery);

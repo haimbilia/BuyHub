@@ -31,7 +31,7 @@ $(document).ready(function(){
 		}
 		
 		fcom.updateWithAjax(fcom.makeUrl('Shops','searchWhoFavouriteShop'), data, function(ans){
-			$.mbsmessage.close();			
+			$.ykmsg.close();			
 			if( append == 1 ){ 
 				$(dv).find('.loader-yk').remove();
 				$(dv).append(ans.html);
