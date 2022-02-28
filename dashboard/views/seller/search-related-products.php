@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
         // 'select_all'=>'',
@@ -75,7 +75,7 @@
 
     echo $frm->getFormTag();
     ?>
-</form>
+    </form>
 </div>
 <?php
 $postedData['page'] = $page;

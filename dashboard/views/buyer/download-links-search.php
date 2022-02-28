@@ -37,8 +37,7 @@ if (null != $fld) {
         </div>
     </div>
 </div>
-
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
         'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
         'linksCount'    =>    Labels::getLabel('LBL_LINKS_INSIDE', $siteLangId),

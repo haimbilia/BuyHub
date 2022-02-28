@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")":"editMetaTagLangForm(" . $metaId . "," . CommonHelper::getDefaultFormLangId() . ",'" . $metaType . "'," . $metaRecordId . ")",
+                                'onclick' => $metaType == MetaTag::META_GROUP_ADVANCED ? "editMetaTagForm(" . $metaId . ",'" . $metaType . "'," . $metaRecordId . ")" : "editMetaTagLangForm(" . $metaId . "," . CommonHelper::getDefaultFormLangId() . ",'" . $metaType . "'," . $metaRecordId . ")",
                                 'title' => Labels::getLabel('BTN_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
@@ -103,7 +103,7 @@ include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
             </div>
         <?php } ?>
     </div>
-    <div class="card-body">
+    <div class="card-table">
         <div class="table-responsive table-scrollable js-scrollable">
             <?php echo $tbl->getHtml(); ?>
         </div>

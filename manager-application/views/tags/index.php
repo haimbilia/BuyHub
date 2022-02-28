@@ -12,7 +12,7 @@ $actionItemsData = $actionItemsData + [
             <div class="col-md-12">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . $actionItemsData['searchFrmTemplate']); ?>
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
                             $tableId = "listingTableJs";
@@ -30,5 +30,5 @@ $actionItemsData = $actionItemsData + [
 </main>
 
 <script>
-var canEdit = <?php echo $canEdit ? 1 :0 ;?>;
+    var canEdit = <?php echo $canEdit ? 1 : 0; ?>;
 </script>
