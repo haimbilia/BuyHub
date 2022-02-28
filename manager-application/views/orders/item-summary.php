@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
 ?>
-<div class="card-body p-0 itemSummaryJs">
+<div class="card-table itemSummaryJs">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <table class="table table-orders">
             <thead class="tableHeadJs">

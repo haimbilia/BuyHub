@@ -41,7 +41,7 @@ class HtmlHelper
         /* For Labels Fields */
 
         /* Group Label and Input field. */
-        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = $frm->developerTags['fieldWrapperRowExtraClassDefault'] ?? 'form-group';
         /* Group Label and Input field. */
     }
 
@@ -53,6 +53,7 @@ class HtmlHelper
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+        $fld->developerTags['noCaptionTag'] = true;
     }
 
     public static function configureSwitchForRadio($fld, $msg = '')

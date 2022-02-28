@@ -134,7 +134,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr class="">
@@ -235,7 +235,7 @@ if (!$print) { ?>
                             <h6>
                                 <?php echo Labels::getLabel('LBL_Download_Links', $siteLangId); ?>
                             </h6>
-                            <div class="js-scrollable table-wrap scroll scroll-x">
+                            <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr class="">

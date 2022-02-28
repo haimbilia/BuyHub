@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
         'order_id'  =>    Labels::getLabel('LBL_Order_Id_Date', $siteLangId),
@@ -52,7 +52,7 @@
                     $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
                     $class = (0 == $order[$key] ? 'badge-warning' : 'badge-success');
                     $htm = '<span class="badge ' . $class . '">' . $label . '</span>';
-                    
+
                     $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'status':

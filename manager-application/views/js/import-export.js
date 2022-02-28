@@ -7,8 +7,8 @@
     };
     exportForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
-            $.ykmodal(t.html);
             fcom.removeLoader();
+            $.ykmodal(t.html);
         });
     }
 

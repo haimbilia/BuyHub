@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frm->setFormTagAttribute('onSubmit', 'exportMedia(this,' . $actionType . '); return false;');
+$frm->setFormTagAttribute('data-onclear', 'exportMediaForm(' . $actionType . ');');
+$frm->setFormTagAttribute('onsubmit', 'exportMedia(this,' . $actionType . '); return false;');
 $actionTypeArr = [
     Importexport::TYPE_PRODUCTS,
     Importexport::TYPE_SELLER_PRODUCTS,

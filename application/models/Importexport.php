@@ -273,10 +273,9 @@ class Importexport extends ImportexportCommon
                 $j++;
             }
         );
-
+        
         if (!$this->isValidColumns($headingRow, $coloumArr)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_COLOUM_CSV_FILE", $langId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_COLOUM_CSV_FILE", $langId));
         }
         $this->headingIndexArr = array_flip($headingRow);
     }
@@ -493,8 +492,7 @@ class Importexport extends ImportexportCommon
         }
 
         if ($default) {
-            Message::addMessage(Labels::getLabel('ERR_INVALID_ACCESS', $langId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $langId));
         }
     }
 
@@ -690,8 +688,7 @@ class Importexport extends ImportexportCommon
         }
 
         if ($default) {
-            Message::addMessage(Labels::getLabel('ERR_INVALID_ACCESS', $langId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $langId));
         }
     }
 

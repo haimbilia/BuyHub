@@ -353,7 +353,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             <?php } ?>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table id="optionsTable-js" class="table table-justified <?php echo ($selprod_id == 0) ? 'd-none' : ''; ?>">
                             <thead>
                                 <tr>

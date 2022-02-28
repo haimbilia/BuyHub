@@ -11,10 +11,10 @@
                 <!-- <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount', array($selprod_id)); ?>" target="_blank"><?php echo Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId) ?></a> -->
             </div>
         <?php } ?>
-        <div class="card-body ">
+        <div class="card-body">
             <div class="row">
                 <div class="<?php echo (count($arrListing) > 0) ? 'col-md-8' : 'col-md-12'; ?>">
-                    <div class="form__subcontent js-scrollable table-wrap">
+                    <div class="js-scrollable table-wrap">
                         <?php
                         $arr_flds = array(
                             'listserial' => Labels::getLabel('LBL_#', $siteLangId),

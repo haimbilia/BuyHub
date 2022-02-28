@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable">
                             <?php
                             $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed'));

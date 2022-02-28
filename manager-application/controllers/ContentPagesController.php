@@ -259,8 +259,10 @@ class ContentPagesController extends ListingBaseController
             $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $langId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $langId));
             $frm->addHTML('', 'cpage_bg_image', '');
             $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
-            $frm->addHiddenField('', 'min_width', 1300);
-            $frm->addHiddenField('', 'min_height', 400);
+            $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);
+            $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
+            $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
+            $this->set('getImageDimensions', $getImageDimensions);
             $frm->addTextBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_TITLE', $langId), 'cpage_image_title');
             $frm->addTextArea(Labels::getLabel('FRM_BACKGROUND_IMAGE_DESCRIPTION', $langId), 'cpage_image_content');
             for ($i = 1; $i <= ContentPage::CONTENT_PAGE_LAYOUT1_BLOCK_COUNT; $i++) {

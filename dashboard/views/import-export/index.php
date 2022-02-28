@@ -21,7 +21,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         </div>
     </div>
 </div>
-
 <script>
-    var inventoryUpdate = '<?php echo Importexport::TYPE_INVENTORY_UPDATE ?>';
+    var inventoryUpdate = <?php echo Importexport::TYPE_INVENTORY_UPDATE; ?>;
 </script>

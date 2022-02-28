@@ -254,7 +254,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                     <?php if (!empty($digitalDownloads)) { ?>
                         <div class="col-md-12 section--repeated js-scrollable table-wrap">
                             <h5><?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?></h5>
-                            <table class="table table-justified table--orders">
+                            <table class="table table-justified table-orders">
                                 <tbody>
                                     <tr class="">
                                         <th><?php echo Labels::getLabel('LBL_#', $siteLangId); ?></th>
@@ -310,7 +310,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                     <?php if (!empty($digitalDownloadLinks)) { ?>
                         <div class="col-md-12 section--repeated js-scrollable table-wrap">
                             <h5><?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?></h5>
-                            <table class="table  table--orders">
+                            <table class="table table-orders">
                                 <tbody>
                                     <tr class="">
                                         <th><?php echo Labels::getLabel('LBL_#', $siteLangId); ?></th>
