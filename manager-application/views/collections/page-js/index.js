@@ -139,7 +139,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
                 uploadedContentEle.remove();
             }
 
-            if ('' != t) {
+            if ('' != t.html) {
                 $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
@@ -277,7 +277,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
                 uploadedContentEle.remove();
             }
 
-            if ('' != t) {
+            if ('' != t.html) {
                 $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
