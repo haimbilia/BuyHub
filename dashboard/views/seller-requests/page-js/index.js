@@ -92,7 +92,6 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
         });
     };
 
-
     /* Product Brand Request [ */
     addBrandReqForm = function (id) {
         fcom.displayProcessing();
@@ -233,10 +232,20 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
     /* ] */
 
     /* Product Category  request [*/
-    addCategoryReqForm = function (id) {
+    addCategoryReqForm = function (id = 0) {
+        id = id || $('.navTabsJs').data('category-id');        
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
+        });
+    };
+
+    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {
+        categoryReqId = categoryReqId || $('.navTabsJs').data('category-id');
+        $("#categoryReqFormJs").prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqLangForm', [categoryReqId, langId, autoFillLangData]), '', function (t) {
+            fcom.removeLoader();
+            $("#categoryReqFormJs").html(t);
         });
     };
 
@@ -244,9 +253,24 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {
-            
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) { 
+            $('.navTabsJs').data('category-id',t.categoryReqId);    
+            if(0 < t.langId){
+                addCategoryReqLangForm(t.categoryReqId,t.langId);
+            }       
             searchProdCategoryRequests(frm);
+        });
+    };
+
+    setupCategoryReqLang = function (frm) {
+        if (!$(frm).validate())
+            return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'categoryReqLangSetup'), data, function (t) {
+            if (t.langId > 0) {
+                addCategoryReqLangForm(t.categoryReqId, t.langId);
+                return;
+            }                     
         });
     };
 
