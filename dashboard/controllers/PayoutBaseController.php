@@ -55,14 +55,12 @@ class PayoutBaseController extends PluginBaseController
 
         $assignFields = array('withdrawal_status' => $status);
         if (!FatApp::getDb()->updateFromArray(User::DB_TBL_USR_WITHDRAWAL_REQ, $assignFields, array('smt' => 'withdrawal_id=?', 'vals' => array($recordId)))) {
-            Message::addErrorMessage(FatApp::getDb()->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(FatApp::getDb()->getError());
         }
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendWithdrawRequestNotification($recordId, $this->siteLangId, "U")) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
         }
         
         FatApp::getDb()->updateFromArray(

@@ -62,13 +62,11 @@ class GuestAdvertiserController extends MyAppController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if ($post == false) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $approvalFrm = $this->getCompanyDetailsForm();
@@ -86,18 +84,15 @@ class GuestAdvertiserController extends MyAppController
     {
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!ValidateElement::username($post['user_username'])) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         }
 
         if (!ValidateElement::password($post['user_password'])) {
-            Message::addErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('SUC_Data_verified', $this->siteLangId));
     }
@@ -105,16 +100,14 @@ class GuestAdvertiserController extends MyAppController
     public function setupCompanyDetailsForm()
     {
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_User_Already_Logged_in', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_User_Already_Logged_in', $this->siteLangId));
         }
 
         $frm = $this->getCompanyDetailsForm();
         $post = FatApp::getPostedData();
         /* $post = $frm->getFormDataFromArray(FatApp::getPostedData()); */
         if ($post == false) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $userObj = new User();
@@ -131,17 +124,15 @@ class GuestAdvertiserController extends MyAppController
 
         if (!$userObj->save()) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
         }
 
         $active = FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
         $verify = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
 
         if (!$userObj->setLoginCredentials($post['user_username'], $post['user_email'], $post['user_password'], $active, $verify)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
         }
 
         $referrerCodeSignup = '';
@@ -157,25 +148,22 @@ class GuestAdvertiserController extends MyAppController
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->notifyAdminRegistration($post, $this->siteLangId)) {
-                Message::addErrorMessage(Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
             }
         }
 
         if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->userEmailVerification($post, $this->siteLangId)) {
-                Message::addErrorMessage(Labels::getLabel("ERR_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel("ERR_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
             }
         } else {
             if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
                 $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
                 if (!$userObj->userWelcomeEmailRegistration($post, $link, $this->siteLangId)) {
-                    Message::addErrorMessage(Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                     $db->rollbackTransaction();
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 }
             }
         }
@@ -200,21 +188,18 @@ class GuestAdvertiserController extends MyAppController
         $userId = FatUtility::int($userId);
 
         if (!$this->isRegisteredSupplierId($userId)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $userObj = new User($userId);
         $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified'), false, false);
 
         if (false == $userdata) {
-            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (/* $userdata['credential_active'] == applicationConstants::ACTIVE &&  */$userdata['credential_verified'] == applicationConstants::YES) {

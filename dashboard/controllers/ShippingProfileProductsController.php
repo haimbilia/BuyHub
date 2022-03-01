@@ -41,8 +41,7 @@ class ShippingProfileProductsController extends SellerBaseController {
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
 
         $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
@@ -58,8 +57,7 @@ class ShippingProfileProductsController extends SellerBaseController {
 
         $spObj = new ShippingProfileProduct();
         if (!$spObj->addProduct($data)) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($spObj->getError());
         }
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -78,8 +76,7 @@ class ShippingProfileProductsController extends SellerBaseController {
 
         $spObj = new ShippingProfileProduct();
         if (!$spObj->addProduct($data)) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($spObj->getError());
         }
         /* ] */
 

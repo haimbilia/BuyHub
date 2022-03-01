@@ -155,10 +155,11 @@ class GuestAffiliateController extends MyAppController
                 $dataToUpdateOnDuplicate = $dataToSave;
                 unset($dataToUpdateOnDuplicate['uextra_user_id']);
                 if (!FatApp::getDb()->insertFromArray(User::DB_TBL_USR_EXTRAS, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
-                    Message::addErrorMessage(Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId));
+                    $msg = Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId);
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
@@ -174,8 +175,7 @@ class GuestAffiliateController extends MyAppController
                 );
                 $userObj->assignValues($dataToSave);
                 if (!$userObj->save()) {
-                    Message::addErrorMessage($userObj->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError($userObj->getError());
                 }
 
                 UserAuthentication::setSessionAffiliateRegistering(array('affiliate_register_step_number' => UserAuthentication::AFFILIATE_REG_STEP3));
@@ -194,10 +194,11 @@ class GuestAffiliateController extends MyAppController
                 $dataToUpdateOnDuplicate = $dataToSave;
                 unset($dataToUpdateOnDuplicate['uextra_user_id']);
                 if (!FatApp::getDb()->insertFromArray(User::DB_TBL_USR_EXTRAS, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
-                    Message::addErrorMessage(Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId));
+                    $msg = Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId);
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
@@ -211,10 +212,11 @@ class GuestAffiliateController extends MyAppController
                     'ub_bank_address' => $post['ub_bank_address'],
                 );
                 if (!$userObj->updateBankInfo($bankInfoData)) {
-                    Message::addErrorMessage($userObj->getError());
+                    $msg = $userObj->getError();
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
