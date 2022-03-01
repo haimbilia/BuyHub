@@ -38,12 +38,12 @@ class MyAppController extends FatController
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
         }
-
+        $cacheTimeStamp = UrlHelper::getCacheTimestamp($this->siteLangId);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('siteLangCode', $this->siteLangCode);
         $this->set('siteCurrencyId', $this->siteCurrencyId);
         $this->set('siteLangCountryCode', $this->siteLangCountryCode);
-        $this->set('cacheTimeStamp', UrlHelper::getCacheTimestamp($this->siteLangId));
+        $this->set('cacheTimeStamp', $cacheTimeStamp);
 
         $loginData = array(
             'loginFrm' => $this->getLoginForm(),
