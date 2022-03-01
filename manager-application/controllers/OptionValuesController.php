@@ -196,17 +196,19 @@ class OptionValuesController extends ListingBaseController
         }
         $this->set('formTitle', Labels::getLabel('LBL_OPTION_VALUE_SETUP', $this->siteLangId));
 
-        $optionValueFrm = $this->getForm($optionId, $recordId);
+        $frm = $this->getForm($optionId, $recordId);
 
         if (0 < $recordId) {
             $data = OptionValue::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('m.*','IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }           
-            $optionValueFrm->fill($data);
+            $frm->fill($data);
         }
 
-        $this->set('frm', $optionValueFrm);
+        HtmlHelper::addIdentierToFrm($frm->getField($this->modelClass::tblFld('name')), ($data[$this->modelClass::tblFld('identifier')] ?? ''));
+
+        $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);

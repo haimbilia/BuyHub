@@ -675,4 +675,20 @@ class HtmlHelper
     {
         return '<a href="' . $url . '" target="_blank">' . $url . '</a>';
     }
+
+    public static function getIdentifierText($identifier, $langId)
+    {
+
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) . " : " . $identifier;
+    }
+
+    public static function addIdentierToFrm($fld, $identifier, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+
+        $fld->addFieldTagAttribute('onkeyup', "getIdentifier(this);");
+        $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $langId) . '</small>';
+    }
 }

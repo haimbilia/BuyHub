@@ -170,6 +170,7 @@ class BrandRequestsController extends ListingBaseController
             $frm->fill($data);
         }
 
+        HtmlHelper::addIdentierToFrm($frm->getField($this->modelClass::tblFld('name')), ($data[$this->modelClass::tblFld('identifier')] ?? ''));
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
