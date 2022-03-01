@@ -52,7 +52,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $imagePluginDimensions = ImageDimension::getData(ImageDimension::TYPE_PLUGIN_IMAGE, ImageDimension::VIEW_ICON);
                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($row['plugin_id'], ImageDimension::VIEW_ICON), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                $imgHtm = '<img data-aspect-ratio = "' . $imageBannerDimensions[ImageDimension::VIEW_ICON]['aspectRatio'] . '" src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
+                $imgHtm = '<img data-aspect-ratio = "' . $imagePluginDimensions[ImageDimension::VIEW_ICON]['aspectRatio'] . '" src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
                 $td->appendElement('plaintext', $tdAttr, $imgHtm, true);
                 break;
             case 'plugin_name':
