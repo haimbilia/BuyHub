@@ -216,8 +216,9 @@ class ImageDimension extends FatUtility
                 break;
         }
 
-        if (!empty($sizeType)) {
-            return $imageDimensions[$sizeType]['aspectRatio'] = self::getAspectRatio($imageDimensions[self::WIDTH], $imageDimensions[self::HEIGHT]);
+        if (!empty($sizeType)) {            
+            $imageDimensions[$sizeType]['aspectRatio'] = self::getAspectRatio($imageDimensions[self::WIDTH], $imageDimensions[self::HEIGHT]);
+            return $imageDimensions;
         }
 
         foreach ($imageDimensions as $key => $val) {
