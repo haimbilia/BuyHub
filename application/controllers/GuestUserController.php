@@ -281,14 +281,12 @@ class GuestUserController extends MyAppController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if ($post == false) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $authentication = new UserAuthentication();
         if (!$authentication->guestLogin(FatApp::getPostedData('user_email'), FatApp::getPostedData('user_name'), $_SERVER['REMOTE_ADDR'])) {
-            Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($authentication->getError(), $this->siteLangId));
         }
 
         $redirectUrl = '';
@@ -1042,8 +1040,7 @@ class GuestUserController extends MyAppController
         $userObj = new User($userId);
         $user = $userObj->getUserInfo(array('credential_password', 'credential_username'), false, false);
         if (!$user) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $this->set('user_password', $user['credential_password']);
         $this->set('credential_username', $user['credential_username']);
@@ -1079,8 +1076,7 @@ class GuestUserController extends MyAppController
         }
 
         /* if (! ValidateElement::password($post['new_pwd'])) {
-          Message::addErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
-          FatUtility::dieJsonError(Message::getHtml());
+          FatUtility::dieJsonError(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
           } */
 
         $userAuthObj = new UserAuthentication();

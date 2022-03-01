@@ -170,8 +170,7 @@ trait BadgeRequestSetup
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($record->getError());
         }
 
         $badgeReqId = $record->getMainTableRecordId();

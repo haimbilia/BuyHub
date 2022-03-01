@@ -821,8 +821,7 @@ trait SellerProducts
 
         $productRow = Product::getAttributesById($selprod_product_id, array('product_id', 'product_active', 'product_seller_id', 'product_added_by_admin_id'));
         if (!$productRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
         if (($productRow['product_seller_id'] != $this->userParentId) && $productRow['product_added_by_admin_id'] == 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
@@ -840,11 +839,9 @@ trait SellerProducts
         $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId, $selprod_id);
 
         if (!empty($selProdAvailable) && !$selProdAvailable['selprod_deleted']) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Inventory_for_this_option_have_been_added", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        } else {
-            FatUtility::dieJsonSuccess(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("LBL_Inventory_for_this_option_have_been_added", $this->siteLangId));
         }
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
     private function getSellerProductLangForm($formLangId, $selprod_id = 0)
@@ -962,8 +959,7 @@ trait SellerProducts
 
         $obj = new SellerProduct($selprod_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage(Labels::getLabel($obj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($obj->getError(), $this->siteLangId));
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -1102,8 +1098,7 @@ trait SellerProducts
         /* CommonHelper::printArray($data); die; */
         $obj = new Tax();
         if (!$obj->addUpdateProductTaxCat($data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($obj->getError());
         }
 
         $this->set('selprod_id', $selprod_id);
@@ -1121,8 +1116,7 @@ trait SellerProducts
         }
 
         if (!FatApp::getDb()->deleteRecords(Tax::DB_TBL_PRODUCT_TO_TAX, array('smt' => 'ptt_product_id = ? and ptt_seller_user_id = ?', 'vals' => array($sellerProductRow['selprod_product_id'], $this->userParentId)))) {
-            Message::addErrorMessage(FatApp::getDb()->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(FatApp::getDb()->getError());
         }
 
         $this->set('selprod_id', $selprod_id);
@@ -1668,25 +1662,21 @@ trait SellerProducts
         $metaRecordId = FatUtility::int($post['meta_record_id']);
 
         if (!UserPrivilege::canEditMetaTag($metaId, $metaRecordId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         if (!$post['meta_other_meta_tags'] == '' && $post['meta_other_meta_tags'] == strip_tags($post['meta_other_meta_tags'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Other_Meta_Tag', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Other_Meta_Tag', $this->siteLangId));
         }
 
         $tabsArr = MetaTag::getTabsArr();
         $metaType = MetaTag::META_GROUP_PRODUCT_DETAIL;
 
         if ($metaType == '' || !isset($tabsArr[$metaType])) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
 
         $post['meta_controller'] = $tabsArr[$metaType]['controller'];
@@ -1697,8 +1687,7 @@ trait SellerProducts
         $record = new MetaTag($metaId);
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($record->getError());
         }
 
         $metaId = $record->getMainTableRecordId();
@@ -1717,8 +1706,7 @@ trait SellerProducts
         $metaObj = new MetaTag($metaId);
 
         if (!$metaObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($metaObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($metaObj->getError());
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -1850,15 +1838,13 @@ trait SellerProducts
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $selprodId = $post['selprod_id'];
 
         if (!UserPrivilege::canEditSellerProduct($this->userParentId, $selprodId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
 
         $tabsArr = MetaTag::getTabsArr();
@@ -1898,8 +1884,7 @@ trait SellerProducts
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             if (FatApp::getDb()->fetch($rs)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_DUPLICATE_CUSTOM_URL', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_DUPLICATE_CUSTOM_URL', $this->siteLangId));
             }
 
             $data = [
@@ -1911,8 +1896,7 @@ trait SellerProducts
             $record->assignValues($data);
 
             if (!$record->save()) {
-                Message::addErrorMessage($record->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($record->getError());
             }
         }
 
@@ -1953,8 +1937,7 @@ trait SellerProducts
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($selProd_id);
         if (!UserPrivilege::canEditSellerProduct($this->userParentId, $selprod_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         $sellProdObj = new SellerProduct();
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
@@ -2061,8 +2044,7 @@ trait SellerProducts
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
         if (!UserPrivilege::canEditSellerProduct($this->userParentId, $selprod_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         $upsellProducts = (isset($post['product_upsell'])) ? $post['product_upsell'] : array();
         $relatedProducts = (isset($post['product_related'])) ? $post['product_related'] : array();
@@ -2237,18 +2219,12 @@ trait SellerProducts
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
         }
 
         $selprodObj = new SellerProduct($selprod_id);
         if (!$selprodObj->deleteSellerProduct($selprod_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
         }
     }
 
@@ -2487,8 +2463,7 @@ trait SellerProducts
         $metaType = MetaTag::META_GROUP_PRODUCT_DETAIL;
 
         if ($metaType == '' || !isset($tabsArr[$metaType])) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
 
         $metaData['meta_controller'] = $tabsArr[$metaType]['controller'];
@@ -2506,8 +2481,7 @@ trait SellerProducts
         $meta->assignValues($metaData);
 
         if (!$meta->save()) {
-            Message::addErrorMessage($meta->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($meta->getError());
         }
         $metaId = $meta->getMainTableRecordId();
 
@@ -2518,8 +2492,7 @@ trait SellerProducts
                 'selprod_title' => SellerProduct::getProductDisplayTitle($selprod_id, $langId)
             );
             if (!$sellerProdObj->updateLangData($langId, $langData)) {
-                Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
             }
 
             $selProdMeta = array(
@@ -2531,8 +2504,7 @@ trait SellerProducts
             $metaObj = new MetaTag($metaId);
 
             if (!$metaObj->updateLangData($langId, $selProdMeta)) {
-                Message::addErrorMessage($metaObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($metaObj->getError());
             }
         }
 
@@ -2969,25 +2941,19 @@ trait SellerProducts
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
         if (!UserPrivilege::canEditSellerProduct($this->userParentId, $selprod_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId));
         }
         if ($selprod_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_Valid_Product', $this->siteLangId));
-            //FatApp::redirectUser($_SESSION['referer_page_url']);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_Valid_Product', $this->siteLangId));
         }
         $relatedProducts = (isset($post['selected_products'])) ? $post['selected_products'] : array();
         if (count($relatedProducts) < 1) {
-            Message::addErrorMessage(Labels::getLabel("MSG_You_need_to_add_atleast_one_related_product", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_You_need_to_add_atleast_one_related_product", $this->siteLangId));
         }
         unset($post['selprod_id']);
         $sellerProdObj = new sellerProduct();
         if (!$sellerProdObj->addUpdateSellerRelatedProdcts($selprod_id, $relatedProducts)) {
-            Message::addErrorMessage($sellerProdObj->getError());
-            //FatApp::redirectUser($_SESSION['referer_page_url']);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($sellerProdObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('LBL_Related_Product_Setup_Successful', $this->siteLangId));
@@ -3190,25 +3156,19 @@ trait SellerProducts
         $post = FatApp::getPostedData();
         $selprod_id = FatUtility::int($post['selprod_id']);
         if (!UserPrivilege::canEditSellerProduct($this->userParentId, $selprod_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId));
         }
         if ($selprod_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_Valid_Product', $this->siteLangId));
-            //FatApp::redirectUser($_SESSION['referer_page_url']);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_Valid_Product', $this->siteLangId));
         }
         $upsellProducts = (isset($post['selected_products'])) ? $post['selected_products'] : array();
         if (count($upsellProducts) < 1) {
-            Message::addErrorMessage(Labels::getLabel("MSG_You_need_to_add_atleast_one_buy_together_product", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_You_need_to_add_atleast_one_buy_together_product", $this->siteLangId));
         }
         $sellerProdObj = new sellerProduct();
         /* saving of product Upsell Product[ */
         if (!$sellerProdObj->addUpdateSellerUpsellProducts($selprod_id, $upsellProducts)) {
-            Message::addErrorMessage($sellerProdObj->getError());
-            //FatApp::redirectUser($_SESSION['referer_page_url']);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($sellerProdObj->getError());
         }
         /* ] */
 

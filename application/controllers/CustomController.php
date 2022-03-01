@@ -372,13 +372,9 @@ class CustomController extends MyAppController
 
         /* content Blocks[ */
         $becomeSellerPageBlock = array(
-            Extrapage::BECOME_SELLER_PAGE_BLOCK1,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK2,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK3,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK4,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK5,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK6,
-            Extrapage::BECOME_SELLER_PAGE_BLOCK7,
+            Extrapage::SELLER_PAGE_BLOCK1,
+            Extrapage::SELLER_PAGE_BLOCK2,
+            Extrapage::SELLER_PAGE_BLOCK3
         );
 
         $srch = Extrapage::getSearchObject($this->siteLangId);
@@ -524,7 +520,7 @@ class CustomController extends MyAppController
             if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != UserAuthentication::getLoggedUserId(true)) {
                 $message = Labels::getLabel("ERR_INVALID_ORDER", $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError(current($message));
+                    LibHelper::dieJsonError($message);
                 }
                 Message::addErrorMessage($message);
                 FatApp::redirectUser(UrlHelper::generateUrl());
@@ -827,8 +823,7 @@ class CustomController extends MyAppController
         if ($userId > 0) {
             $user = new User($userId);
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
-                Message::addErrorMessage($user->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($user->getError());
             }
         } else {
             $_SESSION['cookies_enabled'] = true;
@@ -861,8 +856,7 @@ class CustomController extends MyAppController
     public function deleteErrorLogFiles($hoursBefore = '4')
     {
         if (!ImportexportCommon::deleteErrorLogFiles($hoursBefore)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_HOURS', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_HOURS', $this->siteLangId));
         }
     }
 

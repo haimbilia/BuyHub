@@ -500,8 +500,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $totalBalance = UserRewardBreakup::rewardPointBalance($this->userParentId);
         /* var_dump($totalBalance);exit; */
         if ($totalBalance == 0 || $totalBalance < $rewardPoints) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Insufficient_reward_point_balance', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Insufficient_reward_point_balance', $this->siteLangId));
         }
 
         $scartObj = new SubscriptionCart();
@@ -513,8 +512,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             $msg = Labels::getLabel('ERR_PLEASE_USE_REWARD_POINT_BETWEEN_{MIN}_to_{MAX}', $this->siteLangId);
             $msg = str_replace('{MIN}', FatApp::getConfig('CONF_MIN_REWARD_POINT'), $msg);
             $msg = str_replace('{MAX}', FatApp::getConfig('CONF_MAX_REWARD_POINT'), $msg);
-            Message::addErrorMessage($msg);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($msg);
         }
 
         if (!$scartObj->updateCartUseRewardPoints($rewardPoints)) {

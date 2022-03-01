@@ -173,16 +173,14 @@ class BatchProductsController extends LoggedUserController
         );
 
         if (!$prodGroupObj->updateLangData($lang_id, $dataToSaveArr)) {
-            Message::addErrorMessage(Labels::getLabel($prodGroupObj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($prodGroupObj->getError(), $this->siteLangId));
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ProductGroup::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($prodgroup_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                FatUtility::dieJsonError($updateLangDataobj->getError());
             }
         }
 
@@ -399,29 +397,25 @@ class BatchProductsController extends LoggedUserController
     {       
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
         }
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
 
         if ($lang_id <= 0 || $prodgroup_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
 
         /* Check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
 
         if (!$row || $row['prodgroup_user_id'] != $this->userId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
         }
         /* ] */
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_select_a_file', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -436,8 +430,7 @@ class BatchProductsController extends LoggedUserController
             true,
             $lang_id
         )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('prodgroup_id', $prodgroup_id);
@@ -466,8 +459,7 @@ class BatchProductsController extends LoggedUserController
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_BATCH_IMAGE, $prodgroup_id, 0, 0, $lang_id)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));

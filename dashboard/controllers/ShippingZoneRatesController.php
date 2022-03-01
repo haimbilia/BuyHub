@@ -36,14 +36,12 @@ class ShippingZoneRatesController extends SellerBaseController
         $conditionType = FatApp::getPostedData('shiprate_condition_type', FatUtility::VAR_INT, 0);
         $isCondition = FatApp::getPostedData('is_condition', FatUtility::VAR_INT, 0);
         if (1 > $conditionType && $isCondition > 0) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_CONDITION_TYPE", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_CONDITION_TYPE", $this->siteLangId));
         }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
 
         $rateId = FatApp::getPostedData('shiprate_id', FatUtility::VAR_INT, 0);
@@ -60,8 +58,7 @@ class ShippingZoneRatesController extends SellerBaseController
         $srObj->assignValues($post);
 
         if (!$srObj->save()) {
-            Message::addErrorMessage($srObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($srObj->getError());
         }
         $rateId = $srObj->getMainTableRecordId();
         $newTabLangId = 0;
@@ -133,16 +130,14 @@ class ShippingZoneRatesController extends SellerBaseController
         );
         $srObj = new ShippingRate($rateId);
         if (!$srObj->updateLangData($langId, $data)) {
-            Message::addErrorMessage($srObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($srObj->getError());
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ShippingRate::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($rateId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($updateLangDataobj->getError());
             }
         }
 
@@ -202,15 +197,13 @@ class ShippingZoneRatesController extends SellerBaseController
 
             if (false === $canDelete) {
                 $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->siteLangId);
-                Message::addErrorMessage($msg);
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($msg);
             }
         }
 
         $sObj = new ShippingRate($rateId);
         if (!$sObj->deleteRecord(true)) {
-            Message::addErrorMessage($sObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($sObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->siteLangId));
