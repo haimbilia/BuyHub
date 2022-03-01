@@ -17,12 +17,12 @@ class OptionValuesController extends LoggedUserController
         }
 
         $this->userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId());
-       
+
         if (!UserPrivilege::canSellerEditOption($this->userParentId, $optionId)) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl("seller", "options"));
         }
-      
+
 
         $canAddCustomProd = FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
         if (1 > $canAddCustomProd) {
@@ -87,8 +87,8 @@ class OptionValuesController extends LoggedUserController
     public function setup()
     {
         $frm = $this->getForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());        
-        if (false === $post) {          
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
@@ -104,7 +104,7 @@ class OptionValuesController extends LoggedUserController
         if (0 < $optionvalue_id) {
             $optionValueObj = new OptionValue();
             $data = $optionValueObj->getAttributesByIdAndOptionId($option_id, $optionvalue_id, array('optionvalue_id'));
-            if ($data === false) {               
+            if ($data === false) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
             }
         }
@@ -112,7 +112,7 @@ class OptionValuesController extends LoggedUserController
         $optionValueObj = new OptionValue($optionvalue_id);
         $post[$optionValueObj::tblFld('identifier')] = $post[$optionValueObj::tblFld('name')];
         $optionValueObj->assignValues($post);
-        if (!$optionValueObj->save()) {         
+        if (!$optionValueObj->save()) {
             FatUtility::dieJsonError($optionValueObj->getError());
         }
 
@@ -191,7 +191,7 @@ class OptionValuesController extends LoggedUserController
         $langId = FatUtility::int($langId);
         $autoFillLangData = FatUtility::int($autoFillLangData);
 
-        if (1 > $optionvalue_id || 1 > $langId) {           
+        if (1 > $optionvalue_id || 1 > $langId) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
 
@@ -245,7 +245,7 @@ class OptionValuesController extends LoggedUserController
 
         $frm = $this->getLangForm($optionvalue_id, $lang_id);
         $post = $frm->getFormDataFromArray($post);
-        if (false === $post) {          
+        if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
@@ -273,7 +273,7 @@ class OptionValuesController extends LoggedUserController
         $optionvalue_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         $option_id = FatApp::getPostedData('option_id', FatUtility::VAR_INT, 0);
 
-        if ($optionvalue_id < 1 || $option_id < 1) {           
+        if ($optionvalue_id < 1 || $option_id < 1) {
             FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
@@ -282,15 +282,15 @@ class OptionValuesController extends LoggedUserController
         }
 
         $optionValueObj = new OptionValue($optionvalue_id);
-        if (!$optionValueObj->canEditRecord($option_id)) {         
+        if (!$optionValueObj->canEditRecord($option_id)) {
             FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
-        if ($optionValueObj->isLinkedWithInventory($optionvalue_id)) {          
+        if ($optionValueObj->isLinkedWithInventory($optionvalue_id)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_This_option_value_is_linked_with_inventory', $this->siteLangId));
         }
 
-        if (!$optionValueObj->deleteRecord()) {          
+        if (!$optionValueObj->deleteRecord()) {
             FatUtility::dieJsonError($optionValueObj->getError());
         }
 
@@ -306,9 +306,17 @@ class OptionValuesController extends LoggedUserController
             $obj = new OptionValue();
             if (!$obj->updateOrder($post['optionvalues'])) {
                 FatUtility::dieJsonError($obj->getError());
-            }           
+            }
             $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords(Labels::getLabel('LBL_OPTION_VALUES', $this->siteLangId))]);
+        $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_OPTIONS', $this->siteLangId)), 'href' => UrlHelper::generateUrl('seller', 'options', [], CONF_WEBROOT_DASHBOARD));
+        $this->nodes[] = array('title' => $title);
+        return $this->nodes;
     }
 }
