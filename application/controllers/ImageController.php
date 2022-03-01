@@ -181,10 +181,12 @@ class ImageController extends FatController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $aspectRatioType = $file_row['afile_aspect_ratio'];
+        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+      
 
 
-
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType, $aspectRatioType);
 
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);

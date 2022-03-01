@@ -100,7 +100,7 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getCustomProductImageData($sizeType);
                 break;
             case self::TYPE_SHOP_LOGO:
-                $imageDimensions = self::getShopLogoImageData($sizeType);
+                $imageDimensions = self::getShopLogoImageData($sizeType, $aspectRatioType);
                 break;
             case self::TYPE_SHOP_BANNER:
                 $imageDimensions = self::getShopBannerImageData($sizeType);
@@ -335,25 +335,51 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
-    public static function getShopLogoImageData(string $sizeType = ''): array
+    public static function getShopLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
         if (substr($sizeType, 0, 4) == 'webp') {
             $sizeType = substr($sizeType, 4);
         }
 
-        $arr =  [
-            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
 
+        
+        $arr[AttachedFile::RATIO_TYPE_RECTANGULAR] =  [
+            
+          
+            self::VIEW_THUMB => ['width' => 62, 'height' => 35],
+            self::VIEW_DEFAULT => ['width' => 500, 'height' => 280],
+        ];
+        $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
+        
+            self::VIEW_THUMB => ['width' => 200, 'height' => 200],
+            self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
         ];
 
+
         if (!empty($sizeType)) {
+            if (!array_key_exists($sizeType, $arr[$aspectRatioType])) {
+                return $arr[$aspectRatioType][self::VIEW_DEFAULT];
+            }
+            return $arr[$aspectRatioType][$sizeType];
+        }
+
+        return $arr[$aspectRatioType];
+
+
+
+       /*  $arr =  [
+            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
+
+        ]; */
+
+        /* if (!empty($sizeType)) {
             if (!array_key_exists($sizeType, $arr)) {
                 return $arr[self::VIEW_DEFAULT];
             }
             return $arr[$sizeType];
         }
 
-        return $arr;
+        return $arr; */
     }
 
     public static function getShopBannerImageData(string $sizeType = ''): array

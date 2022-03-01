@@ -6,8 +6,8 @@ $brandReqLangFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $fo
 $brandReqLangFrm->setFormTagAttribute('onsubmit', 'setupBrandReqLang(this); return(false);');
 $brandReqLangFrm->setFormTagAttribute('data-onclear', "addBrandReqLangForm(" . $brandReqId . ", " . $brandReqLangId . ");");
 
-$brandFld = $brandReqLangFrm->getField('brand_name');
-$brandFld->setFieldTagAttribute('onblur', 'checkUniqueBrandName(this,$("input[name=lang_id]").val(),' . $brandReqId . ')');
+// $brandFld = $brandReqLangFrm->getField('brand_name');
+// $brandFld->setFieldTagAttribute('onblur', 'checkUniqueBrandName(this,$("input[name=lang_id]").val(),' . $brandReqId . ')');
 
 $langFld = $brandReqLangFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "addBrandReqLangForm(" . $brandReqId . ", this.value);");
