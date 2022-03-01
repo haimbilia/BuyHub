@@ -513,6 +513,9 @@ Updates/Fixes :
     => 061647 - Admin UI: "Approve" order status is showing for the physical order while updating the paid order's status under the order's details section
     => 062782 - Admin UI: Same priority is showing for the different order's status and rearrangement of the order status is also not working properly.
     => 062795 - Admin UI: "Search icon" is not showing if the admin select the keyword from the suggestion under the shipping profile.
+    => 061905 - Admin UI: Toggles are not aligned and location selection is not working properly on the 'Product' page under the settings section
+    => 061685 - Admin UI: 'Search icon' is not showing in the search field on the automatic badges page
+    => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
