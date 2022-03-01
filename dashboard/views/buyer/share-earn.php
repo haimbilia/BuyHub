@@ -27,7 +27,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <div class="card-body">
                         <div class="invite-box">
                             <div class="share-earn">
-                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/share-earn.png" alt="">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/share-earn.png<?php echo UrlHelper::getCacheTimestamp($siteLangId) ?>" alt="">
                                 <h2>
                                     <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS', $siteLangId); ?>
                                 </h2>

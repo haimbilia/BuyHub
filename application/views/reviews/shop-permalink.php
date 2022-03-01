@@ -40,7 +40,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
                                         <div class="col-auto">
                                             <div class="profile-avatar">
                                                 <div class="profile-dp">
-                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB, true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile-bio">
                                                     <div class="title">

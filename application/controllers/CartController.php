@@ -103,7 +103,7 @@ class CartController extends MyAppController
                 if (true === MOBILE_APP_API_CALL) {
                     $slProduct['discount'] = ($arr['special_price_found'] && $arr['selprod_price'] > $arr['theprice']) ? CommonHelper::showProductDiscountedText($arr, $this->siteLangId) : '';
                     $arr['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($arr['selprod_id']));
-                    $arr['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($arr['product_id'], "THUMB", $arr['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $arr['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($arr['product_id'], ImageDimension::VIEW_THUMB, $arr['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $availableProductsArr['saveForLater'][] = $arr;
                 }
             }
@@ -128,7 +128,7 @@ class CartController extends MyAppController
                 if (true === MOBILE_APP_API_CALL) {
                     $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
                     $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-                    $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
                     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);

@@ -57,7 +57,6 @@ class AccountController extends LoggedUserController
         if ($userId < 1 || $requestId < 1) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm'));
-           
         }
 
         $userObj = new User($userId);
@@ -442,7 +441,7 @@ class AccountController extends LoggedUserController
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $order_net_amount = $post['amount'];
         if ($order_net_amount < $minimumRechargeAmount) {
-            
+
             $str = Labels::getLabel("ERR_RECHARGE_AMOUNT_MUST_BE_GREATER_THAN_{minimumrechargeamount}", $this->siteLangId);
             $str = str_replace("{minimumrechargeamount}", CommonHelper::displayMoneyFormat($minimumRechargeAmount, true, true), $str);
             LibHelper::dieJsonError($str);
@@ -812,7 +811,7 @@ class AccountController extends LoggedUserController
         if (true ===  MOBILE_APP_API_CALL) {
             $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_THUMB, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $data = array('userImage' => $userImage);
 
@@ -849,7 +848,6 @@ class AccountController extends LoggedUserController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
     }
 
     public function profileInfo()
@@ -873,7 +871,7 @@ class AccountController extends LoggedUserController
             $splitPaymentMethods = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
             $bankInfo = $this->bankInfo();
             $personalInfo = $this->personalInfo();
-            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($userId, 'SMALL', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($userId, ImageDimension::VIEW_SMALL, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
             $this->set('bankInfo', empty($bankInfo) ? (object) array() : $bankInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
@@ -1048,10 +1046,10 @@ class AccountController extends LoggedUserController
         }
 
         if (false === MOBILE_APP_API_CALL) {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, 'croped', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, ImageDimension::VIEW_CROPED, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         } else {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'mini', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_MINI, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         }
         $this->set('file', $profileImg);
@@ -1563,7 +1561,7 @@ class AccountController extends LoggedUserController
         $this->set('wish_list_id', $wish_list_id);
         $this->set('totalWishListItems', Common::countWishList());
 
-        $this->updateFavConfTime();      
+        $this->updateFavConfTime();
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('removeFromCart', $removeFromCart);
@@ -2251,7 +2249,7 @@ class AccountController extends LoggedUserController
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
         }
-        
+
         $this->updateFavConfTime();
 
         if (false === $renderView) {
@@ -2378,8 +2376,8 @@ class AccountController extends LoggedUserController
             $message_records = array();
             foreach ($records as $mkey => $mval) {
                 $profile_images_arr = array(
-                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], 'thumb', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], 'thumb', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], ImageDimension::VIEW_THUMB, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], ImageDimension::VIEW_THUMB, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     "message_timestamp" => strtotime($mval['message_date'])
                 );
                 $message_records[] = array_merge($mval, $profile_images_arr);
@@ -2831,7 +2829,6 @@ class AccountController extends LoggedUserController
 
         if (User::isAffiliate()) {
             $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'user_zip');
-          
         }
         $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
         if (User::isAdvertiser() && $parent == 0) {
@@ -2901,7 +2898,7 @@ class AccountController extends LoggedUserController
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-     
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
@@ -3300,7 +3297,7 @@ class AccountController extends LoggedUserController
         $frm->addSelectBox('', 'debit_credit_type', array(-1 => Labels::getLabel('FRM_BOTH-DEBIT/CREDIT', $langId)) + Transactions::getCreditDebitTypeArr($langId), -1, array(), '');
         $frm->addDateField('', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField('', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-     
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
@@ -3338,7 +3335,7 @@ class AccountController extends LoggedUserController
     {
         $frm = new Form('frmRechargeWallet');
         $frm->addFloatField('', 'amount');
-       
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD_CREDITS', $langId));
         return $frm;
     }

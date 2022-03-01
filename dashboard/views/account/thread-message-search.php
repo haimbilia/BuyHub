@@ -11,7 +11,7 @@
                     $userImgUpdatedOn = User::getAttributesById($row['message_from_user_id'], 'user_updated_on');
                     $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                 ?>
-                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($row['message_from_user_id'], 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $row['message_from_name']; ?>">
+                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($row['message_from_user_id'], ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $row['message_from_name']; ?>">
                 <?php } ?>
 
             </div>

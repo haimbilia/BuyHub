@@ -6,7 +6,7 @@
                 <div class="row justify-content-between">
                     <div class="col-auto">
                         <div class="profile-avatar">
-                            <div class="profile-dp"><img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($review['spreview_postedby_user_id'], 'thumb', true)); ?>" alt="<?php echo $review['user_name']; ?>"></div>
+                            <div class="profile-dp"><img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB, true)); ?>" alt="<?php echo $review['user_name']; ?>"></div>
                             <div class="profile-bio">
                                 <div class="title">
                                     <?php echo Labels::getLabel('Lbl_By', $siteLangId); ?>

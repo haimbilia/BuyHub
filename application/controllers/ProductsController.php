@@ -1116,7 +1116,7 @@ class ProductsController extends MyAppController
         $productImageUrl = '';
         /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
         if (0 < $afile_id) {
-            $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'FB_RECOMMEND', 0, $afile_id));
+            $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_FB_RECOMMEND, 0, $afile_id));
         }
         $socialShareContent = array(
             'type' => 'Product',
@@ -1926,12 +1926,11 @@ class ProductsController extends MyAppController
             $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
             $product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
-            $productImageUrl = '';
-            /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
+            /* $productImageUrl = '';            
             if ($productImagesArr) {
                 $afile_id = array_keys($productImagesArr)[0];
-                $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $afile_id));
-            }
+                $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $afile_id));
+            } */
         }
 
         $displayProductNotAvailableLable = false;

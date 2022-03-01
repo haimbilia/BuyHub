@@ -799,7 +799,7 @@ class AccountController extends LoggedUserController
         if (true ===  MOBILE_APP_API_CALL) {
             $userImgUpdatedOn = User::getAttributesById($this->userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $data = array('userImage' => $userImage);
 
@@ -856,7 +856,7 @@ class AccountController extends LoggedUserController
             $splitPaymentMethods = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
             $bankInfo = $this->bankInfo();
             $personalInfo = $this->personalInfo();
-            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, 'SMALL', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, ImageDimension::VIEW_SMALL, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
             $this->set('bankInfo', empty($bankInfo) ? (object) array() : $bankInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
@@ -1010,10 +1010,10 @@ class AccountController extends LoggedUserController
         }
 
         if (false === MOBILE_APP_API_CALL) {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array('croped', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array(ImageDimension::VIEW_CROPED, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         } else {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, 'mini', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, ImageDimension::VIEW_MINI, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         }
         $this->set('file', $profileImg);
@@ -2288,8 +2288,8 @@ class AccountController extends LoggedUserController
             $message_records = array();
             foreach ($records as $mkey => $mval) {
                 $profile_images_arr = array(
-                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], 'thumb', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], 'thumb', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     "message_timestamp" => strtotime($mval['message_date'])
                 );
                 $message_records[] = array_merge($mval, $profile_images_arr);

@@ -56,7 +56,7 @@ if (!empty($arrListing)) {
         $msgTo = $li->appendElement('div', ['class' => 'message-to']);
 
         $uploadedTime = AttachedFile::setTimeParam($toUserUpdatedOn);
-        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, 'thumb', 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, ImageDimension::VIEW_THUMB, 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         $img = '<img  data-aspect-ratio = "'.$imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" src="' . $userImageUrl . '" alt="' . $toUserName . '">';
         $media = $msgTo->appendElement('div', ['class' => 'message-media']);
         $div = $media->appendElement('div', ['class' => 'user user-sm user-circle']);

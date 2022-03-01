@@ -57,7 +57,7 @@
                         <?php
                         $userImgUpdatedOn = User::getAttributesById(UserAuthentication::isUserLogged(), 'user_updated_on');
                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn); ?>
-                        <img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Account', 'userProfileImage', array(UserAuthentication::isUserLogged(), 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                        <img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Account', 'userProfileImage', array(UserAuthentication::isUserLogged(), ImageDimension::VIEW_THUMB, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                     </div>
                     <div class="profile-detail">
                         <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?> </h6>

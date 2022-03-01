@@ -38,8 +38,8 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                                 $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
-                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "EXTRA-SMALL", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPEXTRA-SMALL", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
+                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
                         ?>
 
                                 <li class="list-cart-item <?php echo (!$product['in_stock']) ? 'disabled' : '';
