@@ -163,6 +163,10 @@ getSlugUrl = function (obj, str, extra, pos) {
         .html('<a target="_blank" href="' + SITE_ROOT_URL + str + '">' + SITE_ROOT_URL + str + '</a>');
 };
 
+getIdentifier = function (obj) {
+    $(obj).next().html(langLbl.systemIdentifier + " : " + obj.value);
+};
+
 Slugify = function (str, str_val_id, is_slugify) {
     var str = str
         .toString()

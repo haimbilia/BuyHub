@@ -148,14 +148,12 @@ class ImportExportController extends SellerBaseController
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId));
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId));
         }
 
         $obj->importMedia($actionType, $post, $langId, $userId);
@@ -375,8 +373,7 @@ class ImportExportController extends SellerBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $userId = $this->userParentId;
@@ -732,8 +729,7 @@ class ImportExportController extends SellerBaseController
     public function updateInventory()
     {
         if (!$this->userPrivilege->canEditImportExport(0, true)) {
-            Message::addErrorMessage(Labels::getLabel('FRM_UNAUTHORIZED_ACCESS!', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('FRM_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $frm = $this->getInventoryUpdateForm($this->siteLangId);
         $post = FatApp::getPostedData();

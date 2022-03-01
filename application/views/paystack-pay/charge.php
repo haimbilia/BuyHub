@@ -55,7 +55,7 @@ if (null != $btn) {
             var json = $.parseJSON(res);
             if (1 > json.status) {
                 submitBtn.removeAttr('disabled');
-                fcom.displayErrorMessage(json.msg;
+                fcom.displayErrorMessage(json.msg);
                 return false;
             }
             $("#paymentFormElement-js").replaceWith(json.html);            

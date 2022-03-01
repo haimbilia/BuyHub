@@ -122,35 +122,35 @@ class SupplierController extends MyAppController
     public function register()
     {
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $frm = $this->getSellerRegistrationForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if ($post == false) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         if (!ValidateElement::username($post['user_username'])) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+            $msg = Labels::getLabel('ERR_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId);
             if (FatUtility::isAjaxCall()) {
-                FatUtility::dieWithError(Message::getHtml());
-            } else {
-                $this->registrationForm();
-                return;
+                FatUtility::dieWithError($msg);
             }
+
+            Message::addErrorMessage($msg);
+            FatApp::redirectUser(UrlHelper::generateUrl('Supplier', 'Account'));
+            return;
         }
 
         if (!ValidateElement::password($post['user_password'])) {
-            Message::addErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+            $msg = Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId);
             if (FatUtility::isAjaxCall()) {
-                FatUtility::dieWithError(Message::getHtml());
-            } else {
-                $this->registrationForm();
-                return;
+                FatUtility::dieWithError($msg);
             }
+            
+            Message::addErrorMessage($msg);
+            FatApp::redirectUser(UrlHelper::generateUrl('Supplier', 'Account'));
+            return;
         }
 
         $userObj = new User();
@@ -171,18 +171,16 @@ class SupplierController extends MyAppController
         $userObj->assignValues($post);
 
         if (!$userObj->save()) {
-            Message::addErrorMessage(Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
         }
 
         $active = FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
         $verify = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
 
         if (!$userObj->setLoginCredentials($post['user_username'], $post['user_email'], $post['user_password'], $active, $verify)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
         }
 
         $referrerCodeSignup = '';
@@ -221,9 +219,8 @@ class SupplierController extends MyAppController
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->notifyAdminRegistration($post, $this->siteLangId)) {
-                Message::addErrorMessage(Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
             }
         }
 
@@ -237,24 +234,21 @@ class SupplierController extends MyAppController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->userEmailVerification($post, $this->siteLangId)) {
-                Message::addErrorMessage(Labels::getLabel("ERR_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel("ERR_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
             }
         } else {
             if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
                 $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
                 if (!$userObj->userWelcomeEmailRegistration($post, $link, $this->siteLangId)) {
-                    Message::addErrorMessage(Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                     $db->rollbackTransaction();
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                 }
             }
         }
@@ -325,20 +319,17 @@ class SupplierController extends MyAppController
         $userId = $this->getRegisteredSupplierId();
 
         if (!$this->isRegisteredSupplierId($userId)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $frm = $this->getSupplierForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $phoneKey = $dialCode = '';
@@ -365,8 +356,7 @@ class SupplierController extends MyAppController
         }
 
         if (!empty($error_messages)) {
-            Message::addErrorMessage($error_messages);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($error_messages);
         }
 
         $reference_number = $userId . '-' . time();
@@ -384,8 +374,7 @@ class SupplierController extends MyAppController
 
         if (!$userObj->addSupplierRequestData($data, $this->siteLangId)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('ERR_DETAILS_NOT_SAVED', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_DETAILS_NOT_SAVED', $this->siteLangId));
         }
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
@@ -398,8 +387,7 @@ class SupplierController extends MyAppController
 
         if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel("ERR_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         //send notification to admin
@@ -413,8 +401,7 @@ class SupplierController extends MyAppController
 
         if (!Notification::saveNotifications($notificationData)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel("ERR_SELLER_APPROVAL_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_SELLER_APPROVAL_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         $db->commitTransaction();
@@ -431,16 +418,14 @@ class SupplierController extends MyAppController
         }
 
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $userObj = new User($userId);
         $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified'), false, false);
 
         if (false == $userdata) {
-            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (/* $userdata['credential_active'] == 1 &&  */$userdata['credential_verified'] == applicationConstants::YES) {

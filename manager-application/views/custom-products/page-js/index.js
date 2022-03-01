@@ -1,8 +1,6 @@
 
 $(function () {
-    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), { 'joinShop': 1, 'user_is_supplier': 1 }, '', function () {
-        clearSearch();
-    });
+    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), { 'joinShop': 1, 'user_is_supplier': 1 });
     requestStatusForm = function (recordId) {
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "requestStatusForm", [recordId]), "", function (t) {

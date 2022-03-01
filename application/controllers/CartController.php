@@ -910,7 +910,7 @@ class CartController extends MyAppController
         $this->_template->render(false, false, 'cart/_partial/cartSummary.php');
     }
 
-    public function clear(int $type = CART::TYPE_PRODUCT)
+    public function clear(int $type = Cart::TYPE_PRODUCT)
     {
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         if (1 > $loggedUserId) {

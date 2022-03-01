@@ -515,8 +515,7 @@ class HomeController extends MyAppController
         $this->updateSettingByCurrentLocation($countryCode);
 
         if (!$_SESSION['geo_location']) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
         }
         $this->set('msg', Labels::getLabel('SUC_Settings_with_your_current_location_setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

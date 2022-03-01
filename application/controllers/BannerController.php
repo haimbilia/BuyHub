@@ -50,7 +50,7 @@ class BannerController extends MyAppController
                         'pclick_cost' => $row['promotion_cpc'],
                         'pclick_session_id' => session_id(),
                     );
-                    FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, '', $promotionClickData);
+                    FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, [], $promotionClickData);
 
                     $clickId = FatApp::getDb()->getInsertId();
 
@@ -213,8 +213,7 @@ class BannerController extends MyAppController
     {
         $frameId = FatUtility::int($frameId);
         if (1 > $frameId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
         $this->set('frameId', $frameId);
         $this->_template->render(false, false);
