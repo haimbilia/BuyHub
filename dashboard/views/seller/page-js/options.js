@@ -20,6 +20,7 @@ $(document).ready(function () {
 	}
 
 	optionForm = function (optionId) {
+		optionId = optionId || $('.navTabsJs').data('optionId');
 		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
 			try {
@@ -62,10 +63,11 @@ $(document).ready(function () {
 		});
 	};
 
-	optionValueForm = function (optionId, id) {
+	optionValueForm = function (optionId, id = 0) {
+		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
 			fcom.removeLoader();
-			$(dv).html(t);
+			$.ykmodal(t);		
 			optionValueListing(optionId);
 		});
 	};
@@ -129,6 +131,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function (t) {
+			$('.navTabsJs').data('optionId', t.optionId);			
 			reloadList();
 			if (t.langId > 0) {
 				optionLangForm(t.optionId,t.langId)
