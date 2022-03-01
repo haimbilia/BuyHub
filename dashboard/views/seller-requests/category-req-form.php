@@ -36,7 +36,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
         </nav>
         <?php } ?>
     </div>
-    <div class="form-edit-body loaderContainerJs" id="brandReqFormJs">
+    <div class="form-edit-body loaderContainerJs" id="categoryReqFormJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
 

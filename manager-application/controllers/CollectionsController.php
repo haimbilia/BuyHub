@@ -114,8 +114,6 @@ class CollectionsController extends ListingBaseController
 
         $srch = Collections::getSearchObject(false, $this->siteLangId);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('c.collection_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -132,7 +130,6 @@ class CollectionsController extends ListingBaseController
             $srch->addCondition('collection_layout_type', '=', 'mysql_func_' . $collection_layout_type, 'AND', true);
         }
         $srch->addMultipleFields(array('c.*', 'c_l.collection_name'));
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
