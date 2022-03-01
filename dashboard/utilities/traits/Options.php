@@ -69,9 +69,8 @@ trait Options
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false === $post) {          
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $option_id = FatUtility::int($post['option_id']);
@@ -92,9 +91,7 @@ trait Options
         $post[$optionObj::tblFld('identifier')] = $post[$optionObj::tblFld('name')];
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Option_Identifier_already_exists', $this->siteLangId));
-            /* Message::addErrorMessage($optionObj->getError()); */
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Option_Identifier_already_exists', $this->siteLangId));
         }
 
         $option_id = ($option_id > 0) ? $option_id : $optionObj->getMainTableRecordId();
@@ -133,20 +130,17 @@ trait Options
         $option_id = FatUtility::int($post['option_id']);
 
         if ($option_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         if ($option_id > 0 && !UserPrivilege::canSellerEditOption($this->userParentId, $option_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         $frm = $this->getOptionLangForm($option_id, $lang_id);
         $post = $frm->getFormDataFromArray($post);
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false === $post) {   
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $recordObj = new Option($option_id);
@@ -186,9 +180,8 @@ trait Options
         $langId = FatUtility::int($langId);
         $autoFillLangData = FatUtility::int($autoFillLangData);
 
-        if (1 > $option_id || 1 > $langId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        if (1 > $option_id || 1 > $langId) {          
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         if(!UserPrivilege::canSellerEditOption($this->userParentId, $option_id)){
@@ -305,11 +298,8 @@ trait Options
     private function deleteOption($option_id)
     {
         $this->userPrivilege->canEditProductOptions(UserAuthentication::getLoggedUserId());
-        if ($option_id < 1 || empty($option_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($option_id < 1 || empty($option_id)) {            
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
  
         if(!UserPrivilege::canSellerEditOption($this->userParentId, $option_id)){
@@ -317,24 +307,17 @@ trait Options
         }       
 
         $optionObj = new Option($option_id);
-        if (!$optionObj->canRecordMarkDelete($option_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$optionObj->canRecordMarkDelete($option_id)) {            
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
-        if ($optionObj->isLinkedWithProduct($option_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_This_option_is_linked_with_product', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($optionObj->isLinkedWithProduct($option_id)) {           
+            FatUtility::dieJsonError(Labels::getLabel('MSG_This_option_is_linked_with_product', $this->siteLangId));
         }
 
         $optionObj->assignValues(array(Option::tblFld('deleted') => 1));
-        if (!$optionObj->save()) {
-            Message::addErrorMessage($optionObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$optionObj->save()) {          
+            FatUtility::dieJsonError($optionObj->getError());
         }
     }
 
