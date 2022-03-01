@@ -228,9 +228,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getSlideData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
@@ -243,9 +241,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getProductImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],
@@ -263,9 +259,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getUserImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_MINI_THUMB => [self::WIDTH => 40, self::HEIGHT => 40],
             self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 150],
@@ -278,9 +272,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getCustomProductImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_SMALL => [self::WIDTH => 150, self::HEIGHT => 150],
@@ -317,9 +309,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getShopBannerImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
@@ -334,8 +324,6 @@ class ImageDimension extends FatUtility
 
     public static function getPromotionMediaImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_PREVIEW => [self::WIDTH => 1298, self::HEIGHT => 600],
             self::VIEW_DEFAULT => [self::WIDTH => 1298, self::HEIGHT => 600]
@@ -374,9 +362,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getBrandImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
@@ -388,9 +374,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getEmailLogoImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 100, self::HEIGHT => 100],
@@ -400,8 +384,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getSocialFeedImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 120, self::HEIGHT => 80],
             self::VIEW_DEFAULT => [self::WIDTH => 240, self::HEIGHT => 160],
@@ -412,8 +395,6 @@ class ImageDimension extends FatUtility
 
     public static function getWaterImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
         ];
@@ -451,8 +432,6 @@ class ImageDimension extends FatUtility
 
     public static function getMobileLogoImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 82, self::HEIGHT => 268],
@@ -463,8 +442,6 @@ class ImageDimension extends FatUtility
 
     public static function getInvoiceLogoImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 37, self::HEIGHT => 168],
@@ -474,9 +451,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getCategoryCollectionBGImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
@@ -486,9 +461,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getCouponImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_NORMAL => [self::WIDTH => 120, self::HEIGHT => 120],
@@ -501,9 +474,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getMetaImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400]
         ];
@@ -512,9 +483,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getFirstPurchaseCouponImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_NORMAL => [self::WIDTH => 120, self::HEIGHT => 150],
@@ -555,9 +524,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getSocialPlatformImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 30, self::HEIGHT => 30]
@@ -568,9 +535,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getDisplayCollectionImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_HOME => [self::WIDTH => 76, self::HEIGHT => 92]
@@ -580,9 +545,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getDisplayCollectionBGImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
@@ -591,9 +554,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getBlogPostImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
@@ -606,9 +567,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getBatchProductImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
@@ -620,9 +579,6 @@ class ImageDimension extends FatUtility
 
     public static function getTestimonialImageData(string $sizeType = ''): array
     {
-
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
@@ -633,9 +589,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getCPageBackgroundImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 45],
             self::VIEW_COLLECTION_PAGE => [self::WIDTH => 45, self::HEIGHT => 41],
@@ -647,8 +601,6 @@ class ImageDimension extends FatUtility
 
     public static function getCBlockBackgroundImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 1300, self::HEIGHT => 400]
@@ -658,9 +610,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getShopCollectionImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_SHOP => [self::WIDTH => 610, self::HEIGHT => 343]
@@ -670,9 +620,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getPluginImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_ICON => [self::WIDTH => 30, self::HEIGHT => 30],
             self::VIEW_MINI_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
@@ -688,8 +636,6 @@ class ImageDimension extends FatUtility
 
     public static function getReviewImageData(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_ICON => [self::WIDTH => 30, self::HEIGHT => 30],
             self::VIEW_MINI_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
@@ -704,9 +650,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getBadgeIconImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
             self::VIEW_MINI => [self::WIDTH => 35, self::HEIGHT => 35]
@@ -715,9 +659,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getUserProfileImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_CROPED => [self::WIDTH => 230, self::HEIGHT => 230]
@@ -729,9 +671,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getBadgeRequestImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
             self::VIEW_MINI => [self::WIDTH => 35, self::HEIGHT => 35]
@@ -742,9 +682,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getCategoryImage(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_LARGE => [self::WIDTH => 400, self::HEIGHT => 400],
@@ -757,8 +695,6 @@ class ImageDimension extends FatUtility
 
     public static function getCategoryIcon(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_COLLECTION_PAGE => [self::WIDTH => 48, self::HEIGHT => 48],
@@ -769,9 +705,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getCategoryThumb(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
             self::VIEW_ICON => [self::WIDTH => 300, self::HEIGHT => 300],
@@ -783,9 +717,7 @@ class ImageDimension extends FatUtility
 
     public static function getCategorySellerBanner(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
-        $arr =  [
+       $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
             self::VIEW_ICON => [self::WIDTH => 1320, self::HEIGHT => 320]
         ];
@@ -795,9 +727,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getCategoryBanner(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {       
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
             self::VIEW_MEDIUM => [self::WIDTH => 600, self::HEIGHT => 150],
@@ -810,9 +740,7 @@ class ImageDimension extends FatUtility
     }
 
     public static function getAdminBadgeRequestImage(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 50, self::HEIGHT => 50],
         ];
@@ -822,9 +750,7 @@ class ImageDimension extends FatUtility
 
 
     public static function getBannerImageData(string $sizeType = ''): array
-    {
-        $sizeType = self::formatString($sizeType);
-
+    {        
         $arr =  [
             self::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT => [self::WIDTH => 1350, self::HEIGHT => 405],
             self::VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 338],
@@ -884,8 +810,6 @@ class ImageDimension extends FatUtility
 
     public static function getPushNotification(string $sizeType = ''): array
     {
-        $sizeType = self::formatString($sizeType);
-
         $arr =  [
             self::VIEW_DEFAULT => [self::WIDTH => 1000, self::HEIGHT => 563]
         ];
@@ -936,6 +860,8 @@ class ImageDimension extends FatUtility
         if (empty($sizeType)) {
             return $arr;
         }
+
+        $sizeType = self::formatString($sizeType);
 
         if (array_key_exists($sizeType, $arr)) {
             return $arr[$sizeType];
