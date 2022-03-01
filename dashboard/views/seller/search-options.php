@@ -81,6 +81,22 @@ foreach ($arrListing as $sn => $row) {
                 </i>',
                     true
                 );
+                $li = $ul->appendElement("li");
+                $li->appendElement(
+                    'a',
+                    array(
+                        'href'=> UrlHelper::generateUrl('optionValues', 'index', [$row['option_id']]),
+                        'class'=>'button small green', 'title'=>Labels::getLabel('LBL_OPTION_VALUES', $siteLangId)
+                    ),
+                    '<i class="icn">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#menu">
+                        </use>
+                    </svg>
+                </i>',
+                    true
+                );
 
                 $li = $ul->appendElement("li");
                 $li->appendElement(

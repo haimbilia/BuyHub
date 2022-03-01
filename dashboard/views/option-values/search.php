@@ -43,7 +43,7 @@
                     $li->appendElement('a', array(
                         'href' => 'javascript:void(0)',
                         'class' => 'button small green', 'title' => Labels::getLabel('LBL_EDIT', $langId),
-                        "onclick" => "optionValueForm(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
+                        "onclick" => "form(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ), '<svg class="svg" width="18" height="18">
         <use
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
@@ -53,7 +53,7 @@
                     $li = $ul->appendElement("li");
                     $li->appendElement('a', array(
                         'href' => "javascript:void(0)",
-                        'class' => 'button small green', 'title' => Labels::getLabel('LBL_DELETE', $langId), "onclick" => "deleteOptionValue(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
+                        'class' => 'button small green', 'title' => Labels::getLabel('LBL_DELETE', $langId), "onclick" => "deleteRecord(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ), '<i class="fa fa-trash"></i>', true);
                     break;
                 default:
@@ -68,11 +68,6 @@
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } ?>
 </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-
-    });
-</script>
 <script>
     $(document).ready(function() {
         $(".sortable--js tbody").sortable({

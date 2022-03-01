@@ -42,8 +42,10 @@ class ImageDimension extends FatUtility
     public const TYPE_CATEGORY_SELLER_BANNER = 39;
     public const TYPE_CATEGORY_BANNER = 40;
     public const TYPE_ADMIN_BADGE_REQUEST = 41;
-	 public const TYPE_PUSH_NOTIFICATION = 42;
+    public const TYPE_PUSH_NOTIFICATION = 42;
 
+    public const WIDTH = 'width';
+    public const HEIGHT = 'height';
 
     public const VIEW_DESKTOP = 'DESKTOP';
     public const VIEW_MOBILE = 'MOBILE';
@@ -81,7 +83,6 @@ class ImageDimension extends FatUtility
 
     public static function getData(int $type, $sizeType = '', $aspectRatioType = 1): array
     {
-
         $sizeType = strtoupper($sizeType);
 
         $imageDimensions = [];
@@ -210,149 +211,91 @@ class ImageDimension extends FatUtility
             case self::TYPE_ADMIN_BADGE_REQUEST:
                 $imageDimensions = self::getAdminBadgeRequestImage($sizeType);
                 break;
-			case self::TYPE_PUSH_NOTIFICATION:
+            case self::TYPE_PUSH_NOTIFICATION:
                 $imageDimensions = self::getPushNotification($sizeType);
-                break;	
+                break;
         }
 
-
-        if (empty($sizeType)) {
-            foreach ($imageDimensions as $key => $val) {
-                $imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val['width'], $val['height']);
-            }
-        } else {
-
-            $imageDimensions[$sizeType]['aspectRatio'] = self::getAspectRatio($imageDimensions['width'], $imageDimensions['height']);
+        if (!empty($sizeType)) {            
+            $imageDimensions[$sizeType]['aspectRatio'] = self::getAspectRatio($imageDimensions[self::WIDTH], $imageDimensions[self::HEIGHT]);
+            return $imageDimensions;
         }
 
-
+        foreach ($imageDimensions as $key => $val) {
+            $imageDimensions[$key]['aspectRatio'] = self::getAspectRatio($val[self::WIDTH], $val[self::HEIGHT]);
+        }
 
         return $imageDimensions;
     }
 
-
     public static function getSlideData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {       
         $arr =  [
-            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
-            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
+            self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
+            self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 100],
         ];
 
-
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DESKTOP];
-            }
-            return $arr[$sizeType];
-        }
-
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
     }
 
 
     public static function getProductImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_MINI => ['width' => 50, 'height' => 50],
-            self::VIEW_EXTRA_SMALL => ['width' => 60, 'height' => 60],
-            self::VIEW_SMALL => ['width' => 230, 'height' => 230],
-            self::VIEW_MEDIUM => ['width' => 500, 'height' => 500],
-            self::VIEW_CLAYOUT2 => ['width' => 398, 'height' => 398],
-            self::VIEW_CLAYOUT3 => ['width' => 230, 'height' => 230],
-            self::VIEW_ORIGINAL => ['width' => 1500, 'height' => 1500],
-            self::VIEW_FB_RECOMMEND => ['width' => 1200, 'height' => 630],
-            self::VIEW_DEFAULT => ['width' => 400, 'height' => 400],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],
+            self::VIEW_EXTRA_SMALL => [self::WIDTH => 60, self::HEIGHT => 60],
+            self::VIEW_SMALL => [self::WIDTH => 230, self::HEIGHT => 230],
+            self::VIEW_MEDIUM => [self::WIDTH => 500, self::HEIGHT => 500],
+            self::VIEW_CLAYOUT2 => [self::WIDTH => 398, self::HEIGHT => 398],
+            self::VIEW_CLAYOUT3 => [self::WIDTH => 230, self::HEIGHT => 230],
+            self::VIEW_ORIGINAL => [self::WIDTH => 1500, self::HEIGHT => 1500],
+            self::VIEW_FB_RECOMMEND => [self::WIDTH => 1200, self::HEIGHT => 630],
+            self::VIEW_DEFAULT => [self::WIDTH => 400, self::HEIGHT => 400],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getUserImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-            self::VIEW_MINI_THUMB => ['width' => 40, 'height' => 40],
-            self::VIEW_THUMB => ['width' => 150, 'height' => 150],
-            self::VIEW_MINI => ['width' => 70, 'height' => 70],
-            self::VIEW_SMALL => ['width' => 200, 'height' => 200],
-            self::VIEW_MEDIUM => ['width' => 500, 'height' => 500],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 40, self::HEIGHT => 40],
+            self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 150],
+            self::VIEW_MINI => [self::WIDTH => 70, self::HEIGHT => 70],
+            self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_MEDIUM => [self::WIDTH => 500, self::HEIGHT => 500],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getCustomProductImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SMALL => ['width' => 150, 'height' => 150],
-            self::VIEW_MEDIUM => ['width' => 542, 'height' => 480],
-            self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SMALL => [self::WIDTH => 150, self::HEIGHT => 150],
+            self::VIEW_MEDIUM => [self::WIDTH => 542, self::HEIGHT => 480],
+            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getShopLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
+        $sizeType = self::formatString($sizeType);
 
-
-        
         $arr[AttachedFile::RATIO_TYPE_RECTANGULAR] =  [
-            
-          
-            self::VIEW_THUMB => ['width' => 62, 'height' => 35],
-            self::VIEW_DEFAULT => ['width' => 500, 'height' => 280],
+            self::VIEW_THUMB => [self::WIDTH => 62, self::HEIGHT => 35],
+            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 280],
         ];
+
         $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
-        
-            self::VIEW_THUMB => ['width' => 200, 'height' => 200],
-            self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
         ];
 
 
@@ -364,100 +307,51 @@ class ImageDimension extends FatUtility
         }
 
         return $arr[$aspectRatioType];
-
-
-
-       /*  $arr =  [
-            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
-
-        ]; */
-
-        /* if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr; */
     }
 
     public static function getShopBannerImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {       
         $arr =  [
-            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
-            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
-            self::VIEW_WIDE => ['width' => 1320, 'height' => 320],
-
-
+            self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
+            self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_WIDE => [self::WIDTH => 1320, self::HEIGHT => 320]
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
 
     public static function getPromotionMediaImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_PREVIEW => ['width' => 1298, 'height' => 600],
-            self::VIEW_DEFAULT => ['width' => 1298, 'height' => 600],
-
-
-
+            self::VIEW_PREVIEW => [self::WIDTH => 1298, self::HEIGHT => 600],
+            self::VIEW_DEFAULT => [self::WIDTH => 1298, self::HEIGHT => 600]
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getBrandLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+        $sizeType = self::formatString($sizeType);
 
         $arr[AttachedFile::RATIO_TYPE_RECTANGULAR] =  [
-            
-            self::VIEW_MINI_THUMB => ['width' => 62, 'height' => 35],
-            self::VIEW_THUMB => ['width' => 62, 'height' => 35],
-            self::VIEW_LISTING_PAGE => ['width' => 500, 'height' => 280],
-            self::VIEW_DEFAULT => ['width' => 500, 'height' => 280],
-        ];
-        $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
-        
-            self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 42],
-            self::VIEW_THUMB => ['width' => 61, 'height' => 61],
-            self::VIEW_LISTING_PAGE => ['width' => 530, 'height' => 530],
-            self::VIEW_DEFAULT => ['width' => 500, 'height' => 500],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 62, self::HEIGHT => 35],
+            self::VIEW_THUMB => [self::WIDTH => 62, self::HEIGHT => 35],
+            self::VIEW_LISTING_PAGE => [self::WIDTH => 500, self::HEIGHT => 280],
+            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 280],
         ];
 
-     
+        $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
+
+            self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 42],
+            self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
+            self::VIEW_LISTING_PAGE => [self::WIDTH => 530, self::HEIGHT => 530],
+            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
+        ];
+
         if (!empty($sizeType)) {
             if (!array_key_exists($sizeType, $arr[$aspectRatioType])) {
                 return $arr[$aspectRatioType][self::VIEW_DEFAULT];
@@ -469,98 +363,53 @@ class ImageDimension extends FatUtility
     }
 
     public static function getBrandImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
-            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
+            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
     }
 
     public static function getEmailLogoImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_DEFAULT => ['width' => 100, 'height' => 100],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 100, self::HEIGHT => 100],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getSocialFeedImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
+    {        
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 120, 'height' => 80],
-            self::VIEW_DEFAULT => ['width' => 240, 'height' => 160],
+            self::VIEW_THUMB => [self::WIDTH => 120, self::HEIGHT => 80],
+            self::VIEW_DEFAULT => [self::WIDTH => 240, self::HEIGHT => 160],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getWaterImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getAppleTouchIconImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+        $sizeType = self::formatString($sizeType);
 
         $arr =  [
-            self::VIEW_MINI => ['width' => 72, 'height' => 72],
-            self::VIEW_SMALL => ['width' => 114, 'height' => 114],
+            self::VIEW_MINI => [self::WIDTH => 72, self::HEIGHT => 72],
+            self::VIEW_SMALL => [self::WIDTH => 114, self::HEIGHT => 114],
         ];
 
 
@@ -570,7 +419,7 @@ class ImageDimension extends FatUtility
                 $arr_size = explode('-', $sizeType);
                 if (count($arr_size) > 0) {
                     list($w, $h) = $arr_size;
-                    $arr[$sizeType] = array('width' => $w, 'height' => $h);
+                    $arr[$sizeType] = array(self::WIDTH => $w, self::HEIGHT => $h);
                     return $arr[$sizeType];
                 } else {
                     return $arr;
@@ -584,151 +433,75 @@ class ImageDimension extends FatUtility
 
     public static function getMobileLogoImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_DEFAULT => ['width' => 82, 'height' => 268],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 82, self::HEIGHT => 268],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getInvoiceLogoImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_DEFAULT => ['width' => 37, 'height' => 168],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 37, self::HEIGHT => 168],
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getCategoryCollectionBGImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
     public static function getCouponImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_NORMAL => ['width' => 120, 'height' => 120],
-            self::VIEW_DEFAULT => ['width' => 600, 'height' => 400],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_NORMAL => [self::WIDTH => 120, self::HEIGHT => 120],
+            self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400],
 
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
 
     public static function getMetaImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {        
         $arr =  [
-
-            self::VIEW_DEFAULT => ['width' => 600, 'height' => 400],
-
+            self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400]
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getFirstPurchaseCouponImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_NORMAL => ['width' => 120, 'height' => 150],
-            self::VIEW_DEFAULT => ['width' => 600, 'height' => 400],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_NORMAL => [self::WIDTH => 120, self::HEIGHT => 150],
+            self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400],
 
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
-
-
-
 
     public static function getFaviconImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+        $sizeType = self::formatString($sizeType);
 
         $arr =  [
-            self::VIEW_MINI => ['width' => 72, 'height' => 72],
-            self::VIEW_SMALL => ['width' => 114, 'height' => 114],
+            self::VIEW_MINI => [self::WIDTH => 72, self::HEIGHT => 72],
+            self::VIEW_SMALL => [self::WIDTH => 114, self::HEIGHT => 114],
         ];
 
 
@@ -738,7 +511,7 @@ class ImageDimension extends FatUtility
                 $arr_size = explode('-', $sizeType);
                 if (count($arr_size) > 0) {
                     list($w, $h) = $arr_size;
-                    $arr[$sizeType] = array('width' => $w, 'height' => $h);
+                    $arr[$sizeType] = array(self::WIDTH => $w, self::HEIGHT => $h);
                     return $arr[$sizeType];
                 } else {
                     return $arr;
@@ -752,543 +525,298 @@ class ImageDimension extends FatUtility
 
 
     public static function getSocialPlatformImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
-            self::VIEW_DEFAULT => ['width' => 30, 'height' => 30],
-
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 30, self::HEIGHT => 30]
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
 
     public static function getDisplayCollectionImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_HOME => ['width' => 76, 'height' => 92],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_HOME => [self::WIDTH => 76, self::HEIGHT => 92]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getDisplayCollectionBGImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getBlogPostImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SMALL => ['width' => 200, 'height' => 200],
-            self::VIEW_LAYOUT1 => ['width' => 1350, 'height' => 759],
-            self::VIEW_LAYOUT2 => ['width' => 645, 'height' => 363],
-            self::VIEW_FEATURED => ['width' => 510, 'height' => 287],
-            self::VIEW_DEFAULT => ['width' => 400, 'height' => 400],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_LAYOUT1 => [self::WIDTH => 1350, self::HEIGHT => 759],
+            self::VIEW_LAYOUT2 => [self::WIDTH => 645, self::HEIGHT => 363],
+            self::VIEW_FEATURED => [self::WIDTH => 510, self::HEIGHT => 287],
+            self::VIEW_DEFAULT => [self::WIDTH => 400, self::HEIGHT => 400]
         ];
-
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getBatchProductImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SMALL => ['width' => 200, 'height' => 200],
-            self::VIEW_DEFAULT => ['width' => 400, 'height' => 400],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_DEFAULT => [self::WIDTH => 400, self::HEIGHT => 400]
         ];
 
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getTestimonialImageData(string $sizeType = ''): array
     {
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_THUMB => ['width' => 61, 'height' => 61],
-            self::VIEW_MINI_THUMB => ['width' => 42, 'height' => 52],
-            self::VIEW_DEFAULT => ['width' => 118, 'height' => 276],
-
+            self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
+            self::VIEW_DEFAULT => [self::WIDTH => 118, self::HEIGHT => 276]
         ];
 
-
-        if (!empty($sizeType)) {
-            if (!array_key_exists($sizeType, $arr)) {
-                return $arr[self::VIEW_DEFAULT];
-            }
-
-            return $arr[$sizeType];
-        }
-
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getCPageBackgroundImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {       
         $arr =  [
-            self::VIEW_THUMB => ['width' => 150, 'height' => 45],
-            self::VIEW_COLLECTION_PAGE => ['width' => 45, 'height' => 41],
-			self::VIEW_DEFAULT => ['width' => 1300, 'height' => 400],
+            self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 45],
+            self::VIEW_COLLECTION_PAGE => [self::WIDTH => 45, self::HEIGHT => 41],
+            self::VIEW_DEFAULT => [self::WIDTH => 1300, self::HEIGHT => 400],
         ];
-
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
 
     public static function getCBlockBackgroundImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-			self::VIEW_DEFAULT => ['width' => 1300, 'height' => 400],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 1300, self::HEIGHT => 400]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
     public static function getShopCollectionImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SHOP => ['width' => 610, 'height' => 343],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SHOP => [self::WIDTH => 610, self::HEIGHT => 343]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_SHOP, $sizeType);
     }
 
     public static function getPluginImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_ICON => ['width' => 30, 'height' => 30],
-            self::VIEW_MINI_THUMB => ['width' => 61, 'height' => 61],
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SMALL => ['width' => 200, 'height' => 200],
-            self::VIEW_MEDIUM => ['width' => 250, 'height' => 250],
-            self::VIEW_LARGE => ['width' => 350, 'height' => 350],
+            self::VIEW_ICON => [self::WIDTH => 30, self::HEIGHT => 30],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_MEDIUM => [self::WIDTH => 250, self::HEIGHT => 250],
+            self::VIEW_LARGE => [self::WIDTH => 350, self::HEIGHT => 350],
 
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_LARGE, $sizeType);
     }
 
     public static function getReviewImageData(string $sizeType = ''): array
     {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-            self::VIEW_ICON => ['width' => 30, 'height' => 30],
-            self::VIEW_MINI_THUMB => ['width' => 61, 'height' => 61],
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_SMALL => ['width' => 200, 'height' => 200],
-            self::VIEW_MEDIUM => ['width' => 250, 'height' => 250],
-            self::VIEW_LARGE => ['width' => 500, 'height' => 500],
+            self::VIEW_ICON => [self::WIDTH => 30, self::HEIGHT => 30],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
+            self::VIEW_MEDIUM => [self::WIDTH => 250, self::HEIGHT => 250],
+            self::VIEW_LARGE => [self::WIDTH => 500, self::HEIGHT => 500],
 
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_LARGE, $sizeType);
     }
 
     public static function getBadgeIconImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 60, 'height' => 60],
-            self::VIEW_MINI => ['width' => 35, 'height' => 35],
-
+            self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
+            self::VIEW_MINI => [self::WIDTH => 35, self::HEIGHT => 35]
         ];
-
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getUserProfileImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_CROPED => ['width' => 230, 'height' => 230],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_CROPED => [self::WIDTH => 230, self::HEIGHT => 230]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
 
     public static function getBadgeRequestImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 60, 'height' => 60],
-            self::VIEW_MINI => ['width' => 35, 'height' => 35],
-
+            self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
+            self::VIEW_MINI => [self::WIDTH => 35, self::HEIGHT => 35]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
     public static function getCategoryImage(string $sizeType = ''): array
-    {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_LARGE => ['width' => 400, 'height' => 400],
-            self::VIEW_COLLECTION_PAGE => ['width' => 45, 'height' => 41],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_LARGE => [self::WIDTH => 400, self::HEIGHT => 400],
+            self::VIEW_COLLECTION_PAGE => [self::WIDTH => 45, self::HEIGHT => 41]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
     public static function getCategoryIcon(string $sizeType = ''): array
     {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 100, 'height' => 100],
-            self::VIEW_COLLECTION_PAGE => ['width' => 48, 'height' => 48],
-			 self::VIEW_DEFAULT => ['width' => 60, 'height' => 60],
-
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_COLLECTION_PAGE => [self::WIDTH => 48, self::HEIGHT => 48],
+            self::VIEW_DEFAULT => [self::WIDTH => 60, self::HEIGHT => 60]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getCategoryThumb(string $sizeType = ''): array
-    {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 60, 'height' => 60],
-            self::VIEW_ICON => ['width' => 300, 'height' => 300],
-			self::VIEW_DEFAULT => ['width' => 300, 'height' => 300],
+            self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
+            self::VIEW_ICON => [self::WIDTH => 300, self::HEIGHT => 300],
+            self::VIEW_DEFAULT => [self::WIDTH => 300, self::HEIGHT => 300],
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getCategorySellerBanner(string $sizeType = ''): array
     {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-        $arr =  [
-
-            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
-            self::VIEW_ICON => ['width' => 1320, 'height' => 320],
-
+       $arr =  [
+            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_ICON => [self::WIDTH => 1320, self::HEIGHT => 320]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
     public static function getCategoryBanner(string $sizeType = ''): array
-    {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {       
         $arr =  [
-
-            self::VIEW_THUMB => ['width' => 250, 'height' => 100],
-            self::VIEW_MEDIUM => ['width' => 600, 'height' => 150],
-            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 500],
+            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_MEDIUM => [self::WIDTH => 600, self::HEIGHT => 150],
+            self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getAdminBadgeRequestImage(string $sizeType = ''): array
-    {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
+    {        
         $arr =  [
-            self::VIEW_THUMB => ['width' => 50, 'height' => 50],
+            self::VIEW_THUMB => [self::WIDTH => 50, self::HEIGHT => 50],
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
 
     public static function getBannerImageData(string $sizeType = ''): array
-    {
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
-
+    {        
         $arr =  [
-
-            self::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT => ['width' => 1350, 'height' => 405],
-            self::VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT => ['width' => 600, 'height' => 338],
-            self::VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT => ['width' => 600, 'height' => 198],
-            self::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT => ['width' => 600, 'height' => 198],
-            self::VIEW_THUMB => ['width' => 200, 'height' => 50],
-            self::VIEW_MINI_THUMB => ['width' => 52, 'height' => 42],
-
+            self::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT => [self::WIDTH => 1350, self::HEIGHT => 405],
+            self::VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 338],
+            self::VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 198],
+            self::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 198],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 50],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 52, self::HEIGHT => 42]
         ];
 
-
-
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
 
     public static function getBannerData(string $sizeType = '', $layout = ''): array
     {
-        $sizeType = strtoupper($sizeType);
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
+        $sizeType = self::formatString($sizeType);
 
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT1) {
             $arr =  [
-                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
-                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-                self::VIEW_THUMB => ['width' => 200, 'height' => 66],
+                self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
+                self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 66],
             ];
         }
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT2) {
             $arr =  [
-                self::VIEW_DESKTOP => ['width' => 800, 'height' => 600],
-                self::VIEW_MOBILE => ['width' => 800, 'height' => 600],
-                self::VIEW_TABLET => ['width' => 800, 'height' => 600],
-                self::VIEW_THUMB => ['width' => 200, 'height' => 150],
+                self::VIEW_DESKTOP => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_MOBILE => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_TABLET => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
             ];
         }
 
         if (empty($layout)) {
             $arr =  [
-                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
-                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+                self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
+                self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
 
             ];
         }
 
 
         if (!empty($sizeType)) {
-            $arr[$sizeType]['aspectRatio'] = self::getAspectRatio($arr[$sizeType]['width'], $arr[$sizeType]['height']);
+            $arr[$sizeType]['aspectRatio'] = self::getAspectRatio($arr[$sizeType][self::WIDTH], $arr[$sizeType][self::HEIGHT]);
             return $arr[$sizeType];
         }
         foreach ($arr as $key => $val) {
-            $arr[$key]['aspectRatio'] = self::getAspectRatio($arr[$key]['width'], $arr[$key]['height']);
+            $arr[$key]['aspectRatio'] = self::getAspectRatio($arr[$key][self::WIDTH], $arr[$key][self::HEIGHT]);
         }
 
-        $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP]['width'], $arr[self::VIEW_DESKTOP]['height']);
+        $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP][self::WIDTH], $arr[self::VIEW_DESKTOP][self::HEIGHT]);
         return $arr;
     }
 
-
-
-	public static function getPushNotification(string $sizeType = ''): array
+    public static function getPushNotification(string $sizeType = ''): array
     {
-
-
-        if (substr($sizeType, 0, 4) == 'webp') {
-            $sizeType = substr($sizeType, 4);
-        }
-
         $arr =  [
-
-            self::VIEW_DEFAULT => ['width' => 1000, 'height' => 563],
-           
+            self::VIEW_DEFAULT => [self::WIDTH => 1000, self::HEIGHT => 563]
         ];
 
-        if (!empty($sizeType)) {
-            return $arr[$sizeType];
-        }
-
-        return $arr;
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
-	
-	
-	
 
     public static function getAspectRatio(int $width, int $height)
     {
@@ -1305,7 +833,6 @@ class ImageDimension extends FatUtility
         return $arr =  [
             '1' => '1:1',
             '2' => '16:9'
-
         ];
     }
 
@@ -1313,11 +840,34 @@ class ImageDimension extends FatUtility
     {
         $sizetypes = self::getData($type);
 
-        return  $arr =  [
+        return  [
             self::VIEW_DESKTOP => $sizetypes[self::VIEW_DESKTOP],
             self::VIEW_MOBILE => $sizetypes[self::VIEW_MOBILE],
-            self::VIEW_TABLET => $sizetypes[self::VIEW_TABLET],
-
+            self::VIEW_TABLET => $sizetypes[self::VIEW_TABLET]
         ];
+    }
+
+    private static function formatString($sizeType)
+    {
+        $sizeType = strtoupper($sizeType);
+        if (substr($sizeType, 0, 4) == 'WEBP') {
+            $sizeType = substr($sizeType, 4);
+        }
+        return $sizeType;
+    }
+
+    private static function returnData($arr, $defaultMode, $sizeType = '')
+    {
+        if (empty($sizeType)) {
+            return $arr;
+        }
+
+        $sizeType = self::formatString($sizeType);
+
+        if (array_key_exists($sizeType, $arr)) {
+            return $arr[$sizeType];
+        }
+
+        return $arr[$defaultMode];
     }
 }
