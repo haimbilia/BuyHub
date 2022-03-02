@@ -101,6 +101,11 @@ if ($printData) {
         fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {});
     }
 
+    abc = function(e){
+        console.log(e);
+        e.detail.tagify.dropdown.hide();
+    };
+
     getProducts = function(e) {
         var keyword = e.detail.value;
         var element = e.detail.tagify.DOM.originalInput;
@@ -130,7 +135,7 @@ if ($printData) {
             tagify = new Tagify(element, {
                 whitelist: JSON.parse(element.value),
                 dropdown: {
-                    position: 'text',
+                    position: 'input',
                     enabled: 0 // show suggestions dropdown after 1 typed character
                 },
                 enforceWhitelist: true,
@@ -147,7 +152,7 @@ if ($printData) {
                         })
                     }
                 }
-            }).on('input', getProducts).on('focus', getProducts).on('dropdown:select', bindProduct);
+            }).on('input', getProducts).on('focus', getProducts).on('dropdown:select', bindProduct).on('dropdown:hide', abc);
         });
     };
 
