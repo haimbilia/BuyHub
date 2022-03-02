@@ -99,15 +99,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                                 </use>
                             </svg>
                         </i>', true);
-
-                            $li = $ul->appendElement("li");
-                            $li->appendElement("a", array('title' => Labels::getLabel('LBL_Product_Images', $siteLangId), 'onclick' => 'customProductImages(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="icn">
-                            <svg class="svg" width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#images">
-                                </use>
-                            </svg>
-                        </i>', true);
+                         
                         }
 
                         if ($canEditShipProfile && $row['product_added_by_admin_id'] && $row['psbs_user_id'] && $row['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {

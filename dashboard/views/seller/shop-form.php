@@ -38,12 +38,12 @@ $btnSubmit = $shopFrm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 ?>
 <div class="card-body ">
-    <?php echo $shopFrm->getFormHtml(); ?>
-    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+    <?php echo $shopFrm->getFormHtml(); ?> 
+    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)  && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))  ) { ?>
         <div class="g-map" id="map"></div>
     <?php } ?>
 </div>
-<?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+<?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) ) { ?>
     <script>
         var lat = (!$('#lat').val()) ? 0 : $('#lat').val();
         var lng = (!$('#lng').val()) ? 0 : $('#lng').val();

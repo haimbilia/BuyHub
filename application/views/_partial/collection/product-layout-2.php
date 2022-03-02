@@ -27,7 +27,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
 
                     <?php $layoutClass = 'product-item';
                     $displayProductNotAvailableLable = false;
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                         $displayProductNotAvailableLable = true;
                     }
                     include('product-layout-1-list.php'); ?>
