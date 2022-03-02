@@ -131,10 +131,10 @@ var fcom = {
             fcom.closeProcessing(processingClass);
             fcom.removeLoader();
             if (ans.status != 1) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 return;
             }
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             fn(ans);
         }, o);
     },

@@ -24,10 +24,10 @@ $(document).ready(function () {
 
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "sendResetPasswordLink", [user]), '', function (t) {
             if (0 == t.status) {
-                $.ykmsg.error(t.errorMsg);
+                fcom.displayErrorMessage(t.errorMsg);
                 return false;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
         });
     };
 

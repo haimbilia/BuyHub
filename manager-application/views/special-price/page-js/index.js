@@ -55,7 +55,7 @@ $(document).ready(function () {
             value = parseFloat(value);
             if (Number.isNaN(value)) {
                 obj.text(formattedValue);
-                $.ykmsg.error(langLbl.notANumber);
+                fcom.displayErrorMessage(langLbl.notANumber);
                 return;
             }
             oldValue = parseFloat(oldValue);
@@ -74,7 +74,7 @@ $(document).ready(function () {
                 fcom.closeProcessing();
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {

@@ -35,7 +35,7 @@ $(document).ready(function () {
 			controllerName = 'AbandonedCart';
 
 			fcom.removeLoader();
-			$.ykmsg.success(t.msg);
+			fcom.displaySuccessMessage(t.msg);
 			$.ykmodal.close();
 			reloadList();
 

@@ -115,7 +115,7 @@
                 $('#loader-js').html(fcom.getLoader());
             },
             success: function (ans) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 $("#modalBoxJs").modal("hide");
                 profileInfoForm();
             },

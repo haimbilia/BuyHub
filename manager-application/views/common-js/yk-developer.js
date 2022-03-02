@@ -109,7 +109,7 @@ $(function () {
         },
 
         displayErrorMessage: function (msg) {
-            $.ykmsg.close();
+            $.ykmsg.close();            
             $.ykmsg.error(msg);
         },
 
@@ -339,7 +339,7 @@ $(function () {
                             "-" +
                             iti.getSelectedCountryData().iso2;
                         if ($('input[name="' + elementName + '"]').length < 1) {
-                            $.ykmsg.error($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
+                            fcom.displayErrorMessage($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
                             return;
                         }
                         $('input[name="' + elementName + '"]').val(dCode);
@@ -549,7 +549,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 );
             });
         } else {
-            $.ykmsg.error(
+            fcom.displayErrorMessage(
                 "Geocode was not successful for the following reason: " + status
             );
         }

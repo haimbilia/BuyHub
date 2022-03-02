@@ -96,7 +96,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
     checkControllerName = function() {
         if ("undefined" == typeof controllerName || "" == controllerName) {
-            $.ykmsg.error(langLbl.controllerNameRequired);
+            fcom.displayErrorMessage(langLbl.controllerNameRequired);
             return false;
         }
         return true;
@@ -323,7 +323,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
         if (1 > recordId) {
             $(obj).prop("checked", 1 == oldStatus);
-            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
         }
@@ -335,14 +335,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
-                    $.ykmsg.success(ans.msg);
+                    fcom.displaySuccessMessage(ans.msg);
                     $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status });
                     if ("" != callback) {
                         eval(callback);
                     }
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                 }
                 fcom.removeLoader();
             }
@@ -423,7 +423,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
 
     formAction = function(frm, callback) {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
-            $.ykmsg.error(langLbl.atleastOneRecord);
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return false;
         }
 
@@ -445,7 +445,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
     toggleBulkStatues = function(status, msg = "") {
         var element = "form.actionButtonsJs";
         if (1 > $(element).length) {
-            $.ykmsg.error(langLbl.actionButtonsClass);
+            fcom.displayErrorMessage(langLbl.actionButtonsClass);
             return false;
         }
         /* msg = "" == msg ? langLbl.confirmUpdateStatus : msg;
@@ -614,10 +614,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
             success: function(ans) {
                 fcom.removeLoader();
                 if (ans.status == 0) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
@@ -639,7 +639,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
                 fcom.removeLoader();
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                $.ykmsg.error(
+                fcom.displayErrorMessage(
                     thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
                 );
             },

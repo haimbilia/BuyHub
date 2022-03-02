@@ -10,9 +10,9 @@
 		fcom.updateWithAjax(fcom.makeUrl("adminGuest", "resetPasswordSubmit"), fcom.frmData(frm), function (t) {
 			if (t.status == 1) {
 				fcom.waitAndRedirect(t.msg, fcom.makeUrl('adminGuest', 'loginForm'), 2000);
-				$.ykmsg.success(t.msg);
+				fcom.displaySuccessMessage(t.msg);
 			} else {
-				$.ykmsg.error(t.msg);
+				fcom.displayErrorMessage(t.msg);
 			}
 		});
 		return false;
