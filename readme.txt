@@ -518,6 +518,7 @@ Updates/Fixes :
     => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
     => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
+    => 062851 -	Admin UI: "card-body" is refreshing while clicking on the dropdown option on the dashboard and while clicking on the shop's name admin is navigating to the same page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
