@@ -18,7 +18,7 @@
                                 <div class="col-lg-4 col-md-6 mb-3">
                                     <div class="wishlists">
                                         <div class="wishlists__head">
-                                            <span class="item__title">
+                                            <span class="product-profile__title">
                                                 <?php echo (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] == UserWishList::TYPE_DEFAULT_WISHLIST) ? Labels::getLabel('LBL_Default_list', $siteLangId) : $wishlist['uwlist_title']; ?></span>
                                             <?php if ((!isset($wishlist['uwlist_type']) || (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] != UserWishList::TYPE_FAVOURITE)) && $wishlist['uwlist_type'] != UserWishList::TYPE_DEFAULT_WISHLIST) { ?>
                                                 <a href="javascript:void(0)" onclick="deleteWishList(<?php echo $wishlist['uwlist_id']; ?>);" class="icons-wrapper"><i class="icn shop"><svg class="svg">

@@ -36,13 +36,13 @@
                             <tr>
                                 <td><?php echo FatDate::format($threadDetails["thread_start_date"], false); ?> </td>
                                 <td>
-                                    <div class="item__description">
+                                    <div class="product-profile__description">
                                         <?php if ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_ORDER_PRODUCT) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["op_invoice_number"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["op_invoice_number"]; ?></span>
                                         <?php } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["shop_name"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["shop_name"]; ?></span>
                                         <?php } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_PRODUCT) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["selprod_title"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["selprod_title"]; ?></span>
                                         <?php } ?>
                                     </div>
                                 </td>

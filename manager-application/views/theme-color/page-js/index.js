@@ -36,7 +36,7 @@ $(document).ready(function () {
                 });
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                fcom.displayErrorMessage(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
 
@@ -160,7 +160,7 @@ $(document).ready(function () {
     getVariants = function (e) {
         var fontName = $("input[name='CONF_THEME_FONT_FAMILY']").val();
         if ('' == fontName) {
-            $.ykmsg.error(langLbl.selectFont);
+            fcom.displayErrorMessage(langLbl.selectFont);
             return false;
         }
 

@@ -519,6 +519,8 @@ Updates/Fixes :
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
     => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
     => 062851 -	Admin UI: "card-body" is refreshing while clicking on the dropdown option on the dashboard and while clicking on the shop's name admin is navigating to the same page
+    => 062610 - Admin UI: Unavailable pointer is not showing on the banner listing section and sr. no. is not showing correctly on the import instruction page
+    => 062603 - Admin UI: Spacing is not consistent between the footer section and last field while opening the drawer
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

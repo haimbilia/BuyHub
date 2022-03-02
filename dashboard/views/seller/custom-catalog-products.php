@@ -41,22 +41,22 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="replaced">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <?php
-                                    $submitFld = $frmSearchCustomCatalogProducts->getField('btn_submit');
-                                    $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
-                                    $fldClear = $frmSearchCustomCatalogProducts->getField('btn_clear');
-                                    $fldClear->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <?php
+                                $submitFld = $frmSearchCustomCatalogProducts->getField('btn_submit');
+                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
-                                    echo $frmSearchCustomCatalogProducts->getFormHtml();
-                                    ?>
-                                    <?php echo $frmSearchCustomCatalogProducts->getExternalJS(); ?>
-                                </div>
+                                $fldClear = $frmSearchCustomCatalogProducts->getField('btn_clear');
+                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
+
+                                echo $frmSearchCustomCatalogProducts->getFormHtml();
+                                ?>
+                                <?php echo $frmSearchCustomCatalogProducts->getExternalJS(); ?>
                             </div>
                         </div>
+
 
                     </div>
                 </div>

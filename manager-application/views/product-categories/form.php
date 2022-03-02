@@ -67,7 +67,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             var prodCatId = $("input[name='prodcat_id']").val();
             if (rt_id == '') {
                 if (1 > canEditRating) {
-                    $.ykmsg.error(ratingEditErr);
+                    fcom.displayErrorMessage(ratingEditErr);
                     e.detail.tag.remove();
                     return;
                 }

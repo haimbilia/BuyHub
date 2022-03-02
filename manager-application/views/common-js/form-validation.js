@@ -571,6 +571,6 @@
     };
 
     checkUniqueErrorNotify = function (caption, value) {
-        $.ykmsg.error(caption + " '" + value + "' " + langLbl.isNotAvailable);
+        fcom.displayErrorMessage(caption + " '" + value + "' " + langLbl.isNotAvailable);
     };
 })();

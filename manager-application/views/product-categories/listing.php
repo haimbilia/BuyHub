@@ -88,9 +88,9 @@ echo isset($pagination) ? html_entity_decode($pagination) : '';
                     fcom.closeProcessing();
                     var ans = JSON.parse(res);
                     if (ans.status == 1) {
-                        $.ykmsg.success(ans.msg);
+                        fcom.displaySuccessMessage(ans.msg);
                     } else {
-                        $.ykmsg.error(ans.msg);
+                        fcom.displayErrorMessage(ans.msg);
                     }
                 });
             }

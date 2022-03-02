@@ -17,164 +17,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
 
     <div class="content-body">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card" style="display:none;">
-                    <div class="card-head border-0">
-                        <h5 class="card-title">
-                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
-
-                </div>
-                <div class="card">
-                    <div class="card-head border-0">
-                        <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
-                        </h5> <?php if (count($user_listing) > 0) {
-                                ?> <div class="action">
-                                <a href="<?php echo UrlHelper::generateUrl('affiliate', 'referredByMe'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
-                            </div> <?php
-                                } ?>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap">
-                            <table class="table">
-                                <thead>
-                                    <tr class="">
-                                        <th width="40%">
-                                            <?php echo Labels::getLabel('LBL_User_Detail', $siteLangId); ?></th>
-                                        <th width="30%">
-                                            <?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId); ?></th>
-                                        <th width="10%"><?php echo Labels::getLabel('LBL_Active', $siteLangId); ?>
-                                        </th>
-                                        <th width="20%"><?php echo Labels::getLabel('LBL_Verified', $siteLangId); ?>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <?php if (count($user_listing) > 0) {
-                                        foreach ($user_listing as $row) {
-                                    ?> <tr>
-                                                <td>
-                                                    <div class="item__description">
-                                                        <div class="item__title"> <?php if ($row['user_name'] != '') {
-                                                                                        echo $row['user_name'];
-                                                                                    } ?> </div>
-                                                        <div class="item__brand"> <?php echo $row['credential_email']; ?>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="item__description">
-                                                        <div class="item__date" title="<?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId) ?>">
-                                                            <?php echo FatDate::format($row['user_regdate']); ?></div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="user__status">
-                                                        <?php
-                                                        echo $str = isset($row['credential_active']) ? $yesNoArr[$row['credential_active']] : 'N/A'; ?>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="user__verified">
-                                                        <?php
-                                                        echo $str = isset($row['credential_verified']) ? $yesNoArr[$row['credential_verified']] : 'N/A'; ?>
-                                                    </div>
-                                                </td>
-                                            </tr> <?php
-                                                }
-                                            } else {
-                                                    ?> <tr>
-                                            <td colspan="3">
-                                                <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
-                                            </td>
-                                        </tr> <?php
-                                            } ?>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="card">
-                    <div class="card-head border-0">
-                        <h5 class="card-title ">
-                            <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5> <?php if (count($transactions) > 0) {
-                                                                                                            ?> <div class="action">
-                                <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
-                            </div> <?php
-                                                                                                            } ?>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap">
-                            <table class="table">
-                                <thead>
-                                    <tr class="">
-                                        <th width="30%">
-                                            <?php echo Labels::getLabel('LBL_Txn._Detail', $siteLangId); ?></th>
-                                        <th width="30%"><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?></th>
-                                        <th width="10%"><?php echo Labels::getLabel('LBL_Balance', $siteLangId); ?>
-                                        </th>
-                                        <th width="30%"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>
-                                        </th>
-                                    </tr>
-
-                                </thead>
-                                <tbody>
-                                    <?php if (count($transactions) > 0) {
-                                        foreach ($transactions as $row) {
-                                    ?> <tr>
-                                                <td>
-                                                    <div class="item__description">
-                                                        <div class="item__date">
-                                                            <?php echo FatDate::format($row['utxn_date']); ?></div>
-                                                        <div class="item__title" title="<?php echo Labels::getLabel('Lbl_Txn._Id', $siteLangId) ?>">
-                                                            <?php echo Transactions::formatTransactionNumber($row['utxn_id']); ?>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="txn__type">
-                                                        <div class="txn__credit">
-                                                            <?php echo Labels::getLabel('Lbl_Credit', $siteLangId) ?>:
-                                                            <?php echo CommonHelper::displayMoneyFormat($row['utxn_credit']); ?>
-                                                        </div>
-                                                        <div class="txn__debit">
-                                                            <?php echo Labels::getLabel('Lbl_Debit', $siteLangId) ?>:
-                                                            <?php echo CommonHelper::displayMoneyFormat($row['utxn_debit']); ?>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="txn__balance">
-                                                        <?php echo CommonHelper::displayMoneyFormat($row['balance']); ?>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="txn__status"><span class="badge badge-inline <?php echo $txnStatusClassArr[$row['utxn_status']] ?>"><?php echo $txnStatusArr[$row['utxn_status']]; ?></span>
-                                                    </div>
-                                                </td>
-                                            </tr> <?php
-                                                }
-                                            } else {
-                                                    ?> <tr>
-                                            <td colspan="4">
-                                                <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
-                                            </td>
-                                        </tr> <?php
-                                            } ?>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-lg-4 order-lg-2">
                 <div class="widget-scroll">
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
@@ -281,6 +124,164 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     </div>
                 </div>
             </div>
+            <div class="col-lg-8">
+                <div class="card" style="display:none;">
+                    <div class="card-head border-0">
+                        <h5 class="card-title">
+                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
+
+                </div>
+                <div class="card">
+                    <div class="card-head border-0">
+                        <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
+                        </h5> <?php if (count($user_listing) > 0) {
+                                ?> <div class="action">
+                                <a href="<?php echo UrlHelper::generateUrl('affiliate', 'referredByMe'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
+                            </div> <?php
+                                } ?>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="js-scrollable table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr class="">
+                                        <th width="40%">
+                                            <?php echo Labels::getLabel('LBL_User_Detail', $siteLangId); ?></th>
+                                        <th width="30%">
+                                            <?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId); ?></th>
+                                        <th width="10%"><?php echo Labels::getLabel('LBL_Active', $siteLangId); ?>
+                                        </th>
+                                        <th width="20%"><?php echo Labels::getLabel('LBL_Verified', $siteLangId); ?>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php if (count($user_listing) > 0) {
+                                        foreach ($user_listing as $row) {
+                                    ?> <tr>
+                                                <td>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__title"> <?php if ($row['user_name'] != '') {
+                                                                                                    echo $row['user_name'];
+                                                                                                } ?> </div>
+                                                        <div class="product-profile__brand"> <?php echo $row['credential_email']; ?>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__date" title="<?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId) ?>">
+                                                            <?php echo FatDate::format($row['user_regdate']); ?></div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="user__status">
+                                                        <?php
+                                                        echo $str = isset($row['credential_active']) ? $yesNoArr[$row['credential_active']] : 'N/A'; ?>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="user__verified">
+                                                        <?php
+                                                        echo $str = isset($row['credential_verified']) ? $yesNoArr[$row['credential_verified']] : 'N/A'; ?>
+                                                    </div>
+                                                </td>
+                                            </tr> <?php
+                                                }
+                                            } else {
+                                                    ?> <tr>
+                                            <td colspan="3">
+                                                <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
+                                            </td>
+                                        </tr> <?php
+                                            } ?>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-head border-0">
+                        <h5 class="card-title ">
+                            <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5> <?php if (count($transactions) > 0) {
+                                                                                                            ?> <div class="action">
+                                <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
+                            </div> <?php
+                                                                                                            } ?>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="js-scrollable table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr class="">
+                                        <th width="30%">
+                                            <?php echo Labels::getLabel('LBL_Txn._Detail', $siteLangId); ?></th>
+                                        <th width="30%"><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?></th>
+                                        <th width="10%"><?php echo Labels::getLabel('LBL_Balance', $siteLangId); ?>
+                                        </th>
+                                        <th width="30%"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <?php if (count($transactions) > 0) {
+                                        foreach ($transactions as $row) {
+                                    ?> <tr>
+                                                <td>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__date">
+                                                            <?php echo FatDate::format($row['utxn_date']); ?></div>
+                                                        <div class="product-profile__title" title="<?php echo Labels::getLabel('Lbl_Txn._Id', $siteLangId) ?>">
+                                                            <?php echo Transactions::formatTransactionNumber($row['utxn_id']); ?>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="txn__type">
+                                                        <div class="txn__credit">
+                                                            <?php echo Labels::getLabel('Lbl_Credit', $siteLangId) ?>:
+                                                            <?php echo CommonHelper::displayMoneyFormat($row['utxn_credit']); ?>
+                                                        </div>
+                                                        <div class="txn__debit">
+                                                            <?php echo Labels::getLabel('Lbl_Debit', $siteLangId) ?>:
+                                                            <?php echo CommonHelper::displayMoneyFormat($row['utxn_debit']); ?>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="txn__balance">
+                                                        <?php echo CommonHelper::displayMoneyFormat($row['balance']); ?>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="txn__status"><span class="badge badge-inline <?php echo $txnStatusClassArr[$row['utxn_status']] ?>"><?php echo $txnStatusArr[$row['utxn_status']]; ?></span>
+                                                    </div>
+                                                </td>
+                                            </tr> <?php
+                                                }
+                                            } else {
+                                                    ?> <tr>
+                                            <td colspan="4">
+                                                <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
+                                            </td>
+                                        </tr> <?php
+                                            } ?>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- <div class="row">

@@ -14,25 +14,25 @@
                 <div class="action"> <a href="javascript:void(0)" class="btn btn-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Add/Create_New_Batch', $siteLangId); ?>" onclick="batchForm(0)"><?php echo Labels::getLabel('LBL_Add/Create_New_Batch', $siteLangId); ?> </a>
                 </div>
             </div>
-            <div class="card-body ">
-                <div class="replaced">
-                    <div class="search search--sort">
-                        <div class="search__field">
-                            <?php
-                            $frmSearch->setFormTagAttribute('id', 'frmSearch');
-                            $frmSearch->setFormTagAttribute('onsubmit', 'searchBatches(this); return(false);');
-                            //$frmSearch->setFormTagAttribute( 'placeholder', 'dsdsd' );
-                            $fldKeyword = $frmSearch->getField('keyword');
-                            $fldKeyword->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search', $siteLangId));
-                            echo $frmSearch->getFormTag();
-                            echo $frmSearch->getFieldHtml('keyword');
-                            echo $frmSearch->getFieldHtml('page');
-                            echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                            <i class="fa fa-search"></i>
-                            </form>
-                        </div>
+            <div class="card-body">
+
+                <div class="search search--sort">
+                    <div class="search__field">
+                        <?php
+                        $frmSearch->setFormTagAttribute('id', 'frmSearch');
+                        $frmSearch->setFormTagAttribute('onsubmit', 'searchBatches(this); return(false);');
+                        //$frmSearch->setFormTagAttribute( 'placeholder', 'dsdsd' );
+                        $fldKeyword = $frmSearch->getField('keyword');
+                        $fldKeyword->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search', $siteLangId));
+                        echo $frmSearch->getFormTag();
+                        echo $frmSearch->getFieldHtml('keyword');
+                        echo $frmSearch->getFieldHtml('page');
+                        echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        <i class="fa fa-search"></i>
+                        </form>
                     </div>
                 </div>
+
                 <?php //echo $frmSearch->getExternalJS();	
                 ?>
                 <div id="listing">

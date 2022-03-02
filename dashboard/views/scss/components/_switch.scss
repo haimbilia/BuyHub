@@ -5,21 +5,23 @@
     width: 42px;
     min-width: 42px;
     flex: 0 0 42px;
-
     input {
         display: none;
     }
 
     input:checked + .slider {
-        background-color: #66bb6a;
+        //background-color: #66bb6a;
+        background-color: transparent;
     }
 
     input:checked + .slider:before {
+        background-color: $brand-color;
         transform: translateX(22px * $transform-direction);
     }
 
     .slider {
-        background-color: #ccc;
+        border: $border;
+        background-color: transparent;
         bottom: 0;
         cursor: pointer;
         left: 0;
@@ -28,22 +30,19 @@
         top: 0;
         transition: 0.4s;
         width: 42px;
-
         &:before {
-            background-color: #fff;
-            bottom: 4px;
+            background-color: #777;
+            bottom: 3px;
             left: 4px;
             content: "";
             height: 12px;
             position: absolute;
-
             transition: 0.4s;
             width: 12px;
         }
 
         &.round {
-            border-radius: 20px;
-
+            border-radius: 30px;
             &:before {
                 border-radius: 50%;
             }

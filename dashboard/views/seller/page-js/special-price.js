@@ -1,49 +1,23 @@
 $(document).ready(function () {
     searchRecords(document.frmRecordSearch);
-    $(".date_js").datepicker("option", { minDate: new Date() });
 });
 
-$(document).on("keyup", ".js-special-price", function () {
-    var selProdPrice = $(".js-prod-price").attr("data-price");
-    var specialPrice = $(".js-special-price").val();
-    if (specialPrice != "") {
-        var discountAmt = selProdPrice - specialPrice;
-        var percentage = (discountAmt / selProdPrice) * 100;
-        if (percentage > 0) {
-            percentage = Number(Number(percentage).toFixed(2));
-            var discountPercentage =
-                langLbl.discountPercentage + ": " + percentage + "%";
-            $(".js-discount-percentage").html(discountPercentage);
-        } else {
-            $(".js-discount-percentage").html("");
-        }
-    } else {
-        $(".js-discount-percentage").html("");
+$(document).on('click', '.dateJs', function () {
+    var ele = $(this);
+    ele.hide().bind('active');
+    var inputFld = ele.siblings('input[type="text"]');
+    inputFld.removeClass('d-none').focus().addClass('d-none');
+    if (inputFld.val() != inputFld.attr('data-value')) {
+        inputFld.val(inputFld.attr('data-value'));
     }
 });
 
-$(document).on(
-    "click",
-    "table.splPriceList-js tr td .js--editCol",
-    function () {
-        $(this).hide();
-        var input = $(this).siblings('input[type="text"]');
-        var value = input.attr("value");
-        input.removeClass("hidden");
-        input.val("").focus().val(value);
-    }
-);
-
-$(document).on("blur", ".js--splPriceCol.date_js", function () {
-    var currObj = $(this);
-    var oldValue = currObj.attr("data-oldval");
-    showElement(currObj, oldValue);
-});
-$(document).on("change", ".js--splPriceCol.date_js", function () {
-    updateValues($(this));
+$(document).on('blur', ".inputDateJs", function (e) {
+    e.stopPropagation();
+    $(this).addClass('d-none').siblings('.dateJs').show();
 });
 
-$(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
+$(document).on('change', ".inputDateJs", function () {
     updateValues($(this));
 });
 
@@ -65,7 +39,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
             function (res) {
                 fcom.removeLoader();
                 $("#listing").html(res);
-                $(".date_js").datepicker("option", { minDate: new Date() });
+                $(".dateJs").datepicker("option", { minDate: new Date() });
             }
         );
     };
@@ -150,7 +124,7 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
                     document.getElementById("frmSplPriceListing").reset();
                     $(frm).find("select[name='product_name']").trigger("change.select2");
                     $("table.splPriceList-js tbody").prepend(t.data);
-                    $(".date_js").datepicker("option", { minDate: new Date() });
+                    $(".dateJs").datepicker("option", { minDate: new Date() });
                     if (0 < $(".noResult--js").length) {
                         $(".noResult--js").remove();
                     }
@@ -164,63 +138,66 @@ $(document).on("blur", ".js--splPriceCol:not(.date_js)", function () {
         return false;
     };
 
-    updateValues = function (currObj) {
-        var value = currObj.val();
-        var oldValue = currObj.attr("data-oldval");
-        var displayOldValue = currObj.attr("data-displayoldval");
-        displayOldValue = typeof displayOldValue == "undefined" ? oldValue : displayOldValue;
-        var attribute = currObj.attr("name");
-        var price = currObj.attr('data-price');
-        var percentDiv = currObj.siblings('div.percentValJs');
-        var id = currObj.data("id");
-        var selProdId = currObj.data("selprodid");
-        if ("splprice_price" == attribute) {
+    showOrignal = function (ele) {
+        var obj = $(ele);
+        var value = obj.attr('data-value');
+        obj.text(value);
+    }
+
+    updateValues = function (ele) {
+        var obj = $(ele);
+        var attribute = obj.attr('name');
+        var percentDiv = obj.siblings('div.percentValJs');
+        var value = ('splprice_price' == attribute) ? ele.textContent : obj.val();
+        var price = obj.attr('data-price');
+        var oldValue = obj.attr('data-value');
+        var formattedValue = obj.attr('data-formated-value');
+        var id = obj.attr('data-id');
+        var selProdId = obj.attr('data-selprod-id');
+
+        var discountPercentage = '';
+        if ('splprice_price' == attribute) {
             value = parseFloat(value);
             if (Number.isNaN(value)) {
-                currObj.attr("value", oldValue).val(oldValue);
+                obj.text(formattedValue);
                 fcom.displayErrorMessage(langLbl.notANumber);
                 return;
             }
             oldValue = parseFloat(oldValue);
-
             var discountPrice = price - value;
             if (0 < discountPrice) {
                 var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
-                discountPercentage = discountPercentage + "% " + langLbl.off;
+                discountPercentage = discountPercentage + "%  " + langLbl.off;
             }
         }
-        if ("" != value && value != oldValue) {
-            var data = "attribute=" + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
-            fcom.ajax(
-                fcom.makeUrl("Seller", "updateSpecialPriceColValue"),
-                data,
-                function (t) {
-                    var ans = $.parseJSON(t);
-                    if (ans.status != 1) {
-                        fcom.displayErrorMessage(ans.msg);
-                        value = oldValue;
-                        updatedValue = displayOldValue;
-                    } else {
-                        updatedValue = ans.data.value;
-                        currObj.attr("data-oldval", value);
-                        percentDiv.text(discountPercentage);
-                    }
-                    currObj.attr("value", value);
-                    showElement(currObj, updatedValue);
+
+
+        if ('' != value && value != oldValue) {
+            var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
+            fcom.displayProcessing();
+            fcom.ajax(fcom.makeUrl("Seller", "updateSpecialPriceColValue"), data, function (t) {
+                fcom.closeProcessing();
+                var ans = $.parseJSON(t);
+                if (ans.status != 1) {
+                    fcom.displayErrorMessage(ans.msg);
+                    value = oldValue;
+                    updatedValue = formattedValue;
+                } else {
+                    updatedValue = ans.data.value;
+
+                    percentDiv.text(discountPercentage);
                 }
-            );
-        } else {
-            showElement(currObj);
-            currObj.val(oldValue);
+                obj.attr('data-value', value);
+                obj.attr('data-formated-value', updatedValue);
+                if ('splprice_price' == attribute) {
+                    obj.text(updatedValue);
+                } else {
+                    obj.addClass('d-none').siblings('.dateJs').text(updatedValue).show();
+                }
+            });
+        } else if ('splprice_price' == attribute) {
+            obj.text(formattedValue);
         }
-    };
-    showElement = function (currObj, value) {
-        var sibling = currObj.siblings("div:first");
-        if ("" != value) {
-            sibling.text(value);
-        }
-        sibling.fadeIn();
-        currObj.addClass("hidden");
     };
 
     addNew = function () {

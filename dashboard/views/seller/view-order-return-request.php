@@ -109,7 +109,7 @@ if (null != $btn) {
                                     <?php $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request); ?>
                                     <td><?php echo $request['orreason_title']; ?></td>
                                     <td>
-                                        <div class="item__description">
+                                        <div class="product-profile__description">
                                             <span class=""><?php echo FatDate::format($request['orrequest_date']); ?></span>
                                         </div>
                                     </td>

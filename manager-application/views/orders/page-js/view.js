@@ -116,12 +116,12 @@
         var orderStatusId = $(frm.op_status_id).val();
         var oldStatus = $(frm.op_status_id).data('oldValue');
         if (oldStatus == orderStatusId) {
-            $.ykmsg.error(langLbl.alreadySelected);
+            fcom.displayErrorMessage(langLbl.alreadySelected);
             return;
         }
 
         if (0 < $(".shippingUserJs").length && '' == $(".shippingUserJs").val()) {
-            $.ykmsg.error(langLbl.shippingUser);
+            fcom.displayErrorMessage(langLbl.shippingUser);
             return;
         }
 
@@ -161,7 +161,7 @@
             fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
 
                 if('openShipUser' in t && t.openShipUser == 1){
                     setTimeout(function () {
@@ -170,7 +170,7 @@
                 }
                 return;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
 
             let data = { op_id: opId, op_status_id: orderShippedStatus, customer_notified: 1, tracking_number: t.tracking_number, shipped_by_plugin: 1 };
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
@@ -237,10 +237,10 @@
             success: function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 0) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 setTimeout("pageRedirect(" + opId + ")", 1000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -286,7 +286,7 @@
             fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
                 return;
             }
             window.location.reload();
@@ -317,10 +317,10 @@
             fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
                 return;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
         });
     };
 })();

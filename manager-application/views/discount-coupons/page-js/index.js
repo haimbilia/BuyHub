@@ -96,11 +96,11 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl(controllerName, 'deleteImage', [recordId, afile_id, lang_id]), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 return;
             }
 
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             loadImages(recordId, lang_id);
         });
     }
@@ -160,7 +160,7 @@ $(document).ready(function () {
                 ctrl = 'SellerPackages';
                 break;
             default:
-                $.ykmsg.error(langLbl.invalidRequest);
+                fcom.displayErrorMessage(langLbl.invalidRequest);
                 return false;
         }
         var recordId = element.dataset.recordId;

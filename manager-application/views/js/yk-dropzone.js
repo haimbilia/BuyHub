@@ -29,12 +29,12 @@ $(document).on({
         ykDropzone.on("success", function (file, response) {
             let res = JSON.parse(response);
             if (0 == res.status) {
-                $.ykmsg.error(res.msg);
+                fcom.displayErrorMessage(res.msg);
                 return false;
             }
             this.removeFile(file);
 
-            $.ykmsg.success(res.msg);
+            fcom.displaySuccessMessage(res.msg);
             if (typeof uploadSuccessCallback === "function") {
                 uploadSuccessCallback(res);
             }

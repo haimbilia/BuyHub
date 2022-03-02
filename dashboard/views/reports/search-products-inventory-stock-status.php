@@ -47,14 +47,14 @@ foreach ($arrListing as $sn => $row) {
                 break;
 
             case 'product_name':
-                $name = '<div class="item__title">' . $row['product_name'] . '</div>';
+                $name = '<div class="product-profile__title">' . $row['product_name'] . '</div>';
                 if ($row['selprod_title'] != '') {
-                    $name .= '<div class="item__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $row['selprod_title'] . '</div>';
+                    $name .= '<div class="product-profile__sub_title"><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ": </strong>" . $row['selprod_title'] . '</div>';
                 }
 
                 $variantStr = '';
                 if (is_array($row['options']) && count($row['options'])) {
-                    $name .= '<div class="item__specification">';
+                    $name .= '<div class="product-profile__specification">';
                     $count = count($row['options']);
                     foreach ($row['options'] as $op) {
                         $name .= '' . wordwrap($op['optionvalue_name'], 150, "<br>\n");
@@ -65,7 +65,7 @@ foreach ($arrListing as $sn => $row) {
                     }
                     $name .= '</div>';
                 }
-               
+
                 $span->appendElement('plaintext', array(), $name, true);
                 break;
             case 'selprod_cost':

@@ -90,10 +90,10 @@
 			success: function (ans) {
 				fcom.removeLoader();
 				if (ans.status == 0) {
-					$.ykmsg.error(ans.msg);
+					fcom.displayErrorMessage(ans.msg);
 					return;
 				}
-				$.ykmsg.success(ans.msg);
+				fcom.displaySuccessMessage(ans.msg);
 				categoryImages(prodcatId, imageType, slideScreen, langId);
 				$("#modalBoxJs").modal("hide");
 			},

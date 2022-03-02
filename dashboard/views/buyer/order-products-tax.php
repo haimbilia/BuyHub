@@ -37,15 +37,15 @@
                     <tr>
                         <td><?php echo $k; ?></td>
                         <td>
-                            <div class="item">
-                                <figure class="item__pic">
+                            <div class="product-profile">
+                                <figure class="product-profile__pic">
                                     <a href="<?php echo $prodOrBatchUrl; ?>">
                                         <img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $op['op_product_name']; ?>" alt="<?php echo $op['op_product_name']; ?>">
                                     </a>
                                 </figure>
-                                <div class="item__description">
+                                <div class="product-profile__description">
                                     <?php if ($op['op_selprod_title'] != '') { ?>
-                                        <div class="item__title">
+                                        <div class="product-profile__title">
                                             <a title="<?php echo $op['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                 <?php echo $op['op_selprod_title'] . '<br>'; ?>
                                             </a>
@@ -60,7 +60,7 @@
                                             </a>
                                         </div>
                                     <?php } ?>
-                                    <div class="item__brand">
+                                    <div class="product-profile__brand">
                                         <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
                                         <?php echo CommonHelper::displayNotApplicable($siteLangId, $op['op_brand_name']); ?>
                                     </div>
