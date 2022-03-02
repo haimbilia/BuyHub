@@ -60,14 +60,14 @@ $(document).ready(function () {
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
-                            $.ykmsg.success(ans.msg, 'alert--success', false);
+                            fcom.displaySuccessMessage(ans.msg, 'alert--success', false);
                             loadForm('bulk_media');
                             location.href = fcom.makeUrl('UploadBulkImages', 'downloadPathsFile', [ans.path]);
                         } else {
-                            $.ykmsg.error(ans.msg);
+                            fcom.displayErrorMessage(ans.msg);
                         }
                     } catch (exc) {
-                        $.ykmsg.error(t);
+                        fcom.displayErrorMessage(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -89,10 +89,10 @@ $(document).ready(function () {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
                     
-                    $.ykmsg.success(ans.msg);
+                    fcom.displaySuccessMessage(ans.msg);
                     loadForm('bulk_media');
                 } else {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                 }
             });
         }
@@ -119,19 +119,19 @@ $(document).ready(function () {
                             frm.reset();
                             $("#importFileName").html("");
                             
-                            $.ykmsg.success(ans.msg);
+                            fcom.displaySuccessMessage(ans.msg);
                             loadForm('import');
                         } else {
-                            $.ykmsg.error(ans.msg);
+                            fcom.displayErrorMessage(ans.msg);
                             $('#fileupload_div').html('');
                         }
                     }
                     catch (exc) {
-                        $.ykmsg.error(t);
+                        fcom.displayErrorMessage(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $.ykmsg.error("Error Occured.");
+                    fcom.displayErrorMessage("Error Occured.");
                 }
             });
         });

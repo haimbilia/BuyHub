@@ -160,8 +160,8 @@ $(document).on("change", ".state", function () {
         checkRunningAjax();
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function (t) {
+            fcom.removeLoader();
             runningAjaxReq = false;
-            $.mbsmessage.close();
             if (t.langId > 0 && t.shopId > 0) {
                 shopLangForm(t.shopId, t.langId);
                 return;
@@ -270,9 +270,9 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
+            fcom.removeLoader();
             $(ctabId).data('collectionId', t.collection_id);
             shopCollections();
-            $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
                 return;
@@ -285,7 +285,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollectionLang'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.scollection_id, t.langId);
             }
@@ -334,7 +334,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
         });
     };
 
@@ -354,11 +354,11 @@ $(document).on("change", ".state", function () {
         splatformId = splatformId || $(ctabId).data('splatformId');
         if (splatformId < 0 || typeof (splatformId) == "undefined") {
             splatformId = 0;
-        }      
+        }
         markSubTabActive();
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {  
-            $.ykmodal(t);               
-            fcom.removeLoader();            
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
+            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 
@@ -366,8 +366,8 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
-            $(ctabId).data('splatformId',t.splatformId);
-            $.mbsmessage.close();
+            $(ctabId).data('splatformId', t.splatformId);
+            fcom.removeLoader();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
@@ -392,12 +392,12 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
                 return;
-            } 
+            }
         });
     };
 
@@ -426,9 +426,9 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'changeSocialPlatformStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                $.ykmsg.success(ans.msg);
             } else {
-                $.mbsmessage(ans.msg, true, 'alert--danger');
+                $.ykmsg.error(ans.msg);
             }
         });
     };
@@ -453,7 +453,6 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
-            fcom.closeAlertMessage();           
         });
     };
 
@@ -462,9 +461,9 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
             getReturnAddress();
-            if(0 < t.langId){
+            if (0 < t.langId) {
                 //returnAddressLangForm(t.langId);
-            }            
+            }
         });
     };
 
@@ -472,7 +471,6 @@ $(document).on("change", ".state", function () {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            fcom.closeAlertMessage();
             $.ykmodal(t);
         });
     };
@@ -519,7 +517,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
-                $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
+                $.ykmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
         }
@@ -546,8 +544,8 @@ $(document).on("change", ".state", function () {
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopupTabActive();   
-        hideYkModalFooter();     
+        markPopupTabActive();
+        hideYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -555,7 +553,7 @@ $(document).on("change", ".state", function () {
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
             shopCollectionImages(scollection_id);
-            
+
         });
     };
 
@@ -592,9 +590,9 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'changeShopCollectionStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                $.ykmsg.success(ans.msg);
             } else {
-                $.mbsmessage(ans.msg, true, 'alert--danger');
+                $.ykmsg.error(ans.msg);
             }
         });
     };
@@ -707,12 +705,12 @@ $(document).on("change", ".state", function () {
             processData: false,
             success: function (ans) {
                 $("#modalBoxJs").modal("hide");
-                $.mbsmessage.close();
+                fcom.removeLoader();
                 if (ans.status == true) {
-                    $.mbsmessage(ans.msg, true, 'alert--success');
+                    $.ykmsg.success(ans.msg);
                     shopImages(imageType, slideScreen, langId);
                 } else {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');
+                    $.ykmsg.error(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -742,7 +740,7 @@ $(document).on("change", ".state", function () {
                     imageSmoothingQuality: 'high',
                     imageSmoothingEnabled: true,
                 };
-                $(inputBtn).val('');            
+                $(inputBtn).val('');
                 setTimeout(function () { cropImage(file, options, 'uploadCollectionImage', inputBtn); }, 100);
             });
         }
@@ -762,16 +760,15 @@ $(document).on("change", ".state", function () {
             data: formData,
             cache: false,
             contentType: false,
-            processData: false,           
+            processData: false,
             success: function (ans) {
                 fcom.removeLoader();
-                $.mbsmessage.close();             
                 $("#modalBoxJs").modal("hide");
                 if (ans.status == true) {
-                    $.mbsmessage(ans.msg, true, 'alert--success');                 
+                    $.ykmsg.success(ans.msg);
                     shopCollectionImages(scollection_id, lang_id);
                 } else {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');                  
+                    $.ykmsg.error(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -807,7 +804,7 @@ $(document).on("change", ".state", function () {
                 $(contentDv).html(t.html);
                 bindMcc();
             } else {
-                $.mbsmessage(t.msg, false, 'alert--success');
+                $.ykmsg.success(t.msg);
                 $('.pluginPlatform-js').click();
             }
             $(".loader-yk").remove();
@@ -922,11 +919,11 @@ $(document).on("change", ".state", function () {
 
 function bindAutoComplete() {
     $("#scp_selprod_id").select2({
-        dropdownParent:  $("#scp_selprod_id").closest('.modal'),
+        dropdownParent: $("#scp_selprod_id").closest('.modal'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
         allowClear: false,
-        placeholder:  $("#scp_selprod_id").attr('placeholder'),
+        placeholder: $("#scp_selprod_id").attr('placeholder'),
         ajax: {
             url: fcom.makeUrl('seller', 'autoCompleteProducts'),
             dataType: 'json',
@@ -994,18 +991,17 @@ $(document).on('click', '.catFile-Js', function () {
                     $(node).val($val);
                 },
                 success: function (ans) {
-                    $.mbsmessage.close();
-                    //$.mbsmessage(ans.msg, true, 'alert--success');
+                    fcom.removeLoader();
                     var dv = '#mediaResponse';
                     $('.text-danger').remove();
                     if (ans.status == true) {
-                        $.mbsmessage(ans.msg, true, 'alert--success');
+                        $.ykmsg.success(ans.msg);
                         $(dv).removeClass('text-danger');
                         $(dv).addClass('badge-success');
                         reloadCategoryBannerList();
                         addCategoryBanner(prodcat_id);
                     } else {
-                        $.mbsmessage(ans.msg, true, 'alert--danger');
+                        $.ykmsg.error(ans.msg);
                         $(dv).removeClass('badge-success');
                         $(dv).addClass('text-danger');
                     }

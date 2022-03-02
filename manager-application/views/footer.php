@@ -16,10 +16,10 @@ foreach (Message::getData() as $type => $errors) {
     if (count($errors)) {
         switch ($type) {
             case 'errs':
-                $msgStrJs .= '$.ykmsg.error("' . current($errors) . '");';
+                $msgStrJs .= 'fcom.displayErrorMessage("' . current($errors) . '");';
                 break;
             case 'msgs':
-                $msgStrJs .= '$.ykmsg.success("' . current($errors) . '");';
+                $msgStrJs .= 'fcom.displaySuccessMessage("' . current($errors) . '");';
                 break;
             case 'info':
                 $msgStrJs .= '$.ykmsg.info("' . current($errors) . '");';

@@ -106,7 +106,7 @@
 
 		if (1 > recordId) {
 			$(obj).prop("checked", 1 == oldStatus);
-			$.ykmsg.error(langLbl.invalidRequest);
+			fcom.displayErrorMessage(langLbl.invalidRequest);
 			fcom.removeLoader();
 			return false;
 		}
@@ -119,10 +119,10 @@
 				var ans = $.parseJSON(res);
 				if (ans.status != 1) {
 					$(obj).prop("checked", 1 == oldStatus);
-					$.ykmsg.error(ans.msg);
+					fcom.displayErrorMessage(ans.msg);
 					return;
 				}
-				$.ykmsg.success(ans.msg);
+				fcom.displaySuccessMessage(ans.msg);
 				$(obj).prop("checked", 1 == status);
 				$(obj).attr({
 					"onclick": "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",

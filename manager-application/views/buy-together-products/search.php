@@ -44,7 +44,7 @@ foreach ($arrListing as $selProdId => $row) {
                         'mainRecord' => $selProdId,
                     ];
                 }
-                $td->appendElement('plaintext', $tdAttr, "<input class='form-control tagifyJs' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH_PRODUCT', $siteLangId)."' data-mainrecord='" . $selProdId . "' value='" . json_encode($data) . "'>", true);
+                $td->appendElement('plaintext', $tdAttr, "<input type='text' class='form-control tagifyJs' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH_PRODUCT', $siteLangId)."' data-mainrecord='" . $selProdId . "' value='" . json_encode($data) . "'>", true);
                 break;
             case 'action':
                 $data = [
@@ -129,7 +129,7 @@ if ($printData) {
             tagify = new Tagify(element, {
                 whitelist: [],
                 dropdown: {
-                    position: 'text',
+                    position: 'input',
                     enabled: 0 // show suggestions dropdown after 1 typed character
                 },
                 hooks: {

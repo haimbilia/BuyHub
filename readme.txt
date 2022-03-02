@@ -516,12 +516,16 @@ Updates/Fixes :
     => 061905 - Admin UI: Toggles are not aligned and location selection is not working properly on the 'Product' page under the settings section
     => 061685 - Admin UI: 'Search icon' is not showing in the search field on the automatic badges page
     => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
+    => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
+    => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
+    => 062610 - Admin UI: Unavailable pointer is not showing on the banner listing section and sr. no. is not showing correctly on the import instruction page
+    => 062603 - Admin UI: Spacing is not consistent between the footer section and last field while opening the drawer
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
     => 062190 - Admin UI: "Mark as default" font is not correct and the 'default' tag is showing with the plugin even after inactive and disabling the default status on the "Tax Services, and Shipping Services" pages while accessing the 'Getting Started' section.
-   
+    => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section  [old tagify reopen when unfocus ]
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
         => Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/

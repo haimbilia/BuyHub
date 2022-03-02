@@ -72,7 +72,7 @@ $(document).ajaxComplete(function () {
 
         var pluginId = parseInt(obj.id);
         if (pluginId < 1) {
-            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
         }
@@ -83,9 +83,9 @@ $(document).ajaxComplete(function () {
             fcom.closeProcessing();
             var ans = JSON.parse(res);
             if (ans.status == 1) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
             } else {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
             }
             reloadList();
         });
@@ -135,10 +135,10 @@ $(document).ajaxComplete(function () {
                             fcom.closeProcessing();
                             var ans = $.parseJSON(res);
                             if (ans.status == 1) {
-                                $.ykmsg.success(ans.msg);
+                                fcom.displaySuccessMessage(ans.msg);
                                 return;
                             }
-                            $.ykmsg.error(ans.msg);
+                            fcom.displayErrorMessage(ans.msg);
                         });
                     },
                     function (error) {
@@ -146,10 +146,10 @@ $(document).ajaxComplete(function () {
                         fcom.closeProcessing();
                         var ans = $.parseJSON(res);
                         if (ans.status == 1) {
-                            $.ykmsg.success(ans.msg);
+                            fcom.displaySuccessMessage(ans.msg);
                             return;
                         }
-                        $.ykmsg.error(ans.msg);
+                        fcom.displayErrorMessage(ans.msg);
                     });
             },
             function(error) {
@@ -214,12 +214,12 @@ $(document).on('click', '.uploadFile-Js', function () {
                     } else {
                         $('#plugin_icon').removeClass('text-success');
                         $('#plugin_icon').addClass('text-danger');
-                        $.ykmsg.error(ans.msg);
+                        fcom.displayErrorMessage(ans.msg);
                     }
                     reloadList();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    fcom.displayErrorMessage(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                     fcom.removeLoader();
                 }
             });

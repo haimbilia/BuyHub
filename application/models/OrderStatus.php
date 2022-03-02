@@ -70,11 +70,11 @@ class OrderStatus extends MyAppModel
                 FatApp::getDb()->updateFromArray(
                     static::DB_TBL,
                     array(
-                    static::DB_TBL_PREFIX . 'priority' => $i
+                        static::DB_TBL_PREFIX . 'priority' => $i
                     ),
                     array(
-                    'smt' => static::DB_TBL_PREFIX . 'id = ?',
-                    'vals' => array($id)
+                        'smt' => static::DB_TBL_PREFIX . 'id = ?',
+                        'vals' => array($id)
                     )
                 );
             }
@@ -82,7 +82,7 @@ class OrderStatus extends MyAppModel
         }
         return false;
     }
-    
+
     /**
      * getOpStatusClass
      *
@@ -113,13 +113,13 @@ class OrderStatus extends MyAppModel
             case $defaultCompleted:
                 return 'delivered';
                 break;
-            
+
             default:
                 return 'delivered';
                 break;
         }
     }
-    
+
     /**
      * getDefaultOrderStausMsg
      *
@@ -157,11 +157,10 @@ class OrderStatus extends MyAppModel
             case $defaultCompleted:
                 return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_COMPLETED', $langId);
                 break;
-            
+
             default:
                 return '';
                 break;
         }
     }
-    
 }

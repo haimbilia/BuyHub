@@ -142,7 +142,7 @@ $(document).ready(function () {
 
     zoneForm = function (profileId, zoneId) {
         if ($('input[name="shipprofile_id"]').val() <= 0) {
-            $.ykmsg.error(langLbl.saveProfileFirst);
+            fcom.displayErrorMessage(langLbl.saveProfileFirst);
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {

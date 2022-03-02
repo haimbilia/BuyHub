@@ -136,7 +136,7 @@ function googleCaptcha() {
                     });
             });
         } else if ("undefined" === typeof grecaptcha) {
-            $.ykmsg.error(langLbl.invalidGRecaptchaKeys);
+            fcom.displayErrorMessage(langLbl.invalidGRecaptchaKeys);
         }
     }, 200);
 }
@@ -377,6 +377,11 @@ markNavActive = function (ele) {
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
+
+    $('.sidebarMenuJs').animate({
+        scrollTop: ele.offset().top
+    }, 100);
+
 };
 
 $(document).ready(function () {

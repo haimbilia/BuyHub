@@ -67,7 +67,7 @@
         let rt_id = e.detail.data.id;
         if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
-                $.ykmsg.error(tagsEditErr);
+                fcom.displayErrorMessage(tagsEditErr);
                 e.detail.tag.remove();
                 return;
             }
@@ -450,19 +450,19 @@
             processData: false,
             success: function (ans) {               
                 if (ans.status == 0) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return;
                 }
                 autoOpenSideBar = false;
                 $("#modalBoxJs").modal("hide");
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
                 }
                 fcom.removeLoader();
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.ykmsg.error(
+                fcom.displayErrorMessage(
                     thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
                 );
             },

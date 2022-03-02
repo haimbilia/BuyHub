@@ -7,6 +7,7 @@ $("document").ready(function(){
 	searchSavedSearchList = function(page){
 		$(dv).html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('SavedProductsSearch','search'), 'page=' + page, function(res){
+			fcom.removeLoader();
 			$(dv).html(res);
 		}); 
 	};

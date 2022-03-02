@@ -36,11 +36,11 @@
         fcom.ajax(fcom.makeUrl(controllerName, 'deleteImage', [recordId, afile_id, lang_id, slide_screen]), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 return;
             }
             
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             loadImages(recordId, lang_id);
         });
     }

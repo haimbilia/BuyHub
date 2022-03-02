@@ -38,10 +38,10 @@ $(document).ajaxComplete(function () {
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
-                                $.ykmsg.error(ans.msg);
+                                fcom.displayErrorMessage(ans.msg);
                                 return;
                             }
-                            $.ykmsg.success(ans.msg);
+                            fcom.displaySuccessMessage(ans.msg);
                             reloadList();
                         });
                     },

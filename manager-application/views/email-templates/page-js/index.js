@@ -26,9 +26,9 @@
         fcom.ajax(fcom.makeUrl('EmailTemplates', 'sendTestMail'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
             } else {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
             }
         });
     };
@@ -49,7 +49,7 @@
 
         if ('' == etplCode) {
             $(obj).prop('checked', (1 == oldStatus));
-            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
         }
@@ -59,11 +59,11 @@
             $(obj).prop('checked', (1 == status));
             var ans = JSON.parse(res);
             if (ans.status == 1) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 $(obj).attr({ 'onclick': 'updateStatus(event, this, ' + etplCode + ', ' + oldStatus + ')', 'data-old-status': status });
             } else {
                 $(obj).prop('checked', (1 == oldStatus));
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
             }
             fcom.removeLoader();
         });
