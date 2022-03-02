@@ -26,12 +26,12 @@ if (!$userActiveTab) {
 <li class="short-links-item">
     <div class="dropdown my-account">
         <button class="my-account-btn dropdown-toggle no-after" data-bs-toggle="dropdown">
-            <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="">
+            <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="<?php echo $userName; ?>">
         </button>
         <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
             <div class="profile">
                 <div class="profile-img">
-                    <img alt="" src="<?php echo $profilePicUrl; ?>">
+                    <img alt="<?php echo $userName; ?>" src="<?php echo $profilePicUrl; ?>">
                 </div>
                 <div class="profile-detail">
                     <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></h6>

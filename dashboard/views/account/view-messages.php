@@ -92,7 +92,7 @@
                                         $userImgUpdatedOn = User::getAttributesById($loggedUserId, 'user_updated_on');
                                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                     ?>
-                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
                                     <?php } ?>
                                 </div>
                                 <div class="msg__desc">

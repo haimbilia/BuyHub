@@ -55,9 +55,9 @@ class ProfileController extends ListingBaseController
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }        
+        }
         unset($post['admin_id']);
-                
+
         $this->_adminProfileObj->assignValues($post);
         if (!$this->_adminProfileObj->save()) {
             LibHelper::exitWithError($this->_adminProfileObj->getError(), true);
@@ -66,7 +66,7 @@ class ProfileController extends ListingBaseController
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name'] = $post['admin_name'];
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_email'] = $post['admin_email'];
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_username'] = $post['admin_username'];
-        
+
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -132,7 +132,7 @@ class ProfileController extends ListingBaseController
 
             /*$data = json_decode(stripslashes($post['img_data']));
             CommonHelper::crop($data, CONF_UPLOADS_PATH .$res, $this->siteLangId);*/
-            $this->set('file', UrlHelper::generateFullUrl('Account', 'userProfileImage', array($this->_adminId, 'croped', true)));
+            $this->set('file', UrlHelper::generateFullUrl('Account', 'userProfileImage', array($this->_adminId, ImageDimension::VIEW_CROPED, true)));
         }
 
 

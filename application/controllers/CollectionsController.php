@@ -175,7 +175,7 @@ class CollectionsController extends MyAppController
                             $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                             $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                             $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
-                            $product['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId));
+                            $product['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId));
                         }
                     }
 
@@ -262,7 +262,7 @@ class CollectionsController extends MyAppController
                             $val['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($val['shop_id'], $this->siteLangId));
                             array_walk($products, function (&$value, &$key) {
                                 $uploadedTime = AttachedFile::setTimeParam($value['product_updated_on']);
-                                $value['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($value['product_id'], "THUMB", $value['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $value['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($value['product_id'], ImageDimension::VIEW_THUMB, $value['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             });
                         }
                         $selProdIdsArr = array_column($products, 'selprod_id');

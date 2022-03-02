@@ -3,7 +3,7 @@
 if (!empty($reviewsList) && is_array($reviewsList)) {
     foreach ($reviewsList as &$review) {
         $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
-        $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], 'ORIGINAL']) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_ORIGINAL]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
         $review['images'] = [];
         foreach ($images as $image) {

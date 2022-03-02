@@ -152,10 +152,16 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                                     <?php if (count($offers) > 0) {
                                         foreach ($offers as $row) {
-                                            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']); ?>
+                                            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
+                                            $title = ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title'];
+                                            $uploadedTime = AttachedFile::setTimeParam($row['coupon_updated_on']);
+                                            $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, ImageDimension::VIEW_NORMAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                            $imageCouponDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
+
+                                    ?>
                                             <tr>
                                                 <td>
-                                                    <figure class="item__pic"><img src="<?php echo UrlHelper::generateFullUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, 'NORMAL'), CONF_WEBROOT_FRONTEND) ?>" alt="<?php echo ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title']; ?>">
+                                                    <figure class="item__pic"><img src="<?php echo $imgUrl; ?>" data-aspect-ratio = "<?php echo $imageCouponDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>" alt="<?php echo $title; ?>">
                                                     </figure>
                                                 </td>
                                                 <td>
