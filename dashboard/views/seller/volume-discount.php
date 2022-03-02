@@ -21,7 +21,7 @@ if (0 < $selProd_id) {
                 <div class="col-lg-12">
                     <div class="card">
                         <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                        <div class="card-body">
+                        <div class="card-table">
                             <div id="listing">
                                 <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                             </div>

@@ -14,7 +14,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-md-6 mb-3 mb-md-0">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <span id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></span>
+                    <span id="listing">
+                        <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
+                    </span>
                 </div>
             </div>
             <div class="col-md-6">

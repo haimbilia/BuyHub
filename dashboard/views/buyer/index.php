@@ -161,14 +161,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     ?>
                                             <tr>
                                                 <td>
-                                                    <figure class="item__pic"><img src="<?php echo $imgUrl; ?>" data-aspect-ratio = "<?php echo $imageCouponDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>" alt="<?php echo $title; ?>">
+                                                    <figure class="product-profile__pic"><img src="<?php echo $imgUrl; ?>" data-aspect-ratio="<?php echo $imageCouponDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>" alt="<?php echo $title; ?>">
                                                     </figure>
                                                 </td>
                                                 <td>
-                                                    <div class="item__description">
-                                                        <div class="item__title"><?php echo $discountValue; ?>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__title"><?php echo $discountValue; ?>
                                                             <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <?php echo ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title']; ?>
                                                         </div>
                                                         <span class="coupon-code"><?php echo $row['coupon_code']; ?></span>
@@ -231,13 +231,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 }
                                             } ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
+                                                    <div class="product-profile__description">
                                                         <div class="request__date">
                                                             <?php echo FatDate::format($row['orrequest_date']); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <a title="<?php echo Labels::getLabel('LBL_Invoice_number', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id'])); ?>" href="<?php echo $orderDetailUrl; ?>"><?php echo $row['op_invoice_number']; ?></a>
                                                         </div>
-                                                        <div class="item__sub_title">
+                                                        <div class="product-profile__sub_title">
                                                             <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                     <?php echo $row['op_selprod_title']; ?>
                                                                 </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
@@ -317,14 +317,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 }
                                             } ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
+                                                    <div class="product-profile__description">
                                                         <div class="request__date">
                                                             <?php echo FatDate::format($row['ocrequest_date']); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <a title="<?php echo Labels::getLabel('Lbl_Invoice_number', $siteLangId) ?>" href="<?php echo $orderDetailUrl; ?>">
                                                                 <?php echo $row['op_invoice_number']; ?> </a>
                                                         </div>
-                                                        <div class="item__sub_title">
+                                                        <div class="product-profile__sub_title">
                                                             <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                     <?php echo $row['op_selprod_title']; ?>
                                                                 </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">

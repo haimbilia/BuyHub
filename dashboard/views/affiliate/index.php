@@ -57,17 +57,17 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                                         foreach ($user_listing as $row) {
                                     ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
-                                                        <div class="item__title"> <?php if ($row['user_name'] != '') {
-                                                                                        echo $row['user_name'];
-                                                                                    } ?> </div>
-                                                        <div class="item__brand"> <?php echo $row['credential_email']; ?>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__title"> <?php if ($row['user_name'] != '') {
+                                                                                                    echo $row['user_name'];
+                                                                                                } ?> </div>
+                                                        <div class="product-profile__brand"> <?php echo $row['credential_email']; ?>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="item__description">
-                                                        <div class="item__date" title="<?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId) ?>">
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__date" title="<?php echo Labels::getLabel('Lbl_Registered_on', $siteLangId) ?>">
                                                             <?php echo FatDate::format($row['user_regdate']); ?></div>
                                                     </div>
                                                 </td>
@@ -129,10 +129,10 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                                         foreach ($transactions as $row) {
                                     ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
-                                                        <div class="item__date">
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__date">
                                                             <?php echo FatDate::format($row['utxn_date']); ?></div>
-                                                        <div class="item__title" title="<?php echo Labels::getLabel('Lbl_Txn._Id', $siteLangId) ?>">
+                                                        <div class="product-profile__title" title="<?php echo Labels::getLabel('Lbl_Txn._Id', $siteLangId) ?>">
                                                             <?php echo Transactions::formatTransactionNumber($row['utxn_id']); ?>
                                                         </div>
                                                     </div>
