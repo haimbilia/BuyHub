@@ -517,6 +517,7 @@ Updates/Fixes :
     => 061685 - Admin UI: 'Search icon' is not showing in the search field on the automatic badges page
     => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
+    => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
