@@ -25,19 +25,7 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                     </p>
                 <?php } ?>
                 <div class="row">
-                    <div class="col-lg-8">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                                    <div class="card-body">
-                                        <div id="creditListing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 order-lg-2">
                         <div id="credits-info"></div>
                         <div class="card card-commerce form">
                             <div class="card-head border-0">
@@ -112,6 +100,20 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                             </div>
                         <?php } ?>
                     </div>
+
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                                    <div class="card-body">
+                                        <div id="creditListing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

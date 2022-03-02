@@ -5,9 +5,8 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$serialNo = 0;
+$serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
-    $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     foreach ($fields as $key => $val) {
@@ -29,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['epage_id']
                 ];
-                
+
                 if ($canEdit) {
                     $data['otherButtons'] = [
                         [
@@ -54,9 +53,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
+
+    $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

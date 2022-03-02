@@ -14,13 +14,15 @@ $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide"); ?>
 </div>
 <div class="card-body">
     <div class="content-body">
-        <div class="replaced">
-            <?php echo $frm->getFormHtml();  ?>
-        </div>
-        <h6 class=""><?php echo Labels::getLabel('LBL_Uploaded_Media_Directory_List', $siteLangId); ?></h6>
+
+        <?php echo $frm->getFormHtml();  ?>
+
+        <h6 class="">
+            <?php echo Labels::getLabel('LBL_Uploaded_Media_Directory_List', $siteLangId); ?></h6>
         <div class="row">
             <div class="col-lg-12">
-                <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                <div id="listing">
+                    <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
 
             </div>
         </div>

@@ -64,7 +64,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 }
                 ?>
             </div>
-            <div class="card-body">
+            <div class="card-table">
                 <div class="pagebody--js">
                     <?php if ($noRecordFound) { ?>
                         <div class="row justify-content-center my-5">
@@ -136,7 +136,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <?php } ?>
                         </div>
                     <?php } else { ?>
-                        <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                        <div id="listing"> <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div></div>
                     <?php } ?>
                 </div>
                 <span class="editRecord--js"></span>

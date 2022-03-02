@@ -2,76 +2,6 @@ $(document).ready(function () {
     searchRecords(document.frmRecordSearch);
 });
 
-$(document).on("blur", ".js-voldiscount_min_qty", function () {
-    var qty = $(this).val();
-    var selProdId = $("input[name='voldiscount_selprod_id']").val();
-    if (selProdId > 0) {
-        var data = "selProdId=" + selProdId + "&qty=" + qty;
-        fcom.ajax(
-            fcom.makeUrl("Seller", "compareWithInventoryMinPurchase"),
-            data,
-            function (t) {
-                var ans = $.parseJSON(t);
-                if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
-                }
-            }
-        );
-    }
-});
-
-$(document).on(
-    "click",
-    "table.volDiscountList-js tr td .js--editCol",
-    function () {
-        $(this).hide();
-        var input = $(this).siblings('input[type="text"]');
-        var value = input.val();
-        input.removeClass("hidden");
-        input.val("").focus().val(value);
-    }
-);
-
-$(document).on("blur", ".js--volDiscountCol", function () {
-    var currObj = $(this);
-    var value = currObj.val();
-    var oldValue = currObj.attr("data-oldval");
-    var attribute = currObj.attr("name");
-    var id = currObj.data("id");
-    var selProdId = currObj.data("selprodid");
-    if ("" != value && parseFloat(value) != parseFloat(oldValue)) {
-        var data =
-            "attribute=" +
-            attribute +
-            "&voldiscount_id=" +
-            id +
-            "&selProdId=" +
-            selProdId +
-            "&value=" +
-            value;
-        fcom.ajax(
-            fcom.makeUrl("Seller", "updateVolumeDiscountColValue"),
-            data,
-            function (t) {
-                var ans = $.parseJSON(t);
-                if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
-                    value = updatedValue = oldValue;
-                } else {
-                    updatedValue = ans.data.value;
-                    currObj.attr("data-oldval", value);
-                }
-                currObj.val(value);
-                showElement(currObj, updatedValue);
-            }
-        );
-    } else {
-        showElement(currObj);
-        currObj.val(oldValue);
-    }
-    return false;
-});
-
 (function () {
     var dv = "#listing";
     searchRecords = function (frm) {
@@ -113,6 +43,7 @@ $(document).on("blur", ".js--volDiscountCol", function () {
     reloadList = function () {
         searchRecords(document.frmRecordSearch);
     };
+
     deleteSellerProductVolumeDiscount = function (voldiscount_id) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
@@ -181,19 +112,57 @@ $(document).on("blur", ".js--volDiscountCol", function () {
         );
         return false;
     };
-    showElement = function (currObj, value) {
-        var sibling = currObj.siblings("div");
-        if ("" != value) {
-            sibling.text(value);
-        }
-        sibling.fadeIn();
-        currObj.addClass("hidden");
-    };
 
     addNew = function () {
         fcom.ajax(fcom.makeUrl('Seller', "addVolumeDiscountForm"), "", function (t) {
             $.ykmodal(t.html);
             fcom.removeLoader();
         }, { fOutMode: 'json' });
+    };
+
+    showOrignal = function (ele) {
+        var obj = $(ele);
+        var value = obj.attr('data-value');
+        obj.text(value);
+    }
+
+    updateValues = function (ele) {
+        var obj = $(ele);
+        var attribute = obj.attr('name');
+        var value = ele.textContent;
+        var oldValue = obj.attr('data-value');
+        var formattedValue = obj.attr('data-formated-value');
+        var id = obj.attr('data-id');
+        var selProdId = obj.attr('data-selprod-id');
+        value = parseFloat(value);
+        if (Number.isNaN(value)) {
+            obj.text(formattedValue);
+            fcom.displayErrorMessage(langLbl.notANumber);
+            return;
+        }
+        oldValue = parseFloat(oldValue);
+
+
+        if ('' != value && value != oldValue) {
+            fcom.displayProcessing();
+            var data = 'attribute=' + attribute + "&voldiscount_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
+            fcom.ajax(fcom.makeUrl("Seller", "updateVolumeDiscountColValue"), data, function (t) {
+                fcom.closeProcessing();
+                var ans = $.parseJSON(t);
+                if (ans.status != 1) {
+                    fcom.displayErrorMessage(ans.msg);
+                    value = oldValue;
+                    updatedValue = formattedValue;
+                } else {
+                    updatedValue = ans.data.value;
+                }
+                obj.attr('data-value', value);
+                obj.attr('data-formated-value', updatedValue);
+                obj.text(updatedValue);
+
+            });
+        } else {
+            obj.text(formattedValue);
+        }
     };
 })();

@@ -5,7 +5,7 @@
         }       
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "forgotPassword"), data, function (t) {
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
             frm.reset();
         });
         googleCaptcha();

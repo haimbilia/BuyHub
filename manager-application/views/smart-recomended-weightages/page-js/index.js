@@ -9,7 +9,7 @@
         value = parseFloat(value);
         if (Number.isNaN(value)) {
             obj.text(obj.attr('data-value'));
-            $.ykmsg.error(langLbl.notANumber);
+            fcom.displayErrorMessage(langLbl.notANumber);
             return;
         }
 

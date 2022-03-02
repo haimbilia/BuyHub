@@ -20,7 +20,7 @@ $(document).on('blur', "input[name='promotion_budget']", function () {
     fcom.ajax(fcom.makeUrl(controllerName, 'checkValidPromotionBudget'), data, function (t) {
         var ans = $.parseJSON(t);
         if (ans.status == 0) {
-            $.ykmsg.error(ans.msg);
+            fcom.displayErrorMessage(ans.msg);
             return;
         }
     });

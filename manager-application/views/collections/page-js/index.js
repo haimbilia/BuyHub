@@ -44,10 +44,10 @@ $(document).on('change', '.prefDimensionsJs', function() {
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
                             if (ans.status != 1) {
-                                $.ykmsg.error(ans.msg);
+                                fcom.displayErrorMessage(ans.msg);
                                 return;
                             }
-                            $.ykmsg.success(ans.msg);
+                            fcom.displaySuccessMessage(ans.msg);
                             reloadList();
                         });
                     },
@@ -99,7 +99,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
 
         res = $.parseJSON(response)
         if (0 == res.status) {
-            $.ykmsg.error(res.msg);
+            fcom.displayErrorMessage(res.msg);
             return;
         }
 
@@ -154,7 +154,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
             fcom.removeLoader();
             var ans = $.parseJSON(t);
             if (0 == ans.status) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 $(obj).prop('checked', false);
                 return false
             } else {
@@ -171,11 +171,11 @@ $(document).on('change', '.prefDimensionsJs', function() {
         fcom.ajax(fcom.makeUrl(controllerName, 'deleteImage', [recordId, afile_id, lang_id, slide_screen]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 return;
             }
 
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             loadImages(recordId, lang_id);
         });
     }
@@ -212,10 +212,10 @@ $(document).on('change', '.prefDimensionsJs', function() {
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
 
             if (t.langId > 0) {
                 bannerLangForm(t.collectionId, t.bannerId, t.langId);
@@ -237,10 +237,10 @@ $(document).on('change', '.prefDimensionsJs', function() {
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
 
             if (t.langId > 0) {
                 bannerLangForm(t.collectionId, t.recordId, t.langId);
@@ -297,11 +297,11 @@ $(document).on('change', '.prefDimensionsJs', function() {
         fcom.ajax(fcom.makeUrl(controllerName, 'removeBanner', [recordId, afile_id, lang_id, slide_screen]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.ykmsg.error(ans.msg);
+                fcom.displayErrorMessage(ans.msg);
                 return;
             }
 
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             loadBannerImages(recordId, lang_id);
         });
     }
@@ -312,7 +312,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
         var oldStatus = $(obj).attr("data-old-status");
         if (1 > recordId) {
             $(obj).prop("checked", 1 == oldStatus);
-            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
         }
@@ -323,14 +323,14 @@ $(document).on('change', '.prefDimensionsJs', function() {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
-                    $.ykmsg.success(ans.msg);
+                    fcom.displaySuccessMessage(ans.msg);
                     $(obj).attr({ onclick: "toggleBannerStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status });
                     if ("" != callback) {
                         eval(callback);
                     }
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                 }
                 fcom.removeLoader();
             }

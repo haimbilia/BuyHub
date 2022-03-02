@@ -43,11 +43,8 @@ $cancelBtnFld->developerTags['col'] = 2;
                     </div>
                 </div>
             </div>
-            <div class="card-body ">
-                <div class="replaced">
-                    <?php echo $frmSearchCustomProduct->getFormHtml(); ?>
-                </div>
-
+            <div class="card-body">
+                <?php echo $frmSearchCustomProduct->getFormHtml(); ?>
                 <?php echo $frmSearchCustomProduct->getExternalJS(); ?>
                 <div id="listing">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>

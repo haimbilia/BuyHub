@@ -320,11 +320,12 @@ class HtmlHelper
         }
     }
 
-    public static function getIdentifierText($identifier, $langId){
+    public static function getIdentifierText($identifier, $langId)
+    {
 
-        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) ." : ".$identifier;
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) . " : " . $identifier;
     }
-    
+
     public static function displayWordsFirstLetter($keyword, int $len = 2)
     {
         $titleArr = explode(' ', $keyword);

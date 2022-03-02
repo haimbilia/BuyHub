@@ -2790,13 +2790,18 @@ trait SellerProducts
 
         $frm->addHiddenField('', 'selprod_id', 0);
         $prodName = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
-        //$prodName = $frm->addTextBox('', 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('FRM_SELECT_PRODUCT', $this->siteLangId)));
         $prodName->requirements()->setRequired();
-        //$fld1 = $frm->addTextBox('', 'products_related');
-        $fld1 = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'products_related', [], '');
-        // $fld1->htmlAfterField= '<div class="row"><div class="col-md-12"><ul class="list-vertical" id="related-products"></ul></div></div>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'products_related', [], '');
         return $frm;
+    }
+
+    public function relatedProductsForm()
+    {
+        $this->set("frm", $this->getRelatedProductsForm());
+        $this->set('includeTabs', false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+
     }
 
     public function relatedProducts($selProd_id = 0)
@@ -2830,9 +2835,8 @@ trait SellerProducts
             }
         } else {
             $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-
             if (false === $post) {
-                FatUtility::dieJsonError(current($frm->getValidationErrors()));
+                FatUtility::dieJsonError(current($srchFrm->getValidationErrors()));
             } else {
                 unset($post['btn_submit'], $post['btn_clear']);
                 $srchFrm->fill($post);
@@ -2843,11 +2847,10 @@ trait SellerProducts
             $srchFrm->fill(array('keyword' => $productsTitle[$selProdId]));
         }
         $this->set("canEdit", $this->userPrivilege->canEditRelatedProducts(UserAuthentication::getLoggedUserId(), true));
-        $relProdFrm = $this->getRelatedProductsForm();
         $this->set("dataToEdit", $dataToEdit);
         $this->set("frmSearch", $srchFrm);
-        $this->set("relProdFrm", $relProdFrm);
         $this->set("selProd_id", $selProd_id);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
@@ -2870,8 +2873,10 @@ trait SellerProducts
             $prodSrch->joinTable(SellerProduct::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . SellerProduct::DB_TBL_LANG_PREFIX . 'selprod_id = ' . SellerProduct::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . SellerProduct::DB_TBL_LANG_PREFIX . 'lang_id = ' . $this->siteLangId, 'slang');
             $prodSrch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_PREFIX . 'product_id');
             $prodSrch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . SellerProduct::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $this->siteLangId, 'lang');
+            
             $cnd = $prodSrch->addCondition('product_name', 'like', "%$keyword%");
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%', 'OR');
         }
 
         $prodSrch->addCondition('selprod_user_id', '=', $this->userParentId);

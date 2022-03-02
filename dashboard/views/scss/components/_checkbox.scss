@@ -49,8 +49,6 @@
 
 .checkbox input,
 .radio input {
-    -ms-appearance: none;
-    -o-appearance: none;
     appearance: none;
     position: relative;
     top: -1px;
@@ -95,7 +93,7 @@
     line-height: 1rem;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    -webkit-transform: rotate(45deg);
+
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
@@ -104,8 +102,7 @@
 
 .checkbox input:checked::after,
 .radio input:checked::after {
-    -webkit-animation: click-wave 0.65s;
-    animation: click-wave 0.65s;
+    //animation: click-wave 0.65s;
     background: $brand-color;
     color: $brand-color-inverse;
     content: "";

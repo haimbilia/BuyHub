@@ -4,9 +4,9 @@
         'select_all' => '',
         'product_name' => Labels::getLabel('LBL_Name', $siteLangId),
         'selprod_price' => Labels::getLabel('LBL_Original_Price', $siteLangId),
+        'splprice_price' => Labels::getLabel('LBL_Special_Price', $siteLangId),
         'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $siteLangId),
         'splprice_end_date' => Labels::getLabel('LBL_End_Date', $siteLangId),
-        'splprice_price' => Labels::getLabel('LBL_Special_Price', $siteLangId)
     );
     if ($canEdit) {
         $arr_flds['action']    = '';
@@ -33,7 +33,7 @@
         $splPriceId = $row['splprice_id'];
         $selProdId = $row['selprod_id'];
         $editListingFrm = new Form('editListingFrm-' . $splPriceId, array('id' => 'editListingFrm-' . $splPriceId));
-        foreach ($arr_flds as $column => $lblTitle) {
+        foreach ($arr_flds as $column => $val) {
             $tr->setAttribute('id', 'row-' . $splPriceId);
             $td = $tr->appendElement('td');
             switch ($column) {
@@ -51,29 +51,48 @@
                 case 'splprice_start_date':
                 case 'splprice_end_date':
                     $date = date('Y-m-d', strtotime($row[$column]));
-                    $attr = array(
+                    $fldAttr = array(
+                        'placeholder' => $val,
                         'readonly' => 'readonly',
-                        'placeholder' => $lblTitle,
-                        'data-selprodid' => $selProdId,
+                        'class' => 'field--calender inputDateJs d-none',
+                        'name' => $column,
+                        'data-selprod-id' => $selProdId,
+                        'data-price' => $row['selprod_price'],
                         'data-id' => $splPriceId,
-                        'data-oldval' => $date,
-                        'id' => $column . '-' . $splPriceId,
-                        'class' => 'date_js js--splPriceCol hidden sp-input',
+                        'data-value' => $date,
+                        'data-formated-value' => $date,
                     );
-                    $editListingFrm->addDateField($lblTitle, $column, $date, $attr);
 
-                    $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
+                    $attr = ['class' => 'dateJs contenteditable click-to-edit', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)];
+                    $td->appendElement('div', $attr, $date, true);
+                    $editListingFrm->addDateField($val, $column, $date, $fldAttr);
                     $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($column), true);
                     break;
                 case 'splprice_price':
-                    $input = '<input type="text" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$column] . '" data-selprodid="' . $selProdId . '" name="' . $column . '" data-oldval="' . $row[$column] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$column], true, true) . '" class="js--splPriceCol hidden sp-input"/>';
-                    $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$column], true, true), true);
-                    $td->appendElement('plaintext', array(), $input, true);
+                    $editable = $canEdit ? 'true' : 'false';
+                    $div = $td->appendElement('div', ['class' => 'edit-price']);
+                    $splPrice = CommonHelper::displayMoneyFormat($row[$column], true, true);
+
+                    $div->appendElement('div', [
+                        "class" => 'click-to-edit',
+                        'name' => $column,
+                        'data-selprod-id' => $selProdId,
+                        'data-price' => $row['selprod_price'],
+                        'data-id' => $splPriceId,
+                        'data-value' => $row[$column],
+                        'data-formated-value' => $splPrice,
+                        'contentEditable' => $editable,
+                        'data-bs-toggle' => 'tooltip',
+                        'data-placement' => 'top',
+                        'onblur' => 'updateValues(this)',
+                        'onfocus' => 'showOrignal(this)',
+                        'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
+                    ], $splPrice, true);
                     if ($row['selprod_price'] > $row[$column]) {
                         $discountPrice = $row['selprod_price'] - $row[$column];
-                        $discountPercentage = CommonHelper::numberFormat(round(($discountPrice / $row['selprod_price']) * 100, 2));
+                        $discountPercentage = round(($discountPrice / $row['selprod_price']) * 100, 2);
                         $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $siteLangId);
-                        $td->appendElement('div', array("class" => 'ml-3 percentValJs badge badge-success'), $discountPercentage, true);
+                        $div->appendElement('div', array("class" => 'percentValJs badge badge-success'), $discountPercentage, true);
                     }
                     break;
                 case 'action':

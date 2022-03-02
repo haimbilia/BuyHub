@@ -68,8 +68,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
-                            <div id="listing">
+                        <div class="card-table" id="listing">
+                            <div class="container m-2">
                                 <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                             </div>
                         </div>

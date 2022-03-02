@@ -38,7 +38,11 @@ class ContentPagesController extends ListingBaseController
                             </svg><span>' . Labels::getLabel('BTN_LAYOUTS', $this->siteLangId) . '</span>',
             ]
         ];
-
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'addNew(false, "modal-dialog-vertical-md")'
+            ],
+        ];
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -115,7 +119,7 @@ class ContentPagesController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = ContentPage::getSearchObject($this->siteLangId); 
+        $srch = ContentPage::getSearchObject($this->siteLangId);
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('cpage_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('cpage_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -126,9 +130,9 @@ class ContentPagesController extends ListingBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->addOrder($sortBy, $sortOrder);
-        $srch->setPageSize($pageSize);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -198,7 +202,7 @@ class ContentPagesController extends ListingBaseController
         }
 
         $newTabLangId = CommonHelper::getDefaultFormLangId();
-        if(0 < $recordId){
+        if (0 < $recordId) {
             $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
             if (0 < count($languages)) {
                 foreach ($languages as $langId => $langName) {
@@ -207,9 +211,9 @@ class ContentPagesController extends ListingBaseController
                         break;
                     }
                 }
-            } 
+            }
         }
-        
+
         $recordId = $contentPage->getMainTableRecordId();
         $this->setLangData($contentPage, [$contentPage::tblFld('title') => $post[$contentPage::tblFld('title')]]);
 
@@ -222,7 +226,7 @@ class ContentPagesController extends ListingBaseController
         }
         /* ] */
 
-             
+
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('pageId', $recordId);
@@ -270,7 +274,7 @@ class ContentPagesController extends ListingBaseController
             }
         } else {
             $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'cpage_content');
-        }     
+        }
         $languages = Language::getAllNames();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languages) && $langId == CommonHelper::getDefaultFormLangId()) {
