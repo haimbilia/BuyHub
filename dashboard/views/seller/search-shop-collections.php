@@ -29,7 +29,7 @@
     }
     ?>
 </div>
-<div class="card-body">
+<div class="card-table">
     <div class="table-wrap">
         <?php
         $arr_flds = array(
@@ -104,10 +104,10 @@
                                     "onclick" => "getShopCollectionGeneralForm(" . $row['scollection_id'] . ")"
                                 ),
                                 '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>',
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>',
                                 true
                             );
 
@@ -152,5 +152,4 @@
         } ?>
         </form>
     </div>
-
 </div>

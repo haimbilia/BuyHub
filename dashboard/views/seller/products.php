@@ -18,8 +18,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-lg-12">
                 <div class="card card-form">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <div class="card-body">
-                        <div id="listing">
+                    <div class="card-table" id="listing">
+                        <div class="container m-2">
                             <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                         </div>
                     </div>

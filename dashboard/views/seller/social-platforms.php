@@ -28,7 +28,7 @@
     }
     ?>
 </div>
-<div class="card-body">
+<div class="card-table">
     <div class="js-scrollable table-wrap table-responsive">
         <?php
         $arr_flds = array(

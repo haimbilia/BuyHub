@@ -19,9 +19,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-lg-12">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <div class="card-body">
+                    <div class="card-table">
                         <?php if (1 < count($languages)) { ?>
-                            <div class="row justify-content-end mb-4">
+                            <div class="row justify-content-end m-4">
                                 <div class="col-auto">
                                     <select class="form-control form-select" onchange="langForm(this)" name="lang_id">
                                         <?php foreach ($languages as $langId => $langName) {
@@ -34,7 +34,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                         <?php } ?>
                         <div id="listing"></div>
-
                     </div>
                 </div>
             </div>
