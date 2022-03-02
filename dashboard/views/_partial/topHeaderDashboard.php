@@ -126,16 +126,9 @@
                 </svg>
 
                 <span class="h-badge">
-
-
                     <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
-
         <?php } ?>
-
-        <ul class="short-links">
-            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
-        </ul>
-
+        <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
     </div>
 </header>
 <div class="display-in-print text-center">
