@@ -27,7 +27,7 @@ $(document).ajaxComplete(function () {
                 var data = '';
                 const bindData = new Promise((resolve, reject) => {
                     for (let i = 0; i < order.length; i++) {
-                        data += 'orderStatuses[]=' + order[i];
+                        data += 'orderStatuses[' + (i + 1) + ']=' + order[i];
                         if (i + 1 < order.length) {
                             data += '&';
                         }

@@ -453,7 +453,6 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
-            fcom.closeAlertMessage();           
         });
     };
 
@@ -472,7 +471,6 @@ $(document).on("change", ".state", function () {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            fcom.closeAlertMessage();
             $.ykmodal(t);
         });
     };

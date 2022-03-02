@@ -1,6 +1,7 @@
 <?php
 
-class ListingBaseController extends AdminBaseController {
+class ListingBaseController extends AdminBaseController
+{
 
     use RecordOperations;
 
@@ -11,7 +12,8 @@ class ListingBaseController extends AdminBaseController {
     protected bool $checkMediaExist = false;
     protected int $newTabLangId = 0;
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
     }
 
@@ -21,11 +23,13 @@ class ListingBaseController extends AdminBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setModel(array $constructorArgs = []): void {
+    protected function setModel(array $constructorArgs = []): void
+    {
         $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
     }
 
-    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false) {
+    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false)
+    {
         if ($pageSize < 1) {
             return;
         }
@@ -34,7 +38,7 @@ class ListingBaseController extends AdminBaseController {
             $this->setPageRecord($post['total_record_count'], $pageSize, $page);
             return;
         }
-        
+
         $recordCountSrch->doNotLimitRecords();
         if ($isGroupSearch == false) {
             $recordCountSrch->addFld('count(*) as totalRecords');
@@ -46,16 +50,16 @@ class ListingBaseController extends AdminBaseController {
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
-        //echo $recordCountSrch->getQuery();die;
+        
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }
 
-    private function setPageRecord($recordCount, $pageSize, $page) {
+    private function setPageRecord($recordCount, $pageSize, $page)
+    {
         $this->set('pageCount', ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0);
         $this->set('recordCount', $recordCount);
         $this->set('pageSize', $pageSize);
         $this->set('page', $page);
     }
-
 }
