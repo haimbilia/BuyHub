@@ -2380,7 +2380,7 @@ $header-height: 65px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-#{$start-direction}: $side-bar-size-close;
+    //padding-#{$start-direction}: $side-bar-size-close;
 
     @media (min-width: 1280px) {
         padding-#{$start-direction}: $side-bar-size;
@@ -3003,9 +3003,11 @@ $header-height: 65px;
 
 //
 .grid-layout {
-    display: grid;
-    grid-gap: 2rem;
-    grid-template-columns: minmax(auto, 320px) 2fr;
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-gap: 2rem;
+        grid-template-columns: minmax(auto, 410px) 2fr;
+    }
 }
 .edit-price {
     display: inline-flex;
