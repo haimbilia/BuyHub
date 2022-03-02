@@ -3079,10 +3079,11 @@ $header-height: 65px;
         cursor: pointer;
     }
 }
-
+//phone code
 .iti {
     width: 100%;
     height: $input-height;
+    font-size: 0.8rem;
 }
 [dir="rtl"] .iti__flag-container {
     right: 0 !important;
