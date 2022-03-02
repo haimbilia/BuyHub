@@ -23,7 +23,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_USER_PROFILE_CROPED_IMAGE = 10;    /*User profile croped image*/
     public const FILETYPE_CATEGORY_ICON = 11; /*Used for mobile and shop templates*/
     public const FILETYPE_CATEGORY_BANNER = 12; /* Used in category detail page */
-    
+
     public const FILETYPE_CATEGORY_BANNER_SELLER = 13; /* Used in seller shop template page */
     public const FILETYPE_SHOP_BACKGROUND_IMAGE = 14; /* Used in seller shop template page */
     public const FILETYPE_FRONT_LOGO = 15;
@@ -215,7 +215,7 @@ class AttachedFile extends MyAppModel
         $fileType = FatUtility::int($fileType);
         $recordId = FatUtility::int($recordId);
         $recordSubid = FatUtility::int($recordSubid);
-        $langId = FatUtility::int($langId); 
+        $langId = FatUtility::int($langId);
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
@@ -263,7 +263,7 @@ class AttachedFile extends MyAppModel
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
     {
-       
+
         $data = static::getMultipleAttachments($fileType, $recordId, $recordSubid, $langId, $displayUniversalImage, $screen);
         if (count($data) > 0) {
             reset($data);
@@ -621,7 +621,7 @@ class AttachedFile extends MyAppModel
     /* always call this function using image controller and pass relavant arguments. */
     public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
-        
+
         if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
             self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
@@ -648,12 +648,12 @@ class AttachedFile extends MyAppModel
         }
 
         static::setHeaders();
-      
+
         $w = FatUtility::int($w);
         $h = FatUtility::int($h);
-      
+
         static::checkModifiedHeader($imagePath);
-        
+
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_get_clean();
             ob_start();
@@ -663,13 +663,13 @@ class AttachedFile extends MyAppModel
                 static::loadImage($fileContent, $imagePath);
             }
         }
-       
-     
+
+
         /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
         $tempPath = '';
-      
+
         if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-           
+
             static::setLastModified($imagePath);
             static::setContentType($imagePath);
             $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
@@ -679,17 +679,17 @@ class AttachedFile extends MyAppModel
             }
             $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
         } else {
-           
+
             $tempPath = $imagePath;
             static::setLastModified($imagePath);
             static::setContentType($imagePath);
         }
-        
+
         try {
-          
+
             $img = new ImageResize($tempPath);
         } catch (Exception $e) {
-          
+
             $img = static::getDefaultImage($imagePath, $w, $h);
             $img->setExtraSpaceColor(204, 204, 204);
         }
@@ -1207,7 +1207,11 @@ class AttachedFile extends MyAppModel
     public static function setTimeParam($dateTime)
     {
         $time = strtotime($dateTime);
-        return ($time > 0) ? '?t=' . $time : '';
+        if (0 < $time) {
+            return '?t=' . $time;
+        }
+        $time = strtotime(date('Y-m-d'));
+        return '?t=' . $time;
     }
 
     public static function uploadErrorMessage($code, $langId)
@@ -1343,5 +1347,4 @@ class AttachedFile extends MyAppModel
         }
         return false;
     }
-    
 }

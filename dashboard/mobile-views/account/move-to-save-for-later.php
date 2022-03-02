@@ -15,7 +15,7 @@ if (0 < $productsCount) {
     foreach ($products as $key => &$product) {
         $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
         $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']), CONF_WEBROOT_FRONTEND);
-        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
 
         $type = '';
         if ($product['fulfillment_type'] == Shipping::FULFILMENT_PICKUP) {
