@@ -146,16 +146,9 @@ class ImageController extends FatController
         }
 
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-        /* CommonHelper::printArray($image_name); die();  */
-
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
-
-
-
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
-
         if ($sizeType) {
-
             $objectName::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             $objectName::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
@@ -181,10 +174,12 @@ class ImageController extends FatController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $aspectRatioType = $file_row['afile_aspect_ratio'];
+        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+      
 
 
-
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType, $aspectRatioType);
 
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);

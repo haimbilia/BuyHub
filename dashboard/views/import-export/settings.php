@@ -1,10 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm, 4);
-$frm->setFormTagAttribute('class', 'form form--settings');
-$frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
-$frm->setFormTagAttribute('onsubmit', "updateSettings('frmImportExportSetting'); return(false);");
-$frm->setFormTagAttribute('class', 'form'); ?>
+$frm->setFormTagAttribute('class', 'form form--settings'); ?>
 
 <div class="card-head">
     <?php $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canEditImportExport' => $canEditImportExport, 'canUploadBulkImages' => $canUploadBulkImages);

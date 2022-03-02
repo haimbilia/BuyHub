@@ -44,14 +44,7 @@ $(document).on('change', '#addrStateJs', function () {
                 $.ykmsg.error(langLbl.invalidTimeSlot);
                 return false;
             }
-        }
-
-        if (0 > $('#addrStateJs').val()) {
-            $('#addrStateJs').addClass('error');
-            $.ykmsg.error(langLbl.invalidState);
-            return false;
-        }
-
+        }        
         $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {

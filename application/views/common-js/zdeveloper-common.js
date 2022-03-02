@@ -849,6 +849,31 @@ sendResetPasswordLink = function (user) {
         getRowSpinner: function () {
             return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
         },
+        updateFaceboxContent: function (t, cls) {
+            if (typeof cls == "undefined" || cls == "undefined") {
+                cls = "";
+            }
+            $.facebox(t, cls);
+            $.ykmsg.close();
+            fcom.resetFaceboxHeight();
+        },
+        resetFaceboxHeight: function () {
+            facebocxHeight = screenHeight;
+            var fbContentHeight =
+                parseInt($("#facebox .content").height()) + parseInt(150);
+            setTimeout(function () {
+                $("#facebox .content").css(
+                    "max-height",
+                    parseInt(facebocxHeight) - parseInt(facebocxHeight) / 4 + "px"
+                );
+            }, 700);
+            $("#facebox .content").css("overflow-y", "auto");
+            if (fbContentHeight > screenHeight - parseInt(100)) {
+                $("#facebox .content").css("display", "block");
+            } else {
+                $("#facebox .content").css("max-height", "");
+            }
+        },
     });
 
     $.fn.serialize_without_blank = function () {

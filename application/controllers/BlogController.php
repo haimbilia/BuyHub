@@ -311,19 +311,16 @@ class BlogController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId(true);
         $userId = FatUtility::int($userId);
         if (1 > $userId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_NOT_LOGGED', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_NOT_LOGGED', $this->siteLangId));
         }
         $blogPostId = FatApp::getPostedData('bpcomment_post_id', FatUtility::VAR_INT, 0);
         if ($blogPostId <= 0) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $frm = $this->getPostCommentForm($blogPostId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage($frm->getValidationErrors());
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError($frm->getValidationErrors());
         }
 
         /* checking Abusive Words[ */
@@ -332,8 +329,7 @@ class BlogController extends MyAppController
             if (!empty($enteredAbusiveWordsArr)) {
                 $errStr = Labels::getLabel("ERR_WORD_{abusiveword}_IS/ARE_NOT_ALLOWED_TO_POST", $this->siteLangId);
                 $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
-                Message::addErrorMessage($errStr);
-                FatUtility::dieWithError(Message::getHtml());
+                FatUtility::dieWithError($errStr);
             }
         }
         /* ] */
@@ -346,8 +342,7 @@ class BlogController extends MyAppController
         $blogComment = new BlogComment();
         $blogComment->assignValues($post);
         if (!$blogComment->save()) {
-            Message::addErrorMessage($blogComment->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError($blogComment->getError());
         }
 
         $blogCommentId = $blogComment->getMainTableRecordId();
@@ -361,8 +356,7 @@ class BlogController extends MyAppController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            Message::addErrorMessage(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         FatUtility::dieJsonSuccess(Labels::getLabel('SUC_BLOG_COMMENT_SAVED_AND_AWAITING_ADMIN_APPROVAL.', $this->siteLangId));

@@ -238,12 +238,7 @@ class ReviewsController extends MyAppController
         $sellerId = Shop::getAttributesById($selprod_id, 'shop_user_id', false);
 
         if ($selprod_id <= 0 || false === $sellerId) {
-            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -575,8 +570,7 @@ class ReviewsController extends MyAppController
         );
         $obj = new SelProdReview();
         if (!$obj->addSelProdReviewAbuse($data, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($obj->getError());
         }
         $this->set('reviewId', $reviewId);
         $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFULLY', $this->siteLangId));

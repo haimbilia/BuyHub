@@ -201,7 +201,7 @@ class AbandonedCart extends MyAppModel
 
         $tpl = "";
         if ($abandonedData['abandonedcart_action'] == static::ACTION_ADDED) {
-            $prodImage = UrlHelper::generateFullUrl('image', 'product', array($abandonedData['selprod_product_id'], "THUMB", $abandonedData['selprod_id'], 0, $this->commonLangId), CONF_WEBROOT_FRONTEND);
+            $prodImage = UrlHelper::generateFullUrl('image', 'product', array($abandonedData['selprod_product_id'], ImageDimension::VIEW_THUMB, $abandonedData['selprod_id'], 0, $this->commonLangId), CONF_WEBROOT_FRONTEND);
             $arrReplacements['{product_image}'] = $prodImage;
             $arrReplacements['{product_price}'] = CommonHelper::displayMoneyFormat($abandonedData['selprod_price']);
             $tpl = "abandoned_cart_discount_notification";

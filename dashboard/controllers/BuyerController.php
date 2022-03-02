@@ -381,8 +381,7 @@ class BuyerController extends BuyerBaseController
     public function downloadDigitalFiles(int $type, int $opId)
     {
         if (1 > $type || 1 > $opId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST.', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST.', $this->siteLangId));
         }
 
         switch ($type) {
@@ -394,8 +393,7 @@ class BuyerController extends BuyerBaseController
                 break;
 
             default:
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_TYPE.', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_TYPE.', $this->siteLangId));
                 break;
         }
     }
@@ -428,10 +426,11 @@ class BuyerController extends BuyerBaseController
 
         $downloads = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($downloads)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD.', $this->siteLangId));
+            $msg = Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD.', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($msg);
             }
+            Message::addErrorMessage($msg);
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
@@ -536,10 +535,11 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $downloads = FatApp::getDb()->fetchAll($rs);
         if (empty($downloads)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD', $this->siteLangId));
+            $msg = Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($msg);
             }
+            Message::addErrorMessage($msg);
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
@@ -699,7 +699,7 @@ class BuyerController extends BuyerBaseController
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
             $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
-            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], "THUMB", $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('postedData', $post);
@@ -762,7 +762,7 @@ class BuyerController extends BuyerBaseController
 
         foreach ($orderProducts as &$op) {
             $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
-            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], "CLAYOUT3", $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
@@ -2166,8 +2166,7 @@ class BuyerController extends BuyerBaseController
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError(current($frm->getValidationErrors()));
             }
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         if (abs($opDetail['opcharge_amount']) > 0) {
@@ -2179,8 +2178,7 @@ class BuyerController extends BuyerBaseController
             $pricePerItemCharged = $opDetail['op_unit_price'] - $volumeDiscountPerItem;
 
             if ($amtChargeBackToBuyer > ($opDetail['op_unit_price'] - $volumeDiscountPerItem) * abs($orrequestQty)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Order_not_eligible_for_partial_qty_refund', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_Order_not_eligible_for_partial_qty_refund', $this->siteLangId));
             }
         }
 
@@ -2227,8 +2225,7 @@ class BuyerController extends BuyerBaseController
         $oReturnRequestObj = new OrderReturnRequest();
         $oReturnRequestObj->assignValues($returnRequestDataToSave);
         if (!$oReturnRequestObj->save()) {
-            Message::addErrorMessage($oReturnRequestObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($oReturnRequestObj->getError());
         }
         $orrequest_id = $oReturnRequestObj->getMainTableRecordId();
         if (!$orrequest_id) {
@@ -2244,29 +2241,17 @@ class BuyerController extends BuyerBaseController
 
             if (filesize($uploadedFile) > 10240000) {
                 $message = Labels::getLabel('MSG_Please_upload_file_size_less_than_10MB', $this->siteLangId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                Message::addErrorMessage($message);
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::dieJsonError($message);
             }
 
             if (getimagesize($uploadedFile) === false && in_array($uploadedFileExt, array('.zip'))) {
                 $message = Labels::getLabel('MSG_Only_Image_extensions_and_zip_is_allowed', $this->siteLangId);
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($message);
-                }
-                Message::addErrorMessage($message);
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::dieJsonError($message);
             }
 
             $fileHandlerObj = new AttachedFile();
             if (!$res = $fileHandlerObj->saveAttachment($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $orrequest_id, 0, $_FILES['file']['name'], -1, true)) {
-                if (true === MOBILE_APP_API_CALL) {
-                    LibHelper::dieJsonError($fileHandlerObj->getError());
-                }
-                Message::addErrorMessage($fileHandlerObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::dieJsonError($fileHandlerObj->getError());
             }
         }
 
@@ -2283,11 +2268,7 @@ class BuyerController extends BuyerBaseController
         $oReturnRequestMsgObj = new OrderReturnRequestMessage();
         $oReturnRequestMsgObj->assignValues($returnRequestMsgDataToSave);
         if (!$oReturnRequestMsgObj->save()) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($oReturnRequestMsgObj->getError());
-            }
-            Message::addErrorMessage($oReturnRequestMsgObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::dieJsonError($oReturnRequestMsgObj->getError());
         }
         $orrmsg_id = $oReturnRequestMsgObj->getMainTableRecordId();
         if (!$orrmsg_id) {
@@ -2304,11 +2285,7 @@ class BuyerController extends BuyerBaseController
         /* sending of email notification[ */
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendOrderReturnRequestNotification($orrmsg_id, $opDetail['order_language_id'])) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($oReturnRequestMsgObj->getError());
-            }
-            Message::addErrorMessage($emailNotificationObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::dieJsonError($oReturnRequestMsgObj->getError());
         }
         /* ] */
 
@@ -2413,8 +2390,7 @@ class BuyerController extends BuyerBaseController
         $post = FatApp::getPostedData();
 
         if (empty($post['rewardOptions'])) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Please_select_options', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Please_select_options', $this->siteLangId));
         }
 
         $rewardOptions = str_replace('|', ',', rtrim($post['rewardOptions'], '|'));
@@ -2435,13 +2411,11 @@ class BuyerController extends BuyerBaseController
         $records = FatApp::getDb()->fetch($rs);
 
         if (empty($records)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Invalid_Access', $this->siteLangId));
         }
 
         if ($records['totalRewardPoints'] < FatApp::getConfig('CONF_MIN_REWARD_POINT') || $records['totalRewardPoints'] > FatApp::getConfig('CONF_MAX_REWARD_POINT')) {
-            Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_VERIFY_REWARD_CONVERSION_LIMIT', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_VERIFY_REWARD_CONVERSION_LIMIT', $this->siteLangId));
         }
 
         $db = FatApp::getDb();
@@ -2465,22 +2439,19 @@ class BuyerController extends BuyerBaseController
         $couponObj->assignValues($couponData);
         if (!$couponObj->save()) {
             $db->rollbackTransaction();
-            Message::addErrorMessage($couponObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($couponObj->getError());
         }
 
         $couponId = $couponObj->getMainTableRecordId();
         if (1 > $couponId) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
         }
 
         $obj = new DiscountCoupons();
         if (!$obj->addUpdateCouponUser($couponId, $userId)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel($obj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($obj->getError(), $this->siteLangId));
         }
 
         $rewardOptionsArr = explode(',', $rewardOptions);
@@ -2493,8 +2464,7 @@ class BuyerController extends BuyerBaseController
             );
             if (!$rewardsRecord->save()) {
                 $db->rollbackTransaction();
-                Message::addErrorMessage(Labels::getLabel($rewardsRecord->getError(), $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel($rewardsRecord->getError(), $this->siteLangId));
             }
         }
 

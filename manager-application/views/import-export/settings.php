@@ -1,10 +1,10 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+
+HtmlHelper::formatFormFields($frm, 6);
+$frm->setFormTagAttribute('class', 'form form--settings');
+?>
 <div class="card-body">
-    <?php
-    HtmlHelper::formatFormFields($frm, 6);
-    $frm->setFormTagAttribute('class', 'form form--settings');
-    echo $frm->getFormHtml();
-    ?>
+    <?php echo $frm->getFormHtml(); ?>
 </div>
 <div class="card-foot">
     <button type="button" class="btn btn-brand  importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">

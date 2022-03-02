@@ -154,6 +154,8 @@ class StatesController extends ListingBaseController
             $frm->fill($data);
         }
 
+        HtmlHelper::addIdentierToFrm($frm->getField($this->modelClass::tblFld('name')), ($data[$this->modelClass::tblFld('identifier')] ?? ''));
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));

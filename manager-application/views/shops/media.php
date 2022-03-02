@@ -70,32 +70,75 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
     var minWidthBaneerEle = $('#<?php echo $shopBannerFrm->getFormTagAttribute('id'); ?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $shopBannerFrm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
-    $(minWidthBaneerEle).val(2000);
+  /*   $(minWidthBaneerEle).val(2000);
     $(minHeightBaneerEle).val(500);
     $(minWidthLogoEle).val(150);
-    $(minHeightLogoEle).val(150);
+    $(minHeightLogoEle).val(150); */
+
+    $(minWidthBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width'];  ?>');
+    $(minHeightBaneerEle).val('<?php  echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'); 
+     $(minWidthLogoEle).val('<?php  echo $getShopLogoSquare['width']; ?>');
+    $(minHeightLogoEle).val('<?php  echo $getShopLogoSquare['height']; ?>'); 
+
+
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
-    var aspectRatio = 4 / 1;
+
+    var getAspectRatioDes = '<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
+    getAspectRatioDes = getAspectRatioDes.split(":");
+    if (getAspectRatioDes) {
+        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
+    } else {
+        var aspectRatioDes = 4 / 1;
+    }
+
+
+   /*  var aspectRatio = 4 / 1; */
     $(document).on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
         if ($(this).val() == screenDesktop) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
+         /*    $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
             $(minWidthBaneerEle).val(2000);
             $(minHeightBaneerEle).val(500);
-            aspectRatio = 4 / 1;
+            aspectRatio = 4 / 1; */
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
         } else if ($(this).val() == screenIpad) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
+            var getAspectRatioIpad = '<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
+            getAspectRatioIpad = getAspectRatioIpad.split(":");
+            if (getAspectRatioIpad) {
+                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
+            } else {
+                var aspectRatioIpad = 128 / 45;
+            }
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
+            aspectRatio = aspectRatioIpad;
+          /*   $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
             $(minWidthBaneerEle).val(1024);
             $(minHeightBaneerEle).val(360);
-            aspectRatio = 128 / 45;
+            aspectRatio = 128 / 45; */
         } else {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
+            var getAspectRatioMob = '<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
+            getAspectRatioMob = getAspectRatioMob.split(":");
+            if (getAspectRatioMob) {
+                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
+            } else {
+                var aspectRatioMob = 16 / 9;
+            }
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+
+            $(minWidthBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            aspectRatio = aspectRatioMob;
+            /* $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
             $(minWidthBaneerEle).val(640);
             $(minHeightBaneerEle).val(360);
-            aspectRatio = 16 / 9;
+            aspectRatio = 16 / 9; */
         }
 
         var slide_screen = $(this).val();
@@ -104,7 +147,21 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
         shopImages(shop_id, 'image', slide_screen, lang_id);
     });
 
+
     $(document).on('change', '.prefRatio-js', function() {
+        if ($(this).val() == ratioTypeSquare) {
+            $(minWidthLogoEle).val('<?php echo $getShopLogoSquare['width']; ?>');
+            $(minHeightLogoEle).val('<?php echo $getShopLogoSquare['height']; ?>');
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopLogoSquare['width']; ?> x <?php echo $getShopLogoSquare['height']; ?>'));
+        } else {
+            $(minWidthLogoEle).val('<?php echo $getShopLogoRactangle['width']; ?>');
+            $(minHeightLogoEle).val('<?php echo $getShopLogoRactangle['height']; ?>');
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopLogoRactangle['width']; ?> x <?php echo $getShopLogoRactangle['height']; ?>'));
+        }
+    });
+
+
+   /*  $(document).on('change', '.prefRatio-js', function() {
         if ($(this).val() == ratioTypeSquare) {
             $(minWidthLogoEle).val(500);
             $(minHeightLogoEle).val(500);
@@ -114,5 +171,5 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
             $(minHeightLogoEle).val(280);
             $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
         }
-    });
+    }); */
 </script>

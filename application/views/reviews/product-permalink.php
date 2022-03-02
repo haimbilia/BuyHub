@@ -8,7 +8,7 @@
                 <div class="col-md-8 col-sm-8">
                     <div class="prod-info">
                         <div class="prod-info__left">
-                            <div class="product-avtar"><img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'SMALL', $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                            <div class="product-avtar"><img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                             </div>
                         </div>
                         <div class="prod-info__right">
@@ -45,7 +45,7 @@
                                         <div class="col-md-4">
                                             <div class="profile-avatar">
                                                 <div class="profile-dp">
-                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB, true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile-bio">
                                                     <div class="title">

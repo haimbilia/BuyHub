@@ -2,10 +2,50 @@
 
 class OptionValuesController extends LoggedUserController
 {
+    use RecordOperations;
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->_template->addJs('js/jscolor.js');
+    }
+
+    public function index($optionId = 0)
+    {
+        $optionId = FatUtility::int($optionId);
+        if (1 > $optionId) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatApp::redirectUser(UrlHelper::generateUrl("seller", "options"));
+        }
+
+        $this->userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId());
+
+        if (!UserPrivilege::canSellerEditOption($this->userParentId, $optionId)) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatApp::redirectUser(UrlHelper::generateUrl("seller", "options"));
+        }
+
+
+        $canAddCustomProd = FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
+        if (1 > $canAddCustomProd) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller'));
+        }
+
+        $frmSearch = $this->getSearchForm($optionId);
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_OPTION_VALUE', $this->siteLangId));
+        $this->set("frmSearch", $frmSearch);
+        $this->set("optionId", $optionId);
+        $this->set('canEdit', $this->userPrivilege->canEditProductOptions(UserAuthentication::getLoggedUserId(), true));
+        $this->_template->render(true, true);
+    }
+
+    private function getSearchForm(int $optionId)
+    {
+        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
+        $frm->addTextBox('', 'keyword');
+        $frm->addHiddenField('', 'total_record_count');
+        $frm->addHiddenField('', 'option_id', $optionId);
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
     }
 
     public function search()
@@ -28,13 +68,17 @@ class OptionValuesController extends LoggedUserController
             'ovl'
         );
 
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
         $srch->addMultipleFields(array("ovl.optionvalue_name"));
         $srch->addOrder('ov.optionvalue_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
         $this->set("arrListing", $records);
         $this->set("langId", $this->siteLangId);
         $this->_template->render(false, false);
@@ -43,16 +87,16 @@ class OptionValuesController extends LoggedUserController
     public function setup()
     {
         $frm = $this->getForm();
-        //$post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        $post = FatApp::getPostedData();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $option_id = FatUtility::int($post['optionvalue_option_id']);
         if ($option_id > 0) {
-            UserPrivilege::canSellerEditOption($this->userParentId, $option_id, $this->siteLangId);
+            if (!UserPrivilege::canSellerEditOption($this->userParentId, $option_id)) {
+                FatUtility::dieJsonError($this->str_invalid_request);
+            }
         }
         $optionvalue_id = FatUtility::int($post['optionvalue_id']);
         unset($post['optionvalue_id']);
@@ -60,37 +104,20 @@ class OptionValuesController extends LoggedUserController
         if (0 < $optionvalue_id) {
             $optionValueObj = new OptionValue();
             $data = $optionValueObj->getAttributesByIdAndOptionId($option_id, $optionvalue_id, array('optionvalue_id'));
-
             if ($data === false) {
-                Message::addErrorMessage(
-                    Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-                );
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
             }
         }
 
         $optionValueObj = new OptionValue($optionvalue_id);
+        $post[$optionValueObj::tblFld('identifier')] = $post[$optionValueObj::tblFld('name')];
         $optionValueObj->assignValues($post);
-
         if (!$optionValueObj->save()) {
-            Message::addErrorMessage($optionValueObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($optionValueObj->getError());
         }
 
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            $data = array(
-            'optionvaluelang_optionvalue_id' => $optionvalue_id,
-            'optionvaluelang_lang_id' => $langId,
-            'optionvalue_name' => $post['optionvalue_name' . $langId],
-            );
-            if (!$optionValueObj->updateLangData($langId, $data)) {
-                Message::addErrorMessage($optionValueObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
+        $this->setLangData($optionValueObj, [$optionValueObj::tblFld('name') => $post[$optionValueObj::tblFld('name')]]);
 
-        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->set('optionId', $option_id);
         $this->set('optionValueId', $optionvalue_id);
         $this->_template->render(false, false, 'json-success.php');
@@ -103,35 +130,35 @@ class OptionValuesController extends LoggedUserController
             FatUtility::dieWithError(
                 Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
             );
-        } else {
-            $option = new Option();
-            if (!$row = $option->getOption($option_id)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];
-            $this->set('optionName', $optionName);
         }
+
+        $option = new Option();
+        if (!$row = $option->getOption($option_id)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];
+
         $optionvalue_id = FatUtility::int($optionvalue_id);
-        $optionValueFrm = $this->getForm($option_id, $optionvalue_id);
-
-
+        $frm = $this->getForm($option_id, $optionvalue_id);
+        $identifier = '';
         if (0 < $optionvalue_id) {
-            $optionValueObj = new OptionValue($optionvalue_id);
-            $data = $optionValueObj->getOptionValue($option_id);
-
+            $data = OptionValue::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $optionvalue_id, array('m.*', 'IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 FatUtility::dieWithError(
                     Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
                 );
             }
-            $optionValueFrm->fill($data);
+            $frm->fill($data);
+            $identifier = $data['optionvalue_identifier'];
         }
 
-        $this->set('optionValueFrm', $optionValueFrm);
-        $this->set('langId', $this->siteLangId);
+        $this->set('frm', $frm);
+        $this->set('languages', Language::getAllNames());
+        $this->set('identifier', $identifier);
         $this->set('option_id', $option_id);
         $this->set('optionvalue_id', $optionvalue_id);
+        $this->set('optionName', $optionName);
         $this->_template->render(false, false);
     }
 
@@ -139,35 +166,105 @@ class OptionValuesController extends LoggedUserController
     {
         $option_id = FatUtility::int($option_id);
         $optionvalue_id = FatUtility::int($optionvalue_id);
-
-        $lang_id = $this->siteLangId;
-
         $frm = new Form('frmOptionValues', array('id' => 'frmOptionValues'));
         $frm->addHiddenField('', 'optionvalue_id', $optionvalue_id);
         $frm->addHiddenField('', 'optionvalue_option_id', $option_id);
-        $frm->addRequiredField(Labels::getLabel('FRM_OPTION_VALUE_IDENTIFIER', $lang_id), 'optionvalue_identifier');
-
-        $languages = Language::getAllNames();
-        $defaultLang = true;
-        foreach ($languages as $langId => $langName) {
-            $attr['class'] = 'langField_' . $langId;
-            if (true === $defaultLang) {
-                $attr['class'] .= ' defaultLang';
-                $defaultLang = false;
-            }
-            $frm->addRequiredField(
-                Labels::getLabel('FRM_OPTION_VALUE_NAME', $lang_id) . ' ' . $langName,
-                'optionvalue_name' . $langId,
-                '',
-                $attr
-            );
-        }
-
+        $frm->addRequiredField(Labels::getLabel('FRM_OPTION_VALUE_NAME', $this->siteLangId), 'optionvalue_name');
         $optionRow = Option::getAttributesById($option_id);
         if ($optionRow && $optionRow['option_is_color']) {
             $fld = $frm->addTextBox(Labels::getLabel('FRM_OPTION_VALUE_COLOR', $this->siteLangId), 'optionvalue_color_code');
-            $fld->addFieldTagAttribute('class', 'jscolor');
+            $fld->overrideFldType('color');
         }
+
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
+        return $frm;
+    }
+
+    public function langForm($optionvalue_id = 0, $langId = 0, $autoFillLangData = 0)
+    {
+        $optionvalue_id = FatUtility::int($optionvalue_id);
+        $langId = FatUtility::int($langId);
+        $autoFillLangData = FatUtility::int($autoFillLangData);
+
+        if (1 > $optionvalue_id || 1 > $langId) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+        $langFrm = $this->getLangForm($optionvalue_id, $langId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData(OptionValue::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($optionvalue_id, $langId, CommonHelper::getDefaultFormLangId());
+            if (false === $translatedData) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = OptionValue::getAttributesByLangId($langId, $optionvalue_id, NULL, applicationConstants::JOIN_RIGHT);
+        }
+        if ($langData) {
+            $langFrm->fill($langData);
+        }
+
+        $this->set('langFrm', $langFrm);
+        $this->set('optionvalue_id', $optionvalue_id);
+        $this->set('langId', $langId);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->_template->render(false, false);
+    }
+
+    public function langSetup()
+    {
+        $this->userPrivilege->canEditProductOptions(UserAuthentication::getLoggedUserId());
+
+        $post = FatApp::getPostedData();
+        $lang_id = $post['lang_id'];
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
+
+        $optionvalue_id = FatUtility::int($post['optionvalue_id']);
+        $optionId = FatUtility::int($post['optionvalue_option_id']);
+
+        if (1 > $optionvalue_id || 1 > $optionId || 1 > $lang_id) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+        if (!UserPrivilege::canSellerEditOption($this->userParentId, $optionId)) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
+
+        $frm = $this->getLangForm($optionvalue_id, $lang_id);
+        $post = $frm->getFormDataFromArray($post);
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $recordObj = new OptionValue($optionvalue_id);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
+
+        $this->set('optionvalue_option_id', $optionvalue_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function getLangForm($optionvalue_id = 0, $langId = 0)
+    {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+
+        $frm = new Form('frmOptionValueLang');
+        $frm->addHiddenField('', OptionValue::DB_TBL_PREFIX . 'option_id');
+        $frm->addHiddenField('', OptionValue::DB_TBL_PREFIX . 'id', $optionvalue_id);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), OptionValue::DB_TBL_PREFIX . 'name');
         return $frm;
     }
 
@@ -177,31 +274,24 @@ class OptionValuesController extends LoggedUserController
         $option_id = FatApp::getPostedData('option_id', FatUtility::VAR_INT, 0);
 
         if ($optionvalue_id < 1 || $option_id < 1) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
-        } else {
-            UserPrivilege::canSellerEditOption($this->userParentId, $option_id, $this->siteLangId);
+            FatUtility::dieJsonError($this->str_invalid_request_id);
         }
+
+        if (!UserPrivilege::canSellerEditOption($this->userParentId, $option_id)) {
+            FatUtility::dieJsonError($this->str_invalid_request);
+        }
+
         $optionValueObj = new OptionValue($optionvalue_id);
         if (!$optionValueObj->canEditRecord($option_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
         if ($optionValueObj->isLinkedWithInventory($optionvalue_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_This_option_value_is_linked_with_inventory', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_This_option_value_is_linked_with_inventory', $this->siteLangId));
         }
 
         if (!$optionValueObj->deleteRecord()) {
-            Message::addErrorMessage($optionValueObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($optionValueObj->getError());
         }
 
         FatUtility::dieJsonSuccess(
@@ -215,28 +305,18 @@ class OptionValuesController extends LoggedUserController
         if (!empty($post)) {
             $obj = new OptionValue();
             if (!$obj->updateOrder($post['optionvalues'])) {
-                Message::addErrorMessage($obj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError($obj->getError());
             }
-            /* FatUtility::dieJsonSuccess(
-            Labels::getLabel('LBL_Order_Updated_Successfully',$this->siteLangId)
-            );     */
             $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }
 
-    public function getTranslatedData()
+    public function getBreadcrumbNodes($action)
     {
-        $dataToTranslate = FatApp::getPostedData('optionvalue_name1', FatUtility::VAR_STRING, '');
-        if (!empty($dataToTranslate)) {
-            $translatedText = $this->translateLangFields(OptionValue::DB_TBL_LANG, ['optionvalue_name' => $dataToTranslate]);
-            $data = [];
-            foreach ($translatedText as $langId => $value) {
-                $data[$langId]['optionvalue_name' . $langId] = $value['optionvalue_name'];
-            }
-            CommonHelper::jsonEncodeUnicode($data, true);
-        }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords(Labels::getLabel('LBL_OPTION_VALUES', $this->siteLangId))]);
+        $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_OPTIONS', $this->siteLangId)), 'href' => UrlHelper::generateUrl('seller', 'options', [], CONF_WEBROOT_DASHBOARD));
+        $this->nodes[] = array('title' => $title);
+        return $this->nodes;
     }
 }

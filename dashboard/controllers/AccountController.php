@@ -151,8 +151,7 @@ class AccountController extends LoggedUserController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
         $frm->expireSecurityToken(FatApp::getPostedData());
 
@@ -167,8 +166,7 @@ class AccountController extends LoggedUserController
         }
 
         if (!empty($error_messages)) {
-            Message::addErrorMessage($error_messages);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($error_messages);
         }
 
         $reference_number = $this->userId . '-' . time();
@@ -179,8 +177,7 @@ class AccountController extends LoggedUserController
 
         if (!$supplier_request_id = $userObj->addSupplierRequestData($data, $this->siteLangId)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('MSG_details_not_saved', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_details_not_saved', $this->siteLangId));
         }
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
@@ -193,8 +190,7 @@ class AccountController extends LoggedUserController
 
         if (!$this->notifyAdminSupplierApproval($userObj, $data, $approval_request)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel("MSG_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         //send notification to admin
@@ -208,8 +204,7 @@ class AccountController extends LoggedUserController
 
         if (!Notification::saveNotifications($notificationData)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         $db->commitTransaction();
@@ -327,46 +322,39 @@ class AccountController extends LoggedUserController
         switch ($dasboardType) {
             case User::USER_BUYER_DASHBOARD:
                 if (!User::canViewBuyerTab()) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 }
                 break;
             case User::USER_SELLER_DASHBOARD:
                 if (!User::canViewSupplierTab()) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 }
                 break;
             case User::USER_ADVERTISER_DASHBOARD:
                 if (!User::canViewAdvertiserTab()) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 }
                 break;
             case User::USER_AFFILIATE_DASHBOARD:
                 if (!User::canViewAffiliateTab()) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 }
                 break;
             default:
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 break;
         }
 
         $arr = array('user_preferred_dashboard' => $dasboardType);
 
         if (1 > $this->userId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         $userObj = new User($this->userId);
         $userObj->assignValues($arr);
         if (!$userObj->save()) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
@@ -777,13 +765,9 @@ class AccountController extends LoggedUserController
     {
         if (1 > $this->userId) {
             $message = Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage();
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($message);
         }
-
+        
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId)) {
             $message = Labels::getLabel($fileHandlerObj->getError(), $this->siteLangId);
@@ -799,7 +783,7 @@ class AccountController extends LoggedUserController
         if (true ===  MOBILE_APP_API_CALL) {
             $userImgUpdatedOn = User::getAttributesById($this->userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $data = array('userImage' => $userImage);
 
@@ -856,7 +840,7 @@ class AccountController extends LoggedUserController
             $splitPaymentMethods = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
             $bankInfo = $this->bankInfo();
             $personalInfo = $this->personalInfo();
-            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, 'SMALL', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, ImageDimension::VIEW_SMALL, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
             $this->set('bankInfo', empty($bankInfo) ? (object) array() : $bankInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
@@ -1010,10 +994,10 @@ class AccountController extends LoggedUserController
         }
 
         if (false === MOBILE_APP_API_CALL) {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array('croped', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array(ImageDimension::VIEW_CROPED, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         } else {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, 'mini', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($this->userId, ImageDimension::VIEW_MINI, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         }
         $this->set('file', $profileImg);
@@ -1218,14 +1202,12 @@ class AccountController extends LoggedUserController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $userObj = new User($this->userId);
         if (!$userObj->updateSettingsInfo($post)) {
-            Message::addErrorMessage(Labels::getLabel($userObj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
@@ -1251,8 +1233,7 @@ class AccountController extends LoggedUserController
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError(current($message));
             }
-            Message::addErrorMessage($message);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($message);
         }
 
         if ($post['new_email'] != $post['conf_new_email']) {
@@ -2288,8 +2269,8 @@ class AccountController extends LoggedUserController
             $message_records = array();
             foreach ($records as $mkey => $mval) {
                 $profile_images_arr = array(
-                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], 'thumb', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], 'thumb', 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     "message_timestamp" => strtotime($mval['message_date'])
                 );
                 $message_records[] = array_merge($mval, $profile_images_arr);
@@ -2379,7 +2360,8 @@ class AccountController extends LoggedUserController
         if (true === MOBILE_APP_API_CALL) {
             $threadObj = new Thread($threadId);
             if (!$threadObj->markUserMessageRead($threadId, $this->userId)) {
-                $msg = is_string($threadObj->getError()) ? $threadObj->getError() : current($threadObj->getError());
+                $msg = $threadObj->getError();
+                $msg = is_array($msg) ? current($msg) : $msg;
                 LibHelper::dieJsonError(strip_tags($msg));
             }
         }
@@ -3081,11 +3063,9 @@ class AccountController extends LoggedUserController
             // Returns a `Facebook\FacebookResponse` object
             $response = $fbObj->post('/me/feed', $linkData, $fbAccessToken);
         } catch (FacebookResponseException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($e->getMessage());
         } catch (FacebookSDKException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($e->getMessage());
         }
 
         $graphNode = $response->getGraphNode();
@@ -3235,8 +3215,7 @@ class AccountController extends LoggedUserController
             $address = new Address($addr_id, $langId);
             $data = $address->getData(Address::TYPE_USER, $this->userId);
             if (empty($data)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $langId));
-                FatUtility::dieJsonError(Message::getHtml());
+                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_request', $langId));
             }
             $stateId = $data['addr_state_id'];
             $addressFrm->fill($data);
@@ -3264,8 +3243,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_You_have_alrady_submitted_the_request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_You_have_alrady_submitted_the_request', $this->siteLangId));
         }
 
         $assignValues = array(
@@ -3277,8 +3255,7 @@ class AccountController extends LoggedUserController
         $userReqObj = new UserGdprRequest();
         $userReqObj->assignValues($assignValues);
         if (!$userReqObj->save()) {
-            Message::addErrorMessage($userReqObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($userReqObj->getError());
         }
         Message::addMessage(Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
         FatUtility::dieJsonSuccess(Message::getHtml());
@@ -3302,15 +3279,13 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
 
         if (!$rs) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $data = FatApp::getDb()->fetch($rs, 'user_id');
 
         if ($data === false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0), 'AND', true);
@@ -3333,8 +3308,7 @@ class AccountController extends LoggedUserController
         $frm = $this->getRequestDataForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $srch = new UserGdprRequestSearch();
@@ -3359,15 +3333,13 @@ class AccountController extends LoggedUserController
         $userReqObj = new UserGdprRequest();
         $userReqObj->assignValues($assignValues);
         if (!$userReqObj->save()) {
-            Message::addErrorMessage($userReqObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($userReqObj->getError());
         }
 
         $post['user_id'] = $this->userId;
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendDataRequestNotification($post, $this->siteLangId)) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
         }
 
         $this->set('msg', Labels::getLabel('MSG_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));

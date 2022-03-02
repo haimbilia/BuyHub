@@ -118,8 +118,8 @@ trait ApiProducts
         foreach ($productGroupImages as $recordId => $row) {
             $imageArr[] = [
                 'id' => $row['afile_id'],
-                'src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, 'ORIGINAL', 0, $row['afile_id']]),
-                'thumb_src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, 'THUMB', 0, $row['afile_id']]),
+                'src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, ImageDimension::VIEW_ORIGINAL, 0, $row['afile_id']]),
+                'thumb_src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, ImageDimension::VIEW_THUMB, 0, $row['afile_id']]),
             ];
             
         }

@@ -45,7 +45,7 @@ foreach ($childArr as &$childOrder) {
     $rating = isset($childOrder['prod_rating']) ? $childOrder['prod_rating'] : 0;
     $childOrder['prod_rating'] =  (1 == $defaultOrderStatus || (isset($childOrder['spreview_status']) && $childOrder['spreview_status'] == 1)) ? $rating : 0;
     $childOrder['reviewsAllowed'] =  $reviewAllowed;
-    $childOrder['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], "THUMB", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
+    $childOrder['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], ImageDimension::VIEW_THUMB, $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
 
     if ($childOrder['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true))) ? 1 : 0;

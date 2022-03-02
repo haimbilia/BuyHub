@@ -15,7 +15,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                                                                         $product['selprod_id']
                                                                                                                     )); ?>"><img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array(
                                                                                                                                                     $product['product_id'],
-                                                                                                                                                    "SMALL",
+                                                                                                                                                    ImageDimension::VIEW_SMALL,
                                                                                                                                                     $product['selprod_id'],
                                                                                                                                                     0,
                                                                                                                                                     $siteLangId

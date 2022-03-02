@@ -447,10 +447,10 @@ class HtmlHelper
         foreach ($images as $key => $image) {
             switch ($imageType) {
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 default:
             }
@@ -674,5 +674,21 @@ class HtmlHelper
     public static function seoFriendlyUrl($url)
     {
         return '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+    }
+
+    public static function getIdentifierText($identifier, $langId)
+    {
+
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) . " : " . $identifier;
+    }
+
+    public static function addIdentierToFrm($fld, $identifier, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+
+        $fld->addFieldTagAttribute('onkeyup', "getIdentifier(this);");
+        $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $langId) . '</small>';
     }
 }

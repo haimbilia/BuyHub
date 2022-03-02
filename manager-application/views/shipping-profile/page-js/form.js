@@ -146,7 +146,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.ykmodal(t.html, false, '');
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };

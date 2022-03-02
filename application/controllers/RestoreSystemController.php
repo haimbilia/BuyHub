@@ -13,13 +13,11 @@ class RestoreSystemController extends MyAppController
     public function index()
     {
         if (!CommonHelper::demoUrl()) {
-            Message::addMessage('Restore process is only valid for Demo urls!');
-            FatUtility::dieJsonSuccess(Message::getHtml());
+            FatUtility::dieJsonSuccess('Restore process is only valid for Demo urls!');
         }
         
         if (!FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1)) {
-            Message::addErrorMessage('Auto restore disabled by admin!');
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError('Auto restore disabled by admin!');
         }
 
         $assignValues = array('conf_name' => 'CONF_TIMEZONE', 'conf_val' => 'Asia/Kolkata');
@@ -30,8 +28,7 @@ class RestoreSystemController extends MyAppController
 
         if (strtotime($restoreTime) >= strtotime(date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +1 min')))) {
             // $this->resetRestoreTime(CONF_DB_NAME);
-            Message::addErrorMessage('Auto restore scheduled on ' . $restoreTime);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError('Auto restore scheduled on ' . $restoreTime);
         }
 
         if (!$this->isRestoredSuccessfully()) {
@@ -41,8 +38,7 @@ class RestoreSystemController extends MyAppController
             $this->restoreDatabase($anotherDbName);
             //$this->resetRestoreTime($anotherDbName);
 
-            Message::addMessage('System unable to process the request and re-scheduled the restore process!');
-            FatUtility::dieJsonSuccess(Message::getHtml());
+            FatUtility::dieJsonSuccess('System unable to process the request and re-scheduled the restore process!');
         }
 
         $this->createRestoreProcessFile();

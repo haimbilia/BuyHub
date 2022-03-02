@@ -33,8 +33,8 @@ $(document).ready(function () {
             inputElement.attr('data-min_height', 85)
         }
     });
-    $(document).on('change', '.defaultLocationGeoFilter', function () {
-        if ($(this).val() == 1) {
+    $(document).on('change', 'input[name="CONF_DEFAULT_GEO_LOCATION"]', function () {     
+        if ($(this).prop("checked")) {
             $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
             $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
             $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable

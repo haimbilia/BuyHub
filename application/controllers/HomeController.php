@@ -36,7 +36,7 @@ class HomeController extends MyAppController
                             $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                         }
                         $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                        $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                         $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                         $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
@@ -515,8 +515,7 @@ class HomeController extends MyAppController
         $this->updateSettingByCurrentLocation($countryCode);
 
         if (!$_SESSION['geo_location']) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
         }
         $this->set('msg', Labels::getLabel('SUC_Settings_with_your_current_location_setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -744,7 +743,7 @@ class HomeController extends MyAppController
                                 $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                             }
                             $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                            $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                             $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                             $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
@@ -862,7 +861,7 @@ class HomeController extends MyAppController
                                     }
 
                                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                                     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
@@ -922,7 +921,7 @@ class HomeController extends MyAppController
                                     }
 
                                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                                     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
@@ -1196,7 +1195,7 @@ class HomeController extends MyAppController
                                 if (false === $canSubmitFeedback) {
                                     continue;
                                 }
-                                $orderProduct['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $this->siteLangId));
+                                $orderProduct['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], ImageDimension::VIEW_THUMB, $orderProduct['op_selprod_id'], 0, $this->siteLangId));
                             }
                             $collections[$i]['pendingForReviews'] = $pendingForReviews;
                         }
@@ -1338,7 +1337,7 @@ class HomeController extends MyAppController
                     }
 
                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
                     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
@@ -1457,7 +1456,7 @@ class HomeController extends MyAppController
                     $message = Labels::getLabel('ERR_PRODUCT_ID_&_SELLER_PRODUCT_ID_IS_MANDATORY.', $this->siteLangId);
                     FatUtility::dieJsonError($message);
                 }
-                $image_url = UrlHelper::generateFullUrl('image', 'product', array($product_id, "MEDIUM", $seller_product_id, 0, $this->siteLangId));
+                $image_url = UrlHelper::generateFullUrl('image', 'product', array($product_id, ImageDimension::VIEW_MEDIUM, $seller_product_id, 0, $this->siteLangId));
                 break;
             case 'SLIDE':
                 $slide_id = FatApp::getPostedData('slide_id', null, 0);

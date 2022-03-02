@@ -3,7 +3,7 @@
 HtmlHelper::formatFormFields($frm);
 
 $fld = $frm->getField('brand_name');
-$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');
+$fld->addFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');
 getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('brand_id');

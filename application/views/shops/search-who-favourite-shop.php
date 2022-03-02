@@ -6,7 +6,7 @@
 <div class="rowrepeated rowrepeated--favs">
 	<div class="row">
 		<div class="col-md-5 col-sm-5 avtar--info">
-			<div class="avtar"><img src="<?php echo UrlHelper::generateFileUrl('Image','user',array($shop['ufs_user_id'],'thumb','1'));?>" alt="<?php echo $shop['user_name'];?>" title="<?php echo $shop['user_name'];?>"></div>
+			<div class="avtar"><img src="<?php echo UrlHelper::generateFileUrl('Image','user',array($shop['ufs_user_id'],ImageDimension::VIEW_THUMB,'1'));?>" alt="<?php echo $shop['user_name'];?>" title="<?php echo $shop['user_name'];?>"></div>
 			<h5><?php echo $shop['user_name'];?></h5>
 			<p><?php echo Labels::getLabel('LBL_Favorite_Shop',$siteLangId); ?>: <a href="<?php echo UrlHelper::generateUrl('Custom','FavoriteShops',array($shop['ufs_user_id']));?>"><?php echo $shop['userFavShopcount']; ?></a></p>
 		</div>

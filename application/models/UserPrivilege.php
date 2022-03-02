@@ -329,7 +329,7 @@ class UserPrivilege
         }
     }
 
-    public static function canSellerEditOption($userId, $optionId, $langId)
+    public static function canSellerEditOption($userId, $optionId)
     {
         $userId = FatUtility::int($userId);
         if (0 == $userId) {
@@ -337,7 +337,8 @@ class UserPrivilege
         }
 
         $option = new Option();
-        if (!$row = $option->getOption($optionId, $userId)) {
+        $row = $option->getOption($optionId);
+        if (!$row ||  $row['option_seller_id'] != $userId) {
             return false;
         }
         return true;

@@ -26,7 +26,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'ratingtype_type':
-                $td->appendElement('plaintext', array(), $types[$row[$key]], true);
+                $txt = $types[$row[$key]] ?? '';
+                $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'ratingtype_name':
                 $name = $row[$key];

@@ -37,7 +37,7 @@ if (!empty($arrListing)) {
         $msgFrom = $li->appendElement('div', ['class' => 'message-from']);
 
         $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
-        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
         $img = '<img src="' . $userImageUrl . '" alt="' . $fromUserName . '">';
         $media = $msgFrom->appendElement('div', ['class' => 'message-media']);
@@ -55,7 +55,7 @@ if (!empty($arrListing)) {
         $msgTo = $li->appendElement('div', ['class' => 'message-to']);
 
         $uploadedTime = AttachedFile::setTimeParam($toUserUpdatedOn);
-        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, 'thumb', 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, ImageDimension::VIEW_THUMB, 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         $img = '<img src="' . $userImageUrl . '" alt="' . $toUserName . '">';
         $media = $msgTo->appendElement('div', ['class' => 'message-media']);
         $div = $media->appendElement('div', ['class' => 'user user-sm user-circle']);

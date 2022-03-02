@@ -75,9 +75,12 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     <div class="col-md-12">
                         <div class="input-group">
                             <?php if (null != $keyWordFld) {
+                                $fld = $frmSearch->getField('keyword');
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
 
                                 $class = (string) $fld->getFieldtagAttribute('class');
                                 $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
@@ -98,9 +101,12 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                 <?php } else if (1 == $extraFldCount) { ?>
                     <div class="col-md-4">
                         <?php if (null != $keyWordFld) {
+                            $fld = $frmSearch->getField('keyword');
+                            $fld->setFieldtagAttribute('autocomplete', 'off');
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
+                            $fld->setFieldtagAttribute('autocomplete', 'off');
 
                             $class = (string) $fld->getFieldtagAttribute('class');
                             $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
@@ -129,21 +135,22 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     </div>
                     <div class="col-md-3">
                         <div class="btn-group">
-                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                         </div>
-                        
                     </div>
-
                 <?php } else { ?>
                     <div class="col-md-12">
                         <div class="input-group">
                             <?php if (null != $keyWordFld) {
+                                $fld = $frmSearch->getField('keyword');
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
                                 $class = (string) $fld->getFieldtagAttribute('class');
-                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');                                
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                                 $class = ltrim($class, ' ');
                                 $fld->setFieldtagAttribute('class', $class);
 

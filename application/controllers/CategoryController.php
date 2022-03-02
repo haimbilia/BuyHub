@@ -181,7 +181,11 @@ class CategoryController extends MyAppController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $aspectRatioType = $file_row['afile_aspect_ratio'];
+        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+      
+
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType, $aspectRatioType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, $sizeType);
 
         if ($sizeType) {
