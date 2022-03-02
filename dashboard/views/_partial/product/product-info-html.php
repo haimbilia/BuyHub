@@ -50,54 +50,54 @@ if (isset($order)) {
 }
 
 ?>
-<div class="item">
-    <figure class="item__pic">
+<div class="product-profile">
+    <figure class="product-profile__pic">
         <a href="<?php echo $prodUrl; ?>">
             <img src="<?php echo $imgSrc; ?>" title="<?php echo $productName; ?>" alt="<?php echo $productName; ?>">
         </a>
     </figure>
-    <div class="item__description">
+    <div class="product-profile__description">
         <?php if (!empty($date)) { ?>
-            <div class="item__date">
+            <div class="product-profile__date">
                 <?php echo $date; ?>
             </div>
         <?php } ?>
         <?php if (!empty($productTitle)) { ?>
-            <div class="item__title prodNameJs">
+            <div class="product-profile__title prodNameJs">
                 <a title="<?php echo $productTitle; ?>" href="<?php echo $prodUrl; ?>">
                     <?php echo $productTitle . '<br>'; ?>
                 </a>
             </div>
-            <div class="item__sub_title prodNameJs">
+            <div class="product-profile__sub_title prodNameJs">
                 <?php echo $productName; ?>
             </div>
         <?php } else { ?>
-            <div class="item__title prodNameJs">
+            <div class="product-profile__title prodNameJs">
                 <a title="<?php echo $productName; ?>" href="<?php echo $prodUrl; ?>">
                     <?php echo $productName; ?>
                 </a>
             </div>
         <?php } ?>
         <?php if (!empty($brandName)) { ?>
-            <div class="item__brand">
+            <div class="product-profile__brand">
                 <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
                 <?php echo $brandName; ?>
             </div>
         <?php } ?>
         <?php if (!empty($options)) { ?>
-            <div class="item__options prodOptionsJs">
+            <div class="product-profile__options prodOptionsJs">
                 <?php echo $options; ?>
             </div>
         <?php } ?>
 
         <?php if ('B' == $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) { ?>
             <?php if (!empty($shopName)) { ?>
-                <div class="item__sold_by">
+                <div class="product-profile__sold_by">
                     <?php echo Labels::getLabel('LBL_Sold_By', $siteLangId) . ': ' . $shopName; ?>
                 </div>
             <?php } ?>
             <?php if (!empty($otherInfo)) { ?>
-                <div class="item__specification">
+                <div class="product-profile__specification">
                     <?php echo $otherInfo ?>
                 </div>
             <?php } ?>

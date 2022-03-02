@@ -11,7 +11,92 @@
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
     <div class="content-body">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-lg-4 order-lg-2">
+                <div class="widget-scroll">
+                    <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
+                        <div class="widget widget-stats">
+                            <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                                    <div class="card-head border-0">
+                                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
+
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="stats">
+                                            <div class="stats-number">
+                                                <ul>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($walletBalance); ?></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+                    <div class="widget widget-stats">
+                        <a href="javascript:void(0)" onclick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                <div class="card-head border-0">
+                                    <h5 class="card-title">
+                                        <?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?></h5>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="stats">
+                                        <div class="stats-number">
+                                            <ul>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Active_promotions', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo $totActivePromotions; ?></span>
+                                                </li>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Active_promotions_Expense', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($activePromotionChargedAmount); ?></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="widget widget-stats">
+                        <a href="<?php echo UrlHelper::generateUrl('advertiser', 'promotionCharges'); ?>">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                <div class="card-head border-0">
+                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Promotions', $siteLangId); ?>
+                                    </h5>
+
+                                </div>
+                                <div class="card-body ">
+                                    <div class="stats">
+                                        <div class="stats-number">
+                                            <ul>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Promotions', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($totPromotions); ?></span>
+                                                </li>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Expense', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($totChargedAmount); ?></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-head">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?>
@@ -168,91 +253,7 @@
                     </div>
                 <?php } ?>
             </div>
-            <div class="col-md-4">
-                <div class="widget-scroll">
-                    <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
-                        <div class="widget widget-stats">
-                            <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
-                                    <div class="card-head border-0">
-                                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
 
-                                    </div>
-                                    <div class="card-body ">
-                                        <div class="stats">
-                                            <div class="stats-number">
-                                                <ul>
-                                                    <li>
-                                                        <span class="total"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></span>
-                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($walletBalance); ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
-                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <div class="widget widget-stats">
-                        <a href="javascript:void(0)" onclick="redirectToPromotions('<?php echo UrlHelper::generateUrl('advertiser', 'promotions'); ?>')">
-                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
-                                <div class="card-head border-0">
-                                    <h5 class="card-title">
-                                        <?php echo Labels::getLabel('LBL_Active_Promotions', $siteLangId); ?></h5>
-                                </div>
-                                <div class="card-body ">
-                                    <div class="stats">
-                                        <div class="stats-number">
-                                            <ul>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Active_promotions', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo $totActivePromotions; ?></span>
-                                                </li>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Active_promotions_Expense', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($activePromotionChargedAmount); ?></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="widget widget-stats">
-                        <a href="<?php echo UrlHelper::generateUrl('advertiser', 'promotionCharges'); ?>">
-                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
-                                <div class="card-head border-0">
-                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Promotions', $siteLangId); ?>
-                                    </h5>
-
-                                </div>
-                                <div class="card-body ">
-                                    <div class="stats">
-                                        <div class="stats-number">
-                                            <ul>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Promotions', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($totPromotions); ?></span>
-                                                </li>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Total_Expense', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($totChargedAmount); ?></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
 
 

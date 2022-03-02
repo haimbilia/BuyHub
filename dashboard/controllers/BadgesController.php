@@ -95,6 +95,7 @@ class BadgesController extends SellerBaseController
         $srch->addMultipleFields($attr);
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $srch->getResultSet();
+        echo $srch->getError();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
 
@@ -159,7 +160,7 @@ class BadgesController extends SellerBaseController
         $badgeType = current(FatApp::getParameters());
         $className = Badge::TYPE_BADGE == $badgeType ? Labels::getLabel('LBL_BADGES', $this->siteLangId) : Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
         $url = UrlHelper::generateUrl(LibHelper::getControllerName(), 'list', [$badgeType]);
-    
+
         $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
         $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
         $this->nodes[] = array('title' => ucwords($className), 'href' => $url);
