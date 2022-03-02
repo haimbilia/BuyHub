@@ -323,6 +323,10 @@
         &-btn {
             background-color: transparent;
             border: none;
+            display: none;
+            @include media-breakpoint-up(lg) {
+                display: block;
+            }
         }
         &-target {
             min-width: 16rem;
