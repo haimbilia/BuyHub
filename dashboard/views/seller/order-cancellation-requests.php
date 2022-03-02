@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $orderIdFld = $frmSearch->getField('op_invoice_number');
 $orderIdFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_INVOICE_NUMBER', $siteLangId));
 
@@ -26,8 +25,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-lg-12">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <div class="card-table">
-                        <div id="cancelOrderRequestsListing"></div>
+                    <div class="card-table" id="cancelOrderRequestsListing">
                     </div>
                 </div>
             </div>
