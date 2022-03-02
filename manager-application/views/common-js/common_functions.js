@@ -377,9 +377,8 @@ markNavActive = function (ele) {
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
-
-    $('.sidebarMenuJs').animate({
-        scrollTop: ele.offset().top
+    $('.sidebarMenuJs').animate({     
+        scrollTop: ele.closest('ul').offset().top - $('.sidebarMenuJs').offset().top - 30
     }, 100);
 
 };
