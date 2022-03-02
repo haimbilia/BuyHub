@@ -102,7 +102,7 @@ class ProductsController extends MyAppController
         }
         
         $get['vtype']  = $get['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         } 
         
@@ -219,7 +219,7 @@ class ProductsController extends MyAppController
         $db = FatApp::getDb();
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
         $headerFormParamsAssocArr['vtype']  = $headerFormParamsAssocArr['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $headerFormParamsAssocArr['vtype'] == 'map') {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $headerFormParamsAssocArr['vtype'] == 'map') {
             $headerFormParamsAssocArr['vtype'] = 'grid';
         } 
 
@@ -797,7 +797,7 @@ class ProductsController extends MyAppController
         }
 
         $displayProductNotAvailableLable = false;
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
 
@@ -1738,7 +1738,7 @@ class ProductsController extends MyAppController
         /* ] */
 
         $displayProductNotAvailableLable = false;
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
@@ -1935,7 +1935,7 @@ class ProductsController extends MyAppController
 
         $displayProductNotAvailableLable = false;
         //availableInLocation
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);

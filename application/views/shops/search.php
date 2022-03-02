@@ -40,7 +40,7 @@ if (!empty($allShops)) {
                     <div class="product-wrapper">
                         <div class="row">
                             <?php
-                            $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+                            $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
 
                             $tLeftRibbons = $shop['tLeftRibbons'];
                             $tRightRibbons = $shop['tRightRibbons'];

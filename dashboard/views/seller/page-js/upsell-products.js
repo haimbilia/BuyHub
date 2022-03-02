@@ -163,8 +163,9 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 		var dv = $('#listing');
 		$(dv).html( fcom.getLoader() );
 
-		fcom.ajax(fcom.makeUrl('Seller','searchUpsellProducts'),data,function(res){
+		fcom.ajax(fcom.makeUrl('Seller','searchUpsellProducts'),data,function(res){           
 			$("#listing").html(res);
+            fcom.removeLoader();
 		});
 	};
 
