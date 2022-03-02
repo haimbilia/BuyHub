@@ -62,14 +62,21 @@ $stateFld->setFieldTagAttribute('id', 'user_state_id');
 $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
 if (User::isAdvertiser() && $parent == 0) {
     $fld = $frm->getField('user_profile_info');
-    $fld->developerTags['col'] = 6;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
     $fld = $frm->getField('user_products_services');
-    $fld->developerTags['col'] = 6;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-    $userCompFld = $frm->getField('user_company');
-    $userCompFld->developerTags['col'] = 12;
+    $fld = $frm->getField('user_company');
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
+
+$fld = $frm->getField('user_profile_info');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+$fld = $frm->getField('user_products_services');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
 ?>
 <div class="row justify-content-center">

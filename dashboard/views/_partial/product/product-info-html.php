@@ -11,7 +11,7 @@ if (isset($order)) {
         if (Product::verifyProductIsValid($order['op_selprod_id']) == true) {
             $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
         }
-        $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], "SMALL", $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+        $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_SMALL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.jpg');
     }
     $productName = $order['op_product_name'];
     $productTitle = $order['op_selprod_title'];
@@ -32,7 +32,7 @@ if (isset($order)) {
 } else {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
-    $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
     $productName = $product['product_name'];
     $productTitle = $product['selprod_title'];
@@ -89,7 +89,7 @@ if (isset($order)) {
                 <?php echo $options; ?>
             </div>
         <?php } ?>
-        
+
         <?php if ('B' == $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) { ?>
             <?php if (!empty($shopName)) { ?>
                 <div class="item__sold_by">
