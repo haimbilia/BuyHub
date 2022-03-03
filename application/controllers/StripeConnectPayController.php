@@ -340,7 +340,7 @@ class StripeConnectPayController extends PaymentController
         if (false === $this->stripeConnect->init()) {
             $error = [
                 'msg' => $this->stripeConnect->getError()
-            ];          
+            ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME);
             CommonHelper::printArray($error, true);
         }
@@ -352,7 +352,7 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId),
                 'response' => $payload,
-            ];  
+            ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME);
             return;
         }
@@ -368,10 +368,9 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => $msg,
                 'response' => $payload,
-            ];  
+            ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $recordId);
             return;
-
         }
 
 
@@ -385,19 +384,17 @@ class StripeConnectPayController extends PaymentController
                 'msg' => Labels::getLabel('ERR_INVALID_REQUEST_ORDER/PAYMENT_INTENT_ID', $this->siteLangId),
                 'response' => $payload,
             ];
-            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);        
+            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
             return;
-
         }
 
         if ($this->orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
             $error = [
                 'msg' => Labels::getLabel('ERR_INVALID_ORDER._ALREADY_PAID_OR_CANCELLED', $this->siteLangId),
                 'response' => $payload,
-            ];     
+            ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
             return;
-
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
@@ -405,7 +402,7 @@ class StripeConnectPayController extends PaymentController
             $error = [
                 'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
                 'response' => $payload,
-            ];    
+            ];
             SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
             return;
         }
@@ -414,7 +411,11 @@ class StripeConnectPayController extends PaymentController
         $message = $chargeResponse['status'];
 
         /* Recording Payment in DB */
-        $this->paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $this->paymentAmount = $chargeResponse['amount_captured'];
+        if (!in_array($this->systemCurrencyCode, $this->zeroDecimalCurrencies())) {
+            $this->paymentAmount = $this->paymentAmount / 100;
+        }
+
         if (false === $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $chargeId, $this->paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($chargeResponse), false, 0, Orders::ORDER_PAYMENT_PAID)) {
             $orderPaymentObj->addOrderPaymentComments($message);
         }
@@ -430,8 +431,8 @@ class StripeConnectPayController extends PaymentController
                 $totalDiscount = abs($discount) + abs($rewardPoint);
 
                 $firstTransferAmount = $netSellerAmount - $totalDiscount;
-                $pendingTransferAmount = $totalDiscount;                
-                $sellerShippingApiCharges = CommonHelper::orderProductAmount($op,'SHIPPING_API');
+                $pendingTransferAmount = $totalDiscount;
+                $sellerShippingApiCharges = CommonHelper::orderProductAmount($op, 'SHIPPING_API');
 
                 if (0 == $pendingTransferAmount) {
                     $firstTransferAmount = $firstTransferAmount - $op['op_commission_charged'];
@@ -456,7 +457,7 @@ class StripeConnectPayController extends PaymentController
                 $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
                 $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
                 Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
-                
+
                 if (0 < $sellerShippingApiCharges) {
                     $firstTransferAmount = $firstTransferAmount - $sellerShippingApiCharges;
                     $apiComments = commonHelper::replaceStringData(Labels::getLabel('MSG_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $this->siteLangId), ['{invoice}' => $op['op_invoice_number']]);
@@ -483,7 +484,7 @@ class StripeConnectPayController extends PaymentController
                         $error = [
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $charge,
-                        ];              
+                        ];
                         SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
@@ -495,7 +496,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => Labels::getLabel('ERR_UNABLE_TO_TRANFER', $this->siteLangId),
                             'response' => $resp,
                         ];
-                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);                     
+                        SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
                     // Debit sold product amount from seller wallet.
@@ -519,7 +520,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $this->stripeConnect->getResponse(),
                         ];
-                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);
+                        SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 
@@ -529,7 +530,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => Labels::getLabel('ERR_UNABLE_TO_TRANFER_PENDING_AMOUNT', $this->siteLangId),
                             'response' => $resp,
                         ];
-                        SystemLog::transaction(json_encode($error),self::KEY_NAME . "-" . $orderId);
+                        SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 
