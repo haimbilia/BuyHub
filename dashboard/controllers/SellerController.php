@@ -5948,4 +5948,42 @@ class SellerController extends SellerBaseController
     {
         $this->_template->render();
     }
+
+    public function countries_autocomplete()
+    {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $post = FatApp::getPostedData();      
+        $srch = Countries::getSearchObject(true, $this->siteLangId);
+        $srch->addOrder('country_name');
+
+        $srch->addMultipleFields(array('country_id, country_name, country_code'));
+
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('country_name', 'LIKE', '%' . $post['keyword'] . '%');
+        }
+
+        $srch->setPageSize($pagesize);
+        $srch->setPageNumber($page);
+
+        $countries = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
+        if (isset($post['includeEverywhere']) && $post['includeEverywhere']) {
+            $everyWhereArr = array('country_id' => '-1', 'country_name' => Labels::getLabel('LBL_Everywhere_Else', $this->siteLangId));
+            $countries[] = $everyWhereArr;
+        }
+
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
+        foreach ($countries as $key => $country) {
+            $json['results'][] = array(
+                'id' => $country['country_id'],
+                'text' => strip_tags(html_entity_decode(isset($country['country_name']) ? $country['country_name'] : $country['country_code'], ENT_QUOTES, 'UTF-8')),
+            );
+        }
+        die(json_encode($json));
+    }
 }

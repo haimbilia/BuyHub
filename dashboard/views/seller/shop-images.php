@@ -5,7 +5,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 $imgArr = [];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {   	
 	$uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);	
-    $thumbType = ($imageType == 'logo') ? 'THUMB':'PREVIEW';
+    $thumbType = ImageDimension::VIEW_THUMB;
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], $thumbType, $image['afile_id']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
         'name' => $image['afile_name'],

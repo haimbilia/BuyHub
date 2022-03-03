@@ -80,7 +80,7 @@
                                 <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim notificationDropMenuJs">
                                     <div class="header-notification">
                                         <div class="header-notification__head">
-                                            <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide" id="notifiLinkCount"></span></h5>
+                                            <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide notifiLinkCountJs"></span></h5>
                                             <nav class="nav nav--tabs js-tab">
                                                 <a class="is-current headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(0,this);"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
                                                 <a class="headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>
@@ -89,13 +89,13 @@
                                         <div class="header-notification__body">
                                             <div class="tab-1 tab-container visible">
                                                 <div class="scroll-y p-3">
-                                                    <div class="notifications" id="notificationList">
+                                                    <div class="notifications notificationListJS">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="header-notification__footer">
-                                            <a id="notifiLinkViewAll" href="javascript:void(0)" class="text-link text-link--arrow"><?php echo  Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                                            <a href="javascript:void(0)" class="text-link text-link--arrow notifiLinkViewAllJs"><?php echo  Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                                             </a>
                                         </div>
                                     </div>
@@ -106,17 +106,15 @@
                             <div class="header-action__item dropdown header-account">
                                 <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>" alt="">
+                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
                                     </span>
                                 </a>
 
                                 <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
-
-
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>">
+                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>">
                                             </div>
                                             <div class="profile__detail">
                                                 <h6>

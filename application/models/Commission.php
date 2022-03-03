@@ -36,19 +36,19 @@ class Commission extends MyAppModel
 
     public function addUpdateData($data)
     {
-        $srch = self::getSearchObject();
-        $srch->addCondition('commsetting_product_id', '=', $data['commsetting_product_id']);
-        $srch->addCondition('commsetting_user_id', '=', $data['commsetting_user_id']);
-        $srch->addCondition('commsetting_prodcat_id', '=', $data['commsetting_prodcat_id']);
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $arrListing = $this->db->fetchAll($rs);
-        if (!empty($arrListing)) {
-            $this->error = Labels::getLabel('ERR_ALREADY_ADDED');
-            return false;
+        if (1 > $this->mainTableRecordId) {
+            $srch = self::getSearchObject();
+            $srch->addCondition('commsetting_product_id', '=', $data['commsetting_product_id']);
+            $srch->addCondition('commsetting_user_id', '=', $data['commsetting_user_id']);
+            $srch->addCondition('commsetting_prodcat_id', '=', $data['commsetting_prodcat_id']);
+            $srch->setPageSize(1);
+            $rs = $srch->getResultSet();
+            $arrListing = $this->db->fetchAll($rs);
+            if (!empty($arrListing)) {
+                $this->error = Labels::getLabel('ERR_ALREADY_ADDED');
+                return false;
+            }
         }
-
-        unset($data['commsetting_id']);
 
         $assignValues = array(
             'commsetting_product_id' => $data['commsetting_product_id'],
@@ -63,11 +63,11 @@ class Commission extends MyAppModel
             $assignValues['commsetting_id'] = $this->mainTableRecordId;
         }
 
-        if ($this->db->insertFromArray(static::DB_TBL, $assignValues, false, array(), $assignValues)) {
-            return true;
+        if (!$this->db->insertFromArray(static::DB_TBL, $assignValues, false, array(), $assignValues)) {
+            $this->error = $this->db->getError();
+            return false;
         }
-        $this->error = $this->db->getError();
-        return false;
+        return true;
     }
 
     public function addCommissionHistory($commissionId)

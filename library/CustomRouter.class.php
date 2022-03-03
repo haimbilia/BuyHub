@@ -9,14 +9,20 @@ class CustomRouter
         if ('app-api' == $controller) {
             self::setAPIRoute($controller, $action, $queryString);
         } else {
+            define('MOBILE_APP_API_CALL', false);
+            define('MOBILE_APP_API_VERSION', '');
+            define('MOBILE_APP_USER_TYPE', null);
+
+            if (in_array(CONF_WEBROOT_URL, [CONF_WEBROOT_DASHBOARD, CONF_WEBROOT_BACKEND])) {
+                define('SYSTEM_LANG_ID', $langId);
+                return;
+            }
+
             /* [ Handled lang code in url */
             if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && in_array(strtoupper($controller), LANG_CODES_ARR)) {
                 // $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
                 $langCodes = array_flip(LANG_CODES_ARR);
                 $langId = $langCodes[strtoupper($controller)];
-                /* if (in_array(strtoupper($controller), LANG_CODES_ARR)) {
-                    $langId = $langCodes[strtoupper($controller)];
-                } */
                 $langId = ($langId > 0) ? $langId : CommonHelper::getLangId();
                 setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONTEND);
 
@@ -29,13 +35,8 @@ class CustomRouter
                 }
             }
             /* ] */
-
-            define('MOBILE_APP_API_CALL', false);
-            define('MOBILE_APP_API_VERSION', '');
-            define('MOBILE_APP_USER_TYPE', null);
         }
         define('SYSTEM_LANG_ID', $langId);
-
 
         /* Handled CDN url for static contents and 404 for other requests. Specially when mapped on same root directory[*/
         if (CDN_DOMAIN_URL != '' && (strpos(CDN_DOMAIN_URL, $_SERVER['SERVER_NAME']) !== false)) {
@@ -121,13 +122,12 @@ class CustomRouter
             array_shift($arr);
 
             $queryString = $arr;
+
             /* [ used in case of filters when passed through url*/
-            //array_shift($customUrl);
             if (isset($customUrl[1]) && !empty($customUrl[1])) {
                 $customUrl = explode('&', $customUrl[1]);
                 $queryString = array_merge($queryString, $customUrl);
             }
-
             /* ]*/
 
             if ($controller != '' && $action == '') {

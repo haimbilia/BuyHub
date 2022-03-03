@@ -66,7 +66,7 @@
                         </div>
                         <div class="geo-location">
                             <div class="geo-location_inner">
-                                <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                                <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                                     <div class="dropdown">
                                         <?php
                                         $geoAddress = '';
@@ -249,7 +249,7 @@
                 </div>
                 <div class="geo-location">
                     <div class="geo-location_inner">
-                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                             <div class="dropdown">
                                 <?php
                                 $geoAddress = '';
@@ -320,7 +320,7 @@
         <div class="offcanvas-body">
             <div class="geo-location">
                 <div class="geo-location_inner">
-                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                         <div class="dropdown">
                             <?php
                             $geoAddress = '';

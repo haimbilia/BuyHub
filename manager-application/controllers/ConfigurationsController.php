@@ -559,7 +559,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ACTIVATE_GEO_LOCATION", $langId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
+                HtmlHelper::configureSwitchForCheckbox($fld,Labels::getLabel("FRM_PLEASE_INSURE_GOOGLE_MAP_API_IS_FILLED", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $prodGeoSettingArr = applicationConstants::getProductListingSettings($langId);

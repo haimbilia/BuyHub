@@ -518,8 +518,11 @@ Updates/Fixes :
     => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
     => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
+    => 062851 -	Admin UI: "card-body" is refreshing while clicking on the dropdown option on the dashboard and while clicking on the shop's name admin is navigating to the same page
     => 062610 - Admin UI: Unavailable pointer is not showing on the banner listing section and sr. no. is not showing correctly on the import instruction page
     => 062603 - Admin UI: Spacing is not consistent between the footer section and last field while opening the drawer
+    => 062881 - Admin UI: Admin is not able to update the commission amount of the default commission, the search is not working according to the product, and the "view log" icon is not showing on the "Commission management" section
+    => 062570 - Admin UI: "Metaballs menu" is not working while clicking on it for the password field on the login page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

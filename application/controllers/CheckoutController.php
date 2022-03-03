@@ -17,7 +17,7 @@ class CheckoutController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Cart'));
         }
 
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
                 $this->errMessage = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_LOCATION', $this->siteLangId);

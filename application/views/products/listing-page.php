@@ -156,7 +156,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     </i>
                                 </a>
                             </li> -->
-                            <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                            <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                                 <li class="page-views">
                                     <button class="btn btn-outline-black btn-map-view listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
                                         Map view <span class="toggle-icon"></span>

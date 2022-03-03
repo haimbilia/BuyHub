@@ -228,7 +228,7 @@ class FilterHelper extends FatUtility
         $priceSrch->doNotCalculateRecords();
 
         $useSubQuery = false;
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $prodGeoCondition = FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0);
             switch ($prodGeoCondition) {
                 case applicationConstants::BASED_ON_DELIVERY_LOCATION:

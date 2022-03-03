@@ -41,6 +41,16 @@ var Dashboard = function () {
 }();
 Dashboard.init();
 
+$('#showPass').on('click', function () {
+    var passInput = $("#password");
+    if (passInput.attr('type') === 'password') {
+        passInput.attr('type', 'text');
+    } else {
+        passInput.attr('type', 'password');
+    }
+});
+
+
 $(document).on('click', '.menu-toggle ', function () {
     if (!$(this).parent().hasClass("is--active") && $(".collections-ui").hasClass("is--active")) {
         $(".collections-ui").removeClass("is--active")

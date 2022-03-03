@@ -142,25 +142,26 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
     $(this).parents('li').removeClass("hover");
 });
 
-(function () {
-    var dv = '#listing';
-    searchUpsellProducts = function (frm) {
+(function() {
+	var dv = '#listing';
+	searchUpsellProducts = function(frm){
 
-        /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
-        var data = '';
-        if (frm) {
-            data = fcom.frmData(frm);
-        }
-        /*]*/
-        var dv = $('#listing');
-        $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'searchUpsellProducts'), data, function (res) {
-            $("#listing").html(res);
+		/*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
+		var data = '';
+		if (frm) {
+			data = fcom.frmData(frm);
+		}
+		/*]*/
+		var dv = $('#listing');
+		$(dv).html( fcom.getLoader() );
+
+		fcom.ajax(fcom.makeUrl('Seller','searchUpsellProducts'),data,function(res){           
+			$("#listing").html(res);
             fcom.removeLoader();
-        });
-    };
+		});
+	};
 
-    clearSearch = function (selProd_id) {
+    clearSearch = function(selProd_id){
         if (0 < selProd_id) {
             location.href = fcom.makeUrl('Seller', 'upsellProducts');
         } else {

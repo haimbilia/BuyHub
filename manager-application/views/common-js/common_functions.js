@@ -12,17 +12,14 @@ function setSiteDefaultLang(langId) {
 }
 
 function getNotifications(type, obj) {
-
-    $("#notificationList").prepend(fcom.getLoader());
+    $(".notificationListJS").prepend(fcom.getLoader());
     let url = fcom.makeUrl("Notifications", "notificationList");
     let viewAllUrl = fcom.makeUrl("Notifications");
     if (type == 1) {
         url = fcom.makeUrl("SystemLog", "notificationList");
         viewAllUrl = fcom.makeUrl("SystemLog");
-    } else {
-        $('.headerNotificationTabJs').removeClass('is-current');
-        $('.headerNotificationTabJs:first').addClass('is-current');
     }
+    
     if (typeof obj != undefined) {
         $(obj).siblings().removeClass('is-current');
         $(obj).addClass('is-current');
@@ -33,11 +30,11 @@ function getNotifications(type, obj) {
         "",
         function (res) {
             fcom.removeLoader();
-            $("#notificationList").html(res.html);
-            $('#notifiLinkViewAll').attr('href', viewAllUrl);
-            $('#notifiLinkCount').addClass('hide');
+            $(".notificationListJS").html(res.html);
+            $('.notifiLinkViewAllJs').attr('href', viewAllUrl);
+            $('.notifiLinkCount').addClass('hide');
             if (type == 0) {
-                $('#notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
+                $('.notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
             }
         }
     );
@@ -377,9 +374,8 @@ markNavActive = function (ele) {
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
-
-    $('.sidebarMenuJs').animate({
-        scrollTop: ele.offset().top
+    $('.sidebarMenuJs').animate({     
+        scrollTop: ele.closest('ul').offset().top - $('.sidebarMenuJs').offset().top - 30
     }, 100);
 
 };
