@@ -525,6 +525,7 @@ Updates/Fixes :
     => 062570 - Admin UI: "Metaballs menu" is not working while clicking on it for the password field on the login page
     => 062678 - Admin UI: The "Remove File" option is not showing properly while trying to upload the large file while adding the Media to server under the Import/Export section
     => 062816 - Admin UI: Admin is not able to select the dropdown-item of the "product warranty type" field while adding the product
+    => 062468 - Admin UI: Upload image's placeholder is not showing while adding the banners and "Invalid Request" messages is showing while changing the status of the banner on the collection's page under the CMS section
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
