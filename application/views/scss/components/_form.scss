@@ -3,14 +3,14 @@ $input-padding: 0.6rem 0.75rem;
 $input-line-height: 1.5;
 $input-font-size: 0.85rem;
 $input-border-style: solid;
-$input-border-width: 2px;
+$input-border-width: 1px;
 $input-border-color: #000;
 $input-border: none;
 $input-border-radius: 3px;
 $input-bg: $bg-gray;
 $input-color: #474747;
 @mixin input {
-    border: $input-border-style 2px $input-border-color;
+    border: $input-border-style $input-border-width $input-border-color;
     background-color: transparent;
     color: $input-color;
     height: $input-height;

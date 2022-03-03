@@ -57,8 +57,9 @@
                     <?php }
                     if (count($faqCategories) > Collections::LIMIT_FAQ_LAYOUT1) { ?>
                 </div>
-                <div class="section-foot text-center">
-                    <a class="btn btn-outline-primary btn-wide" href="<?php echo UrlHelper::generateUrl('custom', 'faq'); ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a>
+                <div class="section-foot">
+                    <a class="link-underline" href="<?php echo UrlHelper::generateUrl('custom', 'faq'); ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?>
+                    </a>
                 </div>
             </div>
         <?php } ?>

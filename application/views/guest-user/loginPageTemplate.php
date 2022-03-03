@@ -27,8 +27,10 @@ $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPas
     class="link">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldforgot->developerTags['col'] = 6;
 
+$pwdFld = $loginFrm->getField('password');
+$pwdFld->addFieldTagAttribute('id', 'password');
+
 if (isset($smsPluginStatus) && true === $smsPluginStatus) {
-    $pwdFld = $loginFrm->getField('password');
     $loginWithOtp = $loginFrm->getField('loginWithOtp');
     $loginWithOtp->addFieldTagAttribute('class', 'loginWithOtp--js');
 }
@@ -55,7 +57,12 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <div class="row pwdField--js">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <?php echo $loginFrm->getFieldHtml('password'); ?>
+                        <div class="input-group">
+                            <?php echo $loginFrm->getFieldHtml('password'); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text field-password" id="showPass"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

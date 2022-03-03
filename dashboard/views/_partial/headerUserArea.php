@@ -52,14 +52,12 @@ if (!$userActiveTab) {
 
             <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>"> <svg class="svg" width="14" height="14">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-update"></use>
-                </svg>
-                <?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a>
+                </svg><?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a>
             <div class="divider"></div>
             <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
                 <svg class="svg" width="14" height="14">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
-                </svg>
-                <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
+                </svg><?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
         </nav>
     </div>
 </div>
