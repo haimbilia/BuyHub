@@ -523,6 +523,8 @@ Updates/Fixes :
     => 062603 - Admin UI: Spacing is not consistent between the footer section and last field while opening the drawer
     => 062881 - Admin UI: Admin is not able to update the commission amount of the default commission, the search is not working according to the product, and the "view log" icon is not showing on the "Commission management" section
     => 062570 - Admin UI: "Metaballs menu" is not working while clicking on it for the password field on the login page
+    => 062879 - Admin UI: Getting an error while editing the records on the "social platform" section
+    => 062876 - Admin UI: Getting an error while adding the new record under the "seller approval" section and caption name is also not showing while editing the record
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
