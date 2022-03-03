@@ -130,7 +130,7 @@ class AdminPermissionsController extends ListingBaseController
 
         $arrListing = AdminPrivilege::getPermissionModulesArr();
         if (!empty($keyword)) {
-            $keyword = str_replace('\*', '.*?', preg_quote($keyword, '/'));
+            $keyword = str_replace('\*', '.*?', preg_quote(trim($keyword), '/'));
             $result = preg_grep('/' . $keyword . '/i', $arrListing);
             $arrListing = array_intersect($arrListing, $result);
         }
@@ -155,10 +155,10 @@ class AdminPermissionsController extends ListingBaseController
         }
 
         $this->set("arrListing", $arrListing);
-        $this->set('pageCount', 1);
-        $this->set('recordCount', count($arrListing));
+        $this->set("hidePaginationHtml", true);
         $this->set('page', 1);
         $this->set('pageSize', $pageSize);
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 

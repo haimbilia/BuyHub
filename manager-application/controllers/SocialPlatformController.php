@@ -155,22 +155,22 @@ class SocialPlatformController extends ListingBaseController
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['splatform_id'];
-        $data = $post;
-        $data['splatform_identifier'] = $data['splatform_title'];
-
-        $recordObj = new SocialPlatform($recordId);
-        $recordObj->assignValues($data, true);
+        $recordObj = new SocialPlatform($post['splatform_id']);
+        $recordObj->assignValues($post, true);
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
-        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
+        $post['splatform_title'] = $post['splatform_identifier'];
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -194,6 +194,7 @@ class SocialPlatformController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('activeGentab', false);
+        $this->set('displayFooterButtons', false);
         $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -302,8 +303,7 @@ class SocialPlatformController extends ListingBaseController
     {
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'splatform_id');
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
-        $fld->setUnique(SocialPlatform::DB_TBL, 'splatform_identifier', 'splatform_id', 'splatform_id', 'splatform_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_identifier');
 
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
         $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);

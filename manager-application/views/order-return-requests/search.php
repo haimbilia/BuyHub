@@ -89,22 +89,6 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['orrequest_id']
                 ];
 
-                if ($canEdit) {
-                    $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' => UrlHelper::generateUrl('OrderReturnRequests', 'view', [$row['orrequest_id']]),
-                                'title' => Labels::getLabel('LBL_VIEW_DETAIL', $siteLangId)
-                            ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                                            </use>
-                                        </svg>'
-                        ]
-                    ];
-                }
-
                 if ($row['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED && !empty($row['orrequest_admin_comment'])) {
                     $data['otherButtons'][] = [
                         'attr' => [
@@ -118,6 +102,20 @@ foreach ($arrListing as $sn => $row) {
                                             </use>
                                         </svg>
                                     </i>',
+                    ];
+                }
+
+                if ($canEdit) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => UrlHelper::generateUrl('OrderReturnRequests', 'view', [$row['orrequest_id']]),
+                            'title' => Labels::getLabel('LBL_VIEW_DETAIL', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                        </use>
+                                    </svg>'
                     ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

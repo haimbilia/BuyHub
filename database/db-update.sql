@@ -1649,3 +1649,5 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_shipping_rates_lang` CHANGE `shiprate_name` `shiprate_name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `tbl_coupons` ADD `coupon_updated_on` DATETIME NOT NULL AFTER `coupon_deleted`;
+
+ALTER TABLE `tbl_social_platforms` ADD UNIQUE( `splatform_user_id`, `splatform_identifier`);

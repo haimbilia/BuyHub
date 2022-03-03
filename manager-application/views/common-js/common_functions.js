@@ -19,7 +19,7 @@ function getNotifications(type, obj) {
         url = fcom.makeUrl("SystemLog", "notificationList");
         viewAllUrl = fcom.makeUrl("SystemLog");
     }
-    
+
     if (typeof obj != undefined) {
         $(obj).siblings().removeClass('is-current');
         $(obj).addClass('is-current');
@@ -139,7 +139,7 @@ function googleCaptcha() {
 }
 
 getSlugUrl = function (obj, str, extra, pos) {
-    if (pos == undefined) pos = "pre";
+    if (pos == undefined) { pos = "pre" };
     var str = str
         .toString()
         .toLowerCase()
@@ -362,7 +362,6 @@ redirectfunc = async function (url, hiddenfields = {}, nid, newTab) {
     $.each(hiddenfields, function (index, value) {
         inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
     });
-    console.log(inputs);
     $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
 };
 
@@ -374,7 +373,7 @@ markNavActive = function (ele) {
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
-    $('.sidebarMenuJs').animate({     
+    $('.sidebarMenuJs').animate({
         scrollTop: ele.closest('ul').offset().top - $('.sidebarMenuJs').offset().top - 30
     }, 100);
 
@@ -425,7 +424,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu').on('click', function (e) {
+    $('.dropdown-menu.dropDownMenuBlockClose').on('click', function (e) {        
         e.stopPropagation();
     });
 

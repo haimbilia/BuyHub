@@ -180,7 +180,6 @@ class DiscountCouponsController extends ListingBaseController
         $frm = $this->getForm();
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -304,8 +303,10 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DISCOUNT_TYPE', $this->siteLangId), 'coupon_type', $typeArr)->requirements()->setRequired();
 
         $frm->addRequiredField(Labels::getLabel('FRM_COUPON_TITLE', $this->siteLangId), 'coupon_title');
+
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_COUPON_CODE', $this->siteLangId), 'coupon_code');
         $fld->setUnique(DiscountCoupons::DB_TBL, 'coupon_code', 'coupon_id', 'coupon_id', 'coupon_id');
+
         $frm->addTextArea(Labels::getLabel('FRM_COUPON_DESCRIPTION', $this->siteLangId), 'coupon_description');
 
         $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->siteLangId);
