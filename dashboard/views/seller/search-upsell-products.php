@@ -18,7 +18,7 @@
             $th->appendElement('th', array('width' => '75%'), $val);
         }
     }
-    foreach ($arrListing as $selProdId => $upsellProds) {
+    foreach ($arrListing as $selProdId => $row) {
         $tr = $tbl->appendElement('tr', array());
         foreach ($arr_flds as $key => $val) {
             $tr->setAttribute('id', 'row-' . $selProdId);
@@ -33,13 +33,14 @@
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':
-                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $linkedToProducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
+                    $row['options'] = SellerProduct::getSellerProductOptions($selProdId, true, $siteLangId);
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'upsell_products':
                     $div = $td->appendElement('div', array("class" => "list-tag-wrapper"));
                     $ul = $div->appendElement("ul", array("class" => "list-tags"));
-                    foreach ($upsellProds as $upsellProd) {
+                    foreach ($row['products'] as $upsellProd) {
                         $options = SellerProduct::getSellerProductOptions($upsellProd['selprod_id'], true, $siteLangId);
                         $variantsStr = '';
                         array_walk($options, function ($item, $key) use (&$variantsStr) {

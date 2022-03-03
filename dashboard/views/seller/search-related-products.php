@@ -1,8 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap table-responsive">
     <?php
-    $arr_flds = array(
-        // 'select_all'=>'',
+    $arr_flds = array(     
         'product_name' => Labels::getLabel('LBL_Product_Name', $siteLangId),
         'related_products' => Labels::getLabel('LBL_Related_Products', $siteLangId)
     );
@@ -19,7 +18,7 @@
         }
     }
 
-    foreach ($arrListing as $selProdId => $relatedProds) {
+    foreach ($arrListing as $selProdId => $row) {
         $tr = $tbl->appendElement('tr', array());
         foreach ($arr_flds as $key => $val) {
             $tr->setAttribute('id', 'row-' . $selProdId);
@@ -34,13 +33,14 @@
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':
-                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $linkedToProducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
+                    $row['options'] = SellerProduct::getSellerProductOptions($selProdId, true, $siteLangId);
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'related_products':
                     $div = $td->appendElement('div', array("class" => "list-tag-wrapper scroll scroll-y"));
                     $ul = $div->appendElement("ul", array("class" => "list-tags"));
-                    foreach ($relatedProds as $relatedProd) {
+                    foreach ($row['products'] as $relatedProd) {
                         $options = SellerProduct::getSellerProductOptions($relatedProd['selprod_id'], true, $siteLangId);
                         $variantsStr = '';
                         array_walk($options, function ($item, $key) use (&$variantsStr) {
