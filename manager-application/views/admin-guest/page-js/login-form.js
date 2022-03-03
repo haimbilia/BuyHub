@@ -35,9 +35,7 @@ $(document).ready(function () {
         var passInput = $("#password");
         if (passInput.attr('type') === 'password') {
             passInput.attr('type', 'text');
-            $(this).html(hideTxt);
         } else {
-            $(this).html(showTxt);
             passInput.attr('type', 'password');
         }
     });

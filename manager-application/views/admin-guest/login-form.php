@@ -52,7 +52,7 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <div class="input-group">
                             <?php echo $passwordFld->getHTML('password'); ?>
                             <div class="input-group-append">
-                                <span class="input-group-text field-password"></span>
+                                <span class="input-group-text field-password" id="showPass"></span>
                             </div>
                         </div>
                     </div>
