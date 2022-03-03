@@ -3,14 +3,14 @@ $input-padding: 0.6rem 0.75rem;
 $input-line-height: 1.5;
 $input-font-size: 0.85rem;
 $input-border-style: solid;
-$input-border-width: 2px;
+$input-border-width: 1px;
 $input-border-color: #000;
 $input-border: none;
 $input-border-radius: 3px;
 $input-bg: $bg-gray;
 $input-color: #474747;
 @mixin input {
-    border: $input-border-style 2px $input-border-color;
+    border: $input-border-style $input-border-width $input-border-color;
     background-color: transparent;
     color: $input-color;
     height: $input-height;
@@ -88,6 +88,9 @@ $input-color: #474747;
     .form-group,
     .field-set {
         margin-bottom: 1.8rem;
+        &.form-group {
+            position: relative;
+        }
     }
 
     &-label,
@@ -356,9 +359,9 @@ form.custom-form {
     width: 100%;
     input {
         position: relative;
-        -ms-flex: 1 1 auto;
+
         flex: 1 1 auto;
-        width: 1%;
+        width: 1% !important;
         margin-bottom: 0;
         &:not(:first-child) {
             border-top-#{$start-direction}-radius: 0;
@@ -445,5 +448,25 @@ form.custom-form {
     }
     &_btn {
         font-size: 1.2rem;
+    }
+}
+
+.field-password {
+    position: absolute;
+    #{$end-direction}: 5px;
+    top: 0;
+    height: 100%;
+    width: 3rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktdGhyZWUtZG90cyIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMyA5LjVhMS41IDEuNSAwIDEgMSAwLTMgMS41IDEuNSAwIDAgMSAwIDN6bTUgMGExLjUgMS41IDAgMSAxIDAtMyAxLjUgMS41IDAgMCAxIDAgM3ptNSAwYTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzeiIvPgo8L3N2Zz4=);
+    &-show {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZXllIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xNiA4cy0zLTUuNS04LTUuNVMwIDggMCA4czMgNS41IDggNS41UzE2IDggMTYgOHpNMS4xNzMgOGExMy4xMzMgMTMuMTMzIDAgMCAxIDEuNjYtMi4wNDNDNC4xMiA0LjY2OCA1Ljg4IDMuNSA4IDMuNWMyLjEyIDAgMy44NzkgMS4xNjggNS4xNjggMi40NTdBMTMuMTMzIDEzLjEzMyAwIDAgMSAxNC44MjggOGMtLjA1OC4wODctLjEyMi4xODMtLjE5NS4yODgtLjMzNS40OC0uODMgMS4xMi0xLjQ2NSAxLjc1NUMxMS44NzkgMTEuMzMyIDEwLjExOSAxMi41IDggMTIuNWMtMi4xMiAwLTMuODc5LTEuMTY4LTUuMTY4LTIuNDU3QTEzLjEzNCAxMy4xMzQgMCAwIDEgMS4xNzIgOHoiLz4KICA8cGF0aCBkPSJNOCA1LjVhMi41IDIuNSAwIDEgMCAwIDUgMi41IDIuNSAwIDAgMCAwLTV6TTQuNSA4YTMuNSAzLjUgMCAxIDEgNyAwIDMuNSAzLjUgMCAwIDEtNyAweiIvPgo8L3N2Zz4=);
     }
 }

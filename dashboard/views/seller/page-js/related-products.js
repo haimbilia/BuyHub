@@ -1,6 +1,6 @@
 var selected_products = [];
 $(document).ready(function () {
-    searchRelatedProducts(document.frmSearch);
+    searchRecords(document.frmSearch);
     $('#related-products').delegate('.remove_related', 'click', function () {
         $(this).parents('li').remove();
     });
@@ -14,7 +14,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
 
 (function () {
     var dv = '#listing';
-    searchRelatedProducts = function (frm) {
+    searchRecords = function (frm) {
 
         /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
         var data = '';
@@ -35,7 +35,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
             location.href = fcom.makeUrl('Seller', 'relatedProducts');
         } else {
             document.frmSearch.reset();
-            searchRelatedProducts(document.frmSearch);
+            searchRecords(document.frmSearch);
         }
     };
 
@@ -45,12 +45,12 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
         }
         var frm = document.frmSearchVolumeDiscountPaging;
         $(frm.page).val(page);
-        searchRelatedProducts(frm);
+        searchRecords(frm);
     }
 
     reloadList = function () {
         var frm = document.frmRelatedSellerProduct;
-        searchRelatedProducts(frm);
+        searchRecords(frm);
     }
 
     deleteSelprodRelatedProduct = function (selProdId, relProdId) {
@@ -61,7 +61,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteSelprodRelatedProduct', [selProdId, relProdId]), '', function (t) {
             var frm = document.frmSearchVolumeDiscountPaging;
             $(frm.total_record_count).val('');
-            searchRelatedProducts(document.frmSearchVolumeDiscountPaging);
+            searchRecords(document.frmSearchVolumeDiscountPaging);
         });
     }
 
@@ -82,7 +82,8 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
             $("input[name='selprod_id']").val('');
             $('#related-products').empty();
             $(frm).find("select[name='product_name']").trigger('change.select2');
-            searchRelatedProducts(document.frmRelatedSellerProduct);
+            searchRecords(document.frmRelatedSellerProduct);
+            $.ykmodal.close();
         });
     };
 

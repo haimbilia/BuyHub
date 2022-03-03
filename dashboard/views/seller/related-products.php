@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/dashboardNavigation.php'); 
-$frmSearch->setFormTagAttribute('onsubmit', 'searchRelatedProducts(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 ?>
 <div class="content-wrapper content-space">
     <?php

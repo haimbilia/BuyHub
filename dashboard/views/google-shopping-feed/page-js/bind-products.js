@@ -117,7 +117,7 @@ $(document).ready(function () {
 				processResults: function (data, params) {
 					params.page = params.page || 1;
 					return {
-						results: data.products,
+						results: data.results,
 						pagination: {
 							more: params.page < data.pageCount,
 						},
@@ -125,13 +125,7 @@ $(document).ready(function () {
 				},
 				cache: true,
 			},
-			minimumInputLength: 0,
-			templateResult: function (result) {
-				return result.name;
-			},
-			templateSelection: function (result) {
-				return result.name || result.text;
-			},
+			minimumInputLength: 0,			
 		});
 
 		var select2Selector = ele.data("select2");

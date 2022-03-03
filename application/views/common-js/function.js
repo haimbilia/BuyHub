@@ -400,7 +400,6 @@ $(function () {
         elem = this;
         initialize();
     };
-
     function initialize() {
         total_li = $(elem).children('ul').children('li').length;
         limit = settings.limit;
@@ -635,7 +634,7 @@ function loadGeoLocation() {
     });
 }
 
-function setGeoAddress(data) {    
+function setGeoAddress(data) {
     var address = '';
     setCookie('_ykGeoLat', data.lat);
     setCookie('_ykGeoLng', data.lng);
@@ -663,7 +662,7 @@ function setGeoAddress(data) {
     var formatedAddr = ('undefined' == typeof data.formatted_address) ? '' : data.formatted_address;
     address = ('' == address) ? formatedAddr : address;
 
-    setCookie('_ykGeoAddress', address);    
+    setCookie('_ykGeoAddress', address);
 
     return address;
 }
@@ -716,9 +715,9 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
     var fieldElement = document.getElementById(elementId);
     setTimeout(function () { $("#" + elementId).attr('autocomplete', 'no'); }, 500);
-    var options = { 
+    var options = {
         /* types: ['address'] */
-        fields: ["formatted_address", "geometry", "name","address_components"],
+        fields: ["formatted_address", "geometry", "name", "address_components"],
     }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -746,7 +745,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
                     data['city'] = value;
                 }
             }
-            address = setGeoAddress(data);           
+            address = setGeoAddress(data);
             if ('' == address) {
                 var msg = (langLbl.fieldNotFound).replace('{field}', field);
                 fcom.displayErrorMessage(msg);
@@ -1036,14 +1035,14 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
     }
     HTMLMarker.prototype.onAdd = function () {
         this.div = document.createElement('DIV');
-        this.div.className = "float-price " + (this.isDefault == 1?'float-brand':'') ;
-        this.div.style.position = 'absolute';      
+        this.div.className = "float-price " + (this.isDefault == 1 ? 'float-brand' : '');
+        this.div.style.position = 'absolute';
         this.div.innerHTML = this.pointerText;
         var panes = this.getPanes();
         panes.overlayImage.appendChild(this.div);
         var me = this;
         google.maps.event.addDomListener(this.div, 'click', function () {
-            infowindow.setContent(me.content);          
+            infowindow.setContent(me.content);
             infowindow.setPosition(new google.maps.LatLng(me.lat, me.lng));
             infowindow.open(map);
         });
@@ -1112,7 +1111,7 @@ function clearMarkers() {
 
 function createCustomMarkers(customMarkers) {
     $.each(customMarkers, function (index, marker) {
-        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content , marker.isDefault);
+        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content, marker.isDefault);
         customMarker[index].setMap(map);
     });
 }

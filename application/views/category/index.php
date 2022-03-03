@@ -1,16 +1,15 @@
 <div id="body" class="body">
-    <div class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="section-head justify-content-center mb-0">
-                <div class="section-heading">
-                    <h2 class="mb-0"><?php echo Labels::getLabel('LBL_Shop_By_Categories', $siteLangId); ?></h2>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <section class="section">
         <div class="container">
+            <div class="section-head">
+                <div class="section-heading">
+                    <h2><?php echo Labels::getLabel('LBL_Shop_By_Categories', $siteLangId); ?></h2>
+                </div>
+            </div>
+
+
             <div class="masonry">
                 <?php foreach ($categoriesArr as $category) { ?>
                     <div class="masonry-item">

@@ -9,15 +9,16 @@ $prodFld = $frm->getField('selprod_id');
 $prodFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_PRODUCT', $siteLangId));
 $prodFld->setFieldTagAttribute('id', 'productNameJs');
 
-$relProdFld = $frm->getField('products_related[]');
+$relProdFld = $frm->getField('products_upsell[]');
 $relProdFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_PRODUCT', $siteLangId));
-$relProdFld->setFieldTagAttribute('id', 'relatedProductsJs');
+$relProdFld->setFieldTagAttribute('id', 'upsellProductsJs');
 $relProdFld->setFieldTagAttribute('multiple', 'true');
 $relProdFld->setFieldTagAttribute('disabled', 'disabled');
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_SETUP_RELATED_PRODUCTS', $siteLangId); ?>
+        <?php echo Labels::getLabel('LBL_SETUP_BUY_TOGETHER_PRODUCTS', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -30,25 +31,26 @@ $relProdFld->setFieldTagAttribute('disabled', 'disabled');
 
     bindProductNameSelect2 = function () {
         select2("productNameJs", fcom.makeUrl('Seller', 'autoCompleteProducts'), {}, function (res) {           
-            $('#relatedProductsJs').removeAttr('disabled');       
-            fcom.ajax(fcom.makeUrl('Seller', 'getRelatedProductsList', [res.params.args.data.id]), '', function(t) {
+            $('#upsellProductsJs').removeAttr('disabled');       
+            fcom.ajax(fcom.makeUrl('Seller', 'getUpsellProductsList', [res.params.args.data.id]), '', function(t) {
                     var ans = $.parseJSON(t);
-                    $('#relatedProductsJs option').remove();
-                    for (var key in ans.relatedProducts) {
-                        $('#relatedProductsJs').append(                 
-                            '<option selected value=" '+ ans.relatedProducts[key]['selprod_id'] + '">'+ans.relatedProducts[key]['selprod_title'] + " ["+ ans.relatedProducts[key]['product_identifier'] + "]"+'<option>'
-                        );                        
+                    $('#upsellProductsJs option').remove();
+                    for (var key in ans.upsellProducts) {
+                        $('#upsellProductsJs').append(                 
+                            '<option selected value=" '+ ans.upsellProducts[key]['selprod_id'] + '">'+ans.upsellProducts[key]['selprod_title'] + " ["+ ans.upsellProducts[key]['product_identifier'] + "]"+'<option>'
+                        );                       
                     }
-                    $('#relatedProductsJs').trigger('change');
+                    $('#upsellProductsJs').trigger('change');
+                   
                 });
         }, function (res) {
-            $('#relatedProductsJs option').remove();
-            $('#relatedProductsJs').trigger('change').attr('disabled', 'disabled');
+            $('#upsellProductsJs option').remove();
+            $('#upsellProductsJs').trigger('change').attr('disabled', 'disabled');
         });
     }
 
-    bindlRelatedProdSelect2 = function () {
-        select2('relatedProductsJs', fcom.makeUrl('Seller', 'autoCompleteProducts'), function (obj) {
+    bindlUpsellProdSelect2 = function () {
+        select2('upsellProductsJs', fcom.makeUrl('Seller', 'autoCompleteProducts'), function (obj) {
             let excludeRecords  =  obj.val();
             if(excludeRecords.length){
                 excludeRecords.push($('#productNameJs').val());
@@ -63,6 +65,6 @@ $relProdFld->setFieldTagAttribute('disabled', 'disabled');
 
     $(document).ready(function() {
         bindProductNameSelect2();
-        bindlRelatedProdSelect2();
+        bindlUpsellProdSelect2();
     });
 </script>

@@ -58,7 +58,7 @@ if (!empty($data) && 0 < count($data)) {
                     processResults: function(data, params) {
                         params.page = params.page || 1;
                         return {
-                            results: data.products,
+                            results: data.results,
                             pagination: {
                                 more: params.page < data.pageCount,
                             },
@@ -66,13 +66,7 @@ if (!empty($data) && 0 < count($data)) {
                     },
                     cache: true,
                 },
-                minimumInputLength: 0,
-                templateResult: function(result) {
-                    return result.name;
-                },
-                templateSelection: function(result) {
-                    return result.name || result.text;
-                },
+                minimumInputLength: 0,                
             })
             .on("select2:selecting", function(e) {
                 var parentForm = $(this).closest("form").attr("id");

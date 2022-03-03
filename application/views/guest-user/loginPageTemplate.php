@@ -56,13 +56,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             </div>
             <div class="row pwdField--js">
                 <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <?php echo $loginFrm->getFieldHtml('password'); ?>
-                            <div class="input-group-append">
-                                <span class="input-group-text field-password" id="showPass"></span>
-                            </div>
-                        </div>
+                    <div class="form-group form-group-relative">
+                        <?php echo $loginFrm->getFieldHtml('password'); ?>
+                        <span class="input-group-text field-password" id="showPass"></span>
                     </div>
                 </div>
             </div>

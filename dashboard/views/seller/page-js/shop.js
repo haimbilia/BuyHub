@@ -948,10 +948,10 @@ function bindAutoComplete() {
         },
         minimumInputLength: 0,
         templateResult: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
+            return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         },
         templateSelection: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
+            return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         }
     });
 
