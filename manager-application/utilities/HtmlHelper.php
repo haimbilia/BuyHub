@@ -291,13 +291,22 @@ class HtmlHelper
                 </div>
                 <script>
                 $.initDropZone("' . $url . '")
+                .on("reset",function(event){    
+                    if(!$(".dz-error").length){
+                        $(".upload_cover").removeClass("hidden");     
+                    }               
+                })
                 .on("addedfile",function(event){                                 
-                    $(".upload_cover").addClass("hidden"); 
+                    $(".upload_cover").addClass("hidden");
                 })
-                .on("queuecomplete",function(event){                                 
-                    $(".upload_cover").removeClass("hidden"); 
+                .on("error",function(event){
+                    $(".upload_cover").addClass("hidden");                    
+                })               
+                .on("success",function(event){                                 
+                    $(".upload_cover").removeClass("hidden");
+                    console.log("success");
                 })
-                    .on("sending", function(file, xhr, formData){';
+                .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {
             $str .= $callbackfn . '(file, xhr, formData)';;
         }

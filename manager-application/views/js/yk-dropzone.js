@@ -7,6 +7,7 @@ $(document).on({
     }
 }, ".upload_cover");
 
+
 (function ($) {
     $.initDropZone = function (url, className = "dropzone", maxFiles = 1, acceptedFiles = ".zip") {    
         let invalidFileTypeMsg = langLbl.invalidUploadFileType.replace("{FILE-TYPE}", acceptedFiles);
@@ -50,6 +51,8 @@ $(document).on({
             progr.style.width = progress + "%";
             progrText.textContent = progress.toFixed() + "%";
         });
+
+
         return ykDropzone;
     }
 })(jQuery);
