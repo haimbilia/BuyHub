@@ -70,7 +70,7 @@ if (!empty($data) && 0 < count($data)) {
                     processResults: function(data, params) {
                         params.page = params.page || 1;
                         return {
-                            results: data.products,
+                            results: data.results,
                             pagination: {
                                 more: params.page < data.pageCount,
                             },
@@ -79,12 +79,7 @@ if (!empty($data) && 0 < count($data)) {
                     cache: true,
                 },
                 minimumInputLength: 0,
-                templateResult: function(result) {
-                    return result.name;
-                },
-                templateSelection: function(result) {
-                    return result.name || result.text;
-                },
+               
             })
             .on("select2:selecting", function(e) {
                 var parentForm = $(this).closest("form").attr("id");
@@ -119,11 +114,7 @@ if (!empty($data) && 0 < count($data)) {
             });
 
         var select2Selector = ele.data("select2");
-        select2Selector.$container.addClass("custom-select2");
-        if (ele.attr('multiple') == undefined) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-        } else {
-            select2Selector.$container.addClass("custom-select2-multiple");
-        }
+        select2Selector.$container.addClass("custom-select2 w-100");
+        $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
     });
 </script>
