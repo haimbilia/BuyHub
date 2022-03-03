@@ -528,6 +528,7 @@ Updates/Fixes :
     => 062873 - Admin UI: Pagination is not working on the admin user's permission page
     => 062864 - Admin UI: Admin is not able to edit the records under the "Categories request" section
     => 062862 - Admin UI: The buyer's image is not showing properly under the messages' section on the 'order return request' page
+    => 062899 - Admin UI: Getting a UI design issue on the following modules
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
