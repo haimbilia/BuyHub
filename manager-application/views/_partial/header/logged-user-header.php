@@ -77,7 +77,7 @@
                                         </svg>
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim notificationDropMenuJs">
+                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim notificationDropMenuJs dropDownMenuBlockClose">
                                     <div class="header-notification">
                                         <div class="header-notification__head">
                                             <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide notifiLinkCountJs"></span></h5>

@@ -524,6 +524,7 @@ Updates/Fixes :
     => 062881 - Admin UI: Admin is not able to update the commission amount of the default commission, the search is not working according to the product, and the "view log" icon is not showing on the "Commission management" section
     => 062570 - Admin UI: "Metaballs menu" is not working while clicking on it for the password field on the login page
     => 062678 - Admin UI: The "Remove File" option is not showing properly while trying to upload the large file while adding the Media to server under the Import/Export section
+    => 062816 - Admin UI: Admin is not able to select the dropdown-item of the "product warranty type" field while adding the product
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
