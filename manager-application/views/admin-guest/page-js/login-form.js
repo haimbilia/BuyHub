@@ -3,6 +3,15 @@ $(document).ready(function () {
         $(".rememberFldJs").unwrap();
     }
 });
+
+$('#showPass').on('click', function () {
+    var passInput = $("#password");
+    if (passInput.attr('type') === 'password') {
+        passInput.attr('type', 'text');
+    } else {
+        passInput.attr('type', 'password');
+    }
+});
 (function () {
     login = function (frm, v) {
         if (!$(frm).validate()) {
@@ -30,13 +39,4 @@ $(document).ready(function () {
             fcom.displaySuccessMessage(t.msg);
         });
     };
-
-    $('#showPass').on('click', function () {
-        var passInput = $("#password");
-        if (passInput.attr('type') === 'password') {
-            passInput.attr('type', 'text');
-        } else {
-            passInput.attr('type', 'password');
-        }
-    });
 })();
