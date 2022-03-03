@@ -7,6 +7,7 @@ $(document).on({
     }
 }, ".upload_cover");
 
+
 (function ($) {
     $.initDropZone = function (url, className = "dropzone", maxFiles = 1, acceptedFiles = ".zip") {    
         let invalidFileTypeMsg = langLbl.invalidUploadFileType.replace("{FILE-TYPE}", acceptedFiles);
@@ -18,6 +19,7 @@ $(document).on({
             maxFiles: maxFiles,
             addRemoveLinks: true,
             maxFilesize: 100,
+            uploadMultiple : maxFiles >  1,
             acceptedFiles: acceptedFiles,
             autoProcessQueue: true,
             dictDefaultMessage: langLbl.dropFilesToUpload,
@@ -26,10 +28,10 @@ $(document).on({
             previewTemplate: previewTemplate
         });
 
-        ykDropzone.on("success", function (file, response) {
-            let res = JSON.parse(response);
+        ykDropzone.on("success", function (file, res) {  
             if (0 == res.status) {
                 fcom.displayErrorMessage(res.msg);
+                this.removeFile(file);
                 return false;
             }
             this.removeFile(file);
@@ -50,6 +52,8 @@ $(document).on({
             progr.style.width = progress + "%";
             progrText.textContent = progress.toFixed() + "%";
         });
+
+
         return ykDropzone;
     }
 })(jQuery);

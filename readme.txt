@@ -526,6 +526,9 @@ Updates/Fixes :
     => 062879 - Admin UI: Getting an error while editing the records on the "social platform" section
     => 062876 - Admin UI: Getting an error while adding the new record under the "seller approval" section and caption name is also not showing while editing the record
     => 062873 - Admin UI: Pagination is not working on the admin user's permission page
+    => 062678 - Admin UI: The "Remove File" option is not showing properly while trying to upload the large file while adding the Media to server under the Import/Export section
+    => 062816 - Admin UI: Admin is not able to select the dropdown-item of the "product warranty type" field while adding the product
+    => 062468 - Admin UI: Upload image's placeholder is not showing while adding the banners and "Invalid Request" messages is showing while changing the status of the banner on the collection's page under the CMS section
     => 062864 - Admin UI: Admin is not able to edit the records under the "Categories request" section
     => 062862 - Admin UI: The buyer's image is not showing properly under the messages' section on the 'order return request' page
     => 062899 - Admin UI: Getting a UI design issue on the following modules

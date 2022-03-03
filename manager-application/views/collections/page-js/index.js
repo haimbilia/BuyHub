@@ -317,7 +317,7 @@ $(document).on('change', '.prefDimensionsJs', function() {
             return false;
         }
 
-        data = "bannerId=" + recordId + "&status=" + status;
+        data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl('Banners', "updateStatus"), data,
             function(res) {
                 $(obj).prop("checked", 1 == status);

@@ -424,7 +424,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu').on('click', function (e) {
+    $('.dropdown-menu.dropDownMenuBlockClose').on('click', function (e) {        
         e.stopPropagation();
     });
 
