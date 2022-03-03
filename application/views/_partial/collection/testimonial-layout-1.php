@@ -37,8 +37,8 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
 
                 <?php } ?>
             </div>
-            <div class="section-foot text-center">
-                <a class="btn btn-outline-brand btn-wide" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?>
+            <div class="section-foot">
+                <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?>
                 </a>
             </div>
         </div>
@@ -47,7 +47,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
         <script>
             $(".js-slider-testimonials").slick({
                 slidesToShow: 1,
-                dots: true,
+                dots: false,
                 arrows: true,
                 swipe: true,
                 //  infinite: true,

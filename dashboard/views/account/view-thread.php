@@ -128,8 +128,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
             <?php } ?>
         </div>
     </div>
-
-    <div class="communication-sidebar userJs">
+    <!-- <div class="communication-sidebar userJs">
         <div class="card mb-0 h-100">
             <div class="card-body">
                 <div class="message__user">
@@ -169,5 +168,5 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <?php } ?>
