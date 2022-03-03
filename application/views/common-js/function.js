@@ -272,28 +272,6 @@ $(document).ready(function () {
 
 });
 
-/*ripple effect*/
-$(function () {
-    var ink, d, x, y;
-    $(".ripplelink, .slick-arrow").click(function (e) {
-        if ($(this).find(".ink").length === 0) {
-            $(this).prepend("<span class='ink'></span>");
-        }
-        ink = $(this).find(".ink");
-        ink.removeClass("animate");
-
-        if (!ink.height() && !ink.width()) {
-            d = Math.max($(this).outerWidth(), $(this).outerHeight());
-            ink.css({ height: d, width: d });
-        }
-        x = e.pageX - $(this).offset().left - ink.width() / 2;
-        y = e.pageY - $(this).offset().top - ink.height() / 2;
-        ink.css({ top: y + 'px', left: x + 'px' }).addClass("animate");
-    });
-});
-
-
-
 /*back-top*/
 $(document).ready(function () {
     /* hide #back-top first */
@@ -336,55 +314,6 @@ $(document).ready(function () {
         }, 2500);
     });
 
-});
-
-
-
-/*  like animation  */
-$(document).ready(function () {
-    var debug = /*true ||*/ false;
-    var h = document.querySelector('.heart-wrapper-Js');
-
-    /*   function toggleActivate(){
-        h.classList.toggle('is-active');
-      }   */
-
-    if (debug) {
-        var elts = Array.prototype.slice.call(h.querySelectorAll(':scope > *'), 0);
-        var activated = false;
-        var animating = false;
-        var count = 0;
-        var step = 1000;
-
-        function setAnim(state) {
-            elts.forEach(function (elt) {
-                elt.style.animationPlayState = state;
-            });
-        }
-
-        h.addEventListener('click', function () {
-            if (animating) return;
-            if (count > 27) {
-                h.classList.remove('is-active');
-                count = 0;
-                return;
-            }
-            if (!activated) h.classList.add('is-active') && (activated = true);
-
-            animating = true;
-
-            setAnim('running');
-            setTimeout(function () {
-                setAnim('paused');
-                animating = false;
-            }, step);
-        }, false);
-
-        setAnim('paused');
-        elts.forEach(function (elt) {
-            elt.style.animationDuration = step / 1000 * 27 + 's';
-        });
-    }
 });
 
 $(function () {

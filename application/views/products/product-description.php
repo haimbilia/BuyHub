@@ -50,25 +50,20 @@
             <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?>
         </p>
     <?php } ?>
-
-    <!-- Volume Discounts -->
     <div class="options-block">
         <?php
         if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
-
             <ul class="<?php echo (count($volumeDiscountRows) > 1) ? '' : ''; ?> wholesale-slider">
                 <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
                     $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
                     $price = ($product['theprice'] - $volumeDiscount); ?>
                     <li class="wholesale-slider-item">
-
                         <div class="wholesale-slider-value">
                             <i class="wholesale-slider-icon">
                                 <svg class="svg" width="14" height="14">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#patch-cent">
                                     </use>
                                 </svg>
-
                             </i>
                             <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
                             <?php echo Labels::getLabel('LBL_Or_more', $siteLangId); ?>
@@ -85,8 +80,6 @@
         <?php }  ?>
     </div>
     <div class="divider"></div>
-
-
     <!-- Option block -->
 
     <?php if (!empty($optionRows)) { ?>
