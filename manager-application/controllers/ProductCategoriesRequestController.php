@@ -9,6 +9,7 @@ class ProductCategoriesRequestController extends ListingBaseController
     {
         parent::__construct($action);
         $this->objPrivilege->canViewProductCategories();
+        $this->rewriteUrl = ProductCategory::REWRITE_URL_PREFIX;
     }
 
     /**
@@ -99,10 +100,12 @@ class ProductCategoriesRequestController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
+        
         $srch = ProductCategory::getSearchObject(false, $this->siteLangId, false, ProductCategory::REQUEST_PENDING);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = prodcat_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
+        
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -120,7 +123,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'u.user_name', 'IFNULL(shop_name, shop_identifier) as shop_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
@@ -147,6 +150,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
+            $data['urlrewrite_custom'] = AdminShopSearch::getUrlRewrite($this->rewriteUrl . $recordId);
             $frm->fill($data);
         }
 
@@ -186,6 +190,16 @@ class ProductCategoriesRequestController extends ListingBaseController
             LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
+        
+        /* url data[ */
+        $prodCatOriginalUrl = $this->rewriteUrl . $recordId;
+        if ($post['urlrewrite_custom'] == '') {
+            UrlRewrite::remove($prodCatOriginalUrl);
+        } else {
+            $record->rewriteUrl($post['urlrewrite_custom']);
+        }
+        /* ] */
+
         $record->updateCatCode();
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -198,6 +212,8 @@ class ProductCategoriesRequestController extends ListingBaseController
         $frm = new Form('frmProdCategory', array('id' => 'frmProdCategory'));
         $frm->addHiddenField('', 'prodcat_id');
         $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $this->siteLangId), 'prodcat_name');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_CATEGORY_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        $fld->requirements()->setRequired();
 
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);

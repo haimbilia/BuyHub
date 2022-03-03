@@ -526,6 +526,7 @@ Updates/Fixes :
     => 062879 - Admin UI: Getting an error while editing the records on the "social platform" section
     => 062876 - Admin UI: Getting an error while adding the new record under the "seller approval" section and caption name is also not showing while editing the record
     => 062873 - Admin UI: Pagination is not working on the admin user's permission page
+    => 062864 - Admin UI: Admin is not able to edit the records under the "Categories request" section
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -486,7 +486,7 @@ class ProductCategory extends MyAppModel
         if ($records) {
             $name = strip_tags($records['prodcat_identifier']) . $seprator . $name_suffix;
             if ($records['prodcat_parent'] > 0) {
-                $name = $this->getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId);
+                $name = $this->getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId, $active, $status);
             }
         }
         return $name;
