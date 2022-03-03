@@ -299,12 +299,13 @@ class HtmlHelper
                 .on("addedfile",function(event){                                 
                     $(".upload_cover").addClass("hidden");
                 })
-                .on("error",function(event){
-                    $(".upload_cover").addClass("hidden");                    
+                .on("error",function(event){                 
+                    fcom.displayErrorMessage($(".dz-error-message").text());
+                    this.removeAllFiles(true);
+                    $(".upload_cover").removeClass("hidden");                    
                 })               
                 .on("success",function(event){                                 
-                    $(".upload_cover").removeClass("hidden");
-                    console.log("success");
+                    $(".upload_cover").removeClass("hidden");                   
                 })
                 .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {

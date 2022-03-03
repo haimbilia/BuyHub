@@ -19,6 +19,7 @@ $(document).on({
             maxFiles: maxFiles,
             addRemoveLinks: true,
             maxFilesize: 100,
+            uploadMultiple : maxFiles >  1,
             acceptedFiles: acceptedFiles,
             autoProcessQueue: true,
             dictDefaultMessage: langLbl.dropFilesToUpload,
@@ -27,10 +28,10 @@ $(document).on({
             previewTemplate: previewTemplate
         });
 
-        ykDropzone.on("success", function (file, response) {
-            let res = JSON.parse(response);
+        ykDropzone.on("success", function (file, res) {  
             if (0 == res.status) {
                 fcom.displayErrorMessage(res.msg);
+                this.removeFile(file);
                 return false;
             }
             this.removeFile(file);
