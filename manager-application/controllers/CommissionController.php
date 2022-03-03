@@ -87,6 +87,9 @@ class CommissionController extends ListingBaseController
             $cond = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('tuc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $cond->attachCondition('product_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $cond->attachCondition('shop_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $cond->attachCondition('shop_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
@@ -191,7 +194,7 @@ class CommissionController extends ListingBaseController
         }
 
         if (false == $isMandatory && 1 < $recordId && (empty($post['commsetting_prodcat_id']) && empty($post['commsetting_user_id']) && empty($post['commsetting_product_id']))) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_add_commission_corresponding_to_product,_category_or_user', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_COMMISSION_CORRESPONDING_TO_PRODUCT,_CATEGORY_OR_USER', $this->siteLangId), true);
         }
 
         if ($isMandatory) {
@@ -371,7 +374,7 @@ class CommissionController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
-            'commsetting_user_id' => Labels::getLabel('LBL_Seller', $this->siteLangId),
+            'commsetting_user_id' => Labels::getLabel('LBL_SHOP/_SELLER_NAME', $this->siteLangId),
             'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
