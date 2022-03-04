@@ -148,7 +148,7 @@ class SellerApprovalFormController extends ListingBaseController
                 'sformfield_required',
                 'sformfield_type',
             ];
-            $data = SupplierFormFields::getAttributesByLangId($this->siteLangId, $recordId, $attr, true);
+            $data = SupplierFormFields::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $attr, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

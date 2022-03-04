@@ -369,7 +369,7 @@ class ShopsController extends ListingBaseController
     {
         $land_id = FatUtility::int($land_id);
         $frm = new Form('frmShopLogo');
-        $frm->addHTML('', Labels::getLabel('FRM_LOGO', $this->siteLangId), '<h3>' . Labels::getLabel('FRM_LOGO', $this->siteLangId) . '</h3>');
+        $frm->addHTML('', 'logo_heading', '');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
 
@@ -392,7 +392,7 @@ class ShopsController extends ListingBaseController
     {
         $land_id = FatUtility::int($land_id);
         $frm = new Form('frmShopBanner');
-        $frm->addHTML('', Labels::getLabel('FRM_BANNERS', $this->siteLangId), '<h3>' . Labels::getLabel('FRM_BANNERS', $this->siteLangId) . '</h3>');
+        $frm->addHTML('', 'banner_heading', '');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
         if (count($bannerTypeArr) > 1) {
