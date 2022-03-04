@@ -217,7 +217,7 @@ trait ProductDigitalDownloads
 
         $srch = new OrderProductSearch(0, true);
         $srch->addMultipleFields(array('op_id', 'op_selprod_user_id'));
-        $srch->addCondition('op_id', '=', $recordId);
+        $srch->addCondition('op_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $row = FatApp::getDb()->fetch($srch->getResultSet());
@@ -250,8 +250,8 @@ trait ProductDigitalDownloads
 
         $opSrch = OrderProduct::getSearchObject();
 
-        $opSrch->addCondition('op_id', '=', $opId);
-        $opSrch->addCondition('op_product_type', '=', Product::PRODUCT_TYPE_DIGITAL);
+        $opSrch->addCondition('op_id', '=', 'mysql_func_' . $opId, 'AND', true);
+        $opSrch->addCondition('op_product_type', '=', 'mysql_func_' . Product::PRODUCT_TYPE_DIGITAL, 'AND', true);
 
         $opSrch->addMultipleFields(['op_status_id', 'op_selprod_user_id']);
 
