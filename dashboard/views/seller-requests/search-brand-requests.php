@@ -31,7 +31,7 @@
                     break;
                 case 'brand_name':
                     $brandName = (!empty($row['brand_name'])) ? $row['brand_name'] : $row['brand_identifier'];
-                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, "SMALL", 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $brandName . '" alt="' . $brandName . '"></figure>
+                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $brandName . '" alt="' . $brandName . '"></figure>
 				<div class="product-profile__description">
 					<div class="product-profile__title">' . $brandName . '</div>
 					<div class="product-profile__sub_title"> (' . $row['brand_identifier'] . ') </div>

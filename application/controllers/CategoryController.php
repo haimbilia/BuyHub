@@ -232,10 +232,7 @@ class CategoryController extends MyAppController
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
         } else {
             AttachedFile::displayOriginalImage($image_name);
-        }
-
-
-       
+        }      
     }
 
     public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)

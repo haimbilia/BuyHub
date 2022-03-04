@@ -89,7 +89,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                                                 <img data-ratio="1:1 (150x150)" src="' . UrlHelper::generateFileUrl('image', 'shopLogo', array(
                                             $moresellers['shop_id'],
                                             $siteLangId,
-                                            'SMALL'
+                                            ImageDimension::VIEW_THUMB
                                         )) . '" alt="' . $moresellers['shop_name'] . '">
                                                             </a>
                                                         </figure>

@@ -35,7 +35,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                                         $selProdCodeArr = explode('_', $opDetail['op_selprod_code']);
                                         if ($opDetail['op_is_batch']) {
-                                            $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($opDetail['op_selprod_id'], $siteLangId, "MEDIUM"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                                            $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($opDetail['op_selprod_id'], $siteLangId, ImageDimension::VIEW_MEDIUM), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                         } else {
                                             $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], ImageDimension::VIEW_MEDIUM, $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                         } ?>
@@ -129,7 +129,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <div class="shop-rating-wrap">
                                             <div class="shop-card">
                                                 <div class="shop-card__img">
-                                                    <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" />
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND); ?>" />
                                                 </div>
                                                 <div class="shop-card__detail">
                                                     <h6><?php echo $opDetail['op_shop_name']; ?> </h6>

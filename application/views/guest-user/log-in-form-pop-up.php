@@ -75,18 +75,20 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             </div>
         <?php } ?>
         <div class="row align-items-center">
-            <div class="col remember--js">
-                <div class="form-group">
-                    <label class="checkbox">
-                        <?php
-                        $fld = $loginFrm->getFieldHTML('remember_me');
-                        $fld = str_replace("<label >", "", $fld);
-                        $fld = str_replace("</label>", "", $fld);
-                        echo $fld;
-                        ?>
-                    </label> <?php if ($loginFrm->getField('remember_me')); ?>
+            <?php if ($loginFrm->getField('remember_me')) { ?>
+                <div class="col remember--js">
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <?php
+                            $fld = $loginFrm->getFieldHTML('remember_me');
+                            $fld = str_replace("<label >", "", $fld);
+                            $fld = str_replace("</label>", "", $fld);
+                            echo $fld;
+                            ?>
+                        </label>
+                    </div>
                 </div>
-            </div>
+            <?php } ?>
             <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
                 <div class="col-auto">
                     <a class="link" href="javaScript:void(0)" data-form="frmLogin" onClick="signInWithPhone(this, true)">

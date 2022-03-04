@@ -41,12 +41,18 @@ var Dashboard = function () {
 }();
 Dashboard.init();
 
-$('#showPass').on('click', function () {
+$(document).on('click', '#showPass', function () {
     var passInput = $("#password");
+    if ('' == passInput.val()) {
+        return;
+    }
+    
     if (passInput.attr('type') === 'password') {
         passInput.attr('type', 'text');
+        $(this).addClass('field-password-show');
     } else {
         passInput.attr('type', 'password');
+        $(this).removeClass('field-password-show');
     }
 });
 

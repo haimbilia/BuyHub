@@ -87,7 +87,7 @@
                                         $userImgUpdatedOn = $shopDetails['shop_updated_on'];
                                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                     ?>
-                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
                                     <?php } else {
                                         $userImgUpdatedOn = User::getAttributesById($loggedUserId, 'user_updated_on');
                                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
