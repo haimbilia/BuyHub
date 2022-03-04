@@ -276,21 +276,25 @@ a.link-arrow {
     }
 }
 .link-underline {
+    padding: 0;
     color: $brand-color;
     position: relative;
     font-size: 0.875rem;
+    font-weight: 500;
     white-space: nowrap;
     text-rendering: optimizeLegibility;
     transition: color 0.3s ease-in-out;
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 50% 100%;
     background-repeat: no-repeat;
-    background-size: 0% 1px;
+    background-size: 0% 2px;
+    background-color: transparent;
     transition: background-size 0.3s;
     text-decoration: none;
-    background-size: 100% 1px;
+    background-size: 100% 2px;
+    border: none;
     &:hover {
         text-decoration: none;
-        background-size: 95% 1px;
+        background-size: 95% 2px;
     }
 }
