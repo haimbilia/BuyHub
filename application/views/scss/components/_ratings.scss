@@ -5,37 +5,23 @@
     align-items: center;
     justify-content: flex-start;
     font-size: 0.85rem;
+    line-height: 1.5;
     a {
         color: inherit;
         font-size: inherit;
     }
 
-    .icn {
-        margin-#{$end-direction}: 0.8rem;
-        background: lighten($star-color, 35);
-        border-radius: 50%;
-        padding: 0.5rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .svg {
-            fill: $star-color;
-        }
+    .svg {
+        margin-#{$end-direction}: 8px;
+        width: 14px;
+        height: 14px;
+        fill: $secondary-color;
     }
     .rate {
-        margin: 0 !important;
+        margin: 0;
         padding: 0;
         line-height: inherit;
         font-weight: 500;
-        //height: 1rem;
-        span {
-            color: $txt-gray;
-        }
-        a {
-            color: $brand-color;
-        }
     }
     .be-first {
         line-height: 1;
@@ -44,5 +30,12 @@
         display: inline-block;
         vertical-align: top;
         color: $secondary-color;
+    }
+
+    .totals-review {
+        color: currentColor;
+        background-color: transparent;
+        border: none;
+        text-decoration: underline;
     }
 }
