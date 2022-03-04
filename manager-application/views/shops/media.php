@@ -4,6 +4,10 @@
 HtmlHelper::formatFormFields($logoFrm);
 $logoFrm->setFormTagAttribute('class', 'modal-body form');
 
+$fld = $logoFrm->getField('logo_heading');
+$fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
+$fld->value = '<h5>' . Labels::getLabel('FRM_LOGO', $siteLangId) . '</h5>';
+
 $logoLangFld = $logoFrm->getField('lang_id');
 $logoLangFld->addFieldTagAttribute('id', 'logoLanguageJs');
 
@@ -31,6 +35,10 @@ $fld->value = '<span id="imageListingJs"></span>';
 
 $imageLangFld = $shopBannerFrm->getField('lang_id');
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
+
+$fld = $shopBannerFrm->getField('banner_heading');
+$fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
+$fld->value = '<h5>' . Labels::getLabel('FRM_BANNERS', $siteLangId) . '</h5>';
 
 $screenFld = $shopBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');

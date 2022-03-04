@@ -35,7 +35,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
                         </div>
                     </div>
                 </div>
-                <?php  ?>
+                <?php /*  ?>
                 <div class="card">
                     <div class="card-body">
                         <ul class="points-timeline" id="points-timeline">
@@ -170,7 +170,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
                     </div>
 
                 </div>
-                <?php   ?>
+                <?php    */?>
                 <div class="card">
                     <div class="card-body">
                         <div id="rewardPointsListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
