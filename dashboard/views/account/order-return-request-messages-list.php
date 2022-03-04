@@ -6,7 +6,7 @@
             $shop_name = ' - ' . $message['shop_name'];
             $userImgUpdatedOn = Shop::getAttributesById($message['shop_id'], 'shop_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($message['shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($message['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         } else {
             if ($message['orrmsg_from_admin_id']) {
                 $toImage = UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND);
