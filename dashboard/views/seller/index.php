@@ -296,7 +296,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </thead>
                                     <tbody>
                                         <?php if (count($orders) > 0) {
-                                            foreach ($orders as $orderId => $row) { ?>
+                                            foreach ($orders as $orderId => $row) { 
+                                                $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));                                                
+                                                ?>
                                                 <tr>
                                                     <td>
                                                         <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row, 'siteLangId' => $siteLangId, 'showDate' => true], false, true); ?>
