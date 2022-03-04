@@ -16,7 +16,7 @@
 				<?php if($shops[$shop['ufs_user_id']]['products']){
 						foreach($shops[$shop['ufs_user_id']]['products'] as $product){
 							$shopUrl = UrlHelper::generateUrl('Shops','View',array( $product['shop_id'] )); ?>
-								<li><a class="item__pic" href="<?php echo $shopUrl; ?>"><img alt="" src="<?php echo UrlHelper::generateFileUrl('Image','shopLogo',array($product['shop_id'], $siteLangId,'THUMB'));?>"></a></li>
+								<li><a class="item__pic" href="<?php echo $shopUrl; ?>"><img alt="" src="<?php echo UrlHelper::generateFileUrl('Image','shopLogo',array($product['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB));?>"></a></li>
 							<?php } } ?>
 
 						<?php if( $shops[$shop['ufs_user_id']]['totalProducts'] <= $totalShopToShow ){ ?>
