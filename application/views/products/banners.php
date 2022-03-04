@@ -14,13 +14,13 @@
                     foreach ($slideArr as $slideScreen) {
                         switch ($slideScreen['afile_screen']) {
                             case applicationConstants::SCREEN_MOBILE:
-                                $mobile_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE,'PRODUCTLAYOUT')) . ",";
+                                $mobile_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) . ",";
                                 break;
                             case applicationConstants::SCREEN_IPAD:
-                                $tablet_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD,'PRODUCTLAYOUT')) . ",";
+                                $tablet_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) . ",";
                                 break;
                             case applicationConstants::SCREEN_DESKTOP:
-                                $desktop_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP,'PRODUCTLAYOUT')) . ",";
+                                $desktop_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) . ",";
                                 break;
                         }
                     }
