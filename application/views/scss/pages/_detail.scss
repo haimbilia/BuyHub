@@ -320,10 +320,10 @@
 .side-blocks {
     border: $border;
     border-radius: 2px;
-    padding: 1rem 1.5rem;
     margin-top: 2rem;
 
     .h5 {
+        padding: 1.5rem 1.5rem;
         color: $txt-body;
         font-weight: 500;
         font-size: 1rem;
@@ -338,6 +338,40 @@
             font-size: 0.8rem;
             position: relative;
             list-style: inside;
+        }
+    }
+}
+.wholesale-slider {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+
+    &-item {
+        padding: 1.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        border-bottom: $border;
+
+        &:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+    }
+    &-value {
+        color: $txt-gray;
+        font-size: 0.875rem;
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+    .products-price {
+        margin: 0;
+        .products-price-new {
+            font-weight: 500;
+            font-size: 1.125rem;
+        }
+        .products-price-old {
+            font-size: 12px;
         }
     }
 }
@@ -429,34 +463,6 @@
         background-size: 100%;
         width: 12px;
         height: 12px;
-    }
-}
-
-.wholesale-slider {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8rem;
-    &-item {
-        padding: 0.5rem 0;
-        margin: 0.5rem 0;
-        display: flex;
-        flex-direction: column;
-        border-bottom: $border;
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    &-value {
-        color: $txt-gray;
-        font-size: 0.8rem;
-    }
-    .products-price {
-        margin: 0;
-        .products-price-new {
-            font-weight: 500;
-            font-size: 1.125rem;
-        }
     }
 }
 

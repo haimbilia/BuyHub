@@ -483,6 +483,8 @@
                                             <del class="products-price-old">$600.00</del>
                                             <span class="products-price-off">2% Off</span>
                                         </div>
+
+
                                     </li>
                                     <li class="wholesale-slider-item">
                                         <span class="wholesale-slider-value"> Up to 10 pieces</span>
