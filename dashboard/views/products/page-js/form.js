@@ -665,8 +665,7 @@ async function resetOptionValuesTag(e) {
                 type: 'POST',
                 data: { recordId, optionId, fIsAjax: 1 }
             });
-
-            response = $.parseJSON(response)
+           
             if (response.status != 1) {
                 fcom.displayErrorMessage(response.msg);
                 return;
