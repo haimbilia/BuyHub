@@ -151,9 +151,9 @@
 
 
     /* Submit Form on Enter Key Press. For sidebar forms. */
-    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
-        e.stopImmediatePropagation();
-        if (e.keyCode === 13 && (false === displayInPopup)) {
+    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {       
+        e.stopImmediatePropagation();      
+        if (e.keyCode === 13 && !$(e.target).is('textarea') && (false === displayInPopup)) {
             $('.' + $.ykmodal.element + " .submitBtnJs").click();
         }
     });

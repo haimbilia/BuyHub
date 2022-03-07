@@ -34,46 +34,46 @@ foreach ($attachments as $sn => $row) {
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                if (0 < $row['afile_id']) {             
-                        $ul = new HtmlElement("ul", array("class" => "actions"));     
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                        $li->appendElement(
-                            "a",
-                            array(                                
-                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
-                                'href' => UrlHelper::generateUrl('CustomProducts', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
-                                'target' => '_blank'
-                            ),
-                            '<svg class="svg" width="18" height="18">
+                if (0 < $row['afile_id']) {
+                    $ul = new HtmlElement("ul", array("class" => "actions"));
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
+                        "a",
+                        array(
+                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
+                            'href' => UrlHelper::generateUrl('CustomProducts', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
+                            'target' => '_blank'
+                        ),
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
                                 </use>
                             </svg>',
-                            true
-                        );
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                        $li->appendElement(
-                            "a",
-                            array(                              
-                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
-                            ),
-                            '<svg class="svg" width="18" height="18">
+                        true
+                    );
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
+                        "a",
+                        array(
+                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                            'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                        ),
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                                 </use>
                             </svg>',
-                            true
-                        );
-                    
+                        true
+                    );
+
                     $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));               
-                $ul = new HtmlElement("ul", array("class" => "actions"));                
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                $ul = new HtmlElement("ul", array("class" => "actions"));
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
@@ -90,7 +90,7 @@ foreach ($attachments as $sn => $row) {
                         </svg>',
                         true
                     );
-                  
+
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                     $li->appendElement(
                         'a',
@@ -106,7 +106,6 @@ foreach ($attachments as $sn => $row) {
                         </svg>',
                         true
                     );
-                   
                 } else {
                     $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
