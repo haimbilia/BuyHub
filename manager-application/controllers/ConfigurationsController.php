@@ -1162,7 +1162,7 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addTextBox(Labels::getLabel("FRM_FROM_NAME", $langId), 'CONF_FROM_NAME_' . $langId);
                 $fld = $frm->addEmailField(Labels::getLabel("FRM_FROM_EMAIL", $langId), 'CONF_FROM_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REQUIRED_FOR_SENDING_EMAILS", $langId) . "</span>";
-                $fld = $frm->addEmailField(Labels::getLabel("FRM_REPLY_TO_EMAIL_ADDRESS", $langId), 'CONF_REPLY_TO_EMAIL');
+                // $fld = $frm->addEmailField(Labels::getLabel("FRM_REPLY_TO_EMAIL_ADDRESS", $langId), 'CONF_REPLY_TO_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REQUIRED_FOR_EMAIL_HEADERS_-_user_can_reply_to_this_email", $langId) . "</span>";
 
                 $fld = $frm->addEmailField(Labels::getLabel("FRM_CONTACT_EMAIL_ADDRESS", $langId), 'CONF_CONTACT_EMAIL');
