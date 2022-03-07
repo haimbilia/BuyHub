@@ -534,6 +534,7 @@ Updates/Fixes :
     => 062899 - Admin UI: Getting a UI design issue on the following modules
     -------------------------------TV-9.4.0.20220304--------------------
     => 062926 - Seller UI: The header's background color is not visible and the "view order" option is not working for the recent orders
+    => 062932 - Admin UI: UI is not correct if open the other seller in the same browser
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
