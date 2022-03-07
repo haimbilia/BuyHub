@@ -77,6 +77,9 @@ if (0 < $recordId) {
             select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'), {
                 langId
             });
+            select2('product_ship_package', fcom.makeUrl('shippingPackages', 'autoComplete'), {
+                langId
+            });
             select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
                 langId
             });
