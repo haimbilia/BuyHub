@@ -95,7 +95,7 @@
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
-        <div class="card-body show" id="stock-block1">
+        <div class="card-body p-0 show" id="stock-block1">
             <table class="table table-variants" id="variantsJs">
                 <thead>
                     <tr>
@@ -114,22 +114,40 @@
                 </tbody>
             </table>
             <div class="separator separator-dashed my-4"></div>
-            <div class="form-group row justify-content-between">
-                <div class="col">
-                    <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
-                </div>
-                <div class="col-auto">
-                    <?php
-                    $fld = $frm->getField('upc_type');
-                    HtmlHelper::configureSwitchForRadio($fld);
-                    $fld->addOptionListTagAttribute('class', 'list-radio');
-                    $fld->addFieldTagAttribute('onchange', 'upcType()');
-                    $fld->addFieldTagAttribute('class', 'upc_type');
-                    echo $fld->getHtml();
-                    ?>
+            <div class="px-4">
+                <div class="row justify-content-between">
+                    <div class="col">
+                        <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                    </div>
+                    <div class="col-auto">
+                        <?php
+                        $fld = $frm->getField('upc_type');
+                        HtmlHelper::configureSwitchForRadio($fld);
+                        $fld->addOptionListTagAttribute('class', 'list-radio');
+                        $fld->addFieldTagAttribute('onchange', 'upcType()');
+                        $fld->addFieldTagAttribute('class', 'upc_type');
+                        echo $fld->getHtml();
+                        ?>
+                    </div>
                 </div>
             </div>
             <div id="variantsListJs"></div>
+        </div>
+        <div class="card-foot">
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <button class="btn btn-icon btn-outline-brand">
+                        <svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="/yokart/admin//images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>
+                        <span><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?></span>
+
+                    </button>
+
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="card card-toggle" id="media">
@@ -167,8 +185,8 @@
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
-        <div class="card-body show" id="specifications-block">
-            <div id="specificationsFormJs">
+        <div class="card-body p-0 show" id="specifications-block">
+            <div class="p-4" id="specificationsFormJs">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

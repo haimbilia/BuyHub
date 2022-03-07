@@ -103,17 +103,17 @@ $fld->value = '<label class="label">' . Labels::getLabel('LBL_ICON', $lang_id) .
 </div>
 
 <script>
-    $('input[name=logo_min_width]').val(150);
-    $('input[name=logo_min_height]').val(150);
+    $('input[name=min_width]').val(150);
+    $('input[name=min_height]').val(150);
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var aspectRatio = 16 / 9;
     $(document).on('change', '.prefRatio-js', function() {
         if ($(this).val() == ratioTypeSquare) {
-            $('input[name=logo_min_width]').val(150);
-            $('input[name=logo_min_height]').val(150);
+            $('input[name=min_width]').val(150);
+            $('input[name=min_height]').val(150);
         } else {
-            $('input[name=logo_min_width]').val(150);
-            $('input[name=logo_min_height]').val(85);
+            $('input[name=min_width]').val(150);
+            $('input[name=min_height]').val(85);
         }
     });
 </script>

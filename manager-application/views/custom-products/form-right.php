@@ -95,7 +95,7 @@
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
-        <div class="card-body show" id="stock-block1">
+        <div class="card-body p-0 show" id="stock-block1">
             <table class="table table-variants" id="variantsJs">
                 <thead>
                     <tr>

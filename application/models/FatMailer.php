@@ -127,12 +127,12 @@ class FatMailer extends FatModel
             $this->error = Labels::getLabel('ERR_EMAIL_TEMPLATE_NOT_FOUND!', $this->langId);
             return false;
         }
-
+        
         if (empty($this->fromEmail)) {
             $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
             $this->fromName = FatApp::getConfig('CONF_FROM_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         }
-
+        
         $etpl = new FatTemplate('', '');
         $etpl->set('langId', $row['etpl_lang_id']);
         $header = $etpl->render(false, false, '_partial/emails/email-header.php', true);
@@ -405,7 +405,9 @@ class FatMailer extends FatModel
             } elseif ($row['splatform_icon_class'] != '') {
                 $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
             }
-            $social_media_icons .= '<a style="display:inline-block;vertical-align:top; width:26px;height:26px; margin:0 0 0 5px; background:rgba(255,255,255,0.2); border-radius:100%;padding:4px;" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" ><img alt="' . $title . '" width="24" style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/></a>';
+            $social_media_icons .= '<a style="display: inline-block; margin: 0 4px"" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" >
+                    <img alt="' . $title . '" width="24" style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
+                </a>';
         }
 
 
@@ -419,6 +421,8 @@ class FatMailer extends FatModel
             '{current_date}' => date('M d, Y'),
             '{social_media_icons}' => $social_media_icons,
             '{contact_us_url}' => UrlHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),
+            '{CONTACT-EMAIL}' => FatApp::getConfig('CONF_CONTACT_EMAIL' . $langId, FatUtility::VAR_STRING, ''),
+            '{SITE-PHONE}' => ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode', FatUtility::VAR_STRING, '')) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, ''),
         );
     }
 
