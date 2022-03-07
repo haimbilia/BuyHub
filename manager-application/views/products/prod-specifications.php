@@ -7,7 +7,7 @@ $arr_flds = array(
     'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $langId)
 );
 
-$tbl = new HtmlElement('table', array('class' => 'table'));
+$tbl = new HtmlElement('table', array('class' => 'table table-variants'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ($key == 'action') {
@@ -20,21 +20,21 @@ $tbody = $tbl->appendElement('tbody');
 $count = 0;
 foreach ($productSpecifications as  $specification) {
     $prodSpecId = $specification['prodspec_id'];
-    $tr = $tbody->appendElement('tr',['data-id' => $prodSpecId ]);
-    foreach ($arr_flds as $key => $val) {   
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class'=> str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key)."Js"];
+    $tr = $tbody->appendElement('tr', ['data-id' => $prodSpecId]);
+    foreach ($arr_flds as $key => $val) {
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class' => str_replace(ProdSpecification::DB_TBL_PREFIX, '', $key) . "Js"];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'action':
-                $ul = new HtmlElement("ul", array('class' => 'actions'));               
+                $ul = new HtmlElement("ul", array('class' => 'actions'));
                 $li = $ul->appendElement('li');
                 $li->appendElement(
                     'input',
                     [
-                        'name' => 'specifications['.$count.'][id]',
+                        'name' => 'specifications[' . $count . '][id]',
                         'type' => 'hidden',
                         'value' => $specification['prodspec_id'],
-                        'data-fatreq' => json_encode(['required'=> false]),
+                        'data-fatreq' => json_encode(['required' => false]),
                     ]
                 );
                 $li->appendElement(
@@ -75,13 +75,13 @@ foreach ($productSpecifications as  $specification) {
                 $input = new HtmlElement(
                     'input',
                     [
-                        'name' => 'specifications['.$count.']['.str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key).']',
+                        'name' => 'specifications[' . $count . '][' . str_replace(ProdSpecification::DB_TBL_PREFIX, '', $key) . ']',
                         'type' => 'hidden',
                         'value' => $specification[$key],
-                        'data-fatreq' => json_encode(['required'=> false]),
+                        'data-fatreq' => json_encode(['required' => false]),
                     ]
                 );
-                $td->appendElement('plaintext',$tdAttr, $specification[$key].$input->getHtml(), true);
+                $td->appendElement('plaintext', $tdAttr, $specification[$key] . $input->getHtml(), true);
                 break;
         }
     }

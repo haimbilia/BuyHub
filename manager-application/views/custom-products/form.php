@@ -12,10 +12,10 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
         $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
         echo $frm->getFormTag(); ?>
         <?php if (1 > $tourStep) { ?>
-        <div class="add-stock" id="productWrapper">
-            <?php require_once(CONF_THEME_PATH . 'products/form-left.php'); ?>
-            <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>                      
-        </div>
+            <div class="add-stock" id="productWrapper">
+                <?php require_once(CONF_THEME_PATH . 'products/form-left.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>
+            </div>
         <?php } else { ?>
             <div class="onboarding">
                 <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
@@ -116,7 +116,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php }
             } ?>
-            
+
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
