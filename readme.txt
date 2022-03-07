@@ -538,6 +538,7 @@ Updates/Fixes :
     => 062932 - Admin UI: UI is not correct if open the other seller in the same browser
     => 062927 - Seller UI: Product images are not showing while viewing the information of the marketplace products and the "add inventory" icon is not showing while hovering on it and the table column size is also changing while changing the status of the seller shipping
     => 062853 - Admin UI: Fatal error is showing while clicking on the "SEO Friendly URL" of the brands and URL is not getting highlighted while having on it
+    => 062860 - Admin UI: Font size and color are not correct of the titles and their data while viewing the seller approval's request
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
