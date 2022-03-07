@@ -106,7 +106,7 @@ trait SellerUsers
         if (0 < $userId) {
             $srch = User::getSearchObject(true, UserAuthentication::getLoggedUserId());
             $srch->addMultipleFields(array('user_id', 'user_parent', 'user_name', 'user_phone_dcode', 'user_phone', 'user_country_id', 'user_state_id', 'user_city', 'credential_username', 'credential_email', 'credential_active'));
-            $srch->addCondition('user_id', '=', $userId);
+            $srch->addCondition('user_id', '=', 'mysql_func_' . $userId, 'AND', true);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
@@ -146,7 +146,7 @@ trait SellerUsers
         if (0 < $userId) {
             $srch = User::getSearchObject(true, UserAuthentication::getLoggedUserId());
             $srch->addMultipleFields(array('user_id', 'user_parent', 'credential_username'));
-            $srch->addCondition('user_id', '=', $userId);
+            $srch->addCondition('user_id', '=', 'mysql_func_' . $userId, 'AND', true);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
@@ -279,7 +279,7 @@ trait SellerUsers
         );
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
-        $conNewPwdReq->setCompareWith('new_password', 'eq');       
+        $conNewPwdReq->setCompareWith('new_password', 'eq');
         return $frm;
     }
 

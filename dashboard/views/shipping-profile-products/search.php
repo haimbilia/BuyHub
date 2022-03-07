@@ -9,7 +9,7 @@ if (!empty($productsData)) { ?>
                         <a href="javascript:void(0)"><img class="" src="<?php echo  UrlHelper::generateUrl(
                                                                             " Image",
                                                                             "product",
-                                                                            array($row['product_id'], "SMALL", 0, 0, 1),
+                                                                            array($row['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1),
                                                                             CONF_WEBROOT_FRONTEND
                                                                         ); ?>" alt="" width="50"></a>
                     </figure>

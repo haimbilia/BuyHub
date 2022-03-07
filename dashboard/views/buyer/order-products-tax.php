@@ -26,7 +26,7 @@
                     $prodOrBatchUrl = 'javascript:void(0)';
                     if ($op['op_is_batch']) {
                         $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($op['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($op['op_selprod_id'], $siteLangId, ImageDimension::VIEW_SMALL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                     } else {
                         if (Product::verifyProductIsValid($op['op_selprod_id']) == true) {
                             $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);

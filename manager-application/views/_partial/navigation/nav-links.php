@@ -144,7 +144,9 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-        $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)
+        $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+        $objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)
+        
     ) {
     ?>
         <li class="menu-item dropdownJs">
@@ -295,6 +297,19 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     echo $menuLabel;
                                     ?>
                                 </span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UserGdprRequests"]' href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text"><?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -513,18 +528,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span>
                                 <span class="nav_text"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></span>
                             </a>
-                        </li>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UserGdprRequests"]' href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?></span>
-                            </a>
-                        </li>
+                        </li>                       
                     <?php } ?>
                     <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">

@@ -1651,3 +1651,4 @@ ALTER TABLE `tbl_shipping_rates_lang` CHANGE `shiprate_name` `shiprate_name` VAR
 ALTER TABLE `tbl_coupons` ADD `coupon_updated_on` DATETIME NOT NULL AFTER `coupon_deleted`;
 
 ALTER TABLE `tbl_social_platforms` ADD UNIQUE( `splatform_user_id`, `splatform_identifier`);
+-- --------------------TV-9.4.0.20220304----------------------

@@ -40,9 +40,9 @@
                                                         <?php if (!$product['in_stock']) {
                                                             $batchInStock = false;
                                                         ?>
-                                                            <span class="tag--soldout"><?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></span>
+                                                            <span class="tag-soldout"><?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></span>
                                                         <?php } ?>
-                                                        <figure class="item__pic"> <a href="<?php echo $productUrl; ?>"><img src="<?php echo $imgSrc; ?>" alt="<?php echo $product['product_identifier']; ?>"></a>
+                                                        <figure class=" item__pic"> <a href="<?php echo $productUrl; ?>"><img src="<?php echo $imgSrc; ?>" alt="<?php echo $product['product_identifier']; ?>"></a>
                                                         </figure>
                                                         <!--<label class="checkbox"><input type="checkbox" checked> </label>-->
                                                         <span class="title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title'] != '') ? $product['selprod_title'] : '&nbsp;'; ?></a></span>

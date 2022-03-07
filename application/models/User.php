@@ -640,6 +640,8 @@ class User extends MyAppModel
             trigger_error("Lang id not passed", E_USER_ERROR);
         }
         $srch = SupplierFormFields::getSearchObject();
+        $srch->addMultipleFields(['*','IFNULL(sformfield_caption,sformfield_identifier) as sformfield_caption']);
+        
 
         $srch->joinTable(
             SupplierFormFields::DB_TBL . '_lang',
