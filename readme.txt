@@ -536,6 +536,7 @@ Updates/Fixes :
     => 062926 - Seller UI: The header's background color is not visible and the "view order" option is not working for the recent orders
     => 062930 - Admin UI: The processing message is showing while filling the bank address and press "enter" to go to the next line while adding the seller 
     => 062932 - Admin UI: UI is not correct if open the other seller in the same browser
+    => 062927 - Seller UI: Product images are not showing while viewing the information of the marketplace products and the "add inventory" icon is not showing while hovering on it and the table column size is also changing while changing the status of the seller shipping
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
