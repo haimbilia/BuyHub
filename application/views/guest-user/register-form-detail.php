@@ -23,13 +23,13 @@ $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'sit
             <div class="more-links">
                 <?php if (isset($registerdata['signUpWithPhone']) && true === $smsPluginStatus) {
                     if (0 == $registerdata['signUpWithPhone']) { ?>
-                        <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithPhone()"><?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?></a>
+                        <a class="link-underline otp-link" href="javaScript:void(0)" onClick="signUpWithPhone()"><?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?></a>
                     <?php } else { ?>
-                        <a class="otp-link" href="javaScript:void(0)" onClick="signUpWithEmail()"><?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $siteLangId); ?></a>
+                        <a class="link-underline otp-link" href="javaScript:void(0)" onClick="signUpWithEmail()"><?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $siteLangId); ?></a>
                     <?php } ?>
                 <?php } ?>
 
-                <a class="btn btn-outline-black btn-block loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'LoginForm'); ?>">
+                <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'LoginForm'); ?>">
                     <?php echo Labels::getLabel('LBL_SIGN_IN_NOW', $siteLangId); ?>
                 </a>
             </div>
