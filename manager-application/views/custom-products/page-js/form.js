@@ -63,6 +63,14 @@
             fcom.removeLoader();
         });
     };
+    addShippingPackage = function () {
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(fcom.makeUrl('shippingPackages', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+    };
+    
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
         if (rt_id == '' || rt_id == undefined) {

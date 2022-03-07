@@ -385,11 +385,11 @@ class EmailHandler extends FatModel
 
     public function sendSupplierApprovalNotification($langId, $d, $approval_request = 1)
     {
+        $tpl = 'new_seller_approved_admin';
         if ($approval_request == 1) {
             $tpl = 'new_supplier_approval_admin';
-        } else {
-            $tpl = 'new_seller_approved_admin';
         }
+        
         $vars = array(
             '{name}' => $d['user_name'],
             '{email}' => $d['user_email'],

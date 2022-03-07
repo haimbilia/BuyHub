@@ -1,31 +1,37 @@
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-use PhpParser\Node\Stmt\Label;
-
-defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
         'listserial' => Labels::getLabel('LBL_#', $siteLangId),
         'product_identifier' => Labels::getLabel('LBL_Product', $siteLangId),
-        //'attrgrp_name' => Labels::getLabel('LBL_Attribute_Group', $siteLangId),
         'product_model' => Labels::getLabel('LBL_Model', $siteLangId),
         'product_active' => Labels::getLabel('LBL_Status', $siteLangId),
         'product_approved' => Labels::getLabel('LBL_Admin_Approval', $siteLangId)
     );
+    $width = array(
+        'listserial' => '5%',
+        'product_identifier' => '35%',
+        'product_model' => '10%',
+        'product_active' => '10%',
+        'product_approved' => '15%',
+        'action' => '20%'
+    );
     $isCustom = $postedData['type'] ?? 0;
     if ($canEdit && $canEditShipProfile && 1 > $isCustom) {
         $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
+        $width['product_shipped_by'] = '15%';
+        $width['product_identifier'] = '25%';
     }
     $tableClass = '';
     if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
     $arr_flds['action'] = '';
-    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
-    $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-    foreach ($arr_flds as $val) {
-        $e = $th->appendElement('th', array(), $val);
+    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table listingTableJs ' . $tableClass));
+    $th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr', array('class' => ''));
+    foreach ($arr_flds as $key => $val) {
+        $e = $th->appendElement('th', array('width' => $width[$key]), $val);
     }
 
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
@@ -85,7 +91,13 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                             $li->appendElement(
                                 'a',
                                 array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
-                                '<i class="fa fa-plus-square"></i>',
+                                '<i class="icn">
+                                    <svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                        </use>
+                                    </svg>
+                                </i>',
                                 true
                             );
                         }
@@ -99,7 +111,6 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
                                 </use>
                             </svg>
                         </i>', true);
-                         
                         }
 
                         if ($canEditShipProfile && $row['product_added_by_admin_id'] && $row['psbs_user_id'] && $row['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {

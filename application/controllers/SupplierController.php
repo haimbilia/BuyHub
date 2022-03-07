@@ -387,7 +387,7 @@ class SupplierController extends MyAppController
 
         if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel("ERR_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         //send notification to admin
