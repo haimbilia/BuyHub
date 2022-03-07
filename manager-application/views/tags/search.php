@@ -20,10 +20,10 @@ foreach ($arrListing as $selProdId => $row) {
             case 'tags':
                 $productTags = Product::getProductTags($row['product_id'], $langId, false, array('tag_id as id', 'tag_name as value'));
                 $encodedData = htmlspecialchars(json_encode($productTags), ENT_QUOTES, 'UTF-8');
-                $td->appendElement('plaintext', array(), "<div class='product-tag' id='product" . $row['product_id'] . "'><input class='productsTagsJs' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH_TAGS', $siteLangId)."'  type='text' name='tag_name" . $row['product_id'] . "' value='" . $encodedData . "' data-product_id='" . $row['product_id'] . "'></div>", true);
+                $td->appendElement('plaintext', array(), "<div class='product-tag' id='product" . $row['product_id'] . "'><input class='form-control productsTagsJs' placeholder='" . Labels::getLabel('FRM_TYPE_TO_SEARCH_TAGS', $siteLangId) . "'  type='text' name='tag_name" . $row['product_id'] . "' value='" . $encodedData . "' data-product_id='" . $row['product_id'] . "'></div>", true);
                 break;
             default:
-                $td->appendElement('plaintext', '', $row[$key], true);
+                $td->appendElement('plaintext', [], $row[$key], true);
                 break;
         }
     }

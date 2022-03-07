@@ -1902,12 +1902,14 @@ class User extends MyAppModel
         return true;
     }
 
-    public function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1, $langId)
+    public function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1, $langId = 0)
     {
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         $attr = array('user_name', 'credential_username', 'credential_email');
         $userData = $userObj->getUserInfo($attr, false, false);
 
         if ($userData === false) {
+            $this->error = Labels::getLabel("ERR_INVALID_USER", $langId);
             return false;
         }
 
@@ -1919,9 +1921,9 @@ class User extends MyAppModel
         );
 
         $email = new EmailHandler();
-
         if (!$email->sendSupplierApprovalNotification($langId, $data, $approval_request)) {
-            Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL", $langId));
+            $err = $email->getError();
+            $this->error = !empty($err) ? $err : Labels::getLabel("ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL", $langId);
             return false;
         }
         return true;

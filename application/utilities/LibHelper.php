@@ -51,6 +51,12 @@ class LibHelper extends FatUtility
             FatUtility::dieJsonError($message);
         }
 
+        $fIsAjax = FatApp::getPostedData('fIsAjax', FatUtility::VAR_STRING);
+        if (1 == $fIsAjax && 'html' == $fOutMode) {
+            Message::addErrorMessage($message);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
         if (true === $redirect) {
             Message::addErrorMessage($message);
             return;

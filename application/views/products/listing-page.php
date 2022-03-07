@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (empty($products)) {
     $pSrchFrm = Common::getSiteSearchForm();
-    $pSrchFrm->fill(array('btnSiteSrchSubmit' => Labels::getLabel('LBL_Submit', $siteLangId)));
-    $pSrchFrm->setFormTagAttribute('onSubmit', 'submitSiteSearch(this); return(false);');
+    // $pSrchFrm->fill(array('btnSiteSrchSubmit' => Labels::getLabel('LBL_Submit', $siteLangId)));
+    $pSrchFrm->setFormTagAttribute('onsubmit', 'submitSiteSearch(this); return(false);');
 
     $this->includeTemplate('_partial/no-product-found.php', array('pSrchFrm' => $pSrchFrm, 'siteLangId' => $siteLangId, 'postedData' => $postedData), true);
     return;
@@ -184,8 +184,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     <?php
                     $productsData = array(
                         'products' => $products,
-                        'tLeftRibbons' => $tLeftRibbons,
-                        'tRightRibbons' => $tRightRibbons,
+                        'tLeftRibbons' => $tLeftRibbons ?? [],
+                        'tRightRibbons' => $tRightRibbons ?? [],
                         'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],
                         'page' => $page,
                         'pageCount' => $pageCount,

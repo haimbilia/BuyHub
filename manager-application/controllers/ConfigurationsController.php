@@ -399,12 +399,13 @@ class ConfigurationsController extends ListingBaseController
                 $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $langId));
+                $phnFld->overrideFldType('tel');
 
                 $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');
                 $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
-
+                $faxFld->addFieldTagAttribute('dir',Language::getLayoutDirection($langId));
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId);
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'CONF_COUNTRY', $countriesArr, '', ['id' => 'user_country_id', 'onChange' => 'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')'], Labels::getLabel('FRM_SELECT', $langId));
@@ -413,7 +414,8 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addRequiredField(Labels::getLabel("FRM_POSTAL_CODE", $langId), 'CONF_ZIP_CODE');
                 $frm->addTextBox(Labels::getLabel("FRM_CITY", $langId), 'CONF_CITY_' . $langId);
 
-                $frm->addTextarea(Labels::getLabel("FRM_ADDRESS", $langId), 'CONF_ADDRESS_' . $langId);
+                $fld = $frm->addTextarea(Labels::getLabel("FRM_ADDRESS", $langId), 'CONF_ADDRESS_' . $langId);
+                $fld->requirements()->setRequired(true);
                 $frm->addTextarea(Labels::getLabel("FRM_ADDRESS_LINE_2", $langId), 'CONF_ADDRESS_LINE_2_' . $langId);
 
 
@@ -1162,7 +1164,7 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addTextBox(Labels::getLabel("FRM_FROM_NAME", $langId), 'CONF_FROM_NAME_' . $langId);
                 $fld = $frm->addEmailField(Labels::getLabel("FRM_FROM_EMAIL", $langId), 'CONF_FROM_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REQUIRED_FOR_SENDING_EMAILS", $langId) . "</span>";
-                $fld = $frm->addEmailField(Labels::getLabel("FRM_REPLY_TO_EMAIL_ADDRESS", $langId), 'CONF_REPLY_TO_EMAIL');
+                // $fld = $frm->addEmailField(Labels::getLabel("FRM_REPLY_TO_EMAIL_ADDRESS", $langId), 'CONF_REPLY_TO_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REQUIRED_FOR_EMAIL_HEADERS_-_user_can_reply_to_this_email", $langId) . "</span>";
 
                 $fld = $frm->addEmailField(Labels::getLabel("FRM_CONTACT_EMAIL_ADDRESS", $langId), 'CONF_CONTACT_EMAIL');

@@ -110,7 +110,7 @@
                                     </span>
                                 </a>
 
-                                <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+                                <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropDownMenuBlockClose">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">

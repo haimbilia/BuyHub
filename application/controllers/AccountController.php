@@ -190,9 +190,9 @@ class AccountController extends LoggedUserController
             $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
-        if (!$this->notifyAdminSupplierApproval($userObj, $data, $approval_request)) {
+        if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel("ERR_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         //send notification to admin
@@ -2819,7 +2819,7 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 
@@ -2851,7 +2851,7 @@ class AccountController extends LoggedUserController
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 
@@ -2882,37 +2882,6 @@ class AccountController extends LoggedUserController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
-    }
-
-    private function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1)
-    {
-        $attr = array('user_name', 'credential_username', 'credential_email');
-        $userData = $userObj->getUserInfo($attr);
-
-        if ($userData === false) {
-            return false;
-        }
-
-        $data = array(
-            'user_name' => $userData['user_name'],
-            'username' => $userData['credential_username'],
-            'user_email' => $userData['credential_email'],
-            'reference_number' => $data['reference'],
-        );
-
-        $email = new EmailHandler();
-
-        if (!$email->sendSupplierApprovalNotification(CommonHelper::getLangId(), $data, $approval_request)) {
-            Message::addMessage(
-                Labels::getLabel(
-                    "ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL",
-                    CommonHelper::getLangId()
-                )
-            );
-            return false;
-        }
-
-        return true;
     }
 
     private function getSupplierForm()
@@ -2979,7 +2948,7 @@ class AccountController extends LoggedUserController
                 $fld->htmlAfterField = '<p class="note">' . $field['sformfield_comment'] . '</p>';
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 
