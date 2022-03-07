@@ -136,18 +136,15 @@
         <div class="card-foot">
             <div class="row justify-content-end">
                 <div class="col-auto">
-                    <button class="btn btn-icon btn-outline-brand">
+                    <a class="btn btn-icon btn-outline-brand"  href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank" >
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="/yokart/admin//images/retina/sprite-actions.svg#add">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>
-                        <span><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?></span>
-
-                    </button>
-
+                        <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
+                </a>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="card card-toggle" id="media">
@@ -244,8 +241,8 @@
             <div class="row">
                 <?php
                 echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
-                echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
+                echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);             
+                echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6, ['id' => 'product_ship_package'], '', '', ['label' => Labels::getLabel('FRM_ADD_SHIPPING_PACKAGE', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addShippingPackage()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                 echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
                 echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
