@@ -131,6 +131,7 @@ if (0 < $recordId) {
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
             upcType();
+            fixTableColumnWidth();
         });
     </script>
 </main>

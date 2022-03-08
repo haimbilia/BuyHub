@@ -306,7 +306,7 @@ class PluginCommon extends MyAppModel
     {
         $pluginLabels = CacheHelper::get('pluginLabels' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pluginLabels) {
-            return json_decode($pluginLabels);
+            return json_decode($pluginLabels, true);
         }
 
         $arr = [

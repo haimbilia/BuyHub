@@ -112,8 +112,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body">
-                            <table class="table table-variants" id="variantsJs">
-                                <thead>
+                            <table class="table table-variants listingTableJs" id="variantsJs">
+                                <thead class="tableHeadJs">
                                     <tr>
                                         <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
                                         <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
@@ -466,11 +466,15 @@ echo $imgFrm->getFormHtml();
             tagifyOptionValue("#" + $(this).attr('id'));
         });
 
-        upcType();
+        
         <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
+        upcType();
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+            fixTableColumnWidth();
+        })
     });
 </script>
 

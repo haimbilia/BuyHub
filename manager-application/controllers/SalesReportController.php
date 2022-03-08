@@ -232,7 +232,7 @@ class SalesReportController extends ListingBaseController
             ];
             CacheHelper::create('salesReportCacheVar' . $this->siteLangId,  json_encode($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  json_decode($salesReportCacheVar);
+            $arr =  json_decode($salesReportCacheVar, true);
         }
 
         if (!empty($orderDate)) {

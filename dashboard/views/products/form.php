@@ -122,12 +122,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body">
-                            <table class="table table-variants" id="variantsJs">
-                                <thead>
+                            <table class="table table-variants listingTableJs" id="variantsJs">
+                                <thead class="tableHeadJs">
                                     <tr>
-                                        <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                        <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                        <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                        <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                        <th class="align-right" width="10%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -463,6 +463,7 @@ echo $imgFrm->getFormHtml();
                 '',
                 selectedOptionData
             );
+            $("#"+$(this).attr('id')).data("select2").$container.addClass("w-100");
         });
 
 
@@ -473,7 +474,11 @@ echo $imgFrm->getFormHtml();
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
-        upcType();
+        upcType(); 
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+            fixTableColumnWidth();
+        })
+        
     });
 </script>
 <?php
@@ -493,14 +498,14 @@ function getVariantUiTr($langId, $i, $productOption = [])
 
     return <<<HTML
     <tr class="rowJs">
-        <td width="30%">
+        <td>
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
             </select>
         </td>
-        <td width="50%">
+        <td>
             <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
         </td>
-        <td class="align-right" width="20%">
+        <td class="align-right">
             <ul class="actions">
                 <li class="$deleteClass optionsDeleteJs">
                     <a href="javascript:void(0)" class="">
