@@ -57,7 +57,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         $("#prodcat_parent").select2({
             dropdownParent: $('.' + $.ykmodal.element)
         }).on('select2:open', function(e) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2 custom-select2-single");
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
         $("select[name='prodcat_parent']").data("select2").$container.addClass("custom-select2 custom-select2-width custom-select2-single");
@@ -115,7 +115,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             $(element).siblings(".tagify").remove();
             tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
                 whitelist: [],
-                dropdown: {                   
+                dropdown: {
                     enabled: 0 // show suggestions dropdown after 1 typed character
                 },
                 delimiters: "#",

@@ -456,6 +456,7 @@ form.custom-form {
     #{$end-direction}: 5px;
     top: 0;
     height: 100%;
+    height: $input-height;
     width: 3rem;
     cursor: pointer;
     font-weight: 500;

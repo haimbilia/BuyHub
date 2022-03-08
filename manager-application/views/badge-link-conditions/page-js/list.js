@@ -9,8 +9,8 @@ $(document).ready(function () {
             placeholder: $('#searchFormConditionTypeJs').attr("placeholder")
         }).on("select2:unselecting", function (e) {
             clearSearch();
-        }).on('select2:open', function(e) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+        }).on('select2:open', function (e) {
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2 custom-select2-single");
         });
     }
 });
@@ -55,13 +55,13 @@ $(document).on('change', '#conditionTypeJs', function () {
     } else if (parseInt($(this).val()) == COND_TYPE_COMPLETED_ORDERS) {
         var htm = '<label class="label">' + langLbl.fromDigit + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);
-        
+
         var htm = '<label class="label">' + langLbl.toDigit + '<span class="spn_must_field">*</span></label>';
         $('#conditionToSectionJs label').replaceWith(htm);
     } else {
         var htm = '<label class="label">' + langLbl.fromDecimal + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);
-        
+
         var htm = '<label class="label">' + langLbl.toDecimal + '<span class="spn_must_field">*</span></label>';
         $('#conditionToSectionJs label').replaceWith(htm);
     }
