@@ -19,6 +19,7 @@ class UserAuthentication extends FatModel
     public $loginWithOtp = false;
     private $loginDcode = '';
     private $loginPhone = '';
+    private $loginWithSocialAccount = false;
 
     public const AFFILIATE_REG_STEP1 = 1;
     public const AFFILIATE_REG_STEP2 = 2;
@@ -367,7 +368,7 @@ class UserAuthentication extends FatModel
         }
 
         /* [To Do - need to remove credential_password_old in next release */
-        if (false === $this->loginWithOtp) {
+        if (false === $this->loginWithOtp && false === $this->loginWithSocialAccount) {
 
             if ($row['credential_verified'] == applicationConstants::YES  && !$isAdmin) {
                 if (empty($row['credential_password'])) {

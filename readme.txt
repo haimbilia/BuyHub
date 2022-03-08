@@ -541,6 +541,7 @@ Updates/Fixes :
     => 062860 - Admin UI: Font size and color are not correct of the titles and their data while viewing the seller approval's request
     => 062906 - Admin UI: Getting a UI issue on the Special price and volume discount
     => 062852 - Admin UI: The size of the "options" and "specification" section is changing according to the data while adding the product
+    => 062966 - Unable to login via social account
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
