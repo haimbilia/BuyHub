@@ -13,7 +13,13 @@ $(function () {
 
     $('[data-bs-toggle="popover"]').popover();
     /* Bind bootstrap tooltip with ajax elements. */
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 
 (function () {
@@ -109,7 +115,7 @@ $(function () {
         },
 
         displayErrorMessage: function (msg) {
-            $.ykmsg.close();            
+            $.ykmsg.close();
             $.ykmsg.error(msg);
         },
 
@@ -411,7 +417,13 @@ $(function () {
         $('[data-bs-toggle="popover"]').popover();
 
         /* Bind bootstrap tooltip with ajax elements. */
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        }).on('click', function () {
+            setTimeout(() => {
+                $(this).tooltip('hide');
+            }, 100);
+        });
 
         /* Bind Scoll hand if table width is wider. */
         new ScrollHint(".js-scrollable");

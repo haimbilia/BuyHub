@@ -164,7 +164,7 @@ $input-color: #474747;
         line-height: 1.5;
         padding-top: 10px;
         &.txtarea-height {
-            height: 85px;
+            height: 60px;
         }
     }
     //focus
@@ -573,7 +573,6 @@ form.custom-form {
             // color:  lighten($brand-color, 55%);
             @include bg-brand();
             // color:  lighten($brand-color, 55%);
-            @include bg-brand();
         }
     }
 }

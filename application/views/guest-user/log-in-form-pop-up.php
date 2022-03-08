@@ -33,11 +33,12 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
 }
 ?>
 
-<div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?></h5>
+<div class="modal-header border-0">
+
 </div>
 <div class="modal-body">
     <div class="login-popup loginpopup--js">
+        <h2 class="title"><?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?></h2>
         <?php
         $fldSubmit = $loginFrm->getField('btn_submit');
         $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary  btn-block');
@@ -164,12 +165,13 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <div class="col-md-12">
                 <div class="more-links">
                     <?php echo $loginFrm->getFieldHtml('forgot'); ?>
-                    <a class="btn btn-outline-black btn-block" href="<?php echo UrlHelper::generateUrl('GuestUser', 'registrationForm'); ?>">
+                    <a class="link-underline" href="<?php echo UrlHelper::generateUrl('GuestUser', 'registrationForm'); ?>">
                         <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                     </a>
 
                     <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-                        <a class="btn btn-outline-black btn-block" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
+                        <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
+                            <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
                     <?php } ?>
                 </div>
             </div>

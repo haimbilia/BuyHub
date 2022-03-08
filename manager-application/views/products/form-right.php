@@ -99,9 +99,9 @@
             <table class="table table-variants" id="variantsJs">
                 <thead>
                     <tr>
-                        <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                        <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                        <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                        <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                        <th class="align-right" width="10%"></th>
                     </tr>
                 </thead>
                 <tbody>
