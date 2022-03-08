@@ -3081,6 +3081,14 @@ $header-height: 65px;
         cursor: pointer;
     }
 }
+
+.custom-select2-multiple {
+    .select2-search__field {
+        height: 30px !important;
+        border: $border !important;
+    }
+}
+
 //phone code
 .iti {
     width: 100%;
@@ -3140,4 +3148,9 @@ $header-height: 65px;
     width: 100%;
     align-items: center;
     justify-content: space-between;
+}
+.unit-price-wrap {
+    display: flex;
+    grid-gap: 10px;
+    font-weight: 600;
 }
