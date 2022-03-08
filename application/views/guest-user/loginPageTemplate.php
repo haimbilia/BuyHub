@@ -167,12 +167,11 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                     <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                 </a>
             <?php } else { ?>
-                <a class="link-underlineloginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                 </a>
             <?php } ?>
             <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-
                 <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
                     <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
             <?php } ?>
