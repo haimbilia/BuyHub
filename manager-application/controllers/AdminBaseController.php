@@ -60,9 +60,9 @@ class AdminBaseController extends FatController
                 'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
                 'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
             ];
-            CacheHelper::create('curdLangLabelCache' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+            CacheHelper::create('curdLangLabelCache' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
-            $arr =  json_decode($curdLangLabelCache, true);
+            $arr =  unserialize($curdLangLabelCache);
         }
 
         $this->str_update_record = $arr['str_update_record'];
