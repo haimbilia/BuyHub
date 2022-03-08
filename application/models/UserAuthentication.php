@@ -19,7 +19,7 @@ class UserAuthentication extends FatModel
     public $loginWithOtp = false;
     private $loginDcode = '';
     private $loginPhone = '';
-    private $loginWithSocialAccount = false;
+    public $loginWithSocialAccount = false;
 
     public const AFFILIATE_REG_STEP1 = 1;
     public const AFFILIATE_REG_STEP2 = 2;
