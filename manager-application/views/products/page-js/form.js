@@ -713,10 +713,10 @@ async function resetOptionValuesTag(e) {
         }
 
         if (0 < optionId) {
-            e.preventDefault();
-            console.log('vvvv');
+            e.preventDefault();           
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
+                dataType:'json',
                 type: 'POST',
                 data: { recordId, optionId, fIsAjax: 1 }
             });       

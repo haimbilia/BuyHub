@@ -163,17 +163,17 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
         <div class="more-links">
             <?php echo $loginFrm->getFieldHtml('forgot'); ?>
             <?php if (true === $popup) { ?>
-                <a class="btn btn-outline-black btn-block" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="link-underline" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                 </a>
             <?php } else { ?>
-                <a class="btn btn-outline-black btn-block loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                 </a>
             <?php } ?>
             <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-
-                <a class="btn btn-outline-black btn-block" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
+                <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
+                    <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
             <?php } ?>
         </div>
     </div>

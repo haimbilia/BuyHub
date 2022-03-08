@@ -171,9 +171,6 @@
 }
 
 .user-reviews {
-    @include media-breakpoint-up(lg) {
-        max-width: 90%;
-    }
     &-item {
         padding: 1rem 0;
         margin-bottom: 2rem;
@@ -182,7 +179,6 @@
             border-bottom: none;
         }
     }
-
     &-foot {
         display: flex;
         justify-content: space-between;
@@ -191,6 +187,8 @@
     .reviews-by {
         display: flex;
         align-items: center;
+        font-size: 0.8rem;
+        grid-gap: 6px;
     }
 }
 .sort-by {
@@ -232,8 +230,8 @@
 .rated-by {
     margin: 2rem 0;
     display: flex;
-
     flex-direction: column;
+    grid-gap: 1rem;
     @include media-breakpoint-up(lg) {
         flex-direction: row;
         align-items: center;
@@ -246,12 +244,10 @@
         justify-content: space-between;
         padding: 5px 1rem;
         border: $border;
-        margin-bottom: 5px;
+
         font-size: 0.8rem;
         color: $txt-gray;
-        @include media-breakpoint-up(lg) {
-            margin-#{$end-direction}: 10px;
-        }
+
         &:last-child {
             margin-#{$end-direction}: 0;
         }
@@ -266,20 +262,26 @@
         font-weight: 600;
     }
 }
-
 .yes-no {
     display: flex;
     align-items: center;
-
-    li {
-        border: none;
-        margin-#{$start-direction}: 0.5rem;
+    font-size: 0.8rem;
+    &-item {
         &:first-child {
             margin-#{$start-direction}: 0;
         }
         .btn {
             font-weight: 600;
             font-size: 0.8rem;
+        }
+    }
+    .btn-thumb {
+        .counts {
+            color: $txt-gray;
+            font-weight: 400;
+        }
+        &:hover {
+            color: $brand-color;
         }
     }
 }

@@ -989,6 +989,81 @@
                                                 <li class="rated-by-item">
                                                     <span class="rated-by-label">Product</span>
                                                     <div class="product-ratings">
+
+                                                        <svg class="svg" width="10" height="10">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+
+                                                        <span class="rate">4.2 /5</span>
+                                                    </div>
+                                                </li>
+                                                <li class="rated-by-item">
+                                                    <span class="rated-by-label">Stock Availability</span>
+                                                    <div class="product-ratings">
+
+                                                        <svg class="svg" width="10" height="10">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+
+                                                        <span class="rate">4.2 /5</span>
+                                                    </div>
+                                                </li>
+                                                <li class="rated-by-item">
+                                                    <span class="rated-by-label">Packaging Quality</span>
+                                                    <div class="product-ratings">
+
+                                                        <svg class="svg" width="10" height="10">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+
+                                                        <span class="rate">4.2 /5</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="review-data">
+                                                <div class="cms">
+                                                    <h6><strong>99.99% Perfect Smartphone !!</strong></h6>
+                                                    <p> Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
+                                                        Build quality was great as always
+                                                        <br>
+                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
+                                                        Build quality was great as always from Apple.
+                                                    </p>
+                                                </div>
+
+                                                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+                                            </div>
+                                            <div class="user-reviews-foot">
+                                                <div class="reviews-by">Pankaj Khanna | <span class="dated">26 Dec 2020</span>
+                                                </div>
+                                                <ul class="yes-no">
+                                                    <li class="yes-no-item">Was this review helpful?</li>
+                                                    <li class="yes-no-item">
+                                                        <button class="btn btn-thumb" type="button">
+                                                            Yes <span class="counts">(10)</span>
+                                                        </button>
+                                                    </li>
+                                                    <li class="yes-no-item">
+                                                        <button class="btn btn-thumb" type="button">
+                                                            No
+                                                            <span class="counts">(2)</span>
+                                                        </button>
+                                                    </li>
+                                                    <li class="yes-no-item">
+                                                        <a class="btn btn-light" href="#">Permalink</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="user-reviews-item">
+                                            <ul class="rated-by">
+                                                <li class="rated-by-item">
+                                                    <span class="rated-by-label">Product</span>
+                                                    <div class="product-ratings">
                                                         <i class="icn">
                                                             <svg class="svg" width="16" height="16">
                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
@@ -1029,447 +1104,35 @@
                                                     <p> Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
                                                         Build quality was great as always
                                                         <br>
-
                                                         Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
                                                         Build quality was great as always from Apple.
-
                                                     </p>
                                                 </div>
-
                                             </div>
-
                                             <div class="user-reviews-foot">
                                                 <div class="reviews-by">Pankaj Khanna | <span class="dated">26 Dec 2020</span>
                                                 </div>
                                                 <ul class="yes-no">
-                                                    <li>
-                                                        <a class="btn btn-light" href="/yokart/reviews/product-permalink/172/15">Permalink</a>
-                                                    </li>
-                                                    <li>
+                                                    <li class="yes-no-item">Was this review helpful?</li>
+                                                    <li class="yes-no-item">
                                                         <button class="btn btn-thumb" type="button">
-                                                            <i class="icn">
-                                                                <svg class="svg" width="16" height="16">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-up">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>
-                                                            (10)
+                                                            Yes <span class="counts">(10)</span>
                                                         </button>
                                                     </li>
-                                                    <li>
-                                                        <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(&quot;15&quot;,0);return false;">
-                                                            <i class="icn">
-                                                                <svg class="svg" width="16" height="16">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-down">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>
-                                                            (2)
+                                                    <li class="yes-no-item">
+                                                        <button class="btn btn-thumb" type="button">
+                                                            No
+                                                            <span class="counts">(2)</span>
                                                         </button>
                                                     </li>
-
+                                                    <li class="yes-no-item">
+                                                        <a class="btn btn-light" href="#">Permalink</a>
+                                                    </li>
                                                 </ul>
                                             </div>
-
-
                                         </div>
-                                        <div class="user-reviews-item">
-                                            <div class="profile-avatar">
-                                                <div class="profile-dp">
-                                                    <img src="/yokart/image/user/20/thumb/1" alt="Dougals">
-                                                </div>
-                                                <div class="profile-bio">
-                                                    <div class="title">By Dougals <span class="dated">On Date 23/12/2020</span>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <ul class="rated-by">
-                                                <li class="rated-by-item">
-                                                    <span class="rated-by-label">Product</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Stock Availability</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Packaging Quality</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            <div class="review-data">
-                                                <div class="cms">
-                                                    <h6><strong>99.99% Perfect Smartphone !!</strong></h6>
-                                                    <p>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always
-                                                        <br>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always from Apple.
-
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                            <ul class="yes-no">
-                                                <li>
-                                                    <a class="btn btn-light" href="/yokart/reviews/product-permalink/172/15">Permalink</a>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(15,1);return false;">
-
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-up">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (10)
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(&quot;15&quot;,0);return false;">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-down">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (2)
-                                                    </button>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                        <div class="user-reviews-item">
-                                            <div class="profile-avatar">
-                                                <div class="profile-dp">
-                                                    <img src="/yokart/image/user/20/thumb/1" alt="Dougals">
-                                                </div>
-                                                <div class="profile-bio">
-                                                    <div class="title">By Dougals <span class="dated">On Date 23/12/2020</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <ul class="rated-by">
-                                                <li class="rated-by-item">
-                                                    <span class="rated-by-label">Product</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Stock Availability</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Packaging Quality</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            <div class="review-data">
-                                                <div class="cms">
-                                                    <h6><strong>99.99% Perfect Smartphone !!</strong></h6>
-                                                    <p>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always
-                                                        <br>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always from Apple.
-
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                            <ul class="yes-no">
-                                                <li>
-                                                    <a class="btn btn-light" href="/yokart/reviews/product-permalink/172/15">Permalink</a>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(15,1);return false;">
-
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-up">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (10)
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(&quot;15&quot;,0);return false;">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-down">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (2)
-                                                    </button>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                        <div class="user-reviews-item">
-                                            <div class="profile-avatar">
-                                                <div class="profile-dp">
-                                                    <img src="/yokart/image/user/20/thumb/1" alt="Dougals">
-                                                </div>
-                                                <div class="profile-bio">
-                                                    <div class="title">By Dougals <span class="dated">On Date 23/12/2020</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <ul class="rated-by">
-                                                <li class="rated-by-item">
-                                                    <span class="rated-by-label">Product</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Stock Availability</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Packaging Quality</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            <div class="review-data">
-                                                <div class="cms">
-                                                    <h6><strong>99.99% Perfect Smartphone !!</strong></h6>
-                                                    <p>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always
-                                                        <br>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always from Apple.
-
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                            <ul class="yes-no">
-                                                <li>
-                                                    <a class="btn btn-light" href="/yokart/reviews/product-permalink/172/15">Permalink</a>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(15,1);return false;">
-
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-up">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (10)
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(&quot;15&quot;,0);return false;">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-down">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (2)
-                                                    </button>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                        <div class="user-reviews-item">
-                                            <div class="profile-avatar">
-                                                <div class="profile-dp">
-                                                    <img src="/yokart/image/user/20/thumb/1" alt="Dougals">
-                                                </div>
-                                                <div class="profile-bio">
-                                                    <div class="title">By Dougals <span class="dated">On Date 23/12/2020</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <ul class="rated-by">
-                                                <li class="rated-by-item">
-                                                    <span class="rated-by-label">Product</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Stock Availability</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-
-                                                </li>
-                                                <li class="rated-by-item">
-
-                                                    <span class="rated-by-label">Packaging Quality</span>
-                                                    <div class="product-ratings">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <span class="rate">4.2 /5</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            <div class="review-data">
-                                                <div class="cms">
-                                                    <h6><strong>99.99% Perfect Smartphone !!</strong></h6>
-                                                    <p>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always
-                                                        <br>
-
-                                                        Another beauty from Apple. I was upgraded from iPhone X and it was great experience with all the latest specs and flawlessly smooth. Thanks to all new A14 Bionic chip.<br>
-                                                        Build quality was great as always from Apple.
-
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                            <ul class="yes-no">
-                                                <li>
-                                                    <a class="btn btn-light" href="/yokart/reviews/product-permalink/172/15">Permalink</a>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(15,1);return false;">
-
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-up">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (10)
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(&quot;15&quot;,0);return false;">
-                                                        <i class="icn">
-                                                            <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#hand-thumbs-down">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        (2)
-                                                    </button>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                        <button class="btn btn-outline-black btn-wide" type="button">
+                                        <button class="btn link-underline" type="button">
                                             All 567 Reviews
                                         </button>
                                     </div>

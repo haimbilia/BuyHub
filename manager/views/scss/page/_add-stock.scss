@@ -1,11 +1,8 @@
 .add-stock {
-    // display: flex;
-    // justify-content: space-between;
-
-    @include media-breakpoint-up(lg) {
+    grid-gap: 2rem;
+    @include media-breakpoint-up(xl) {
         display: grid;
-        grid-template-columns: minmax(auto, 250px) 1fr minmax(auto, 230px);
-        grid-gap: 2rem;
+        grid-template-columns: minmax(auto, 250px) 1fr minmax(auto, 300px);
     }
 
     &-column {
@@ -28,10 +25,17 @@
         }
     }
 }
+.column-nav {
+    display: none;
+    @include media-breakpoint-up(xl) {
+        display: block;
+    }
+}
 
 .stock-nav {
     max-height: 600px;
     overflow-y: auto;
+
     &-item {
         list-style: none;
         border-bottom: $border;

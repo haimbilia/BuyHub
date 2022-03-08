@@ -83,7 +83,25 @@
         }
     }
     &-variants {
-        table-layout: fixed;
+        //table-layout: fixed;
+    }
+    &-slots {
+        thead th {
+            &:first-child {
+                padding-#{$start-direction}: 0;
+            }
+            &:last-child {
+                padding-#{$end-direction}: 0;
+            }
+        }
+        tbody td {
+            &:first-child {
+                padding-#{$start-direction}: 0;
+            }
+            &:last-child {
+                padding-#{$end-direction}: 0;
+            }
+        }
     }
     &-zebra {
         font-size: 0.85rem;
