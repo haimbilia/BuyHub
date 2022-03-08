@@ -35,7 +35,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
         </div>
     </div>
     <div class="card-body">
-        <div class="formBodyJs dfdf">
+        <div class="formBodyJs">
             <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
             <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                 <div id="map" style="height:500px"></div>
