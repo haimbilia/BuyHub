@@ -266,7 +266,7 @@ select2 = function (
             }
         }).on('select2:open', function (e) {
             if (ele.attr('multiple') == undefined) {
-                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2 custom-select2-single");
             }
         });
 
@@ -424,7 +424,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu.dropDownMenuBlockClose').on('click', function (e) {        
+    $('.dropdown-menu.dropDownMenuBlockClose').on('click', function (e) {
         e.stopPropagation();
     });
 
