@@ -120,7 +120,7 @@ class AbandonedCartProductsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('abdCartProdsFormTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

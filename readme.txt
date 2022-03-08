@@ -540,7 +540,12 @@ Updates/Fixes :
     => 062853 - Admin UI: Fatal error is showing while clicking on the "SEO Friendly URL" of the brands and URL is not getting highlighted while having on it
     => 062860 - Admin UI: Font size and color are not correct of the titles and their data while viewing the seller approval's request
     => 062906 - Admin UI: Getting a UI issue on the Special price and volume discount
-    
+    => 062852 - Admin UI: The size of the "options" and "specification" section is changing according to the data while adding the product
+    => 062966 - Unable to login via social account
+    => 062822 - Admin UI: The rating type's name is not showing in the table
+    => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section 
+    => 062467 - Admin UI: Tooltip is showing while adding and editing the records on the Collections page under the CMS section
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

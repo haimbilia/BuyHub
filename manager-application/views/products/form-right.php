@@ -96,8 +96,8 @@
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
         <div class="card-body p-0 show" id="stock-block1">
-            <table class="table table-variants" id="variantsJs">
-                <thead>
+            <table class="table table-variants listingTableJs" id="variantsJs">
+                <thead class="tableHeadJs">
                     <tr>
                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
                         <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>

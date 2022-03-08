@@ -127,6 +127,7 @@ class User extends MyAppModel
 
     public $parentId = 0;
     private $loginWithOtp = false;
+    private $loginWithSocialAccount = false;    
 
     public function __construct($userId = 0, $parentId = 0)
     {
@@ -2770,7 +2771,14 @@ class User extends MyAppModel
                 return false;
             }
         }
-        $this->doLogin($row['credential_username'], $row['credential_password']);
+
+        if(!empty($socialAccountId)){
+            $this->loginWithSocialAccount = true;
+        }
+
+        if(!$this->doLogin($row['credential_username'], $row['credential_password'])){
+            return false; 
+        }
         unset($row['credential_password']);
         return $row;
     }
@@ -2893,6 +2901,7 @@ class User extends MyAppModel
     {
         $authentication = new UserAuthentication();
         $authentication->loginWithOtp = $this->loginWithOtp;
+        $authentication->loginWithSocialAccount = $this->loginWithSocialAccount;
         $remoteAddress = $_SERVER['REMOTE_ADDR'];
         if (!$authentication->login($username, $password, $remoteAddress, false)) {
             $this->error = Labels::getLabel($authentication->getError(), $this->commonLangId);
