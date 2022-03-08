@@ -541,6 +541,7 @@ Updates/Fixes :
     => 062860 - Admin UI: Font size and color are not correct of the titles and their data while viewing the seller approval's request
     => 062906 - Admin UI: Getting a UI issue on the Special price and volume discount
     => 062822 - Admin UI: The rating type's name is not showing in the table
+    => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section 
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
