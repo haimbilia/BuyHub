@@ -156,7 +156,7 @@ class AttachedFile extends MyAppModel
     {
         $imgAttrTypeCacheVar = CacheHelper::get('imgAttrTypeCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($imgAttrTypeCacheVar) {
-            return json_decode($imgAttrTypeCacheVar);
+            return json_decode($imgAttrTypeCacheVar, true);
         }
 
         return $arr = array(

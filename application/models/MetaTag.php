@@ -36,7 +36,7 @@ class MetaTag extends MyAppModel
 
         $metaTagsTabsArr = CacheHelper::get('metaTagsTabsArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTabsArr) {
-            return json_decode($metaTagsTabsArr);
+            return json_decode($metaTagsTabsArr, true);
         }
 
         $metaGroups = array(

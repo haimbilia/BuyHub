@@ -28,7 +28,7 @@ class HelpCenterController extends ListingBaseController
 
         $content = CacheHelper::get($cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($content) {
-            die($content);
+            die(json_decode($content, true));
         }
             
         $db = FatApp::getDb();
