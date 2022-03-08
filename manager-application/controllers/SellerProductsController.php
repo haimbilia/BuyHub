@@ -2629,7 +2629,7 @@ class SellerProductsController extends ListingBaseController
     {
         $inventoryHeadingCols = CacheHelper::get('inventoryHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($inventoryHeadingCols) {
-            return json_decode($inventoryHeadingCols);
+            return json_decode($inventoryHeadingCols, true);
         }
 
         $arr = [
