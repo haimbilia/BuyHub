@@ -90,12 +90,12 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             </td>
 
             <td>
-                <div class="text-nowrap unit-price">
-                    <span>
+                <div class="text-nowrap unit-price-wrap">
+                    <span class="unit-price">
                         <?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?>
                     </span>
-                    <span><i class="fas fa-times"></i></span>
-                    <span>
+                    <span class="unit-price-times"><i class="fas fa-times"></i></span>
+                    <span class="unit-price-qty">
                         <?php echo $op['op_qty']; ?>
                     </span>
                 </div>
