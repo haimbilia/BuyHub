@@ -190,7 +190,7 @@ class AdvertisersReportController extends ListingBaseController
     {
         $avdertiserUserReportsCacheVar = CacheHelper::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($avdertiserUserReportsCacheVar) {
-            return json_decode($avdertiserUserReportsCacheVar);
+            return json_decode($avdertiserUserReportsCacheVar, true);
         }
 
         $arr = [

@@ -32,6 +32,16 @@ $input-color: #474747;
         transition: 0.3s all ease-in-out;
         border-color: darken($border-color, 10);
     }
+    &:focus-visible {
+        outline: $focus-outline;
+        box-shadow: none;
+    }
+    &:disabled {
+        opacity: 0.5;
+        &:hover {
+            cursor: not-allowed;
+        }
+    }
     &.error {
         border-color: $danger-color;
         background-color: transparent;
@@ -47,6 +57,13 @@ $input-color: #474747;
     background-position: calc(100% - 12px) center;
     &:hover {
         cursor: pointer;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        &:hover {
+            cursor: not-allowed;
+        }
     }
     [dir="rtl"] & {
         background-position: calc(0% - -12px) center;
@@ -164,7 +181,7 @@ $input-color: #474747;
         line-height: 1.5;
         padding-top: 10px;
         &.txtarea-height {
-            height: 85px;
+            height: 60px;
         }
     }
     //focus
@@ -573,7 +590,6 @@ form.custom-form {
             // color:  lighten($brand-color, 55%);
             @include bg-brand();
             // color:  lighten($brand-color, 55%);
-            @include bg-brand();
         }
     }
 }

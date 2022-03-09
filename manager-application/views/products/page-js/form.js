@@ -66,6 +66,13 @@
             fcom.removeLoader();
         });
     };
+    addShippingPackage = function () {
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(fcom.makeUrl('shippingPackages', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+    };
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
         if (rt_id == '' || rt_id == undefined) {
@@ -706,14 +713,13 @@ async function resetOptionValuesTag(e) {
         }
 
         if (0 < optionId) {
-            e.preventDefault();
+            e.preventDefault();           
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
+                dataType:'json',
                 type: 'POST',
                 data: { recordId, optionId, fIsAjax: 1 }
-            });
-
-            response = $.parseJSON(response)
+            });       
             if (response.status != 1) {
                 fcom.displayErrorMessage(response.msg);
                 return;

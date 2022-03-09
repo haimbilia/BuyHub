@@ -52,7 +52,7 @@ class Configurations extends FatModel
     {
         $confTabsCacheVar = CacheHelper::get('confTabsCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($confTabsCacheVar) {
-            return json_decode($confTabsCacheVar);
+            return json_decode($confTabsCacheVar, true);
         }
 
         $arr =   array(
@@ -87,7 +87,7 @@ class Configurations extends FatModel
     {
         $confTabMsgCacheVar = CacheHelper::get('confTabMsgCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($confTabMsgCacheVar) {
-            return json_decode($confTabMsgCacheVar);
+            return json_decode($confTabMsgCacheVar, true);
         }
 
         $arr = array(

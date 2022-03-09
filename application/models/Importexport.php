@@ -62,7 +62,7 @@ class Importexport extends ImportexportCommon
         $cacheKey = $type . '-' . $langId . '-' . $sellerDashboard;
         $importExportTypeArr = CacheHelper::get('importExportTypeArr' . $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($importExportTypeArr) {
-            return json_decode($importExportTypeArr);
+            return json_decode($importExportTypeArr, true);
         }
 
         switch (strtoupper($type)) {
@@ -121,7 +121,7 @@ class Importexport extends ImportexportCommon
         $cacheKey = $type . '-' . $langId . '-' . $sellerDashboard;
         $importExportTypeMsgArr = CacheHelper::get('importExportTypeMsgArr' . $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($importExportTypeMsgArr) {
-            return json_decode($importExportTypeMsgArr);
+            return json_decode($importExportTypeMsgArr, true);
         }
 
         switch (strtoupper($type)) {

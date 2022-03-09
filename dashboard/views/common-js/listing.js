@@ -101,12 +101,44 @@ $(document).on("click", ".navTabsJs a", function (e) {
     };
 
     hideYkModalFooter = function () {
-       $('.contentBodyJs .form-edit-foot').hide();
+        $('.contentBodyJs .form-edit-foot').hide();
     };
 
     showYkModalFooter = function () {
         $('.contentBodyJs .form-edit-foot').show();
     };
+    
+    /* Fix width of table headings. */
+    fixTableColumnWidth = function () {
+        var thWidthArr = [];
+        var autoTableColumWidth = $('.listingTableJs').data('autoColumnWidth');
+        if (1 > autoTableColumWidth) {
+            return false;
+        }
 
+        $('.listingTableJs .tableHeadJs th').each(function () {
+            var arr = {
+                'width': $(this).outerWidth(true),
+                'element': $(this)
+            };
+            thWidthArr.push(arr);
+        });
+        /* Sort By width */
+        thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
+        /* Sort By width */
+
+        /* let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; */
+
+        $.each(thWidthArr, function (index, value) {
+            var width = value.width;
+            var element = value.element;
+            $(element).attr('width', width);
+
+            /* Not required for drag drop functionality. */
+            /* if (isSortableTable) {
+                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1) + ")").attr('width', width);
+            } */
+        });
+    }
 })();
 

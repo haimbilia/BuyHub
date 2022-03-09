@@ -77,6 +77,9 @@ if (0 < $recordId) {
             select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'), {
                 langId
             });
+            select2('product_ship_package', fcom.makeUrl('shippingPackages', 'autoComplete'), {
+                langId
+            });
             select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
                 langId
             });
@@ -128,6 +131,7 @@ if (0 < $recordId) {
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
             upcType();
+            fixTableColumnWidth();
         });
     </script>
 </main>
@@ -149,14 +153,14 @@ function getVariantUiTr($langId, $i, $productOption = [])
 
     return <<<HTML
     <tr class="rowJs">
-        <td width="30%">
+        <td >
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
             </select>
         </td>
-        <td width="50%">
+        <td >
             <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
         </td>
-        <td class="align-right" width="20%">
+        <td class="align-right" >
             <ul class="actions">
                 <li class="$deleteClass optionsDeleteJs">
                     <a href="javascript:void(0)" class="">

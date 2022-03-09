@@ -127,6 +127,7 @@ class User extends MyAppModel
 
     public $parentId = 0;
     private $loginWithOtp = false;
+    private $loginWithSocialAccount = false;    
 
     public function __construct($userId = 0, $parentId = 0)
     {
@@ -1902,12 +1903,14 @@ class User extends MyAppModel
         return true;
     }
 
-    public function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1, $langId)
+    public function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1, $langId = 0)
     {
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         $attr = array('user_name', 'credential_username', 'credential_email');
         $userData = $userObj->getUserInfo($attr, false, false);
 
         if ($userData === false) {
+            $this->error = Labels::getLabel("ERR_INVALID_USER", $langId);
             return false;
         }
 
@@ -1919,9 +1922,9 @@ class User extends MyAppModel
         );
 
         $email = new EmailHandler();
-
         if (!$email->sendSupplierApprovalNotification($langId, $data, $approval_request)) {
-            Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL", $langId));
+            $err = $email->getError();
+            $this->error = !empty($err) ? $err : Labels::getLabel("ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL", $langId);
             return false;
         }
         return true;
@@ -2768,7 +2771,14 @@ class User extends MyAppModel
                 return false;
             }
         }
-        $this->doLogin($row['credential_username'], $row['credential_password']);
+
+        if(!empty($socialAccountId)){
+            $this->loginWithSocialAccount = true;
+        }
+
+        if(!$this->doLogin($row['credential_username'], $row['credential_password'])){
+            return false; 
+        }
         unset($row['credential_password']);
         return $row;
     }
@@ -2891,6 +2901,7 @@ class User extends MyAppModel
     {
         $authentication = new UserAuthentication();
         $authentication->loginWithOtp = $this->loginWithOtp;
+        $authentication->loginWithSocialAccount = $this->loginWithSocialAccount;
         $remoteAddress = $_SERVER['REMOTE_ADDR'];
         if (!$authentication->login($username, $password, $remoteAddress, false)) {
             $this->error = Labels::getLabel($authentication->getError(), $this->commonLangId);

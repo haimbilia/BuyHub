@@ -129,6 +129,32 @@ class ShippingPackagesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function autoComplete()
+    {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+     
+        $keyword = FatApp::getPostedData('keyword');
+        $srch = ShippingPackage::getSearchObject();
+        $srch->addMultipleFields(array(ShippingPackage::tblFld('id') .' as id' , ShippingPackage::tblFld('name').' as text'));
+        $srch->addOrder(ShippingPackage::tblFld('name'));
+        if (!empty($keyword)) {
+            $srch->addCondition(ShippingPackage::tblFld('name'), 'LIKE', '%' . $keyword . '%');
+        }
+        $srch->setPageSize($pagesize);
+        $srch->setPageNumber($page);
+        $results = FatApp::getDb()->fetchAll($srch->getResultSet());      
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => $results,
+        );
+        
+        die(FatUtility::convertToJson($json));
+    }
+
     private function getForm()
     {
         $frm = new Form('frmShippingPackages');

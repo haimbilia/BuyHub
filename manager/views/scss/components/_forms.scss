@@ -582,6 +582,8 @@ form.custom-form {
     font-size: 0.875rem;
     line-height: 1rem;
     cursor: pointer;
+    display: flex;
+    grid-gap: 5px;
     &.brand {
         display: flex;
     }
@@ -601,17 +603,14 @@ form.custom-form {
     #{$end-direction}: 0;
     bottom: 0;
     #{$start-direction}: 0;
-    height: 1rem !important;
-    width: 1rem !important;
-    flex: 0 0 1rem;
-    max-width: 1rem;
+    height: 16px !important;
+    width: 16px !important;
     transition: all 0.15s ease-out 0s;
     border: solid 1px darken($border-color, 20);
     background: #fff;
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    margin-#{$end-direction}: 0.5rem;
     padding: 0 !important;
     outline: none;
     position: relative;
@@ -818,7 +817,6 @@ form.custom-form {
             // color:  lighten($brand-color, 55%);
             @include bg-brand();
             // color:  lighten($brand-color, 55%);
-            @include bg-brand();
         }
     }
 }

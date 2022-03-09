@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'seo_url':
                 $url = UrlHelper::generateFullUrl('Brands', 'View', array($row['brand_id']), CONF_WEBROOT_FRONT_URL);
-                $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url . '</a>', true);
+                $td->appendElement('plaintext', $tdAttr, '<a class="td-link" href="' . $url . '" target="_blank">' . $url . '</a>', true);
                 break;
             case 'brand_active':
                 $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['brand_id'], $row[$key]);
