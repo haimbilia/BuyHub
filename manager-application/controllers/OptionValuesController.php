@@ -425,7 +425,7 @@ class OptionValuesController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $optionsTblHeadingCols = CacheHelper::get('optionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $optionsTblHeadingCols = CacheHelper::get('optionsValueTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($optionsTblHeadingCols) {
             return json_decode($optionsTblHeadingCols, true);
         }
@@ -437,7 +437,7 @@ class OptionValuesController extends ListingBaseController
             'optionvalue_name' => Labels::getLabel('LBL_OPTION_VALUE_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('optionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('optionsValueTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
