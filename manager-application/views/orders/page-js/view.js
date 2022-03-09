@@ -128,6 +128,8 @@
         var manualShipping = 0;
         if (0 < $("input.manualShippingJs").length) {
             manualShipping = $("input.manualShippingJs:checked").val();
+        }else if(0 < $("select.manualShippingJs").length){            
+            manualShipping = $("select.manualShippingJs").val();            
         }
 
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {

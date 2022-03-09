@@ -210,10 +210,7 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
-    if (null === obj) {
-        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
-    }
+    var obj = ele.closest('form').length ? ele.closest('form') : null;    
 
     ele.select2({
         dropdownParent: obj,
@@ -263,8 +260,10 @@ select2 = function (
             callbackOnUnSelect(e);
         }
     }).on('select2:open', function (e) {
-        if (ele.attr('multiple') == undefined) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+        if (ele.attr('multiple') == undefined) {         
+            $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        }else{         
+            $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
         }
     });
 
@@ -285,8 +284,11 @@ select2 = function (
         select2Selector.$container.addClass("custom-select2-width");
     }
 
+
     if (ele.attr('multiple') != undefined) {
-        select2Selector.$container.addClass("custom-select2-multiple");
+        select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
+    }else{
+        select2Selector.$container.addClass("custom-select2 custom-select2-single");
     }
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };

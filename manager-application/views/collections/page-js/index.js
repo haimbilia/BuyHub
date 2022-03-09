@@ -89,11 +89,12 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    updateRecord = async function (linkRecordId, collection_id) {
+    updateRecord = async function (e, collection_id) {
+        var record_id = e.params.args.data.id;
         let response = await $.ajax({
             url: fcom.makeUrl(controllerName, 'updateCollectionRecords'),
             type: 'POST',
-            data: { collection_id, linkRecordId, fIsAjax: 1 }
+            data: { collection_id, record_id, fIsAjax: 1 }
         });
 
         res = $.parseJSON(response)
