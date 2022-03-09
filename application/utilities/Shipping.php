@@ -325,32 +325,36 @@ class Shipping
                 continue;
             }
 
+            $shippingApiKey = get_class($shippingApiObj)::KEY_NAME;
+
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
             $carriers = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
             if ($carriers) {
                 $carriers = unserialize($carriers);
             } else {
-                $limit = ('ShipStationShipping' == get_class($shippingApiObj)::KEY_NAME ? 0 : 1);
+                $limit = ('ShipStationShipping' == $shippingApiKey ? 0 : 1);
                 $carriers = $shippingApiObj->getCarriers($limit);
                 if (!empty($carriers)) {
                     CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
                 }
             }
-
+            
             if (empty($carriers)) {
-                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError(), 'SelProd ID-' . $product['selprod_id']);
+                $title = $shippingApiKey . " - " . $shippingApiObj->getError();
+                SystemLog::system($title, $title);
                 continue;
             }
 
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
-
+            
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
-                SystemLog::system($msg);
+                $title = $shippingApiKey . ' : ' . Labels::getLabel('ERR_INVALID_SHIPPING_DIMENSIONS');
+                SystemLog::system($msg, $title);
                 continue;
             }
-
+            
             $shopAddress = 0 < $isProductShippedBySeller ? $this->getShopAddress($product['shop_id']) : $this->getShopAddress(0);
 
             if (method_exists($shippingApiObj, 'setAddressReference')) {

@@ -31,12 +31,12 @@
                                 </span>
                             <?php } ?>
                             <?php if (!empty($detail['slog_content'])) { ?>
-                                <br><span class="timeline-v4__item-text">
+                                <br><span class="timeline-v4__item-text text-break">
                                     <b><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?>:</b> <?php echo $detail['slog_content']; ?>
                                 </span>
                             <?php } ?>
                             <?php if (!empty($detail['slog_backtrace'])) { ?>
-                                <span class="timeline-v4__item-text">
+                                <span class="timeline-v4__item-text text-break">
                                     <?php
                                     $backTrace = json_decode($detail['slog_backtrace']);
                                     if (!empty($backTrace->file)) {
