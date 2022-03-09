@@ -52,7 +52,7 @@ if (!empty($data) && 0 < count($data)) {
         var ele = $(".selProd--js");
         ele.select2({
                 closeOnSelect: true,
-                dropdownParent: ele.closest('.modal'),
+                dropdownParent: ele.closest('form'),
                 dir: langLbl.layoutDirection,
                 allowClear: true,
                 placeholder: ele.attr("placeholder"),
@@ -111,10 +111,9 @@ if (!empty($data) && 0 < count($data)) {
                 $("#" + parentForm + " input[name='splprice_price']")
                     .attr("disabled", "disabled")
                     .val("");
-            });
-
-        var select2Selector = ele.data("select2");
-        select2Selector.$container.addClass("custom-select2 w-100");
-        $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+            }).on('select2:open', function(e) {        
+                $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+            })
+            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");;
     });
 </script>
