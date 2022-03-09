@@ -101,7 +101,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                                                             </table>
                                                                                             <div style="color: #555555;font-size: 14px;font-weight: 600;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $val["op_shop_name"] . '</div>
                                                                                         </td>
-                                                                                        <td style="color: #555555;font-size: 14px;font-weight: 600; text-align:right;">';
+                                                                                        <td style="color: #555555;font-size: 14px;font-weight: 600; text-align:right;padding:0px 5px 0;">';
                                                                                         $productHtml .= CommonHelper::displayMoneyFormat($opCustomerBuyingPrice + $shippingPrice + $productTaxCharged - abs($volumeDiscount) + $roundingOff);
                                                                                         if (0 < $roundingOff) {
                                                                                             $productHtml .= '(+' . $roundingOff . ')';

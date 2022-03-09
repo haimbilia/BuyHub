@@ -41,37 +41,29 @@
 
             @media screen and (max-width: 530px) {}
         </style>
+        {MEDIA_SCREEN_CSS}
     </head>
 
     <body style="margin: 0; padding: 0; word-spacing: normal">
-        <table width="100%" cellspacing="0" cellpadding="0" style="
-                    font-size: 16px;
-                    font-family: 'Poppins', sans-serif;
-                    background-color: #f6f6f6;
-                    background-image: url({website_url}images/email/bg-top.png), url({website_url}images/email/bg-center.png), url({website_url}images/email/bg-bottom.png);
-                    background-repeat: no-repeat, no-repeat, no-repeat;
-                    background-position: top left, right center, bottom left;
-                ">
-            <tr>
-                <td style="padding: 40px"></td>
-            </tr>
+        <table
+            width="100%"
+            cellspacing="0"
+            cellpadding="0"
+            style="
+                font-size: 16px;
+                font-family: 'Poppins', sans-serif;
+                background-color: #f6f6f6;
+                background-image: url({website_url}images/email/bg-top.png), url({website_url}images/email/bg-center.png), url({website_url}images/email/bg-bottom.png);
+                background-repeat: no-repeat, no-repeat, no-repeat;
+                background-position: top left, right center, bottom left;
+            "
+        >
             <tr>
                 <td>
-                    <table width="600px" cellspacing="0" cellpadding="0"
-                        style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
-                        <tr>
-                            <td>
-                                <table width="100%" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <td style="text-align: center; padding-top: 60px">
-                                            <div class="logo-wrapper" style="max-width: 200px; margin: 0 auto">
-                                                {Company_Logo}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
+                    <div style="width: 600px; margin: 40px auto">
+                        <div class="header" id="header" style="max-width: 200px; margin: 40px auto">
+                            {Company_Logo}
+                        </div>
+                        <div class="body" id="body" style="margin-bottom: 40px; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)"> <!-- closing tag in Footer file -->
+                           
                         <!-- Header End -->             
