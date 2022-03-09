@@ -2,7 +2,7 @@
     <div class="sticky-top">
         <div class="card">
             <div class="card-body p-0">
-                <div class="stock-nav">
+                <div class="stock-nav stockNavJs">
                     <ul>
                         <li class="stock-nav-item is-active">
                             <a class="stock-nav-link" href="#basic-details">

@@ -6,7 +6,7 @@ $frm->setFormTagAttribute('id', 'frmImgAttributeJs');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 
 $formLayout = Language::getLayoutDirection(CommonHelper::getDefaultFormLangId());
-$frm->setFormTagAttribute('class', 'form modalFormJs layout--'.$formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 
 $langFld = $frm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'languageJs');
@@ -26,7 +26,7 @@ if ($optionIdFld !== null) {
     <div class="form-edit-body loaderContainerJs">
         <?php
         echo $frm->getFormTag();
-        HtmlHelper::renderHiddenFields($frm);
+            HtmlHelper::renderHiddenFields($frm);
             echo $frm->getFieldHtml('module_type');
             echo $frm->getFieldHtml('record_id');
             if (1 == count($languages)) {
@@ -59,9 +59,16 @@ if ($optionIdFld !== null) {
                     </div>
                 <?php } ?>
             </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <?php if (!empty($images)) { ?>
+            <?php if (!empty($images)) { ?>
+                <table class="table table-slots"> 
+                    <thead>
+                        <tr>
+                            <th><?php echo Labels::getLabel('LBL_IMAGE', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_IMAGE_TITLE', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_IMAGE_ALT', $siteLangId); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?php foreach ($images as $afileId => $afileData) {
                             $uploadedTime = AttachedFile::setTimeParam($afileData['afile_updated_at']);
                             $frm->getField('image_title' . $afileId)->value = $afileData['afile_attribute_title'];
@@ -75,7 +82,7 @@ if ($optionIdFld !== null) {
                                     $languages = Language::getAllNames();
                                     $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, (count($languages) > 1) ? false : true);
                                     $aspectRatioType = $brandLogo['afile_aspect_ratio'];
-                                    $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+                                    $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
                                     $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
                                     $imageUrl = UrlHelper::generateFullUrl('Image', 'brand', array($recordId, $langId, ImageDimension::VIEW_THUMB, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
@@ -92,45 +99,23 @@ if ($optionIdFld !== null) {
                                     $imageUrl = UrlHelper::generateFullUrl('Category', 'image', array($recordId, $langId, ImageDimension::VIEW_THUMB, 0, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 default:
-                                  $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
                                     $imageUrl = UrlHelper::generateFullUrl('Category', 'banner', array($recordId, $langId, ImageDimension::VIEW_THUMB, 0, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                             } ?>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <img data-aspect-ratio = "<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php
-                                            $fld = $frm->getField('image_title' . $afileId);
-                                            echo $fld->getCaption();
-                                            ?>
-                                        </label>
-                                        <?php echo $frm->getFieldHtml('image_title' . $afileId); ?>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php
-                                            $fld = $frm->getField('image_alt' . $afileId);
-                                            echo $fld->getCaption();
-                                            ?>
-                                        </label>
-                                        <?php echo $frm->getFieldHtml('image_alt' . $afileId); ?>
-                                    </div>
-                                </div>
-                            </div>
+                            <tr>
+                                <td>
+                                    <img class="border" data-aspect-ratio="<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                </td>
+                                <td><?php echo $frm->getFieldHtml('image_title' . $afileId); ?></td>
+                                <td><?php echo $frm->getFieldHtml('image_alt' . $afileId); ?></td>
+                            </tr>
                         <?php } ?>
-                    <?php } else {
-                        echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_No_Image_Found', $siteLangId));
-                    } ?>
-                </div>
-            </div>
+                    </tbody>
+                </table>
+            <?php } else {
+                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_No_Image_Found', $siteLangId));
+            }  ?>
         </form>
         <?php echo $frm->getExternalJS(); ?>
     </div>

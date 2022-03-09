@@ -545,7 +545,10 @@ Updates/Fixes :
     => 062822 - Admin UI: The rating type's name is not showing in the table
     => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section 
     => 062467 - Admin UI: Tooltip is showing while adding and editing the records on the Collections page under the CMS section
-
+    => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section
+    => 062783 - Admin UI: "Invalid Order" error is showing while changing the order's status to shipped and using self-shipping(in case of shipping plugin is ON) under the Orders section
+    => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

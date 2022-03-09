@@ -55,12 +55,15 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
     $(document).ready(function() {
         $("#prodcat_parent").select2({
-            dropdownParent: $('.' + $.ykmodal.element)
-        }).on('select2:open', function(e) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2 custom-select2-single");
-        });
+            dropdownParent: $("#prodcat_parent").closest('form'),
+        })
+        .on('select2:open', function(e) {        
+            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        })
+        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
+        
         $("." + $.ykmodal.element).removeAttr('tabindex');
-        $("select[name='prodcat_parent']").data("select2").$container.addClass("custom-select2 custom-select2-width custom-select2-single");
+        
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;
             var ratingtype_name = e.detail.tag.title;
