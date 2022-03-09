@@ -9,8 +9,10 @@
         display: flex;
         align-items: center;
         margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: $border-black;
         .h2 {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
     }
     &_main {
@@ -56,26 +58,53 @@
     z-index: 1;
     margin-#{$start-direction}: auto;
     display: grid;
-    grid-gap: 1rem;
+    grid-gap: 2rem;
     grid-template-columns: 1fr 1fr;
+    &-item {
+        line-height: 1;
+        position: relative;
+        &::after {
+            background-color: $border-color;
+            width: 2px;
+            height: 16px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            #{$end-direction}: -14px;
+            display: block;
+            content: "";
+        }
+        &:last-child {
+            &::after {
+                content: normal;
+            }
+        }
+    }
     .control-label {
-        border: solid 2px $border-color;
-        border-radius: $radius-common;
-        background: $bg-white;
+        background-color: transparent;
+        border: none;
         color: $txt-gray;
-        padding: 0.7rem;
+        padding: 0;
+        padding-bottom: 5px;
         margin: 0;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         cursor: pointer;
-        font-size: 0.85rem;
-        font-weight: 400;
+        font-size: 1rem;
+        font-weight: 600;
         white-space: nowrap;
         position: relative;
+        background-image: linear-gradient(currentColor, currentColor);
+        background-position: 50% 100%;
+        background-repeat: no-repeat;
+        background-size: 0% 2px;
+        background-color: transparent;
+        transition: background-size 0.3s;
         &:hover,
         &.is-active {
-            color: $secondary-color;
-            border-color: $secondary-color;
+            color: $brand-color;
+            text-decoration: none;
+            background-size: 100% 2px;
         }
     }
     .control-input {
@@ -100,6 +129,7 @@
         }
     }
     .svg {
+        display: none;
         margin-#{$end-direction}: 10px;
     }
     .disabled {
@@ -370,17 +400,108 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
+    padding: 1.4rem;
     font-size: 0.85rem;
-    color: $brand-color;
+    color: $txt-gray;
     font-weight: 500;
-    background-color: $bg-brand-light;
-    border: dashed 1px $brand-color;
+    background-color: #f4f5f6;
+    border: 1px solid #dedede;
     border-radius: $radius-common;
     .svg {
         margin-#{$end-direction}: 10px;
     }
-    a {
-        text-decoration: underline;
+    .not-pickup {
+        flex: 1;
+    }
+    .btn-close {
+        // background-color: $bg-black;
+        // border-radius: 50%;
+    }
+}
+
+.block-cart {
+    display: flex;
+    &-img {
+        margin: 0 auto;
+        text-align: center;
+        flex: 0 0 212px;
+        max-width: 212px;
+        position: relative;
+        .products-img {
+            margin-bottom: 0;
+        }
+        &-sm {
+            flex: 0 0 60px;
+            max-width: 60px;
+        }
+    }
+
+    &-detail {
+        padding: 1rem 0;
+        padding-#{$start-direction}: 3rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        &-top {
+            display: flex;
+            margin-bottom: 2rem;
+            flex: 1;
+        }
+        &-bottom {
+            display: flex;
+            .not-available-txt {
+                margin-#{$start-direction}: auto;
+            }
+        }
+        .products-price {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+    }
+
+    .cart-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        vertical-align: top;
+        white-space: nowrap;
+        margin: 0;
+        color: $txt-body;
+        grid-gap: 30px;
+        @include media-breakpoint-down(sm) {
+            flex-wrap: wrap;
+        }
+        &-item {
+            line-height: 1;
+            position: relative;
+            &::after {
+                background-color: $border-color;
+                width: 1px;
+                height: 16px;
+                position: absolute;
+                top: 4px;
+                bottom: 0;
+                #{$end-direction}: -14px;
+                display: block;
+                content: "";
+            }
+
+            &:last-child {
+                &::after {
+                    content: normal;
+                }
+            }
+        }
+        .btn-link {
+            padding: 0;
+            margin: 0;
+            font-size: 0.875rem;
+            text-decoration: underline;
+            color: $txt-body;
+        }
     }
 }

@@ -254,21 +254,19 @@ select2 = function (
         },
         minimumInputLength: 0,
         dropdownPosition: "below",
-    })
-        .on("select2:selecting", function (e) {
-            if ("function" == typeof callbackOnSelect) {
-                callbackOnSelect(e);
-            }
-        })
-        .on("select2:unselecting", function (e) {
-            if ("function" == typeof callbackOnUnSelect) {
-                callbackOnUnSelect(e);
-            }
-        }).on('select2:open', function (e) {
-            if (ele.attr('multiple') == undefined) {
-                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2 custom-select2-single");
-            }
-        });
+    }).on("select2:selecting", function (e) {
+        if ("function" == typeof callbackOnSelect) {
+            callbackOnSelect(e);
+        }
+    }).on("select2:unselecting", function (e) {
+        if ("function" == typeof callbackOnUnSelect) {
+            callbackOnUnSelect(e);
+        }
+    }).on('select2:open', function (e) {
+        if (ele.attr('multiple') == undefined) {
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
+        }
+    });
 
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');

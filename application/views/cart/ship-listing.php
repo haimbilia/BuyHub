@@ -17,21 +17,20 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             //if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
             if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) {
             ?>
-                <li class="minus-space">
+                <li class="list-cart-item minus-space">
                     <div class="delivery-info">
-                        <span> <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                                </use>
-                            </svg><?php echo Labels::getLabel('MSG_SOME_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?>
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#warning">
+                            </use>
+                        </svg>
+                        <span class="not-pickup">
+                            <?php echo Labels::getLabel('MSG_SOME_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?>
                             <?php if (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) == $productsCount) { ?>
-                                <a href="javascript:void(0);" onClick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>);" class=""><?php echo Labels::getLabel('LBL_Pickup_Entire_Order', $siteLangId); ?></a>
+                                <a class="link-underline" href="javascript:void(0);" onClick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>);"><?php echo Labels::getLabel('LBL_Pickup_Entire_Order', $siteLangId); ?></a>
                             <?php } ?>
                         </span>
-
-                        <a class="btn-close" href="javascript:void(0);" onClick="removePickupOnlyProducts();">
-
-                        </a>
-
+                        <button class="btn-close" onClick="removePickupOnlyProducts();">
+                        </button>
                     </div>
                 </li>
                 <?php foreach ($products as $key => $product) {
@@ -45,8 +44,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                     $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
                 ?>
-                    <li class="list-cart-item <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
-                        <div class="block-img">
+                    <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
+                        <div class="block-cart-img">
                             <div class="products-img">
                                 <a href="<?php echo $productUrl; ?>">
                                     <?php
@@ -64,8 +63,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </a>
                             </div>
                         </div>
-                        <div class="block-detail">
-                            <div class="block-detail-top">
+                        <div class="block-cart-detail">
+                            <div class="block-cart-detail-top">
                                 <div class="product-profile">
                                     <div class="product-profile-data">
                                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
@@ -85,23 +84,16 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                             <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="block-cart-detail-bottom">
+                                <ul class="cart-action">
+                                    <li class="cart-action-item">
+                                        <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
 
-                                <div class="cart-action">
-                                    <ul class="actions">
-                                        <li>
-                                            <a href="javascript:void(0)" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
-
-                                                <i class="icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
-                                                        </use>
-                                                    </svg>
-
-                                                </i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                            <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </li>
@@ -109,9 +101,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         </ul>
         <ul class="list-cart">
         <?php } ?>
-
         <?php foreach ($products as $product) {
-
             if ($product['fulfillment_type'] == Shipping::FULFILMENT_PICKUP) {
                 continue;
             }
@@ -123,8 +113,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
         ?>
 
-            <li class="list-cart-item <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
-                <div class="block-img">
+            <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                <div class="block-cart-img">
                     <div class="products-img">
                         <a href="<?php echo $productUrl; ?>">
                             <?php
@@ -141,19 +131,14 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             ?>
                         </a>
                     </div>
-                    <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                    </button>
                 </div>
-                <div class="block-detail">
-                    <div class="block-detail-top">
-                        <div class="item">
+                <div class="block-cart-detail">
+                    <div class="block-cart-detail-top">
+                        <div class="product-profile">
                             <div class="product-profile-data">
-
                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-
+                                <div class="products-price"> <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                                 <div class="options">
-
                                     <?php
                                     if (isset($product['options']) && count($product['options'])) {
                                         foreach ($product['options'] as $key => $option) {
@@ -163,70 +148,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                             echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
                                     <?php }
                                     } ?>
-
                                 </div>
                             </div>
                         </div>
-                        <div class="cart-action">
-                            <ul class="actions">
-                                <?php if ($showAddToFavorite) { ?>
-                                    <li>
-                                        <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                                            if (empty($product['ufp_id'])) {  ?>
-                                                <a href="javascript:void(0)" class="" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            <?php } else { ?>
-                                                <a href="javascript:void(0)" class="is-active" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                </a>
-                                            <?php }
-                                        } else {
-                                            if (empty($product['is_in_any_wishlist'])) { ?>
-                                                <a href="javascript:void(0)" class="" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
-
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            <?php  } else { ?>
-                                                <a class="favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                </a>
-                                        <?php }
-                                        } ?>
-                                    </li>
-                                <?php } ?>
-                                <li>
-                                    <a href="javascript:void(0)" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="block-detail-bottom">
                         <div class="product-quantity">
-                            <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
+
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
                                     <i class="icn">
@@ -248,13 +174,51 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </span>
                             </div>
                         </div>
-                        <div class="products-price">
-                            <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                    </div>
+                    <div class="block-cart-detail-bottom">
+                        <ul class="cart-action">
+                            <li class="cart-action-item">
+                                <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                    <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                </button>
+                            </li>
+                            <?php if ($showAddToFavorite) { ?>
+                                <li class="cart-action-item">
+                                    <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                                        if (empty($product['ufp_id'])) {  ?>
+                                            <button class="btn btn-link" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+                                                <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
+                                            </button>
+                                        <?php } else { ?>
+                                            <button class="btn btn-link" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
+                                                <?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>
+                                            </button>
+                                        <?php }
+                                    } else {
+                                        if (empty($product['is_in_any_wishlist'])) { ?>
+                                            <button class="btn btn-link" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+
+                                                <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
+                                            </button>
+                                        <?php  } else { ?>
+                                            <button class="btn btn-link favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
+                                                <?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>
+                                            </button>
+                                    <?php }
+                                    } ?>
+                                </li>
+                            <?php } ?>
+                            <li class="cart-action-item">
+                                <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
+                                    <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
+                                </button>
+                            </li>
+                        </ul>
+
                     </div>
                 </div>
             </li>
         <?php } ?>
-
         </ul>
     <?php } ?>
     <?php if (0 < count($saveForLaterProducts)) { ?>
@@ -267,8 +231,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
                 $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
             ?>
-                <li class="list-cart-item  <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
-                    <div class="block-img">
+                <li class="list-cart-item block-cart <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                    <div class="block-cart-img">
                         <div class="products-img">
                             <a href="<?php echo $productUrl; ?>">
                                 <?php
@@ -285,16 +249,15 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 ?>
                             </a>
                         </div>
-                        <button class="btn-remove" type="button" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)">
-                            <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                        </button>
 
                     </div>
-                    <div class="block-detail">
-                        <div class="block-detail-top">
+                    <div class="block-cart-detail">
+                        <div class="block-cart-detail-top">
                             <div class="product-profile">
                                 <div class="product-profile-data">
                                     <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                    <div class="products-price">
+                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                                     <div class="options">
                                         <?php
                                         if (isset($product['options']) && count($product['options'])) {
@@ -308,24 +271,20 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="cart-action">
-                                <ul class="actions">
-                                    <li>
-                                        <a href="javascript:void(0)" onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#cart">
-                                                </use>
-                                            </svg>
-                                        </a>
 
-                                    </li>
-
-                                </ul>
-                            </div>
                         </div>
-                        <div class="block-detail-bottom">
-                            <div class="products-price">
-                                <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                        <div class="block-cart-detail-bottom">
+                            <ul class="cart-action">
+                                <li class="cart-action-item"> <button class="btn btn-link" type="button" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)">
+                                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                    </button>
+                                </li>
+                                <li class="cart-action-item">
+                                    <button class="btn btn-link" onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)">
+                                        <?php echo Labels::getLabel('LBL_MOVE_TO_CART', $siteLangId); ?>
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
 
                     </div>
