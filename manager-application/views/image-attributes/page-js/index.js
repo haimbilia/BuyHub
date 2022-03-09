@@ -11,10 +11,7 @@ setup = function (frm) {
     if (!$(frm).validate()) return;
     var data = fcom.frmData(frm);
     $.ykmodal(fcom.getLoader());
-    fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-        fcom.closeProcessing();
-        fcom.removeLoader();
-    });
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {});
 };
 
 $(document).on('change', '.languageJs', function () {
