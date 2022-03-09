@@ -106,7 +106,7 @@ class ShipRocket extends ShippingServicesBase
     {
         return true;
     }
-    
+
     /**
      * canFetchTrackingDetail
      *
@@ -319,21 +319,21 @@ class ShipRocket extends ShippingServicesBase
      * @return int
      */
     private function getPickupLocation(int $shopId): int
-    { 
-        if(0 < $this->orderDetail['opshipping_by_seller_user_id']){
+    {
+        if (0 < $this->orderDetail['opshipping_by_seller_user_id']) {
             $updatedOn = Shop::getAttributesById($shopId, 'shop_updated_on');
             $pickupLocationId = $shopId . date('ym', strtotime($updatedOn));
-        }else{
+        } else {
             $pickupLocationId = 0; // admin
         }
-        
-        $pickups = $this->getAllPickupLocations(); 
+
+        $pickups = $this->getAllPickupLocations();
 
         if (false !== array_search($pickupLocationId, array_column($pickups, 'pickup_location'))) {
             return (int) $pickupLocationId;
         }
-        
-        if (false === $this->addPickupLocation($pickupLocationId)) {            
+
+        if (false === $this->addPickupLocation($pickupLocationId)) {
             return -1;
         }
         return $pickupLocationId;
@@ -348,7 +348,7 @@ class ShipRocket extends ShippingServicesBase
     {
         $pickupLocationId = $this->orderDetail['op_invoice_number'];
         $pickups = $this->getAllPickupLocations();
-        
+
         $locationIndex = array_search($pickupLocationId, array_column($pickups, 'pickup_location'));
         if (false !== $locationIndex) {
             return (int) $pickups[$locationIndex]['id'];
@@ -399,14 +399,14 @@ class ShipRocket extends ShippingServicesBase
             'COALESCE(state_name, state_identifier) as state_name',
             'country_name',
             'shop_postalcode',
-        ];       
-     
+        ];
+
         $address = $this->getShopAddress($this->orderDetail['opshipping_by_seller_user_id']);
 
         $requestParam = [
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'name' => $address['shop_name'],
-           // 'email' => $this->orderDetail['op_shop_owner_email'],
+            // 'email' => $this->orderDetail['op_shop_owner_email'],
             'phone' => $address['phone'],
             'address' => $address['line1'],
             'address_2' => $address['line2'],
@@ -415,11 +415,11 @@ class ShipRocket extends ShippingServicesBase
             'country' => $address['country'],
             'pin_code' => $address['postalCode'],
         ];
-       
-       
+
+
         return $this->doRequest(self::REQUEST_ADD_PICKUP_LOCATION, $requestParam);
     }
-    
+
     /**
      * addReturnPickupLocation
      *
@@ -480,7 +480,7 @@ class ShipRocket extends ShippingServicesBase
         $channel = $this->getChannel();
 
         $this->setAddress($billingAddress['oua_name'], $billingAddress['oua_address1'], $billingAddress['oua_address2'], $billingAddress['oua_city'], $billingAddress['oua_state'], $billingAddress['oua_zip'], $billingAddress['oua_country_code'], $billingAddress['oua_phone']);
-        
+
         $this->orderDetail['op_other_charges'] = array_sum(array_column($this->orderDetail['charges'], 'opcharge_amount'));
 
         $taxOptions = !empty($this->orderDetail['op_product_tax_options']) ? json_decode($this->orderDetail['op_product_tax_options'], true) : [];
@@ -534,7 +534,7 @@ class ShipRocket extends ShippingServicesBase
             'payment_method' => (FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_COD_ORDER_STATUS")) == $this->orderDetail['op_status_id']) ? 'COD' : 'Prepaid',
             'shipping_charges' => $shippingTotal,
             'total_discount' => $totalDiscount,
-            'sub_total' => CommonHelper::orderProductAmount($this->orderDetail, 'CART_TOTAL', false , User::USER_TYPE_SELLER) + $taxCharged,
+            'sub_total' => CommonHelper::orderProductAmount($this->orderDetail, 'CART_TOTAL', false, User::USER_TYPE_SELLER) + $taxCharged,
             'length' => $this->convertToCm($this->orderDetail['op_product_length'], $this->orderDetail['op_product_dimension_unit']),
             'breadth' => $this->convertToCm($this->orderDetail['op_product_width'], $this->orderDetail['op_product_dimension_unit']),
             'height' => $this->convertToCm($this->orderDetail['op_product_height'], $this->orderDetail['op_product_dimension_unit']),
@@ -546,19 +546,19 @@ class ShipRocket extends ShippingServicesBase
             return false;
         }
         $orderShipment = $this->getResponse();
-        
+
         if (!isset($orderShipment['shipment_id']) && isset($orderShipment['message'])) {
             $this->error = $orderShipment['message'];
             return false;
         }
-       
+
         $requestParam = [
             'shipmentIdsArr' => [$orderShipment['shipment_id']],
             'courierId' => $this->orderDetail['opshipping_service_code'],
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight']),
         ];
-        
-        if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {          
+
+        if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {
             return false;
         }
 
@@ -586,7 +586,7 @@ class ShipRocket extends ShippingServicesBase
         ];
         return true;
     }
-    
+
     /**
      * loadSystemOrder
      *
@@ -831,11 +831,11 @@ class ShipRocket extends ShippingServicesBase
                     break;
             }
             return true;
-        } catch (Exception $e) { 
-            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket'); 
+        } catch (Exception $e) {
+            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), self::KEY_NAME);
             $this->error = $e->getMessage();
-        } catch (Error $e) {       
-            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket');
+        } catch (Error $e) {
+            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), self::KEY_NAME);
             $this->error = $e->getMessage();
         }
         return false;

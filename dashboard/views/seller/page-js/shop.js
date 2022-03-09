@@ -819,6 +819,7 @@ $(document).on("change", ".state", function () {
             fcom.ajax(fcom.makeUrl(keyName, 'getMerchantCategory'), '', function (res) {
                 selector.select2({
                     closeOnSelect: true,
+                    dropdownParent: selector.closest('form'),
                     dir: langLbl.layoutDirection,
                     allowClear: true,
                     placeholder: selector.attr('placeholder'),
@@ -919,7 +920,7 @@ $(document).on("change", ".state", function () {
 
 function bindAutoComplete() {
     $("#scp_selprod_id").select2({
-        dropdownParent: $("#scp_selprod_id").closest('.modal'),
+        dropdownParent: $("#scp_selprod_id").closest('form'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
         allowClear: false,
@@ -953,7 +954,10 @@ function bindAutoComplete() {
         templateSelection: function (result) {
             return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         }
-    });
+    }).on('select2:open', function(e) {        
+        $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+    })
+    .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
 
 }
 

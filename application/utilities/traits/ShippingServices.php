@@ -698,7 +698,7 @@ trait ShippingServices
                 if (!empty($shippingRates)) {
                     CacheHelper::create($cacheKey, serialize($shippingRates),CacheHelper::TYPE_SHIPING_API);
                 } else {
-                    SystemLog::system($this->shippingService->getError(),'SelProd ID-'.$orderData['op_id']);
+                    SystemLog::system($this->shippingService->getError(), $this->shippingService->keyName . ' - ' . Labels::getLabel('ERR_UNABLE_TO_FETCH_SHIPPING_RATES'));
                     continue;
                 }
             }

@@ -408,7 +408,7 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
             closeOnSelect: true,
             allowClear: true,
             dir: langLbl.layoutDirection,
-			dropdownParent: selector.closest('.modal'),
+			dropdownParent: selector.closest('form'),
             placeholder: selector.attr('placeholder'),
             ajax: {
                 url: function () {
@@ -463,7 +463,10 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
             $('.recordListing--js').append(htm);
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
-        });
+        }).on('select2:open', function(e) {        
+            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple")
+        })
+        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");
     }
 
 
