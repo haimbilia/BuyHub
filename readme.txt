@@ -546,6 +546,7 @@ Updates/Fixes :
     => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section 
     => 062467 - Admin UI: Tooltip is showing while adding and editing the records on the Collections page under the CMS section
     => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section
+    => 062783 - Admin UI: "Invalid Order" error is showing while changing the order's status to shipped and using self-shipping(in case of shipping plugin is ON) under the Orders section
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

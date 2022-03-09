@@ -14,9 +14,11 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var op_id = $(frm.op_id).val();
         var manualShipping = 0;
-        var orderStatusId = $(frm.op_status_id).val();
-        if (0 < $("input.manualShipping-js").length) {
-            manualShipping = $("input.manualShipping-js:checked").val();
+        var orderStatusId = $(frm.op_status_id).val(); 
+        if (0 < $("input.manualShippingJs").length) {
+            manualShipping = $("input.manualShippingJs:checked").val();
+        }else if(0 < $("select.manualShippingJs").length){            
+            manualShipping = $("select.manualShippingJs").val();            
         }
 
         var data = fcom.frmData(frm);
