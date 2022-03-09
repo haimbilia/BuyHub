@@ -1,9 +1,11 @@
 .cart-page {
     display: grid;
-    grid-gap: 5rem;
+    grid-gap: 6rem;
     grid-template-columns: 2fr 1fr;
+    padding: 3rem 0;
     @include media-breakpoint-down(md) {
         display: block;
+        padding: 0;
     }
     &-head {
         display: flex;
@@ -16,12 +18,12 @@
         }
     }
     &_main {
-        padding: 3rem 0;
+        padding: 0;
     }
     &_aside {
         flex: 1;
         &:after {
-            content: "";
+            // content: "";
             background: $bg-gray;
             position: fixed;
             z-index: -1;
@@ -139,8 +141,20 @@
 }
 
 .cart-total {
-    padding: 4rem;
-    padding-#{$end-direction}: 0;
+    padding: 2rem;
+    border: $border-black;
+    &-head {
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: $border;
+    }
+    &-title {
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+    &-body {
+    }
+
     .cart-action {
         margin-top: 2rem;
         text-align: center;
@@ -149,37 +163,16 @@
         }
     }
 }
-
-.included {
-    text-align: center;
-    font-weight: 400;
-    font-size: 0.8rem;
-    padding: 1rem 0;
-    color: $txt-gray;
-}
-
-.promo-code {
-    max-width: 400px;
-    display: flex;
-    align-items: center;
-    form {
+.promotional-code {
+    &-head {
         display: flex;
-        flex: 1;
-        .promo-input {
-            width: auto;
-            height: 40px;
-            line-height: 1;
-        }
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 1rem;
     }
-}
-
-.product-line-info {
-    .label {
-        font-size: 0.8rem;
-    }
-    .value {
-        @extend .label;
-        color: $txt-body;
+    &-title {
+        font-size: 1rem;
+        margin: 0;
     }
 }
 .coupons {
@@ -203,34 +196,43 @@
 }
 
 .coupons-applied {
-    background-color: lighten($success-color, 50);
-    border: dashed 1px $success-color;
-    padding: 1rem;
-    border-radius: $radius4;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    color: $success-color;
+    flex-direction: column;
+    margin: 2rem 0;
     position: relative;
-    .svg {
-        width: 20px;
-        height: 20px;
-        margin-#{$end-direction}: 10px;
-    }
-    h6 {
-        font-weight: 500;
+    color: $txt-gray;
+
+    &-title {
         margin: 0;
         padding: 0;
-        position: relative;
-        display: flex;
-        align-items: center;
-        color: $txt-body;
+        font-size: 1rem;
     }
-    p {
+    &-desc {
         margin-top: 10px;
         font-size: 0.8rem;
-        color: currentColor;
+    }
+}
+
+.included {
+    text-align: center;
+    font-weight: 400;
+    font-size: 0.8rem;
+    padding: 1rem 0;
+    color: $txt-gray;
+}
+
+.promo-code {
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    .form {
+        display: flex;
+        flex: 1;
+        .promo-input {
+            width: auto;
+            height: 40px;
+            line-height: 1;
+        }
     }
 }
 
@@ -277,20 +279,16 @@
     }
 }
 
-.strong {
-    font-weight: 500;
-}
-
 .secure {
-    margin-top: 4rem;
-    padding-bottom: 2rem;
-    text-align: center;
-    p {
-        margin: 0.5rem 0;
-        font-weight: 500;
-        .icn {
-            margin-#{$end-direction}: 6px;
-        }
+    padding-top: 1rem;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: $txt-gray;
+    font-size: 0.85rem;
+    .svg {
+        margin-#{$end-direction}: 10px;
     }
 }
 
