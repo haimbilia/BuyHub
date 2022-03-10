@@ -551,6 +551,9 @@ trait ShippingServices
         }
 
         $resp = $this->shippingService->getResponse();
+        if(false === $resp){
+            LibHelper::dieJsonError($this->shippingService->getError());
+        }
 
         if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled' => applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());

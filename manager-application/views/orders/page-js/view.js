@@ -303,7 +303,7 @@
     
     shippingRatesForm = function(opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (t) {
-            $.ykmodal(t.html);
+            $.ykmodal(t.html,true);
             fcom.removeLoader();
         });
     };
