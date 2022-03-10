@@ -18,10 +18,14 @@
                         </strong></span>
                 </h6>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                    <div class="product-ratings"> <i class="icn"><svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                            </svg></i> <span class="rate"><?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5';
-                                                            if ($shopTotalReviews) { ?>
+                    <div class="product-ratings">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                        </svg>
+
+                        <span class="rate">
+                            <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5';
+                            if ($shopTotalReviews) { ?>
                                 - <a href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
                             <?php } ?> </span>
                     </div>
