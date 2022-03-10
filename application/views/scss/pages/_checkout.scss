@@ -2,63 +2,6 @@
     --header-height: 90px;
     --btn-height: 50px;
 }
-
-.checkout-page {
-    //min-height: calc(100vh - (var(--header-height)));
-    display: flex;
-    @include media-breakpoint-down(sm) {
-        padding-bottom: var(--btn-height);
-        flex-direction: column;
-    }
-    .main {
-        flex: 1;
-        @include media-breakpoint-up(xl) {
-            padding-#{$end-direction}: 60px;
-            flex: 0 0 60%;
-            max-width: 60%;
-        }
-    }
-    .sidebar {
-        //background: $bg-gray;
-        //border-#{$start-direction}: $border;
-        position: relative;
-        flex: 1;
-        background-position: left top;
-        background: $bg-gray;
-        padding: 2rem;
-        border-radius: $radius4;
-        @include media-breakpoint-down(lg) {
-            display: none;
-        }
-        .order-summary--on & {
-            display: block;
-            flex: auto;
-            max-width: inherit;
-            padding: 1rem;
-            padding-bottom: 0;
-            margin: 0;
-            //background: $bg-gray;
-            background: hsla(0, 0%, 100%, 0.8);
-            backdrop-filter: blur(7px);
-            position: fixed;
-            //top: 0;
-            left: 0;
-            right: 0;
-            bottom: var(--btn-height);
-            top: 0;
-            z-index: 10;
-            width: 100%;
-            //height: 100%;
-            box-shadow: $shadow1;
-        }
-        &__content {
-            @include media-breakpoint-down(sm) {
-                height: 100%;
-            }
-        }
-    }
-}
-
 .header-checkout {
     min-height: var(--header-height);
     background: $bg-white;
@@ -101,7 +44,35 @@
 }
 
 .checkout-page {
-    max-width: 1000px;
+    //min-height: calc(100vh - (var(--header-height)));
+    display: flex;
+    @include media-breakpoint-down(sm) {
+        padding-bottom: var(--btn-height);
+        flex-direction: column;
+    }
+    .main {
+        flex: 1;
+        @include media-breakpoint-up(xl) {
+            padding-#{$end-direction}: 60px;
+            flex: 0 0 60%;
+            max-width: 60%;
+        }
+    }
+    .sidebar {
+        //background: $bg-gray;
+        //border-#{$start-direction}: $border;
+        position: relative;
+        flex: 1;
+        background-position: left top;
+
+        @include media-breakpoint-down(lg) {
+            display: none;
+        }
+    }
+}
+
+.checkout-page {
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-gap: 5rem;
@@ -110,84 +81,16 @@
         display: block;
     }
     &_main {
-        padding: 3rem 0;
+        padding: 0;
     }
     &_aside {
         flex: 1;
         @include media-breakpoint-down(lg) {
             display: none;
         }
-        .order-summary--on & {
-            display: block;
-            flex: auto;
-            max-width: inherit;
-            padding: 1rem;
-            padding-bottom: 0;
-            margin: 0;
-            //background: $bg-gray;
-            background: hsla(0, 0%, 100%, 0.8);
-            backdrop-filter: blur(7px);
-            position: fixed;
-            //top: 0;
-            left: 0;
-            right: 0;
-            bottom: var(--btn-height);
-            top: 0;
-            z-index: 10;
-            width: 100%;
-            //height: 100%;
-            box-shadow: $shadow1;
-        }
-        &:after {
-            content: "";
-            background: $bg-gray;
-            position: fixed;
-            z-index: -1;
-            width: 100%;
-            height: 100%;
-            display: block;
-            top: 0;
-            bottom: 0;
-        }
     }
 }
 
-.order-summary-toggle {
-    height: var(--btn-height);
-    position: fixed;
-    bottom: 0;
-    z-index: 2;
-    background: $brand-color;
-    color: $brand-color-inverse;
-    //backdrop-filter: blur(7px);
-    border: none;
-    padding: 1rem;
-    width: 100%;
-    @include media-breakpoint-up(xl) {
-        display: none;
-    }
-    .order-summary-toggle__inner {
-        display: flex;
-        justify-content: space-between;
-        //max-width: 400px;
-        margin: 0 auto;
-        .order-summary-toggle__text {
-            position: relative;
-            text-transform: uppercase;
-        }
-        .svg {
-            width: 10px;
-            height: 10px;
-            margin: 0;
-            fill: currentColor;
-            transform: rotate(90deg);
-            transition: all 0.5s ease;
-        }
-    }
-    .order-summary-toggle__total-recap {
-        margin-#{$start-direction}: auto;
-    }
-}
 //Steps
 .step {
     display: flex;
@@ -292,36 +195,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-    }
-}
-
-//Order summary
-
-.order-summary {
-    padding: 4rem;
-    padding-#{$end-direction}: 0;
-    @include media-breakpoint-down(sm) {
-        display: flex;
-        flex-direction: column;
-        height: inherit;
-    }
-    h5 {
-        text-transform: uppercase;
-        font-size: 1rem;
-        color: $txt-body;
-    }
-    &_list {
-        min-width: 100%;
-        position: relative;
-        max-height: 500px;
-        overflow-y: auto;
-        @include media-breakpoint-down(sm) {
-            flex: 1;
-            max-height: inherit;
-        }
-    }
-    .cart-summary {
-        margin-bottom: 2rem;
     }
 }
 
@@ -559,91 +432,90 @@
 }
 
 .list-addresses {
-    max-height: 400px;
-    overflow-y: auto;
-    > ul {
-        grid-template-columns: repeat(2, 1fr);
-        display: grid;
-        grid-gap: 1rem;
-        @include media-breakpoint-down(sm) {
-            grid-template-columns: auto;
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-gap: 3rem;
+    @include media-breakpoint-down(sm) {
+        grid-template-columns: auto;
+    }
+    &-item {
+        position: relative;
+        border: $border;
+        border-radius: 4px;
+        //margin-bottom: 1.5rem;
+        &.is-active {
+            border-color: $brand-color;
         }
-        > li {
-            position: relative;
-            border: $border;
-            border-radius: 4px;
-            //margin-bottom: 1.5rem;
-            &.is-active {
-                border-color: $brand-color;
+    }
+    .label-block {
+        padding: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-start;
+        margin: 0;
+    }
+    .addresses {
+        &-actions {
+            border-top: $border;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            .btn-addresses {
+                border: none;
+                height: auto;
+                width: 100%;
+                display: block;
+                color: $secondary-color;
             }
-            .label-block {
-                padding: 1rem;
-                cursor: pointer;
-                display: flex;
-                align-items: flex-start;
-                margin: 0;
-            }
-            &-detail {
-                flex: 1;
-                font-size: 0.85rem;
-                color: $txt-gray;
+        }
+        &-detail {
+            flex: 1;
+            font-size: 0.85rem;
+            color: $txt-gray;
+            line-height: 1.5;
+            margin-bottom: 0;
+            padding: 1rem;
+            .h5 {
+                margin-bottom: 10px;
+                font-weight: 500;
+                font-size: 0.9rem;
                 line-height: 1.5;
-                margin-bottom: 0;
-                padding: 1rem;
-                .h5 {
-                    margin-bottom: 10px;
-                    font-weight: 500;
-                    font-size: 0.9rem;
-                    line-height: 1.5;
-                    color: $txt-body;
-                    display: flex;
-                    align-items: center;
-                }
-                span {
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    display: inline-block;
-                    max-width: 50%;
-                }
-                .tag {
-                    margin: 0 5px;
-                    border: solid 1px $success-color;
-                    border-radius: 40px;
-                    color: $success-color;
-                    padding: 2px 0.6rem;
-                    line-height: 1;
-                    font-size: 0.75rem;
-                    font-weight: 400;
-                    text-transform: uppercase;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 42%;
-                }
-                .phone-txt {
-                    font-weight: 500;
-                    margin-top: 8px;
-                }
+                color: $txt-body;
+                display: flex;
+                align-items: center;
+            }
+            span {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                display: inline-block;
+                max-width: 50%;
             }
 
-            &-actions {
-                border-top: $border;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                .btn-addresses {
-                    border: none;
-
-                    height: auto;
-                    width: 100%;
-                    display: block;
-                    color: $secondary-color;
-                }
+            .phone-txt {
+                font-weight: 500;
+                margin-top: 8px;
             }
         }
     }
+
+    .tag {
+        margin: 0 5px;
+        border: solid 1px $success-color;
+        border-radius: 40px;
+        color: $success-color;
+        padding: 2px 0.6rem;
+        line-height: 1;
+        font-size: 0.75rem;
+        font-weight: 400;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 42%;
+    }
 }
+
 .tags-addresses {
     position: static;
     .tags__inner {

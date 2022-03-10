@@ -73,6 +73,7 @@ $star-color: #ff3a59;
 //Bg brand
 @mixin bg-brand {
     background-color: $brand-color;
+    color: $brand-color-inverse;
     //color: lighten($brand-color, 55%);
 }
 //Push auto

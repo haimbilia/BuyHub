@@ -1,6 +1,6 @@
 <?php
 switch (strtoupper($stats_type)) {
-    case 'TOP_COUNTRIES': die('dsds');
+    case 'TOP_COUNTRIES': 
         if (null != $stats_info && array_key_exists('rows', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
             echo '<ul class="list-stats list-stats-double">';
             foreach ($stats_info['rows'] as $key => $val) {
