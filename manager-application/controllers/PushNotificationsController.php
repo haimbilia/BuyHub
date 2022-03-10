@@ -460,7 +460,7 @@ class PushNotificationsController extends ListingBaseController
     {
         $frm = new Form('PushNotificationUserForm', array('id' => 'PushNotificationUserForm'));
         $frm->addHiddenField('', 'pnotification_id');
-        $frm->addTextBox(Labels::getLabel('FRM_SELECT_USER', $this->siteLangId), 'users', '', ['placeholder' => Labels::getLabel('FRM_Search...', $this->siteLangId)]);
+        $frm->addTextBox(Labels::getLabel('FRM_SELECT_USER', $this->siteLangId), 'users', '', ['placeholder' => Labels::getLabel('FRM_TYPE_TO_SEARCH', $this->siteLangId)]);
         return $frm;
     }
 

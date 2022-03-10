@@ -192,7 +192,6 @@ $(document).ready(function () {
             tagify = new Tagify(element, {
                 whitelist: [],
                 dropdown: {
-                    closeOnSelect: false,
                     position: 'text',
                     enabled: 1 // show suggestions dropdown after 1 typed character
                 },

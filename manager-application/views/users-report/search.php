@@ -17,7 +17,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'name':
-                $td->appendElement('plaintext', $tdAttr, $row['name'] . '<br/>(' . $row['email'] . ')', true);
+                $name = $row['name'] . (!empty($row['email']) ? '<br/>(' . $row['email'] . ')' : '');
+                $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
             case 'user_regdate':
                 $date = HtmlHelper::formatDateTime(
