@@ -1,12 +1,10 @@
 .shop-fold {
     position: relative;
-    border-bottom: solid 4px $brand-color;
-    @include media-breakpoint-down(md) {
-        border: none;
-    }
-    .container {
-        position: relative;
-    }
+}
+
+.shop-bar {
+    background-color: $bg-gray;
+    border-bottom: $border;
 }
 
 .shop-banner {
@@ -23,7 +21,6 @@
         //opacity: 0.2;
     }
 }
-
 .bg-shop-info {
     //background: $brand-color;
     background-image: linear-gradient($brand-color, $brand-color);
@@ -37,50 +34,29 @@
 
 .shop-info-wrap {
     display: flex;
-    align-items: flex-end;
-    position: absolute;
-    left: 1rem;
-    right: 1rem;
-    bottom: 2rem;
-    z-index: 0;
-    @include media-breakpoint-down(md) {
-        top: -30px;
-        left: 0;
-        right: 0;
-        display: block;
-        position: relative;
-        flex-direction: column;
-    }
+    flex-direction: column;
 }
 
 .shop-information {
-    text-align: center;
-    width: 100%;
-    max-width: 300px;
-    background: $bg-white;
-    padding: 1rem;
-    border-radius: 4px;
-    //border-radius: 4px 4px 0 0;
-    //box-shadow: 0px -18px 40px -7px #DDDDDD;
-    box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
-    //border: $border;
+    padding: 3rem 0;
     display: flex;
     align-items: center;
-    flex-direction: column;
-    // position: absolute;
-    // bottom: 0;
-    // #{$start-direction}: 0;
+    flex-direction: row;
     @include media-breakpoint-down(md) {
-        flex-direction: column;
-        padding: 1rem;
-        align-items: center;
-        border: none;
-        max-width: inherit;
     }
-    .shop-logo {
-        width: 200px;
-        margin: 0 auto;
-        margin-bottom: 1rem;
+    &-start {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
+    &-end {
+        margin-#{$start-direction}: auto;
+    }
+    &-logo {
+        border: $border-black;
+        width: 155px;
+        margin: 0;
+        background-color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -90,208 +66,122 @@
         }
         img {
             padding: 10px;
-            background: #fff;
             &[data-ratio="1:1"] {
                 max-width: 150px;
                 border-radius: 50%;
             }
         }
     }
-    .shop-info {
-        padding: 0;
-        text-align: center;
+    &-detail {
+        padding-#{$start-direction}: 3rem;
         display: flex;
         flex-direction: column;
-        @include media-breakpoint-down(md) {
-            flex-direction: column;
-            align-items: center;
-        }
-        .shop-title {
+        .title {
             margin-bottom: 1rem;
-            span {
-                margin-top: 5px;
+            .blk-txt {
                 display: block;
                 font-size: 0.775rem;
                 color: $txt-gray;
             }
-            .products__rating {
-                margin: 0;
-                padding: 0;
-            }
-        }
-        .shop-btn-group {
-            margin: 0 10px;
         }
     }
-    .shop-info {
-        .products__rating {
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-    }
-    .shop-btn-group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        a.btn {
-            background: #9b9a9a;
-            &:hover {
-                background: $brand-color;
-                color: $brand-color-inverse;
-            }
-        }
-    }
-}
-
-.shop-nav {
-    background: #fff;
-    flex: 1;
-    margin-#{$start-direction}: 4rem;
-    @include media-breakpoint-down(md) {
+    .product-ratings {
         margin: 0;
-    }
-    ul {
-        border: $border;
-        display: flex;
-        @include media-breakpoint-down(md) {
-            padding: 1rem 0;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            justify-content: flex-start;
-        }
-        li {
-            flex: 1;
-            text-align: center;
-
-            &:last-child {
-                a {
-                    border-#{$end-direction}: none;
-                }
-            }
-            a {
-                border-#{$end-direction}: $border;
-                color: $txt-gray;
-                font-size: 0.85rem;
-                padding: 0.8rem 1rem;
-                margin: 0;
-                display: block;
-                font-weight: 500;
-                position: relative;
-
-                @include media-breakpoint-down(md) {
-                    white-space: nowrap;
-                }
-                &:hover {
-                    background: $brand-color;
-                    color: $brand-color-inverse;
-                }
-            }
-            &.is--active {
-                a {
-                    background: $brand-color;
-                    color: $brand-color-inverse;
-                }
-            }
-        }
-    }
-}
-
-.shop-btn-group {
-    max-width: 350px;
-    a.btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 42px;
-        height: 42px;
-        border-radius: $radius-common;
-        margin: 2px;
         padding: 0;
-        min-width: 1%;
-        background-color: #fff !important;
-        color: $txt-gray;
-        .icn {
-            svg {
-                width: 18px;
-                height: 18px;
-            }
-        }
-        &.is-active {
-            background: $brand-color !important;
-            color: $brand-color-inverse !important;
-            border-color: $brand-color !important;
-        }
-        &:hover {
-            background: $brand-color !important;
-            color: $brand-color-inverse !important;
-            border-color: $brand-color !important;
-        }
-    }
-    .share-icon {
-        .icn {
-            svg {
-                margin: -2px auto 0;
-                width: 16px;
-                height: 16px;
-                fill: $brand-color;
-            }
-        }
     }
 }
 
 .contact-social {
+    margin-top: 2rem;
     display: block;
     color: $txt-gray;
-    margin-top: 2rem;
-    h5 {
-        font-weight: 500;
-        font-size: 1rem;
-    }
-    ul {
+    display: flex;
+    grid-gap: 0.5rem;
+    position: relative;
+    &-item {
         display: inline-block;
+    }
+    &-link {
+        background-color: #fff;
+        border: $border;
+        border-radius: 2px;
+        color: $brand-color;
+        font-size: 1rem;
         position: relative;
-        left: -9px;
-        li {
-            display: inline-block;
-            margin-right: 5px;
-            &:last-child {
-                margin-right: 0;
+        height: 2.5rem;
+        width: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+        display: block;
+        transition: all 0.4s ease;
+        overflow: hidden;
+
+        &:hover {
+            .icon-1 {
+                top: -15px;
             }
-            a {
-                color: $brand-color;
-                font-size: 17px;
-                position: relative;
-                height: 30px;
-                width: 30px;
-                line-height: 30px;
-                text-align: center;
-                display: block;
-                transition: all 0.4s ease;
-                overflow: hidden;
-                span {
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    margin-left: -15px;
-                    margin-top: -15px;
-                    height: 30px;
-                    width: 30px;
-                    line-height: 30px;
-                    display: block;
-                    transition: all 0.3s ease;
-                }
-                &:hover {
-                    .icon-1 {
-                        top: -15px;
-                    }
-                    .icon-2 {
-                        top: 15px;
-                    }
-                }
-                .icon-2 {
-                    top: 50px;
-                }
+            .icon-2 {
+                top: 15px;
             }
+        }
+        .icon-2 {
+            top: 50px;
+        }
+    }
+}
+.shop-info {
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    @include media-breakpoint-down(md) {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.shop-info {
+    .products__rating {
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+}
+
+.shop-nav {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 2rem;
+    @include media-breakpoint-down(md) {
+        padding: 1rem 0;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+    &-item {
+    }
+    &-link {
+        color: $txt-body;
+        font-size: 0.85rem;
+        padding: 0.8rem 0;
+        margin: 0;
+        display: block;
+        font-weight: 600;
+        position: relative;
+        white-space: nowrap;
+        text-rendering: optimizeLegibility;
+        transition: color 0.3s ease-in-out;
+        background-image: linear-gradient(currentColor, currentColor);
+        background-position: 50% 100%;
+        background-repeat: no-repeat;
+        background-size: 0% 2px;
+        background-color: transparent;
+        transition: background-size 0.3s;
+        text-decoration: none;
+
+        &:hover,
+        &.active {
+            color: $brand-color;
+            text-decoration: none;
+            background-size: 100% 2px;
         }
     }
 }

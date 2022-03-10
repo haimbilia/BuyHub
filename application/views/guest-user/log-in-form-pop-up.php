@@ -151,10 +151,10 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                         <ul>
                             <?php foreach ($socialLoginApis as $plugin) { ?>
                                 <li>
-                                    <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn--social btn--<?php echo $plugin['plugin_code']; ?>">
-                                        <i class="icn">
-                                            <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
-                                        </i>
+                                    <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
+
+                                        <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+
                                     </a>
                                 </li>
                             <?php } ?>
