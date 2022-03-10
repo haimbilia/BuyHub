@@ -429,8 +429,8 @@ $(document).on("change", ".state", function () {
     returnAddressForm = function () {
         if (1 > $(mtabId).data('shop_id')) {
             return;
-        }
-        fcom.displayProcessing();
+        }        
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
@@ -449,7 +449,7 @@ $(document).on("change", ".state", function () {
     };
 
     returnAddressLangForm = function (langId, autoFillLangData = 0) {
-        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $.ykmodal(t);

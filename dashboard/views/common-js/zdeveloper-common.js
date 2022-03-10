@@ -10,7 +10,7 @@ $(window).on("load", function () {
     ) {
         var scrollPosition = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100);
         $('#scrollElement-js').animate({ scrollTop: scrollPosition }, 1000);
-    }
+    }   
 });
 
 $(window).scroll(function () {
@@ -78,6 +78,19 @@ installJsColor = function () {
     }
 };
 installJsColor();
+
+bindMaxLengthValidator = function () {
+    $('[maxlength]').maxlength({
+        alwaysShow: true,
+        threshold: 10,
+        warningClass: "badge badge-info",
+        limitReachedClass: "badge badge-warning",
+        placement: 'top',
+        message: langLbl.maxLengthValidator
+    });
+}
+
+bindMaxLengthValidator();
 /* unlinkSlick = function () {
     $(".js-widget-scroll").slick("unslick");
 };
@@ -1142,6 +1155,9 @@ $(document).ajaxComplete(function () {
         }
     });
     installJsColor();
+
+    /* Bind Max Length validator. */
+    bindMaxLengthValidator();
 });
 $(document).ready(function () {
     $("body")
