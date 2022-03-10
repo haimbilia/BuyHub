@@ -51,7 +51,7 @@ trait BadgeRequestSetup
         }
 
         if (0 < $badgeReqId) {
-            $frm->addHiddenField('', 'breq_record_type', );
+            $frm->addHiddenField('', 'breq_record_type',);
         } else {
             $frm->addSelectBox(Labels::getLabel('FRM_RECORD_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
         }
@@ -139,7 +139,7 @@ trait BadgeRequestSetup
             if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType)) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_REQUEST_FOR_THIS_BADGE_ALREADY_APPROVED/_PENDING', $this->siteLangId));
             }
-            
+
             $data = [
                 'blinkcond_badge_id' => $badgeId,
                 'blinkcond_record_type' => $recordType,
@@ -222,7 +222,8 @@ trait BadgeRequestSetup
             $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
-
+        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
+        $this->set('approvalRequiredBadges', $approvalRequiredBadges);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
         $this->set('badgeId', $badgeId);

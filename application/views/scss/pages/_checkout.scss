@@ -107,7 +107,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1.8rem;
     }
     &_title {
         font-size: 1.5rem;
@@ -119,13 +119,12 @@
         flex: 1;
     }
     &_foot {
+        border-top: $border;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 1.5rem;
-        .step__footer__continue-btn {
-            order: 2;
-        }
+        margin-top: 3rem;
+        padding-top: 3rem;
     }
 }
 
@@ -621,12 +620,16 @@
 
 .list-shippings {
     margin-bottom: 1.5rem;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    & + & {
+        margin-top: 3.5rem;
+    }
     .shipping-select {
         position: relative;
         font-size: 0.85rem;
         border: none;
         padding: 0;
+        //padding-top: 1.5rem;
         //align-items: center;
         display: flex;
         justify-content: space-between;
@@ -886,5 +889,8 @@
         font-size: 1.5rem;
     }
     &-body {
+    }
+    .block-cart-detail-top {
+        margin-bottom: 0;
     }
 }

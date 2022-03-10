@@ -559,6 +559,7 @@ Updates/Fixes :
     => 062857 - Admin UI: Getting multiple issues on the product's tag page
     => 062790 - Admin UI: "Fetch Shipping Rates" functionality is not working and its UI design is also not aligned
     => 062962 - Seller UI: "Ctrl+F" is opening the browser search even if this option is unselected and the drop-down listing is not aligned while switching between the user-type
+    => 062991 - Seller UI: Drop-down is not showing for the "Select Badge" field while sending the badges' request.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

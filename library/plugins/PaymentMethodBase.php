@@ -92,7 +92,7 @@ class PaymentMethodBase extends PluginBase
             return false;
         }
         $this->userInfoColumns = array_merge($this->commonColumns, $this->sellerInfoColumns);
-        $srch = User::getSearchObject();
+        $srch = User::getSearchObject(true);
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sh.shop_user_id', 'sh');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sh.shop_id = sh_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->langId, 'sh_l');
         $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_country_id = c.country_id', 'c');
@@ -100,12 +100,17 @@ class PaymentMethodBase extends PluginBase
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'sh.shop_state_id = s.state_id', 's');
         $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND statelang_lang_id = ' . $this->langId, 's_l');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
+        $srch->addCondition('credential_verified', '=', applicationConstants::ACTIVE);
         $srch->addMultipleFields($this->userInfoColumns);
         $srch->addCondition('user_id', '=', $this->userId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $this->formatUserData((array) FatApp::getDb()->fetch($rs));
+        $data = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($data)) {
+            $this->error = Labels::getLabel('ERR_INVALID_USER', $this->langId);
+            return false;
+        }
+        $this->formatUserData($data);
         return true;
     }
     

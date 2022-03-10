@@ -50,10 +50,18 @@ if (null != $fld) {
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_REQUEST_TO_BIND_BADGE', $siteLangId) ?></h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $frm->getFormHtml(); ?>
-    </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+    <?php if (!empty($approvalRequiredBadges)) { ?>
+        <div class="form-edit-body loaderContainerJs">
+
+            <?php echo $frm->getFormHtml(); ?>
+
+        </div>
+        <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+    <?php } else { ?>
+        <div class="form-edit-body loaderContainerJs">
+            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_NO_BADGE_FOUND_TO_BIND', $siteLangId)); ?>
+        </div>
+    <?php }  ?>
 </div>
 <script>
     var RECORD_TYPE_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_PRODUCT; ?>;
