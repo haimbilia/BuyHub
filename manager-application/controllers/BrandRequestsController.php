@@ -452,7 +452,7 @@ class BrandRequestsController extends ListingBaseController
 
     private function getFormColumns(): array
     {
-        $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopsTblHeadingCols = CacheHelper::get('brandRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols, true);
         }
@@ -464,7 +464,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('shopsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('brandRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
