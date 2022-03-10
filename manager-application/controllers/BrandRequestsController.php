@@ -37,6 +37,7 @@ class BrandRequestsController extends ListingBaseController
         ]);
         
         $this->getListingData();
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BRAND_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

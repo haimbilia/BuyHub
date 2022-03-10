@@ -50,7 +50,7 @@ class OrderStatusController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_STATUS_NAME', $this->siteLangId));
         $this->getListingData();
         $this->setCustomColumnWidth();
         $this->set('autoTableColumWidth', false);
