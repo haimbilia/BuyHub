@@ -1,7 +1,9 @@
 .offcanvas {
     &-side-cart {
-        .offcanvas-foot {
-            padding: 1rem;
+        // width: 500px;
+
+        .cart-summary {
+            margin-bottom: 2rem;
         }
     }
 }

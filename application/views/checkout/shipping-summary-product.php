@@ -102,11 +102,13 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
             <div class="block-cart-detail-bottom">
                 <ul class="cart-action">
                     <li class="cart-action-item">
-                        <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                        <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
                             <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
                         </button>
                     </li>
                 </ul>
+
+
 
             </div>
         </div>

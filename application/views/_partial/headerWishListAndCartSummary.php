@@ -10,7 +10,8 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
             </svg>
         </i>
-        <span class="cart-qty"><?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
+        <span class="cart-qty">
+            <?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
         <span class="txt">
             <?php echo Labels::getLabel("LBL_My_Bag", $siteLangId); ?>
 
@@ -23,7 +24,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
     <div class="offcanvas offcanvas-side-cart offcanvas-end" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">
-                <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)
+                <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?> <span class="count-items"> (<?php echo $totalCartItems; ?>) </span>
             </h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
@@ -42,9 +43,9 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
                         ?>
 
-                                <li class="list-cart-item <?php echo (!$product['in_stock']) ? 'disabled' : '';
-                                                            echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
-                                    <div class="block-img block-img-sm">
+                                <li class="list-cart-item block-cart block-cart-sm <?php echo (!$product['in_stock']) ? 'disabled' : '';
+                                                                                    echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
+                                    <div class="block-cart-img ">
                                         <div class="products-img">
                                             <a href="<?php echo $productUrl; ?>">
                                                 <?php
@@ -59,18 +60,23 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                                 ?>
                                             </a>
                                         </div>
-                                        <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                            <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                                        </button>
                                     </div>
-                                    <div class="block-detail">
-                                        <div class="block-detail-top">
+                                    <div class="block-cart-detail">
+                                        <div class="block-cart-detail-top">
                                             <div class="product-profile">
                                                 <div class="product-profile-data">
                                                     <div class="category">
                                                         <a href="<?php echo $shopUrl; ?>"><?php echo $product['shop_name']; ?> </a>
                                                     </div>
                                                     <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                    <div class="products-price">
+                                                        <span class="products-price-new">
+                                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                                        </span>
+                                                        <?php if ($product['special_price_found']) { ?>
+                                                            <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                                        <?php } ?>
+                                                    </div>
                                                     <div class="options">
                                                         <?php
                                                         if (isset($product['options']) && count($product['options'])) {
@@ -86,22 +92,19 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                                         | <?php echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
                                                         <?php echo $product['quantity']; ?> </div>
 
-                                                    <div class="products-price">
-                                                        <span class="products-price-new">
-                                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                                        </span>
-                                                        <?php if ($product['special_price_found']) { ?>
-                                                            <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
-                                                        <?php } ?>
-                                                    </div>
+
                                                 </div>
-
-
-
                                             </div>
-
                                         </div>
-
+                                        <div class="block-cart-detail-bottom">
+                                            <ul class="cart-action">
+                                                <li class="cart-action-item">
+                                                    <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </li>
                         <?php
@@ -113,7 +116,6 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                 </div>
             </div>
             <div class="offcanvas-foot">
-
                 <ul class="cart-summary">
                     <li class="cart-summary-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
@@ -140,7 +142,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
             </div>
         <?php } else { ?>
-            <div class="block--empty m-auto text-center"> <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
+            <div class="block-empty m-auto text-center"> <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
                 <h4><?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h4>
             </div>
         <?php } ?>
