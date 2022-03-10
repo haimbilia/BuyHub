@@ -554,6 +554,7 @@ Updates/Fixes :
     => 062994 - unable to set shipment method incase of shipping plugin
     => 062601 - Admin UI: Page's design is not aligned while clicking on the '+' icon in the blog post categories page, processing and successful messages shows simultaneously and placeholder label is also missing for the whole blog section
     => 062592 - Admin UI: Double products are selected while binding the products with the discount coupons and UI is also not aligned
+    => 062595 - Admin UI: Approval's sorting is not working on the badges page and getting multiple Ui issues on the same page
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
