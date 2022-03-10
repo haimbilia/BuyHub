@@ -132,7 +132,7 @@ class StripeConnectController extends PaymentMethodBaseController
 
         $frm = $this->getRequiredFieldsForm($businessType);
         if (false === $frm) {
-            FatUtility::dieJsonSuccess($this->msg);
+            FatUtility::dieJsonError($this->msg);
         }
 
         $initialFieldsValue = $this->stripeConnect->initialFieldsValue();
@@ -283,7 +283,12 @@ class StripeConnectController extends PaymentMethodBaseController
 
         $userId = UserAuthentication::getLoggedUserId(true);
         $userObj = new User($userId);
-        $userEmail = current($userObj->getUserInfo('credential_email'));
+        $userData = $userObj->getUserInfo('credential_email');
+        if (empty($userData)) {
+            $this->msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
+            return false;
+        }
+        $userEmail = current($userData);
 
         $frm = new Form('frm' . self::KEY_NAME);
         $stateFldClass = '';
