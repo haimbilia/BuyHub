@@ -150,6 +150,7 @@ function getVariantUiTr($langId, $i, $productOption = [])
         }
     }
     $tagData = json_encode($tagData);
+    $tagifyPlaceholder = Labels::getLabel('FRM_TYPE_TO_SEARCH');
 
     return <<<HTML
     <tr class="rowJs">
@@ -158,7 +159,7 @@ function getVariantUiTr($langId, $i, $productOption = [])
             </select>
         </td>
         <td >
-            <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
+            <input class="form-tagify optionValuesJs" placeholder="$tagifyPlaceholder" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
         </td>
         <td class="align-right" >
             <ul class="actions">

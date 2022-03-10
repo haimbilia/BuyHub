@@ -351,7 +351,6 @@
             whitelist: value,
             delimiters: "#",
             dropdown: {
-                closeOnSelect: false,
                 enabled: 0,
                 classname: "tags-look",
             },

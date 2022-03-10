@@ -86,7 +86,7 @@
                                         case 'items':
                                             $data = $linksTypeData[$linkType];
 
-                                            $td->appendElement('plaintext', [], "<input class='form-control tagifyJs' data-link-type='" . $linkType . "' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData) . "'>", true);
+                                            $td->appendElement('plaintext', [], "<input class='form-control tagifyJs' data-link-type='" . $linkType . "' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH', $siteLangId)."' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData) . "'>", true);
                                             break;
                                         default:
                                             $td->appendElement('plaintext', [], $label, true);
