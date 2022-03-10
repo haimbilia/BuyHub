@@ -41,6 +41,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                 'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                 'id' => $shippingcharge['id'],
                                 'carrier_code' => $shippingcharge['carrier_code'],
+                                'service_code' => $key,
                             ];
                         }
                     }
@@ -82,6 +83,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                     'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
+                                    'service_code' => $key,
                                 ];
                             }
                         }
@@ -121,6 +123,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                     'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
+                                    'service_code' => $key,
                                 ];
                             }
                         }

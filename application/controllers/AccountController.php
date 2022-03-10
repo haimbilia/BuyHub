@@ -1,5 +1,4 @@
 <?php
-
 class AccountController extends LoggedUserController
 {
     public function __construct($action)

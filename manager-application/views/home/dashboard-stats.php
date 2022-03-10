@@ -99,7 +99,7 @@ switch (strtoupper($stats_type)) {
                 echo '<li class="list-stats-item">
                     <span class="label">' . $keyword . '</span>
                     <span class="value">
-                        <i class="icn fas ' . $cls . '"></i>' . $row['search_count'] . '%</span>
+                        <i class="icn fas ' . $cls . '"></i>' . $row['search_count'] . '</span>
                 </li>';
             }
             echo '</ul>';

@@ -98,7 +98,6 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-stats list-stats-double">
-
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
                                 <span class="value">
