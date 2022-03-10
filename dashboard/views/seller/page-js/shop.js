@@ -939,7 +939,7 @@ function bindAutoComplete() {
             processResults: function (data, params) {
                 params.page = params.page || 1;
                 return {
-                    results: data.products.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
+                    results: data.results.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
                     pagination: {
                         more: params.page < data.pageCount
                     }
