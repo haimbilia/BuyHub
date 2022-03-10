@@ -550,9 +550,11 @@ Updates/Fixes :
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section.
     => 062970 - Seller UI: Delete media functionality is not working while adding the product.
     => 061671 - Admin UI: Upload image option is not showing and getting a UI issue while selecting a Date while adding and editing the discount coupons
+    => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
+    => 062994 - unable to set shipment method incase of shipping plugin
     => 062601 - Admin UI: Page's design is not aligned while clicking on the '+' icon in the blog post categories page, processing and successful messages shows simultaneously and placeholder label is also missing for the whole blog section
     => 062592 - Admin UI: Double products are selected while binding the products with the discount coupons and UI is also not aligned
-    
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
