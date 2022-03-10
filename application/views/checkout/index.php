@@ -11,18 +11,143 @@
                 <div class="cart-total summary-listing-js">
                     <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
                 </div>
-                <div class="secure">
+                <div class="secure m-4">
                     <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
                     <p> <?php echo Labels::getLabel('LBL_Safe_and_Secure_Payments_Easy_returns_100%_Authentic_products', $siteLangId); ?>
                     </p>
                 </div>
                 <div class="review-total">
                     <div class="review-total-head">
-                        <h3 class="review-total-title">
+                        <h3 class="review-total-title dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#review-cart" aria-haspopup="true" aria-expanded="false" aria-controls="review-cart">
                             <?php echo Labels::getLabel('LBL_Review_Cart', $siteLangId); ?>
-                            <span> 4 Items</span>
+                            <span class="count-items"> 4 Items</span><i class="dropdown-toggle-custom-arrow"></i>
                         </h3>
                     </div>
+                    <div class="review-total-body collapse" id="review-cart">
+                        <ul class="list-cart">
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
 
             </aside>

@@ -12,9 +12,10 @@
         }
         &:last-child {
             border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
         }
         &.list-saved-later {
-            align-items: center;
             @include media-breakpoint-down(md) {
                 flex-direction: row;
             }
@@ -184,4 +185,9 @@
             fill: $brand-color;
         }
     }
+}
+
+.count-items {
+    color: $txt-gray;
+    font-size: 0.8rem;
 }

@@ -440,6 +440,7 @@ a:hover {
     }
 }
 .dropdown-toggle-custom {
+    cursor: pointer;
     border: none;
     position: relative;
     padding-#{$end-direction}: 2rem;
