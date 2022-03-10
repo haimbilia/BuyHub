@@ -442,11 +442,12 @@ a:hover {
 .dropdown-toggle-custom {
     border: none;
     position: relative;
+    padding-#{$end-direction}: 2rem;
     &-arrow {
         position: absolute;
         transform: translate(-6px, 0);
         top: calc(50% - 4px);
-        #{$end-direction}: 25px;
+        #{$end-direction}: 0;
         &:after,
         &:before {
             content: "";
@@ -493,11 +494,12 @@ a:hover {
     flex-wrap: nowrap;
     .btn {
         background-color: #fff;
-        border: solid 1px $black;
+        border: $border-black;
         padding: 0;
         width: 42px;
         height: 42px;
         display: block;
+        border-radius: 0;
         &-prev span {
             display: inline-block;
             border-right: 1px solid black;

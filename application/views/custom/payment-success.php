@@ -220,8 +220,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                     $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
                                                                 }
                                                         ?>
-                                                                <li class="list-cart-item">
-                                                                    <div class="block-img">
+                                                                <li class="list-cart-item block-cart">
+                                                                    <div class="block-cart-img">
                                                                         <div class="product-profile">
                                                                             <div class="product-profile-thumbnail">
                                                                                 <a href="<?php echo $productUrl; ?>">
@@ -231,21 +231,20 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                             </div>
                                                                             <div class="product-profile-data">
                                                                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                                                                <div class="products-price">
+                                                                                    <?php
+                                                                                    $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
+                                                                                    echo CommonHelper::displayMoneyFormat($txnAmount);
+                                                                                    $shippingCharges += $product['op_actual_shipping_charges'];
+                                                                                    ?>
+                                                                                </div>
                                                                                 <div class="options">
                                                                                     <p class=""> <?php echo $product['op_selprod_options']; ?></p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="block-detail">
-                                                                        <div class="products-price">
-                                                                            <?php
-                                                                            $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
-                                                                            echo CommonHelper::displayMoneyFormat($txnAmount);
-                                                                            $shippingCharges += $product['op_actual_shipping_charges'];
-                                                                            ?>
-                                                                        </div>
-                                                                    </div>
+
                                                                 </li>
                                                             <?php }
                                                         } else {

@@ -45,7 +45,7 @@ if ($relatedProductsRs) { ?>
                     <div class="products-foot">
                         <?php /* if(round($rProduct['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
                 <div class="product-ratings">
-                    <i class="icn"><svg class="svg">
+                    <i class="icn"><svg class="svg" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
                                ></use>
                         </svg></i> <span class="rate"><?php echo round($rProduct['prod_rating'],1);?></span>

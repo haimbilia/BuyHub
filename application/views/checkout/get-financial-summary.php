@@ -107,7 +107,7 @@
             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
         ?>
-            <li class="list-cart-item">
+            <li class="list-cart-item block-cart">
                 <div class="block-img block-img-sm">
                     <div class="products-img">
                         <a href="<?php echo $productUrl; ?>">
@@ -126,8 +126,8 @@
                         </a>
                     </div> <span class="product-qty"><?php echo $product['quantity']; ?></span>
                 </div>
-                <div class="block-detail">
-                    <div class="block-detail-top">
+                <div class="block-cart-detail">
+                    <div class="block-cart-detail-top">
                         <div class="product-profile">
                             <div class="product-profile-data">
                                 <a class="title" href="<?php echo $productUrl; ?>" title="<?php echo $product['product_name'] ?>"><?php echo $product['selprod_title'] ?></a>
