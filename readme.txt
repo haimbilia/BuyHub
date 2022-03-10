@@ -555,7 +555,9 @@ Updates/Fixes :
     => 062601 - Admin UI: Page's design is not aligned while clicking on the '+' icon in the blog post categories page, processing and successful messages shows simultaneously and placeholder label is also missing for the whole blog section
     => 062592 - Admin UI: Double products are selected while binding the products with the discount coupons and UI is also not aligned
     => 062595 - Admin UI: Approval's sorting is not working on the badges page and getting multiple Ui issues on the same page
-
+    => 062955 - Seller UI: Error is not showing while seller trying to add the already deleted collection under the manage shop section
+    => 062857 - Admin UI: Getting multiple issues on the product's tag page
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
