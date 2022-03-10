@@ -35,6 +35,8 @@ class SellerRequestsController extends SellerBaseController
             $noRecordFound = true;
         }
 
+        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
+        $this->set('approvalRequiredBadges', $approvalRequiredBadges);
         $this->set('canRequestBadge', $this->userPrivilege->canEditBadgesAndRibbons(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));

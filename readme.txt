@@ -558,6 +558,7 @@ Updates/Fixes :
     => 062955 - Seller UI: Error is not showing while seller trying to add the already deleted collection under the manage shop section
     => 062857 - Admin UI: Getting multiple issues on the product's tag page
     => 062790 - Admin UI: "Fetch Shipping Rates" functionality is not working and its UI design is also not aligned
+    => 062991 - Seller UI: Drop-down is not showing for the "Select Badge" field while sending the badges' request.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
