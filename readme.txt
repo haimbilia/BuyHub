@@ -549,6 +549,7 @@ Updates/Fixes :
     => 062783 - Admin UI: "Invalid Order" error is showing while changing the order's status to shipped and using self-shipping(in case of shipping plugin is ON) under the Orders section
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section.
     => 062970 - Seller UI: Delete media functionality is not working while adding the product.
+    => 061671 - Admin UI: Upload image option is not showing and getting a UI issue while selecting a Date while adding and editing the discount coupons
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
