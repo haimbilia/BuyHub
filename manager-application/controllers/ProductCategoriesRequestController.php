@@ -41,6 +41,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             'newRecordBtn' => false
         ]);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME', $this->siteLangId));
         $this->_template->addCss(['css/cropper.css', 'css/select2.min.css']);
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'product-categories-request/page-js/index.js']);
         $this->getListingData();

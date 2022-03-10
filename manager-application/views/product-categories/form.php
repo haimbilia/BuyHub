@@ -123,7 +123,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 },
                 delimiters: "#",
                 editTags: false,
-                closeOnSelect: false,
             }).on('add', addRatingType).on('remove', removeRatingType).on('focus',
                 getRatingTypeAutoComplete);
         };

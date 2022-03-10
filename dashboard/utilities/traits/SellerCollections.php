@@ -289,6 +289,7 @@ trait SellerCollections
         $this->set('userId', $this->userParentId);
         $this->set('scollection_id', $scollection_id);
         $this->set('langId', $langId);
+        $this->set('languages', Language::getAllNames());
         $this->commonShopCollection();
         $this->_template->render(false, false);
     }
@@ -375,7 +376,7 @@ trait SellerCollections
         $this->set('collectionLinkFrm', $collectionLinkFrm);
         $this->set('scollection_id', $scollection_id);
         $this->set('products', $products);
-        $this->set('activeTab', 'LINKS');
+        $this->set('languages', Language::getAllNames()); 
         $this->_template->render(false, false);
     }
 
@@ -409,6 +410,12 @@ trait SellerCollections
             Message::addErrorMessage($shopColObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id);       
+        if (false == $attachment || 1 > $attachment['afile_id']) {
+            $this->set('openMediaForm', true);
+        } 
+        $this->set('scollection_id', $scollection_id);
         $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -417,7 +424,7 @@ trait SellerCollections
     {
         $collectionMediaFrm = $this->getShopCollectionMediaForm($scollection_id);
         $this->set('frm', $collectionMediaFrm);
-        $this->set('language', Language::getAllNames());
+        $this->set('languages', Language::getAllNames());
         $this->set('scollection_id', $scollection_id);
         $this->_template->render(false, false);
     }

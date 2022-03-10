@@ -35,7 +35,7 @@ $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getI
             <a class="nav-link active" href="javascript:void(0);" onclick="addForm(<?php echo $splatform_id; ?>);" title="<?php echo Labels::getLabel('LBL_General', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
             </a>           
-            <a class="nav-link" href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id ?>,<?php echo array_key_first($languages); ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
+            <a class="nav-link <?php echo (1 > $splatform_id ? " disabled" :"") ?> " href="javascript:void(0);" onclick="addLangForm(<?php echo $splatform_id ?>,<?php echo array_key_first($languages); ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
             <?php } ?>

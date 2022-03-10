@@ -75,7 +75,7 @@
             tagify = new Tagify(element, {
                 whitelist: [],
                 dropdown: {
-                    position: 'text',
+                    position: 'input',
                     classname: dir,
                     enabled: 0 // show suggestions dropdown after 1 typed character
                 }, hooks: {

@@ -300,14 +300,13 @@
             setTimeout(function () { window.location.reload(); }, 300);
         });
     };
-
-    shippingRatesForm = function (opId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
-            fcom.closeProcessing();
-            $.ykmodal(res, false);
+    
+    shippingRatesForm = function(opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
         });
-    }
+    };
 
     setUpShippingRate = function (frm) {
         if (!$(frm).validate()) {

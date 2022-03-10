@@ -50,7 +50,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_REASON_TITLE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render(true, true, '_partial/listing/index.php');

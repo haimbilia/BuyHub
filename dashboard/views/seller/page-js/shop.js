@@ -253,12 +253,7 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    getShopCollectionGeneralForm = function (scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
-        if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
-            scollection_id = 0;
-        }
-        showYkModalFooter();
+    getShopCollectionGeneralForm = function (scollection_id) { 
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -270,8 +265,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
-            fcom.removeLoader();
-            $(ctabId).data('collectionId', t.collection_id);
+            fcom.removeLoader();          
             shopCollections();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
@@ -298,34 +292,24 @@ $(document).on("change", ".state", function () {
     };
 
     editShopCollectionLangForm = function (scollection_id, langId, autoFillLangData = 0) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
-        if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
-            return false;
-        }
         if (typeof (langId) == "undefined" || langId < 0) {
             return false;
         }
-
-        markPopupTabActive();
-        showYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
         });
     };
 
     sellerCollectionProducts = function (scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
-        }
-        markPopupTabActive();
-        showYkModalFooter();
+        }       
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
             bindAutoComplete();
         });
     };
@@ -335,6 +319,9 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function (t) {
             fcom.removeLoader();
+            if("openMediaForm" in t){
+                collectionMediaForm(t.scollection_id);
+            }            
         });
     };
 
@@ -350,23 +337,19 @@ $(document).on("change", ".state", function () {
         });
     };
     addForm = function (splatformId) {
-
-        splatformId = splatformId || $(ctabId).data('splatformId');
+     
         if (splatformId < 0 || typeof (splatformId) == "undefined") {
             splatformId = 0;
-        }
-        markSubTabActive();
+        }    
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
     };
-
     setup = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
-            $(ctabId).data('splatformId', t.splatformId);
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {          
             fcom.removeLoader();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
@@ -375,16 +358,14 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    addLangForm = function (splatformId, langId, autoFillLangData = 0) {
-        splatformId = splatformId || $(ctabId).data('splatformId');
+    addLangForm = function (splatformId, langId, autoFillLangData = 0) {       
         if (splatformId < 0 || typeof (splatformId) == "undefined") {
             return false;
-        }
-        markSubTabActive();
+        }       
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -539,21 +520,15 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    collectionMediaForm = function (el, scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
+    collectionMediaForm = function (scollection_id) {      
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopupTabActive();
-        hideYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
-            $(el).parent().siblings().removeClass('is-active');
-            $(el).parent().addClass('is-active');
+            $.ykmodal(t);          
             shopCollectionImages(scollection_id);
-
         });
     };
 
@@ -939,7 +914,7 @@ function bindAutoComplete() {
             processResults: function (data, params) {
                 params.page = params.page || 1;
                 return {
-                    results: data.products.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
+                    results: data.results.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
                     pagination: {
                         more: params.page < data.pageCount
                     }

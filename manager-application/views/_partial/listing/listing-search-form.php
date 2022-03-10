@@ -77,6 +77,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             <?php if (null != $keyWordFld) {
                                 $fld = $frmSearch->getField('keyword');
                                 $fld->setFieldtagAttribute('autocomplete', 'off');
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
@@ -90,6 +91,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 if (!$fld->getFieldtagAttribute('placeholder')) {
                                     $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                                 }
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                                 echo $frmSearch->getFieldHtml($firstElement['name']);
                             }
                             ?>
@@ -103,6 +105,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         <?php if (null != $keyWordFld) {
                             $fld = $frmSearch->getField('keyword');
                             $fld->setFieldtagAttribute('autocomplete', 'off');
+                            $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
@@ -115,6 +118,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             if (!$fld->getFieldtagAttribute('placeholder')) {
                                 $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                             }
+                            $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                             echo $frmSearch->getFieldHtml($firstElement['name']);
                         }
                         ?>
@@ -131,6 +135,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         if (!$fld->getFieldtagAttribute('placeholder')) {
                             $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                         }
+                        $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                         echo $frmSearch->getFieldHtml($flds['name']); ?>
                     </div>
                     <div class="col-md-3">
@@ -145,6 +150,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             <?php if (null != $keyWordFld) {
                                 $fld = $frmSearch->getField('keyword');
                                 $fld->setFieldtagAttribute('autocomplete', 'off');
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
@@ -157,6 +163,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 if (!$fld->getFieldtagAttribute('placeholder')) {
                                     $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                                 }
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
                                 echo $frmSearch->getFieldHtml($firstElement['name']);
                             }
                             ?>
