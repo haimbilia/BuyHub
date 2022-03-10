@@ -75,7 +75,7 @@ foreach ($sellers as $sellerDetail) {
 
                     <div class="product-ratings">
                         <i class="icn">
-                            <svg class="svg">
+                            <svg class="svg" width="14" height="14">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                 </use>
                             </svg>

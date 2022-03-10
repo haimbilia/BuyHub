@@ -187,7 +187,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             </div>
                         </div>
                     </div>
-                    <div class="block-detail-bottom">
+                    <div class="block-cart-detail-bottom">
                         <ul class="cart-action">
                             <li class="cart-action-item">
                                 <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
@@ -287,7 +287,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </div>
                             </div>
                         </div>
-                        <div class="block-detail-bottom">
+                        <div class="block-cart-detail-bottom">
                             <ul class="cart-action">
                                 <li class="cart-action-item">
                                     <button class="btn btn-link" type="button" onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)">

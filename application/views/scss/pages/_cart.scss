@@ -428,10 +428,6 @@
         .products-img {
             margin-bottom: 0;
         }
-        &-sm {
-            flex: 0 0 60px;
-            max-width: 60px;
-        }
     }
 
     &-detail {
@@ -500,6 +496,20 @@
             font-size: 0.875rem;
             text-decoration: underline;
             color: $txt-body;
+        }
+    }
+
+    &-sm {
+        .block-cart-img {
+            flex: 0 0 100px;
+            max-width: 100px;
+        }
+        .block-cart-detail-top {
+            //margin: 0;
+        }
+        .block-cart-detail {
+            padding: 0;
+            padding-#{$start-direction}: 1.5rem;
         }
     }
 }
