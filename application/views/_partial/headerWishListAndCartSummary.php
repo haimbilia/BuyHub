@@ -113,26 +113,26 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                 </div>
             </div>
             <div class="offcanvas-foot">
-                <div class="cart-summary">
-                    <ul>
-                        <li>
-                            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
-                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+
+                <ul class="cart-summary">
+                    <li class="cart-summary-item">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+                    </li>
+                    <?php if (0 < $cartSummary['cartVolumeDiscount']) { ?>
+                        <li class="cart-summary-item">
+                            <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
+                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
                         </li>
-                        <?php if (0 < $cartSummary['cartVolumeDiscount']) { ?>
-                            <li>
-                                <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
-                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
-                            </li>
-                        <?php } ?>
-                        <?php ?>
-                        <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0); ?>
-                        <li class="highlighted">
-                            <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
-                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
-                        </li>
-                    </ul>
-                </div>
+                    <?php } ?>
+                    <?php ?>
+                    <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0); ?>
+                    <li class="cart-summary-item highlighted">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
+                    </li>
+                </ul>
+
                 <div class="buttons-group">
                     <a href="javascript:void(0);" onclick="cart.clear();" class="btn btn-outline-brand"><?php echo Labels::getLabel('LBL_CLEAR_CART', $siteLangId); ?> </a>
                     <a class="btn btn-brand" href="<?php echo UrlHelper::generateUrl('cart'); ?>"><?php echo Labels::getLabel('LBL_Proceed_To_Pay', $siteLangId); ?></a>

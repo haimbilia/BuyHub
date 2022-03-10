@@ -343,7 +343,7 @@ class BadgeLinkCondition extends MyAppModel
     public static function getRecordTypeHtml(int $langId, int $type): string
     {
         $arr = self::getRecordTypeArr($langId);
-        $msg = $arr[$type];
+        $msg = $arr[$type] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($type) {
             case self::RECORD_TYPE_SELLER_PRODUCT:
                 $status = 'info';

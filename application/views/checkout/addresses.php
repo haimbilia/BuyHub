@@ -31,7 +31,7 @@
                             ?>
                             <li class="list-addresses-item addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : '' ?>">
                                 <label class="addresses" for="s-<?php echo $address['addr_id']; ?>">
-                                    <span class="checkbox addresses-checkbox">
+                                    <span class="radio addresses-checkbox">
                                         <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?> name="shipping_address_id" value="<?php echo $address['addr_id']; ?>" type="radio" id="s-<?php echo $address['addr_id']; ?>">
                                     </span>
                                     <div class="addresses-detail">
@@ -54,19 +54,12 @@
                                     </div>
                                     <?php if (!commonhelper::isAppUser()) { ?>
                                         <div class="addresses-actions">
-                                            <button class="btn btn-icon btn-addresses" type="button" href="javascript:void(0)" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-                                                <i class="icn"><svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit">
-                                                        </use>
-                                                    </svg></i>
+                                            <button class="btn btn-icon btn-addresses" type="button" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
+
                                                 <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                                             </button>
                                             <button class="btn btn-icon btn-addresses" type="button" onclick="removeAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-                                                <i class="icn"> <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                                        </use>
-                                                    </svg>
-                                                </i>
+
                                                 <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
                                             </button>
                                         </div>
@@ -87,27 +80,25 @@
                         'stateId'    =>    $stateId,
                     ); ?>
                     <?php $this->includeTemplate('checkout/address-form.php', $tplDataArr, false);    ?>
-
                 </div>
-
             </div>
 
             <div class="step_foot">
                 <div class="checkout-actions">
                     <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-                        <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);" onclick="loadPaymentSummary();">
+                        <button class="btn btn-outline-brand btn-wide" onclick="loadPaymentSummary();">
                             <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                        </a>
+                        </button>
                     <?php } else { ?>
-                        <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);" onclick="goToBack();">
-
+                        <button class="btn btn-outline-brand btn-wide" onclick="goToBack();">
                             <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                        </a>
+                        </button>
                     <?php } ?>
                     <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-                        <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpBillingAddressSelection(this);" class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                        <button class="btn btn-brand btn-wide" id="btn-continue-js" onClick="setUpBillingAddressSelection(this);"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></button>
                     <?php } else { ?>
-                        <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpAddressSelection();" class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                        <button class="btn btn-brand btn-wide" id="btn-continue-js" onClick="setUpAddressSelection();">
+                            <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></button>
                     <?php } ?>
                 </div>
             </div>

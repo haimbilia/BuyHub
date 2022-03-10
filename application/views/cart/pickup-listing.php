@@ -92,7 +92,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <ul class="cart-action">
                                     <li>
                                         <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_PICKUP; ?> );">
-
                                             <?php echo Labels::getLabel('LBL_save_for_later', $siteLangId); ?>
                                         </button>
                                     </li>

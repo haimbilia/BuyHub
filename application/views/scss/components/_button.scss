@@ -39,10 +39,11 @@
 }
 
 $btn-padding: 0.6rem 0.75rem;
-$btn-height: auto;
+$btn-height: 3.625rem;
 $btn-border: solid 1px transparent;
-$btn-radius: 0;
-$btn-font-size: 1rem;
+$btn-radius: 3px;
+$btn-font-size: 0.85rem;
+$btn-font-weight: 500;
 $btn-line-height: 1.5;
 .btn {
     border: $btn-border;
@@ -50,12 +51,12 @@ $btn-line-height: 1.5;
     height: $btn-height;
     border-radius: $btn-radius;
     font-size: $btn-font-size;
+    font-weight: $btn-font-weight;
     line-height: $btn-line-height;
     &-brand {
-        background-color: var(--brand-color);
-        color: var(--brand-color-inverse);
+        @include bg-brand;
         &:hover {
-            color: var(--brand-color-inverse);
+            color: currentColor;
         }
     }
     &-outline-brand {
@@ -140,18 +141,18 @@ $btn-line-height: 1.5;
         //border-radius: 0.2rem;
     }
     &-arrow {
-        svg {
+        .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
-            fill: currentColor;
         }
     }
     &-link {
         text-decoration: none;
         color: $txt-body;
         padding: 0;
+        height: auto;
         .arrow {
             display: inline-block;
             transition: all 0.2s ease-in-out;
