@@ -625,14 +625,9 @@ $(document).on("change", ".state", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
-                var minHeight = document.frmShopLogo.logo_min_height.value;
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                var minHeight = document.frmShopLogo.logo_min_height.value;               
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
