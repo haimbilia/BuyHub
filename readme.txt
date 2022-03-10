@@ -553,6 +553,7 @@ Updates/Fixes :
     => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
     => 062994 - unable to set shipment method incase of shipping plugin
     => 062955 - Seller UI: Error is not showing while seller trying to add the already deleted collection under the manage shop section
+    => 062857 - Admin UI: Getting multiple issues on the product's tag page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
