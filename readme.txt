@@ -557,7 +557,8 @@ Updates/Fixes :
     => 062595 - Admin UI: Approval's sorting is not working on the badges page and getting multiple Ui issues on the same page
     => 062955 - Seller UI: Error is not showing while seller trying to add the already deleted collection under the manage shop section
     => 062857 - Admin UI: Getting multiple issues on the product's tag page
-    
+    => 062790 - Admin UI: "Fetch Shipping Rates" functionality is not working and its UI design is also not aligned
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
