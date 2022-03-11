@@ -258,6 +258,8 @@
     &-color {
         grid-gap: 1rem;
         .btn-option {
+            box-shadow: $shadow2;
+            display: block;
             width: 23px;
             min-width: 23px;
             height: 23px;

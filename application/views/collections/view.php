@@ -13,7 +13,6 @@
     <section class="section">
         <div class="container">
             <div id="listing"></div>
-            <span class="gap"></span>
             <div id="loadMoreBtnDiv"></div>
         </div>
     </section>
