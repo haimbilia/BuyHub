@@ -2,6 +2,8 @@
 <script type="text/javascript">
 	$(function() {
 		$("#sortable").sortable({
+			helper: fixWidthHelper,
+			start: fixPlaceholderStyle,
 			stop: function() {
 				var mysortarr = new Array();
 				$(this).find('li').each(function() {
