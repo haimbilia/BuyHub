@@ -565,6 +565,7 @@ Updates/Fixes :
     => 063006 - Seller UI: Fatal error is showing while clicking on the Badges and Ribbons options
     => 062987 - Seller UI: Records are not showing properly while Drag-drop it under the option's value section and "delete icon" is not showing while hovering on it
     => 062920 - Seller UI: Getting an error while submitting the "Seller Approval Form"
+    => 062989 - Seller UI: Not able to go to the language data and media section while adding the brands and uploaded media is also not showing in the table
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

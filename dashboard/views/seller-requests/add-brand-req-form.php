@@ -23,27 +23,13 @@ $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getI
 
 unset($languages[CommonHelper::getDefaultFormLangId()]);
 
+$generalTabActive = true;
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-head">
-        <nav class="nav nav-tabs navTabsJs">
-            <a class="nav-link active" href="javascript:void(0);" onclick="addBrandReqForm(<?php echo $brandReqId; ?>);">
-                <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
-            </a>
-            <?php if(0 < count($languages)){ ?>
-                <a class="nav-link <?php echo (0 == $brandReqId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $brandReqId) ? "onclick='addBrandReqLangForm(" . $brandReqId . "," . array_key_first($languages) . ");'" : ""; ?>>
-                    <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
-                </a>
-            <?php } ?>
-
-            <a class="nav-link <?php echo (0 == $brandReqId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php if ($brandReqId > 0) { ?> onclick="brandMediaForm(<?php echo $brandReqId ?>);" <?php } ?>>
-                <?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>
-            </a>
-        </nav>
-    </div>
+    <?php require_once(CONF_THEME_PATH . '/seller-requests/_partial/brand-request/top-nav.php'); ?>
     <div class="form-edit-body loaderContainerJs" id="brandReqFormJs">
         <?php echo $frmBrandReq->getFormHtml(); ?>
     </div>

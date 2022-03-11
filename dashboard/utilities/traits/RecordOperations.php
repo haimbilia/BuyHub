@@ -30,7 +30,7 @@ trait RecordOperations
                 FatUtility::dieWithError(Message::getHtml());
             }
         }  
-
+        
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
