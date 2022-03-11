@@ -3520,13 +3520,6 @@ class SellerController extends SellerBaseController
         //die(json_encode($json));
     }
 
-    /* private function isMediaUploaded($shopId){
-      if($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER , $shopId, 0 )){
-      return true;
-      }
-      return false;
-      } */
-
     private function getCatalogRequestMessageSearchForm()
     {
         $frm = new Form('frmCatalogRequestMsgsSrch');

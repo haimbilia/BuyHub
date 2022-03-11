@@ -75,6 +75,8 @@
 <script>
     $(document).ready(function() {
         $(".sortable--js tbody").sortable({
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             stop: function() {
                 var orderStr = '';
                 $(this).find('tr').each(function(index, value) {

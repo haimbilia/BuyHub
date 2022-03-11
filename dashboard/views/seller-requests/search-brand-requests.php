@@ -30,12 +30,22 @@
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'brand_name':
-                    $brandName = (!empty($row['brand_name'])) ? $row['brand_name'] : $row['brand_identifier'];
-                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $brandName . '" alt="' . $brandName . '"></figure>
-				<div class="product-profile__description">
-					<div class="product-profile__title">' . $brandName . '</div>
-					<div class="product-profile__sub_title"> (' . $row['brand_identifier'] . ') </div>
-				</div></div>';
+                    $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $row['brand_id'], 0, $siteLangId, (count($languages) > 1) ? false : true);
+                    $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+                    $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
+                    $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_MINI_THUMB, $aspectRatioType);
+                    $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
+                    $brandImage = '<img data-aspect-ratio = "' . $imageBrandDimensions[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" width="' . $imageBrandDimensions['width'] . '" height="' . $imageBrandDimensions['height'] . '" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
+
+                    $html = '<div class="product-profile">
+                                <figure class="product-profile__pic">
+                                    ' . $brandImage . '
+                                </figure>
+                                <div class="product-profile__description">
+                                    <div class="product-profile__title">' . $row['brand_name'] . '</div>
+                                    <div class="product-profile__sub_title"> (' . $row['brand_identifier'] . ') </div>
+                                </div>
+                            </div>';
                     $td->appendElement('plaintext', array(), $html, true);
                     break;
                 case 'brand_status':

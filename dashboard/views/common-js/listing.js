@@ -140,5 +140,18 @@ $(document).on("click", ".navTabsJs a", function (e) {
             } */
         });
     }
+
+    fixWidthHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    }
+    
+    fixPlaceholderStyle = function (e, ui) {
+        ui.placeholder.height(ui.item.height());
+        ui.placeholder.css("visibility", "visible");
+        ui.placeholder.css('background-color', '#f3f6f9');
+    }
 })();
 
