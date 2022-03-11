@@ -177,7 +177,7 @@ class DiscountCouponsReportController extends ListingBaseController
     {
         $discountReportsCacheVar = CacheHelper::get('discountReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($discountReportsCacheVar) {
-            return json_decode($discountReportsCacheVar);
+            return json_decode($discountReportsCacheVar, true);
         }
         $arr = [
             'coupon_code' => Labels::getLabel('LBL_COUPON_CODE', $this->siteLangId),

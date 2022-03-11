@@ -74,7 +74,7 @@
                         }
                     };
                     $(inputBtn).val('');
-                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 500);
                     return;
                 });
             }

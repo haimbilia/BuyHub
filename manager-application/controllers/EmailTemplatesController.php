@@ -436,7 +436,7 @@ class EmailTemplatesController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $emptyCartItemsTblHeadingCols = CacheHelper::get($this->pageKey.'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
             return json_decode($emptyCartItemsTblHeadingCols, true);
         }
@@ -448,7 +448,7 @@ class EmailTemplatesController extends ListingBaseController
             'etpl_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create($this->pageKey.'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

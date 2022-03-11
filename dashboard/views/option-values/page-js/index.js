@@ -85,6 +85,7 @@ $(document).ready(function () {
 		$('#optionValueListing').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			$("#optionValueListing").html(res);
+			fcom.removeLoader();
 		});
 	};
 

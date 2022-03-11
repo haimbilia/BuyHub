@@ -58,7 +58,11 @@
                     $li->appendElement(
                         'a',
                         array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Change_Password', $siteLangId), "onclick" => "userPasswordForm(" . $row['user_id'] . ")"),
-                        '<i class="fas fa-key"></i>',
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
+                            </use>
+                        </svg>',
                         true
                     );
 
@@ -67,26 +71,22 @@
                         'a',
                         array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addUserForm(" . $row['user_id'] . ")"),
                         '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>',
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>',
                         true
                     );
-
-                    /*$li = $ul->appendElement("li");
-                $li->appendElement(
-                    'a',
-                    array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "sellerUserDelete(" . $row['user_id'] . ")"),
-                    '<i class="fa fa-trash"></i>',
-                    true
-                );*/
 
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
                         array('href' => UrlHelper::generateUrl('Seller', 'UserPermissions', array($row['user_id'])), 'title' => Labels::getLabel('LBL_Permissions', $siteLangId)),
-                        '<i class="fa fa-lock"></i>',
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#user-permission">
+                            </use>
+                        </svg>',
                         true
                     );
 

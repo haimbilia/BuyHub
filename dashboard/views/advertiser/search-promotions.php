@@ -122,13 +122,6 @@ foreach ($arrListing as $sn => $row) {
                 </svg>',
                     true
                 );
-
-                /* $li = $ul->appendElement("li");
-                $li->appendElement('a', array(
-                    'href'=>"javascript:void(0)", 'class'=>'button small green',
-                    'title'=>Labels::getLabel('LBL_Delete',$siteLangId),"onclick"=>"deletepromotionRecord(".$row['promotion_id'].")"),
-                    '<i class="fa fa-trash"></i>', true); */
-
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

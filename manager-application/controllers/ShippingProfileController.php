@@ -334,7 +334,7 @@ class ShippingProfileController extends ListingBaseController
     {
         $shippingProfileCols = CacheHelper::get('shippingProfileTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shippingProfileCols) {
-            return json_decode($shippingProfileCols);
+            return json_decode($shippingProfileCols, true);
         }
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),

@@ -491,14 +491,9 @@
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                                
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
