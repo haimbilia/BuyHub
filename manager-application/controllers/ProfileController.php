@@ -135,6 +135,7 @@ class ProfileController extends ListingBaseController
             $this->set('file', UrlHelper::generateFullUrl('Account', 'userProfileImage', array($this->_adminId, ImageDimension::VIEW_CROPED, true)));
         }
 
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] = time();
 
         $this->set('msg', Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -150,6 +151,8 @@ class ProfileController extends ListingBaseController
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_ADMIN_PROFILE_CROPED_IMAGE, $this->_adminId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
+        
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] = time();
 
         $this->set('msg', Labels::getLabel('SUC_FILE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

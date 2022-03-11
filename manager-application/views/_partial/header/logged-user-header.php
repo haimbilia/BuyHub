@@ -106,7 +106,7 @@
                             <div class="header-action__item dropdown header-account">
                                 <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
+                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)). ( $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time() ), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
                                     </span>
                                 </a>
 
@@ -114,7 +114,7 @@
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>">
+                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)). ( $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                             </div>
                                             <div class="profile__detail">
                                                 <h6>
