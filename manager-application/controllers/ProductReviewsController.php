@@ -293,7 +293,7 @@ class ProductReviewsController extends ListingBaseController
      */
     protected function getFormColumns(): array
     {
-        $ContentPageTblHeadingCols = CacheHelper::get('ContentPageTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $ContentPageTblHeadingCols = CacheHelper::get($this->pageKey.'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ContentPageTblHeadingCols) {
             return json_decode($ContentPageTblHeadingCols, true);
         }
@@ -308,7 +308,7 @@ class ProductReviewsController extends ListingBaseController
             'spreview_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
         ];
-        CacheHelper::create('ContentPageTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create($this->pageKey.'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

@@ -356,9 +356,9 @@ class TaxCategoriesRuleController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($taxTblHeadingCols) {
-            return json_decode($taxTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('taxCatTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
@@ -369,7 +369,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             'taxstr_name' => Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('taxTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('taxCatTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

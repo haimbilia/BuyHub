@@ -430,9 +430,9 @@ class OrderCancellationRequestsController extends ListingBaseController
      */
     protected function getFormColumns(): array
     {
-        $withdrawalRequestsTblHeadingCols = CacheHelper::get('withdrawalRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($withdrawalRequestsTblHeadingCols) {
-            return json_decode($withdrawalRequestsTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('orderCancellationRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
@@ -445,7 +445,7 @@ class OrderCancellationRequestsController extends ListingBaseController
             'ocrequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
         ];
-        CacheHelper::create('withdrawalRequestsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('orderCancellationRequestsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
