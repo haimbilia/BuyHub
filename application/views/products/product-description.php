@@ -2,9 +2,7 @@
 
 <div class="product-description">
     <?php if (!empty($product['brand_name'])) { ?>
-
         <a class="brand-title" href="<?php echo UrlHelper::generateUrl('Brands', 'view', [$product['brand_id']]); ?>"><?php echo $product['brand_name']; ?></a>
-
     <?php } ?>
     <div class="products-title">
         <h1 class="h1"> <?php echo $product['selprod_title']; ?> </h1>
@@ -28,58 +26,26 @@
         ?>
         <!-- Shop and SelProd Badge  -->
     </div>
-    <div class="reviews-wrap">
-        <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-            <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
-            <div class="products-reviews">
-                <div class="product-ratings">
-                    <i class="icn">
-                        <svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                            </use>
-                        </svg>
-                    </i>
-                    <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-                </div>
-                <a href="#itemRatings" class="totals-review nav-scroll-js"><?php echo $label; ?></a>
-            </div>
-        <?php } ?>
-    </div>
+
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+        <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
+        <div class="product-ratings">
+            <svg class="svg" width="14" height="14">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                </use>
+            </svg>
+            <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
+            <button href="#itemRatings" class="totals-review nav-scroll-js"><?php echo $label; ?></button>
+        </div>
+    <?php } ?>
+
     <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
         <p class="tax-inclusive">
             <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?>
         </p>
     <?php } ?>
-    <div class="options-block">
-        <?php
-        if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
-            <ul class="<?php echo (count($volumeDiscountRows) > 1) ? '' : ''; ?> wholesale-slider">
-                <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
-                    $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                    $price = ($product['theprice'] - $volumeDiscount); ?>
-                    <li class="wholesale-slider-item">
-                        <div class="wholesale-slider-value">
-                            <i class="wholesale-slider-icon">
-                                <svg class="svg" width="14" height="14">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#patch-cent">
-                                    </use>
-                                </svg>
-                            </i>
-                            <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
-                            <?php echo Labels::getLabel('LBL_Or_more', $siteLangId); ?>
-                            (<?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>)
 
-                        </div>
-                        <span class="wholesale-slider-price"><?php echo CommonHelper::displayMoneyFormat($price); ?>
-                            /
-                            <?php echo Labels::getLabel('LBL_Product', $siteLangId); ?></span>
-                    </li>
-                <?php } ?>
-            </ul>
 
-        <?php }  ?>
-    </div>
-    <div class="divider"></div>
     <!-- Option block -->
 
     <?php if (!empty($optionRows)) { ?>
@@ -96,6 +62,44 @@
                 <div class="options-block-head">
                     <h6 class="h6"><?php echo $option['option_name']; ?></h6>
                 </div>
+                <?php if ($option['values']) { ?>
+                    <ul class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
+                        <?php foreach ($option['values'] as $opVal) {
+                            $isAvailable = true;
+                            if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
+                                $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
+                            } else {
+                                $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
+                                $optionUrlArr = explode("::", $optionUrl);
+                                if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
+                                    $optionUrl = $optionUrlArr[0];
+                                    $isAvailable = false;
+                                }
+                            }
+
+                            $colorStyle = '';
+                            if ($option['option_is_color']) {
+                                if ($opVal['optionvalue_color_code'] != '') {
+                                    $colorStyle = 'style="background-color:' . ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] . '"' : "#" . $opVal['optionvalue_color_code'] . '"');
+                                } else {
+                                    $colorStyle = 'style="background-color:' . $opVal['optionvalue_name'] . '"';
+                                }
+                            }
+
+                            $title = $opVal['optionvalue_name'];
+                            if (!$isAvailable) {
+                                $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
+                            }
+                        ?>
+                            <li class="select-options-item">
+                                <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
+                                    <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
+                <?php /* ?>
                 <div class="dropdown dropdown-options">
                     <button class="btn btn-outline-gray dropdown-toggle" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                         <span>
@@ -143,9 +147,8 @@
                         </div>
                     <?php } ?>
                 </div>
+                <?php  */ ?>
             </div>
-            <div class="divider"></div>
-
         <?php $count++;
         } ?>
 
@@ -232,14 +235,32 @@
     <?php } ?>
 
 
-
+    <?php
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
+        <div class="side-blocks wholesale-slider">
+            <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
+            <ul class="wholesale-slider">
+                <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
+                    $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                    $price = ($product['theprice'] - $volumeDiscount); ?>
+                    <li class="wholesale-slider-item">
+                        <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
+                            <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
+                        <div class="products-price">
+                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price); ?></span>
+                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></del>
+                            <span class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?> <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
+                        </div>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+    <?php }  ?>
 
     <!-- Upsell Products -->
-    <div class="options-block">
-        <?php if (count($upsellProducts) > 0) { ?>
-            <h6 class="h6">
-                <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?>
-            </h6>
+    <?php if (count($upsellProducts) > 0) { ?>
+        <div class="side-blocks product-add-ons">
+            <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
             <div class="addons-scrollbar scroll scroll-x">
                 <ul class="list-addons list-addons--js">
                     <?php foreach ($upsellProducts as $usproduct) {
@@ -249,9 +270,9 @@
                             $cancelClass = 'cancel cancelled--js';
                             $uncheckBoxClass = 'remove-add-on';
                         } ?>
-                        <li class="addon--js <?php echo $cancelClass; ?>">
+                        <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
                             <div class="product-profile">
-                                <figure class="item__pic">
+                                <figure class="product-profile__pic">
                                     <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
                                     </a>
                                 </figure>
@@ -261,32 +282,29 @@
                                     <div class="products-price">
                                         <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
                                     </div>
+                                    <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                        <span class="decrease decrease-js"><i class="icn">
+                                                <svg class="svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                    </use>
+                                                </svg>
+                                            </i></span>
+                                        <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                            <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                        </div>
+                                        <span class="increase increase-js"><i class="icn">
+                                                <svg class="svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                    </use>
+                                                </svg>
+                                            </i></span>
+                                    </div>
                                 </div>
                                 <?php if ($usproduct['selprod_stock'] <= 0) { ?>
                                     <div class="tag-soldout">
                                         <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                                     </div>
                                 <?php  } ?>
-                            </div>
-
-                            <div class=" qty-wrapper">
-                                <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                    <span class="decrease decrease-js"><i class="icn">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                </use>
-                                            </svg>
-                                        </i></span>
-                                    <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
-                                    </div>
-                                    <span class="increase increase-js"><i class="icn">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                </use>
-                                            </svg>
-                                        </i></span>
-                                </div>
                             </div>
                             <label class="checkbox">
                                 <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
@@ -295,9 +313,6 @@
                     <?php } ?>
                 </ul>
             </div>
-        <?php } ?>
-    </div>
-
-
-
+        </div>
+    <?php } ?>
 </div>

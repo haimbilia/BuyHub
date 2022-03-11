@@ -429,8 +429,8 @@ $(document).on("change", ".state", function () {
     returnAddressForm = function () {
         if (1 > $(mtabId).data('shop_id')) {
             return;
-        }
-        fcom.displayProcessing();
+        }        
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
@@ -449,7 +449,7 @@ $(document).on("change", ".state", function () {
     };
 
     returnAddressLangForm = function (langId, autoFillLangData = 0) {
-        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $.ykmodal(t);
@@ -625,14 +625,9 @@ $(document).on("change", ".state", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
-                var minHeight = document.frmShopLogo.logo_min_height.value;
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                var minHeight = document.frmShopLogo.logo_min_height.value;               
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,

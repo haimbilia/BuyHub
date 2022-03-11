@@ -32,15 +32,16 @@ foreach ($catBannerArr as $slideScreen) {
                 <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
             </picture>
         </div>
+
+    </section>
+    <section class="shop-bar">
         <div class="container">
             <div class="shop-info-wrap">
                 <?php include(CONF_THEME_PATH . 'shops/shop_info.php'); ?>
-                <div class="shop-nav">
-                    <?php
-                    $variables = array('template_id' => $template_id, 'shop_id' => $shop['shop_id'], 'shop_user_id' => $shop['shop_user_id'], 'action' => $action, 'siteLangId' => $siteLangId);
-                    $this->includeTemplate('shops/shop-layout-navigation.php', $variables, false);
-                    ?>
-                </div>
+                <?php
+                $variables = array('template_id' => $template_id, 'shop_id' => $shop['shop_id'], 'shop_user_id' => $shop['shop_user_id'], 'action' => $action, 'siteLangId' => $siteLangId);
+                $this->includeTemplate('shops/shop-layout-navigation.php', $variables, false);
+                ?>
             </div>
         </div>
     </section>
