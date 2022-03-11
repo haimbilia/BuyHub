@@ -131,14 +131,14 @@ class UsersController extends ListingBaseController
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        
+
         $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on', 'shop_updated_on'));
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -360,7 +360,7 @@ class UsersController extends ListingBaseController
             $fld->requirements()->setRequired();
         }
         $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
-        
+
         $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         $frm->addHiddenField('', 'user_phone_dcode');
@@ -541,6 +541,7 @@ class UsersController extends ListingBaseController
         $joinShop = FatApp::getPostedData('joinShop', FatUtility::VAR_INT, 0);
         $joinOrder = FatApp::getPostedData('joinOrder', FatUtility::VAR_INT, 0);
         $orderType = FatApp::getPostedData('order_type', FatUtility::VAR_INT, 0);
+        $appendGuestUser = FatApp::getPostedData('appendGuestUser', FatUtility::VAR_INT, 0);
 
         $attr = [
             'u.user_name',
@@ -627,10 +628,18 @@ class UsersController extends ListingBaseController
 
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
+
         $json = array(
             'pageCount' => $srch->pages(),
             'results' => []
         );
+
+        if (1 === $appendGuestUser && !empty($keyword)) {
+            if (false !== stripos(Labels::getLabel('LBL_GUEST_USER', $this->siteLangId), $keyword)) {
+                $json['results'][] = ['id' => -1, 'text' => Labels::getLabel('LBL_GUEST_USER', $this->siteLangId)];
+            }
+        }
+
         foreach ($users as $key => $user) {
             $userName = (0 < $joinShop) ? $user['shop_name'] : $user['credential_username'];
             $name = !empty($user['user_name']) ? $user['user_name'] . ' (' . $userName . ')' : $userName;
