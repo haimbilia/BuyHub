@@ -38,13 +38,6 @@
  <?php
     } ?>
 
-
-
-
-
-
-
-
  <div class="" id="filters_body--js">
      <div class="selected-filters" id="filters">
          <div class="selected-filters-head">

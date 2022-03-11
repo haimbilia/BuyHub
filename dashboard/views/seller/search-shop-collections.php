@@ -81,7 +81,6 @@
                         break;
 
                     case 'scollection_active':
-                        /* $td->appendElement( 'plaintext', array(), $activeInactiveArr[$row[$key]],true ); */
                         $active = "";
                         if (applicationConstants::ACTIVE == $row['scollection_active']) {
                             $active = 'checked';
@@ -118,7 +117,11 @@
                                     'href' => "javascript:void(0)", 'class' => 'button small green',
                                     'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteShopCollection(" . $row['scollection_id'] . ")"
                                 ),
-                                '<i class="fa fa-trash"></i>',
+                                '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>',
                                 true
                             );
                         }
