@@ -61,13 +61,19 @@
                                 case 'action':
                                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                                     $li = $ul->appendElement("li");
-                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductSpecialPriceForm(" . $selprod_id . ", " . $row['splprice_id'] . ")"), '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>', true);
+                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductSpecialPriceForm(" . $selprod_id . ", " . $row['splprice_id'] . ")"), 
+                                    '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                        </use>
+                                    </svg>', true);
                                     $li = $ul->appendElement("li");
-                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $row['splprice_id'] . ")"), '<i class="fa fa-trash"></i>', true);
+                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $row['splprice_id'] . ")"), 
+                                    '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                        </use>
+                                    </svg>', true);
                                     break;
                                 default:
                                     $td->appendElement('plaintext', array(), $row[$key], true);
