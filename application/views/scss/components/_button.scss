@@ -1,50 +1,10 @@
-@-webkit-keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-.invalid {
-    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
-}
-
-$btn-padding: 0.6rem 0.75rem;
-$btn-height: 3.625rem;
+$btn-padding: 0 0.75rem;
+$btn-height: 3rem;
 $btn-border: solid 1px transparent;
 $btn-radius: 3px;
 $btn-font-size: 0.85rem;
 $btn-font-weight: 500;
-$btn-line-height: 1.5;
+$btn-line-height: $btn-height;
 .btn {
     border: $btn-border;
     padding: $btn-padding;
@@ -56,7 +16,7 @@ $btn-line-height: 1.5;
     &-brand {
         @include bg-brand;
         &:hover {
-            color: currentColor;
+            color: $brand-color-inverse;
         }
     }
     &-outline-brand {
@@ -135,6 +95,7 @@ $btn-line-height: 1.5;
         padding-right: 2rem;
     }
     &-sm {
+        height: auto;
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
@@ -153,6 +114,7 @@ $btn-line-height: 1.5;
         color: $txt-body;
         padding: 0;
         height: auto;
+        line-height: 1;
         .arrow {
             display: inline-block;
             transition: all 0.2s ease-in-out;
@@ -172,9 +134,7 @@ $btn-line-height: 1.5;
     &:focus {
         outline: none !important;
     }
-    &:hover {
-        color: inherit;
-    }
+
     .icn {
         svg {
             width: 16px;
@@ -298,4 +258,43 @@ a.link-arrow {
         text-decoration: none;
         background-size: 95% 2px;
     }
+}
+@-webkit-keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.invalid {
+    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }

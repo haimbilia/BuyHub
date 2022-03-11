@@ -38,7 +38,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </li>';
         }
 
-        if ($canRequestBadge) {
+        if ($canRequestBadge && !empty($approvalRequiredBadges)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link" href="javascript:void(0);" onclick="addBadgeReqForm(0)">
                                                     ' . Labels::getLabel('LBL_BADGE_REQUEST', $siteLangId) . '
@@ -120,7 +120,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </div>
                                 </div>
                             <?php } ?>
-                            <?php if ($canRequestBadge) { ?>
+                            <?php if ($canRequestBadge && !empty($approvalRequiredBadges)) { ?>
                                 <div class="col-md-3">
                                     <div class="no-data-found">
                                         <div class="img">
@@ -136,7 +136,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <?php } ?>
                         </div>
                     <?php } else { ?>
-                        <div id="listing"> <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div></div>
+                        <div id="listing">
+                            <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                        </div>
                     <?php } ?>
                 </div>
                 <span class="editRecord--js"></span>

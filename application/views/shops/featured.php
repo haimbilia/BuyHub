@@ -1,18 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <div id="body" class="body">
-    <section class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="section-head justify-content-center mb-0">
-                <div class="section-heading">
-                    <h1 class="mb-0"><?php echo Labels::getLabel('Lbl_Featured_Shops', $siteLangId); ?>
-                    </h1>
-                </div>
-            </div>
-        </div>
-    </section>
     <?php if ($geoLocation) { ?>
         <section class="section">
             <div class="container">
+                <div class="section-head section-head-center">
+                    <div class="section-heading">
+                        <h1><?php echo Labels::getLabel('Lbl_Featured_Shops', $siteLangId); ?> </h1>
+                    </div>
+                </div>
                 <div class="interactive-stores">
                     <div class="interactive-stores-map">
                         <div class="map-loader is-loading">

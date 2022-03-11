@@ -1298,6 +1298,24 @@ $(document).on("click", ".fileRemove--js", function () {
     $(this).closest("li").remove();
 });
 
+$(window).keydown(function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+        if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
+            $("#search-main").modal("show");
+            e.preventDefault();
+        }
+    }
+});
+
+$(document).on("click", "#quickSearchCtrlJs", function () {
+    if ($(this).is(":checked")) {
+        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.rooturl });
+        $("#search-main").modal("hide");
+    } else {
+        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.rooturl });
+    }
+});
+
 function previewImage(obj) {
     var imgUrl = $("img", obj).data("altimg");
     if ("" == imgUrl || "undefined" == typeof imgUrl) {

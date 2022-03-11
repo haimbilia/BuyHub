@@ -193,9 +193,11 @@ $header-height: 122px;
     position: relative;
     .cart-qty {
         position: absolute;
-        #{$start-direction}: 1rem;
-        background-color: #ee3e5a;
-        color: #fff;
+        #{$start-direction}: 10px;
+        top: -3px;
+        // background-color: $brand-color;
+        // color: $brand-color-inverse;
+        @include bg-brand;
         font-size: 8px;
         border-radius: 50%;
         width: 12px;

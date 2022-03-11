@@ -4,7 +4,7 @@ class BadgeLinkCondition extends MyAppModel
 {
     public const DB_TBL = 'tbl_badge_link_conditions';
     public const DB_TBL_PREFIX = 'blinkcond_';
-    
+
     public const DB_TBL_BADGE_LINKS = 'tbl_badge_links';
     public const DB_TBL_BADGE_LINKS_PREFIX = 'badgelink_';
 
@@ -19,7 +19,7 @@ class BadgeLinkCondition extends MyAppModel
     public const COND_TYPE_COMPLETED_ORDERS = 5;
     public const COND_TYPE_RETURN_ACCEPTANCE = 6; // Refund/Return Acceptance
     public const COND_TYPE_ORDER_CANCELLED = 7; // Cancelled By Seller
-    
+
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
@@ -129,14 +129,14 @@ class BadgeLinkCondition extends MyAppModel
             case self::COND_TYPE_ORDER_CANCELLED:
                 $status = 'danger';
                 break;
-            
+
             default:
                 $status = 'warning';
                 break;
         }
         return '<span class="font-' . $status . '">' . $msg . '</span>';
     }
-    
+
     /**
      * getBadgeLinksSearchObj
      *
@@ -217,7 +217,7 @@ class BadgeLinkCondition extends MyAppModel
         }
         return $srch;
     }
-    
+
     /**
      * isUnique : Used for Manual Badge Conditions
      *
@@ -252,7 +252,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->getResultSet();
         return (1 > $srch->recordCount());
     }
-    
+
     /**
      * isUnique : Used for Automatic Badge Conditions
      *
@@ -276,7 +276,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->getResultSet();
         return (1 > $srch->recordCount());
     }
-    
+
     /**
      * getApprovalRequestBadges
      *
@@ -295,7 +295,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'trigger_type', '=', Badge::COND_MANUAL);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'required_approval', '=', applicationConstants::YES);
-      
+
         $srch->addDirectCondition('(
             CASE
                 WHEN (
@@ -307,14 +307,15 @@ class BadgeLinkCondition extends MyAppModel
                 ELSE TRUE
             END
         )');
-        
+
         $badgeNameField = "COALESCE(badge_name, badge_identifier) badge_name";
 
 
         $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         if (true === $assoc) {
-            $srch->addMultipleFields([
+            $srch->addMultipleFields(
+                [
                     'badge_id',
                     $badgeNameField
                 ]
@@ -354,7 +355,7 @@ class BadgeLinkCondition extends MyAppModel
             case self::RECORD_TYPE_SHOP:
                 $status = 'success';
                 break;
-            
+
             default:
                 $status = 'danger';
                 break;

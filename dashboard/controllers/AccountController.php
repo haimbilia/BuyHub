@@ -135,15 +135,13 @@ class AccountController extends LoggedUserController
 
         $rs = $srch->getResultSet();
         if (!$rs) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $supplierRequest = FatApp::getDb()->fetch($rs);
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
-            Message::addErrorMessage(Labels::getLabel('MSG_You_have_already_consumed_max_attempts', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_HAVE_ALREADY_CONSUMED_MAX_ATTEMPTS', $this->siteLangId));
         }
         /* ] */
 
@@ -161,7 +159,7 @@ class AccountController extends LoggedUserController
             $fieldIdsArr[] = $field['sformfield_id'];
             //$fieldCaptionsArr[] = $field['sformfield_caption'];
             if ($field['sformfield_required'] && empty($post["sformfield_" . $field['sformfield_id']])) {
-                $error_messages[] = sprintf(Labels::getLabel('MSG_Label_Required', $this->siteLangId), $field['sformfield_caption']);
+                $error_messages[] = sprintf(Labels::getLabel('ERR_LABEL_REQUIRED', $this->siteLangId), $field['sformfield_caption']);
             }
         }
 
@@ -177,20 +175,22 @@ class AccountController extends LoggedUserController
 
         if (!$supplier_request_id = $userObj->addSupplierRequestData($data, $this->siteLangId)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel('MSG_details_not_saved', $this->siteLangId));
+            $msg = $userObj->getError();
+            $msg = empty($msg) ? Labels::getLabel('ERR_DETAILS_NOT_SAVED', $this->siteLangId) : $msg;
+            FatUtility::dieJsonError($msg);
         }
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
             $approval_request = 1;
-            $msg = Labels::getLabel('MSG_Your_seller_approval_form_request_sent', $this->siteLangId);
+            $msg = Labels::getLabel('SUC_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
         } else {
             $approval_request = 0;
-            $msg = Labels::getLabel('MSG_Your_application_is_approved', $this->siteLangId);
+            $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
-        if (!$this->notifyAdminSupplierApproval($userObj, $data, $approval_request)) {
+        if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel("MSG_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         //send notification to admin
@@ -2751,37 +2751,6 @@ class AccountController extends LoggedUserController
         $this->siteLangId)); */
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
-    }
-
-    private function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1)
-    {
-        $attr = array('user_name', 'credential_username', 'credential_email');
-        $userData = $userObj->getUserInfo($attr);
-
-        if ($userData === false) {
-            return false;
-        }
-
-        $data = array(
-            'user_name' => $userData['user_name'],
-            'username' => $userData['credential_username'],
-            'user_email' => $userData['credential_email'],
-            'reference_number' => $data['reference'],
-        );
-
-        $email = new EmailHandler();
-
-        if (!$email->sendSupplierApprovalNotification(CommonHelper::getLangId(), $data, $approval_request)) {
-            Message::addMessage(
-                Labels::getLabel(
-                    "MSG_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL",
-                    CommonHelper::getLangId()
-                )
-            );
-            return false;
-        }
-
-        return true;
     }
 
     private function getSupplierForm()
