@@ -177,7 +177,7 @@ class AbandonedCartController extends ListingBaseController {
     protected function getFormColumns(): array {
         $tblHeadingCols = CacheHelper::get('abandonedCartFormTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

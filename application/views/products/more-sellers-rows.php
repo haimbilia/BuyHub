@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-foreach ($sellers as $sellerDetail) {
-    if (!isset($product) && isset($productsArr) && array_key_exists($sellerDetail['selprod_id'], $productsArr)) {
+$count = 0;
+foreach ($sellers as $key => $sellerDetail) {
+    /* if (!isset($product) && isset($productsArr) && array_key_exists($sellerDetail['selprod_id'], $productsArr)) {
         $product = $productsArr[$sellerDetail['selprod_id']];
         $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
         $fulfillmentType = $product['selprod_fulfillment_type'];
@@ -40,8 +41,44 @@ foreach ($sellers as $sellerDetail) {
         } else {
             $codEnabled = ($product['product_cod_enabled']);
         }
-    } ?>
-    <li class="table-row <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
+    } */
+    if (0 == $count && !array_key_exists('isActive', $sellerDetail)) {
+        echo '<li class="more-sellers-head">' . Labels::getLabel('LBL_MORE_SELLERS', $siteLangId) . '</li>';
+    }
+?>
+
+    <li class="more-sellers-item <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
+        <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
+        <div class="sold-by">
+            <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
+            <a class="sold-by-name" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>"><?php echo $sellerDetail['shop_name']; ?></a>
+        </div>
+        <div class="shop-wrap">
+            <div class="product-ratings">
+                <svg class="svg" width="14" height="14">
+                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                    </use>
+                </svg>
+                <?php
+                $shop_rating = 0;
+                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                    $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id']);
+                ?>
+                    <span class="rate"><?php echo round($shop_rating, 1); ?></span>
+                <?php
+                }
+                ?>
+                <button href="#itemRatings" class="totals-review nav-scroll-js"><?php echo isset($sellerDetail['totReviews']) ? $sellerDetail['totReviews'] : 0;?> <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId);?> </button>
+            </div>
+            <!-- Shop Badge  -->
+            <?php
+            $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
+            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+            ?>
+            <!-- Shop Badge  -->
+        </div>
+
+        <?php /* ?>
         <div class="cell cell-1" data-label="<?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>">
             <div class="product-profile">
                 <div class="item__pic item__pic-seller">
@@ -147,5 +184,7 @@ foreach ($sellers as $sellerDetail) {
                 <?php } ?>
             </div>
         </div>
+        <?php  */ ?>
     </li>
-<?php }
+<?php $count++;
+}

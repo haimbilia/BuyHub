@@ -322,6 +322,7 @@
                 return;
             }
             fcom.displaySuccessMessage(t.msg);
+            $.ykmodal.close();
         });
     };
 })();

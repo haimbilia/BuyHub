@@ -17,9 +17,11 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
                     </div>
                 </div>
             </div>
-
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
             <?php include('prod-desc-nav-detail.php'); ?>
-            <?php include('more-sellers.php');  ?>
         </div>
     </section>
     <?php include('banners.php'); ?>
