@@ -94,7 +94,7 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
 
     /* Product Brand Request [ */
     addBrandReqForm = function (id) {
-        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();

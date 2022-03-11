@@ -559,7 +559,8 @@ Updates/Fixes :
     => 062857 - Admin UI: Getting multiple issues on the product's tag page
     => 062790 - Admin UI: "Fetch Shipping Rates" functionality is not working and its UI design is also not aligned
     => 062946 - Seller UI: Character's count validation is not showing while adding the phone number on the whole seller's dashboard
-
+    => 062969 - Seller UI: Getting multiple issues while adding the product at the seller's end
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

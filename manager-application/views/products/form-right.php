@@ -154,7 +154,6 @@
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
             </div>
             <div class="card-toolbar">
-
                 <i class="dropdown-toggle-custom-arrow"></i>
             </div>
         </div>
