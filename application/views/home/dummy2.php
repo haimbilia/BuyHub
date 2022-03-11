@@ -535,6 +535,7 @@
                                                         </i></span>
                                                 </div>
                                             </div>
+
                                         </div>
                                         <label class="checkbox">
                                             <input checked="checked" type="checkbox" class="cancel " name="check_addons" title="Remove">

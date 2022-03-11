@@ -80,7 +80,7 @@
                             $colorStyle = '';
                             if ($option['option_is_color']) {
                                 if ($opVal['optionvalue_color_code'] != '') {
-                                    $colorStyle = 'style="background-color:' . ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] . '"' : "#" . $opVal['optionvalue_color_code'] . '"');
+                                    $colorStyle = 'style="background-color:#' . $opVal['optionvalue_color_code'] . '"';
                                 } else {
                                     $colorStyle = 'style="background-color:' . $opVal['optionvalue_name'] . '"';
                                 }
@@ -91,7 +91,7 @@
                                 $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
                             }
                         ?>
-                            <li class="select-options-item">
+                            <li class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
                                 <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
                                     <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
                                 </a>
@@ -99,55 +99,6 @@
                         <?php } ?>
                     </ul>
                 <?php } ?>
-                <?php /* ?>
-                <div class="dropdown dropdown-options">
-                    <button class="btn btn-outline-gray dropdown-toggle" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                        <span>
-                            <?php if ($option['option_is_color']) { ?>
-                                <span class="colors" style="background-color:<?php echo $selectedOptionColor; ?>;"></span>
-                            <?php } ?>
-                            <?php echo $selectedOptionValue; ?>
-                        </span>
-                    </button>
-                    <?php if ($option['values']) { ?>
-                        <div class="dropdown-menu dropdown-menu-anim scroll scroll-y">
-                            <ul class="nav nav-block">
-                                <?php foreach ($option['values'] as $opVal) {
-                                    $isAvailable = true;
-                                    if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-                                        $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
-                                    } else {
-                                        $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
-                                        $optionUrlArr = explode("::", $optionUrl);
-                                        if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
-                                            $optionUrl = $optionUrlArr[0];
-                                            $isAvailable = false;
-                                        }
-                                    } ?>
-                                    <li class="nav__item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' is-active' : ' ';
-                                                            echo (!$optionUrl) ? ' is-disabled' : '';
-                                                            echo (!$isAvailable) ? 'not--available' : ''; ?>">
-                                        <?php if ($option['option_is_color'] && $opVal['optionvalue_color_code'] != '') {
-                                            $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
-                                        ?>
-                                            <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (!$option['option_is_color']) ? 'selector__link' : '';
-                                                                                                                                                                                                                                                                                                                            echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? ' ' : ' ';
-                                                                                                                                                                                                                                                                                                                            echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
-                                                <span class="colors" style="background-color:<?php echo $color; ?>;"></span><?php echo $opVal['optionvalue_name']; ?></a>
-                                        <?php } else { ?>
-                                            <a data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $opVal['optionvalue_name'];
-                                                                                                                                                                                                echo (!$isAvailable) ? ' ' . Labels::getLabel('LBL_Not_Available', $siteLangId) : ''; ?>" class="dropdown-item nav__link <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? '' : ' ';
-                                                                                                                                                                                                                                                                                                                            echo (!$optionUrl) ? ' is-disabled' : ''; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>">
-                                                <?php echo $opVal['optionvalue_name'];  ?> </a>
-                                        <?php } ?>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    <?php } ?>
-                </div>
-                <?php  */ ?>
             </div>
         <?php $count++;
         } ?>
@@ -177,40 +128,35 @@
                 <div class="options-block">
                     <div class="options-block-head">
                         <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
-                        <div class="qty-wrapper">
-                            <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <span class="decrease decrease-js not-allowed"><i class="icn">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </span>
-                                <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
-                                </div>
-                                <span class="increase increase-js"><i class="icn">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </span>
+                        <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
+                            <span class="decrease decrease-js not-allowed"><i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </span>
+                            <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                             </div>
+                            <span class="increase increase-js"><i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </span>
                         </div>
-                    </div>
-                    <div class="">
-                        <h6 class="h6">&nbsp;</h6>
-                        <div class="buy-group">
-                            <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                                //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
-                                echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                            }
-                            echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
-                        </div>
+
                     </div>
                 </div>
-                <div class="divider"></div>
+                <div class="buy-group">
+                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                        //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
+                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                    }
+                    echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
+                </div>
             <?php } ?>
             </form>
         <?php echo $frmBuyProduct->getExternalJs();
@@ -233,7 +179,7 @@
             </p>
         </div>
     <?php } ?>
-
+    <?php include('more-sellers.php');  ?>
 
     <?php
     if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
