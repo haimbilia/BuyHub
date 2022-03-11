@@ -120,8 +120,8 @@
         font-size: $btn-font-size;
         border-color: $black;
         height: $btn-height;
-        padding: $btn-padding;
-        padding-#{$start-direction}: 1rem;
+        // padding: $btn-padding;
+        // padding-#{$start-direction}: 1rem;
         line-height: $btn-line-height;
     }
 }
