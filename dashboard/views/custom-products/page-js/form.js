@@ -482,6 +482,9 @@ var advanceMedia = false; /* open via advance media*/
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 $.ykmsg.close();
                 if (ans.status == 0) {

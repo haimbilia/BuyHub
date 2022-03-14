@@ -527,6 +527,9 @@
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
