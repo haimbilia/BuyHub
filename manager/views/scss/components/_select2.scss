@@ -6,7 +6,7 @@
             background-color: transparent;
             border: none;
             font-size: 1em;
-            margin-#{$end-direction}:20px;
+            margin-#{$end-direction}: 20px;
         }
         .select2-selection__placeholder {
             color: $txt-gray;
@@ -32,6 +32,7 @@
                 cursor: pointer;
             }
             [dir="rtl"] & {
+                padding-#{$start-direction}: 35px;
                 background-position: calc(0% - -12px) center;
             }
         }

@@ -13,7 +13,7 @@ if (0 < $recordId) {
     $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
     echo $frm->getFormTag(); ?>
     <div class="content-header">
-    <div class="content-header-title">
+        <div class="content-header-title">
             <h2>
                 <a class="back" href="<?php echo UrlHelper::generateUrl('sellerRequests'); ?>">
                     <svg class="svg" width="24" height="24">
@@ -23,8 +23,8 @@ if (0 < $recordId) {
                 </a>
                 <?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_CUSTOM_PRODUCT_REQUEST', $langId) : Labels::getLabel('FRM_ADD_CUSTOM_PRODUCT_REQUEST', $langId); ?>
             </h2>
-            <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', $this->variables, false); ?>        
-        </div>        
+            <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', $this->variables, false); ?>
+        </div>
         <?php
         $langFld =  $frm->getField('lang_id');
         if (0 < $recordId) {
@@ -34,7 +34,7 @@ if (0 < $recordId) {
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm('.$langId.',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
@@ -42,7 +42,7 @@ if (0 < $recordId) {
                                                             </a>
                                                         </div>';
             }
-        }    
+        }
         ?>
         <div class="content-header-toolbar">
             <div class="input-group">
@@ -51,10 +51,10 @@ if (0 < $recordId) {
                 ?>
             </div>
         </div>
-       
+
     </div>
-    <div class="content-body" id="contentBody">
-        <div class="add-stock">
+    <div class="content-body">
+        <div class="add-stock" id="addStock">
             <div class="add-stock-column column-main">
                 <div class="card" id="basic-details">
                     <div class="card-head">
@@ -68,7 +68,7 @@ if (0 < $recordId) {
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
-                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));                           
+                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
@@ -117,8 +117,8 @@ if (0 < $recordId) {
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="collapse" id="stock-block1">
-                        <div class="card-body">
-                            <table class="table table-variants listingTableJs" id="variantsJs">
+                        <div class="card-body p-0">
+                            <table class="table listingTableJs" id="variantsJs">
                                 <thead class="tableHeadJs">
                                     <tr>
                                         <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
@@ -136,7 +136,7 @@ if (0 < $recordId) {
                                 </tbody>
                             </table>
                             <div class="separator separator-dashed my-4"></div>
-                            <div class="form-group row justify-content-between">
+                            <div class="form-group row justify-content-between px-4">
                                 <div class="col">
                                     <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
                                 </div>
@@ -161,13 +161,13 @@ if (0 < $recordId) {
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_MEDIA', $langId); ?></h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
                         </div>
-                        <div class="card-toolbar">                         
+                        <div class="card-toolbar">
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                     </div>
                     <div class="collapse" id="stock-block2">
                         <div class="card-body">
-                            <div>                              
+                            <div>
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6 class="h6 "><?php echo Labels::getLabel('LBL_UPLOADED_MEDIA', $langId); ?></h6>
                                     <a href="javascript:void(0)" onclick="imageForm();" class="link"><?php echo Labels::getLabel('LBL_ADVANCED_MEDIA', $langId); ?></a>
@@ -199,7 +199,7 @@ if (0 < $recordId) {
                                             <label class="label">
                                                 <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                                             </label>
-                                            <input type="text" name="sp_label" id="sp_label" value="" data-required="1">                                           
+                                            <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -418,7 +418,7 @@ echo $imgFrm->getFormHtml();
 
     $(function() {
         $('body').addClass('isLoading');
-        $('#contentBody').prepend(fcom.getLoader());
+        $('#addStock').prepend(fcom.getLoader());
         prodSpecifications();
         tagifyProducts();
         productDefaultImages();
@@ -464,13 +464,13 @@ echo $imgFrm->getFormHtml();
             tagifyOptionValue("#" + $(this).attr('id'));
         });
 
-        
+
         <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
         upcType();
-        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function() {
             fixTableColumnWidth();
         })
     });

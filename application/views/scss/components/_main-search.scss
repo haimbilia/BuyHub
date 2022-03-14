@@ -44,6 +44,7 @@
         width: 100%;
         margin-bottom: 2rem;
         [dir="rtl"] & {
+            padding-#{$end-direction}: 35px;
             background-position: calc(-10px) center;
         }
     }

@@ -86,7 +86,7 @@
             <div class="step_foot">
                 <div class="checkout-actions">
                     <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-                        <button class="btn btn-outline-brand btn-wide" onclick="loadPaymentSummary();">
+                        <button class="btn btn-outline-gray btn-wide" onclick="loadPaymentSummary();">
                             <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
                         </button>
                     <?php } else { ?>
