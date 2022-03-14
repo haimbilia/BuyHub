@@ -106,7 +106,7 @@
                             <div class="header-action__item dropdown header-account">
                                 <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)). ( $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time() ), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
+                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)) . ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
                                     </span>
                                 </a>
 
@@ -114,7 +114,7 @@
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)). ( $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)) . ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                             </div>
                                             <div class="profile__detail">
                                                 <h6>
@@ -161,8 +161,9 @@
                     </div>
                 </div>
             </div>
-            <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
-                <div class="alert alert-solid-warning fade alertWarningJs show" role="alert">
+
+            <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && ('true' != CommonHelper::getCookie('alert_' . $pageData['plang_id']))) { ?>
+                <div class="alert alert-solid-warning fade alertWarningJs show " role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_warring_msg']); ?></div>
                     <div class="alert-close">
@@ -173,7 +174,7 @@
                 </div>
             <?php } ?>
 
-            <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
+            <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>

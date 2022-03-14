@@ -1,7 +1,6 @@
 <div class="demo-header no-print">
     <div class="restore-wrapper">
         <a href="javascript:void(0)" onclick="showRestorePopup()">
-
             <p class="restore__content">Database Restores in</p>
             <div class="restore__progress">
                 <div class="restore__progress-bar" style="width:25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">

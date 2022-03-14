@@ -210,7 +210,7 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('form').length ? ele.closest('form') : null;    
+    var obj = ele.closest('form').length ? ele.closest('form') : null;
 
     ele.select2({
         dropdownParent: obj,
@@ -260,10 +260,10 @@ select2 = function (
             callbackOnUnSelect(e);
         }
     }).on('select2:open', function (e) {
-        if (ele.attr('multiple') == undefined) {         
-            $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
-        }else{         
-            $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
+        if (ele.attr('multiple') == undefined) {
+            $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        } else {
+            $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
         }
     });
 
@@ -287,7 +287,7 @@ select2 = function (
 
     if (ele.attr('multiple') != undefined) {
         select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
-    }else{
+    } else {
         select2Selector.$container.addClass("custom-select2 custom-select2-single");
     }
     $("." + $.ykmodal.element).removeAttr("tabindex");
@@ -402,14 +402,14 @@ $(document).ready(function () {
     /* Active Sidebar Link. */
 
     /* alert-text close */
-    $(".closeAlertJs").on("click", function () {
+    $(document).on('click', '.closeAlertJs', function () {
         $.cookie($(this).attr("data-name"), true, { expires: 30, path: siteConstants.rooturl });
     });
-    /* alert-text close */
 
-    $(".openAlertJs").on("click", function () {
+    /* alert-text close */
+    $(document).on('click', '.openAlertJs', function () {
         if ($(".mainHeaderJs").find(".closeAlertJs").length == 0) {
-            $.removeCookie($(this).attr("data-name"));
+            $.cookie($(this).attr("data-name"), false, { expires: 30, path: siteConstants.rooturl });
             data = "id=" + $(this).attr("data-pageid");
             fcom.updateWithAjax(
                 fcom.makeUrl("PageLanguageData", "displayAlert"),
