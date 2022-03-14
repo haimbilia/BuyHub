@@ -567,6 +567,7 @@ Updates/Fixes :
     => 062920 - Seller UI: Getting an error while submitting the "Seller Approval Form"
     => 062989 - Seller UI: Not able to go to the language data and media section while adding the brands and uploaded media is also not showing in the table
     => 062950 - Seller UI: Loader is not showing while uploading the media and pickup's drawer is showing after uploading the media under the manage shop section
+    => 062967 - Seller UI: Drop-down icon is not showing correctly, the Save button is disabled initially, the tooltip is not showing and the Product warranty field size is changing while selecting the duration while adding the product
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

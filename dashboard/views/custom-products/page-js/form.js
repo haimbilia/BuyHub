@@ -349,8 +349,7 @@ var advanceMedia = false; /* open via advance media*/
         tagifyObjs[index] = tagify;
     };
 
-    upcType = function () {
-        $('#addProductfrm button[type="submit"]').prop("disabled", true);
+    upcType = function () {        
         if (typeof upcTypeTriggerEvent != 'undefined') {
             clearTimeout(upcTypeTriggerEvent);
         }
@@ -385,7 +384,7 @@ var advanceMedia = false; /* open via advance media*/
             fcom.ajax(fcom.makeUrl('CustomProducts', "upcListing"), { recordId, langId, type, productOptions }, function (t) {
                 fcom.removeLoader();
                 $('#variantsListJs').html(t.html);
-                $('#addProductfrm button[type="submit"]').prop("disabled", false);
+                $('body').removeClass('isLoading');
             }, { fOutMode: 'json' });
         }, 2000);
     };
