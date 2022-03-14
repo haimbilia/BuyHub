@@ -1,4 +1,7 @@
-<?php $adminSidebar = $_COOKIE['adminSidebar'] ?? 0; ?>
+<?php
+$adminSidebar = $_COOKIE['adminSidebar'] ?? 0;
+$adminSidebar = (FatApp::getController() == 'ProductsController' && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
+?>
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
         <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button">
@@ -12,7 +15,6 @@
             ?>
             <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
-
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <?php require CONF_THEME_PATH . '_partial/navigation/nav-links.php'; ?>
