@@ -55,7 +55,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        $default_image = '';
+        $default_image = 'logo_default.svg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
 
@@ -126,9 +126,11 @@ class ImageController extends FatController
         $image_name = isset($res['afile_physical_path']) ? AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_ADMIN_BADGE_REQUEST, $sizeType);
+        
+        $default_image = 'badge_default.png';        
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], '', '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
         } else {
             AttachedFile::displayImage($image_name, 0, 0, '', '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
         }

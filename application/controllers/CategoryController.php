@@ -164,11 +164,12 @@ class CategoryController extends MyAppController
 
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_IMAGE, $sizeType);
+        $default_image = 'logo_default.svg';
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
 
 
@@ -176,22 +177,21 @@ class CategoryController extends MyAppController
     }
 
     public function icon($catId, $langId = 0, $sizeType = '')
-    {
+    { 
+        $default_image = 'logo_default.svg';
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $aspectRatioType = $file_row['afile_aspect_ratio'];
-        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
-      
-
+        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;            
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType, $aspectRatioType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, $sizeType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
 
        
@@ -206,11 +206,12 @@ class CategoryController extends MyAppController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB, $sizeType);
+        $default_image = 'no_image.jpg';
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
        
     }
@@ -222,6 +223,7 @@ class CategoryController extends MyAppController
         $prodCatId = FatUtility::int($prodCatId);
         $langId = FatUtility::int($langId);
 
+        $default_image = 'banner-default-image.png';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shopId, $prodCatId, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
@@ -229,15 +231,15 @@ class CategoryController extends MyAppController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_SELLER_BANNER, $sizeType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }      
     }
 
     public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)
     {
-        $default_image = 'product_default_image.jpg';
+        $default_image = 'banner-default-image.png';
         $prodCatId = FatUtility::int($prodCatId);
         $langId = FatUtility::int($langId);
 
