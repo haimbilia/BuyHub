@@ -20,8 +20,8 @@ $remembermeField->developerTags['col'] = 6;
 $remembermeField->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $fldforgot = $loginFrm->getField('forgot');
-$fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
-    class="">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
+$fldforgot->value = '<a class="link-underline" href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
+    >' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldforgot->developerTags['col'] = 6;
 
 $pwdFld = $loginFrm->getField('password');
