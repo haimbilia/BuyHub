@@ -5,7 +5,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 
 <div class="step">
     <ul class="review-block">
-        <li>
+        <li class="review-block-item">
             <div class="review-block__label">
                 <?php
                 if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) {
@@ -47,7 +47,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
         </li>
 
         <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP && !empty($orderPickUpData)) { ?>
-            <li>
+            <li class="review-block-item">
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?>
                     <div class="review-block__link">
@@ -94,7 +94,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
         <?php } ?>
 
         <?php if ($cartHasPhysicalProduct && $fulfillmentType == Shipping::FULFILMENT_SHIP && !empty($orderShippingData)) { ?>
-            <li>
+            <li class="review-block-item">
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Shipping:', $siteLangId); ?>
                     <div class="review-block__link">
@@ -117,6 +117,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                             $pictureAttr = [
                                                 'webpImageUrl' => $imageWebpUrl,
                                                 'jpgImageUrl' => $imageUrl,
+                                                'imageUrl' => $imageUrl,
                                                 'alt' => $data['op_selprod_title'],
                                                 'siteLangId' => $siteLangId,
                                             ];
@@ -143,7 +144,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
         <?php } ?>
 
         <?php if ($cartHasPhysicalProduct && $fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId != $billingAddressId) { ?>
-            <li>
+            <li class="review-block-item">
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?> <div class="review-block__link">
                         <a class="link" href="javascript:void(0);" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
@@ -195,7 +196,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         <div class="info">
                             <span>
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"></use>
                                 </svg>
                                 <?php
                                 $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
@@ -224,7 +225,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
             <?php } else { ?>
                 <div class="info">
                     <span> <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                             </use>
                         </svg> <?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
                         <strong><?php echo $cartSummary['cartRewardPoints']; ?>
@@ -307,7 +308,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 if ($cartSummary['orderPaymentGatewayCharges']) { ?>
                     <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
                         <?php if ($cartSummary['orderPaymentGatewayCharges'] && 0 < count($paymentMethods)) { ?>
-                            <ul class="nav nav-payments <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
+                            <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
                                 <?php foreach ($paymentMethods as $key => $val) {
                                     $pmethodCode = $val['plugin_code'];
                                     if ($cartHasDigitalProduct && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
@@ -319,11 +320,9 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                     if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
                                         continue;
                                     } ?>
-                                    <li class="nav-item">
-                                        <a class="nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
-                                            <div class="payment-box">
-                                                <span><?php echo $pmethodName; ?></span>
-                                            </div>
+                                    <li class="payments-nav-item">
+                                        <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                            <?php echo $pmethodName; ?>
                                         </a>
                                     </li>
                                 <?php
@@ -399,7 +398,7 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
                     if (true == enableGcaptcha) {
                         googleCaptcha();
                     }
-                    $.mbsmessage.close();
+                    $.ykmsg.close();
                 } else {
                     var form = '#tabs-container form';
                     if (0 < $(form).length) {

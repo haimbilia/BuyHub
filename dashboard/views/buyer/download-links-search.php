@@ -37,8 +37,7 @@ if (null != $fld) {
         </div>
     </div>
 </div>
-<span class="gap"></span>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
         'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
         'linksCount'    =>    Labels::getLabel('LBL_LINKS_INSIDE', $siteLangId),
@@ -148,7 +147,7 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
         fcom.ajax(fcom.makeUrl('buyer', 'downloadDigitalProductFromLink', [linkId, opId]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
-                $.systemMessage(ans.msg, 'alert--danger');
+                fcom.displayErrorMessage(ans.msg);
                 return false;
             }
             /* var dataLink = $(this).attr('data-link');

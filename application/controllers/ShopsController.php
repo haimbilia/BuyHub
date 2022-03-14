@@ -322,7 +322,7 @@ class ShopsController extends MyAppController
 
         $shopDetails = Shop::getAttributesByid($shop_id);
         if (UserAuthentication::isUserLogged() && UserAuthentication::getLoggedUserId() == $shopDetails['shop_user_id'] && !UserPrivilege::isUserHasValidSubsription(UserAuthentication::getLoggedUserId())) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addInfo(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 
@@ -386,7 +386,7 @@ class ShopsController extends MyAppController
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
 
         $description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($shop['shop_description'], true)), 500));
-        $description .= ' - ' . Labels::getLabel('LBL_See_more_at', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
+        $description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
         if ($shop) {
             $socialShareContent = array(
@@ -429,7 +429,7 @@ class ShopsController extends MyAppController
     {
         $shop_id = FatUtility::int($shop_id);
         if (1 > $shop_id) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_SHOP', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_SHOP', $this->siteLangId));
         }
         $collectionData = ShopCollection::getShopCollectionsDetail($shop_id, $this->siteLangId);
         if (!empty($collectionData)) {
@@ -542,7 +542,7 @@ class ShopsController extends MyAppController
         $scollectionId = FatUtility::int($scollectionId);
         if (1 > $scollectionId) {
             if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
@@ -626,7 +626,7 @@ class ShopsController extends MyAppController
 
         $shop = $this->getShopInfo($shop_id);
         if (!$shop) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
@@ -671,12 +671,12 @@ class ShopsController extends MyAppController
         $shop_id = FatUtility::int($post['shop_id']);
         $shopData = $this->getShopInfo($shop_id);
         if (!$shopData) {
-            $message = Labels::getLabel('LBL_Invalid_Shop', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_SHOP', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
 
         if ($shopData['shop_user_id'] == $loggedUserId) {
-            $message = Labels::getLabel('LBL_You_are_not_allowed_to_send_message', $this->siteLangId);
+            $message = Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_SEND_MESSAGE', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
 
@@ -732,7 +732,7 @@ class ShopsController extends MyAppController
                 LibHelper::dieJsonError($emailObj->getError());
             }
         }
-        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('SUC_MESSAGE_SUBMITTED_SUCCESSFULLY!', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -747,13 +747,13 @@ class ShopsController extends MyAppController
 
         $shop = $this->getShopInfo($shop_id);
         if (!$shop) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
         $shopRepData = ShopReport::getReportDetail($shop['shop_id'], UserAuthentication::getLoggedUserId(), 'sreport_id');
         if (!empty($shopRepData)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Shops', 'View', array($shop_id)));
         }
         
@@ -780,12 +780,12 @@ class ShopsController extends MyAppController
 
         $shop_id = FatUtility::int($post['shop_id']);
         if (1 > $shop_id) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_Invalid_Shop', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_SHOP', $this->siteLangId));
         }
 
         $shopRepData = ShopReport::getReportDetail($shop_id, $loggedUserId, 'sreport_id');
         if (!empty($shopRepData) && 0 < count($shopRepData)) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
         }
 
         $srch = new ShopSearch($this->siteLangId);
@@ -799,7 +799,7 @@ class ShopsController extends MyAppController
         $shopData = FatApp::getDb()->fetch($shopRs);
 
         if (!$shopData) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_Invalid_Shop', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_SHOP', $this->siteLangId));
         }
 
         $sReportObj = new ShopReport();
@@ -819,7 +819,7 @@ class ShopsController extends MyAppController
         $sreport_id = $sReportObj->getMainTableRecordId();
 
         if (!$sreport_id) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         /* email notification[ */
@@ -837,12 +837,12 @@ class ShopsController extends MyAppController
             );
 
             if (!Notification::saveNotifications($notificationData)) {
-                FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
             }
         }
         /* ] */
 
-        $sucessMsg = Labels::getLabel('MSG_Reported_Successfully!', $this->siteLangId);
+        $sucessMsg = Labels::getLabel('SUC_REPORTED_SUCCESSFULLY!', $this->siteLangId);
         Message::addMessage($sucessMsg);
         $this->set('msg', $sucessMsg);
         if (true === MOBILE_APP_API_CALL) {
@@ -852,116 +852,13 @@ class ShopsController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function searchWhoFavouriteShop(){
-    $db = FatApp::getDb();
-    $data = FatApp::getPostedData();
-    $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
-    $pagesize = FatApp::getConfig('CONF_PAGE_SIZE',FatUtility::VAR_INT, 10);
 
-    $searchForm = $this->getWhoFavouriteSearchForm($this->siteLangId);
-    $post = $searchForm->getFormDataFromArray($data);
-
-
-    $shop_id = FatUtility::int($post['shop_id']);
-    if(1 > $shop_id){
-    FatUtility::dieWithError( Labels::getLabel('LBL_Invalid_Access_ID',$this->siteLangId));
-    }
-
-    $srch = new UserFavoriteShopSearch($this->siteLangId);
-    $srch->joinWhosFavouriteUser();
-    $srch->joinFavouriteUserShopsCount();
-    $srch->addMultipleFields(array( 'ufs_shop_id as shop_id','ufs_user_id','user_name','userFavShopcount'));
-    $srch->addCondition('ufs_shop_id','=',$shop_id);
-
-    $page = (empty($page) || $page <= 0)?1:$page;
-    $page = FatUtility::int($page);
-    $srch->setPageNumber($page);
-    $srch->setPageSize($pagesize);
-
-    $rs = $srch->getResultSet();
-    $userFavorite = $db->fetchAll( $rs );
-
-    $totalShopToShow = 4;
-    $prodSrchObj = new ProductSearch( $this->siteLangId );
-    $prodSrchObj->setDefinedCriteria();
-    $prodSrchObj->setPageSize(1);
-    $shops = array();
-    foreach($userFavorite as $val){
-    $fsrch = new UserFavoriteShopSearch($this->siteLangId);
-    $fsrch->joinWhosFavouriteUser();
-    $fsrch->addCondition('ufs_user_id','=',$val['ufs_user_id']);
-    $fsrch->addMultipleFields(array( 'ufs_shop_id as shop_id'));
-    $fsrch->setPageSize($totalShopToShow);
-    $frs = $fsrch->getResultSet();
-    $shops[$val['ufs_user_id']]['shop'] = $db->fetchAll( $frs,'shop_id');
-    if( $shops[$val['ufs_user_id']]['shop'] ){
-                foreach( $shops[$val['ufs_user_id']]['shop'] as $res ){
-                    $prodSrch = clone $prodSrchObj;
-                    $prodSrch->addShopIdCondition( $res['shop_id'] );
-                    $prodSrch->addMultipleFields( array( 'selprod_id', 'product_id', 'shop_id','IFNULL(shop_name, shop_identifier) as shop_name',
-                    'IFNULL(product_name, product_identifier) as product_name',
-                    'IF(selprod_stock > 0, 1, 0) AS in_stock') );
-                    $prodRs = $prodSrch->getResultSet();
-                    $shops[$val['ufs_user_id']]['products'][] = $db->fetch( $prodRs);
-                    $shops[$val['ufs_user_id']]['totalProducts'] =     $prodSrch->recordCount();
-                }
-    }
-    }
-
-    $this->set( 'shops', $shops );
-    $this->set( 'totalShopToShow', $totalShopToShow );
-    $this->set( 'userFavorite', $userFavorite );
-    $this->set('pageCount',$srch->pages());
-    $this->set('recordCount',$srch->recordCount());
-    $this->set('page', $page);
-    $this->set('pageSize', $pagesize);
-    $this->set('postedData', $post);
-
-    $startRecord = ($page-1)* $pagesize + 1 ;
-    $endRecord = $pagesize;
-    $totalRecords = $srch->recordCount();
-    if ($totalRecords < $endRecord) { $endRecord = $totalRecords; }
-    $json['totalRecords'] = $totalRecords;
-    $json['startRecord'] = $startRecord;
-    $json['endRecord'] = $endRecord;
-    $json['html'] = $this->_template->render( false, false, '', true, false);
-    $json['loadMoreBtnHtml'] = $this->_template->render( false, false, '_partial/load-more-btn.php', true, false);
-    FatUtility::dieJsonSuccess($json);
-    }
-
-    public function whoFavoritesShop($shop_id){
-    $db = FatApp::getDb();
-    $shop_id = FatUtility::int($shop_id);
-
-    $searchForm = $this->getWhoFavouriteSearchForm($this->siteLangId);
-    $searchForm->fill(array('shop_id'=>$shop_id));
-
-    $shopData = $this->getShopInfo($shop_id);
-    if( !$shopData ){
-    Message::addErrorMessage( Labels::getLabel('LBL_Invalid_Request', $this->siteLangId) );
-    FatApp::redirectUser(UrlHelper::generateUrl('Home'));
-    }
-
-    $srch = new UserFavoriteShopSearch($this->siteLangId);
-    $srch->joinWhosFavouriteUser();
-    $srch->joinFavouriteUserShopsCount();
-    $srch->addMultipleFields(array( 'ufs_shop_id as shop_id','ufs_user_id','user_name','userFavShopcount'));
-    $srch->addCondition('ufs_shop_id','=',$shop_id);
-
-    $rs = $srch->getResultSet();
-    $userFavorite = $db->fetchAll( $rs );
-
-    $this->set( 'shopData', $shopData );
-    $this->set( 'searchForm', $searchForm );
-    $this->set( 'userFavoriteCount', $srch->recordCount() );
-    $this->_template->render( );
-    }*/
 
     public function policies($shop_id)
     {
         $shop = $this->getShopInfo($shop_id);
         if (!$shop) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
@@ -971,27 +868,27 @@ class ShopsController extends MyAppController
     private function shopPoliciesData($shop)
     {
         $shop['description'] = empty($shop['shop_description']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_Shop_Description', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_Shop_Description', $this->siteLangId),
             'description' => $shop['shop_description'],
         );
         $shop['shop_payment_policy'] = empty($shop['shop_payment_policy']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_PAYMENT_POLICY', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_PAYMENT_POLICY', $this->siteLangId),
             'description' => $shop['shop_payment_policy'],
         );
         $shop['shop_delivery_policy'] = empty($shop['shop_delivery_policy']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_DELIVERY_POLICY', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_DELIVERY_POLICY', $this->siteLangId),
             'description' => $shop['shop_delivery_policy'],
         );
         $shop['shop_refund_policy'] = empty($shop['shop_refund_policy']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_REFUND_POLICY', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_REFUND_POLICY', $this->siteLangId),
             'description' => $shop['shop_refund_policy'],
         );
         $shop['shop_additional_info'] = empty($shop['shop_additional_info']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_ADDITIONAL_INFO', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_ADDITIONAL_INFO', $this->siteLangId),
             'description' => $shop['shop_additional_info'],
         );
         $shop['shop_seller_info'] = empty($shop['shop_seller_info']) ? (object) array() : array(
-            'title' => Labels::getLabel('LBL_SELLER_INFO', $this->siteLangId),
+            'title' => Labels::getLabel('MSG_SELLER_INFO', $this->siteLangId),
             'description' => $shop['shop_seller_info'],
         );
         return $shop;
@@ -1005,9 +902,7 @@ class ShopsController extends MyAppController
 
         if ($prodCatId > 0) {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shopId, $prodCatId, $lang_id);
-            /* if(false == $file_row){
-            $file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_SHOP_BANNER, $shopId );
-            } */
+          
         }
 
         if (false == $file_row) {
@@ -1016,21 +911,15 @@ class ShopsController extends MyAppController
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 250;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            case 'WIDE':
-                $w = 1320;
-                $h = 320;
-                AttachedFile::displayImage($image_name, $w, $h);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name);
-                break;
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name);
         }
+        
     }
 
     private function getShopInfo($shop_id)
@@ -1058,9 +947,9 @@ class ShopsController extends MyAppController
     {
         $frm = new Form('frmShopReportSpam');
         $frm->addHiddenField('', 'shop_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_Select_Reason', $langId), 'sreport_reportreason_id', ShopReportReason::getReportReasonArr($langId), '', array(), Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $langId), 'sreport_message')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit_Report', $langId));
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_REASON', $langId), 'sreport_reportreason_id', ShopReportReason::getReportReasonArr($langId), '', array(), Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $langId), 'sreport_message')->requirements()->setRequired();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT_REPORT', $langId));
         return $frm;
     }
 
@@ -1070,14 +959,14 @@ class ShopsController extends MyAppController
         //$frm->addHiddenField('', 'user_id');
         $frm->addHiddenField('', 'shop_id');
 
-        $fld = $frm->addHtml(Labels::getLabel('LBL_From', $langId), 'send_message_from', '');
-        $frm->addHtml(Labels::getLabel('LBL_To', $langId), 'send_message_to', '');
-        $frm->addHtml(Labels::getLabel('LBL_About_Product', $langId), 'about_product', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Subject', $langId), 'thread_subject');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Your_Message', $langId), 'message_text');
+        $fld = $frm->addHtml(Labels::getLabel('FRM_FROM', $langId), 'send_message_from', '');
+        $frm->addHtml(Labels::getLabel('FRM_TO', $langId), 'send_message_to', '');
+        $frm->addHtml(Labels::getLabel('FRM_ABOUT_PRODUCT', $langId), 'about_product', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_SUBJECT', $langId), 'thread_subject');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_YOUR_MESSAGE', $langId), 'message_text');
         $fld->requirements()->setRequired();
         $frm->addHiddenField('', 'product_id');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $langId));
+        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $langId));
         return $frm;
     }
 
@@ -1092,7 +981,7 @@ class ShopsController extends MyAppController
     {
         $shopId = FatUtility::int($shopId);
         if (1 > $shopId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
 
@@ -1116,7 +1005,7 @@ class ShopsController extends MyAppController
         $row = FatApp::getDb()->fetch($rs);
 
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
 
@@ -1174,25 +1063,6 @@ class ShopsController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
-    /* private function getProductSearchForm(){
-    $sortByArr = array( 'price_asc' => Labels::getLabel('LBL_Price_(Low_to_High)', $this->siteLangId), 'price_desc' => Labels::getLabel('LBL_Price_(High_to_Low)', $this->siteLangId) );
-
-    $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
-    $itemsTxt = Labels::getLabel('LBL_Items', $this->siteLangId);
-    $pageSizeArr[$pageSize] = $pageSize.' '.$itemsTxt;
-    $pageSizeArr[25] = 25 . ' '.$itemsTxt;
-    $pageSizeArr[50] = 50 . ' '.$itemsTxt;
-    $frm = new Form('frmProductSearch');
-    $frm->addTextBox('','keyword');
-    $frm->addSelectBox( '', 'sortBy', $sortByArr, 'price_asc', array(), '');
-    $frm->addSelectBox( '', 'pageSize', $pageSizeArr, $pageSize, array(), '' );
-    $frm->addHiddenField('', 'page', 1);
-    $frm->addHiddenField('', 'sortOrder', 'asc');
-    $frm->addHiddenField('', 'category', 0);
-    $frm->addHiddenField('', 'shop_id', 0);
-    $frm->addSubmitButton('','btnProductSrchSubmit','');
-    return $frm;
-    } */
 
     private function getListingData($get, $includeShopData = true)
     {

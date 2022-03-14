@@ -6,9 +6,9 @@ $data = array_merge($commonData, $data);
 $responseCode = isset($responseCode) ? $responseCode : LibHelper::RC_OK;
 
 if (applicationConstants::FAILURE == $status && (!isset($msg) || empty($msg))) {
-    $msg = Labels::getLabel('MSG_AN_UNKNOWN_ERROR_OCCURRED', $siteLangId);
+    $msg = Labels::getLabel('ERR_AN_UNKNOWN_ERROR_OCCURRED', $siteLangId);
 } else if (applicationConstants::SUCCESS == $status && (!isset($msg) || empty($msg))) {
-    $msg = Labels::getLabel('MSG_SUCCESS', $siteLangId);
+    $msg = Labels::getLabel('SUC_SUCCESS', $siteLangId);
 }
 
 $response = LibHelper::formatResponse($status, $msg, $data, $responseCode);

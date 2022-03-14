@@ -116,8 +116,7 @@ class ShippingProfileController extends SellerBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
         
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -132,8 +131,7 @@ class ShippingProfileController extends SellerBaseController
         $spObj->assignValues($post);
 
         if (!$spObj->save()) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($spObj->getError());
         }
         
         $languages = Language::getAllNames();
@@ -165,20 +163,17 @@ class ShippingProfileController extends SellerBaseController
 
         $shipprofileId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($shipprofileId < 1) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request_id', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request_id', $this->siteLangId));
         }
 
         $shippingProfile = ShippingProfile::getAttributesById($shipprofileId);
         if (false == $shippingProfile) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
         $whr = array('smt' => 'shipprofile_id = ? and shipprofile_default != ? and shipprofile_user_id = ?', 'vals' => array($shipprofileId, applicationConstants::YES, $this->userParentId));
         if (!FatApp::getDb()->deleteRecords(ShippingProfile::DB_TBL, $whr)) {
-            Message::addErrorMessage(FatApp::getDb()->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(FatApp::getDb()->getError());
         }
 
         $shippingProfData = ShippingProfileZone::getAttributesByProfileId($shipprofileId);
@@ -191,24 +186,20 @@ class ShippingProfileController extends SellerBaseController
 
         $shippingProfileZone = new ShippingProfileZone($shipprozoneId);
         if (!$shippingProfileZone->deleteRecord()) {
-            Message::addErrorMessage($shippingProfileZone->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($shippingProfileZone->getError());
         }
 
         $shippingProfileZone = new ShippingZone($shippingProfData['shipprozone_shipzone_id']);
         if (!$shippingProfileZone->deleteRates($shipprozoneId)) {
-            Message::addErrorMessage($shippingProfileZone->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($shippingProfileZone->getError());
         }
 
         if (!$shippingProfileZone->deleteLocations($shippingProfData['shipprozone_shipzone_id'])) {
-            Message::addErrorMessage($shippingProfileZone->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($shippingProfileZone->getError());
         }
 
         if (!$shippingProfileZone->deleteRecord()) {
-            Message::addErrorMessage($shippingProfileZone->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($shippingProfileZone->getError());
         }
 
         $defaultShipProfileId = ShippingProfile::getDefaultProfileId($this->userParentId);

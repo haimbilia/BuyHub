@@ -39,16 +39,16 @@ if (null != $arguments) {
 }
 
 $pagination .=     FatUtility::getPageString(
-    '<li><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '">xxpagexx</a></li>',
+    '<li class="pagination-item"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '">xxpagexx</a></li>',
     $pageCount,
     $pageNumber,
-    ' <li class="selected"><a href="javascript:void(0);">xxpagexx</a></li>',
-    ' <li><a href="javascript:void(0);">...</a></li> ',
+    ' <li class="pagination-item selected"><a href="javascript:void(0);">xxpagexx</a></li>',
+    ' <li class="pagination-item"><a href="javascript:void(0);">...</a></li> ',
     $linksToDisp,
-    ' <li class="rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></a></li>',
-    ' <li class="forward"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a></li>',
-    ' <li class="prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i></a></li>',
-    ' <li class="next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i></a></li>'
+    ' <li class="pagination-item rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></a></li>',
+    ' <li class="pagination-item forward"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a></li>',
+    ' <li class="pagination-item prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i></a></li>',
+    ' <li class="pagination-item next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i></a></li>'
 );
 
 $ul = new HtmlElement(

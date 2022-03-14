@@ -30,6 +30,12 @@ class FatTemplate
         $this->variables[$name] = $value;
     }
 
+    /** get Variables **/
+    public function get($name)
+    {
+        return $this->variables[$name] ?? NULL;
+    }
+
     protected function writeMetaTags($returnArr = false)
     {
         if (method_exists('MetaTagsWriter', 'getMetaTags')) {
@@ -114,6 +120,7 @@ class FatTemplate
             /* Include JS */
             $str .= '<script>
                     var siteConstants = ' . json_encode(array(
+                'rooturl' => CONF_WEBROOT_FRONTEND,
                 'webroot' => CONF_WEBROOT_URL . $langCode,
                 'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
                 'webroot_dashboard' => CONF_WEBROOT_DASHBOARD . $langCode,

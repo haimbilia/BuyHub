@@ -64,11 +64,9 @@ $(document).ready(function () {
                             loadForm('bulk_media');
                             location.href = fcom.makeUrl('UploadBulkImages', 'downloadPathsFile', [ans.path]);
                         } else {
-                            $(document).trigger('close.mbsmessage');
                             $.ykmsg.error(ans.msg);
                         }
                     } catch (exc) {
-                        $(document).trigger('close.mbsmessage');
                         $.ykmsg.error(t);
                     }
                 },
@@ -94,7 +92,6 @@ $(document).ready(function () {
                     $.ykmsg.success(ans.msg);
                     loadForm('bulk_media');
                 } else {
-                    $(document).trigger('close.mbsmessage');
                     $.ykmsg.error(ans.msg);
                 }
             });

@@ -15,9 +15,26 @@ if (0 < $scollection_id) {
 $urlFld->htmlAfterField = "<small class='form-text text-muted'>" . $collectionUrl . '</small>';
 $IDFld = $colectionForm->getField('scollection_id');
 $IDFld->setFieldTagAttribute('id', "scollection_id");
-$identiFierFld = $colectionForm->getField('scollection_identifier');
-$identiFierFld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','scollection_id')");
+
 $inactive = 1 > $scollection_id ? 'fat-inactive' : '';
+
+$fld = $colectionForm->getField('scollection_name');
+$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','scollection_id');getIdentifier(this);");
+$fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $siteLangId) . '</small>';
+
+$fld = $colectionForm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
+$fld = $colectionForm->getField('scollection_active'); 
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+unset($languages[CommonHelper::getDefaultFormLangId()]);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -30,9 +47,11 @@ $inactive = 1 > $scollection_id ? 'fat-inactive' : '';
             <a class="nav-link active" href="javascript:void(0);" onclick="getShopCollectionGeneralForm(<?php echo $scollection_id; ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
             </a>
-            <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo $siteLangId; ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
+            <?php if(0 < count($languages)){ ?>
+            <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0);" onclick="editShopCollectionLangForm(<?php echo $scollection_id ?>,<?php echo array_key_first($languages); ?>)" title="<?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
             </a>
+            <?php } ?>
             <a class="nav-link <?php echo $inactive; ?>" onclick="sellerCollectionProducts(<?php echo $scollection_id ?>)" href="javascript:void(0);" title="<?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>">
                 <?php echo Labels::getLabel('LBL_LINK', $siteLangId); ?>
             </a>

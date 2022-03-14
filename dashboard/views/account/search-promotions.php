@@ -5,7 +5,7 @@ $prm_budget_dur_arr = Promotion::getPromotionBudgetDurationArr($siteLangId); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button>
     </div>
 <?php } ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
         'promotion_image' => '',
         'promotion_id' => Labels::getLabel('LBL_ID', $siteLangId),

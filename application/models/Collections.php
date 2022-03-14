@@ -30,10 +30,14 @@ class Collections extends MyAppModel
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
+    public const TYPE_PRODUCT_LAYOUT4 = 19;
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
+    public const TYPE_CATEGORY_LAYOUT3 = 20;
     public const TYPE_SHOP_LAYOUT1 = 6;
+    public const TYPE_SHOP_LAYOUT2 = 22;
     public const TYPE_BRAND_LAYOUT1 = 7;
+    public const TYPE_BRAND_LAYOUT2 = 21;
     public const TYPE_BLOG_LAYOUT1 = 8;
     public const TYPE_SPONSORED_PRODUCT_LAYOUT = 9;
     public const TYPE_SPONSORED_SHOP_LAYOUT = 10;
@@ -49,16 +53,20 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
     public const LIMIT_PRODUCT_LAYOUT3 = 12;
+    public const LIMIT_PRODUCT_LAYOUT4 = 3;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
+    public const LIMIT_CATEGORY_LAYOUT1_PRODUCT = 3;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
+    public const LIMIT_CATEGORY_LAYOUT3 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
+    public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
+    public const LIMIT_BRAND_LAYOUT2 = 5;
     public const LIMIT_BLOG_LAYOUT1 = 3;
-    public const LIMIT_FAQ_LAYOUT1 = 6;
+    public const LIMIT_FAQ_LAYOUT1 = 3;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
     public const LIMIT_CONTENT_BLOCK_LAYOUT1 = 1;
     public const LIMIT_COLLECTION_RECORDS = 20;
-
     public const COLLECTION_CRITERIA_PRICE_LOW_TO_HIGH = 1;
     public const COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW = 2;
 
@@ -142,21 +150,21 @@ class Collections extends MyAppModel
     public static function getTypeArr(int $langId): array
     {
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
         return [
-            self::COLLECTION_TYPE_PRODUCT => Labels::getLabel('LBL_Product', $langId),
-            self::COLLECTION_TYPE_CATEGORY => Labels::getLabel('LBL_Category', $langId),
-            self::COLLECTION_TYPE_SHOP => Labels::getLabel('LBL_Shop', $langId),
-            self::COLLECTION_TYPE_BRAND => Labels::getLabel('LBL_Brand', $langId),
-            self::COLLECTION_TYPE_BLOG => Labels::getLabel('LBL_Blog', $langId),
-            self::COLLECTION_TYPE_SPONSORED_PRODUCTS => Labels::getLabel('LBL_Sponsored_Products', $langId),
-            self::COLLECTION_TYPE_SPONSORED_SHOPS => Labels::getLabel('LBL_Sponsored_Shops', $langId),
-            self::COLLECTION_TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
+            self::COLLECTION_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
+            self::COLLECTION_TYPE_CATEGORY => Labels::getLabel('LBL_CATEGORY', $langId),
+            self::COLLECTION_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId),
+            self::COLLECTION_TYPE_BRAND => Labels::getLabel('LBL_BRAND', $langId),
+            self::COLLECTION_TYPE_BLOG => Labels::getLabel('LBL_BLOG', $langId),
+            self::COLLECTION_TYPE_SPONSORED_PRODUCTS => Labels::getLabel('LBL_SPONSORED_PRODUCTS', $langId),
+            self::COLLECTION_TYPE_SPONSORED_SHOPS => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
+            self::COLLECTION_TYPE_BANNER => Labels::getLabel('LBL_BANNER', $langId),
             self::COLLECTION_TYPE_FAQ => Labels::getLabel('LBL_FAQ', $langId),
             self::COLLECTION_TYPE_FAQ_CATEGORY => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
-            self::COLLECTION_TYPE_TESTIMONIAL => Labels::getLabel('LBL_Testimonial', $langId),
-            self::COLLECTION_TYPE_CONTENT_BLOCK => Labels::getLabel('LBL_Content_Blocks', $langId),
+            self::COLLECTION_TYPE_TESTIMONIAL => Labels::getLabel('LBL_TESTIMONIAL', $langId),
+            self::COLLECTION_TYPE_CONTENT_BLOCK => Labels::getLabel('LBL_CONTENT_BLOCKS', $langId),
             self::COLLECTION_TYPE_REVIEWS => Labels::getLabel('LBL_REVIEWS', $langId),
         ];
     }
@@ -170,28 +178,32 @@ class Collections extends MyAppModel
     public static function getLayoutTypeArr(int $langId): array
     {
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
 
         return [
-            self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
-            self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
-            self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
-            self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Category_Layout1', $langId),
-            self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_Category_Layout2', $langId),
-            self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
-            self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_Brand_Layout1', $langId),
-            self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_Blog_Layout1', $langId),
-            self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_Sponsored_Products', $langId),
-            self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_Sponsored_Shops', $langId),
-            self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_Banner_Layout1', $langId),
-            self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_Banner_Layout2', $langId),
-            self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_Mobile_Banner_Layout', $langId),
-            self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_Faq_Layout1', $langId),
-            self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_Testimonial_Layout1', $langId),
-            self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_block_Layout1', $langId),
+            self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
+            self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
+            self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
+            self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
+            self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
+            self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
+            self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
+            self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
+            self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
+            self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
+            self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
+            self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
+            self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_SPONSORED_PRODUCTS', $langId),
+            self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
+            self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
+            self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
+            self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+            self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
+            self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
+            self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT1', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Faq_Categories', $langId),
+            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
         ];
     }
 
@@ -205,19 +217,21 @@ class Collections extends MyAppModel
     {
         return [
             self::COLLECTION_TYPE_BANNER => [
-                self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_Banner_Layout1', $langId),
-                self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_Banner_Layout2', $langId),
-                self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_Mobile_Banner_Layout', $langId),
+                self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
+                self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
+                self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             ],
             self::COLLECTION_TYPE_BRAND => [
-                self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_Brand_Layout1', $langId),
+                self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
+                self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
             ],
             self::COLLECTION_TYPE_BLOG => [
-                self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_Blog_Layout1', $langId),
+                self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
             ],
             self::COLLECTION_TYPE_CATEGORY => [
-                self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Category_Layout1', $langId),
-                self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_Category_Layout2', $langId),
+                self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
+                self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
+                self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
             ],
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
@@ -229,21 +243,23 @@ class Collections extends MyAppModel
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
             ],
             self::COLLECTION_TYPE_PRODUCT => [
-                self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
-                self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
-                self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
+                self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
+                self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
+                self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
+                self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
-                self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
+                self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
+                self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             ],
             self::COLLECTION_TYPE_SPONSORED_PRODUCTS => [
-                self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_Sponsored_Products', $langId),
+                self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_SPONSORED_PRODUCTS', $langId),
             ],
             self::COLLECTION_TYPE_SPONSORED_SHOPS => [
-                self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_Sponsored_Shops', $langId),
+                self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             ],
             self::COLLECTION_TYPE_TESTIMONIAL => [
-                self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_Testimonial', $langId),
+                self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL', $langId),
             ],
             /* self::COLLECTION_TYPE_CONTENT_BLOCK => [
                 self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block', $langId),
@@ -501,7 +517,7 @@ class Collections extends MyAppModel
     {
         $db = FatApp::getDb();
         if (!$collectionId || !$recordId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_TBL_COLLECTION_TO_RECORDS, array('smt' => static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id = ? AND ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id = ?', 'vals' => array($collectionId, $recordId)))) {
@@ -543,7 +559,7 @@ class Collections extends MyAppModel
     public static function getSellProds(int $collection_id, int $lang_id): array
     {
         if (!$collection_id || !$lang_id) {
-            trigger_error(Labels::getLabel('MSG_Arguments_not_specified.', $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ARGUMENTS_NOT_SPECIFIED.', $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -572,7 +588,7 @@ class Collections extends MyAppModel
     public static function getBanners(int $collection_id, int $lang_id): array
     {
         if (!$collection_id || !$lang_id) {
-            trigger_error(Labels::getLabel('MSG_Arguments_not_specified.', $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ARGUMENTS_NOT_SPECIFIED.', $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -601,7 +617,7 @@ class Collections extends MyAppModel
     public static function getCategories(int $collection_id, int $lang_id): array
     {
         if (!$collection_id || !$lang_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -633,7 +649,7 @@ class Collections extends MyAppModel
     public static function getShops(int $collection_id, int $lang_id): array
     {
         if (!$collection_id || !$lang_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -661,7 +677,7 @@ class Collections extends MyAppModel
     public static function getBrands(int $collectionId, int $langId): array
     {
         if (!$collectionId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
 
@@ -687,7 +703,7 @@ class Collections extends MyAppModel
     public static function getBlogs(int $collectionId, int $langId): array
     {
         if (!$collectionId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
 
@@ -714,7 +730,7 @@ class Collections extends MyAppModel
     public static function getFaqs(int $collectionId, int $langId): array
     {
         if (!$collectionId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
 
@@ -748,7 +764,7 @@ class Collections extends MyAppModel
     public static function getFaqCategories(int $collectionId, int $langId): array
     {
         if (!$collectionId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
 
@@ -776,7 +792,7 @@ class Collections extends MyAppModel
     public static function getTestimonials(int $collectionId, int $langId): array
     {
         if (!$collectionId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
 
@@ -805,7 +821,7 @@ class Collections extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -832,7 +848,7 @@ class Collections extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

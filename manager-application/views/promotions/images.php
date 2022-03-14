@@ -7,15 +7,18 @@ if (!empty($bannerImgArr)) { ?>
         $uploadedTime = AttachedFile::setTimeParam($bannerImg['afile_updated_at']);
         switch ($promotionType) {
             case Promotion::TYPE_BANNER:
-                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'Thumb', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], $bannerImg['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_THUMB);
+
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'BannerImage', array($bannerImg['afile_record_id'], $bannerImg['afile_lang_id'], $bannerImg['afile_screen'],  ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 break;
             case Promotion::TYPE_SLIDES:
-                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'Slide', array($bannerImg['afile_record_id'], $bannerImg['afile_screen'], $bannerImg['afile_lang_id'], 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SLIDE, ImageDimension::VIEW_THUMB);
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'Slide', array($bannerImg['afile_record_id'], $bannerImg['afile_screen'], $bannerImg['afile_lang_id'],  ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 break;
         }
     ?>
         <div class="dropzone-uploaded dropzoneUploadedJs">
-            <img src="<?php echo $imgUrl; ?>" title="<?php echo $bannerImg['afile_name']; ?>" alt="<?php echo $bannerImg['afile_name']; ?>">
+            <img data-aspect-ratio = "<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $imgUrl; ?>" title="<?php echo $bannerImg['afile_name']; ?>" alt="<?php echo $bannerImg['afile_name']; ?>">
             <?php if ($canEdit) { ?>
                 <div class="dropzone-uploaded-action">
                     <ul class="actions">

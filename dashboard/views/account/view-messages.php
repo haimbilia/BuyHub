@@ -13,8 +13,8 @@
                 <h5 class="card-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?></h5>
                 <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Account', 'messages'); ?>" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId); ?></a></div>
             </div>
-            <div class="card-body">
-                <div class="js-scrollable table-wrap scroll scroll-x">
+            <div class="card-table">
+                <div class="js-scrollable table-wrap table-responsive">
                     <table class="table">
                         <tbody>
                             <tr class="">
@@ -51,9 +51,9 @@
                                     <span class="item__price">
                                         <?php if ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_ORDER_PRODUCT) {
                                         ?> <?php
-                                            } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) {
-                                                ?> <?php
-                                                } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_PRODUCT) { ?>
+                                        } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) {
+                                            ?> <?php
+                                            } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_PRODUCT) { ?>
                                             <p><?php echo CommonHelper::displayMoneyFormat($threadDetails['selprod_price']); ?></p>
                                         <?php } ?>
                                     </span>
@@ -69,8 +69,8 @@
                 </div>
             </div>
         </div>
-        <div class="gap"></div>
-        <div class="gap"></div>
+
+
         <div class="card">
             <div class="card-body">
                 <?php echo $frmSrch->getFormHtml(); ?> <div id="loadMoreBtnDiv"></div>

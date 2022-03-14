@@ -23,6 +23,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_USER_PROFILE_CROPED_IMAGE = 10;    /*User profile croped image*/
     public const FILETYPE_CATEGORY_ICON = 11; /*Used for mobile and shop templates*/
     public const FILETYPE_CATEGORY_BANNER = 12; /* Used in category detail page */
+    
     public const FILETYPE_CATEGORY_BANNER_SELLER = 13; /* Used in seller shop template page */
     public const FILETYPE_SHOP_BACKGROUND_IMAGE = 14; /* Used in seller shop template page */
     public const FILETYPE_FRONT_LOGO = 15;
@@ -76,6 +77,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 63;
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
     public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
+    public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -141,11 +143,11 @@ class AttachedFile extends MyAppModel
     public static function getFileTypeArray($langId)
     {
         return $arr = array(
-            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_Product_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_Category_Icon', $langId),
-            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Category_Image', $langId),
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_Category_Banner_Seller', $langId),
+            static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_PRODUCT_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_CATEGORY_ICON', $langId),
+            static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORY_IMAGE', $langId),
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_CATEGORY_BANNER_SELLER', $langId),
         );
         return $arr;
     }
@@ -191,7 +193,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (!is_uploaded_file($fileTmpName)) {
-            $this->error = Labels::getLabel('ERR_Unable_To_Upload_File', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_UPLOAD_FILE', CommonHelper::getLangId());
             return false;
         }
 
@@ -261,6 +263,7 @@ class AttachedFile extends MyAppModel
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
     {
+       
         $data = static::getMultipleAttachments($fileType, $recordId, $recordSubid, $langId, $displayUniversalImage, $screen);
         if (count($data) > 0) {
             reset($data);
@@ -618,6 +621,7 @@ class AttachedFile extends MyAppModel
     /* always call this function using image controller and pass relavant arguments. */
     public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
+        
         if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
             self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
@@ -644,12 +648,12 @@ class AttachedFile extends MyAppModel
         }
 
         static::setHeaders();
-
+      
         $w = FatUtility::int($w);
         $h = FatUtility::int($h);
-
+      
         static::checkModifiedHeader($imagePath);
-
+        
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_get_clean();
             ob_start();
@@ -659,10 +663,13 @@ class AttachedFile extends MyAppModel
                 static::loadImage($fileContent, $imagePath);
             }
         }
-
+       
+     
         /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
         $tempPath = '';
+      
         if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+           
             static::setLastModified($imagePath);
             static::setContentType($imagePath);
             $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
@@ -672,14 +679,17 @@ class AttachedFile extends MyAppModel
             }
             $tempPath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
         } else {
+           
             $tempPath = $imagePath;
             static::setLastModified($imagePath);
             static::setContentType($imagePath);
         }
-
+        
         try {
+          
             $img = new ImageResize($tempPath);
         } catch (Exception $e) {
+          
             $img = static::getDefaultImage($imagePath, $w, $h);
             $img->setExtraSpaceColor(204, 204, 204);
         }
@@ -1204,29 +1214,29 @@ class AttachedFile extends MyAppModel
     {
         switch ($code) {
             case UPLOAD_ERR_INI_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_UPLOAD_MAX_FILESIZE_DIRECTIVE_IN_PHP.INI", $langId);
                 break;
             case UPLOAD_ERR_FORM_SIZE:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_EXCEEDS_THE_MAX_FILE_SIZE_DIRECTIVE_THAT_WAS_SPECIFIED_IN_THE_HTML_FORM", $langId);
                 break;
             case UPLOAD_ERR_PARTIAL:
-                $message = Labels::getLabel("MSG_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_THE_UPLOADED_FILE_WAS_ONLY_PARTIALLY_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_FILE:
-                $message = Labels::getLabel("MSG_NO_FILE_WAS_UPLOADED", $langId);
+                $message = Labels::getLabel("ERR_NO_FILE_WAS_UPLOADED", $langId);
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
-                $message = Labels::getLabel("MSG_MISSING_A_TEMPORARY_FOLDER", $langId);
+                $message = Labels::getLabel("ERR_MISSING_A_TEMPORARY_FOLDER", $langId);
                 break;
             case UPLOAD_ERR_CANT_WRITE:
-                $message = Labels::getLabel("MSG_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
+                $message = Labels::getLabel("ERR_FAILED_TO_WRITE_FILE_TO_DISK", $langId);
                 break;
             case UPLOAD_ERR_EXTENSION:
-                $message = Labels::getLabel("MSG_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
+                $message = Labels::getLabel("ERR_FILE_UPLOAD_STOPPED_BY_EXTENSION", $langId);
                 break;
 
             default:
-                $message = Labels::getLabel("MSG_UNKNOWN_UPLOAD_ERROR", $langId);
+                $message = Labels::getLabel("ERR_UNKNOWN_UPLOAD_ERROR", $langId);
                 break;
         }
         return $message;

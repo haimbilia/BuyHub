@@ -1,0 +1,48 @@
+.product-ratings {
+    padding: 0;
+    margin: 5px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.85rem;
+    a {
+        color: inherit;
+        font-size: inherit;
+    }
+
+    .icn {
+        margin-#{$end-direction}: 0.8rem;
+        background: lighten($star-color, 35);
+        border-radius: 50%;
+        padding: 0.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .svg {
+            fill: $star-color;
+        }
+    }
+    .rate {
+        margin: 0 !important;
+        padding: 0;
+        line-height: inherit;
+        font-weight: 500;
+        //height: 1rem;
+        span {
+            color: $txt-gray;
+        }
+        a {
+            color: $brand-color;
+        }
+    }
+    .be-first {
+        line-height: 1;
+        font-size: 0.9em;
+        font-weight: 300;
+        display: inline-block;
+        vertical-align: top;
+        color: $secondary-color;
+    }
+}

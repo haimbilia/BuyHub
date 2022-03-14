@@ -1,7 +1,7 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-lg-6 col-md-6 quick-col-1">
-            <?php include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
+
             <?php if ($productImagesArr) { ?>
                 <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php foreach ($productImagesArr as $afile_id => $image) {
@@ -28,15 +28,15 @@
             <div class="product-detail product-description product-detail-quickview">
                 <div>
                     <div class="product-description-inner">
-                        <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>"><?php echo $product['selprod_title']; ?></a>
+                        <div class="products-title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>"><?php echo $product['selprod_title']; ?></a>
                         </div>
                         <div class="gap"></div>
-                        <div class="products_price">
-                            <span class="products_price_new">
+                        <div class="products-price">
+                            <span class="products-price-new">
                                 <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                <del class="products_price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
-                                <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
+                                <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                             <?php } ?>
                         </div>
                         <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
@@ -120,7 +120,7 @@
 
                         <div class="not-available">
                             <svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                 </use>
                             </svg><?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
                         </div>
@@ -141,7 +141,7 @@
                                 <div class="qty-wrapper">
                                     <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
                                         <span class="decrease decrease-js not-allowed"><i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
+                                                <svg class="svg" width="16" height="16">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                     </use>
                                                 </svg>
@@ -150,7 +150,7 @@
                                             <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                         </div>
                                         <span class="increase increase-js"><i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
+                                                <svg class="svg" width="16" height="16">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                                     </use>
                                                 </svg>

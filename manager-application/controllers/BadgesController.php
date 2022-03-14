@@ -107,7 +107,7 @@ class BadgesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true); 
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true);
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
@@ -125,18 +125,18 @@ class BadgesController extends ListingBaseController
         }
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
-        
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->doNotCalculateRecords();
+
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting); 
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         $this->set("approvalStatusArr", $approvalStatusArr);
     }
@@ -149,7 +149,7 @@ class BadgesController extends ListingBaseController
 
         $dataToFill = [];
         if ($recordId > 0) {
-            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, ['*','IFNULL(badge_name,badge_identifier) as badge_name'], applicationConstants::JOIN_RIGHT);
+            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, ['*', 'IFNULL(badge_name,badge_identifier) as badge_name'], applicationConstants::JOIN_RIGHT);
         }
 
         $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
@@ -232,7 +232,7 @@ class BadgesController extends ListingBaseController
 
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -288,9 +288,19 @@ class BadgesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getMediaForm($recordId);
+        $getBadgeDimensions = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, ImageDimension::VIEW_THUMB);
+        $getAspectRatio = $getBadgeDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'];
+        $arrRatio = explode(":", $getAspectRatio);
+        if ($arrRatio) {
+            $ratioJs = $arrRatio[0] . ' / ' . $arrRatio[1];
+        } else {
+            $ratioJs = '1' . ' / ' . '1';
+        }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('ratioJs',$ratioJs);
         $this->set('displayFooterButtons', false);
+        $this->set('getBadgeDimensions', $getBadgeDimensions);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
         $this->set('html', $this->_template->render(false, false, NULL, true));

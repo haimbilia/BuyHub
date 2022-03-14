@@ -71,8 +71,8 @@ class Promotion extends MyAppModel
         }
 
         $arr = array(
-        static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
-        static::TYPE_SLIDES => Labels::getLabel('LBL_Slides', $langId),
+        static::TYPE_BANNER => Labels::getLabel('LBL_BANNER', $langId),
+        static::TYPE_SLIDES => Labels::getLabel('LBL_SLIDES', $langId),
         );
 
         if ($displayAdvertiserOnly) {
@@ -80,10 +80,10 @@ class Promotion extends MyAppModel
         }
 
         return array(
-        static::TYPE_SHOP => Labels::getLabel('LBL_Shop', $langId),
-        static::TYPE_PRODUCT => Labels::getLabel('LBL_Product', $langId),
-        static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
-        static::TYPE_SLIDES => Labels::getLabel('LBL_Slides', $langId),
+        static::TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId),
+        static::TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
+        static::TYPE_BANNER => Labels::getLabel('LBL_BANNER', $langId),
+        static::TYPE_SLIDES => Labels::getLabel('LBL_SLIDES', $langId),
         );
     }
 
@@ -200,7 +200,7 @@ class Promotion extends MyAppModel
             $txnArray["utxn_status"] = Transactions::STATUS_COMPLETED;
             $txnArray["utxn_type"] = Transactions::TYPE_PPC;
 
-            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('M_Charges_for_promotion_from_duration', $langId), $formatted_request_value, $dataToSave['pcharge_start_date'], $dataToSave['pcharge_end_date'], $dataToSave['pcharge_clicks']);
+            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('MSG_CHARGES_FOR_PROMOTION_FROM_DURATION', $langId), $formatted_request_value, $dataToSave['pcharge_start_date'], $dataToSave['pcharge_end_date'], $dataToSave['pcharge_clicks']);
             if ($txnId = $transObj->addTransaction($txnArray)) {
                 $emailNotificationObj = new EmailHandler();
 
@@ -221,9 +221,9 @@ class Promotion extends MyAppModel
         }
 
         return array(
-        static::DAILY => Labels::getLabel('LBL_Daily', $langId),
-        static::WEEKLY => Labels::getLabel('LBL_Weekly', $langId),
-        static::MONTHLY => Labels::getLabel('LBL_Monthly', $langId)
+        static::DAILY => Labels::getLabel('LBL_DAILY', $langId),
+        static::WEEKLY => Labels::getLabel('LBL_WEEKLY', $langId),
+        static::MONTHLY => Labels::getLabel('LBL_MONTHLY', $langId)
         );
     }
 
@@ -248,11 +248,11 @@ class Promotion extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('ERR_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
         $arr = array(
 
-        applicationConstants::YES => Labels::getLabel('LBL_Approved', $langId),
+        applicationConstants::YES => Labels::getLabel('LBL_APPROVED', $langId),
 
         );
         return $arr;

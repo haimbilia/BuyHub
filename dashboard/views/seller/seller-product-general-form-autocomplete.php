@@ -353,7 +353,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             <?php } ?>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="js-scrollable table-wrap table-responsive">
                         <table id="optionsTable-js" class="table table-justified <?php echo ($selprod_id == 0) ? 'd-none' : ''; ?>">
                             <thead>
                                 <tr>
@@ -531,7 +531,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                     method: 'post',
                     data: function(params) {
                         if ('undefined' != typeof params.term && '' != params.term) {
-                            $.systemMessage(langLbl.processing, 'alert--process', false);
+                            fcom.displayProcessing();
                         }
                         return {
                             keyword: params.term, // search term
@@ -540,7 +540,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                     },
                     processResults: function(data, params) {
                         if (0 < (data.options).length) {
-                            $.systemMessage.close();
+                            $.ykmsg.close();
                         }
                         return {
                             results: data.options
@@ -568,7 +568,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                 var item = e.params.args.data;
                 if (0 < $('table#optionsTable-js tbody tr#' + item.id).length) {
                     $(".optionname--js").val(null).trigger('change');
-                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    fcom.displayErrorMessage(langLbl.alreadySelected);
                     return;
                 } else {
                     $('input[name="inv_option_name"]').val(item.name);
@@ -597,7 +597,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                     '' == invOptionSell_price ||
                     '' == invOptionStock ||
                     '' == invOptionSku)) {
-                $.systemMessage(langLbl.requiredFields, 'alert--danger');
+                fcom.displayErrorMessage(langLbl.requiredFields);
                 return;
             }
 
@@ -623,16 +623,16 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             }, {});
 
             postData = $.extend(invFormData, postData);
-            $.systemMessage(langLbl.processing, 'alert--process');
+            fcom.displayProcessing();
             $.ajax({
                 url: fcom.makeUrl('Seller', 'addInvOption'),
                 data: postData,
                 dataType: 'json',
                 type: 'post',
                 success: function(json) {
-                    $.systemMessage.close();
+                    $.ykmsg.close();
                     if (1 > json.status) {
-                        $.systemMessage(json.msg, 'alert--danger');
+                        fcom.displayErrorMessage(json.msg);
                         return false;
                     }
 

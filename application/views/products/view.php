@@ -6,34 +6,39 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <div id="body" class="body detail-page">
     <section class="">
         <div class="container">
-            <div class="py-4">
-                <div class="breadcrumbs breadcrumbs--center">
-                    <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php');  ?>
-                </div>
-            </div>
-            <div class="detail-wrapper">
-                <div class="detail-first-fold ">
-                    <div class="row justify-content-between">
-                        <div class="col-lg-7 relative">
-                            <?php include('product-detail-gallery.php'); ?>
-                        </div>
-                        <div class="col-lg-5 col-details-right">
-                            <?php include('product-description.php'); ?>
-                        </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="breadcrumb">
+                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php');  ?>
+                    </div>
+                    <div class="detail-first-fold">
+                        <?php include('product-detail-gallery.php'); ?>
+                        <?php include('product-description.php'); ?>
                     </div>
                 </div>
-                <?php include('more-sellers.php');  ?>
             </div>
 
-            <?php
-            include('prod-desc-nav-detail.php');
-            include('banners.php');
-            ?>
+            <?php include('prod-desc-nav-detail.php'); ?>
+            <?php include('more-sellers.php');  ?>
         </div>
     </section>
+    <?php include('banners.php'); ?>
     <?php if ($recommendedProducts) { ?>
         <section class="section bg-brand-light">
             <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
+        </section>
+    <?php } ?>
+
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+        <section class="section">
+            <div class="container">
+                <div id="itemRatings">
+                    <?php
+                    echo $frmReviewSearch->getFormHtml();
+                    $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
+                    ?>
+                </div>
+            </div>
         </section>
     <?php } ?>
     <?php if ($relatedProductsRs) { ?>
@@ -96,29 +101,6 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         });
         /* ] */
 
-        $(".nav-scroll-js").click(function(event) {
-            event.preventDefault();
-            var full_url = this.href;
-            var parts = full_url.split("#");
-            var trgt = parts[1];
-            /* var target_offset = $("#" + trgt).offset();
-            var target_top = target_offset.top - $('#header').height();
-            $('html, body').animate({
-                scrollTop: target_top
-            }, 800); */
-            $('html, body').animate({
-                scrollTop: parseInt($("#" + trgt).position().top) + parseInt($("#scrollUpTo-js")
-                    .position().top)
-            }, 800);
-
-        });
-        $('.nav-detail-js li a').click(function() {
-            $('.nav-detail-js li a').removeClass('is-active');
-            $(this).addClass('is-active');
-        });
-
-        var headerHeight = $("#header").height();
-        $(".nav-detail-js").css('top', headerHeight);
 
     });
 </script>

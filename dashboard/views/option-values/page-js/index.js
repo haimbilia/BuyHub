@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	searchOptionValueListing(document.frmSearch);
+	searchRecords(document.frmRecordSearch);
 });
 (function () {
 	var currentPage = 1;
@@ -9,86 +9,95 @@ $(document).ready(function () {
 		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
-		var frm = document.frmSearchOptionValuePaging;
+		var frm = document.frmRecordSearch;
 		$(frm.page).val(page);
-		searchOptionValueListing(frm);
+		searchRecords(frm);
 	}
 
 	reloadList = function () {
-		var frm = document.frmSearchOptionValuePaging;
-		searchOptionValueListing(frm);
+		var frm = document.frmRecordSearch;
+		searchRecords(frm);
 	}
-
-	addOptionValueForm = function (optionId, id) {
-		var frm = document.frmSearchOptionValuePaging;
+	
+	form = function (optionId, id) {
+		optionId = optionId || $('.navTabsJs').data('optionId');
+		id = id || $('.navTabsJs').data('optionValueId');
+		console.log();
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.mbsmessage(res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(res.msg);
 			} catch (e) {
 				$.ykmodal(t);
 			}
-
-
 		});
 	};
 
-	setUpOptionValues = function (frm) {
+	setup = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
-			$.mbsmessage.close();
-			reloadList();
+			$.ykmsg.close();
+			$('.navTabsJs').data('optionValueId', t.optionValueId);
+			$('.navTabsJs').data('optionId', t.optionId);
+			reloadList();		
 			if (t.langId > 0) {
-				optionValueLangForm(t.optionValueId, t.langId);
-				return;
-			}
-			$.ykmodal.close();
+				langForm(t.optionValueId, t.langId);
+				return;				
+			}	
+			form(t.optionId,t.optionValueId);		
 		});
 	};
 
-	optionValueLangForm = function (optionValueId, langId, autoFillLangData = 0) {
-		fcom.ajax(fcom.makeUrl('OptionValues', 'langForm', [optionValueId, langId, autoFillLangData = 0]), '', function (t) {
-			$.ykmodal(t);
+	langForm = function (optionValueId, langId, autoFillLangData = 0) {
+		optionValueId = optionValueId || $('.navTabsJs').data('optionValueId');
+        if (optionValueId < 0 || typeof (optionValueId) == "undefined") {
+            return false;
+        }
+        if (typeof (langId) == "undefined" || langId < 0) {
+            return false;
+        }     
+		markPopupTabActive();       
+        $('#editFormJs').prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('OptionValues', 'langForm', [optionValueId, langId, autoFillLangData]), '', function (t) {
+			$('#editFormJs').html(t);
 		});
 	};
 
-	setUpOptionValueLang = function (frm) {
+	langSetup = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'langSetup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			reloadList();
 			if (t.langId > 0) {
-				optionValueLangForm(t.optionValueId, t.langId);
+				langSetup(t.optionValueId, t.langId);
 				return;
-			}
-			$.ykmodal.close();
+			}			
 		});
 	};
 
-	searchOptionValueListing = function (form) {
+	searchRecords = function (form) {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
-		}
-		$("#optionValueListing").html('Loading....');
+		}	
+		$('#optionValueListing').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			$("#optionValueListing").html(res);
 		});
 	};
 
-	deleteOptionValueRecord = function (id) {
-		if (!confirm(langLbl.confirmDelete)) { return; }
-		data = 'id=' + id;
-		fcom.ajax(fcom.makeUrl('OptionValues', 'deleteRecord'), data, function (res) {
+	deleteRecord = function (option_id, id) {
+		if (!confirm(langLbl.confirmDelete)) { return; }		
+		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), {option_id,id}, function (res) {
 			reloadList();
 		});
 	};
 
 	clearOptionValueSearch = function () {
 		document.frmSearch.reset();
-		searchOptionValueListing(document.frmSearch);
+		searchRecords(document.frmSearch);
 	};
 
 })();

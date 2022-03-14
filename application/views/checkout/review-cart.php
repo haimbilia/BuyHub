@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="section-head">
-    <div class="section__heading">
+    <div class="section-heading">
         <h2><?php echo Labels::getLabel('LBL_Review_Order', $siteLangId); ?></h2>
     </div>
 </div>
@@ -31,10 +31,10 @@
                                     <figure class="item__pic"><a href="<?php echo $productUrl; ?>"><img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>"></a></figure>
                                 </td>
                                 <td>
-                                    <div class="item__description">
+                                    <div class="product-profile-data">
                                         <div class="item__category"><?php echo Labels::getLabel('LBL_Shop', $siteLangId) ?>: <span class="text--dark"><?php echo $product['shop_name']; ?></span></div>
-                                        <div class="item__title"><a title="<?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
-                                        <div class="item__specification">
+                                        <div class="title"><a title="<?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
+                                        <div class="options">
                                             <?php
                                             if (isset($product['options']) && count($product['options'])) {
                                                 foreach ($product['options'] as $option) { ?>
@@ -75,7 +75,7 @@
             </table>
         </div>
         <div class="cartdetail__footer js-scrollable table-wrap">
-            <table class="table--justify">
+            <table class="table-justify">
                 <tr>
                     <td><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></td>
                     <td><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></td>
@@ -105,8 +105,8 @@
                     </tr>
                 <?php } ?>
                 <tr>
-                    <td class="hightlighted"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></td>
-                    <td class="hightlighted"><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']); ?></td>
+                    <td class="highlighted"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></td>
+                    <td class="highlighted"><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']); ?></td>
                 </tr>
                 <tr>
                     <td></td>

@@ -30,16 +30,14 @@ if (null != $fld) {
     $fld->setFieldTagAttribute('class', 'opId--js');
 }
 ?>
-<div class="replaced">
-    <div class="row">
-        <div class="col-lg-12">
-            <?php echo $frmSrch->getFormHtml(); ?>
-            <?php echo $frmSrch->getExternalJS(); ?>
-        </div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <?php echo $frmSrch->getFormHtml(); ?>
+        <?php echo $frmSrch->getExternalJS(); ?>
     </div>
 </div>
-<span class="gap"></span>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
         'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
         'filesCount'    =>    Labels::getLabel('LBL_FILES_INSIDE', $siteLangId),

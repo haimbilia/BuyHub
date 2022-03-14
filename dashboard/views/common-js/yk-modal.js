@@ -1,5 +1,6 @@
 (function ($) {
     var displayInPopup = false;
+    var isloader = false;
     $.ykmodal = function (data, popupView = '', dialogClassParm = "", modalClassParm = "", bodyClass = "") {
         modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
@@ -11,6 +12,8 @@
             modalClass = modalClassParm;
             dialogClass = 'modal-dialog-centered ' + dialogClassParm;
         }
+        
+        isloader = $(data).hasClass("loaderJs");
 
         init(modalClass, dialogClass);
         if (data.ajax) { fillYKModalFromAjax(data.ajax); }
@@ -23,7 +26,7 @@
     $.extend($.ykmodal, {
         element: Date.now(),
         reveal: function (data, bodyClass) {
-            if ($(data).hasClass("loaderJs") && 0 < $("." + $.ykmodal.element + " .loaderContainerJs").length) {
+            if (isloader && 0 < $("." + $.ykmodal.element + " .loaderContainerJs").length) {
                 $("." + $.ykmodal.element + " .loaderContainerJs").prepend(data);
                 return;
             }
@@ -47,7 +50,7 @@
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
                 $(contentBody + " .modal-body").addClass(bodyClass);
             }
-            
+
             $.ykmodal.show();
         },
         close: function () {
@@ -66,7 +69,7 @@
         },
         isSideBarView: function () {
             return !!$(".fixed-right." + $.ykmodal.element).length;
-        },
+        }
     });
 
     function init(modalClass, dialogClass) {
@@ -80,7 +83,11 @@
             $("." + $.ykmodal.element).addClass('fixed-right');
         }
 
-        $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', 'modal-dialog ' + dialogClass);
+        var oldClass = $("body ." + $.ykmodal.element + " .modal-dialog").attr('class');
+        var newClass = 'modal-dialog ' + dialogClass;
+        if (oldClass.trim() != newClass.trim() && !isloader) {
+            $("body ." + $.ykmodal.element + " .modal-dialog").attr('class', newClass.trim());
+        }
     }
 
     function fillYKModalFromHref(href) {

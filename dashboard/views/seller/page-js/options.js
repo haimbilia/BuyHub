@@ -20,26 +20,34 @@ $(document).ready(function () {
 	}
 
 	optionForm = function (optionId) {
+		optionId = optionId || $('.navTabsJs').data('optionId');
 		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.mbsmessage(res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(res.msg);
 			} catch (e) {
 				$.ykmodal(t);
-				addOptionForm(optionId);
-				optionValueListing(optionId);
 			}
 
 		});
-	}
+	}	
 
-	addOptionForm = function (optionId) {
-		fcom.ajax(fcom.makeUrl('Seller', 'addOptionForm', [optionId]), '', function (t) {
-			$(dv).html(t);
-			fcom.removeLoader();
-		});
-	};
+	optionLangForm = function (optionId, langId, autoFillLangData = 0) {
+        optionId = optionId || $('.navTabsJs').data('optionId');
+        if (optionId < 0 || typeof (optionId) == "undefined") {
+            return false;
+        }
+        if (typeof (langId) == "undefined" || langId < 0) {
+            return false;
+        }
+        markPopupTabActive();       
+        $('#editFormJs').prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('seller', 'optionLangForm', [optionId, langId, autoFillLangData]), '', function (t) {
+            fcom.removeLoader();
+            $('#editFormJs').html(t);
+        });
+    };
 
 	optionValueListing = function (optionId) {
 		if (optionId == 0) { $('#showHideContainer').addClass('hide'); return; }
@@ -55,10 +63,11 @@ $(document).ready(function () {
 		});
 	};
 
-	optionValueForm = function (optionId, id) {
+	optionValueForm = function (optionId, id = 0) {
+		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
 			fcom.removeLoader();
-			$(dv).html(t);
+			$.ykmodal(t);		
 			optionValueListing(optionId);
 		});
 	};
@@ -67,7 +76,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			if (t.optionId > 0) {
 				optionValueForm(t.optionId, 0);
 				return;
@@ -80,7 +89,7 @@ $(document).ready(function () {
 		if (!confirm(langLbl.confirmDelete)) { return; }
 		data = 'id=' + id + '&option_id=' + optionId;
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), data, function (res) {
-			$.mbsmessage.close();
+			$.ykmsg.close();
 			optionValueListing(optionId);
 			optionValueForm(optionId, 0);
 		});
@@ -107,7 +116,6 @@ $(document).ready(function () {
 	};
 
 	showHideValues = function (obj) {
-
 		var type = obj.value;
 		var data = 'optionType=' + type;
 		fcom.ajax(fcom.makeUrl('Options', 'canSetValue'), data, function (t) {
@@ -123,15 +131,26 @@ $(document).ready(function () {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function (t) {
+			$('.navTabsJs').data('optionId', t.optionId);			
 			reloadList();
-			if (t.optionId > 0) {
-				if (1 > $("#showHideContainer").length) {
-					optionForm(t.optionId);
-				}
+			if (t.langId > 0) {
+				optionLangForm(t.optionId,t.langId)
 			}
-			$.mbsmessage.close();
+			$.ykmsg.close();
 		});
 	};
+
+	optionLangSetup = function (frm) {
+        if (!$(frm).validate())
+            return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'optionLangSetup'), data, function (t) {
+            if (t.langId > 0) {
+                optionLangForm(t.optionId,t.langId)
+                return;
+            }                      
+        });
+    };
 
 	searchRecords = function (form) {
 		/*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
@@ -154,9 +173,9 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('seller', 'deleteSellerOption'), data, function (t) {
 			$res = $.parseJSON(t);
 			if ($res.status == 0) {
-				$.mbsmessage($res.msg, true, 'alert--danger');
+				fcom.displayErrorMessage($res.msg);
 			} else {
-				$.mbsmessage($res.msg, true, 'alert--success');
+				fcom.displaySuccessMessage($res.msg);
 			}
 			reloadList();
 		});

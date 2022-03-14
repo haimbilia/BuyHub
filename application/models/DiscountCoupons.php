@@ -77,8 +77,8 @@ class DiscountCoupons extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::VALID_FOR_ONE_TIME => Labels::getLabel('LBL_One_Time', $langId),
-            static::VALID_FOR_RECURRING_ALSO => Labels::getLabel('LBL_Include_Recurring', $langId),
+            static::VALID_FOR_ONE_TIME => Labels::getLabel('LBL_ONE_TIME', $langId),
+            static::VALID_FOR_RECURRING_ALSO => Labels::getLabel('LBL_INCLUDE_RECURRING', $langId),
         );
     }
 
@@ -88,7 +88,7 @@ class DiscountCoupons extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -114,7 +114,7 @@ class DiscountCoupons extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -151,7 +151,7 @@ class DiscountCoupons extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -174,7 +174,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
 
@@ -194,7 +194,7 @@ class DiscountCoupons extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -218,7 +218,7 @@ class DiscountCoupons extends MyAppModel
         $lang_id = FatUtility::int($lang_id);
 
         if (!$coupon_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -241,7 +241,7 @@ class DiscountCoupons extends MyAppModel
         $user_id = FatUtility::int($user_id);
 
         if (!$user_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }   
         $intervalInMinutes = FatApp::getConfig('cart_stock_hold_minutes', FatUtility::VAR_INT, 15);
@@ -465,10 +465,10 @@ class DiscountCoupons extends MyAppModel
         $langId = FatUtility::int($langId);
 
         if ($userId <= 0) {
-            trigger_error(Labels::getLabel("ERR_User_id_is_mandatory", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_USER_ID_IS_MANDATORY", $langId), E_USER_ERROR);
         }
         if ($langId <= 0) {
-            trigger_error(Labels::getLabel("ERR_Language_id_is_mandatory", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_LANGUAGE_ID_IS_MANDATORY", $langId), E_USER_ERROR);
         }
 
         $currDate = date('Y-m-d');
@@ -941,7 +941,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $prodcat_id = FatUtility::int($prodcat_id);
         if (1 > $coupon_id || 1 > $prodcat_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
 
@@ -963,7 +963,7 @@ class DiscountCoupons extends MyAppModel
         $prodcat_id = FatUtility::int($prodcat_id);
 
         if (1 > $coupon_id || 1 > $prodcat_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
         $db = FatApp::getDb();
@@ -979,7 +979,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $spplan_id = FatUtility::int($spplan_id);
         if (1 > $coupon_id || 1 > $spplan_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
 
@@ -1001,7 +1001,7 @@ class DiscountCoupons extends MyAppModel
         $spplan_id = FatUtility::int($spplan_id);
 
         if (1 > $coupon_id || 1 > $spplan_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -1018,7 +1018,7 @@ class DiscountCoupons extends MyAppModel
         $product_id = FatUtility::int($product_id);
 
         if (1 > $coupon_id || 1 > $product_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1036,7 +1036,7 @@ class DiscountCoupons extends MyAppModel
         $shop_id = FatUtility::int($shop_id);
 
         if (1 > $coupon_id || 1 > $shop_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -1053,7 +1053,7 @@ class DiscountCoupons extends MyAppModel
         $brand_id = FatUtility::int($brand_id);
 
         if (1 > $coupon_id || 1 > $brand_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -1069,7 +1069,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $product_id = FatUtility::int($product_id);
         if (1 > $coupon_id || 1 > $product_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
 
@@ -1090,7 +1090,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $user_id = FatUtility::int($user_id);
         if (1 > $coupon_id || 1 > $user_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
 
@@ -1111,7 +1111,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $shop_id = FatUtility::int($shop_id);
         if (1 > $coupon_id || 1 > $shop_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1132,7 +1132,7 @@ class DiscountCoupons extends MyAppModel
         $coupon_id = FatUtility::int($coupon_id);
         $brand_id = FatUtility::int($brand_id);
         if (1 > $coupon_id || 1 > $brand_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1154,7 +1154,7 @@ class DiscountCoupons extends MyAppModel
         $user_id = FatUtility::int($user_id);
 
         if (1 > $coupon_id || 1 > $user_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);;
             return false;
         }
         $db = FatApp::getDb();

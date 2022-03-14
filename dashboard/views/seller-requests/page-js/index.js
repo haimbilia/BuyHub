@@ -3,6 +3,12 @@ $(document).on("change", '[name="breq_record_type"]', function () {
     $('table.recordListing--js tr').remove();
 });
 
+$(document).on('change', '#brandlogoLanguageJs', function () {
+    var lang_id = $(this).val();
+    var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
+    brandMediaForm(brand_id,lang_id);
+});
+
 (function () {
     var runningAjaxReq = false;
     var dv = '#listing';
@@ -86,14 +92,13 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         });
     };
 
-
     /* Product Brand Request [ */
     addBrandReqForm = function (id) {
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
         });
     };
 
@@ -102,19 +107,18 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             searchBrandRequests(frm);
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
-            }
-            closeForm();
+            }          
         }, { fOutMode: 'json' });
     };
 
     addBrandReqLangForm = function (brandReqId, langId, autoFillLangData = 0) {
         $("#brandReqFormJs").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
             $("#brandReqFormJs").html(t);
         });
@@ -125,7 +129,6 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'brandReqLangSetup'), data, function (t) {
-
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
@@ -133,14 +136,13 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             if (t.openMediaForm) {
                 brandMediaForm(t.brandReqId);
                 return;
-            }
-            closeForm();
+            }           
         });
     };
 
-    brandMediaForm = function (brandReqId) {
+    brandMediaForm = function (brandReqId,langId = 0) {
         $("#brandReqFormJs").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId,langId]), '', function (t) {
             fcom.removeLoader();
             $("#brandReqFormJs").html(t);
         });
@@ -151,33 +153,32 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeBrandLogo', [brandReqId, langId]), '', function (t) {
-            brandMediaForm(brandReqId);
-            reloadList();
+            brandMediaForm(brandReqId,langId);
+            searchBrandRequests();
         });
     }
 
     checkUniqueBrandName = function (obj, $langId, $brandId) {
         data = "brandName=" + $(obj).val() + "&langId= " + $langId + "&brandId= " + $brandId;
         fcom.ajax(fcom.makeUrl('Brands', 'checkUniqueBrandName'), data, function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $res = $.parseJSON(t);
 
             if ($res.status == 0) {
                 $(obj).val('');
-
-                $alertType = 'alert--danger';
-
-                $.mbsmessage($res.msg, true, $alertType);
+                fcom.displayErrorMessage($res.msg);
             }
 
         });
     };
 
     brandPopupImage = function (inputBtn) {
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
-                $('#cropperBox-js').html(t);
-                $("#brandMediaForm-js").css("display", "none");
+            fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var ratioType = document.frmBrandMedia.ratio_type.value;
                 var aspectRatio = 1 / 1;
                 if (ratioType == ratioTypeRectangular) {
@@ -194,7 +195,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
                 };
                 var file = inputBtn.files[0];
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadBrandLogo', inputBtn);
+               setTimeout(function () { cropImage(file, options, 'uploadBrandLogo', inputBtn); }, 100);          
             });
         }
     };
@@ -213,24 +214,13 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             data: formData,
             cache: false,
             contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $('#loader-js').prepend(fcom.getLoader());
-            },
-            complete: function () {
-                $('#loader-js').prepend(fcom.getLoader());
-            },
+            processData: false,           
             success: function (ans) {
-                fcom.removeLoader();
-                $('.text-danger').remove();
-                $('#input-field').html(ans.msg);
-                if (ans.status == true) {
-                    $('#input-field').removeClass('text-danger');
-                    $('#input-field').addClass('badge-success');
-                    brandMediaForm(ans.brandId);
-                } else {
-                    $('#input-field').removeClass('badge-success');
-                    $('#input-field').addClass('text-danger');
+                fcom.removeLoader();              
+                $("#modalBoxJs").modal("hide");        
+                if (ans.status == true) {          
+                    brandMediaForm(ans.brandId , langId);
+                    fcom.displaySuccessMessage(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -242,10 +232,20 @@ $(document).on("change", '[name="breq_record_type"]', function () {
     /* ] */
 
     /* Product Category  request [*/
-    addCategoryReqForm = function (id) {
+    addCategoryReqForm = function (id = 0) {
+        id = id || $('.navTabsJs').data('category-id');        
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
+        });
+    };
+
+    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {
+        categoryReqId = categoryReqId || $('.navTabsJs').data('category-id');
+        $("#categoryReqFormJs").prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqLangForm', [categoryReqId, langId, autoFillLangData]), '', function (t) {
+            fcom.removeLoader();
+            $("#categoryReqFormJs").html(t);
         });
     };
 
@@ -253,9 +253,24 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {
-            
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) { 
+            $('.navTabsJs').data('category-id',t.categoryReqId);    
+            if(0 < t.langId){
+                addCategoryReqLangForm(t.categoryReqId,t.langId);
+            }       
             searchProdCategoryRequests(frm);
+        });
+    };
+
+    setupCategoryReqLang = function (frm) {
+        if (!$(frm).validate())
+            return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'categoryReqLangSetup'), data, function (t) {
+            if (t.langId > 0) {
+                addCategoryReqLangForm(t.categoryReqId, t.langId);
+                return;
+            }                     
         });
     };
 
@@ -324,14 +339,14 @@ $(document).on("change", '[name="breq_record_type"]', function () {
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $.mbsmessage(langLbl.processing, false, 'alert--process');
+                fcom.displayProcessing();
             },
             success: function (ans) {
-                var className = (ans.status == 1 ? 'alert--success' : 'alert--danger');
-                $.mbsmessage(ans.msg, true, className);
                 if (1 > ans.status) {
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                 }
+                fcom.displaySuccessMessage(ans.msg);
                 backToListing();
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -367,7 +382,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -381,7 +396,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return [data.shopData];
         } else {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
     }
@@ -430,7 +445,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
                 JSONObj = JSON.parse(badgeLinkRecordIds);
                 if (JSONObj.includes(e.params.args.data.id)) {
                     selector.val('').trigger('change');
-                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    fcom.displayErrorMessage(langLbl.alreadySelected);
                     return false;
                 }
                 JSONObj.push(e.params.args.data.id);
@@ -488,7 +503,7 @@ $(document).on("change", '[name="breq_record_type"]', function () {
         fcom.ajax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestRefFile', [badgeReqId]), '', function (t) {
             var res = $.parseJSON(t);
             if (1 > res.status) {
-                $.systemMessage(res.msg, 'alert--danger');
+                fcom.displayErrorMessage(res.msg);
                 return false;
             }
             $('.refFile--js').remove();

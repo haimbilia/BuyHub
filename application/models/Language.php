@@ -64,11 +64,11 @@ class Language extends MyAppModel
         $srch = new SearchBase(static::DB_TBL);
         $srch->addOrder(static::tblFld('id'));
         if ($active === true) {
-            $srch->addCondition('language_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('language_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($recordId > 0) {
-            $srch->addCondition(static::tblFld('id'), '=', FatUtility::int($recordId));
+            $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . FatUtility::int($recordId), 'AND', true);
         }
 
         $srch->doNotCalculateRecords();
@@ -76,7 +76,7 @@ class Language extends MyAppModel
         $srch->addMultipleFields(array(static::tblFld('id'), 'UPPER(' . static::tblFld('code') . ')'));
         $row = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         if ($withDefaultValue) {
-            $row = array(0 => 'Universal') + $row;
+            $row = array(0 => Labels::getLabel('LABL_UNIVERSAL', CommonHelper::getLangId())) + $row;
         }
 
         CacheHelper::create('languageGetAllCodesAssoc' . $cacheKey, FatUtility::convertToJson($row), CacheHelper::TYPE_LANGUAGE);
@@ -87,7 +87,7 @@ class Language extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
 
         $getLayoutDirection = CacheHelper::get('getLayoutDirection' .  $langId, CONF_DEF_CACHE_TIME, '.txt');

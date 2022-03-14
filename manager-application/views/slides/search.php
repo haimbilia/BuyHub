@@ -28,6 +28,7 @@ foreach ($arrListing as $sn => $row) {
             case 'slide_media':
                 $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $row['slide_id'], 0, $siteLangId);
                 $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                $imageSlideDimensions = ImageDimension::getData(ImageDimension::TYPE_SLIDE, ImageDimension::VIEW_THUMB);
                 $url = UrlHelper::getCachedUrl(
                     UrlHelper::generateFileUrl(
                         'Image',
@@ -36,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                             $row['slide_id'],
                             applicationConstants::SCREEN_DESKTOP,
                             $siteLangId,
-                            'THUMB',
+                           ImageDimension::VIEW_THUMB,
                             false
                         ),
                         CONF_WEBROOT_FRONT_URL
@@ -44,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                     CONF_IMG_CACHE_TIME,
                     '.jpg'
                 );
-                $slideImage = '<img class="banner-thumb" width="100" height="50" title="' . $row['slide_title'] . '" alt="' . $row['slide_title'] . '" src="' . $url . '">';
+                $slideImage = '<img data-aspect-ratio = "'.$imageSlideDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" class="banner-thumb" width="100" height="50" title="' . $row['slide_title'] . '" alt="' . $row['slide_title'] . '" src="' . $url . '">';
                 $td->appendElement('plaintext', $tdAttr, $slideImage, true);
                 break;
             case 'slide_title':

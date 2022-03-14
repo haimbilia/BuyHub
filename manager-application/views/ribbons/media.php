@@ -9,7 +9,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     [
         'onChange' => 'loadImageCropper(this)',
         'accept' => 'image/*',
-        'data-name' => Labels::getLabel("FRM_BADGE_ICON", $siteLangId),
+        'data-name' => Labels::getLabel("FRM_RIBBON_ICON", $siteLangId),
         'data-frm'=> $frm->getFormTagAttribute('name')
     ],
     $siteLangId,

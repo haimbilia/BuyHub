@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
     $arr_flds = array(
         'listserial' => 'Sr.',
         'taxcat_name' => Labels::getLabel('LBL_Tax_Category', $siteLangId)
@@ -20,7 +20,7 @@
     foreach ($arr_flds as $val) {
         $e = $th->appendElement('th', array(), $val);
     }
-    
+
     $defaultStringLength = applicationConstants::DEFAULT_STRING_LENGTH;
     $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
     foreach ($arrListing as $sn => $row) {

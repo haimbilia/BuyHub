@@ -5,10 +5,10 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-12">
-                    <div class="section-head section--head--center mb-0">
-                        <div class="section__heading">
-                            <h1><?php echo Labels::getLabel('Lbl_Testimonials',$siteLangId); ?></h1>
-                            <div class="breadcrumbs  breadcrumbs--center">
+                    <div class="section-head section-head-center mb-0">
+                        <div class="section-heading">
+                            <h1><?php echo Labels::getLabel('Lbl_Testimonials', $siteLangId); ?></h1>
+                            <div class="breadcrumb breadcrumb-center">
                                 <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
             <div class="cms">
                 <div class="list__all" id='listing'></div>
                 <div id="loadMoreBtnDiv"></div>
-                <?php echo FatUtility::createHiddenFormFromData ( array('page'=>1), array ('name' => 'frmSearchTestimonialsPaging') ); ?>
+                <?php echo FatUtility::createHiddenFormFromData(array('page' => 1), array('name' => 'frmSearchTestimonialsPaging')); ?>
             </div>
         </div>
     </section>

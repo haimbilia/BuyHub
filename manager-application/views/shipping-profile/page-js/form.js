@@ -118,8 +118,7 @@ $(document).ready(function () {
         }
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'removeProduct', [productId]), '', function (t) {
             var profileId = $('input[name="profile_id"]').val();
-            searchProducts(profileId);
-            
+            searchProductsSection(profileId);
         });
     }
 
@@ -147,7 +146,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.ykmodal(t.html, false, '');
+            $.ykmodal(t.html);
             fcom.removeLoader();
         });
     };
@@ -310,6 +309,14 @@ $(document).ready(function () {
     }
 })();
 
+/* Reset result on clear(cross) icon on keyword search field. */
+$(document).on("search", "." + $.ykmodal.element + " input[type='search']", function () {
+    if ("" == $(this).val()) {
+        $(".continentJs").trigger("keyup");
+    }
+});
+/* Reset result on clear(cross) icon on keyword search field. */
+
 $(document).on('keyup', '.continentJs', function () {
     var filter = $(this).val();
     if (filter.length <= 1) {
@@ -360,6 +367,7 @@ $(document).on('keyup', '.continentJs', function () {
         }
     });
 });
+
 $(document).ready(function () {
     $(document).on('click', 'input[name="rest_of_the_world"]', function () {
         $('.checkbox_container--js input[type="checkbox"]').each(function (index) {

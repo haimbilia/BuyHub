@@ -68,28 +68,38 @@ if ($optionIdFld !== null) {
                             $frm->getField('image_alt' . $afileId)->value = $afileData['afile_attribute_alt'];
                             switch ($moduleType) {
                                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'Product', array($recordId, "THUMB", 0, $afileId, $langId), CONF_WEBROOT_FRONT_URL);
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);
+                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'Product', array($recordId, ImageDimension::VIEW_THUMB, 0, $afileId, $langId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_BRAND_LOGO:
-                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'brand', array($recordId, $langId, "THUMB", $afileId), CONF_WEBROOT_FRONT_URL);
+                                    $languages = Language::getAllNames();
+                                    $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, (count($languages) > 1) ? false : true);
+                                    $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+                                    $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
+                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'brand', array($recordId, $langId, ImageDimension::VIEW_THUMB, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_BRAND_IMAGE:
-                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'brandImage', array($recordId, $langId, "THUMB", $afileId), CONF_WEBROOT_FRONT_URL);
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
+                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'brandImage', array($recordId, $langId, ImageDimension::VIEW_THUMB, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_BLOG_POST_IMAGE:
-                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'blogPost', array($recordId, $langId, "THUMB", 0, $afileId, false), CONF_WEBROOT_FRONT_URL);
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BLOG_POST, ImageDimension::VIEW_THUMB);
+                                    $imageUrl = UrlHelper::generateFullUrl('Image', 'blogPost', array($recordId, $langId, ImageDimension::VIEW_THUMB, 0, $afileId, false), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 case AttachedFile::FILETYPE_CATEGORY_IMAGE:
-                                    $imageUrl = UrlHelper::generateFullUrl('Category', 'image', array($recordId, $langId, "THUMB", 0, $afileId), CONF_WEBROOT_FRONT_URL);
+                                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_IMAGE, ImageDimension::VIEW_THUMB);
+                                    $imageUrl = UrlHelper::generateFullUrl('Category', 'image', array($recordId, $langId, ImageDimension::VIEW_THUMB, 0, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                                 default:
-                                    $imageUrl = UrlHelper::generateFullUrl('Category', 'banner', array($recordId, $langId, "THUMB", 0, $afileId), CONF_WEBROOT_FRONT_URL);
+                                  $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
+                                    $imageUrl = UrlHelper::generateFullUrl('Category', 'banner', array($recordId, $langId, ImageDimension::VIEW_THUMB, 0, $afileId), CONF_WEBROOT_FRONT_URL);
                                     break;
                             } ?>
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <img src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                        <img data-aspect-ratio = "<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-5">

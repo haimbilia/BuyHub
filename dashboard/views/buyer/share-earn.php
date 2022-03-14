@@ -13,9 +13,9 @@ $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS'
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="content-wrapper content-space">
+<div class="content-wrapper content-space">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
             <?php
             $data = [
                 'headingLabel' => Labels::getLabel('LBL_Share_and_Earn', $siteLangId),
@@ -181,14 +181,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             })
         }, function(response) {
             if (response !== null && typeof response.post_id !== 'undefined') {
-                $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+                fcom.displaySuccessMessage(langLbl.thanksForSharing);
                 /* $("#fb_ajax").html(langLbl.thanksForSharing); */
             }
         });
     }
 
     function twitter_shared(name) {
-        $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+        fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
     }
 </script>

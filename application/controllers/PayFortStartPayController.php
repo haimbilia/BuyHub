@@ -38,7 +38,7 @@ class PayFortStartPayController extends PaymentController
         $amount_in_cents = $this->formatPayableAmount($paymentGatewayCharge);
 
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-        $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+        $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
 
         $this->set('open_key', $this->settings['open_key']);
         $this->set('paymentAmount', $paymentGatewayCharge);
@@ -66,7 +66,7 @@ class PayFortStartPayController extends PaymentController
             $orderId = $post["ord"];
             $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
             $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_Order_Payment_Gateway_Description', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
             $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
             $amount_in_cents = $this->formatPayableAmount($paymentGatewayCharge);
             $token = $post["startToken"];
@@ -98,7 +98,7 @@ class PayFortStartPayController extends PaymentController
                 FatApp::redirectUser($failUrl);
             }
         }
-        Message::addErrorMessage(Labels::getLabel('LBL_Page_not_found', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_PAGE_NOT_FOUND', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 
@@ -133,8 +133,8 @@ class PayFortStartPayController extends PaymentController
                     $request .= "\n\n PP_STANDARD :: TOTAL PAID MISMATCH! " . strtolower($response['captured_amount']) . "\n\n";
                 }
                 if ($order_payment_status == 1 && $total_paid_match) {
-                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['id'], $payment_gateway_charge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($response));
-                    FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($order_id)));
+                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['id'], $payment_gateway_charge, Labels::getLabel("SUC_Received_Payment", $this->siteLangId), json_encode($response));
+                    FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
                 } else {             
                     SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                     $orderPaymentObj->addOrderPaymentComments($request);

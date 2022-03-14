@@ -27,7 +27,10 @@ $(document).ready(function () {
             $(dv).html(t);
         });
     };
-    updateSettings = function (frm) {
+
+
+    updateSettings = function (formName) {
+        let frm = document.forms[formName];
         var data = fcom.frmData(frm);
         $(settingDv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
@@ -40,9 +43,10 @@ $(document).ready(function () {
         if (actionType == inventoryUpdate) {
             location.href = fcom.makeUrl('seller', 'exportInventory');
         } else {
+            fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
-                fcom.removeLoader();
-                $(exportDv).html(t);
+                fcom.closeProcessing();
+                $.ykmodal(t, true);
             });
         }
     };
@@ -54,8 +58,10 @@ $(document).ready(function () {
     };
 
     exportMediaForm = function (actionType) {
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
-            $(exportDv).html(t);
+            $.ykmodal(t, true);
+            fcom.removeLoader();
         });
     };
 
@@ -70,7 +76,7 @@ $(document).ready(function () {
             inventoryUpdateForm();
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), formData, function (t) {
-                $(importDv).html(t);
+                $.ykmodal(t);
             });
         }
     };
@@ -80,14 +86,14 @@ $(document).ready(function () {
             importForm(actionType);
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
-                $(importDv).html(t);
+                $.ykmodal(t);
             });
         }
     };
 
     importMediaForm = function (actionType) {
         fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
-            $(importDv).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -100,10 +106,10 @@ $(document).ready(function () {
             data.append(this.name, $(this).val());
         });
         if ($('#import_file')[0].files.length == 0) {
-            $.mbsmessage(langLbl.selectFile, false, 'alert--danger');
+            fcom.displayErrorMessage(langLbl.selectFile);
         }
         $.each($('#import_file')[0].files, function (i, file) {
-            $.mbsmessage(langLbl.processing, false, 'alert--process');
+            fcom.displayProcessing();
             $('#fileupload_div').prepend(fcom.getLoader());
             data.append('import_file', file);
             $.ajax({
@@ -117,13 +123,10 @@ $(document).ready(function () {
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1 || ans.status == true) {
-                            
-                            $(document).trigger('close.mbsmessage');
-                            $.systemMessage(ans.msg, 'alert--success');
+                            fcom.displaySuccessMessage(ans.msg);
                         } else {
                             $('#fileupload_div').html('');
-                            $(document).trigger('close.mbsmessage');
-                            $.systemMessage(ans.msg, 'alert--danger');
+                            fcom.displayErrorMessage(ans.msg);
                         }
 
                         if ('importData' == method) {
@@ -141,8 +144,7 @@ $(document).ready(function () {
                         } else {
                             importMediaForm(actionType);
                         }
-                        $(document).trigger('close.mbsmessage');
-                        $.systemMessage(exc.message, 'alert--danger');
+                        fcom.displayErrorMessage(exc.message);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -168,7 +170,7 @@ $(document).ready(function () {
     uploadZip = function () {
         var data = new FormData();
         $.each($('#bulk_images')[0].files, function (i, file) {
-            $.mbsmessage(langLbl.processing, false, 'alert--process');
+            fcom.displayProcessing();
             data.append('bulk_images', file);
             $.ajax({
                 url: fcom.makeUrl('ImportExport', 'uploadBulkMedia'),
@@ -180,9 +182,7 @@ $(document).ready(function () {
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1) {
-                            
-                            $(document).trigger('close.mbsmessage');
-                            $.systemMessage(ans.msg, 'alert--success', false);
+                            fcom.displaySuccessMessage(ans.msg);
                             document.uploadBulkImages.reset();
                             $("#uploadFileName").text('');
                             setTimeout(function () {
@@ -191,12 +191,10 @@ $(document).ready(function () {
                             }, 5000);
 
                         } else {
-                            $(document).trigger('close.mbsmessage');
-                            $.systemMessage(ans.msg, 'alert--danger');
+                            fcom.displayErrorMessage(ans.msg);
                         }
                     } catch (exc) {
-                        $(document).trigger('close.mbsmessage');
-                        $.systemMessage(exc.message, 'alert--danger');
+                        fcom.displayErrorMessage(exc.message);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -228,17 +226,14 @@ $(document).ready(function () {
 
     removeDir = function (dir) {
         if (true == confirm(langLbl.confirmDelete)) {
-            $.mbsmessage(langLbl.processing, false, 'alert--process');
+            fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
-                    
-                    $(document).trigger('close.mbsmessage');
-                    $.systemMessage(ans.msg, 'alert--success');
+                    fcom.displaySuccessMessage(ans.msg);
                     searchFiles();
                 } else {
-                    $(document).trigger('close.mbsmessage');
-                    $.systemMessage(ans.msg, 'alert--danger');
+                    fcom.displayErrorMessage(ans.msg);
                 }
             });
         }
@@ -258,7 +253,7 @@ $(document).ready(function () {
 
     inventoryUpdateForm = function () {
         fcom.ajax(fcom.makeUrl('Seller', 'InventoryUpdateForm'), '', function (t) {
-            $(importDv).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -309,12 +304,12 @@ $(document).on('click', '.csvFile-Js', function () {
                 },
                 success: function (ans) {
                     //$('.text-danger').remove();
-                    /* $.systemMessage.close();				 */
+                    /* $.ykmsg.close();				 */
                     if (ans.status == true) {
-                        $.mbsmessage(ans.msg, true, 'alert--success');
+                        fcom.displaySuccessMessage(ans.msg);
                         loadForm('inventoryUpdate');
                     } else {
-                        $.mbsmessage(ans.msg, true, 'alert--danger');
+                        fcom.displayErrorMessage(ans.msg);
                     }
                     if (typeof ans.CSVfileUrl !== 'undefined') {
                         location.href = ans.CSVfileUrl;

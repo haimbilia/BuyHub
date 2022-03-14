@@ -35,6 +35,7 @@ class BrandRequestsController extends ListingBaseController
             'js/select2.js',
             'brand-requests/page-js/index.js'
         ]);
+        
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -71,6 +72,7 @@ class BrandRequestsController extends ListingBaseController
             'listingHtml' => $this->_template->render(false, false, 'brand-requests/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+        
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
@@ -104,23 +106,23 @@ class BrandRequestsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
         $srch->addCondition('brand_status', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('brand_seller_id', '>', 'mysql_func_0', 'AND', true); 
+        $srch->addCondition('brand_seller_id', '>', 'mysql_func_0', 'AND', true);
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        
+
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
             $srch->addCondition('brand_seller_id', '=', 'mysql_func_' . $user_id, 'AND', true);
         }
-        
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1); 
-        $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, $recordId);    
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, $recordId);
         if (0 < $brandId) {
             $srch->addCondition('brand_id', '=', $brandId);
         }
-        
+
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
@@ -130,7 +132,7 @@ class BrandRequestsController extends ListingBaseController
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -277,11 +279,18 @@ class BrandRequestsController extends ListingBaseController
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getBrandImageForm($recordId);
+        $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
+        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
+        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
+        
         $imageFrm->fill($data);
+        $this->set('getBrandRequestLogoSquare',$getBrandRequestLogoSquare);
+        $this->set('getBrandRequestLogoRactangle',$getBrandRequestLogoRactangle);
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
+        $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -298,12 +307,20 @@ class BrandRequestsController extends ListingBaseController
         }
         if ($file_type == 'logo') {
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
+            
+            $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
+            $this->set('aspectRatioType',$aspectRatioType);
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
         } else {
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
         }
 
         $this->set('file_type', $file_type);

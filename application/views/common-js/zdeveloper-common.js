@@ -41,10 +41,7 @@ $(document).ready(function () {
     ) {
         $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
     }
-    $(document).on("click", ".loginRegBtn--js", function () {
-        $(".container-form").toggleClass("sign-up");
-        $("#sign-up").toggleClass("is-opened");
-    });
+
 });
 $(document).on("keyup", "input.otpVal-js", function (e) {
     if ("" != $(this).val()) {
@@ -123,17 +120,17 @@ startOtpInterval = function (parent = "", callback = "", params = []) {
     }, 1000);
 };
 loginPopupOtp = function (userId, getOtpOnly = 0) {
-    $.mbsmessage(langLbl.processing, false, "alert--process");
+    fcom.displayProcessing();
     fcom.ajax(
         fcom.makeUrl("GuestUser", "resendOtp", [userId, getOtpOnly]),
         "",
         function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, "alert--danger");
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.mbsmessage.close();
+            $.ykmsg.close();
             var parent = "";
             fcom.updateFaceboxContent(t.html);
             if (0 < $(".loginpopup--js").length) {
@@ -194,10 +191,10 @@ function selectAll(obj) {
 
 function formAction(frm, callback) {
     if (typeof $(".selectItem--js:checked").val() === "undefined") {
-        $.mbsmessage(langLbl.atleastOneRecord, true, "alert--danger");
+        fcom.displayErrorMessage(langLbl.atleastOneRecord);
         return false;
     }
-    $.mbsmessage(langLbl.processing, true, "alert--process alert");
+    fcom.displayProcessing();
     data = fcom.frmData(frm);
     fcom.updateWithAjax(frm.action, data, function (resp) {
         callback();
@@ -263,13 +260,12 @@ function resendVerificationLink(user) {
     if (user == "") {
         return false;
     }
-    $(document).trigger("close.systemMessage");
-    $.mbsmessage(langLbl.processing, false, "alert--process alert");
+    fcom.displayProcessing();
     fcom.updateWithAjax(
         fcom.makeUrl("GuestUser", "resendVerification", [user]),
         "",
         function (ans) {
-            $.mbsmessage(ans.msg, false, "alert--success");
+            fcom.displaySuccessMessage(ans.msg);
         }
     );
 }
@@ -454,8 +450,8 @@ removeFromCart = function (key) {
             listCartProducts();
             $("#cartSummary").load(fcom.makeUrl("cart", "getCartSummary"));
         }
-        $.mbsmessage.close();
-        $.systemMessage(langLbl.MovedSuccessfully, "alert--success");
+        $.ykmsg.close();
+        fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
     });
 };
 
@@ -464,7 +460,7 @@ function submitSiteSearch(frm, page) {
     var keyword = $.trim($(frm).find('input[name="keyword"]').val());
     keyword = keyword.replace("&", "++");
     if (3 > keyword.length || "" === keyword) {
-        $.mbsmessage(langLbl.searchString, true, "alert--danger");
+        fcom.displayErrorMessage(langLbl.searchString);
         return;
     }
     var qryParam = $(frm).serialize_without_blank();
@@ -716,7 +712,7 @@ function defaultSetUpLogin(frm, v) {
                     '{"required":false}'
                 );
                 invalidOtpField();
-                $.mbsmessage(langLbl.requiredFields, false, "alert--danger");
+                fcom.displayErrorMessage(langLbl.requiredFields);
                 return false;
             }
         });
@@ -730,17 +726,12 @@ function defaultSetUpLogin(frm, v) {
         fcom.frmData(frm),
         function (t) {
             var ans = JSON.parse(t);
-            if (ans.notVerified == 1) {
-                var autoClose = false;
-            } else {
-                var autoClose = true;
-            }
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, autoClose, "alert--success");
+                fcom.displaySuccessMessage(ans.msg);
                 location.href = ans.redirectUrl;
                 return;
             }
-            $.mbsmessage(ans.msg, autoClose, "alert--danger");
+            fcom.displayErrorMessage(ans.msg);
         }
     );
     return false;
@@ -749,17 +740,17 @@ sendResetPasswordLink = function (user) {
     if (user == "") {
         return false;
     }
-    $.systemMessage(langLbl.processing, "alert--process", false);
+    fcom.displayProcessing();
     fcom.updateWithAjax(
         fcom.makeUrl("GuestUser", "sendResetPasswordLink", [user]),
         "",
         function (ans) {
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, autoClose, "alert--success");
+                fcom.displaySuccessMessage(ans.msg);
                 location.href = ans.redirectUrl;
                 return;
             }
-            $.mbsmessage(ans.msg, autoClose, "alert--danger");
+            fcom.displayErrorMessage(ans.msg);
         }
     );
 };
@@ -769,8 +760,14 @@ sendResetPasswordLink = function (user) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
-        getLoader: function () {
-            return '<div class="loader-yk"><div class="loader-yk-inner"></div></div>';
+        processingCounter: 0,
+        processingClass: 'processingJs',
+        getLoader: function (addAsNew) {
+            if (typeof addAsNew === 'undefined') {
+                $(document.body).css({ cursor: "wait" });
+                $(".loaderJs").remove();
+            }
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
@@ -818,6 +815,48 @@ sendResetPasswordLink = function (user) {
                 }
             }
         },
+        displayProcessing: function () {
+            fcom.processingCounter++;
+            $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
+        },
+        closeProcessing: function (counter) {
+            var cls = fcom.processingClass;
+            if (typeof counter !== "undefined") {
+                cls += '-' + counter
+            }
+            // $("."+ cls).remove(); 
+            $.ykmsg.close();
+        },
+
+        displaySuccessMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.success(msg);
+        },
+
+        displayErrorMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.error(msg);
+        },
+
+        getModalBody: function () {
+            return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
+        },
+        removeLoader: function (cls) {
+            $(document.body).css({ cursor: "default" });
+            $(".loaderJs").remove();
+            $(".submitBtnJs").removeClass("loading");
+        },
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
+        },
+        updateFaceboxContent: function (t, cls) {
+            if (typeof cls == "undefined" || cls == "undefined") {
+                cls = "";
+            }
+            $.facebox(t, cls);
+            $.ykmsg.close();
+            fcom.resetFaceboxHeight();
+        },
         resetFaceboxHeight: function () {
             facebocxHeight = screenHeight;
             var fbContentHeight =
@@ -835,93 +874,8 @@ sendResetPasswordLink = function (user) {
                 $("#facebox .content").css("max-height", "");
             }
         },
-        updateFaceboxContent: function (t, cls) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "";
-            }
-            $.facebox(t, cls);
-            $.systemMessage.close();
-            fcom.resetFaceboxHeight();
-        },
-        displayProcessing: function (msg, cls, autoclose) {
-            if (typeof msg == "undefined" || msg == "undefined") {
-                msg = langLbl.processing;
-            }
-            $.systemMessage(msg, "alert--process", autoclose);
-        },
-        displaySuccessMessage: function (msg, cls, autoclose) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "alert--success";
-            }
-            $.systemMessage(msg, cls, autoclose);
-        },
-        displayErrorMessage: function (msg, cls, autoclose) {
-            if (typeof cls == "undefined" || cls == "undefined") {
-                cls = "alert--danger";
-            }
-            $.systemMessage(msg, cls, autoclose);
-        },
-        closeAlertMessage: function (msg, cls, autoclose) {
-            $.systemMessage.close();
-        },
-    });
-    $(document).bind("reveal.facebox", function () {
-        fcom.resetFaceboxHeight();
-    });
-    $(window).on("orientationchange", function () {
-        fcom.resetFaceboxHeight();
-    });
-    $(document).bind("loading.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-    });
-    $(document).bind("afterClose.facebox", function () {
-        $("html").css("overflow", "");
-    });
-    $(document).bind("beforeReveal.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-        $("html").css("overflow", "");
-    });
-    $(document).bind("reveal.facebox", function () {
-        $("#facebox .content").addClass("fbminwidth");
-    });
-    $.systemMessage = function (data, cls, autoClose = true) {
-        $.mbsmessage(data, autoClose, cls);
-    };
-    $.extend($.systemMessage, {
-        settings: {
-            closeimage: siteConstants.webroot + "images/facebox/close.gif",
-        },
-        loading: function () {
-            $(".system_message").show();
-        },
-        fillSysMessage: function (data, cls, autoClose) {
-            if (cls) {
-                $(".system_message").removeClass("alert--process");
-                $(".system_message").removeClass("alert--danger");
-                $(".system_message").removeClass("alert--success");
-                $(".system_message").removeClass("alert--info");
-                $(".system_message").addClass(cls);
-            }
-            $(".system_message .content").html(data);
-            $(".system_message").fadeIn();
-            if (true == autoClose && CONF_AUTO_CLOSE_SYSTEM_MESSAGES == 1) {
-                var time = CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES * 1000;
-                setTimeout(function () {
-                    $.systemMessage.close();
-                }, time);
-            }
-        },
-        close: function () {
-            $.mbsmessage.close();
-        },
-    });
-    $(document).bind("close.systemMessage", function () {
-        $.mbsmessage.close();
     });
 
-    function initialize() {
-        $(".system_message .close").click($.systemMessage.close);
-    }
     $.fn.serialize_without_blank = function () {
         var $form = this,
             result,
@@ -1011,13 +965,13 @@ $(document).ready(function () {
                 if (t.html.length > 0) {
                     if (!searchSuggestionsJs.find("div").hasClass("search-suggestions")) {
                         searchSuggestionsJs.html(
-                            '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a><div class="search-suggestions" id="tagsSuggetionList"></div>'
+                            '<div class="search-suggestions" id="tagsSuggetionList"></div>'
                         );
                     }
                     $("#tagsSuggetionList").html(t.html);
                 } else {
                     searchSuggestionsJs.html(
-                        '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a>'
+                        ''
                     );
                 }
             },
@@ -1065,7 +1019,7 @@ $(document).ready(function () {
             loginPopUpBox();
             return false;
         }
-        $.mbsmessage.close();
+        $.ykmsg.close();
         fcom.ajax(
             fcom.makeUrl(
                 "Account",
@@ -1095,7 +1049,7 @@ $(document).ready(function () {
             loginPopUpBox();
             return false;
         }
-        $.mbsmessage.close();
+        $.ykmsg.close();
         fcom.ajax(
             fcom.makeUrl(
                 "Account",
@@ -1136,13 +1090,13 @@ $(document).ready(function () {
             try {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
-                    $.mbsmessage(ans.msg, true, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     if ("undefined" != typeof ans.redirectUrl) {
                         location.href = ans.redirectUrl;
                     }
                     return;
                 }
-                $.mbsmessage(ans.msg, true, "alert--danger");
+                fcom.displayErrorMessage(ans.msg);
             } catch (err) {
                 fcom.updateFaceboxContent(t);
             }
@@ -1151,18 +1105,18 @@ $(document).ready(function () {
     guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;
-        $.mbsmessage(langLbl.processing, false, "alert--process");
+        fcom.displayProcessing();
         fcom.ajax(
             fcom.makeUrl("GuestUser", "guestLogin"),
             fcom.frmData(frm),
             function (t) {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
-                    $.mbsmessage(ans.msg, true, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     location.href = ans.redirectUrl;
                     return;
                 }
-                $.mbsmessage(ans.msg, true, "alert--danger");
+                fcom.displayErrorMessage(ans.msg);
             }
         );
         return false;
@@ -1171,7 +1125,7 @@ $(document).ready(function () {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
         if (1 > defaultLangField.length) {
-            $.systemMessage(langLbl.unknownPrimaryLanguageField, "alert--danger");
+            fcom.displayErrorMessage(langLbl.unknownPrimaryLanguageField);
             return false;
         }
         var proceed = true;
@@ -1184,13 +1138,13 @@ $(document).ready(function () {
                 stringToTranslate += $(this).attr("name") + "=" + $(this).val();
             } else {
                 $(this).focus();
-                $.systemMessage(langLbl.primaryLanguageField, "alert--danger");
+                fcom.displayErrorMessage(langLbl.primaryLanguageField);
                 proceed = false;
                 return false;
             }
         });
         if (true == proceed) {
-            $.mbsmessage(langLbl.processing, true, "alert--process alert");
+            fcom.displayProcessing();
             fcom.ajax(actionUrl, stringToTranslate, function (t) {
                 var res = $.parseJSON(t);
                 $.each(res, function (langId, values) {
@@ -1200,7 +1154,6 @@ $(document).ready(function () {
                         );
                     });
                 });
-                $(document).trigger("close.mbsmessage");
             });
         }
     };
@@ -1283,10 +1236,10 @@ $(document).ready(function () {
             "" == dialCode
         ) {
             $(obj).closest("form").submit();
-            $.mbsmessage(langLbl.requiredFields, false, "alert--danger");
+            fcom.displayErrorMessage(langLbl.requiredFields);
             return false;
         }
-        $.mbsmessage(langLbl.processing, false, "alert--process");
+        fcom.displayProcessing();
         var data =
             "username=" +
             $(formClass + 'input[name="username"]').val() +
@@ -1295,10 +1248,10 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
-                $.mbsmessage(t.msg, false, "alert--danger");
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $(obj).closest(".getOtpBtnBlock--js").addClass("d-none");
             $(formClass + " .resendOtp-js").addClass("disabled");
             $(formClass + " .submitBtn--js").show();
@@ -1368,7 +1321,7 @@ $(document).ready(function () {
                 var ans = $.parseJSON(rsp);
                 console.log(ans);
                 if (ans.status == 0) {
-                    $.mbsmessage(ans.msg, true, "alert--danger");
+                    fcom.displayErrorMessage(ans.msg);
                 } else {
                     $(".cookie-alert").hide("slow");
                     $(".cookie-alert").remove();
@@ -1411,7 +1364,7 @@ $(document).ready(function () {
         if ($(this).val() > $(this).parent().data("stock")) {
             val = $(this).parent().data("stock");
             var message = langLbl.quantityAdjusted.replace(/{qty}/g, val);
-            $.mbsmessage(message, "", "alert--success");
+            fcom.displaySuccessMessage(message);
             $(this)
                 .parent()
                 .parent("div")
@@ -1680,7 +1633,7 @@ function stylePhoneNumberFld(
                         dialCode + "-" + iti.getSelectedCountryData().iso2;
                     if (false === hasOnlyFlag) {
                         if ($('input[name="' + elementName + '"]', form).length < 1) {
-                            $.systemMessage(
+                            fcom.displaySuccessMessage(
                                 $(input, form).attr("name") +
                                 " " +
                                 langLbl.dialCodeFieldNotFound,
@@ -1880,7 +1833,7 @@ function fileSizeValidation() {
     if (fsize > langLbl.allowedFileSize) {
         var msg = langLbl.fileSizeExceeded;
         var msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
-        $.mbsmessage(msg, true, "alert--danger");
+        fcom.displayErrorMessage(msg);
         $(this).val("");
         return false;
     }
@@ -1991,7 +1944,7 @@ function DataURIToBlob(dataURI) {
 }
 $(document).on("change", ".multipleImgs--js", function () {
     if ($(this)[0].files.length > 8) {
-        $.mbsmessage(langLbl.uploadImageLimit, true, "alert--danger");
+        fcom.displayErrorMessage(langLbl.uploadImageLimit);
         $(this).val("");
         if (0 < $(".fileRemove--js").length) {
             $(".fileRemove--js").click();

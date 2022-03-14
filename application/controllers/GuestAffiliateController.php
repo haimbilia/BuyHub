@@ -48,7 +48,7 @@ class GuestAffiliateController extends MyAppController
                 $post['user_username'] = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
 
                 if (!ValidateElement::username($post['user_username'])) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_USERNAME_MUST_BE_THREE_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
                     if (FatUtility::isAjaxCall()) {
                         FatUtility::dieWithError(Message::getHtml());
                     }
@@ -56,7 +56,7 @@ class GuestAffiliateController extends MyAppController
                 }
 
                 if (!ValidateElement::password($post['user_password'])) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
                     if (FatUtility::isAjaxCall()) {
                         FatUtility::dieWithError(Message::getHtml());
                     }
@@ -78,7 +78,7 @@ class GuestAffiliateController extends MyAppController
                 $userObj->assignValues($post);
                 if (!$userObj->save()) {
                     $db->rollbackTransaction();
-                    Message::addErrorMessage(Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                    Message::addErrorMessage(Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
                     if (FatUtility::isAjaxCall()) {
                         FatUtility::dieWithError(Message::getHtml());
                     }
@@ -91,7 +91,7 @@ class GuestAffiliateController extends MyAppController
                 $verify = FatApp::getConfig('CONF_EMAIL_VERIFICATION_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
 
                 if (!$userObj->setLoginCredentials($post['user_username'], $post['user_email'], $post['user_password'], $active, $verify)) {
-                    Message::addErrorMessage(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                    Message::addErrorMessage(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
                     $db->rollbackTransaction();
                     if (FatUtility::isAjaxCall()) {
                         FatUtility::dieWithError(Message::getHtml());
@@ -101,7 +101,7 @@ class GuestAffiliateController extends MyAppController
 
                 if (FatApp::getConfig('CONF_NOTIFY_ADMIN_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1) == 1) {
                     if (!$userObj->notifyAdminRegistration($post, $this->siteLangId)) {
-                        Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                         $db->rollbackTransaction();
                         if (FatUtility::isAjaxCall()) {
                             FatUtility::dieWithError(Message::getHtml());
@@ -112,7 +112,7 @@ class GuestAffiliateController extends MyAppController
 
                 if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1)) {
                     if (!$userObj->userEmailVerification($post, $this->siteLangId)) {
-                        Message::addErrorMessage(Labels::getLabel("MSG_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel("ERR_VERIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                         $db->rollbackTransaction();
                         if (FatUtility::isAjaxCall()) {
                             FatUtility::dieWithError(Message::getHtml());
@@ -124,7 +124,7 @@ class GuestAffiliateController extends MyAppController
                 if (FatApp::getConfig('CONF_WELCOME_EMAIL_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1) == 1) {
                     $link = UrlHelper::generateFullUrl('GuestAffiliate');
                     if (!$userObj->userWelcomeEmailRegistration($post, $link, $this->siteLangId)) {
-                        Message::addErrorMessage(Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
                         $db->rollbackTransaction();
                         if (FatUtility::isAjaxCall()) {
                             FatUtility::dieWithError(Message::getHtml());
@@ -155,10 +155,11 @@ class GuestAffiliateController extends MyAppController
                 $dataToUpdateOnDuplicate = $dataToSave;
                 unset($dataToUpdateOnDuplicate['uextra_user_id']);
                 if (!FatApp::getDb()->insertFromArray(User::DB_TBL_USR_EXTRAS, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
-                    Message::addErrorMessage(Labels::getLabel("LBL_Details_could_not_be_saved!", $this->siteLangId));
+                    $msg = Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId);
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
@@ -174,8 +175,7 @@ class GuestAffiliateController extends MyAppController
                 );
                 $userObj->assignValues($dataToSave);
                 if (!$userObj->save()) {
-                    Message::addErrorMessage($userObj->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    FatUtility::dieJsonError($userObj->getError());
                 }
 
                 UserAuthentication::setSessionAffiliateRegistering(array('affiliate_register_step_number' => UserAuthentication::AFFILIATE_REG_STEP3));
@@ -194,10 +194,11 @@ class GuestAffiliateController extends MyAppController
                 $dataToUpdateOnDuplicate = $dataToSave;
                 unset($dataToUpdateOnDuplicate['uextra_user_id']);
                 if (!FatApp::getDb()->insertFromArray(User::DB_TBL_USR_EXTRAS, $dataToSave, false, array(), $dataToUpdateOnDuplicate)) {
-                    Message::addErrorMessage(Labels::getLabel("LBL_Details_could_not_be_saved!", $this->siteLangId));
+                    $msg = Labels::getLabel("ERR_DETAILS_COULD_NOT_BE_SAVED!", $this->siteLangId);
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
@@ -211,10 +212,11 @@ class GuestAffiliateController extends MyAppController
                     'ub_bank_address' => $post['ub_bank_address'],
                 );
                 if (!$userObj->updateBankInfo($bankInfoData)) {
-                    Message::addErrorMessage($userObj->getError());
+                    $msg = $userObj->getError();
                     if (FatUtility::isAjaxCall()) {
-                        FatUtility::dieWithError(Message::getHtml());
+                        FatUtility::dieWithError($msg);
                     }
+                    Message::addErrorMessage($msg);
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestAffiliate'));
                 }
                 /* ] */
@@ -230,7 +232,7 @@ class GuestAffiliateController extends MyAppController
 
         if (FatUtility::isAjaxCall()) {
             $msg = str_replace(" ", "_", $msg);
-            $this->set('msg', Labels::getLabel('LBL_' . $msg . '_Saved', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_' . $msg . '_Saved', $this->siteLangId));
             //$this->set( 'redirectUrl', $redirectUrl );
             $this->set('affiliate_register_step_number', UserAuthentication::getSessionAffiliateByKey('affiliate_register_step_number'));
             $this->_template->render(false, false, 'json-success.php');
@@ -287,9 +289,9 @@ class GuestAffiliateController extends MyAppController
                 break;
 
             case UserAuthentication::AFFILIATE_REG_STEP4:
-                $successMsg = Labels::getLabel('LBL_You_have_been_registered_successfully.', $this->siteLangId);
+                $successMsg = Labels::getLabel('SUC_YOU_HAVE_BEEN_REGISTERED_SUCCESSFULLY.', $this->siteLangId);
                 if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1)) {
-                    $successMsg .= Labels::getLabel('LBL_A_verification_link_has_been_sent_to_your_Email_Address._Please_verify_your_email_and_access_my_account_area.', $this->siteLangId);
+                    $successMsg .= Labels::getLabel('SUC_A_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS._PLEASE_VERIFY_YOUR_EMAIL_AND_ACCESS_MY_ACCOUNT_AREA.', $this->siteLangId);
                 }
                 $this->clearAffiliateSession();
                 $this->set('successMsg', $successMsg);
@@ -312,77 +314,77 @@ class GuestAffiliateController extends MyAppController
 
                 $frm->addHiddenField('', 'user_id', 0, array('id' => 'user_id'));
 
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_USERNAME', $siteLangId), 'user_username');
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $siteLangId), 'user_username');
                 $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
                 $fld->requirements()->setRequired();
                 $fld->requirements()->setUsername();
 
-                $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email');
+                $fld = $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $siteLangId), 'user_email');
                 $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
 
-                $frm->addRequiredField(Labels::getLabel('LBL_NAME', $siteLangId), 'user_name');
+                $frm->addRequiredField(Labels::getLabel('FRM_NAME', $siteLangId), 'user_name');
                 $frm->addHiddenField('', 'user_phone_dcode');
-                $phoneFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $phoneFld = $frm->addRequiredField(Labels::getLabel('FRM_Phone', $siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phoneFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
-                $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password');
+                $fld = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $siteLangId), 'user_password');
                 $fld->requirements()->setRequired();
                 $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
-                $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
+                $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
 
-                $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1');
+                $fld1 = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_PASSWORD', $siteLangId), 'password1');
                 $fld1->requirements()->setRequired();
-                $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
+                $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('FRM_PASSWORD', $siteLangId));
 
                 /* $fld->requirements()->setInt(); */
 
                 $frm->addHtml('', 'agree_fld_html_div', '&nbsp;');
                 $fld = $frm->addCheckBox('', 'agree', 1);
                 $fld->requirements()->setRequired();
-                $fld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Terms_Condition_is_mandatory.', $siteLangId));
+                $fld->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_TERMS_CONDITION_IS_MANDATORY.', $siteLangId));
 
-                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Register', $siteLangId));
+                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REGISTER', $siteLangId));
                 $frm->setFormTagAttribute('onsubmit', 'setupAffiliateRegister(this); return(false);');
 
                 break;
 
             case UserAuthentication::AFFILIATE_REG_STEP2:
-                $frm->addTextBox(Labels::getLabel('LBL_Company', $siteLangId), 'uextra_company_name');
-                $frm->addTextBox(Labels::getLabel('LBL_Website', $siteLangId), 'uextra_website');
+                $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $siteLangId), 'uextra_company_name');
+                $frm->addTextBox(Labels::getLabel('FRN_WEBSITE', $siteLangId), 'uextra_website');
 
-                $frm->addTextBox(Labels::getLabel('LBL_Address_Line1', $siteLangId), 'user_address1')->requirements()->setRequired();
-                $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $siteLangId), 'user_address2');
+                $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE1', $siteLangId), 'user_address1')->requirements()->setRequired();
+                $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $siteLangId), 'user_address2');
 
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($siteLangId);
-                $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('LBL_Select', $siteLangId));
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('FRM_SELECT', $siteLangId));
                 $fld->requirement->setRequired(true);
 
-                $frm->addSelectBox(Labels::getLabel('LBL_State', $siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-                $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
-                $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $siteLangId), 'user_zip');
+                $frm->addSelectBox(Labels::getLabel('FRM_STATE', $siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+                $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
+                $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $siteLangId), 'user_zip');
 
-                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Register', $siteLangId));
+                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REGISTER', $siteLangId));
                 $frm->setFormTagAttribute('onsubmit', 'setupAffiliateRegister(this); return(false);');
 
                 break;
 
             case UserAuthentication::AFFILIATE_REG_STEP3:
-                $frm->addTextBox(Labels::getLabel('LBL_Tax_Id', $siteLangId), 'uextra_tax_id');
+                $frm->addTextBox(Labels::getLabel('FRM_TAX_ID', $siteLangId), 'uextra_tax_id');
 
-                $frm->addRadioButtons(Labels::getLabel('LBL_Payment_Method', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline'));
+                $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline'));
 
-                $frm->addTextBox(Labels::getLabel('LBL_Cheque_Payee_Name', $siteLangId), 'uextra_cheque_payee_name');
+                $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $siteLangId), 'uextra_cheque_payee_name');
 
-                $frm->addTextBox(Labels::getLabel('LBL_Bank_Name', $siteLangId), 'ub_bank_name');
-                $frm->addTextBox(Labels::getLabel('LBL_Account_Holder_Name', $siteLangId), 'ub_account_holder_name');
-                $frm->addTextBox(Labels::getLabel('LBL_Bank_Account_Number', $siteLangId), 'ub_account_number');
-                $frm->addTextBox(Labels::getLabel('LBL_Swift_Code', $siteLangId), 'ub_ifsc_swift_code');
-                $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $siteLangId), 'ub_bank_address');
-                $fld = $frm->addTextBox(Labels::getLabel('LBL_PayPal_Email_Account', $siteLangId), 'uextra_paypal_email_id');
+                $frm->addTextBox(Labels::getLabel('FRM_BANK_NAME', $siteLangId), 'ub_bank_name');
+                $frm->addTextBox(Labels::getLabel('FRM_ACCOUNT_HOLDER_NAME', $siteLangId), 'ub_account_holder_name');
+                $frm->addTextBox(Labels::getLabel('FRM_BANK_ACCOUNT_NUMBER', $siteLangId), 'ub_account_number');
+                $frm->addTextBox(Labels::getLabel('FRM_SWIFT_CODE', $siteLangId), 'ub_ifsc_swift_code');
+                $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $siteLangId), 'ub_bank_address');
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $siteLangId), 'uextra_paypal_email_id');
                 $fld->requirements()->setEmail();
 
-                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Register', $siteLangId));
+                $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REGISTER', $siteLangId));
                 $frm->setFormTagAttribute('onsubmit', 'setupAffiliateRegister(this); return(false);');
 
                 break;

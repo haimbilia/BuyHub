@@ -6,12 +6,14 @@
         display: block;
     }
     .collection-sidebar {
+        background: $bg-white;
         flex-grow: 0;
         flex-basis: 0;
-        background: $bg-gray;
-        border-radius: $radius4;
+        // background: $bg-gray;
+        // border-radius: $radius4;
+        //padding: 1.5rem;
         display: block;
-        padding: 1.5rem;
+
         @include media-breakpoint-down(md) {
             border-radius: 0;
             position: fixed;
@@ -20,16 +22,14 @@
             bottom: 0;
             overflow-y: auto;
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
             width: 280px;
-            -webkit-transition: left 0.3s ease, right 0.3s ease;
             transition: left 0.3s ease, right 0.3s ease;
             .collection-sidebar--on & {
                 padding: 1rem;
                 #{$start-direction}: 0;
                 visibility: visible;
                 box-shadow: 0px 0px 0 1500px rgba(0, 0, 0, 0.2);
-                z-index: 10;
+                z-index: $zindex-fixed;
             }
         }
     }
@@ -58,7 +58,7 @@
         background: $brand-color;
         width: 30px;
         height: 2px;
-        content: "";
+        //content: "";
         position: absolute;
         bottom: -1px;
         #{$start-direction}: 0;
@@ -72,22 +72,22 @@
         }
     }
     &_head {
-        font-size: 0.85rem;
+        font-size: 1rem;
         /*text-transform: uppercase;*/
         margin: 0;
-        color: $body-color;
+        color: $txt-body;
         font-weight: 600;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-#{$end-direction}: 20px;
+        padding-#{$start-direction}: 20px;
         position: relative;
         cursor: pointer;
         &:before {
             content: "";
             position: absolute;
             top: calc(50% - 6px);
-            #{$end-direction}: 0rem;
+            #{$start-direction}: 0;
             display: inline-block;
             border-right: 1px solid black;
             border-bottom: 1px solid black;
@@ -97,7 +97,7 @@
             transform-origin: center;
             transition: all 0.5s ease;
         }
-        &[aria-expanded='true'] {
+        &[aria-expanded="true"] {
             &:before {
                 top: calc(50% - 1px);
                 transform: rotate(-134deg);
@@ -113,30 +113,29 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    font-size: 0.75rem;
-    margin: 1rem 0;
+    margin: 0;
+
+    &-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
     .chip {
         white-space: nowrap;
         display: flex;
         align-items: center;
-        border-radius: 30px;
-        //border: $border;
-        padding: 5px 5px;
-        margin: 2px 0;
-        padding-#{$start-direction}: 14px;
-        margin-#{$end-direction}: 14px;
+        border-radius: 0;
+        border: $border-black;
+        padding: 0.5rem;
+        margin: 0;
+        margin-#{$end-direction}: 1rem;
         font-size: inherit;
-        background: $bg-brand-light;
-        color: $brand-color;
+        //background: $bg-brand-light;
+        color: $txt-body;
         font-weight: 300;
-        height: 28px;
-        &:hover {
-            border-color: $brand-color;
-            .remove {
-                background: $brand-color;
-                color: $brand-color-inverse;
-            }
-        }
+        //height: 28px;
+
         &:last-child {
             margin-#{$end-direction}: 0;
         }
@@ -157,9 +156,15 @@
             font-size: 10px;
             color: inherit;
             &:hover {
-                background: $brand-color;
-                color: $brand-color-inverse;
+                background-color: none;
             }
         }
+    }
+    .btn-clear-all {
+        background: #000;
+        color: #fff;
+        padding: 4px 8px;
+        border: none;
+        font-size: inherit;
     }
 }

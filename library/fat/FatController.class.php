@@ -31,4 +31,9 @@ class FatController
     {
         $this->_template->set($name, $value);
     }
+
+    public function get($name)
+    {
+        return $this->_template->get($name);
+    }
 }

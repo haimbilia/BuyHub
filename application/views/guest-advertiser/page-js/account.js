@@ -20,7 +20,7 @@ $(document).ready(function(){
 		fcom.ajax(fcom.makeUrl('GuestAdvertiser', 'validateDetails'), data, function(t) {
 			var ans = $.parseJSON(t);
 			if(ans.status==0) {
-				$.mbsmessage(ans.msg, true, 'alert--danger');
+				fcom.displayErrorMessage(ans.msg);
 				return false;
 			}
 			companyDetailsForm(data);
@@ -41,7 +41,7 @@ $(document).ready(function(){
 		}	
 		var data = fcom.frmData(frm);		
 		fcom.updateWithAjax(fcom.makeUrl('GuestAdvertiser', 'setupCompanyDetailsForm'), data, function(t) {
-			//$.mbsmessage.close();
+			//$.ykmsg.close();
 			if(t.userId > 0){
 				profileConfirmation(t.userId);
 			}
@@ -61,7 +61,7 @@ $(document).ready(function(){
 		}	
 		var data = fcom.frmData(frm);		
 		fcom.updateWithAjax(fcom.makeUrl('GuestAdvertiser', 'setupPasswordForm'), data, function(t) {
-			//$.mbsmessage.close();
+			//$.ykmsg.close();
 			if(t.userId > 0){
 				profileConfirmation(t.userId);
 			}

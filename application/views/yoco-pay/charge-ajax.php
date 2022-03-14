@@ -37,9 +37,9 @@ $fld->value = '<div class="yoco-form" id="card_frame"></div>';
             if (result.error) {         
                 btnEle.val(btnText).removeAttr('disabled');
                 const errorMessage = result.error.message;
-                errorMessage && $.systemMessage(errorMessage, 'alert--danger');
+                errorMessage && fcom.displayErrorMessage(errorMessage);
             } else {
-                $.mbsmessage(langLbl.processing, false, 'alert--process alert');
+                fcom.displayProcessing();
                 fcom.updateWithAjax(fcom.makeUrl('YocoPay', 'chargeCard', ['<?php echo $orderInfo["id"]; ?>']), {token: result.id}, function (t) {
                     btnEle.val(btnText).removeAttr('disabled');
                     if (t.status == 1) {
@@ -48,7 +48,7 @@ $fld->value = '<div class="yoco-form" id="card_frame"></div>';
                 });
             }
         }).catch(function (error) {
-            $.systemMessage(error, 'alert--danger');
+            fcom.displayErrorMessage(error);
             btnEle.val(btnText).removeAttr('disabled');
         });
 

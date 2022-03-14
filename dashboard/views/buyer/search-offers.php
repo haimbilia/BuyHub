@@ -4,7 +4,7 @@
 ?>
 
 <ul class="list-group list-coupons">
-    <?php
+    <?php 
     foreach ($offers as $row) {
         $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']); ?>
         <li class="list-group-item ">
@@ -52,5 +52,38 @@
                 <a class="link-text" href="#">View Products</a>
             </div>
         </div>
-    </li> <?php */ ?>
+    </li>
+    <li class="list-group-item ">
+        <div class="coupon coupon--notused">
+            <div class="coupon__code-img">
+                <div class="coupon__img">
+                    <img src="media/coupon-img.png" alt="" data-ratio="1:1">
+                </div>
+                <span class="coupon__tag">Redeemed</span>
+            </div>
+            <div class="coupon__detail">
+                <h6>10% Discount to New Customer</h6>
+                <p> Flat $100.00 off upto Rs. 100 on minimum purchase of Rs.
+                    XXXXX. Expires on Jul 31, 2020 10:00 PM</p>
+                <a class="link-text" href="#">View Products</a>
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item ">
+        <div class="coupon coupon--notused">
+            <div class="coupon__code-img">
+                <div class="coupon__img">
+                    <img src="media/coupon-img.png" alt="" data-ratio="1:1">
+                </div>
+                <span class="coupon__tag">Redeemed</span>
+            </div>
+            <div class="coupon__detail">
+                <h6>10% Discount to New Customer</h6>
+                <p> Flat $100.00 off upto Rs. 100 on minimum purchase of Rs.
+                    XXXXX. Expires on Jul 31, 2020 10:00 PM</p>
+                <a class="link-text" href="#">View Products</a>
+            </div>
+        </div>
+    </li>
+    <?php  */?>
 </ul>

@@ -14,6 +14,7 @@ $imgArr = [];
 $imageRecordId = $image['afile_record_id'];
 if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+    $imageTestimonialDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, ImageDimension::VIEW_THUMB);
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
@@ -22,13 +23,14 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
                 array(
                     $recordId, 
                     $image['afile_lang_id'], 
-                    "THUMB", 
+                    ImageDimension::VIEW_THUMB, 
                     $image['afile_id']
                 ), CONF_WEBROOT_FRONT_URL
             ) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
         ),
         'name' => $image['afile_name'],
         'afile_id' => $image['afile_id'],
+        'data-aspect-ratio' => $imageTestimonialDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'],
     ]; 
 } 
 $imagFld->value = "<span id='imageListingJs'>". HtmlHelper::getfileInputHtml(

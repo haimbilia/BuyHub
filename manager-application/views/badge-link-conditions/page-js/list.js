@@ -5,11 +5,12 @@ $(document).ready(function () {
 
     if (0 < $('#searchFormConditionTypeJs').length) {
         $('#searchFormConditionTypeJs').select2({
-            dropdownParent: $('#searchFormConditionTypeJs').parent(),
             allowClear: true,
             placeholder: $('#searchFormConditionTypeJs').attr("placeholder")
         }).on("select2:unselecting", function (e) {
             clearSearch();
+        }).on('select2:open', function(e) {
+            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
         });
     }
 });

@@ -473,7 +473,8 @@ trait StripeConnectFunctions
      */
     private function createAccountTokenId(): object
     {
-        return $this->stripe->tokens->create([
+        $stripe = new \Stripe\StripeClient($this->settings[$this->liveMode . 'publishable_key']);
+        return $stripe->tokens->create([
             'account' => [
                 'tos_shown_and_accepted' => true
             ],

@@ -15,7 +15,7 @@ $stateData =  $frmType == Configurations::FORM_PRODUCT ? $stateData = FatApp::ge
 $displayMap = $frmType == Configurations::FORM_PRODUCT;
 
 ?>
-<div id="frmBlockJs" class="card">
+<div id="frmBlockJs" class="card setting-card">
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
@@ -75,7 +75,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
                 $('.listingFilter').attr('disabled', 'disabled');
                 $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
             } else {
-                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
+                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true).val(0); // enable
             }
 
             if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {

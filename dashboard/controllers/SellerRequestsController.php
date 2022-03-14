@@ -2,6 +2,7 @@
 class SellerRequestsController extends SellerBaseController
 {
     use BadgeRequestSetup;
+    use RecordOperations;
 
     public function __construct($action)
     {
@@ -183,36 +184,19 @@ class SellerRequestsController extends SellerBaseController
     {
         $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);
         $frm = $this->getCategoryForm();
-        $this->set('languages', Language::getAllNames());
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $identifier = '';
         if (0 < $categoryReqId) {
-            $data = ProductCategory::getAttributesById($categoryReqId, array('prodcat_id', 'prodcat_identifier', 'prodcat_parent'));
+            $data = ProductCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $categoryReqId, array('prodcat_parent', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'prodcat_id', 'prodcat_identifier'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
-
-            $langData = ProductCategory::getLangDataArr($categoryReqId, array(ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id', ProductCategory::DB_TBL_PREFIX . 'name'));
-            $catnameArr = array();
-            foreach ($langData as $value) {
-                $catnameArr[ProductCategory::DB_TBL_PREFIX . 'name'][$value[ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id']] = $value[ProductCategory::DB_TBL_PREFIX . 'name'];
-            }
-            if (!isset($data[ProductCategory::DB_TBL_PREFIX . 'name'][$siteDefaultLangId])) {
-                $data[ProductCategory::DB_TBL_PREFIX . 'name'][$siteDefaultLangId] = $data[ProductCategory::DB_TBL_PREFIX . 'identifier'];
-            }
             $frm->fill($data);
+            $identifier = $data['prodcat_identifier'];
         }
         $this->set('frm', $frm);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $langData = Language::getAllNames();
-        unset($langData[$siteDefaultLangId]);
-        $auto_update_other_langs_data = false;
-        if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
-            $auto_update_other_langs_data = true;
-        }
-        $this->set('auto_update_other_langs_data', $auto_update_other_langs_data);
-        $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('categoryReqId', $categoryReqId);
-        $this->set('langId', $this->siteLangId);
+        $this->set('identifier', $identifier);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
@@ -221,21 +205,16 @@ class SellerRequestsController extends SellerBaseController
         $prodCatId = FatUtility::int($prodCatId);
         $frm = new Form('frmCategoryReq', array('id' => 'frmCategoryReq'));
         $frm->addHiddenField('', 'prodcat_id', $prodCatId);
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . $siteDefaultLangId . ']');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name');
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $prodCatId);
         $categories = array(0 => Labels::getLabel('FRM_ROOT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $langData = Language::getAllNames();
-        unset($langData[$siteDefaultLangId]);
-        if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
+        $languages = Language::getAllNames();
+        if (!empty($translatorSubscriptionKey) && 1 <  count($languages)) {
             $frm->addCheckBox(Labels::getLabel('FRM_TRANSLATE_TO_OTHER_LANGUAGES', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        foreach ($langData as $langId => $data) {
-            $frm->addTextBox(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . $langId . ']');
         }
 
         return $frm;
@@ -248,15 +227,12 @@ class SellerRequestsController extends SellerBaseController
         $frm = $this->getCategoryForm();
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $categoryReqId = $post['prodcat_id'];
-
         if ($categoryReqId > 0 && !UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         $approvalRequired = FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0);
@@ -270,11 +246,8 @@ class SellerRequestsController extends SellerBaseController
         }
 
         $post['prodcat_requested_on'] = date('Y-m-d H:i:s');
-
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $post['prodcat_identifier'] = $post['prodcat_name'][$siteDefaultLangId];
-
-        $post['prodcat_seller_id'] = UserAuthentication::getLoggedUserId();
+        $post['prodcat_identifier'] = $post['prodcat_name'];
+        $post['prodcat_seller_id'] = $this->userParentId;
 
         $record = new ProductCategory($categoryReqId);
         $record->assignValues($post);
@@ -287,6 +260,8 @@ class SellerRequestsController extends SellerBaseController
         }
         $categoryReqId = $record->getMainTableRecordId();
 
+        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
+
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_PRODUCT_CATEGORY,
             'notification_record_id' => $categoryReqId,
@@ -296,24 +271,105 @@ class SellerRequestsController extends SellerBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         $categoryData = ProductCategory::getAttributesById($categoryReqId);
         $email = new EmailHandler();
         if (!$email->sendCategoryRequestAdminNotification($this->siteLangId, $categoryData)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
-        $msg = Labels::getLabel("MSG_Category_Setup_Successful", $this->siteLangId);
         if ($approvalRequired) {
             $msg = Labels::getLabel("MSG_CATEGORY_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         }
         $this->set('msg', $msg);
         $this->set('categoryReqId', $categoryReqId);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function categoryReqLangForm($categoryReqId = 0, $lang_id = 0, $autoFillLangData = 0)
+    {
+        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);
+        $categoryReqId = FatUtility::int($categoryReqId);
+        $lang_id = FatUtility::int($lang_id);
+
+        if (1 > $categoryReqId || 1 > $lang_id) {
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $frm = $this->getCategoryReqLangForm($categoryReqId, $lang_id);
+
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData(ProductCategory::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($categoryReqId, $lang_id, CommonHelper::getDefaultFormLangId());
+            if (false === $translatedData) {
+                Message::addErrorMessage($updateLangDataobj->getError());
+                FatUtility::dieWithError(Message::getHtml());
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = ProductCategory::getAttributesByLangId($lang_id, $categoryReqId);
+        }
+
+        if ($langData) {
+            $frm->fill($langData);
+        }
+
+        $this->set('languages', Language::getAllNames());
+        $this->set('categoryReqId', $categoryReqId);
+        $this->set('langId', $lang_id);
+        $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->_template->render(false, false);
+    }
+
+    public function categoryReqLangSetup()
+    {
+        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);
+        $post = FatApp::getPostedData();
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
+
+        $categoryReqId = $post['prodcat_id'];
+
+        if ($categoryReqId == 0 || $lang_id == 0) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        if ($categoryReqId > 0 && !UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        $frm = $this->getCategoryReqLangForm($categoryReqId, $lang_id);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $recordObj = new ProductCategory($categoryReqId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
+
+        $this->set('categoryReqId', $categoryReqId);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getCategoryReqLangForm($categoryReqId = 0, $lang_id = 0)
+    {
+        $frm = new Form('frmCategoryReqLang', array('id' => 'frmBrandReqLang'));
+        $frm->addHiddenField('', 'prodcat_id', $categoryReqId);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $fld->requirements()->setRequired();
+        $fld->requirements()->setInt();
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $lang_id), 'prodcat_name');
+
+        return $frm;
     }
 
     /* ] */
@@ -324,17 +380,20 @@ class SellerRequestsController extends SellerBaseController
     {
         $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);
         $frm = $this->getBrandForm();
-        $this->set('languages', Language::getAllNames());
+        $identifier = '';
         if (0 < $brandReqId) {
-            $data = Brand::getAttributesById($brandReqId, array('brand_id', 'brand_identifier'));
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $brandReqId, array('IFNULL(brand_name,brand_identifier) as brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
             $frm->fill($data);
+            $identifier = $data['brand_identifier'];
         }
         $this->set('frmBrandReq', $frm);
         $this->set('brandReqId', $brandReqId);
         $this->set('langId', $this->siteLangId);
+        $this->set('identifier', $identifier);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
@@ -345,15 +404,13 @@ class SellerRequestsController extends SellerBaseController
         $frm = $this->getBrandForm();
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $brandReqId = $post['brand_id'];
 
         if ($brandReqId > 0 && !UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         unset($post['brandReqId']);
@@ -368,14 +425,16 @@ class SellerRequestsController extends SellerBaseController
 
         $post['brand_seller_id'] = UserAuthentication::getLoggedUserId();
         $record = new Brand($brandReqId);
+        $post[$record::tblFld('identifier')] = $post[$record::tblFld('name')];
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($record->getError());
         }
 
         $brandReqId = $record->getMainTableRecordId();
+
+        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_BRAND,
@@ -386,8 +445,7 @@ class SellerRequestsController extends SellerBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         if ($brandReqId == 0) {
@@ -398,24 +456,7 @@ class SellerRequestsController extends SellerBaseController
             }
         }
 
-        $newTabLangId = 0;
-        if ($brandReqId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Brand::getAttributesByLangId($langId, $brandReqId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $brandReqId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-
-
-        $this->set('msg', Labels::getLabel("MSG_Brand_Setup_Successful", $this->siteLangId));
         $this->set('brandReqId', $brandReqId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -434,55 +475,26 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if ($brandReqId == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         $frm = $this->getBrandReqLangForm($brandReqId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        unset($post['brand_id']);
-        unset($post['lang_id']);
-        $data = array(
-            'brandlang_lang_id' => $lang_id,
-            'brandlang_brand_id' => $brandReqId,
-            'brand_name' => $post['brand_name'],
-        );
-
-        $brandObj = new Brand($brandReqId);
-        if (!$brandObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($brandObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($brandReqId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
+        $recordObj = new Brand($brandReqId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Brand::getAttributesByLangId($langId, $brandReqId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($brandReqId)) {
+        if ($this->get('langId') == 0 && !$this->isMediaUploaded($brandReqId)) {
             $this->set('openMediaForm', true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Brand_Request_Sent_Successful', $this->siteLangId));
         $this->set('brandReqId', $brandReqId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -504,7 +516,7 @@ class SellerRequestsController extends SellerBaseController
 
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($brandReqId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($brandReqId, $lang_id, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
@@ -521,13 +533,12 @@ class SellerRequestsController extends SellerBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('brandReqId', $brandReqId);
         $this->set('brandReqLangId', $lang_id);
-        $this->set('siteLangId', $this->siteLangId);
         $this->set('brandReqLangFrm', $brandReqLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->_template->render(false, false);
     }
 
-    public function brandMediaForm($brand_id = 0)
+    public function brandMediaForm($brand_id = 0, $langId = 0)
     {
         $brand_id = FatUtility::int($brand_id);
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
@@ -535,14 +546,14 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $brandMediaFrm = $this->getMediaForm($brand_id);
-        $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, -1);
+        $brandMediaFrm = $this->getMediaForm($brand_id, $langId);
+        $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $langId, false);
         $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $this->set('languages', Language::getAllNames());
         $this->set('brandReqId', $brand_id);
         $this->set('brandReqMediaFrm', $brandMediaFrm);
-        $this->set('brandImages', $brandImages);
+        $this->set('image', $brandImage);
         $this->set('bannerTypeArr', $bannerTypeArr);
         $this->_template->render(false, false);
     }
@@ -559,18 +570,15 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if (!$brand_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
         }
 
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
@@ -590,8 +598,7 @@ class SellerRequestsController extends SellerBaseController
             0,
             $aspectRatio
         )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('brandId', $brand_id);
@@ -600,15 +607,13 @@ class SellerRequestsController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getMediaForm($brand_id)
+    public function getMediaForm($brand_id, $langId)
     {
         $frm = new Form('frmBrandMedia');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brand_id);
-        $frm->addHTML('', 'brand_logo_heading', '');
-
         if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'brand_lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'brand_lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, $langId, array(), '');
         } else {
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'brand_lang_id', $lang_id);
@@ -616,10 +621,7 @@ class SellerRequestsController extends SellerBaseController
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
-        $frm->addFileUpload(Labels::getLabel('FRM_LOGO', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandMedia'));
-
-        $frm->addHtml('', 'brand_logo_display_div', '');
-
+        $frm->addHtml('', 'logo', '');
         return $frm;
     }
 
@@ -628,19 +630,16 @@ class SellerRequestsController extends SellerBaseController
         $brand_id = FatUtility::int($brand_id);
         $lang_id = FatUtility::int($lang_id);
         if (!$brand_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, 0, $lang_id)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
@@ -651,7 +650,14 @@ class SellerRequestsController extends SellerBaseController
     {
         $frm = new Form('frmBrandReq', array('id' => 'frmBrandReq'));
         $frm->addHiddenField('', 'brand_id');
-        $frm->addRequiredField(Labels::getlabel('FRM_BRAND_IDENTIFIER', $this->siteLangId), 'brand_identifier')->setUnique(Brand::DB_TBL, Brand::DB_TBL_PREFIX . 'identifier', Brand::DB_TBL_PREFIX . 'id', Brand::DB_TBL_PREFIX . 'id', Brand::DB_TBL_PREFIX . 'identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
+        //->setUnique(Brand::DB_TBL, Brand::DB_TBL_PREFIX . 'identifier', Brand::DB_TBL_PREFIX . 'id', Brand::DB_TBL_PREFIX . 'id', Brand::DB_TBL_PREFIX . 'name');
+
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
 
@@ -659,27 +665,14 @@ class SellerRequestsController extends SellerBaseController
     {
         $frm = new Form('frmBrandReqLang', array('id' => 'frmBrandReqLang'));
         $frm->addHiddenField('', 'brand_id', $brandReqId);
-
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
-        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $fld->requirements()->setRequired();
+        $fld->requirements()->setInt();
+        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $lang_id), 'brand_name');
 
         return $frm;
     }
+
 
     private function isMediaUploaded($brandId)
     {

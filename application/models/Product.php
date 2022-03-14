@@ -234,8 +234,8 @@ class Product extends MyAppModel
         }
 
         return array(
-            static::UNAPPROVED => Labels::getLabel('LBL_Un-Approved', $langId),
-            static::APPROVED => Labels::getLabel('LBL_Approved', $langId),
+            static::UNAPPROVED => Labels::getLabel('LBL_UN-APPROVED', $langId),
+            static::APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
         );
     }
 
@@ -255,8 +255,8 @@ class Product extends MyAppModel
         }
 
         return array(
-            static::INVENTORY_TRACK => Labels::getLabel('LBL_Track', $langId),
-            static::INVENTORY_NOT_TRACK => Labels::getLabel('LBL_Do_not_track', $langId)
+            static::INVENTORY_TRACK => Labels::getLabel('LBL_TRACK', $langId),
+            static::INVENTORY_NOT_TRACK => Labels::getLabel('LBL_DO_NOT_TRACK', $langId)
         );
     }
 
@@ -268,9 +268,9 @@ class Product extends MyAppModel
         }
 
         return array(
-            static::CONDITION_NEW => Labels::getLabel('LBL_New', $langId),
-            static::CONDITION_USED => Labels::getLabel('LBL_Used', $langId),
-            static::CONDITION_REFURBISH => Labels::getLabel('LBL_Refurbished', $langId)
+            static::CONDITION_NEW => Labels::getLabel('LBL_NEW', $langId),
+            static::CONDITION_USED => Labels::getLabel('LBL_USED', $langId),
+            static::CONDITION_REFURBISH => Labels::getLabel('LBL_REFURBISHED', $langId)
         );
     }
 
@@ -278,12 +278,12 @@ class Product extends MyAppModel
     {
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
         if (!$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $langId), E_USER_ERROR);
             return false;
         }
         return array(
-            self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_Physical', $langId),
-            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_Digital', $langId)
+            self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_PHYSICAL', $langId),
+            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId)
         );
     }
 
@@ -374,7 +374,7 @@ class Product extends MyAppModel
         $imageId = FatUtility::int($imageId);
         $fileType = FatUtility::int($fileType);
         if (1 > $productId || 1 > $imageId || 1 >  $fileType) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -414,7 +414,7 @@ class Product extends MyAppModel
     public function addUpdateProductCategories($product_id, $categories = array())
     {
         if (!$product_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -441,7 +441,7 @@ class Product extends MyAppModel
     {
         $optionId = FatUtility::int($optionId);
         if (!$this->mainTableRecordId || !$optionId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_PRODUCT_TO_OPTION);
@@ -463,7 +463,7 @@ class Product extends MyAppModel
         $db = FatApp::getDb();
         $option_id = FatUtility::int($option_id);
         if (!$this->mainTableRecordId || !$option_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_PRODUCT_TO_OPTION, array('smt' => static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id = ? AND ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id = ?', 'vals' => array($this->mainTableRecordId, $option_id)))) {
@@ -478,7 +478,7 @@ class Product extends MyAppModel
     {
         $tag_id = FatUtility::int($tag_id);
         if (!$this->mainTableRecordId || !$tag_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_PRODUCT_TO_TAG);
@@ -492,14 +492,34 @@ class Product extends MyAppModel
         }
         $this->logUpdatedRecord();
         return true;
-    }   
+    }
+
+    public function addUpdateProductTags($tags = array())
+    {
+        if (!$this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        FatApp::getDb()->deleteRecords(static::DB_PRODUCT_TO_TAG, array('smt' => static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        if (empty($tags)) {
+            return true;
+        }
+
+        foreach ($tags as $tag_id) {
+            if (!$this->addUpdateProductTag($tag_id)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public function removeProductTag($tag_id)
     {
         $db = FatApp::getDb();
         $tag_id = FatUtility::int($tag_id);
         if (!$this->mainTableRecordId || !$tag_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_PRODUCT_TO_TAG, array('smt' => static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id = ? AND ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id = ?', 'vals' => array($this->mainTableRecordId, $tag_id)))) {
@@ -541,7 +561,7 @@ class Product extends MyAppModel
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'duration',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'charges',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'additional_charges',
-                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name', '\'' . Labels::getLabel('LBL_Everywhere_Else', $lang_id) . '\') as country_name',
+                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name', '\'' . Labels::getLabel('LBL_EVERYWHERE_ELSE', $lang_id) . '\') as country_name',
                 'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name', ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
                 ShippingCompanies::DB_TBL_PREFIX . 'id',
                 ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id',
@@ -608,7 +628,7 @@ class Product extends MyAppModel
         $productId = FatUtility::convertToType($productId, FatUtility::VAR_INT);
         $userId = FatUtility::convertToType($userId, FatUtility::VAR_INT);
         if (!$productId || !$langId) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
         $srch = new SearchBase(static::DB_TBL_PRODUCT_SHIPPING);
@@ -700,7 +720,7 @@ class Product extends MyAppModel
         $product_id = FatUtility::convertToType($product_id, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$product_id || !$lang_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
 
@@ -730,7 +750,7 @@ class Product extends MyAppModel
 
     public static function getSeparateImageOptions($product_id, $lang_id)
     {
-        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $lang_id));
+        $imgTypesArr = array(0 => Labels::getLabel('LBL_FOR_ALL_OPTIONS', $lang_id));
         $productOptions = Product::getProductOptions($product_id, $lang_id, true, 1);
 
         foreach ($productOptions as $val) {
@@ -748,7 +768,7 @@ class Product extends MyAppModel
         $product_id = FatUtility::convertToType($product_id, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$product_id || !$lang_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
         $data = array();
@@ -780,7 +800,7 @@ class Product extends MyAppModel
         $product_id = FatUtility::convertToType($product_id, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$product_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", $lang_id), E_USER_ERROR);
             return false;
         }
 
@@ -788,7 +808,7 @@ class Product extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
         $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
-        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);       
+        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);
         if (true == $assoc) {
             if (count($attrs)) {
                 $srch->addMultipleFields($attrs);
@@ -823,7 +843,7 @@ class Product extends MyAppModel
         $option_id = FatUtility::int($option_id);
         $lang_id = FatUtility::int($lang_id);
         if (!$option_id || !$lang_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments!', $lang_id), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS!', $lang_id), E_USER_ERROR);
         }
         $srch = new SearchBase(OptionValue::DB_TBL);
         $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionvaluelang_optionvalue_id = ' . OptionValue::DB_TBL_PREFIX . 'id AND optionvaluelang_lang_id = ' . $lang_id, 'lang');
@@ -886,7 +906,7 @@ class Product extends MyAppModel
     public static function getProductNumericAttributes($product_id)
     {
         if (!$product_id) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments!', CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS!', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $record = new TableRecord(static::DB_NUMERIC_ATTRIBUTES_TBL);
         $record->loadFromDb(array('smt' => static::DB_NUMERIC_ATTRIBUTES_PREFIX . 'product_id = ?', 'vals' => array($product_id)));
@@ -898,7 +918,7 @@ class Product extends MyAppModel
         $product_id = FatUtility::int($product_id);
         $langId = FatUtility::int($langId);
         if (!$product_id || !$langId) {
-            trigger_error(Labels::getLabel('ERR_Invalid_Arguments!', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_ARGUMENTS!', $langId), E_USER_ERROR);
         }
         $record = new TableRecord(static::DB_TEXT_ATTRIBUTES_TBL);
         $record->loadFromDb(array('smt' => static::DB_TEXT_ATTRIBUTES_PREFIX . 'product_id = ? AND ' . static::DB_TEXT_ATTRIBUTES_PREFIX . 'lang_id = ?', 'vals' => array($product_id, $langId)));
@@ -1190,7 +1210,7 @@ class Product extends MyAppModel
         if (empty($shippingDetails)) {
             return;
         } else {
-            return FatUtility::decodeHtmlEntities('<em><strong>' . $shippingDetails['country_name'] . '</em></strong> ' . Labels::getLabel('LBL_by', $langId) . ' <strong>' . $shippingDetails['scompany_name'] . '</strong> ' . Labels::getLabel('LBL_in', $langId) . ' ' . ShippingDurations::getShippingDurationTitle($shippingDetails, $langId));
+            return FatUtility::decodeHtmlEntities('<em><strong>' . $shippingDetails['country_name'] . '</em></strong> ' . Labels::getLabel('LBL_BY', $langId) . ' <strong>' . $shippingDetails['scompany_name'] . '</strong> ' . Labels::getLabel('LBL_IN', $langId) . ' ' . ShippingDurations::getShippingDurationTitle($shippingDetails, $langId));
         }
     }
 
@@ -1271,7 +1291,7 @@ class Product extends MyAppModel
         $productId = FatUtility::int($productId);
         $userId = FatUtility::int($userId);
         if (!$productId || !$userId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', CommonHelper::getLangId()));
         }
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
@@ -1349,7 +1369,7 @@ class Product extends MyAppModel
         $db = FatApp::getDb();
         $option_id = FatUtility::int($option_id);
         if (!$this->mainTableRecordId || !$option_id) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         if (!$db->deleteRecords(static::DB_TBL_PRODUCT_TO_CATEGORY, array('smt' => static::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'product_id = ? AND ' . static::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'prodcat_id = ?', 'vals' => array($this->mainTableRecordId, $option_id)))) {
@@ -1368,7 +1388,7 @@ class Product extends MyAppModel
     {
         $prodCatId = FatUtility::int($prodCatId);
         if (!$this->mainTableRecordId || !$prodCatId) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_TBL_PRODUCT_TO_CATEGORY);
@@ -1811,7 +1831,7 @@ END,   special_price_found ) as special_price_found'
     public function saveProductData($data)
     {
         if (empty($data)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1831,7 +1851,7 @@ END,   special_price_found ) as special_price_found'
     public function saveProductLangData($langData)
     {
         if ($this->mainTableRecordId < 1 || empty($langData)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1860,7 +1880,7 @@ END,   special_price_found ) as special_price_found'
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1876,7 +1896,7 @@ END,   special_price_found ) as special_price_found'
     {
         $toLangId = FatUtility::int($toLangId);
         if (empty($data) || $toLangId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1893,7 +1913,7 @@ END,   special_price_found ) as special_price_found'
     {
         $categoryId = FatUtility::int($categoryId);
         if ($this->mainTableRecordId < 1 || $categoryId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1916,7 +1936,7 @@ END,   special_price_found ) as special_price_found'
     {
         $taxId = FatUtility::int($taxId);
         if ($this->mainTableRecordId < 1 || $taxId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1953,7 +1973,7 @@ END,   special_price_found ) as special_price_found'
         $prodSpecId = FatUtility::int($prodSpecId);
         $langId = FatUtility::int($langId);
         if ($langId < 1 || empty($prodSpecName) || empty($prodSpecValue) || ($prodSpecId < 1 && $this->mainTableRecordId < 1)) {
-            $this->error = Labels::getLabel('ERR_Please_fill_product_speicification_text_and_value', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_PLEASE_FILL_PRODUCT_SPEICIFICATION_TEXT_AND_VALUE', $this->commonLangId);
             return false;
         }
 
@@ -1987,7 +2007,7 @@ END,   special_price_found ) as special_price_found'
     {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $srch = new SearchBase(static::DB_PRODUCT_SPECIFICATION);
@@ -2009,7 +2029,7 @@ END,   special_price_found ) as special_price_found'
     public function saveProductSellerShipping($prodSellerId, $psFree, $psCountryId)
     {
         if ($this->mainTableRecordId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $prodSellerShip = array(
@@ -2168,7 +2188,7 @@ END,   special_price_found ) as special_price_found'
         FROM
             tbl_attached_files_temp
         WHERE
-            afile_type = ".AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+            afile_type = " . AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP . " AND afile_record_id = $tempRecordId";
 
 
         if (!$db->query($sql)) {
@@ -2176,13 +2196,13 @@ END,   special_price_found ) as special_price_found'
             return false;
         }
 
-        $sql = "delete from tbl_attached_files_temp where afile_type = ".AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+        $sql = "delete from tbl_attached_files_temp where afile_type = " . AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP . " AND afile_record_id = $tempRecordId";
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;
         }
 
-        $db->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        $db->updateFromArray('tbl_products', array('product_img_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;

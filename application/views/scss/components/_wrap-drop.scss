@@ -4,7 +4,7 @@
     height: 38px;
     line-height: 38px;
     width: 100%;
-    color: $body-color;
+    color: $txt-body;
     font-family: inherit;
     font-size: 0.9em;
     font-weight: normal;
@@ -70,7 +70,7 @@
             }
             a {
                 cursor: pointer;
-                color: $body-color;
+                color: $txt-body;
                 display: block;
                 overflow: hidden;
                 position: relative;
@@ -79,14 +79,12 @@
                 font-weight: 400;
                 padding: 10px;
                 line-height: 1.2;
-                
-                
+
                 display: flex;
-                
-                
+
                 align-items: center;
                 text-decoration: none;
-                
+
                 transition: all 0.2s linear;
             }
         }
@@ -113,7 +111,7 @@
         border-radius: 50%;
         display: inline-block;
         margin-#{$end-direction}: 5px;
-        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
-        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
+        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
     }
 }

@@ -50,9 +50,9 @@ foreach ($arrListing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                     $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
                 }
-
-                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($row['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                $imgHtm = '<img src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
+                $imagePluginDimensions = ImageDimension::getData(ImageDimension::TYPE_PLUGIN_IMAGE, ImageDimension::VIEW_ICON);
+                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($row['plugin_id'], ImageDimension::VIEW_ICON), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgHtm = '<img data-aspect-ratio = "' . $imagePluginDimensions[ImageDimension::VIEW_ICON]['aspectRatio'] . '" src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
                 $td->appendElement('plaintext', $tdAttr, $imgHtm, true);
                 break;
             case 'plugin_name':
@@ -120,7 +120,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 $formAction = isset($formAction) ? $formAction : 'toggleBulkStatuses';
 $attr = [
@@ -149,7 +149,7 @@ $frm->addHiddenField('', 'status'); ?>
         ?>
     </div>
 </div>
-<div class="card-body">
+<div class="card-table">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <?php
         echo $frm->getFormTag();

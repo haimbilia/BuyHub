@@ -13,9 +13,9 @@ trait SellerCollections
     {
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
-        if(false == $shopDetails){
+        if (false == $shopDetails) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml()); 
+            FatUtility::dieWithError(Message::getHtml());
         }
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
@@ -46,8 +46,7 @@ trait SellerCollections
     {
         $userId = $this->userParentId;
         if (!UserPrivilege::canEditSellerCollection($userId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
 
         $this->commonShopCollection();
@@ -57,33 +56,42 @@ trait SellerCollections
 
     public function shopCollectionGeneralForm($scollection_id = 0)
     {
-        $scollection_id = FatUtility::int($scollection_id);
-        $userId = $this->userParentId;
+        $scollection_id = FatUtility::int($scollection_id);       
         $shop_id = $this->commonShopCollection();
-        $colectionForm = $this->getCollectionGeneralForm('', $shop_id);
-        $shopcolDetails = ShopCollection::getCollectionGeneralDetail($shop_id, $scollection_id);
-        $baseUrl = Shop::getRewriteCustomUrl($shop_id);
-        if (!empty($shopcolDetails)) {
-            /* url data[ */
-            $urlSrch = UrlRewrite::getSearchObject();
-            $urlSrch->doNotCalculateRecords();
-            $urlSrch->setPageSize(1);
-            $urlSrch->addFld('urlrewrite_custom');
-
-            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/collection/' . $shop_id . '/' . $scollection_id);
-            $rs = $urlSrch->getResultSet();
-            $urlRow = FatApp::getDb()->fetch($rs);
-            if ($urlRow) {
-                $shopcolDetails['urlrewrite_custom'] = str_replace('-' . $baseUrl, '', $urlRow['urlrewrite_custom']);
+        $colectionForm = $this->getCollectionGeneralForm($scollection_id, $shop_id); 
+        $identifier = ''; 
+        $baseUrl = '';      
+        if(0 < $scollection_id){
+            $shopcolDetails = ShopCollection::getCollectionGeneralDetail($shop_id, $scollection_id, CommonHelper::getDefaultFormLangId());
+            $baseUrl = Shop::getRewriteCustomUrl($shop_id);
+            if (!empty($shopcolDetails)) {
+                /* url data[ */
+                $urlSrch = UrlRewrite::getSearchObject();
+                $urlSrch->doNotCalculateRecords();
+                $urlSrch->setPageSize(1);
+                $urlSrch->addFld('urlrewrite_custom');
+    
+                $urlSrch->addCondition('urlrewrite_original', '=', 'shops/collection/' . $shop_id . '/' . $scollection_id);
+                $rs = $urlSrch->getResultSet();
+                $urlRow = FatApp::getDb()->fetch($rs);
+                if ($urlRow) {
+                    $shopcolDetails['urlrewrite_custom'] = str_replace('-' . $baseUrl, '', $urlRow['urlrewrite_custom']);
+                }
+                /* ] */
+                $scollection_id = (array_key_exists('scollection_id', $shopcolDetails)) ? $shopcolDetails['scollection_id'] : 0;
+                $shopcolDetails['scollection_name'] = !empty($shopcolDetails[ShopCollection::tblFld('name')]) ? $shopcolDetails[ShopCollection::tblFld('name')] : $shopcolDetails[ShopCollection::tblFld('identifier')];
+                
+                $colectionForm->fill($shopcolDetails);
+                $identifier = $shopcolDetails[ShopCollection::tblFld('identifier')];
             }
-            /* ] */
-            $scollection_id = (array_key_exists('scollection_id', $shopcolDetails)) ? $shopcolDetails['scollection_id'] : 0;
-            $colectionForm->fill($shopcolDetails);
         }
+        
         $this->set('scollection_id', $scollection_id);
+        $this->set('identifier', $identifier);
         $this->set('baseUrl', $baseUrl);
         $this->set('shop_id', $shop_id);
         $this->set('colectionForm', $colectionForm);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
@@ -128,13 +136,11 @@ trait SellerCollections
     {
         $shopcolDetails = ShopCollection::getCollectionGeneralDetail($shop_id, $scollection_id);
         if (empty($shopcolDetails)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $collection = new ShopCollection();
         if (!$collection->deleteCollection($scollection_id)) {
-            Message::addErrorMessage($collection->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($collection->getError());
         }
     }
 
@@ -143,12 +149,18 @@ trait SellerCollections
         $shop_id = FatUtility::int($shop_id);
         $frm = new Form('frmShopCollection');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
-        $frm->addHiddenField('', 'scollection_shop_id', $shop_id);
-        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'scollection_identifier');
+        $frm->addHiddenField('', 'scollection_shop_id', $shop_id);      
+        $frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $this->siteLangId), 'scollection_name');  
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
-        $fld->requirements()->setRequired();
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'scollection_active', $activeInactiveArr, applicationConstants::YES, array(), '');
+        $fld->requirements()->setRequired(); 
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'scollection_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
+        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+        
         return $frm;
     }
 
@@ -159,51 +171,36 @@ trait SellerCollections
         $shop_id = FatUtility::int($post['scollection_shop_id']);
         $scollection_id = FatUtility::int($post['scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($shop_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }        
         $frm = $this->getCollectionGeneralForm($scollection_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }        
 
         $record = new ShopCollection($scollection_id);
+        $post[$record::tblFld('identifier')] = $post[$record::tblFld('name')];
 
         $record->assignValues($post);
         if (!$collection_id = $record->save()) {
-            Message::addErrorMessage(Labels::getLabel("MSG_This_identifier_is_not_available._Please_try_with_another_one.", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_This_identifier_is_not_available._Please_try_with_another_one.", $this->siteLangId));
         }
+
+        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
         /* url data[ */
 
 
         $shopOriginalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $shop_id . '/' . $collection_id;
         if ($post['urlrewrite_custom'] == '') {
-            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array( 'smt' => 'urlrewrite_original = ?', 'vals' => array($shopOriginalUrl)));
+            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($shopOriginalUrl)));
         } else {
             $shop = new Shop($shop_id);
             $shop->setupCollectionUrl($post['urlrewrite_custom'], $collection_id);
         }
         /* ] */
-        $newTabLangId = 0;
-        if ($collection_id > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                $row = ShopCollection::getAttributesByLangId($langId, $collection_id);
-                if (!$row) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $collection_id = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
-        $this->set('collection_id', $collection_id);
-        $this->set('langId', $newTabLangId);
+        
+        $this->set('collection_id', $collection_id);       
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -265,14 +262,13 @@ trait SellerCollections
     {
         $scollection_id = Fatutility::int($scollection_id);
         if (!$scollection_id) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
 
         $shopColLangFrm = $this->getCollectionLangForm($scollection_id, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(ShopCollection::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($scollection_id, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($scollection_id, $langId, CommonHelper::getDefaultFormLangId());
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
@@ -283,13 +279,11 @@ trait SellerCollections
         }
 
         if (!empty($row) && 0 < count($row)) {
-            $data['scollection_id'] = $row['scollectionlang_scollection_id'];
-            $data['lang_id'] = $row['scollectionlang_lang_id'];
-            $data['name'] = $row['scollection_name'];
-            $shopColLangFrm ->fill($data);
+            $row['scollection_id'] = $row['scollectionlang_scollection_id'];
+            $row['lang_id'] = $row['scollectionlang_lang_id'];          
+            $shopColLangFrm->fill($row);
         }
-
-        $this->set('languages', Language::getAllNames());
+       
         $this->set('shopColLangFrm', $shopColLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('userId', $this->userParentId);
@@ -299,28 +293,14 @@ trait SellerCollections
         $this->_template->render(false, false);
     }
 
-    private function getCollectionLangForm($scollection_id = 0, $lang_id = 0)
+    private function getCollectionLangForm($scollection_id = 0, $langId = 0)
     {
         $frm = new Form('frmMetaTagLang');
-        $frm->addHiddenField('', 'scollection_id', $scollection_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $this->siteLangId), 'name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
+        $frm->addHiddenField('', 'scollection_id', $scollection_id);        
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $fld->requirements()->setRequired(); 
+        $fld->requirements()->setInt(); 
+        $frm->addRequiredField(Labels::getLabel('FRM_COLLECTION_NAME', $langId), 'scollection_name');
         return $frm;
     }
 
@@ -328,65 +308,29 @@ trait SellerCollections
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-		$scollection_id = FatUtility::int($post['scollection_id']);
+        $scollection_id = FatUtility::int($post['scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+        }        
         $frm = $this->getCollectionLangForm($scollection_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $post['lang_id'] =  array_key_first($languages); 
-		}
-		$record = new ShopCollection($scollection_id);
-
-        if (!$record->addUpdateShopCollectionLang($post)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(ShopCollection::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($scollection_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $newTabLangId = 0;
-        if ($scollection_id > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = ShopCollection::getAttributesByLangId($langId, $scollection_id)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $collection_id = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-
-        if ($newTabLangId == 0 && !$this->isCollectionLinkFormFilled($scollection_id)) {
+        if (false === $post) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }        
+        $record = new ShopCollection($scollection_id);
+        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]], $post['lang_id']);
+       
+        if ($this->get('langId') == 0 && !$this->isCollectionLinkFormFilled($scollection_id)) {             
             $this->set('openCollectionLinkForm', true);
         }
-
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('scollection_id', $scollection_id);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function isCollectionLinkFormFilled($scollection_id)
     {
         $sCollectionobj = new ShopCollection();
-        if ($row = $sCollectionobj->getShopCollectionProducts($scollection_id, $this->siteLangId)) {
+        if ($sCollectionobj->getShopCollectionProducts($scollection_id, $this->siteLangId)) {
             return true;
         }
         return false;
@@ -401,13 +345,31 @@ trait SellerCollections
         $scollection_id = FatUtility::int($scollection_id);
         $shop_id = $this->commonShopCollection();
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         $sellProdObj = new ShopCollection();
         $products = $sellProdObj->getShopCollectionProducts($scollection_id, $this->siteLangId);
-
-        $collectionLinkFrm = $this->getCollectionLinksFrm();
+       
+        $collectionLinkFrm = $this->getCollectionLinksFrm();       
+        if (!empty($products)) {
+            $sellerProducts = [];
+            foreach ($products as $key => $val) {
+                $options = SellerProduct::getSellerProductOptions($val['selprod_id'], true, $this->siteLangId);
+                $variantsStr = '';
+                array_walk($options, function ($item, $key) use (&$variantsStr) {
+                    $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+                });
+                $productName = strip_tags(html_entity_decode(($val['product_name'] != '') ? $val['product_name'] : $val['product_identifier'], ENT_QUOTES, 'UTF-8'));
+                $productName .= $variantsStr;
+                $sellerProducts[$val['selprod_id']] = $productName;   
+                
+                $data['scp_selprod_id'] = array_keys($sellerProducts);
+                $fld = $collectionLinkFrm->getField('scp_selprod_id[]');
+                $fld->options = $sellerProducts;
+               
+            }           
+            $data['scp_scollection_id'] = $scollection_id; 
+        }
         $data['scp_scollection_id'] = $scollection_id;
         $collectionLinkFrm->fill($data);
         $this->set('collectionLinkFrm', $collectionLinkFrm);
@@ -421,9 +383,8 @@ trait SellerCollections
     {
         $frm = new Form('frmLinks1', array('id' => 'frmLinks1'));
         $frm->addHiddenField('', 'scp_scollection_id');
-        $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION', $this->siteLangId), 'scp_selprod_id', [], '', array('id' => 'scp_selprod_id'), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-        
-        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div><div class="gap"></div>');
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCTS', $this->siteLangId), 'scp_selprod_id[]', [], '', array('id' => 'scp_selprod_id'), false);
+        $frm->addHtml('', 'buy_together', '<div id="selprod-products"><ul class="list-vertical"></ul></div>');
         return $frm;
     }
 
@@ -433,12 +394,9 @@ trait SellerCollections
         $post = FatApp::getPostedData();
         $scollection_id = FatUtility::int($post['scp_scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
-        $product_ids = (isset($post['product_ids'])) ? $post['product_ids'] : array();
-
-        unset($post['scp_selprod_id']);
+        $product_ids = (isset($post['scp_selprod_id'])) ? $post['scp_selprod_id'] : array();
 
         if ($scollection_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
@@ -469,15 +427,13 @@ trait SellerCollections
         $frm = new Form('frmCollectionMedia');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $bannerTypeArr = applicationConstants::getAllLanguages();
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
-        } else  {
-			$langid = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $langid);
-		}
-       
-		
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
+        } else {
+            $langid = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $langid);
+        }
+        $frm->addHtml('', 'collection_image', '');
         return $frm;
     }
 
@@ -485,62 +441,56 @@ trait SellerCollections
     {
         $scollection_id = FatUtility::int($scollection_id);
         $lang_id = FatUtility::int($lang_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = FatUtility::int($lang_id);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
         $this->commonShopCollection();
         if (1 > $scollection_id) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
         $collectionImg = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $lang_id, false);
-        $this->set('images', $collectionImg);
-        $this->set('languages', applicationConstants::getAllLanguages());
+        $this->set('image', $collectionImg);       
         $this->set('scollection_id', $scollection_id);
         $this->set('lang_id', $lang_id);
+        $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
     }
 
     public function uploadCollectionImage()
     {
         if (!$this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
         }
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
         }
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
-		$scollection_id = FatApp::getPostedData('scollection_id', FatUtility::VAR_INT, 0);
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
+        $scollection_id = FatApp::getPostedData('scollection_id', FatUtility::VAR_INT, 0);
 
         if ($scollection_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($this->str_invalid_request);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id)
-        ) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id)) {
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('file', $_FILES['cropped_image']['name']);
@@ -562,8 +512,7 @@ trait SellerCollections
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, 0, $lang_id)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
         $this->set('msg', Labels::getLabel('MSG_File_deleted_successfully', $this->siteLangId));

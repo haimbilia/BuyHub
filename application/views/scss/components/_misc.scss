@@ -1,15 +1,22 @@
 html {
     font-size: 16px;
     overflow-x: hidden;
-    @include media-breakpoint-down(lg) {
-        font-size: 15px;
+    @include media-breakpoint-up(sm) {
+        font-size: 12px;
     }
-    @include media-breakpoint-down(md) {
-        font-size: 14px;
-    }
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-up(md) {
         font-size: 13px;
     }
+    @include media-breakpoint-up(lg) {
+        font-size: 14px;
+    }
+    @include media-breakpoint-up(xl) {
+        font-size: 15px;
+    }
+    @media (min-width: 1600px) {
+        font-size: 16px;
+    }
+
     &.pop-on {
         overflow: hidden;
     }
@@ -53,6 +60,7 @@ img {
 
 a {
     color: inherit;
+    text-decoration: none;
 }
 
 a:hover {
@@ -156,7 +164,7 @@ a:hover {
 }
 
 .hidden {
-    display: none!important;
+    display: none !important;
 }
 
 .no-after {
@@ -379,53 +387,6 @@ a:hover {
     }
 }
 
-.slick-arrow {
-    position: absolute;
-    top: calc(50% - 20px);
-    background-color: rgba(255, 255, 255, 0.7);
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: none;
-    text-indent: -999999px;
-    z-index: 1;
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-}
-
-.slick-prev:after,
-.slick-next:after {
-    content: "";
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
-    width: 10px;
-    height: 10px;
-    transform: rotate(-45deg);
-    position: absolute;
-    left: 50%;
-    margin-left: -7px;
-    top: 50%;
-    margin-top: -5px;
-}
-
-.slick-prev:after {
-    transform: rotate(135deg);
-    margin-#{$start-direction}: -3px;
-}
-
-.slick-arrow.slick-disabled {
-    opacity: 0.2;
-    cursor: default;
-}
-
-.slick-prev {
-    left: 0;
-}
-
-.slick-next {
-    right: 0;
-}
-
 .browse-more {
     display: flex;
     align-items: center;
@@ -473,5 +434,85 @@ a:hover {
         z-index: 1020;
         background-color: $bg-white;
         padding: 1.5rem 2rem;
+    }
+}
+.dropdown-toggle-custom {
+    border: none;
+    position: relative;
+    &-arrow {
+        position: absolute;
+        transform: translate(-6px, 0);
+        top: calc(50% - 4px);
+        #{$end-direction}: 25px;
+        &:after,
+        &:before {
+            content: "";
+            position: absolute;
+            background-color: currentColor;
+            width: 1px;
+            height: 9px;
+            transition: all 0.25s ease-in-out;
+        }
+        &:before {
+            transform: translate(-3px * $transform-direction, 0) rotate(45deg);
+        }
+        &:after {
+            transform: translate(3px * $transform-direction, 0) rotate(-45deg);
+        }
+    }
+    &:not(.show) {
+        .dropdown-toggle-custom-arrow {
+            &:before {
+                transform: translate(3px * $transform-direction, 0) rotate(45deg);
+            }
+            &:after {
+                transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
+            }
+        }
+    }
+}
+
+.offcanvas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.slider-controls {
+    grid-gap: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    .btn {
+        background-color: #fff;
+        border: solid 1px $black;
+        padding: 0;
+        width: 42px;
+        height: 42px;
+        display: block;
+        &-prev span {
+            display: inline-block;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            width: 10px;
+            height: 10px;
+            transform: rotate(-225deg);
+            margin-#{$end-direction}: -7px;
+        }
+
+        &-next span {
+            display: inline-block;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            width: 10px;
+            height: 10px;
+            transform: rotate(-45deg);
+            margin-#{$start-direction}: -7px;
+        }
     }
 }

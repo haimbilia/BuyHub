@@ -32,7 +32,7 @@ class YocoPayController extends PaymentController
     public function charge($orderId)
     {
         if ($orderId == '') {
-            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
@@ -41,7 +41,7 @@ class YocoPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $this->setErrorAndRedirect(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId), FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId), FatUtility::isAjaxCall());
         }
 
         $this->set('orderInfo', $orderInfo);
@@ -68,7 +68,7 @@ class YocoPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $msg = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall(), false);
         }
         $token = FatApp::getPostedData('token', FatUtility::VAR_STRING);
@@ -79,10 +79,10 @@ class YocoPayController extends PaymentController
 
         $response = $this->plugin->getResponse();
         if (isset($response['status']) && strtolower($response['status']) == 'successful') {
-            $orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['id'], ($paymentAmount), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($response));
+            $orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['id'], ($paymentAmount), Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($response));
             die(json_encode(['status' => 1, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId))]));
         }
-        $msg = $response['displayMessage'] ?? Labels::getLabel("MSG_PAYMENT_FAILED", $this->siteLangId);     
+        $msg = $response['displayMessage'] ?? Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);     
         SystemLog::transaction(json_encode($response),self::KEY_NAME . "-" . $orderId);
         $orderPaymentObj->addOrderPaymentComments($msg);
         die(json_encode(['status' => 0, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentFailed'), 'msg' => $msg]));
@@ -108,7 +108,7 @@ class YocoPayController extends PaymentController
     {
         $frm = new Form('frmPaymentForm');
         $frm->addHtml('', 'card_frame', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         return $frm;
     }
 

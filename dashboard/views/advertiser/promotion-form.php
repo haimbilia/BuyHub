@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm, 6);
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupPromotion(this); return(false);');
 
 if (User::isSeller()) {
@@ -44,6 +44,21 @@ HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
+$fld = $frm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
+$fld = $frm->getField('promotion_name');
+$fld->setFieldTagAttribute('onkeyup', "getIdentifier(this)");
+$fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $siteLangId) . '</small>';
+
+
+
+unset($languages[CommonHelper::getDefaultFormLangId()]);
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -53,13 +68,16 @@ $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs navTabsJs">
-            <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $promotionId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
-            <a class="nav-link <?php echo (0 == $promotionId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $promotionId) ? "onclick='promotionLangForm(" . $promotionId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+            <a class="nav-link active" href="javascript:void(0);" title="<?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?>" onclick="promotionForm(<?php echo $recordId; ?>)"><?php echo Labels::getLabel('NAV_GENERAL', $siteLangId); ?></a>
+            <?php             
+            if(0 < count($languages)){ ?>
+            <a class="nav-link <?php echo (0 == $recordId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='promotionLangForm(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?>>
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
-            <?php $inactive = ($promotionId == 0) ? 'fat-inactive' : ''; ?>
+            <?php } ?>
+            <?php $inactive = ($recordId == 0) ? 'fat-inactive' : ''; ?>
             <?php if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) { ?>
-                <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0)" <?php if ($promotionId > 0) { ?> onclick="promotionMediaForm(<?php echo $promotionId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+                <a class="nav-link <?php echo $inactive; ?>" href="javascript:void(0)" <?php if ($recordId > 0) { ?> onclick="promotionMediaForm(<?php echo $recordId; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
             <?php } ?>
         </nav>
     </div>

@@ -2,7 +2,7 @@
     display: flex;
     border-radius: $radius4;
     background: #fff;
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
+    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
     transform: scaleY(1);
     opacity: 1;
     visibility: visible;
@@ -46,6 +46,6 @@
     padding: 0;
 }
 
-.yk-ac-results .products_title {
+.yk-ac-results .products-title {
     min-height: inherit;
 }

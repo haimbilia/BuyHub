@@ -25,7 +25,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                                 <div class="btngroup--fix">
                                     <a class="btn btn-brand btn-sm" href="javascript:void(0);" onclick="removeCategoryBanner(<?php echo $img['afile_record_subid']; ?>,<?php echo $img['afile_lang_id']; ?>)"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
                                 </div>
-                                <span class="gap"></span>
+
                             <?php } ?>
                         </div>
                     </div>

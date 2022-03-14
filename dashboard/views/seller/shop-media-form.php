@@ -1,30 +1,39 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $shopLogoFrm->setFormTagAttribute('onsubmit', 'setupShopMedia(this); return(false);');
 $shopLogoFrm->setFormTagAttribute('class', 'form');
 $shopLogoFrm->developerTags['colClassPrefix'] = 'col-md-';
 $shopLogoFrm->developerTags['fld_default_col'] = 12;
 $ratioFld = $shopLogoFrm->getField('ratio_type');
 $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
-$fld = $shopLogoFrm->getField('shop_logo');
-$fld->addFieldTagAttribute('class', 'btn btn-sm');
-$fld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
+$ratioFld->addOptionListTagAttribute('class', 'list-radio');
+$ratioFld = HtmlHelper::configureRadioAsButton($shopLogoFrm, 'ratio_type');
 
+$fld = $shopLogoFrm->getField('shop_logo');
+$langFld = $shopLogoFrm->getField('lang_id');
+if($ratioFld && $langFld->fldType != 'hidden'){  
+    $ratioFld->developerTags['col'] = 6; 
+    $langFld->developerTags['col'] = 6; 
+}
+
+$fld->value= '<div class="field-set"><div class="caption-wraper"><label class="field_label">'.Labels::getLabel('LBL_UPLOAD_LOGO', $siteLangId).'</label></div><div class="field-wraper"><div class="field_cover"><span id="shopLogoHtml"></span></div></div></div>';
+$fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150').'</span>';
 $shopBannerFrm->setFormTagAttribute('onsubmit', 'setupShopMedia(this); return(false);');
 $shopBannerFrm->setFormTagAttribute('class', 'form');
 $shopBannerFrm->developerTags['colClassPrefix'] = 'col-md-';
 $shopBannerFrm->developerTags['fld_default_col'] = 12;
 $screenFld = $shopBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
-$fld = $shopBannerFrm->getField('shop_banner');
-$fld->addFieldTagAttribute('class', 'btn  btn-sm');
-$fld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
+$langFld = $shopBannerFrm->getField('lang_id');
+if($screenFld && $langFld->fldType != 'hidden'){
+    $screenFld->developerTags['col'] = 6; 
+    $langFld->developerTags['col'] = 6; 
+}
 
-$shopBackgroundImageFrm->setFormTagAttribute('onsubmit', 'setupShopMedia(this); return(false);');
-$shopBackgroundImageFrm->developerTags['colClassPrefix'] = 'col-md-';
-$shopBackgroundImageFrm->developerTags['fld_default_col'] = 12;
-$fld = $shopBackgroundImageFrm->getField('shop_background_image');
-$fld->addFieldTagAttribute('class', 'btn btn-sm');
-$shopLayout = SHOP::TEMPLATE_ONE;
+$fld = $shopBannerFrm->getField('shop_banner');
+$fld->value= '<div class="field-set"><div class="caption-wraper"><label class="field_label">'.Labels::getLabel('LBL_UPLOAD_BANNER', $siteLangId).'</label></div><div class="field-wraper"><div class="field_cover"><span id="shopBannerHtml"></span></div></div></div>';
+$fld->htmlAfterField ='<span class="form-text text-muted preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500').'</span>';
+
 ?>
 
 <div class="card-body">
@@ -33,23 +42,15 @@ $shopLayout = SHOP::TEMPLATE_ONE;
         <div class="col-lg-6">
             <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Banner_Setup', $siteLangId); ?></h5>
-                <?php echo $shopBannerFrm->getFormHtml(); ?>
-                <span class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?>
-                </span>
-                <ul class="uploaded-media" id="banner-image-listing">
-                </ul>
+                <?php echo $shopBannerFrm->getFormHtml(); ?>                
+                </span>              
             </div>
         </div>
         <div class="col-lg-6">
             <div class="media-block">
                 <h5><?php echo Labels::getLabel('LBL_Logo_Setup', $siteLangId); ?></h5>
                 <?php echo $shopLogoFrm->getFormHtml(); ?>
-                <span class="form-text text-muted logoPreferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150'); ?></span>
-
-                <ul class="uploaded-media" id="logo-image-listing">
-                </ul>
             </div>
-
         </div>
     </div>
 </div>

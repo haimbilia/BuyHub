@@ -1,0 +1,34 @@
+.banner-wrappers {
+    .banner-ppc {
+        border-radius: $radius4;
+        overflow: hidden;
+        .advertise__block {
+            margin-bottom: 2rem;
+            display: block;
+        }
+        img {
+            margin: 0 auto;
+            display: inline-block;
+        }
+    }
+}
+.poster-layout-1 {
+    padding: 0;
+    .poster {
+        text-align: center;
+        background: $bg-placeholder;
+    }
+}
+
+.poster-layout-2 {
+    display: grid;
+    grid-gap: 3rem;
+    grid-template-columns: 1fr 1fr;
+    @include media-breakpoint-down(sm) {
+        display: block;
+    }
+    .poster {
+        text-align: center;
+        background: $bg-placeholder;
+    }
+}

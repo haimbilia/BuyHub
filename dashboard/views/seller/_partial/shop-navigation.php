@@ -12,7 +12,7 @@ $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_M
         <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
     </a>
 
-    <a class="nav-link" href="javascript:void(0);" onclick="returnAddressForm()">
+    <a class="nav-link" href="javascript:void(0);" onclick="getReturnAddress()">
         <?php echo Labels::getLabel('LBL_Return_Address', $siteLangId); ?>
     </a>
 

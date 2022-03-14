@@ -1,209 +1,47 @@
-$(document).ready(function() {
-    /* alert(singleFeaturedProduct); */
-    /* home page main slider */
-
-    $('.navchild').hover(function() {
+$(document).ready(function () {
+    $('.navchild').hover(function () {
         reinitSlick();
     });
 
-    reinitSlick = function() {
-        $('.js-hero-slider').slick("slickPause");
-    }
 
-    $('.js-collection-corner').slick(getSlickSliderSettings(5, 1, langLbl.layoutDirection));
-
-    if (langLbl.layoutDirection == 'rtl') {
-        var slickOptions = {
-            slidesToShow: 1,
-            arrows: false,
-            dots: true,
-            rtl: true,
-            autoplay: true,
-            centerMode: true,
-            centerPadding: '15%',
-
-        }
-        if($('.js-hero-slider .hero-item').length > 1){
-            $('.js-hero-slider').slick(slickOptions); 
-        }
-       
-        $('.featured-item-js').slick({
-
-            centerMode: true,
-
-            centerPadding: '26%',
-
-            slidesToShow: 1,
-
-            rtl: true,
-
-            responsive: [
-
-                {
-
-                    breakpoint: 768,
-
-                    settings: {
-
-                        arrows: false,
-
-                        centerMode: true,
-
-                        centerPadding: '5%',
-
-                        slidesToShow: 3
-
-                    }
-
-                },
-
-                {
-
-                    breakpoint: 500,
-
-                    settings: {
-
-                        arrows: false,
-
-                        centerMode: true,
-
-                        centerPadding: '0%',
-
-                        slidesToShow: 1
-
-                    }
-
-                }
-
-            ]
-
-        });
-
-        $('.fashion-corner-js').slick({
-            dots: false,
-            arrows: false,
-            autoplay: true,
-            pauseOnHover: true,
-            slidesToShow: 6,
-            rtl: true,
-            responsive: [{
-                    breakpoint: 1025,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 500,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 1,
-                    }
-                }
-            ]
-        });
-
-    } else {
-        var slickOptions = {
-            slidesToShow: 1,
-            arrows: false,
-            dots: true,
-            autoplay: true,
-            centerMode: true,
-            centerPadding: '15%',
-        }
-        
-        if($('.js-hero-slider .hero-item').length > 1){
-            $('.js-hero-slider').slick(slickOptions); 
-        }
-
-        $('.featured-item-js').slick({
-            centerMode: true,
-            centerPadding: '26%',
-            slidesToShow: 1,
-            responsive: [{
-                    breakpoint: 768,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '5%',
-                        slidesToShow: 3
-                    }
-                },
-                {
-                    breakpoint: 500,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '0%',
-                        slidesToShow: 1
-                    }
-                }
-            ]
-        });
-
-        $('.fashion-corner-js').slick({
-            dots: false,
-            arrows: false,
-            autoplay: true,
-            pauseOnHover: true,
-            slidesToShow: 6,
-            responsive: [{
-                    breakpoint: 1025,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 3,
-                    }
-                },
-                {
-                    breakpoint: 500,
-                    settings: {
-                        arrows: false,
-                        slidesToShow: 1,
-                    }
-                }
-            ]
-        });
-
-    }
-
-    /*Tabs*/
-    $(".tabs-content-home--js").hide();
-    $(".faqTabs--flat-js li:first").addClass("is-active").show();
-    $(".tabs-content-home--js:first").show();
-    $(".faqTabs--flat-js li").click(function() {
-        $(".faqTabs--flat-js li").removeClass("is-active");
-        $(this).addClass("is-active");
-        $(".tabs-content-home--js").hide();
-        var activeTab = $(this).find("a").attr("href");
-        $(activeTab).fadeIn();
-        return false;
+    $('.js-hero-slider').slick({
+        autoplay: true,
+        autoplaySpeed: 8000,
+        draggable: true,
+        arrows: false,
+        dots: true,
+        fade: true,
+        speed: 900,
+        infinite: true,
+        cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
+        touchThreshold: 100
     });
 
+
 });
-resendOtp = function(userId, getOtpOnly = 0) {
-    $.mbsmessage(langLbl.processing, false, 'alert--process');
-    fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function(t) {
+resendOtp = function (userId, getOtpOnly = 0) {
+    fcom.displayProcessing();
+    fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function (t) {
         t = $.parseJSON(t);
         if (1 > t.status) {
-            $.mbsmessage(t.msg, false, 'alert--danger');
+            fcom.displayErrorMessage(t.msg);
             return false;
         }
-        $.mbsmessage(t.msg, true, 'alert--success');
+        fcom.displaySuccessMessage(t.msg);
         startOtpInterval();
     });
     return false;
 };
 
-validateOtp = function(frm) {
+validateOtp = function (frm) {
     if (!$(frm).validate()) return;
     var data = fcom.frmData(frm);
-    fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function(t) {
+    fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function (t) {
         t = $.parseJSON(t);
         if (1 == t.status) {
             window.location.href = t.redirectUrl;
         } else {
-            $.systemMessage(t.msg, 'alert--danger', true);
+            fcom.displayErrorMessage(t.msg);
             invalidOtpField();
         }
     });

@@ -23,7 +23,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             </h3>
                         </div>
                     </div>
-                    <div class="card-body p-0 itemSummaryJs">
+                    <div class="card-table itemSummaryJs">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <table class="table table-orders">
                                 <thead class="tableHeadJs">

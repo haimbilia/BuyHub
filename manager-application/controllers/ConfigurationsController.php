@@ -573,7 +573,8 @@ class ConfigurationsController extends ListingBaseController
                     'CONF_PRODUCT_GEO_LOCATION',
                     $prodGeoSettingArr,
                     '',
-                    array('class' => 'list-radio geoLocation')
+                    array('class' => 'list-radio'),
+                    array('class' => 'geoLocation')
                 );
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld);

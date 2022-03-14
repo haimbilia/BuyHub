@@ -5,7 +5,7 @@ $keywordFld = $frmSearch->getField('keyword');
 if (0 < $selProd_id) {
     $keywordFld->setFieldTagAttribute('readonly', 'readonly');
 } ?>
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [

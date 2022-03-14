@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array();
     if (count($arrListing) > 0) {
         $arr_flds['select_all'] = '';
@@ -13,7 +13,7 @@
     if (0 < count($arrListing)) {
         $tableClass = "table-justified";
     }
-    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--orders ' . $tableClass));
+    $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-orders ' . $tableClass));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
     foreach ($arr_flds as $key => $val) {
         if ('select_all' == $key) {
@@ -111,7 +111,7 @@
         echo $frm->getFormTag();
         echo $frm->getFieldHtml('status');
         echo $tbl->getHtml(); ?> </form> <?php
-                                    } ?>
+                                        } ?>
 </div>
 <?php $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmUserSearchPaging'));

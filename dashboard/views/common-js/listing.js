@@ -21,7 +21,10 @@ $(document).on("click", ".resetModalFormJs", function (e) {
         eval(onClear);
     } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
         $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
+    } else {
+        $.ykmodal.close();
     }
+    fcom.removeLoader();
 });
 
 $(document).on("click", ".navTabsJs a", function (e) {
@@ -40,7 +43,7 @@ $(document).on("click", ".navTabsJs a", function (e) {
 
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {
-            $.ykmsg.error(langLbl.controllerNameRequired);
+            fcom.displayErrorMessage(langLbl.controllerNameRequired);
             return false;
         }
         return true;
@@ -97,6 +100,13 @@ $(document).on("click", ".navTabsJs a", function (e) {
         $.ykmodal.close();
     };
 
+    hideYkModalFooter = function () {
+       $('.contentBodyJs .form-edit-foot').hide();
+    };
+
+    showYkModalFooter = function () {
+        $('.contentBodyJs .form-edit-foot').show();
+    };
 
 })();
 

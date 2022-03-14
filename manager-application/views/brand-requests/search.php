@@ -24,10 +24,18 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
+                $languages = Language::getAllNames();
+              
+                $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $row['brand_id'], 0, $siteLangId, (count($languages) > 1) ? false : true);
+                
+                $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+                $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+                $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_MINI_THUMB, $aspectRatioType);
+                
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),
-                    '<img  class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
+                    '<img   data-aspect-ratio = "'.$imageBrandDimensions[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'].'" class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
                     true
                 );
                 break;

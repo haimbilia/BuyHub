@@ -7,32 +7,32 @@
     white-space: nowrap;
     display: inline-block;
     border-radius: $radius4;
-    &.label-default {
+    &-default {
         background: #fff;
         border: $border;
     }
-    &.label-primary {
+    &-primary {
         //background-color: $brand-color;
         //color:lighten($brand-color, 55%);
         @include bg-brand();
     }
-    &.label-secondary {
+    &-secondary {
         background: $secondary-color;
         color: $secondary-color-inverse;
     }
-    &.label-success {
+    &-success {
         background: lighten($success-color, 50);
         color: $success-color;
     }
-    &.label-info {
+    &-info {
         background: lighten($info-color, 30);
         color: $info-color;
     }
-    &.label-danger {
+    &-danger {
         background: lighten($danger-color, 30);
         color: $danger-color;
     }
-    &.label-warning {
+    &-warning {
         background: lighten($warning-color, 35);
         color: $warning-color;
     }

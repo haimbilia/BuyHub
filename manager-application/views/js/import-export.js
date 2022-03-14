@@ -7,8 +7,8 @@
     };
     exportForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
-            $.ykmodal(t.html);
             fcom.removeLoader();
+            $.ykmodal(t.html);
         });
     }
 
@@ -89,13 +89,9 @@
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
-                            //reloadList();
-                            
-                            $(document).trigger('close.mbsmessage');
                             $.ykmsg.success(ans.msg);
                         } else {
                             $('#fileupload_div').html('');
-                            $(document).trigger('close.mbsmessage');
                             $.ykmsg.error(ans.msg);
                         }
 
@@ -107,7 +103,6 @@
                             }, 1000);
                         } */
                     } catch (exc) {
-                        $(document).trigger('close.mbsmessage');
                         $.ykmsg.error(t);
                     }
                 },

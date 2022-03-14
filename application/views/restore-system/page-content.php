@@ -63,7 +63,7 @@
     }
 
     function restoreSystem() {
-        $.mbsmessage('Restore is in process..', false, 'alert--process alert');
+        $.ykmsg.warning('Restore is in process..');
         setTimeout(function() {
             $.facebox.close();
         }, 5000);

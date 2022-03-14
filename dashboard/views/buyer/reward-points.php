@@ -4,9 +4,10 @@ $frmSrch->setFormTagAttribute('class', 'form');
 $frmSrch->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frmSrch->developerTags['fld_default_col'] = 12;
 ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-        <div class="content-wrapper content-space">
+
+<div class="content-wrapper content-space">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
             <?php
             $data = [
                 'headingLabel' => Labels::getLabel('LBL_Reward_Points', $siteLangId),
@@ -34,7 +35,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
                         </div>
                     </div>
                 </div>
-                <?php /* ?>
+                <?php  ?>
                 <div class="card">
                     <div class="card-body">
                         <ul class="points-timeline" id="points-timeline">
@@ -169,7 +170,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
                     </div>
 
                 </div>
-                <?php  */ ?>
+                <?php   ?>
                 <div class="card">
                     <div class="card-body">
                         <div id="rewardPointsListing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>

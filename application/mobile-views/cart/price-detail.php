@@ -42,7 +42,7 @@ $appliedRewardPointsDiscount = isset($cartSummary['cartRewardPoints']) ? $cartSu
 
 $priceDetail['priceDetail'] = array(
     array(
-        'key' => Labels::getLabel('LBL_Items', $siteLangId),
+        'key' => Labels::getLabel('LBL_ITEMS', $siteLangId),
         'value' => $productsCount
     ),
     array(
@@ -61,19 +61,19 @@ if (0 < $cartSummary['totalSaving'] && (!isset($cartPage) || false === $cartPage
 if (0 < $appliedRewardPointsDiscount) {
     $usedRPAmt = CommonHelper::convertRewardPointToCurrency($appliedRewardPointsDiscount);
     $priceDetail['priceDetail'][] = array(
-        'key' => Labels::getLabel('LBL_Reward_point_discount', $siteLangId),
+        'key' => Labels::getLabel('LBL_REWARD_POINT_DISCOUNT', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($usedRPAmt)
     );
 }
 if (0 < $cartVolumeDiscount) {
     $priceDetail['priceDetail'][] = array(
-        'key' => Labels::getLabel('LBL_Volume_Discount', $siteLangId),
+        'key' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($cartVolumeDiscount)
     );
 }
 if (0 < $coupon_discount_total) {
     $priceDetail['priceDetail'][] = array(
-        'key' => Labels::getLabel('LBL_Discount', $siteLangId),
+        'key' => Labels::getLabel('LBL_DISCOUNT', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($coupon_discount_total)
     );
 }
@@ -88,7 +88,7 @@ if (0 < $cartTaxTotal) {
         }
     } else {
         $priceDetail['priceDetail'][] = array(
-            'key' => Labels::getLabel('LBL_Tax_Charges', $siteLangId),
+            'key' => Labels::getLabel('LBL_TAX_CHARGES', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat($cartTaxTotal)
         );
     }
@@ -96,14 +96,14 @@ if (0 < $cartTaxTotal) {
 
 if (0 < $shippingTotal) {
     $priceDetail['priceDetail'][] = array(
-        'key' => Labels::getLabel('LBL_Shipping_Charges', $siteLangId),
+        'key' => Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($shippingTotal)
     );
 }
 
 if (array_key_exists('roundingOff', $cartSummary) && $cartSummary['roundingOff'] != 0 && !isset($cartPage)) {
     $priceDetail['priceDetail'][] = array(
-        'key' => (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId),
+        'key' => (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_ROUNDING_UP', $siteLangId) : Labels::getLabel('LBL_ROUNDING_DOWN', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat($cartSummary['roundingOff'])
     );
 }
@@ -115,7 +115,7 @@ if (isset($cartPage) && true === $cartPage) {
 }
 
 $priceDetail['netPayable'] = array(
-    'key' => Labels::getLabel('LBL_Net_Payable', $siteLangId),
+    'key' => Labels::getLabel('LBL_NET_PAYABLE', $siteLangId),
     'value' => CommonHelper::displayMoneyFormat($orderNetAmount)
 );
 

@@ -16,7 +16,7 @@ class FullTextSearch extends FatModel
 
         $this->defaultPlugin = $this->getDefaultPlugin();
         if (false == $this->defaultPlugin) {
-            trigger_error(Labels::getLabel('LBL_PLUGIN_NOT_ACTIVATED', $this->langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLUGIN_NOT_ACTIVATED', $this->langId), E_USER_ERROR);
         }
         
         $error = '';
@@ -484,12 +484,12 @@ class FullTextSearch extends FatModel
     {
         $langId = FatUtility::int($langId);
         if (1 > $langId) {
-            trigger_error(Labels::getLabel('LBL_INVALID_REQUEST', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_REQUEST', $langId), E_USER_ERROR);
         }
 
         $defaultPlugin = (new self($langId))->getDefaultPlugin();
         if (!$defaultPlugin) {
-            trigger_error(Labels::getLabel('LBL_INVALID_REQUEST', $langId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_INVALID_REQUEST', $langId), E_USER_ERROR);
         }
         
         $error = '';

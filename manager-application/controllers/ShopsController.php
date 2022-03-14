@@ -227,6 +227,18 @@ class ShopsController extends ListingBaseController
         if ($shopLayoutTemplateId == 0) {
             $shopLayoutTemplateId = 10001;
         }
+        $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
+        
+        $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
+   
+        $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
+
+
+        $this->set('getShopDimensions',$getShopDimensions);
+        $this->set('getShopLogoSquare',$getShopLogoSquare);
+        $this->set('getShopLogoRactangle', $getShopLogoRactangle);
+
+
 
         $shopDetails['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $shop_id) {
@@ -257,12 +269,22 @@ class ShopsController extends ListingBaseController
 
         if ($file_type == 'logo') {
             $logo = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) > 1) ? false : true);
+
+          
+            $aspectRatioType = $logo['afile_aspect_ratio'];
+            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+
             $this->set('image', $logo);
             $this->set('imageFunction', 'shopLogo');
+            $this->set('aspectRatioType', 'aspectRatioType');
+            $imageShopDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);
+            $this->set('imageShopDimensions', $imageShopDimensions);
         } else {
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'shopBanner');
+            $imageShopDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, ImageDimension::VIEW_THUMB);
+            $this->set('imageShopDimensions', $imageShopDimensions);
         }
 
         $this->set('file_type', $file_type);

@@ -1,4 +1,4 @@
-<?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
+<?php $this->includeTemplate('_partial/dashboardNavigation.php');
 $allAccessfrm->setFormTagAttribute('class', 'form');
 $allAccessfrm->developerTags['fld_default_col'] = 8;
 $submitFld = $allAccessfrm->getField('btn_submit');

@@ -81,9 +81,8 @@ var defaultController = controllerName;
         data = fcom.frmData(frm);
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Users', 'transaction', [transactionUserId]), data, function (t) {
-            fcom.updateFaceboxContent(t);
+            $.ykmodal(t);
         });
-        $.systemMessage.close();
     };
 
     loadMore = function () {

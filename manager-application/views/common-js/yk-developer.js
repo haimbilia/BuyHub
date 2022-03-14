@@ -339,10 +339,7 @@ $(function () {
                             "-" +
                             iti.getSelectedCountryData().iso2;
                         if ($('input[name="' + elementName + '"]').length < 1) {
-                            $.systemMessage(
-                                $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
-                                "alert-danger"
-                            );
+                            $.ykmsg.error($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
                             return;
                         }
                         $('input[name="' + elementName + '"]').val(dCode);
@@ -649,20 +646,20 @@ $(window).keydown(function (e) {
 
 $(document).on("click", "#quickSearchCtrlJs", function () {
     if ($(this).is(":checked")) {
-        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.webrootfront });
+        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.rooturl });
         $("#search-main").modal("hide");
     } else {
-        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.webrootfront });
+        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.rooturl });
     }
 });
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
     if ($(this).hasClass('active')) {
-        $.cookie('adminSidebar', 0, { expires: 30, path: siteConstants.webrootfront });
+        $.cookie('adminSidebar', 0, { expires: 30, path: siteConstants.rooturl });
         $("body").attr("data-sidebar-minimize", "on");
         $(this).removeClass("active");
     } else {
-        $.cookie('adminSidebar', 1, { expires: 30, path: siteConstants.webrootfront });
+        $.cookie('adminSidebar', 1, { expires: 30, path: siteConstants.rooturl });
         $("body").attr("data-sidebar-minimize", "off");
         $(this).addClass("active");
     }

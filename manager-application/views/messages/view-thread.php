@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $messageDetail = current($threadListing);
 $doNotshowMessages = $doNotshowMessages ?? false;
+$imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_THUMB);
 ?>
 <?php if (empty($messageDetail)) { ?>
     <div class="col-md-9">
@@ -31,7 +32,8 @@ $doNotshowMessages = $doNotshowMessages ?? false;
     }
 
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
-    $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    
+    $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
 
     <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
@@ -40,7 +42,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 <div class="card-head-label">
                     <div class="card-head-title d-flex align-items-center">
                         <div class="user user-md user-circle">
-                            <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
+                            <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
                         </div>
                         <div class="message-user__detail">
                             <h3><?php echo $fromUserName; ?></h3>
@@ -74,9 +76,10 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                                     <div class="user user-circle">
                                         <?php
                                         $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
-                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], 'thumb', true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                         ?>
-                                        <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
+                                        <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
                                     </div>
                                 </div>
                                 <div class="message-detail">
@@ -101,7 +104,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
             <div class="card-body">
                 <div class="message__user">
                     <div class="user user-circle">
-                        <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
+                        <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
                     </div>
                     <h3 class="message__user-name"><?php echo $fromUserName; ?></h3>
                     <ul class="list__group">

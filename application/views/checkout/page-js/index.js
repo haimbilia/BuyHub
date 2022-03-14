@@ -85,17 +85,12 @@ $("document").ready(function () {
             fcom.frmData(frm),
             function (t) {
                 var ans = JSON.parse(t);
-                if (ans.notVerified == 1) {
-                    var autoClose = false;
-                } else {
-                    var autoClose = true;
-                }
                 if (ans.status == 1) {
-                    $.mbsmessage(ans.msg, autoClose, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     location.href = ans.redirectUrl;
                     return;
                 }
-                $.mbsmessage(ans.msg, autoClose, "alert--danger");
+                fcom.displayErrorMessage(ans.msg);
             }
         );
         return false;
@@ -476,9 +471,9 @@ $("document").ready(function () {
         }
         $(pageContent).html(fcom.getLoader());
 
-        $.mbsmessage(langLbl.requestProcessing, false, "alert--process");
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl("Checkout", "PaymentSummary"), "", function (ans) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             $(pageContent).html(ans);
             $(paymentDiv).addClass("is-current");
         });
@@ -500,11 +495,11 @@ $("document").ready(function () {
     };
 
     getPromoCode = function () {
-        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.displayProcessing();
         checkLogin();
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl("Checkout", "getCouponForm"), "", function (t) {
-                $.systemMessage.close();
+                $.ykmsg.close();
                 $.facebox(t);
                 $("input[name='coupon_code']").focus();
             });
@@ -521,7 +516,7 @@ $("document").ready(function () {
             data,
             function (res) {
                 $.facebox.close();
-                $.systemMessage.close();
+                $.ykmsg.close();
                 loadFinancialSummary();
                 if ($(paymentDiv).hasClass("is-current")) {
                     loadPaymentSummary();
@@ -551,7 +546,7 @@ $("document").ready(function () {
 
     useRewardPoints = function (frm) {
         checkLogin();
-        $.systemMessage.close();
+        $.ykmsg.close();
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(
@@ -566,7 +561,7 @@ $("document").ready(function () {
 
     removeRewardPoints = function () {
         checkLogin();
-        $.systemMessage.close();
+        $.ykmsg.close();
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "removeRewardPoints"),
             "",
@@ -626,7 +621,7 @@ $("document").ready(function () {
         var btnText = submitBtn.val();
         submitBtn.attr("disabled", "disabled");
         submitBtn.val(submitBtn.data("processing-text"));
-        $.mbsmessage(langLbl.processing, false, "alert--process alert");
+        fcom.displayProcessing();
         fcom.ajax(action, data, function (t) {
             submitBtn.val(btnText);
             /* debugger; */
@@ -634,7 +629,7 @@ $("document").ready(function () {
                 var json = $.parseJSON(t);
                 if (typeof json.status != "undefined" && 1 > json.status) {
                     submitBtn.removeAttr("disabled");
-                    $.mbsmessage(json.msg, true, "alert--danger");
+                    fcom.displayErrorMessage(json.msg);
                     return false;
                 }
                 if (typeof json.html != "undefined") {
@@ -650,7 +645,7 @@ $("document").ready(function () {
     };
 
     displayPickupAddress = function (pickUpBy, recordId) {
-        $.mbsmessage(langLbl.processing, true, "alert--process alert");
+        fcom.displayProcessing();
         var addrId = $(".js-slot-addr-" + pickUpBy).attr("data-addr-id");
         var slotId = $("input[name='slot_id[" + pickUpBy + "]']").val();
         var slotDate = $("input[name='slot_date[" + pickUpBy + "]']").val();
@@ -674,7 +669,7 @@ $("document").ready(function () {
             ),
             data,
             function (rsp) {
-                $.mbsmessage.close();
+                $.ykmsg.close();
                 $.facebox(rsp, "modal-lg faceboxWidth medium-fb-width");
                 $("input[name='coupon_code']").focus();
             }
@@ -747,12 +742,12 @@ $("document").ready(function () {
                         fcom.makeUrl(method + "Pay", "charge", [orderId])
                     );
                 }
-                $.mbsmessage(t.msg, true, "alert--success");
+                fcom.displaySuccessMessage(t.msg);
                 $(".successOtp-js").removeClass("d-none");
                 $(".otpBlock-js").addClass("d-none");
                 confirmOrder(frm);
             } else {
-                $.mbsmessage(t.msg, true, "alert--danger");
+                fcom.displayErrorMessage(t.msg);
                 invalidOtpField();
             }
         });
@@ -760,11 +755,11 @@ $("document").ready(function () {
     };
 
     resendOtp = function (frm = "") {
-        $.mbsmessage(langLbl.processing, false, "alert--process");
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl("Checkout", "resendOtp"), "", function (t) {
             t = $.parseJSON(t);
             if (typeof t.status != "undefined" && 1 > t.status) {
-                $.mbsmessage(t.msg, false, "alert--danger");
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
             $(".otpVal-js").val("");
@@ -773,7 +768,7 @@ $("document").ready(function () {
                 $('input[name="btn_submit"]', frm).val(langLbl.proceed);
                 $(".otpVal-js").removeAttr("disabled");
             }
-            $.mbsmessage(t.msg, false, "alert--success");
+            fcom.displaySuccessMessage(t.msg);
             startOtpInterval("", "showElements");
             $(".resendOtpDiv-js").addClass("d-none");
         });
@@ -801,11 +796,11 @@ $("document").ready(function () {
     };
 
     orderShippingData = function (order_id) {
-        $.mbsmessage(langLbl.requestProcessing, false, "alert--process");
+        fcom.displayProcessing();
         var data = "order_id=" + order_id;
         fcom.ajax(fcom.makeUrl("Checkout", "orderShippingData"), data,
             function (rsp) {
-                $.mbsmessage.close();
+                $.ykmsg.close();
                 $.facebox(rsp);
             }
         );

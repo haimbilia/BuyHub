@@ -41,7 +41,7 @@ class HtmlHelper
         /* For Labels Fields */
 
         /* Group Label and Input field. */
-        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = $frm->developerTags['fieldWrapperRowExtraClassDefault'] ?? 'form-group';
         /* Group Label and Input field. */
     }
 
@@ -53,6 +53,7 @@ class HtmlHelper
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+        $fld->developerTags['noCaptionTag'] = true;
     }
 
     public static function configureSwitchForRadio($fld, $msg = '')
@@ -205,7 +206,7 @@ class HtmlHelper
                 break;
         }
     }
-    
+
     public static function configureCheckboxLabel(&$frm, $fldName)
     {
         $fld = $frm->getField($fldName);
@@ -215,8 +216,125 @@ class HtmlHelper
     }
 
     public static function setFieldEncryptedValue($fld, $value)
-    {   
+    {
         $fld->developerTags['fldWidthValues'] = ['cover position-relative', null, null, null];
         $fld->setFieldTagAttribute('data-encrypted-value', $value);
+    }
+
+    /**
+     * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl' ,'afile_id'=> 66]
+     */
+
+    public static function getfileInputHtml(array $fileInputAttributes, int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    {
+        $str =  '<div class="dropzone ' . $headerClass . '">';
+        if (1 > count($imageArr)) {
+            $str .= ' 
+                            <div class="dropzone-upload dropzoneUploadJs">                 
+                                <div class="file-upload">
+                                    <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
+                                </div>
+                                <div class="needsclick">
+                                    <h3 class="dropzone-msg-title">' . Labels::getLabel("FRM_CLICK_HERE_TO_UPLOAD", $langId) . '</h3>                              
+                                </div> 
+                            </div>                                        
+                        ';
+        } else {
+            $str .=
+                '<div class="dropzone-uploaded dropzoneUploadedJs">
+                                <img src="' . $imageArr['url'] . '" title=""  data-afile_id="' . ($imageArr['afile_id'] ?? 0) . '">    
+                                <div class="dropzone-uploaded-action">
+                                <ul class="actions">';
+            if (!empty($editFn)) {
+                $str .= '
+                                    <li>
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>';
+            }
+            $str .= '<li>
+                                            <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                    </use>
+                                                </svg>
+                                                </a>
+                                        </li>
+                                </ul></div>
+                            </div>';
+        }
+
+        $str .= '<input name="dropzoneInput" data-fatreq="{&quot;required&quot;:false}" class="dropzone-input dropzoneInputJs ' . (count($imageArr) ? "hide" : "") . '" type="file"';
+        foreach ($fileInputAttributes as $attrName => $attrVal) {
+            $str .= ' ' . $attrName . '="' . $attrVal . '"';
+        }
+        $str .= '>';
+
+
+        $str .= '</div>';
+        return   $str;
+    }
+
+    public static function configureRadioAsButton(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $str = '<label class="label">' . $fld->getCaption() . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($fld->options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fld->getFieldTagAttribute('class') . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $opValue == $fld->value ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        $str .= '</div>';
+
+        $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
+        $htmlFld->developerTags = $fld->developerTags;
+        return $htmlFld;
+    }
+    /*
+        attach Transalate Iconwith select box
+    */
+    public static function attachTransalateIcon(object $langFld, int $langId, string $onclickFn)
+    {
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
+            $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+            $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="' . $onclickFn . '" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                    </use>
+                                </svg>
+                            </a>';
+        }
+    }
+
+    public static function getIdentifierText($identifier, $langId){
+
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) ." : ".$identifier;
+    }
+    
+    public static function displayWordsFirstLetter($keyword, int $len = 2)
+    {
+        $titleArr = explode(' ', $keyword);
+        $title = '';
+        foreach ($titleArr as $val) {
+            $title .= substr($val, 0, 1);
+            if (strlen($title) == $len) {
+                break;
+            }
+        }
+        return strtoupper($title);
     }
 }

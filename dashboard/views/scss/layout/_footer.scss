@@ -1,9 +1,16 @@
 $content-space: 3.125rem;
 
 .footer {
-    padding: 1rem $content-space;
-    .copyright-st {
+    padding: 1rem;
+    @include media-breakpoint-up(lg) {
+        padding: 1rem $content-space;
+    }
+
+    .copyright {
         font-size: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 

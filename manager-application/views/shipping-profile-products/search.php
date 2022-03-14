@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php
+
+use Google\Service\Script;
+
+ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 if (!empty($productsData)) {
     echo '<div class="mt-4"> <ul class="upload__list">';
@@ -6,7 +10,10 @@ if (!empty($productsData)) {
         ?>
         <li class="upload__list-item">
             <div class="media">
-                <img class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'SMALL', 0, 0, 1)) ?>" alt="" width="50">
+                <?php
+                     $imageProductDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);
+                ?>
+                <img data-aspect-ratio = "<?php echo $imageProductDimensions[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>" class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1)) ?>" alt="" width="50">
             </div>
             <div class="title"><?php echo $product['product_name'] ?></div>
             <?php if (isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>
@@ -17,18 +24,19 @@ if (!empty($productsData)) {
         </li>
         <?php
     }
-    echo '</ul></div>';
-} else {
+    echo '</ul></div>'; ?>
+    <script>
+        $(".searchFormJs").show();
+    </script>
+<?php } else {
     $this->includeTemplate('_partial/no-record-found.php');
 }
 
 $frm = new Form('frmProductListing', array('id' => 'frmProductListing'));
 $frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadListProduct); return(false);');
-echo $frm->getFormTag();
-?>
-</form>
-<?php
+echo $frm->getFormHtml();
+
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging'));
 //$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);

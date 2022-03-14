@@ -13,7 +13,7 @@ $(document).on("blur", ".js-voldiscount_min_qty", function () {
             function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
-                    $.systemMessage(ans.msg, "alert--danger");
+                    fcom.displayErrorMessage(ans.msg);
                 }
             }
         );
@@ -55,7 +55,7 @@ $(document).on("blur", ".js--volDiscountCol", function () {
             function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
-                    $.systemMessage(ans.msg, "alert--danger", true);
+                    fcom.displayErrorMessage(ans.msg);
                     value = updatedValue = oldValue;
                 } else {
                     updatedValue = ans.data.value;
@@ -131,7 +131,7 @@ $(document).on("blur", ".js--volDiscountCol", function () {
     };
     deleteSelected = function () {
         if (typeof $(".selectItem--js:checked").val() === "undefined") {
-            $.systemMessage(langLbl.atleastOneRecord, "alert--danger");
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return false;
         }
         var agree = confirm(langLbl.confirmDelete);
@@ -145,10 +145,10 @@ $(document).on("blur", ".js--volDiscountCol", function () {
             function (t) {
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
-                    $.systemMessage(ans.msg, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                     $(".formActionBtn-js").addClass("disabled");
                 } else {
-                    $.systemMessage(ans.msg, "alert--danger");
+                    fcom.displayErrorMessage(ans.msg);
                 }
                 searchRecords(document.frmRecordSearch);
             }

@@ -7,15 +7,14 @@ var sendPayment = function (frm) {
             var json = $.parseJSON(t);
             var el = $('#ajax_message');
             if (json['error']) {
-                // el.html('<div class="alert alert--danger">'+json['error']+'<div>');
-                $.systemMessage(json['error'], 'alert--danger');
+                fcom.displayErrorMessage(json['error']);
             }
             if (json['redirect']) {
-                $.systemMessage(json['msg'], 'alert--success');
+                fcom.displaySuccessMessage(json['msg']);
                 setTimeout(function () { $(location).attr("href", json['redirect']); }, 2000);
             }
         } catch (exc) {
-            console.log(t);
+            // console.log(t);
         }   
     });
 };

@@ -9,7 +9,7 @@
     <div class="tabs__content form">
         <div class="row">
             <div class="col-md-12">
-                <div class="form__subcontent js-scrollable table-wrap">
+                <div class="js-scrollable table-wrap">
                     <?php
                     $arr_flds = array(
                         'listserial' => Labels::getLabel('LBL_#', $siteLangId),

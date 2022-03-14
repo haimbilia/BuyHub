@@ -14,6 +14,6 @@ class SmsNotificationController extends PluginBaseController
         if (false === $smsNotification) {
             FatUtility::dieJsonError($error);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_SUCCESS', $this->siteLangId));
     }
 }

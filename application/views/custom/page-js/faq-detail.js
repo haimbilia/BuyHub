@@ -45,7 +45,7 @@ $(document).ready(function(){
 		$(dv).html(fcom.getLoader());
 		
 		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqsDetail', [faqcatId,faqId]), '', function(ans){
-			$.mbsmessage.close();			
+			$.ykmsg.close();			
 		
 				$(dv).find('.loader-yk').remove();
 				$(dv).html(ans.html);
@@ -56,7 +56,7 @@ $(document).ready(function(){
 	};
 	getFaq = function(faqCatId,faqId){
 		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqsDetail', [faqCatId,faqId]), '', function(ans){
-			$.mbsmessage.close();			
+			$.ykmsg.close();			
 		
 				$(dv).find('.loader-yk').remove();
 				$(dv).html(ans.html);
@@ -67,7 +67,7 @@ $(document).ready(function(){
 	}
 	faqRightPanel = function(){
 		fcom.updateWithAjax(fcom.makeUrl('Custom','faqQuestionsPanel', [faqcatId]), '', function(ans){
-			$.mbsmessage.close();			
+			$.ykmsg.close();			
 			
 				$(dv).find('.loader-yk').remove();
 				$(dvCategoryPanel).html(ans.categoriesPanelHtml);

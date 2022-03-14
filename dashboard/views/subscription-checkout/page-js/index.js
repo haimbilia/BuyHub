@@ -108,7 +108,7 @@ $("document").ready(function () {
         });
     };
     useRewardPoints = function (frm) {
-        $.systemMessage.close();
+        $.ykmsg.close();
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'useRewardPoints'), data, function (res) {
@@ -118,7 +118,7 @@ $("document").ready(function () {
     };
 
     removeRewardPoints = function () {
-        $.systemMessage.close();
+        $.ykmsg.close();
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'removeRewardPoints'), '', function (res) {
             loadPaymentSummary();
             loadFinancialSummary();
@@ -126,13 +126,13 @@ $("document").ready(function () {
     };
 
     getPromoCode = function () {
-        $.systemMessage(langLbl.processing, 'alert--process', false);
+        fcom.displayProcessing();
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
         }
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function (t) {
-            $.systemMessage.close();
+            $.ykmsg.close();
             $.ykmodal(t);
             $("input[name='coupon_code']").focus();
         });
@@ -222,7 +222,7 @@ $("document").ready(function () {
             try {
                 var json = $.parseJSON(t);
                 if (typeof json.status != 'undefined' && 1 > json.status) {
-                    $.systemMessage(json.msg, 'alert--danger');
+                    fcom.displayErrorMessage(json.msg);
                     return false;
                 }
                 if (typeof json.html != 'undefined') {

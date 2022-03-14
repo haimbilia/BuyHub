@@ -25,9 +25,9 @@ class ProductRequest extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::STATUS_PENDING => Labels::getLabel('LBL_Pending', $langId),
-            static::STATUS_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-            static::STATUS_CANCELLED => Labels::getLabel('LBL_Cancelled', $langId),
+            static::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            static::STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+            static::STATUS_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId),
         );
     }
 
@@ -121,7 +121,7 @@ class ProductRequest extends MyAppModel
         $preq_id = FatUtility::convertToType($preq_id, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
         if (!$preq_id || !$lang_id) {
-            trigger_error(Labels::getLabel("ERR_Arguments_not_specified.", CommonHelper::getLangId()), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_ARGUMENTS_NOT_SPECIFIED.", CommonHelper::getLangId()), E_USER_ERROR);
             return false;
         }
 
@@ -224,7 +224,7 @@ class ProductRequest extends MyAppModel
     public function saveProductRequestLangData($siteDefaultLangId, $autoUpdateOtherLangsData, $prodName, $prodDesc, $prodYouTubeUrl)
     {
         if ($this->mainTableRecordId < 1 || empty($prodName)) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $autoUpdateOtherLangsData = FatUtility::int($autoUpdateOtherLangsData);
@@ -337,7 +337,7 @@ class ProductRequest extends MyAppModel
             return false;
         }
 
-        $db->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        $db->updateFromArray('tbl_products', array('product_img_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;

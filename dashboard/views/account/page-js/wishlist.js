@@ -67,7 +67,7 @@ $("document").ready(function () {
             function (ans) {
                 fcom.removeLoader();
                 ans = $.parseJSON(ans);
-                $.mbsmessage.close();
+                $.ykmsg.close();
                 $(dv).replaceWith(ans.html);
             }
         );
@@ -188,8 +188,7 @@ $("document").ready(function () {
                 if (false === moveToCart) {
                     searchFavouriteListItems();
                     if (ans.status) {
-                        $.mbsmessage.close();
-                        $.systemMessage(ans.msg, "alert--success");
+                        fcom.displaySuccessMessage(ans.msg);
                     }
                 }
             }
@@ -207,8 +206,7 @@ $("document").ready(function () {
             data,
             function (ans) {
                 if (ans.status) {
-                    $.mbsmessage.close();
-                    $.systemMessage(ans.msg, "alert--success");
+                    fcom.displaySuccessMessage(ans.msg);
                 }
             }
         );
@@ -228,7 +226,7 @@ $("document").ready(function () {
 
     addSelectedToCart = function (event, isWishlist) {
         event.stopPropagation();
-        $.mbsmessage(langLbl.processing, false, "alert--process alert");
+        fcom.displayProcessing();
         if (0 < $("#wishlistForm").length) {
             var data = $("#wishlistForm").serialize();
         } else {

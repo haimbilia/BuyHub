@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -17,7 +17,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                             <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>',
-                'label' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
+                'label' => Labels::getLabel('LBL_NEW', $siteLangId)
             ]
         ];
     }

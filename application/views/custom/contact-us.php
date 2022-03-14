@@ -154,6 +154,7 @@ events.contactUs();
                                             <div class="field-wraper">
                                                 <div class="field_cover">
                                                     <?php echo $contactFrm->getFieldHtml('btn_submit'); ?>
+                                                    <?php echo $contactFrm->getFieldHtml('fatpostsectkn'); ?>
                                                 </div>
                                             </div>
                                         </div>

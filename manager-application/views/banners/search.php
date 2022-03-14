@@ -27,7 +27,8 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'banner_img':
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
-                $img = '<img width="40" height="40"  src="' . UrlHelper::generateFullUrl('Banner', 'showBanner', array($row['banner_id'], $siteLangId, 52, 42), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
+                $getBannerRatio = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_MINI_THUMB);
+                $img = '<img data-aspect-ratio = "'.$getBannerRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'].'" width="'.$getBannerRatio['width'].'" height="'.$getBannerRatio['height'].'"  src="' . UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'banner_target':

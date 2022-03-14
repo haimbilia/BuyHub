@@ -84,7 +84,7 @@
                                     <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-table">
                             <div class="table-responsive" id="latestOrdersJs"></div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SELLING_PRODUCTS', $siteLangId); ?></h3>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="table-responsive table-scrollable js-scrollable" id="topSellingProductsJs">
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body relative topCountriesJs">                       
+                    <div class="card-body relative topCountriesJs">
                     </div>
                 </div>
 
@@ -259,7 +259,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body relative topReferersJs">                       
+                    <div class="card-body relative topReferersJs">
                     </div>
                 </div>
                 <div class="card">

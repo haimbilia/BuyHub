@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="js-scrollable table-wrap scroll scroll-x">
-    <?php 
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
     $arr_flds = array(
         // 'select_all'=>'',
         'product_name' => Labels::getLabel('LBL_Product_Name', $siteLangId),

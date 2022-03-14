@@ -33,6 +33,7 @@ class ShippingProfileController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
+        $this->set("keywordPlaceholder", Labels::getLabel('LBL_SEARCH_BY_SHIPPING_PROFILE_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

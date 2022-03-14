@@ -1,15 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form ');
-
-$frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-$frm->developerTags['fld_default_col'] = 12;
-$optionFld = $frm->getField('export_option');
-$optionFld->developerTags['noCaptionTag'] = true;
-
-$radFld = $frm->getField('export_option');
-$radFld->setOptionListTagAttribute('class', 'list-vertical');
-$radFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
-$radFld->developerTags['rdHtmlAfterRadio'] = ''; ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="card-head">
     <?php $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canEditImportExport' => $canEditImportExport, 'canUploadBulkImages' => $canUploadBulkImages);
@@ -19,7 +8,24 @@ $radFld->developerTags['rdHtmlAfterRadio'] = ''; ?>
     <div class="tabs__content">
         <div class="row">
             <div class="col-md-12" id="importFormBlock">
-                <?php echo $frm->getFormHtml();  ?>
+                <div class="settings">
+                    <?php foreach ($options as $key => $val) { ?>
+                        <a class="setting" href="javascript:void(0)" onclick="getInstructions(<?php echo $key; ?>); return false;">
+                            <div class="setting__icon">
+                                <span class="icon">
+                                    <svg class="icon" width="40" height="40">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="setting__detail">
+                                <h6><?php echo $val; ?></h6>
+                                <span><?php echo $optionsMessages[$key]; ?></span>
+                            </div>
+                        </a>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     </div>

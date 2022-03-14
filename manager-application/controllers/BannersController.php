@@ -391,8 +391,8 @@ class BannersController extends ListingBaseController
         $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
         $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
-        $frm->addHiddenField('', 'min_width', 1350);
-        $frm->addHiddenField('', 'min_height', 405);
+        $frm->addHiddenField('', 'min_width', 2000);
+        $frm->addHiddenField('', 'min_height', 666);
         $frm->addHTML('', 'banner_image', '');
         return $frm;
     }
@@ -418,12 +418,14 @@ class BannersController extends ListingBaseController
             $this->set('image', $bannerImge);
         }
 
-        $blocationData = $this->getBannerLocationById($bannerLocationId);
-        $bannerWidth = FatUtility::convertToType($blocationData['blocation_banner_width'], FatUtility::VAR_FLOAT);
-        $bannerHeight = FatUtility::convertToType($blocationData['blocation_banner_height'], FatUtility::VAR_FLOAT);
-
-        $this->set('bannerWidth', $bannerWidth);
-        $this->set('bannerHeight', $bannerHeight);
+        /* $blocationData = $this->getBannerLocationById($bannerLocationId); */
+       /*  $bannerWidth = FatUtility::convertToType($blocationData['blocation_banner_width'], FatUtility::VAR_FLOAT);
+        $bannerHeight = FatUtility::convertToType($blocationData['blocation_banner_height'], FatUtility::VAR_FLOAT); */
+        $getBannerDimensions = ImageDimension::getBannerData();
+        
+        $this->set('getBannerDimensions', $getBannerDimensions);
+       /*  $this->set('bannerWidth', $bannerWidth);
+        $this->set('bannerHeight', $bannerHeight); */
         $this->set('frm', $imageFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('bannerTypeArr', $this->bannerTypeArr());

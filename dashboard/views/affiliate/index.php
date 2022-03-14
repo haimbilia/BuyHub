@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/affiliate/affiliateDashboardNavigation.php');
+$this->includeTemplate('_partial/dashboardNavigation.php');
 $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
 $sharingFrm->addFormTagAttribute('class', 'form');
 $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
@@ -19,15 +19,16 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
         <div class="row">
             <div class="col-md-8">
                 <div class="card" style="display:none;">
-                    <div class="card-head">
-                        <h4>
-                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h4>
+                    <div class="card-head border-0">
+                        <h5 class="card-title">
+                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
                     </div>
-                    <div class="card-body"> <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
+                    <div class="card-body pt-0">
+                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
 
                 </div>
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
                         </h5> <?php if (count($user_listing) > 0) {
                                 ?> <div class="action">
@@ -35,10 +36,10 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </div> <?php
                                 } ?>
                     </div>
-                    <div class="card-body">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-body pt-0">
+                        <div class="js-scrollable table-wrap">
                             <table class="table">
-                                <tbody>
+                                <thead>
                                     <tr class="">
                                         <th width="40%">
                                             <?php echo Labels::getLabel('LBL_User_Detail', $siteLangId); ?></th>
@@ -48,9 +49,13 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                                         </th>
                                         <th width="20%"><?php echo Labels::getLabel('LBL_Verified', $siteLangId); ?>
                                         </th>
-                                    </tr> <?php if (count($user_listing) > 0) {
-                                                foreach ($user_listing as $row) {
-                                            ?> <tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php if (count($user_listing) > 0) {
+                                        foreach ($user_listing as $row) {
+                                    ?> <tr>
                                                 <td>
                                                     <div class="item__description">
                                                         <div class="item__title"> <?php if ($row['user_name'] != '') {
@@ -96,7 +101,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
 
 
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title ">
                             <?php echo Labels::getLabel('LBL_Transaction_History', $siteLangId); ?></h5> <?php if (count($transactions) > 0) {
                                                                                                             ?> <div class="action">
@@ -104,10 +109,10 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </div> <?php
                                                                                                             } ?>
                     </div>
-                    <div class="card-body">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-body pt-0">
+                        <div class="js-scrollable table-wrap">
                             <table class="table">
-                                <tbody>
+                                <thead>
                                     <tr class="">
                                         <th width="30%">
                                             <?php echo Labels::getLabel('LBL_Txn._Detail', $siteLangId); ?></th>
@@ -116,9 +121,13 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                                         </th>
                                         <th width="30%"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>
                                         </th>
-                                    </tr> <?php if (count($transactions) > 0) {
-                                                foreach ($transactions as $row) {
-                                            ?> <tr>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <?php if (count($transactions) > 0) {
+                                        foreach ($transactions as $row) {
+                                    ?> <tr>
                                                 <td>
                                                     <div class="item__description">
                                                         <div class="item__date">
@@ -170,11 +179,11 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
-                                <div class="card-head">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
 
                                 </div>
-                                <div class="card-body ">
+                                <div class="card-body pt-0 ">
                                     <div class="stats">
                                         <div class="stats-number">
                                             <ul>
@@ -196,10 +205,10 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                             <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
-                                <div class="card-head">
+                                <div class="card-head border-0">
                                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Revenue', $siteLangId); ?></h5>
                                 </div>
-                                <div class="card-body ">
+                                <div class="card-body pt-0 ">
                                     <div class="stats">
                                         <div class="stats-number">
                                             <ul>
@@ -220,56 +229,55 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                     </div>
                     <div class="widget widget-stats">
                         <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
-                            <div class="card-head">
+                            <div class="card-head border-0">
                                 <h5 class="card-title">
                                     <?php echo Labels::getLabel('LBL_Share_and_earn_commission_on_every_purchase', $siteLangId) ?>
                                 </h5>
                             </div>
-                            <div class="card-body ">
+                            <div class="card-body pt-0 ">
                                 <div class="stats">
-                                    <a href="javascript:void(0)" class="btn btn-outline-gray btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
+                                    <button type="button" class="btn btn-outline-gray btn-sm mt-4" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></button>
                                 </div>
                             </div>
                         </div>
                     </div> <?php
                             if (!empty(FatApp::getConfig("CONF_FACEBOOK_APP_ID")) && !empty(FatApp::getConfig("CONF_FACEBOOK_APP_SECRET"))) {
-                            ?> <div class="widget widget-stats">
-                            <a id="facebook_btn" href="javascript:void(0);" class="box--share box--share-fb">
-                                <i class="icon fab fa-facebook-f"></i>
-                                <div class="detail">
-                                    <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                                    <h2><?php echo Labels::getLabel('L_Facebook', $siteLangId) ?></h2>
-                                    <p> <?php echo sprintf(Labels::getLabel('L_Post_your_wall_facebook', $siteLangId), '<strong>' . Labels::getLabel('L_Facebook', $siteLangId) . '</strong>') ?>
-                                    </p>
-                                </div>
-                                <span class="ajax_message thanks-msg" id="fb_ajax"></span>
-                            </a>
+                            ?>
+                        <div class="widget widget-stats">
+                            <button class="btn block-social mb-3" id="facebook_btn" type="button" style="background-color:#4267B2">
+                                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                                </svg>
+
+                                <p> <?php echo sprintf(Labels::getLabel('L_Post_your_wall_facebook', $siteLangId), '<strong>' . Labels::getLabel('L_Facebook', $siteLangId) . '</strong>') ?>
+                                </p>
+                                <span class="ajax_message thanks-msgX" id="fb_ajax"></span>
+                            </button>
                         </div> <?php
                             } ?> <?php if (false !== $twitterUrl) {
-                                    ?> <div class="widget widget-stats">
-                            <a class="box--share box--share-tw" id="twitter_btn" href="javascript:void(0);">
-                                <i class="icon fa fa-twitter"></i>
-                                <div class="detail">
-                                    <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                                    <h2><?php echo Labels::getLabel('L_Twitter', $siteLangId) ?></h2>
-                                    <p> <?php echo sprintf(Labels::getLabel('L_Send_a_tweet_followers', $siteLangId), '<strong>' . Labels::getLabel('L_Tweet', $siteLangId) . '</strong>') ?>
-                                    </p>
-                                </div>
-                                <span class="ajax_message thanks-msg" id="twitter_ajax"></span>
-                            </a>
-                        </div> <?php
-                                    } ?> <div class="widget widget-stats">
-                        <a class="showbutton box--share box--share-mail" href="javascript:void(0);">
-                            <i class="fa fa-envelope"></i>
-                            <div class="detail">
-                                <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                                <h2><?php echo Labels::getLabel('L_Email', $siteLangId) ?></h2>
-                                <p> <?php echo Labels::getLabel('L_Email', $siteLangId) ?>
-                                    <?php echo Labels::getLabel('L_Your_friend_tell_them_about_yourself', $siteLangId) ?>
+                                    ?>
+                        <div class="widget widget-stats">
+                            <button class="btn block-social mb-3" id="twitter_btn" type="button" style="background-color:#1DA1F2">
+                                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                                    <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
+                                </svg>
+                                <p> <?php echo sprintf(Labels::getLabel('L_Send_a_tweet_followers', $siteLangId), '<strong>' . Labels::getLabel('L_Tweet', $siteLangId) . '</strong>') ?>
                                 </p>
-                            </div>
-                            <span class="ajax_message thanks-msg"></span>
-                        </a>
+                                <span class="ajax_message thanks-msgX" id="twitter_ajax"></span>
+                            </button>
+                        </div>
+                    <?php
+                                    } ?>
+                    <div class="widget widget-stats">
+                        <button class="btn block-social" type="button" style="background-color:#00B2FF">
+                            <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
+                            </svg>
+                            <p> <?php echo Labels::getLabel('L_Email', $siteLangId) ?>
+                                <?php echo Labels::getLabel('L_Your_friend_tell_them_about_yourself', $siteLangId) ?>
+                            </p>
+                            <span class="ajax_message thanks-msgX"></span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -278,17 +286,17 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
         <!-- <div class="row">
             <div class="col-lg-6 col-md-12">
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Information', $siteLangId); ?></h5>
                         <div class="action">
                             <a href="<?php echo UrlHelper::generateUrl('account', 'profileInfo'); ?>" class="link"><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>  <i class="fa fa-pencil"></i></a>
                         </div>
                     </div>
-                    <div class="card-body ">
+                    <div class="card-body pt-0 ">
                         <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
                             <ul>
-                                <li class="is-active"><a href="javascript:void(0);" onclick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
-                                <li><a href="javascript:void(0);" onclick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
+                                <li class="is-active"><a type="button" onclick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
+                                <li><a type="button" onclick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
                             </ul>
                         </div>
                         <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>
@@ -326,14 +334,14 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
             description: "<?php echo str_replace(array("\n", "\r", "\r\n"), ' ', sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_" . $siteLangId, FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId))) ?>",
         }, function(response) {
             if (response !== null && typeof response.post_id !== 'undefined') {
-                $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+                fcom.displaySuccessMessage(langLbl.thanksForSharing);
                 /* $("#fb_ajax").html(langLbl.thanksForSharing); */
             }
         });
     }
 
     function twitter_shared(name) {
-        $.mbsmessage(langLbl.thanksForSharing, true, 'alert--success');
+        fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
     }
 </script>

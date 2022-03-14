@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -34,7 +34,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 
     <div class="content-body">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-lg-8 order-2 order-lg-1">
                 <div class="card">
                     <div class="card-head border-0">
                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
@@ -45,8 +45,8 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
@@ -134,8 +134,8 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                         <div class="action"> <?php if (count($offers) > 0) { ?> <a href="<?php echo UrlHelper::generateUrl('buyer', 'offers'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             <?php } ?> </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr class="">
@@ -196,8 +196,8 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderReturnRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             </div> <?php } ?>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table table-justified">
                                 <thead>
 
@@ -284,8 +284,8 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('buyer', 'orderCancellationRequests'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
                             </div> <?php } ?>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="js-scrollable table-wrap scroll scroll-x">
+                    <div class="card-table">
+                        <div class="js-scrollable table-wrap table-responsive">
                             <table class="table ">
                                 <thead>
                                     <tr class="">
@@ -352,7 +352,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4 order-1 order-lg-2 ">
                 <div class="widget-scroll">
                     <div class="widget widget-stats">
                         <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">

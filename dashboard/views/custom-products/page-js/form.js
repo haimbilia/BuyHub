@@ -36,7 +36,7 @@ var advanceMedia = false; /* open via advance media*/
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
             fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
         });
     };
     productType = function (el) {
@@ -47,7 +47,7 @@ var advanceMedia = false; /* open via advance media*/
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'form', [recordId, productType]), { langId }, function (res) {
             fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
         });
     };
 
@@ -175,7 +175,7 @@ var advanceMedia = false; /* open via advance media*/
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('CustomProducts', 'prodSpecifications'), { recordId, langId }, function (res) {
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
             $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hidden');
@@ -231,7 +231,7 @@ var advanceMedia = false; /* open via advance media*/
             var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();
             productImages(recordId, fileType);
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
         });
     };
     loadImageOptions = function () {
@@ -397,7 +397,7 @@ var advanceMedia = false; /* open via advance media*/
         }
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('CustomProducts', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
 
@@ -479,7 +479,7 @@ var advanceMedia = false; /* open via advance media*/
             contentType: false,
             processData: false,
             success: function (ans) {
-                fcom.closeAlertMessage();
+                $.ykmsg.close();
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;
@@ -542,7 +542,7 @@ var advanceMedia = false; /* open via advance media*/
             processData: false,
             contentType: false,
             success: function (t) {
-                fcom.closeAlertMessage();
+                $.ykmsg.close();
                 t = $.parseJSON(t);
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
@@ -564,7 +564,7 @@ var advanceMedia = false; /* open via advance media*/
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
-                fcom.closeAlertMessage();
+                $.ykmsg.close();
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
                 }
@@ -572,7 +572,7 @@ var advanceMedia = false; /* open via advance media*/
             });
         } else {
             fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadAttachments'), data, function (res) {
-                fcom.closeAlertMessage();
+                $.ykmsg.close();
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
                 }
@@ -608,7 +608,7 @@ var advanceMedia = false; /* open via advance media*/
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (res) {
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalFile, recordId);
         });
@@ -620,7 +620,7 @@ var advanceMedia = false; /* open via advance media*/
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            fcom.closeAlertMessage();
+            $.ykmsg.close();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });

@@ -16,7 +16,7 @@ if (1 > count($arrListing) || !$canEdit) {
 
 $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
 
-<div class="js-scrollable table-wrap scroll scroll-x">
+<div class="js-scrollable table-wrap table-responsive">
     <?php
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . $tableClass));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));

@@ -53,10 +53,10 @@ class NavigationLinks extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::NAVLINK_TYPE_CMS => Labels::getLabel('LBL_CMS_Page', $langId),
+        static::NAVLINK_TYPE_CMS => Labels::getLabel('LBL_CMS_PAGE', $langId),
         //static::NAVLINK_TYPE_CUSTOM_HTML => Labels::getLabel('LBL_Custom_HTML', $langId),
-        static::NAVLINK_TYPE_EXTERNAL_PAGE => Labels::getLabel('LBL_External_Page', $langId),
-        static::NAVLINK_TYPE_CATEGORY_PAGE => Labels::getLabel('LBL_Product_Category_Page', $langId),
+        static::NAVLINK_TYPE_EXTERNAL_PAGE => Labels::getLabel('LBL_EXTERNAL_PAGE', $langId),
+        static::NAVLINK_TYPE_CATEGORY_PAGE => Labels::getLabel('LBL_PRODUCT_CATEGORY_PAGE', $langId),
         );
     }
 
@@ -67,8 +67,8 @@ class NavigationLinks extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::NAVLINK_TARGET_CURRENT_WINDOW => Labels::getLabel('LBL_Current_Window', $langId),
-        static::NAVLINK_TARGET_BLANK_WINDOW => Labels::getLabel('LBL_Blank_Window', $langId),
+        static::NAVLINK_TARGET_CURRENT_WINDOW => Labels::getLabel('LBL_CURRENT_WINDOW', $langId),
+        static::NAVLINK_TARGET_BLANK_WINDOW => Labels::getLabel('LBL_BLANK_WINDOW', $langId),
         );
     }
 
@@ -79,9 +79,9 @@ class NavigationLinks extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::NAVLINK_LOGIN_BOTH => Labels::getLabel('LBL_Both', $langId),
-        static::NAVLINK_LOGIN_YES => Labels::getLabel('LBL_Yes', $langId),
-        static::NAVLINK_LOGIN_NO => Labels::getLabel('LBL_No', $langId),
+        static::NAVLINK_LOGIN_BOTH => Labels::getLabel('LBL_BOTH', $langId),
+        static::NAVLINK_LOGIN_YES => Labels::getLabel('LBL_YES', $langId),
+        static::NAVLINK_LOGIN_NO => Labels::getLabel('LBL_NO', $langId),
         );
     }
 

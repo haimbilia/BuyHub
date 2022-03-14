@@ -50,8 +50,9 @@ if (false === $fileFound) {
 } else {
     $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
     $uploadedTime = AttachedFile::setTimeParam($res['afile_updated_at']);
+    $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_ADMIN_BADGE_REQUEST, ImageDimension::VIEW_THUMB);
     $a = '<a target="blank" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($badgeReqId)) . '">
-        <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', [$badgeReqId, 1500, 50]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />
+        <img data-aspect-ratio ="'.$getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'].'"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', [$badgeReqId, ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />
     </a>';
 
     $htm = '<div class="col-md-12">

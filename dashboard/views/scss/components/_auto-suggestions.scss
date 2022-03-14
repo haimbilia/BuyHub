@@ -1,10 +1,9 @@
 .yk-ac-container {
-    
     display: flex;
     border-radius: $radius4;
     background: #fff;
-    -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
+    -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
     -webkit-transform: scaleY(1);
     transform: scaleY(1);
     opacity: 1;
@@ -51,6 +50,6 @@
     padding: 0;
 }
 
-.yk-ac-results .products_title {
+.yk-ac-results .products-title {
     min-height: inherit;
 }
