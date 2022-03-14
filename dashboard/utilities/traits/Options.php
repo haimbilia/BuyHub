@@ -206,6 +206,7 @@ trait Options
         $this->set('langFrm', $langFrm);
         $this->set('option_id', $option_id);
         $this->set('langId', $langId);
+        $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
