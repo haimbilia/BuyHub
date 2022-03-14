@@ -53,8 +53,8 @@
 
 
     if (count($arrListing) == 0) {
-        $message = Labels::getLabel('LBL_You_need_to_create_private_products_in_order_to_add_tags', $langId);
-        $this->includeTemplate('_partial/no-record-found-with-info.php', array('langId' => $langId, 'message' => $message));
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } else {
         echo $tbl->getHtml();
     } ?>

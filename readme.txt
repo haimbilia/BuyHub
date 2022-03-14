@@ -571,6 +571,7 @@ Updates/Fixes :
     => 062967 - Seller UI: Drop-down icon is not showing correctly, the Save button is disabled initially, the tooltip is not showing and the Product warranty field size is changing while selecting the duration while adding the product
     => 062974 - Seller UI: The product's image is not showing while viewing the details of the seller's product and the seller's shipping is not working for the marketplace products.
     => 062986 - Seller UI: "Invalid error" is showing under the language data section while adding the options value, the continuous loader is showing while adding/editing the options and their values and previously added data is showing while adding the new options
+    => 062975 - Seller UI: "No Record Found" message is not showing if the seller trying to search the wrong record and the "invalid request" error is showing while trying to add the product's tags. 
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
