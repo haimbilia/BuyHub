@@ -54,7 +54,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                         $selProdTotalSpecialPrice += $val['op_special_price'] * $val["op_qty"];
 
                                                         $prodOrBatchUrl = 'javascript:void(0)';
-                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($val['selprod_product_id'], "MINI", $val['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($val['selprod_product_id'], ImageDimension::VIEW_MINI, $val['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
                                                         $productTaxChargedTxt = '';
                                                         if (empty($val['taxOptions'])) {
                                                             $productTaxChargedTxt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($val, 'TAX'));
