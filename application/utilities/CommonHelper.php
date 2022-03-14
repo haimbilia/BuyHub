@@ -2123,10 +2123,10 @@ class CommonHelper extends FatUtility
         return false;
     }
 
-    public static function getCookie($cookieName)
+    public static function getCookie($cookieName): string
     {
         if (isset($_COOKIE[$cookieName]) && !empty($_COOKIE[$cookieName])) {
-            return true;
+            return $_COOKIE[$cookieName];
         }
         return false;
     }

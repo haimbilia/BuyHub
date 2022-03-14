@@ -19,17 +19,12 @@ class HomeController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $statsObj = new Statistics();
-        $orderSalesStats = $statsObj->getOrderSalesStats($this->defaultStatsInterval);
-        $shopsSignupStats = $statsObj->getShopsSignupStats($this->defaultStatsInterval);
-        $userSignupStats = $statsObj->getUserSignupStats($this->defaultStatsInterval);
-
         $analyticArr = array(
             'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
             'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
             'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
         );
-
 
         // simple Caching with:        
         $dashboardInfoCache = FatCache::get('dashboardInfoCache' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
@@ -147,6 +142,11 @@ class HomeController extends ListingBaseController
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
+
+            $dashboardInfo['orderSalesStats'] = $statsObj->getOrderSalesStats($this->defaultStatsInterval);
+            $dashboardInfo['shopsSignupStats'] = $statsObj->getShopsSignupStats($this->defaultStatsInterval);
+            $dashboardInfo['userSignupStats'] = $statsObj->getUserSignupStats($this->defaultStatsInterval);
+
             FatCache::set('dashboardInfoCache' . $this->siteLangId, serialize($dashboardInfo), '.txt');
             //$cache->set("dashboardInfo" . $this->siteLangId, $dashboardInfo, 24 * 60 * 60);
         } else {
@@ -167,9 +167,9 @@ class HomeController extends ListingBaseController
         $this->set('objPrivilege', $this->objPrivilege);
         $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
         $this->set('defaultStatsInterval', $this->defaultStatsInterval);
-        $this->set('orderSalesStats', $orderSalesStats[$this->defaultStatsInterval]);
-        $this->set('shopsSignupStats', $shopsSignupStats[$this->defaultStatsInterval]);
-        $this->set('userSignupStats', $userSignupStats[$this->defaultStatsInterval]);
+        $this->set('orderSalesStats', $dashboardInfo['orderSalesStats'][$this->defaultStatsInterval]);
+        $this->set('shopsSignupStats', $dashboardInfo['shopsSignupStats'][$this->defaultStatsInterval]);
+        $this->set('userSignupStats', $dashboardInfo['userSignupStats'][$this->defaultStatsInterval]);
         $this->_template->render();
     }
 

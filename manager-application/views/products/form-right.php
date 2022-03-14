@@ -2,10 +2,8 @@
     <div class="add-stock-column-head">
         <div class="add-stock-column-head-label">
             <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
-            <span class="text-muted"> <span class="required"></span> required
-                information</span>
+            <span class="text-muted"> <span class="required"></span> <?php echo Labels::getLabel('FRM_REQUIRED_INFORMATION', $langId); ?></span>
         </div>
-
         <?php
         $langFld =  $frm->getField('lang_id');
         if (0 < $recordId) {

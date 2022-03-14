@@ -88,15 +88,15 @@ class ThresholdProductsController extends ListingBaseController
 
         $srch->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
         $srch->addDirectCondition('selprod_track_inventory = ' . Product::INVENTORY_TRACK);
-        $srch->addGroupBy('selprod_id'); 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
-        $srch->doNotCalculateRecords(); 
+        $srch->addGroupBy('selprod_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on', 'credential_username'));
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

@@ -66,6 +66,7 @@ $input-color: #474747;
         }
     }
     [dir="rtl"] & {
+        padding-#{$start-direction}: 35px;
         background-position: calc(0% - -12px) center;
     }
 }
@@ -131,6 +132,7 @@ $input-color: #474747;
             background-repeat: no-repeat;
             background-position: calc(13px) center;
             [dir="rtl"] & {
+                padding-#{$end-direction}: 40px;
                 background-position: calc(100% - 13px) center;
             }
         }
@@ -166,6 +168,7 @@ $input-color: #474747;
             background-repeat: no-repeat;
             background-position: calc(100% - 11px) center;
             [dir="rtl"] & {
+                padding-#{$start-direction}: 38px !important;
                 background-position: calc(0% - -11px) center;
             }
         }

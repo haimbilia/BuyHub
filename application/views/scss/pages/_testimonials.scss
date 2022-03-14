@@ -10,12 +10,19 @@
         padding: 0 1rem;
         transition: all 0.5s ease-in-out;
         display: flex;
+        flex-direction: column;
         @include media-breakpoint-up(lg) {
             align-items: center;
+            flex-direction: row;
         }
     }
     &-image {
         position: relative;
+        @include media-breakpoint-up(lg) {
+            img {
+                display: inline-block;
+            }
+        }
         &:before {
             @include media-breakpoint-up(lg) {
                 content: "";
@@ -45,11 +52,13 @@
         }
     }
     &-data {
-        margin-#{$start-direction}: 6.25rem;
-        margin-top: 6.25rem;
-        text-align: left;
+        text-align: #{$start-direction};
         flex: 1;
         font-size: 1.3rem;
+        @include media-breakpoint-up(lg) {
+            margin-#{$start-direction}: 6.25rem;
+            margin-top: 6.25rem;
+        }
     }
     &-text {
         //max-width: 512px;

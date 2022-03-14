@@ -66,6 +66,7 @@ $input-color: #474747;
         }
     }
     [dir="rtl"] & {
+        padding-#{$start-direction}: 30px;
         background-position: calc(0% - -12px) center;
     }
 }
@@ -129,6 +130,7 @@ $input-color: #474747;
             background-position: calc(13px) center;
             -webkit-appearance: search-cancel-button;
             [dir="rtl"] & {
+                padding-#{$end-direction}: 40px;
                 background-position: calc(100% - 13px) center;
             }
             &::-webkit-search-cancel-button {
@@ -176,6 +178,7 @@ $input-color: #474747;
             background-repeat: no-repeat;
             background-position: calc(100% - 11px) center;
             [dir="rtl"] & {
+                padding-#{$start-direction}: 38px !important;
                 background-position: calc(0% - -11px) center;
             }
         }

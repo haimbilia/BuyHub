@@ -6,9 +6,8 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id']);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-
-<div class="content-wrapper content-space" dir="<?php echo $formLayout; ?>">
+?>
+<div class="content-wrapper content-space mainJs" dir="<?php echo $formLayout; ?>">
     <?php
     $frm->setFormTagAttribute('class', 'form');
     $frm->setFormTagAttribute('id', 'addProductfrm');
@@ -57,7 +56,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         </div>
     </div>
     <div class="content-body">
-        <div class="add-stock">
+        <div class="add-stock" id="addStock">
             <div class="add-stock-column column-main">
                 <div class="card" id="basic-details">
                     <div class="card-head">
@@ -70,8 +69,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], '', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
-                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], '', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
+                            echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
+                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
@@ -112,7 +111,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="variants-options">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
                             </h3>
@@ -120,8 +119,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="collapse" id="stock-block1">
-                        <div class="card-body">
-                            <table class="table table-variants listingTableJs" id="variantsJs">
+                        <div class="card-body  p-0">
+                            <table class="table  listingTableJs" id="variantsJs">
                                 <thead class="tableHeadJs">
                                     <tr>
                                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
@@ -139,7 +138,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </tbody>
                             </table>
                             <div class="separator separator-dashed my-4"></div>
-                            <div class="form-group row justify-content-between">
+                            <div class="form-group row justify-content-between px-4">
                                 <div class="col">
                                     <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
                                 </div>
@@ -159,18 +158,18 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="media">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_MEDIA', $langId); ?> </h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?> </span>
                         </div>
-                        <div class="card-toolbar">                          
+                        <div class="card-toolbar">
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                     </div>
                     <div class="collapse" id="stock-block2">
                         <div class="card-body">
-                            <div>                           
+                            <div>
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6 class="h6 "><?php echo Labels::getLabel('LBL_UPLOADED_MEDIA', $langId); ?></h6>
                                     <a href="javascript:void(0)" onclick="imageForm();" class="link"><?php echo Labels::getLabel('LBL_ADVANCED_MEDIA', $langId); ?></a>
@@ -186,7 +185,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="specifications">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                             </h3>
@@ -203,7 +202,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <label class="label">
                                                 <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                                             </label>
-                                            <input type="text" name="sp_label" id="sp_label" value="" data-required="1">                                           
+                                            <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -242,7 +241,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="tax-shipping">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                             </h3>
@@ -271,7 +270,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 <?php if ($displayDigitalDownloadList) { ?>
 
                     <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
@@ -293,7 +292,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="digital-links">
-                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
@@ -392,30 +391,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <table id="variantCloneJs" class="hidden">
     <?php echo getVariantUiTr($langId, -1);  ?>
 </table>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 <?php echo $frm->getExternalJS();
 $imgFrm->setFormTagAttribute('class', 'hidden');
 $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm');
@@ -440,6 +415,8 @@ echo $imgFrm->getFormHtml();
     var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
 
     $(function() {
+        $('body').addClass('isLoading');
+        $('#addStock').prepend(fcom.getLoader());
         prodSpecifications();
         tagifyProducts();
         productDefaultImages();
@@ -479,7 +456,7 @@ echo $imgFrm->getFormHtml();
                 '',
                 selectedOptionData
             );
-            $("#"+$(this).attr('id')).data("select2").$container.addClass("w-100");
+            $("#" + $(this).attr('id')).data("select2").$container.addClass("w-100");
         });
 
 
@@ -490,11 +467,11 @@ echo $imgFrm->getFormHtml();
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
-        upcType(); 
-        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+        upcType();
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function() {
             fixTableColumnWidth();
         })
-        
+
     });
 </script>
 <?php

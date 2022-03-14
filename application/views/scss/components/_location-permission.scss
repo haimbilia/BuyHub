@@ -119,6 +119,7 @@
                 border-right: 2px solid $brand-color;
                 transform: rotate(45deg);
                 [dir="rtl"] & {
+                    #{$start-direction}: 1.2rem;
                     transform: rotate(-135deg);
                 }
             }
@@ -159,6 +160,7 @@
                 padding: 1.5rem;
                 padding-#{$start-direction}: 45px;
                 [dir="rtl"] & {
+                    padding-#{$end-direction}: 45px;
                     background-position: calc(100% - 10px) center;
                 }
             }
