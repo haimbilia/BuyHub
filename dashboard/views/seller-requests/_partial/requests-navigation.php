@@ -2,7 +2,7 @@
 <nav class="nav nav-tabs navTabsJs">
     <?php if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
         <a class="nav-link active tabs_001 customCatalogReq--js" rel="tabs_001" href="javascript:void(0)" onclick="searchCustomCatalogProducts()">
-            <?php echo Labels::getLabel('LBL_Marketplace_Products_Requests', $siteLangId); ?> 
+            <?php echo Labels::getLabel('LBL_Marketplace_Products_Requests', $siteLangId); ?>
             <i class="fa fa-question-circle" onclick="productInstructions(<?php echo Extrapage::PRODUCT_REQUEST_INSTRUCTIONS; ?>)"></i>
         </a>
     <?php } ?>
@@ -16,10 +16,16 @@
             <?php echo Labels::getLabel('LBL_Category_Requests', $siteLangId); ?>
         </a>
     <?php } ?>
-    <?php if ($canRequestBadge) { ?>
-        <a class="nav-link tabs_003 badgeReq--js" rel="tabs_003" href="javascript:void(0)" onclick="searchBadgeRequests()">
-            <?php echo Labels::getLabel('LBL_Badge_Requests', $siteLangId); ?>
-        </a>
 
+    <?php if ($canRequestBadge) { ?>
+        <?php if (!empty($reqBadges)) { ?>
+            <a class="nav-link tabs_003 badgeReq--js" rel="tabs_003" href="javascript:void(0)" onclick="searchBadgeRequests()">
+                <?php echo Labels::getLabel('LBL_Badge_Requests', $siteLangId); ?>
+            </a>
+        <?php } else if (empty($reqBadges) && !empty($approvalRequiredBadges)) { ?>
+            <a class="nav-link tabs_003 badgeReq--js" rel="tabs_003" href="javascript:void(0)" onclick="searchBadgeRequests()">
+                <?php echo Labels::getLabel('LBL_Badge_Requests', $siteLangId); ?>
+            </a>
+        <?php } ?>
     <?php } ?>
 </nav>

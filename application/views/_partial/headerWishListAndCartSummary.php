@@ -136,7 +136,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                 </ul>
 
                 <div class="buttons-group">
-                    <a href="javascript:void(0);" onclick="cart.clear();" class="btn btn-outline-brand"><?php echo Labels::getLabel('LBL_CLEAR_CART', $siteLangId); ?> </a>
+                    <a href="javascript:void(0);" onclick="cart.clear();" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_CLEAR_CART', $siteLangId); ?> </a>
                     <a class="btn btn-brand" href="<?php echo UrlHelper::generateUrl('cart'); ?>"><?php echo Labels::getLabel('LBL_Proceed_To_Pay', $siteLangId); ?></a>
                 </div>
 

@@ -146,7 +146,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)
-        
+
     ) {
     ?>
         <li class="menu-item dropdownJs">
@@ -222,7 +222,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?>(<?php echo $threshSelProdCount; ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -309,7 +309,12 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?></span>
+                                <span class="nav_text">
+                                    <?php
+                                    $menuLabel = Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId);
+                                    $menuLabel .= (!$quickSearch && $gdprReqCount ? ' (' . $gdprReqCount . ')' : '');
+                                    echo $menuLabel;
+                                    ?> </span>
                             </a>
                         </li>
                     <?php } ?>
@@ -528,7 +533,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span>
                                 <span class="nav_text"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></span>
                             </a>
-                        </li>                       
+                        </li>
                     <?php } ?>
                     <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -888,7 +893,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true) ||
-        $objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true)        
+        $objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true)
     ) {
     ?>
         <li class="menu-item dropdownJs">
@@ -950,7 +955,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span>
                             </a>
                         </li>
-                    <?php } ?>                    
+                    <?php } ?>
                     <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ContentBlock"]' href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
@@ -1150,7 +1155,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
-                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_BUYER;?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
+                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_BUYER; ?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
                                                 <span class="nav_text">
                                                     <?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?>
                                                 </span>
@@ -1159,7 +1164,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
-                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_SELLER;?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
+                                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_SELLER; ?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
                                                 <span class="nav_text">
                                                     <?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?>
                                                 </span>

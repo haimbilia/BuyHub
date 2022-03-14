@@ -1,5 +1,6 @@
 :root {
     --secondary-color: #0795e6;
+    --secondary-color-inverse: #ffffff;
     --secondary-color-alpha: 7, 149, 230;
 }
 
@@ -13,8 +14,8 @@ $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
-$secondary-color: #0795e6;
-$secondary-color-inverse: #ffffff;
+$secondary-color: --secondary-color;
+$secondary-color-inverse: --secondary-color-inverse;
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
 //fixed theme colors

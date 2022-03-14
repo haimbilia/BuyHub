@@ -21,12 +21,12 @@
     }
     .product-gallery {
         display: flex;
-        justify-content: space-between;
     }
     .slider-for {
+        max-width: 500px;
         flex: 1;
         order: 2;
-        margin: 0 auto;
+        margin: 0;
         //max-width: 500px;
         @include media-breakpoint-down(lg) {
             padding: 0;
@@ -42,6 +42,26 @@
         //@include responsive-ratio(1, 1);
         img {
             //@include img-absolute;
+        }
+    }
+    .thumb {
+        margin: 1.125rem 0;
+        text-align: center;
+        border: $border !important;
+        overflow: hidden;
+        @include placeholder;
+        @include responsive-ratio(1, 1);
+        position: relative;
+        img {
+            max-width: 100%;
+            margin: 0 auto;
+            @include img-absolute;
+        }
+        &.slick-current {
+            border-color: $brand-color;
+        }
+        @include media-breakpoint-down(lg) {
+            margin: 0 0.5rem;
         }
     }
     .slider-nav {
@@ -61,66 +81,38 @@
             margin: 0 auto;
             text-align: center;
         }
-        .thumb {
-            margin: 1.125rem 0;
-            text-align: center;
-            border: $border !important;
-            overflow: hidden;
-            @include placeholder;
-            @include responsive-ratio(1, 1);
-            position: relative;
-            img {
-                max-width: 100%;
-                margin: 0 auto;
-                @include img-absolute;
-            }
-            &.slick-current {
-                border-color: $brand-color;
-            }
-            @include media-breakpoint-down(lg) {
-                margin: 0 0.5rem;
-            }
-        }
+
         .slick-arrow {
-            position: relative;
-            top: auto;
-            width: 40px;
-            height: 40px;
+            background-color: #fff;
+            border: $border-black;
             padding: 0;
-            border: none;
-            border-radius: $radius-common;
-            box-shadow: none;
-            margin: 0;
-            max-width: 40px;
-            flex: 0 0 40px;
-            transform: rotate(90deg);
-            @include media-breakpoint-down(lg) {
-                transform: none;
-                height: auto;
-                width: 40px;
-                min-width: 40px;
+            width: 100px;
+            height: 100px;
+            display: block;
+            border-radius: 0;
+            text-indent: -9999px;
+            position: relative;
+
+            &:before {
+                content: "";
+                display: inline-block;
+                border-right: $border-black;
+                border-bottom: $border-black;
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                left: auto;
+                right: auto;
             }
         }
         .slick-prev {
-            &:after {
-                border-right: 2px solid #000;
-                border-bottom: 2px solid #000;
-                width: 16px;
-                height: 16px;
-                #{$start-direction}: calc(50% - 0px);
-                top: calc(50% - 3px);
-                /*-webkit-transform: rotate(-135deg);
-            transform: rotate(-135deg);*/
+            &:before {
+                transform: rotate(-224deg);
             }
         }
         .slick-next {
-            &:after {
-                border-right: 2px solid #000;
-                border-bottom: 2px solid #000;
-                width: 16px;
-                height: 16px;
-                #{$start-direction}: calc(50% - 3px);
-                top: calc(50% - 3px);
+            &:before {
+                transform: rotate(45deg);
             }
         }
     }

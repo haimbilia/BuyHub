@@ -21,8 +21,10 @@ $(document).ready(function () {
 
 	optionForm = function (optionId) {
 		optionId = optionId || $('.navTabsJs').data('optionId');
+		optionId = 'undefined' == typeof optionId ? 0 : optionId;
 		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
+			fcom.removeLoader();
 			try {
 				res = jQuery.parseJSON(t);
 				fcom.displayErrorMessage(res.msg);
@@ -42,10 +44,10 @@ $(document).ready(function () {
             return false;
         }
         markPopupTabActive();       
-        $('#editFormJs').prepend(fcom.getLoader());
+		$.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'optionLangForm', [optionId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $('#editFormJs').html(t);
+            $.ykmodal(t);
         });
     };
 

@@ -3299,7 +3299,7 @@ class SellerController extends SellerBaseController
 
         $this->set('splatform_id', $splatform_id);
         $this->set('identifier', $identifier);
-        $this->set('frm', $frm);       
+        $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
@@ -3331,7 +3331,7 @@ class SellerController extends SellerBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
 
         $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
-        $this->set('splatformId', $splatform_id);    
+        $this->set('splatformId', $splatform_id);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -3380,7 +3380,7 @@ class SellerController extends SellerBaseController
         if (count($languages) > 1) {
             $lang_id = $post['lang_id'];
         } else {
-            $lang_id = array_key_first($languages);            
+            $lang_id = array_key_first($languages);
         }
 
         if (1 > $splatform_id || 1 > $lang_id) {
@@ -3389,10 +3389,10 @@ class SellerController extends SellerBaseController
         }
 
         $frm = $this->getSocialPlatformLangForm($splatform_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());  
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
-        }     
+        }
 
         $recordObj = new SocialPlatform($splatform_id);
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]], $lang_id);
@@ -3564,7 +3564,7 @@ class SellerController extends SellerBaseController
             $iconsArr = SocialPlatform::getAvailableIconsArr($this->userParentId, $this->siteLangId);
         }
         $frm = new Form('frmSocialPlatform');
-        $frm->addHiddenField('', 'splatform_id', $splatform_id);        
+        $frm->addHiddenField('', 'splatform_id', $splatform_id);
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
         $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
@@ -3573,9 +3573,9 @@ class SellerController extends SellerBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', $iconsArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         if ($splatform_id > 0) {
             $fld->setFieldTagAttribute('disabled', 'disabled');
-        }            
+        }
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
-        
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -4743,7 +4743,7 @@ class SellerController extends SellerBaseController
         if (!$userObj->updateUserReturnAddress($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
-        $post['lang_id'] = CommonHelper::getDefaultFormLangId();        
+        $post['lang_id'] = CommonHelper::getDefaultFormLangId();
 
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
@@ -4756,7 +4756,7 @@ class SellerController extends SellerBaseController
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
-        }  
+        }
 
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
@@ -4916,7 +4916,7 @@ class SellerController extends SellerBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'ura_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'ura_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);       
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'ura_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('FRM_POSTALCODE', $this->siteLangId), 'ura_zip');
 
         $frm->addHiddenField('', 'ura_phone_dcode');
@@ -4924,14 +4924,14 @@ class SellerController extends SellerBaseController
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
-        
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
-        
+
+
         return $frm;
     }
 
@@ -4939,11 +4939,11 @@ class SellerController extends SellerBaseController
     {
         $formLangId = FatUtility::int($formLangId);
 
-        $frm = new Form('frmReturnAddressLang');   
+        $frm = new Form('frmReturnAddressLang');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $formLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $formLangId, array(), '');
-        $fld->requirements()->setRequired(); 
+        $fld->requirements()->setRequired();
         $fld->requirements()->setInt();
-        $frm->addTextBox(Labels::getLabel('FRM_NAME', $formLangId), 'ura_name')->requirement->setRequired(true);       
+        $frm->addTextBox(Labels::getLabel('FRM_NAME', $formLangId), 'ura_name')->requirement->setRequired(true);
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS2', $formLangId), 'ura_address_line_2');
         $frm->addTextBox(Labels::getLabel('FRM_CITY', $formLangId), 'ura_city')->requirement->setRequired(true);
@@ -5677,12 +5677,12 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmPickUpAddress');
         $frm->addHiddenField('', 'addr_id', $addressId);
         $languages = Language::getAllNames();
-        if(1 < count($languages)){
+        if (1 < count($languages)) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
-        }else{
+        } else {
             $frm->addHiddenField('', 'lang_id', array_key_first($languages));
-        }       
-        
+        }
+
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $langId), 'addr_address1');
@@ -5845,6 +5845,8 @@ class SellerController extends SellerBaseController
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+            echo "here";
+            die;
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -5868,7 +5870,11 @@ class SellerController extends SellerBaseController
     {
         $tagName = FatApp::getPostedData('tag_name', FatUtility::VAR_STRING);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (empty($tagName) || 1 > $langId) {
+        if (1 > $langId) {
+            $langId = $this->siteLangId;
+        }
+
+        if (empty($tagName)) {
             LibHelper::exitWithError($this->str_invalid_request);
         }
 
@@ -5949,7 +5955,7 @@ class SellerController extends SellerBaseController
         if ($page < 2) {
             $page = 1;
         }
-        $post = FatApp::getPostedData();      
+        $post = FatApp::getPostedData();
         $srch = Countries::getSearchObject(true, $this->siteLangId);
         $srch->addOrder('country_name');
 
