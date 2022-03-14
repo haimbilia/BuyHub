@@ -295,6 +295,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'trigger_type', '=', Badge::COND_MANUAL);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'required_approval', '=', applicationConstants::YES);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
 
         $srch->addDirectCondition('(
             CASE
