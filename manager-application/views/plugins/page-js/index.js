@@ -241,9 +241,6 @@ $(document).on('change', '.StripeConnectPayoutInterval--js', function () {
     if ('manual' == $(this).val() || '' == $(this).val()) {
         $(payoutMonthlyEle + ', ' + payoutWeeklyEle + ', ' + payoutDaysEle).val("").attr('disabled', 'disabled');
     } else if ('daily' == $(this).val()) {
-        if ('' == $(payoutDaysEle).val()) {
-            $(payoutDaysEle).val(2);
-        }
         $(payoutDaysEle).removeAttr('disabled');
         $(payoutWeeklyEle + ", " + payoutMonthlyEle).val("").attr('disabled', 'disabled');
     } else if ('monthly' == $(this).val()) {

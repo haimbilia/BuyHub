@@ -101,6 +101,8 @@ class NotificationsController extends ListingBaseController
         $post['user_id'] = $userId;
         if (0 < $userId) {
             $srch->addCondition('notification_user_id', '=', $userId);
+        }else if(-1 === $userId){
+            $srch->addCondition('notification_user_id', '=', 0);
         }
 
         $page = (empty($page) || $page <= 0) ? 1 : $page;
@@ -206,8 +208,7 @@ class NotificationsController extends ListingBaseController
 
     protected function getSearchForm(array $fields = [])
     {
-        $frm = new Form('frmRecordSearch');
-        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $frm = new Form('frmRecordSearch');       
         $frm->addHiddenField('', 'page');
         $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'user_id', []);
         $typeArr  = [];

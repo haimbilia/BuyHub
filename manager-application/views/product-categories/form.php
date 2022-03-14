@@ -81,9 +81,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         }
 
         removeRatingType = function(e) {
-            var rt_id = e.detail.tag.id;
-            var prodCatId = $("input[name='prodcat_id']").val();
-            if ('' == rt_id || '' == prodCatId) {
+            var rt_id = e.detail.tag.id;      
+            var prodCatId = $("input[name='prodcat_id']").val();           
+            if ('' == rt_id || 1 > prodCatId) {
                 return;
             }
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +

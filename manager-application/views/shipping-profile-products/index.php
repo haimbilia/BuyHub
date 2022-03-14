@@ -7,6 +7,7 @@ $frm->setFormTagAttribute('onsubmit', 'searchProducts(' . $profileId . ',this); 
 $proFld = $frm->getField("keyword");
 $proFld->developerTags['noCaptionTag'] = true;
 $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Product...', $siteLangId));
+$proFld->addFieldTagAttribute('autocomplete', 'off')
 ?>
 <div class="row">
     <div class="col-md-12 searchFormJs" style="display:none;">
