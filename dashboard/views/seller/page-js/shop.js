@@ -593,7 +593,7 @@ $(document).on("change", ".state", function () {
     };
 
     bannerPopupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
@@ -622,7 +622,7 @@ $(document).on("change", ".state", function () {
     };
 
     logoPopupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
@@ -678,6 +678,9 @@ $(document).on("change", ".state", function () {
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 $("#modalBoxJs").modal("hide");
                 fcom.removeLoader();
@@ -736,6 +739,9 @@ $(document).on("change", ".state", function () {
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 fcom.removeLoader();
                 $("#modalBoxJs").modal("hide");

@@ -5,8 +5,8 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id']);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
-$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<div class="content-wrapper content-space" dir="<?php echo $formLayout; ?>">
+?>
+<div class="content-wrapper content-space mainJs" dir="<?php echo $formLayout; ?>">
     <?php
     $frm->setFormTagAttribute('class', 'form');
     $frm->setFormTagAttribute('id', 'addProductfrm');
@@ -53,7 +53,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         </div>
        
     </div>
-    <div class="content-body">
+    <div class="content-body" id="contentBody">
         <div class="add-stock">
             <div class="add-stock-column column-main">
                 <div class="card" id="basic-details">
@@ -67,8 +67,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
-                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
+                            echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
+                            echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));                           
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
@@ -109,7 +109,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="variants-options">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
                             </h3>
@@ -156,7 +156,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="media">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_MEDIA', $langId); ?></h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
@@ -183,7 +183,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="specifications">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                             </h3>
@@ -238,7 +238,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
                 <div class="card card-toggle" id="tax-shipping">
-                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                             </h3>
@@ -264,7 +264,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                 <?php if ($displayDigitalDownloadList) { ?>
                     <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
@@ -286,7 +286,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card card-toggle" id="digital-links">
-                        <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
@@ -417,6 +417,8 @@ echo $imgFrm->getFormHtml();
     var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
 
     $(function() {
+        $('body').addClass('isLoading');
+        $('#contentBody').prepend(fcom.getLoader());
         prodSpecifications();
         tagifyProducts();
         productDefaultImages();

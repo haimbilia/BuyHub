@@ -219,6 +219,9 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 fcom.removeLoader();
                 $("#modalBoxJs").modal("hide");

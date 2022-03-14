@@ -385,8 +385,7 @@ var advanceMedia = false; /* open via advance media*/
         tagifyObjs[index] = tagify;
     };
 
-    upcType = function () {
-        $('#addProductfrm button[type="submit"]').prop("disabled", true);
+    upcType = function () {        
         if (typeof upcTypeTriggerEvent != 'undefined') {
             clearTimeout(upcTypeTriggerEvent);
         }
@@ -420,7 +419,7 @@ var advanceMedia = false; /* open via advance media*/
             fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {
                 fcom.removeLoader();
                 $('#variantsListJs').html(t.html);
-                $('#addProductfrm button[type="submit"]').prop("disabled", false);
+                $('body').removeClass('isLoading');
             }, { fOutMode: 'json' });
         }, 2000);
     };
@@ -479,6 +478,9 @@ var advanceMedia = false; /* open via advance media*/
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 $.ykmsg.close();
                 if (ans.status == 0) {
