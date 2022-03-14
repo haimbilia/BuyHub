@@ -34,9 +34,10 @@ class SellerRequestsController extends SellerBaseController
         if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts) && empty($reqBadges)) {
             $noRecordFound = true;
         }
-
         $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
+
         $this->set('approvalRequiredBadges', $approvalRequiredBadges);
+        $this->set('reqBadges', $reqBadges);
         $this->set('canRequestBadge', $this->userPrivilege->canEditBadgesAndRibbons(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
@@ -500,7 +501,7 @@ class SellerRequestsController extends SellerBaseController
 
         $recordObj = new Brand($brandReqId);
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
-        
+
         if ($this->get('langId') == 0 && !$this->isMediaUploaded($brandReqId)) {
             $this->set('openMediaForm', true);
         }

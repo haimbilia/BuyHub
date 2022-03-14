@@ -77,6 +77,8 @@ class HomeController extends MyAppController
             }
         }
 
+        // CommonHelper::printArray($collections, true);
+
         $slides = $this->getSlides();
         $this->set('slides', $slides);
         $this->set('collections', $collections);
