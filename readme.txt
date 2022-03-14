@@ -567,6 +567,7 @@ Updates/Fixes :
     => 062920 - Seller UI: Getting an error while submitting the "Seller Approval Form"
     => 062989 - Seller UI: Not able to go to the language data and media section while adding the brands and uploaded media is also not showing in the table
     => 062988 - Seller UI: "View Tax rates" option is not showing under the Tax category page
+    => 062986 - Seller UI: "Invalid error" is showing under the language data section while adding the options value, the continuous loader is showing while adding/editing the options and their values and previously added data is showing while adding the new options
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
