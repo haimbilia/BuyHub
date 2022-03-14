@@ -1313,7 +1313,7 @@ class Product extends MyAppModel
         $productSellerShiping['ps_product_id'] = $product_id;
         $productSellerShiping['ps_user_id'] = $userId;
         $productSellerShiping['ps_from_country_id'] = $data_to_be_save['ps_from_country_id'];
-        $productSellerShiping['ps_free'] = $data_to_be_save['ps_free'];
+        $productSellerShiping['ps_free'] = !empty($data_to_be_save['ps_free']) ?? 0;
         if (!FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping)) {
             return false;
         }
