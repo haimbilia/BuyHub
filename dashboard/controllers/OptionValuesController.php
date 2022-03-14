@@ -116,6 +116,8 @@ class OptionValuesController extends LoggedUserController
             FatUtility::dieJsonError($optionValueObj->getError());
         }
 
+        $optionvalue_id = ($optionvalue_id > 0) ? $optionvalue_id : $optionValueObj->getMainTableRecordId();
+
         $this->setLangData($optionValueObj, [$optionValueObj::tblFld('name') => $post[$optionValueObj::tblFld('name')]]);
 
         $this->set('optionId', $option_id);
@@ -206,14 +208,26 @@ class OptionValuesController extends LoggedUserController
         } else {
             $langData = OptionValue::getAttributesByLangId($langId, $optionvalue_id, NULL, applicationConstants::JOIN_RIGHT);
         }
+
+        $optionName = '';
+        $option_id = 0;
         if ($langData) {
             $langFrm->fill($langData);
+            $option_id = $langData['optionvalue_option_id'];
+            $option = new Option();
+            if (!$row = $option->getOption($option_id)) {
+                LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId), true);
+            }
+            $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];
         }
 
         $this->set('langFrm', $langFrm);
         $this->set('optionvalue_id', $optionvalue_id);
+        $this->set('option_id', $option_id);
         $this->set('langId', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('optionName', $optionName);
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 

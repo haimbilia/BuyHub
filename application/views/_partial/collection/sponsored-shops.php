@@ -12,7 +12,7 @@ if (isset($collection['shops']) && count($collection['shops'])) { ?>
             $collection['rating'] = $collection['rating'];
             $track = true;
             include('shop-layout-1-list.php'); ?>
-            <?php if ($collection['totShops'] > Collections::LIMIT_SHOP_LAYOUT1) { ?>
+            <?php if (isset($collection['totShops']) && $collection['totShops'] > Collections::LIMIT_SHOP_LAYOUT1) { ?>
                 <div class="section-foot">
                     <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
                         <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
