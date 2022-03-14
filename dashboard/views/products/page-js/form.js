@@ -740,7 +740,8 @@ $(document).on('change', '#product_fulfillment_type', function () {
     }
 });
 
-$(document).on('click', '.optionsAddJs', function () {
+$(document).on('click', '.optionsAddJs', function (e) {
+    e.stopPropagation();
     let clonedRow = $('#variantCloneJs .rowJs').clone();
     let index = clonedRow.find('.optionValuesJs').data('index');
     let newIndex = $('#variantsJs .rowJs').length + 1;
