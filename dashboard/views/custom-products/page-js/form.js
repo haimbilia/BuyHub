@@ -263,6 +263,8 @@ var advanceMedia = false; /* open via advance media*/
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, file_type, option_id, lang_id]), '', function (t) {
             $('#productImagesJs').html(t.html);
             $("#productImagesJs").sortable({
+                helper: fixWidthHelper,
+                start: fixPlaceholderStyle,
                 stop: function () {
                     var mysortarr = new Array();
                     $(this).find('li').each(function () {
@@ -403,6 +405,8 @@ var advanceMedia = false; /* open via advance media*/
 
             $("#productDefaultImagesJs").sortable({
                 items: "li:not(.unsortableJs)",
+                helper: fixWidthHelper,
+                start: fixPlaceholderStyle,
                 stop: function () {
                     var mysortarr = new Array();
                     $(this).find('li').each(function () {

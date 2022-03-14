@@ -429,11 +429,13 @@ $(document).on("change", ".state", function () {
     returnAddressForm = function () {
         if (1 > $(mtabId).data('shop_id')) {
             return;
-        }        
+        } 
+        fcom.displayProcessing();       
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
+            fcom.closeProcessing();
         });
     };
 
@@ -443,7 +445,7 @@ $(document).on("change", ".state", function () {
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
             getReturnAddress();
             if (0 < t.langId) {
-                //returnAddressLangForm(t.langId);
+                returnAddressLangForm(t.langId);
             }
         });
     };
@@ -487,8 +489,11 @@ $(document).on("change", ".state", function () {
     };
 
     pickupAddressForm = function (id, langId = 0) {
+        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
+            fcom.closeProcessing();
             $.ykmodal(t, false, 'modal-dialog-vertical-md');
             setTimeout(function () { $('.fromTime-js').change(); }, 500);
         });

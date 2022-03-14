@@ -19,6 +19,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
 $(function () {
 	$("#sortable").sortable({
+		helper: fixWidthHelper,
+		start: fixPlaceholderStyle,
 		stop: function () {
 			reloadList(false);
 		}
@@ -56,7 +58,7 @@ $(function () {
 		}
 
 		fcom.ajax(fcom.makeUrl(controllerName, 'searchProductsInventoryStockStatus'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(res);
 		});
 	};
