@@ -46,7 +46,7 @@ $(document).on('click', '#showPass', function () {
     if ('' == passInput.val()) {
         return;
     }
-    
+
     if (passInput.attr('type') === 'password') {
         passInput.attr('type', 'text');
         $(this).addClass('field-password-show');
@@ -320,6 +320,29 @@ $(document).ready(function () {
         }, 2500);
     });
 
+    $('[data-bs-toggle="popover"]').popover();
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
+});
+
+
+$(document).ajaxComplete(function () {
+    $('[data-bs-toggle="popover"]').popover();
+
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 
 $(function () {
@@ -639,6 +662,7 @@ function getCookie(cname) {
 function displayGeoAddress(address) {
     if (0 < $("#ga-autoComplete-header").length) {
         $("#ga-autoComplete-header").val(address);
+        $(".geo-location-selected").text(address);        
     }
 }
 

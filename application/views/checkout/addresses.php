@@ -90,7 +90,7 @@
                             <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
                         </button>
                     <?php } else { ?>
-                        <button class="btn btn-outline-brand btn-wide" onclick="goToBack();">
+                        <button class="btn btn-outline-gray btn-wide" onclick="goToBack();">
                             <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
                         </button>
                     <?php } ?>

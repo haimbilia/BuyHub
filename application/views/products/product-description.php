@@ -179,7 +179,21 @@
             </p>
         </div>
     <?php } ?>
+
+    <!-- Social Sharing -->
+    <?php include('social-sharing.php');  ?>
+    <!-- Social Sharing -->
+
+    <!-- More Sellers -->
     <?php include('more-sellers.php');  ?>
+    <!-- More Sellers -->
+
+    <?php if ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+        <div class="side-blocks delivery-options">
+            <h5 class="h5"><?php echo Labels::getLabel('LBL_DELIVERY_OPTIONS'); ?></h5>
+            <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
+        </div>
+    <?php } ?>
 
     <?php
     if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>

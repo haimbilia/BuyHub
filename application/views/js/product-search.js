@@ -215,7 +215,7 @@ $(document).ready(function () {
 });
 
 
-$(document).on('mouseover mouseout', '#mapProducts--js li', function (e) {
+$(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
     let shopId = $(this).data('shopid');
     $.each(mapMarker, function (index, marker) {
         if (typeof marker != 'undefined') {
@@ -642,6 +642,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         fcom.ajax(url, data, function (res) {
             $('.productFilters-js').html(res);
             getSetSelectedOptionsUrl(frm);
+            fcom.removeLoader();
         });
     };
 

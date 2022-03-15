@@ -19,35 +19,48 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
             </div>
         </div>
     </section>
+
     <section class="section">
         <div class="container">
             <?php include('prod-desc-nav-detail.php'); ?>
         </div>
     </section>
-    <?php include('banners.php'); ?>
-    <?php if ($recommendedProducts) { ?>
-        <section class="section bg-brand-light">
-            <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
-        </section>
-    <?php } ?>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && !empty($reviews)) { ?>
         <section class="section">
-            <div class="container">
-                <div id="itemRatings">
-                    <?php
-                    echo $frmReviewSearch->getFormHtml();
-                    $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
-                    ?>
-                </div>
+            <div class="container" id="itemRatings">
+                <?php
+                echo $frmReviewSearch->getFormHtml();
+                $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
+                ?>
             </div>
         </section>
     <?php } ?>
+
+    <!-- Banners -->
+    <section class="section">
+        <div class="container">
+            <?php include('banners.php'); ?>
+        </div>
+    </section>
+    <!-- Banners -->
+
+    <?php if ($recommendedProducts) { ?>
+        <!-- Recomended Products -->
+        <section class="section bg-brand-light">
+            <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
+        </section>
+        <!-- Recomended Products -->
+    <?php } ?>
+
     <?php if ($relatedProductsRs) { ?>
+        <!-- Related Products -->
         <section class="section">
             <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
         </section>
+        <!-- Related Products -->
     <?php } ?>
+
     <div id="recentlyViewedProductsDiv"></div>
 </div>
 <script>
@@ -102,8 +115,6 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
             }
         });
         /* ] */
-
-
     });
 </script>
 
