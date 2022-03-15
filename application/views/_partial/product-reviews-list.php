@@ -93,9 +93,8 @@ if ($totReviews) {
             </div>
         </div>
 
-        <div class="listing__all"></div>
+        <div class="reviewListJs"></div>
         <div id="loadMoreReviewsBtnDiv" class="text-center"></div>
-        <!--<a class="loadmore text--uppercase" href="javascript:alert('Pending');">Load More</a>-->
     </div>
 </div>
 <script>

@@ -85,6 +85,8 @@ class Product extends MyAppModel
     public const WARRANTY_TYPE_DAY = 0;
     public const WARRANTY_TYPE_MONTH = 1;
     public const WARRANTY_TYPE_YEAR = 2;
+    
+    public const VIEW_MORE_SELLER_COUNT = 2;
 
     public function __construct($id = 0)
     {
