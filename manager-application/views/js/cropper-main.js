@@ -87,8 +87,7 @@ var cropper;
                             console.log(e.message);
                         }
                     }
-                }
-                console.log(data.method);
+                }            
                 switch (data.method) {
                  
                     case 'rotate':

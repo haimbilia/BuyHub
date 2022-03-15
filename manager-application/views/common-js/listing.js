@@ -534,15 +534,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         if (false === checkControllerName()) {
             return false;
         }
-
         if (inputBtn.files && inputBtn.files[0]) {
+            var file = inputBtn.files[0]; 
+            if(!validateFileUpload(file)){
+                return;    
+            }
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.updateWithAjax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
-                var file = inputBtn.files[0];
-
+                  
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var options = {
                     toggleDragModeOnDblclick: false,
@@ -726,6 +728,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         ui.placeholder.height(ui.item.height());
         ui.placeholder.css("visibility", "visible");
         ui.placeholder.css('background-color', '#f3f6f9');
+    }
+
+    validateFileUpload = function (file){
+        if(file.size >=  langLbl.allowedFileSize){           
+            let msg = langLbl.fileSizeExceeded;
+            msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
+            fcom.displayErrorMessage(msg); 
+            return false;
+        }
+        return true;
     }
 })();
 

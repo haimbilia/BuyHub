@@ -132,15 +132,6 @@ class Tag extends MyAppModel
         if ($languages) {
             foreach ($languages as $lang_id => $lang_name) {
                 $productTags = Product::getProductTags($productId, $lang_id, true);
-                $productName = Product::getAttributesBylangId($lang_id, $productId, 'product_name');
-
-                if (!$productName) {
-                    $productData = Product::getProductDataById(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $productId, array('ifNull(product_name,product_identifier) as product_name', 'product_identifier'));
-                    $productName = $productData['product_name'];
-                }
-
-                $productName = !empty($productName) ? $productName : $productData['product_identifier'];
-
                 $productTagsStringArr[$lang_id] = [];
 
                 if (!empty($productTags)) {
@@ -154,10 +145,7 @@ class Tag extends MyAppModel
                 }
 
                 if (!empty($product_tags_string[$lang_id])) {
-                    $data_to_update = array('product_tags_string' => $product_tags_string[$lang_id]);
-                    if ($productName) {
-                        $data_to_update['product_name'] = $productName;
-                    }
+                    $data_to_update = array('product_tags_string' => $product_tags_string[$lang_id]);                    
                     $prodObj->updateLangData($lang_id, $data_to_update);
                 } else {
                     $data_to_update = array('product_tags_string' => '', 'product_name' => $productName);
@@ -165,16 +153,6 @@ class Tag extends MyAppModel
                 }
             }
         }
-
-        /* if ( $productId ) {
-            $rs = $db->query('SELECT product_id FROM tbl_products');
-            while ($row = $db->fetch($rs)) {
-                static::updateProductTagString($row['product_id']);
-            }
-        } */
-
-        // Select all tag names for the prouct. Implode those with ', ' and update in tbl_products.
-        // include category names also here.
     }
 
     public static function updateTagStrings($tagId)

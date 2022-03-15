@@ -403,6 +403,9 @@
     };
     loadCropper = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            if(!validateFileUpload(inputBtn.files[0])){
+                return;    
+            }
             loadCropperSkeleton(false);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('CustomProducts', "imgCropper"), "", function (t) {
