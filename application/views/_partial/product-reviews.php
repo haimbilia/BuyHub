@@ -18,7 +18,7 @@ if (!empty($reviews)) {
                     <div class="">
                         <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>" data-bs-toggle="tooltip">
                             <div class="dropdown">
-                                <button class="dropdown-toggle-custom btn btn-outline-gray sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle-custom btn btn-outline-gray btn-dropdown sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                     <span><?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?></span>
                                     <i class="dropdown-toggle-custom-arrow"></i>
                                 </button>

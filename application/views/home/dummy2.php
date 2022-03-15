@@ -239,7 +239,7 @@
                             </div>
                             <div class="product-ratings">
                                 <svg class="svg" width="14" height="14">
-                                    <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#star-yellow">
                                     </use>
                                 </svg>
                                 <span class="rate">4.4</span>
@@ -310,7 +310,7 @@
                                         <div class="quantity" data-stock="50">
                                             <span class="decrease decrease-js not-allowed"><i class="icn">
                                                     <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="/yokart/images/retina/sprite.svg#minus">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#minus">
                                                         </use>
                                                     </svg>
                                                 </i>
@@ -320,7 +320,7 @@
                                             </div>
                                             <span class="increase increase-js"><i class="icn">
                                                     <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                                         </use>
                                                     </svg>
                                                 </i>
@@ -389,7 +389,7 @@
                                     <div class="shop-wrap">
                                         <div class="product-ratings">
                                             <svg class="svg" width="14" height="14">
-                                                <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
                                             <span class="rate">4.4</span>
@@ -407,7 +407,7 @@
                                     <div class="shop-wrap">
                                         <div class="product-ratings">
                                             <svg class="svg" width="14" height="14">
-                                                <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
                                             <span class="rate">4.4</span>
@@ -424,7 +424,7 @@
                                     <div class="shop-wrap">
                                         <div class="product-ratings">
                                             <svg class="svg" width="14" height="14">
-                                                <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
                                             <span class="rate">4.4</span>
@@ -441,7 +441,7 @@
                                     <div class="shop-wrap">
                                         <div class="product-ratings">
                                             <svg class="svg" width="14" height="14">
-                                                <use xlink:href="/yokart/images/retina/sprite.svg#star-yellow">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
                                             <span class="rate">4.4</span>
@@ -520,7 +520,7 @@
                                                 <div class="quantity quantity-2" data-stock="4545">
                                                     <span class="decrease decrease-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#minus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#minus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -529,7 +529,7 @@
                                                     </div>
                                                     <span class="increase increase-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -554,7 +554,7 @@
                                                 <div class="quantity quantity-2" data-stock="4545">
                                                     <span class="decrease decrease-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#minus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#minus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -563,7 +563,7 @@
                                                     </div>
                                                     <span class="increase increase-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -588,7 +588,7 @@
                                                 <div class="quantity quantity-2" data-stock="4545">
                                                     <span class="decrease decrease-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#minus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#minus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -597,7 +597,7 @@
                                                     </div>
                                                     <span class="increase increase-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -624,7 +624,7 @@
                                                 <div class="quantity quantity-2" data-stock="4545">
                                                     <span class="decrease decrease-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#minus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#minus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -633,7 +633,7 @@
                                                     </div>
                                                     <span class="increase increase-js"><i class="icn">
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                                                 </use>
                                                             </svg>
                                                         </i></span>
@@ -665,7 +665,7 @@
                         <div class="descriptions-item">
                             <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="false" aria-controls="specification">Specifications
                                 <svg class="svg plus" width="16" height="16">
-                                    <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                     </use>
                                 </svg>
                             </h2>
@@ -720,7 +720,7 @@
                         <div class="descriptions-item">
                             <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="false" aria-controls="description">Description
                                 <svg class="svg plus" width="16" height="16">
-                                    <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                     </use>
                                 </svg>
                             </h2>
@@ -746,7 +746,7 @@
                             <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="false" aria-controls="collapseOne">Video
 
                                 <svg class="svg plus" width="16" height="16">
-                                    <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                     </use>
                                 </svg>
 
@@ -763,7 +763,7 @@
                         <div class="descriptions-item">
                             <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="false" aria-controls="policies">Shop Policies
                                 <svg class="svg plus" width="16" height="16">
-                                    <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#plus">
                                     </use>
                                 </svg>
                             </h2>

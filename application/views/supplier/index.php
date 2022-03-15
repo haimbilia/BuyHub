@@ -3,7 +3,7 @@
 $btn = $sellerFrm->getField('btn_submit');
 $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 ?>
-<div class="after-header"></div>
+
 <div id="body" class="body">
     <?php $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, $slogan['epage_id'], 0, $siteLangId);
     $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE)) . ")" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);"; ?>
@@ -88,15 +88,15 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         <div class="divider"></div>
     <?php } ?>
 
-    <div class="gap"></div>
+
     <div class="container">
-        <div class="align--center">
+        <div class="align-center">
             <div class="heading3"><?php echo Labels::getLabel('LBL_Still_need_help', $siteLangId) ?> ?</div>
             <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
         </div>
-        <div class="gap"></div>
+
     </div>
-    <div class="gap"></div>
+
 </div>
 <!-- End Document
 ================================================== -->
