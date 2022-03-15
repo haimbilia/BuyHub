@@ -1277,6 +1277,15 @@ $(document).ready(function () {
             .appendTo($(document.body))
             .submit();
     };
+
+    wishlistBox = function () {
+        if (isUserLogged() == 0) {
+            loginPopUpBox();
+            return false;
+        }
+        window.location.href = fcom.makeUrl('account', 'wishlist', [], siteConstants.webroot_dashboard);
+    };
+
     $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
     });

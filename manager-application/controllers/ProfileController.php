@@ -25,7 +25,7 @@ class ProfileController extends ListingBaseController
 
     public function imgCropper()
     {
-        $this->set('image', UrlHelper::generateFullUrl('Image', 'profileImage', array($this->_adminId)));
+        //$this->set('image', UrlHelper::generateFullUrl('Image', 'profileImage', array($this->_adminId)));
         $this->_template->render(false, false, 'cropper/index.php');
     }
 

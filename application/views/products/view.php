@@ -20,49 +20,45 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         </div>
     </section>
 
+    <?php if ($relatedProductsRs) { ?>
+        <!-- Related Products -->
+        <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
+        <!-- Related Products -->
+    <?php } ?>
+        
     <section class="section">
         <div class="container">
             <?php include('prod-desc-nav-detail.php'); ?>
         </div>
     </section>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && !empty($reviews)) { ?>
-        <section class="section">
-            <div class="container" id="itemRatings">
-                <?php
-                echo $frmReviewSearch->getFormHtml();
-                $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
-                ?>
-            </div>
-        </section>
-    <?php } ?>
+    <?php if ($recommendedProducts) {
+        /* Recomended Products */
+        include(CONF_THEME_PATH . 'products/recommended-products.php');
+        /* Recomended Products */
+    } ?>
+
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && !empty($reviews)) {
+        echo $frmReviewSearch->getFormHtml();
+        /* $this->includeTemplate('_partial/product-reviews.php', [
+            'reviews' => $reviews, 
+            'ratingAspects' => $ratingAspects, 
+            'siteLangId' => $siteLangId, 
+            'product_id' => $product['product_id'], 
+            'canSubmitFeedback' => $canSubmitFeedback
+            'productview' => $productviewk
+        ], false); */    
+        $product_id = $product['product_id'];
+        include(CONF_THEME_PATH . '_partial/product-reviews.php');
+    } ?>
 
     <!-- Banners -->
-    <section class="section">
-        <div class="container">
-            <?php include('banners.php'); ?>
-        </div>
-    </section>
+    <?php include('banners.php'); ?>
     <!-- Banners -->
-
-    <?php if ($recommendedProducts) { ?>
-        <!-- Recomended Products -->
-        <section class="section bg-brand-light">
-            <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
-        </section>
-        <!-- Recomended Products -->
-    <?php } ?>
-
-    <?php if ($relatedProductsRs) { ?>
-        <!-- Related Products -->
-        <section class="section">
-            <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
-        </section>
-        <!-- Related Products -->
-    <?php } ?>
 
     <div id="recentlyViewedProductsDiv"></div>
 </div>
+
 <script>
     var mainSelprodId = <?php echo $product['selprod_id']; ?>;
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';

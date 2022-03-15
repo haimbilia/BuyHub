@@ -199,7 +199,6 @@ class AdminBaseController extends FatController
             } else {
                 $jsVariables =  unserialize($jsAdminVariablesCache);
             }
-
             $this->set('jsVariables', $jsVariables);
 
             $this->includeDatePickerLangJs();

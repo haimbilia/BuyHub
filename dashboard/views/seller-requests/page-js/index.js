@@ -177,6 +177,9 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
     };
 
     brandPopupImage = function (inputBtn) {
+        if(!validateFileUpload(inputBtn.files[0])){
+            return;    
+        }
         loadCropperSkeleton();
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {

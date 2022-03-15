@@ -25,6 +25,7 @@ var cropper;
     };
 
     cropImage = function (file, options, callback, inputBtn) {
+        $('#loader-js').remove();
         var uploadedImageType = '';
         var container = document.querySelector('.img-container');
         if (/^image\/\w+/.test(file.type)) {
@@ -87,8 +88,7 @@ var cropper;
                             console.log(e.message);
                         }
                     }
-                }
-                console.log(data.method);
+                }            
                 switch (data.method) {
                  
                     case 'rotate':

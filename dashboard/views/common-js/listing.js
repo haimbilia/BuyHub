@@ -153,5 +153,15 @@ $(document).on("click", ".navTabsJs a", function (e) {
         ui.placeholder.css("visibility", "visible");
         ui.placeholder.css('background-color', '#f3f6f9');
     }
+    
+    validateFileUpload = function (file){
+        if(file.size >=  langLbl.allowedFileSize){           
+            let msg = langLbl.fileSizeExceeded;
+            msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
+            fcom.displayErrorMessage(msg); 
+            return false;
+        }
+        return true;
+    }
 })();
 

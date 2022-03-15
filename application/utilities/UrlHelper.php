@@ -1,9 +1,9 @@
 <?php
 class UrlHelper extends FatUtility
-{    
+{
     public static function getCurrUrl()
     {
-        return self::getUrlScheme() . $_SERVER["REQUEST_URI"];        
+        return self::getUrlScheme() . $_SERVER["REQUEST_URI"];
     }
 
     public static function getUrlScheme()
@@ -228,8 +228,20 @@ class UrlHelper extends FatUtility
         if (!$cacheTimeStamp || empty($cacheTimeStamp)) {
             $cacheTimeStamp = date('Y-m-d H:i:s');
             CacheHelper::create('cacheTimeStamp' . $langId, $cacheTimeStamp);
-        }      
+        }
 
         return AttachedFile::setTimeParam($cacheTimeStamp);
+    }
+
+    public static function getCanonical($controllerName, $langId = SYSTEM_LANG_ID)
+    {
+        if (empty(FatApp::getParameters()) && FatApp::getAction() == 'index') {
+            $cName = ($controllerName == 'Home') ? '' : $controllerName;
+            return UrlHelper::generateFullUrl($cName, '', [], CONF_WEBROOT_FRONT_URL, null, false, false, true, $langId);
+        }
+
+        $action = empty(FatApp::getAction()) ? 'index' : FatApp::getAction();
+        $params = empty(FatApp::getParameters()) ? [] : FatApp::getParameters();
+        return UrlHelper::generateFullUrl($controllerName, $action, $params, CONF_WEBROOT_FRONT_URL, null, false, false, true, $langId);
     }
 }

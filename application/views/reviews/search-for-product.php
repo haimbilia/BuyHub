@@ -1,4 +1,12 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if (!empty($product) && !$productView) { ?>
+    <div class="product-description">
+        <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
+    </div>
+    <div class="divider"></div>
+<?php } ?>
+
 <?php if ($reviewsList) { ?>
     <div class="user-reviews">
         <?php foreach ($reviewsList as $review) {
@@ -93,9 +101,12 @@
                 </div>
             </div>
         <?php } ?>
-        <a class="btn link-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>">
-            <?php echo Labels::getLabel('LBL_ALL', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
-        </a>
+
+        <?php if ($productView) { ?>
+            <a class="btn link-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>">
+                <?php echo Labels::getLabel('LBL_ALL', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
+            </a>
+        <?php } ?>
     </div>
     <?php echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchReviewsPaging')); ?>
 <?php } else {

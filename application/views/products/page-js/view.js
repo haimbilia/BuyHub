@@ -180,6 +180,9 @@ function getSortedReviews(elm) {
             $(elm).parent().addClass('is-active');
         }
     }
+    $('.sortByTxtJs').text($(elm).text());
+    $('.sortByEleJs').removeClass('active');
+    $(elm).addClass('active');
     reviews(document.frmReviewSearch);
 }
 
@@ -237,7 +240,7 @@ function setupReviewAbuse(frm) {
         } else {
             $(dv).html(fcom.getLoader());
         }
-
+        data += '&productView=1';
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
             $.ykmsg.close();
 
