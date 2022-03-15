@@ -82,33 +82,34 @@
                                         $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
                                         ?>
                                         <button class="button-geo-location geo-location_trigger" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="icn">
-                                                <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
-                                                    </use>
-                                                </svg>
-                                            </i>
+
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
+                                                </use>
+                                            </svg>
+
                                             <div class="geo-location-selected">
                                                 <?php echo $geoAddress; ?>
                                             </div>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
                                             <div class="geo-location_body">
-                                                <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
+                                                <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+
+                                                <!-- <div class="or">
+                                                    <span>Or</span>
+                                                </div> -->
+                                                <button onclick="loadGeoLocation()" class="btn btn-outline-gray btn-block btn-detect">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
+                                                        </use>
+                                                    </svg>
                                                     <span class="txt">
                                                         <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
                                                     </span>
                                                 </button>
-                                                <div class="or">
-                                                    <span>Or</span>
-                                                </div>
-                                                <input autocomplete="no" id="ga-autoComplete-header" class="form-control  geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +278,12 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
                                     <div class="geo-location_body">
-                                        <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
+
+                                        <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                        <!-- <div class="or">
+                                            <span>Or</span>
+                                        </div> -->
+                                        <button onclick="loadGeoLocation()" class="btn btn-outline-gray btn-block btn-detect">
                                             <i class="icn">
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
@@ -288,10 +294,7 @@
                                                 <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
                                             </span>
                                         </button>
-                                        <div class="or">
-                                            <span>Or</span>
-                                        </div>
-                                        <input autocomplete="no" id="ga-autoComplete-header" class="form-control  geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+
                                     </div>
                                 </div>
                             </div>
@@ -336,33 +339,34 @@
                             $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
                             ?>
                             <button class="button-geo-location geo-location_trigger" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icn">
-                                    <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
-                                        </use>
-                                    </svg>
-                                </i>
+
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
+                                    </use>
+                                </svg>
+
                                 <div class="geo-location-selected">
                                     <?php echo $geoAddress; ?>
                                 </div>
                             </button>
                             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
-                                <div class="geo-location_body">
+                                <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                    <!-- <div class="or">
+                                        <span>Or</span>
+                                    </div> -->
                                     <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
-                                        <i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
-                                                </use>
-                                            </svg>
-                                        </i>
+
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
+                                            </use>
+                                        </svg>
+
                                         <span class="txt">
                                             <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
                                         </span>
                                     </button>
-                                    <div class="or">
-                                        <span>Or</span>
-                                    </div>
-                                    <input autocomplete="no" id="ga-autoComplete-header" class="form-control  geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+
+
                                 </div>
                             </div>
                         </div>

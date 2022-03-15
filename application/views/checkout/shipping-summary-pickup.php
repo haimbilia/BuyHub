@@ -6,7 +6,7 @@
             <div class="review-block__label">
                 <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
                 <div class="review-block__link">
-                    <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    <button class="link-underline" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                 </div>
 
             </div>

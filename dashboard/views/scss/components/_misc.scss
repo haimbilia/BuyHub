@@ -574,6 +574,12 @@ a:hover {
     height: $input-height;
     font-size: 0.8rem;
 
+    &__selected-flag {
+        background-color: $input-bg;
+        border-radius: $input-border-radius;
+        margin-#{$end-direction}: 10px !important;
+    }
+
     &[dir="ltr"] {
         .iti__flag-container {
             right: auto !important;
