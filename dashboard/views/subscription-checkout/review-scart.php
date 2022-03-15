@@ -70,7 +70,7 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                         } else {
                             $paymentText = Labels::getLabel('LBL_Proceed_To_Confirm', $siteLangId);
                         } ?>
-                    <a href="javascript:void(0)" class="btn btn-brand confirmReview"><?php echo $paymentText; ?></a>
+                    <button class="btn btn-brand confirmReview"><?php echo $paymentText; ?></button>
                 <?php } ?>
                 </div>
             </div>

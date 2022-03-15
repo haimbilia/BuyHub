@@ -548,7 +548,7 @@ class ProductsController extends MyAppController
 
         /* over all catalog product reviews */
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
@@ -875,7 +875,7 @@ class ProductsController extends MyAppController
         //$this->setRecentlyViewedItem($selprod_id);
 
         if (false === MOBILE_APP_API_CALL) {
-            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js', 'js/jw-player.js'));
+            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/xzoom.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
         } else {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
             $recentlyViewed = is_array($recentlyViewed) && 0 < count($recentlyViewed) ? FatUtility::int($recentlyViewed) : array();

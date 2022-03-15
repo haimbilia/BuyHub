@@ -11,7 +11,6 @@ if (!empty($orderShippingData)) {
                     <div class="review-block__content">
                         <div class="shipping-data">
                             <ul class="media-more media-more-sm show">
-
                                 <?php
                                 foreach ($shipData as $data) {
                                     $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
@@ -34,7 +33,8 @@ if (!empty($orderShippingData)) {
                                         </span>
                                     </li>
                                 <?php } ?>
-                                <div class="shipping-data_title"><?php echo $data['opshipping_label']; ?></div>
+                                <div class="shipping-data_title">
+                                    <?php echo $data['opshipping_label']; ?></div>
                             </ul>
                         </div>
                     </div>

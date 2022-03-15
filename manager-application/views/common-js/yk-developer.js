@@ -685,4 +685,3 @@ $(document).on("click", ".sidebarOpenerBtnJs", function () {
     $('#sidebar').addClass("animating");
     setInterval(function () { $('#sidebar').removeClass("animating"); }, 2000);
 });
-

@@ -1277,6 +1277,15 @@ $(document).ready(function () {
             .appendTo($(document.body))
             .submit();
     };
+
+    wishlistBox = function () {
+        if (isUserLogged() == 0) {
+            loginPopUpBox();
+            return false;
+        }
+        window.location.href = fcom.makeUrl('account', 'wishlist', [], siteConstants.webroot_dashboard);
+    };
+
     $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
     });
@@ -1959,19 +1968,23 @@ $(document).on("click", ".fileRemove--js", function () {
     $(this).closest("li").remove();
 });
 
-function previewImage(obj) {
+function previewImage(obj, e) {
+    e.preventDefault();
     var imgUrl = $("img", obj).data("altimg");
     if ("" == imgUrl || "undefined" == typeof imgUrl) {
         imgUrl = $("img", obj).attr("src");
     }
     var img = $($.parseHTML("<img>")).attr("src", imgUrl).get(0).outerHTML;
     fcom.updateFaceboxContent(img, "text-center");
+    return false;
 }
 
-function loadMoreImages(obj) {
+function loadMoreImages(obj, e) {
+    e.preventDefault();
     $("a", obj).removeAttr("data-count").attr("onclick", "previewImage(this)");
     $(obj).removeClass("more-media").removeAttr("onclick");
     $(obj).nextAll().removeClass("d-none");
+    return false;
 }
 
 function redirectUrl(url) {

@@ -79,12 +79,12 @@
 
                                     if (5 > $i || 5 < $i) { ?>
                                         <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
-                                            <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this);">
+                                            <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this, event);">
                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                             </a>
                                         </li>
                                     <?php } else { ?>
-                                        <li class="more-media" onclick="loadMoreImages(this);">
+                                        <li class="more-media" onclick="loadMoreImages(this, event);">
                                             <a class="uploaded-file review-media" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                             </a>

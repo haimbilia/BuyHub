@@ -1,57 +1,43 @@
-<ul class="list-services">
+<ul>
     <?php
     if (!empty($product['product_warranty'])) { ?>
         <?php $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_WARRANTY', $siteLangId); ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
-                    </use>
-                </svg>
-            </i>
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
+            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>
         </li>
     <?php } ?>
+
     <?php if ((!empty($product['shop_return_age']) || !empty($product['selprod_return_age'])) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php
         $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
         $returnAge = !empty($returnAge) ? $returnAge : 0;
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
-                    </use>
-                </svg>
-            </i>
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
+            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>
     <?php } ?>
+
     <?php if ((!empty($product['shop_cancellation_age']) || !empty($product['selprod_cancellation_age'])) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php
         $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
         $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
         $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
-                    </use>
-                </svg>
-            </i>
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
+            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>
     <?php } ?>
+
     <?php if ($codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php $lbl = Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
-                    </use>
-                </svg>
+        <li title="<?php echo $lbl; ?>">
+            <?php echo Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
+            <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" data-container="body" title="<?php echo Labels::getLabel('MSG_CASH_ON_DELIVERY_AVAILABLE._CHOOSE_FROM_PAYMENT_OPTIONS', $siteLangId); ?>">
             </i>
         </li>
     <?php } ?>
+
     <?php if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php
         switch ($fulfillmentType) {
@@ -66,14 +52,9 @@
                 break;
         }
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
+        <li title="<?php echo $lbl; ?>">
             <?php $icon = $fulfillmentType == Shipping::FULFILMENT_PICKUP ? 'item_pickup' : 'freeshipping'; ?>
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $icon; ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $icon; ?>">
-                    </use>
-                </svg>
-            </i>
+            <?php echo $lbl; ?>
         </li>
     <?php } ?>
 </ul>
