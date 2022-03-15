@@ -42,10 +42,20 @@ class CollectionsController extends ListingBaseController
             $this->modelObj::tblFld('description'),
             $this->modelObj::tblFld('link_caption'),
         ];
+
+        if(0 < $this->modelObj->getMainTableRecordId()){          
+            if($collection_type = $this->modelObj::getAttributesById($this->modelObj->getMainTableRecordId(),'collection_type')){                  
+                if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
+                    $this->set('recordForm', 1);
+                }elseif($collection_type == Collections::COLLECTION_TYPE_BANNER){
+                    $this->set('banners', 1);
+                }
+            } 
+        }
     }
 
     public function index()
-    {
+    {      
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -1184,6 +1194,7 @@ class CollectionsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('screenTypeArr', $this->getDisplayScreenName());
         $this->set('recordId', $recordId);
+        $this->set('collectionId', $collectionId);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -1202,6 +1213,7 @@ class CollectionsController extends ListingBaseController
         if (!$fileHandlerObj->deleteFile($fileType, $bannerId, $afileId, 0, $langId, $slide_screen)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
+
         $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

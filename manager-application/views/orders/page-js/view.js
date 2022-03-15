@@ -323,6 +323,7 @@
             }
             fcom.displaySuccessMessage(t.msg);
             $.ykmodal.close();
+            setTimeout(function () { window.location.reload(); }, 300);
         });
     };
 })();

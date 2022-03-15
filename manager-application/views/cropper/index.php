@@ -4,7 +4,12 @@
     $body = '
         <div class="img-container">
             <img src="' . $imageUrl . '" alt="Picture" id="new-img" class="img_responsive cropper-hidden">
-            <div class="loader-positon" id="loader-js"></div>
+            <div class="loader-positon" id="loader-js">
+                <div class="table-processing loaderJs">
+                    <div class="spinner spinner--sm spinner--brand">
+                    </div>
+                </div> 
+            </div>
         </div>
     ';
 

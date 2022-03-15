@@ -286,10 +286,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-
-
-
-    removeBannerImage = function (recordId, afile_id, lang_id, slide_screen) {
+    removeBannerImage = function (collectionId,recordId, afile_id, lang_id, slide_screen) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
@@ -302,7 +299,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
             }
 
             fcom.displaySuccessMessage(ans.msg);
-            loadBannerImages(recordId, lang_id);
+            loadBannerImages(collectionId ,recordId);
         });
     }
 
@@ -349,14 +346,15 @@ $(document).on('change', '.prefDimensionsJs', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-
+           
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();
             }
-
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            } else {
+            } else if("banners" in t){
+                banners(t.recordId);
+            } else if("recordForm" in t){ 
                 recordForm(t.recordId, frm.collection_type.value);
             }
         });

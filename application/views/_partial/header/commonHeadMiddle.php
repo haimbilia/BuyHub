@@ -16,17 +16,21 @@
 <link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
 <?php
 if ($canonicalUrl == '') {
-    if (empty(FatApp::getParameters()) && FatApp::getAction() == 'index') {
-        $cName = ($controllerName == 'Home') ? '' : $controllerName;
-        $canonicalUrl = UrlHelper::generateFullUrl($cName);
-    } else {
-        $action = empty(FatApp::getAction()) ? 'index' : FatApp::getAction();
-        $params = empty(FatApp::getParameters()) ? [] : FatApp::getParameters();
-        $canonicalUrl = UrlHelper::generateFullUrl($controllerName, $action, $params);
-    }
+    $canonicalUrl = UrlHelper::getCanonical($controllerName);
 } ?>
-
 <link rel="canonical" href="<?php echo $canonicalUrl; ?>" />
+<?php
+if (0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
+    $languages = Language::getAllCodesAssoc();
+    foreach ($languages as $lid => $langCode) {
+        if ($siteLangId == $lid) {
+            continue;
+        }
+        $canonicalUrl = UrlHelper::getCanonical($controllerName, $lid);
+?>
+        <link rel="alternate" hreflang="<?php echo strtolower($langCode); ?>" href="<?php echo $canonicalUrl; ?>">
+<?php }
+} ?>
 <?php $googleFontFamily = "'Poppins', sans-serif !important";
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');

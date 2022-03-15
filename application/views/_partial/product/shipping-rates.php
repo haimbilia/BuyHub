@@ -2,7 +2,7 @@
     <?php
     if (!empty($product['product_warranty'])) { ?>
         <?php $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_WARRANTY', $siteLangId); ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>
         </li>
     <?php } ?>
@@ -13,7 +13,7 @@
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
         $returnAge = !empty($returnAge) ? $returnAge : 0;
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>
     <?php } ?>
@@ -24,14 +24,14 @@
         $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
         $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>
     <?php } ?>
 
     <?php if ($codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php $lbl = Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
+        <li title="<?php echo $lbl; ?>">
             <?php echo Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
             <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" data-container="body" title="<?php echo Labels::getLabel('MSG_CASH_ON_DELIVERY_AVAILABLE._CHOOSE_FROM_PAYMENT_OPTIONS', $siteLangId); ?>">
             </i>
@@ -52,7 +52,7 @@
                 break;
         }
         ?>
-        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
+        <li title="<?php echo $lbl; ?>">
             <?php $icon = $fulfillmentType == Shipping::FULFILMENT_PICKUP ? 'item_pickup' : 'freeshipping'; ?>
             <?php echo $lbl; ?>
         </li>
