@@ -48,8 +48,10 @@
     .btn-detect {
         display: flex;
         align-items: center;
-        justify-content: center;
-        .icn {
+        text-align: #{$start-direction};
+        font-weight: 600;
+        .svg {
+            fill: $secondary-color;
             margin-#{$end-direction}: 8px;
         }
     }
@@ -57,12 +59,21 @@
         margin: 1.5rem 0;
     }
     &_input {
-        border: $border;
-        border-radius: $radius-common;
-        background: none;
-        //border: none;
-        min-height: 36px;
-        font-size: 0.85rem;
+        border: $input-border-style $input-border-width $input-border-color;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        color: $input-color;
+        height: $input-height;
+        width: 100%;
+        padding: $input-padding;
+        font-size: $input-font-size;
+        line-height: $input-line-height;
+        border-radius: $input-border-radius;
+        outline: none;
+        font-family: inherit;
+        transition: 0.3s all ease-in-out;
+        appearance: none;
+        margin-bottom: 2rem;
     }
 }
 .location-popup-width {

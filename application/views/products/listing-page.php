@@ -127,15 +127,16 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         </div>
                     <?php } ?>
 
-                    <div id="top-filters" class="page-sort hide_on_no_product">
-                        <ul>
-                            <li>
+                    <div id="top-filters" class="collection-search-toolbar hide_on_no_product">
+                        <ul class="page-sort">
+                            <li class="page-sort-item">
                                 <?php if (!(UserAuthentication::isUserLogged()) || (UserAuthentication::isUserLogged() && (User::isBuyer()))) { ?>
                                     <button class="btn btn-black btn-filters-control saveSearch-js" type="button" onclick="saveProductSearch()">
-                                        <i class="icn fas fa-file-download d-md-none"></i><span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></button>
+                                        <span class="txt"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></span></button>
                                 <?php } ?>
                             </li>
-                            <li><?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
+                            <li class="page-sort-item">
+                                <?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
                             <!-- <li class="page-views">
                                 <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
                                     <i class="icn">
@@ -157,12 +158,21 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 </a>
                             </li> -->
                             <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                                <li class="page-views">
+                                <li class="page-sort-item">
                                     <button class="btn btn-outline-black btn-map-view <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
                                         <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
                             <?php } ?>
+
+                            <li class="page-sort-item">
+                                <button class="btn btn-outline-black btn-filters" type="button">
+                                    <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
+                                    <svg class="svg" width="18" height="18">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                                    </svg>
+                                </button>
+                            </li>
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                     </div>
@@ -188,13 +198,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     <aside class="collection-sidebar productFilters-js" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
                     </aside>
                     <main class="collection-content">
-                        <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
-                            <i class="icn">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
-                                </svg>
-                            </i>
-                        </button>
+
 
                         <?php
                         if (false && isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
@@ -217,18 +221,25 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                             </div>
                         <?php } ?>
-                    </main>
+                    </main> <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
+
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                        </svg>
+
+                    </button>
                 </div>
             <?php } ?>
         </div>
     </div>
+    <?php
+    if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {
+        include(CONF_THEME_PATH . 'products/products-list-map-view.php');
+        //$this->includeTemplate('products/products-list-map-view.php', $productsData, false)
+
+    } ?>
 </section>
-<?php
-if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {
-    include(CONF_THEME_PATH . 'products/products-list-map-view.php');
-    //$this->includeTemplate('products/products-list-map-view.php', $productsData, false)
-   
-} ?>
+
 
 <section>
     <div class="container">

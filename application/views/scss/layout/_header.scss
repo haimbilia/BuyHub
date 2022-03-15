@@ -14,7 +14,9 @@ $header-height: 122px;
     }
     .container {
         max-width: none;
-        padding: 0 3rem;
+        @include media-breakpoint-up(lg) {
+            padding: 0 3rem;
+        }
     }
     .top-bar {
         @include media-breakpoint-up(lg) {
