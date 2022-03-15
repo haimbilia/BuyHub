@@ -10,8 +10,8 @@ class ReviewsController extends MyAppController
     public function product($selprod_id = 0)
     {
         $selprod_id = FatUtility::int($selprod_id);
-        $prodSrch = new ProductSearch($this->siteLangId);
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
+        $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setDefinedCriteria();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
@@ -61,6 +61,7 @@ class ReviewsController extends MyAppController
     public function searchForProduct()
     {
         $selprod_id = FatApp::getPostedData('selprod_id');
+        $productView = FatApp::getPostedData('productView', FatUtility::VAR_INT, 0);
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -115,6 +116,19 @@ class ReviewsController extends MyAppController
             $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
         }
 
+        $prodSrch = new ProductSearch($this->siteLangId);
+        $prodSrch->setDefinedCriteria();
+        $prodSrch->joinSellerSubscription();
+        $prodSrch->addSubscriptionValidCondition();
+        $prodSrch->joinProductToCategory();
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->setPageSize(1);
+        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $productRs = $prodSrch->getResultSet();
+        $product = FatApp::getDb()->fetch($productRs);
+
+        $this->set('product', $product);
+        $this->set('productView', $productView);
         $this->set('recordRatings', $recordRatings);
         $this->set('reviewsList', $records);
         $this->set('page', $page);

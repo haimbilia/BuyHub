@@ -7,73 +7,89 @@ if (!empty($reviews)) {
     $pixelToFillRight = $avgRating / 5 * 160;
     $pixelToFillRight = FatUtility::convertToType($pixelToFillRight, FatUtility::VAR_FLOAT);
 }
+
+$productView = $productView ?? false;
 ?>
-
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="customer-reviews">
-            <div class="customer-reviews-head">
-                <h2 class="title"><?php echo Labels::getLabel('LBL_CUSTOMER_REVIEWS', $siteLangId); ?></h2>
-                <?php if ($totReviews > 0) { ?>
-                    <div class="">
-                        <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>" data-bs-toggle="tooltip">
-                            <div class="dropdown">
-                                <button class="dropdown-toggle-custom btn btn-outline-gray sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                    <span><?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?></span>
-                                    <i class="dropdown-toggle-custom-arrow"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-anim">
-                                    <ul class="drop nav nav-block">
-                                        <li class="nav__item"><a class="dropdown-item nav__link" href="javascript:void(0);" data-sort='most_recent' onclick="getSortedReviews(this);return false;"><?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?></a>
-                                        </li>
-                                        <li class="nav__item"><a class="dropdown-item nav__link" href="javascript:void(0);" data-sort='most_helpful' onclick="getSortedReviews(this);return false;"><?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?></a>
-                                        </li>
-                                    </ul>
+<section class="section">
+    <div class="container" id="itemRatings">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="customer-reviews">
+                    <?php if (true === $productView) { ?>
+                        <div class="customer-reviews-head">
+                            <h2 class="title"><?php echo Labels::getLabel('LBL_CUSTOMER_REVIEWS', $siteLangId); ?></h2>
+                            <?php if ($totReviews > 0) { ?>
+                                <div class="">
+                                    <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>" data-bs-toggle="tooltip">
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle-custom btn btn-outline-gray sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sortByTxtJs"><?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?></span>
+                                                <i class="dropdown-toggle-custom-arrow"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-anim">
+                                                <ul class="drop nav nav-block">
+                                                    <li class="nav__item">
+                                                        <a class="dropdown-item nav__link sortByEleJs active" href="javascript:void(0);" data-sort='most_recent' onclick="getSortedReviews(this);return false;">
+                                                            <?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="dropdown-item nav__link sortByEleJs" href="javascript:void(0);" data-sort='most_helpful' onclick="getSortedReviews(this);return false;">
+                                                            <?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                    <div class="customer-reviews-body">
+                        <div class="rating-layout">
+                            <!-- Rating Section -->
+                            <div class="rating-layout-start">
+                                <div class="sticky-lg-top">
+                                    <?php if (false === $productView && !empty($product)) { ?>
+                                        <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                    <?php } ?>
+                                    <div class="rating-block">
+                                        <div class="average-rating">
+                                            <span class="rate"><?php echo round($avgRating, 1); ?>
+                                                <svg class="svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                            <span class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <?php
+                                    $this->includeTemplate('_partial/product-overall-ratings.php', [
+                                        'reviews' => $reviews,
+                                        'ratingAspects' => $ratingAspects,
+                                        'siteLangId' => $siteLangId,
+                                        'canSubmitFeedback' => $canSubmitFeedback,
+                                        'product_id' => $product_id,
+                                    ], false);
+                                    ?>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-            <div class="customer-reviews-body">
-                <div class="rating-layout">
-                    <!-- Rating Section -->
-                    <div class="rating-layout-start">
-                        <div class="sticky-lg-top">
-                            <div class="rating-block">
-                                <div class="average-rating">
-                                    <span class="rate"><?php echo round($avgRating, 1); ?>
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                            </use>
-                                        </svg>
-                                    </span>
-                                    <span class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <?php
-                            $this->includeTemplate('_partial/product-overall-ratings.php', [
-                                'reviews' => $reviews,
-                                'ratingAspects' => $ratingAspects,
-                                'siteLangId' => $siteLangId,
-                                'canSubmitFeedback' => $canSubmitFeedback,
-                                'product_id' => $product_id,
-                            ], false);
-                            ?>
-                        </div>
-                    </div>
-                    <!-- Rating Section -->
+                            <!-- Rating Section -->
 
-                    <!-- Comments Section -->
-                    <div class="rating-layout-end reviewListJs"></div>
-                    <div id="loadMoreReviewsBtnDiv" class="align--center"></div>
-                    <!-- Comments Section -->
+                            <!-- Comments Section -->
+                            <div class="rating-layout-end reviewListJs"></div>
+                            <div id="loadMoreReviewsBtnDiv" class="align--center"></div>
+                            <!-- Comments Section -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <script>
     var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
