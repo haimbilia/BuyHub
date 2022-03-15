@@ -194,7 +194,7 @@ class ImageController extends FatController
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'MINI':
-                return AttachedFile::displayImage($image_name, 50, 50, 'promotions/', 'shop_default.jpg');
+                return AttachedFile::displayImage($image_name, 50, 50, $default_image);
                 break;
             default:
                 return AttachedFile::displayImage($image_name, 50, 50, $default_image);
@@ -800,7 +800,7 @@ class ImageController extends FatController
 
     public function slide($slide_id, $screen = 0, $lang_id, $sizeType = '', $displayUniversalImage = true)
     {
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'banner-default-image.png';
         $slide_id = FatUtility::int($slide_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, $displayUniversalImage, $screen);
@@ -810,7 +810,7 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getSlideData($sizeType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
@@ -856,7 +856,7 @@ class ImageController extends FatController
     public function banner($banner_id, $collectionLayoutType, $lang_id, $screen = 0,  $sizeType = '', $displayUniversalImage = true)
     {
 
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'banner-default-image.png';
         $banner_id = FatUtility::int($banner_id);
         $sizeType = strtoupper($sizeType);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, $displayUniversalImage, $screen);
@@ -866,7 +866,7 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getBannerData($sizeType, $collectionLayoutType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
@@ -936,15 +936,16 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
+        $default_image = 'banner-default-image.png';       
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_IMAGE, $sizeType);
 
         if ($sizeType) {
 
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
 
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
 
@@ -966,12 +967,12 @@ class ImageController extends FatController
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_BG_IMAGE, $sizeType);
 
+        $default_image = 'banner-default-image.png';
         if ($sizeType) {
-
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
 
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
 
@@ -1072,13 +1073,14 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, $sizeType);
+        $default_image = 'seller-bg.png';
 
         if ($sizeType) {
 
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
 
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
 
@@ -1123,10 +1125,12 @@ class ImageController extends FatController
 
     public function pushNotificationImage($pNotificationId, $sizeType = '')
     {
+        $default_image = 'no_image.jpg';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        AttachedFile::displayOriginalImage($image_name);
+        
+        AttachedFile::displayOriginalImage($image_name, $default_image);
     }
 
     public function plugin($recordId, $sizeType = '', $displayUniversalImage = true)
@@ -1152,6 +1156,7 @@ class ImageController extends FatController
 
     public function review($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $displayUniversalImage = true)
     {
+        $default_image = 'no_image.jpg';
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);
         $lang_id = FatUtility::int($lang_id);
@@ -1172,10 +1177,10 @@ class ImageController extends FatController
 
         if ($sizeType) {
 
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
 
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
 
@@ -1200,7 +1205,7 @@ class ImageController extends FatController
 
     public function badgeIcon($badgeId, $langId = 0, $sizeType = '')
     {
-        $default_image = 'product_default_image.jpg';
+        $default_image = 'badge_default.png';
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
@@ -1229,7 +1234,7 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
-        $default_image = 'no_image.jpg';
+        $default_image = 'badge_default.png';
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BADGE_REQUEST_IMAGE, $sizeType);
 
         if ($sizeType) {

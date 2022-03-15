@@ -61,7 +61,8 @@
         }
     }
     [dir="rtl"] & {
-        i, svg {
+        i,
+        svg {
             transform: rotate(180deg);
         }
     }

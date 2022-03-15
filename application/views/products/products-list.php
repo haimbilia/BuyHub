@@ -16,9 +16,6 @@ if ($vtype == 'list') {
 ?>
 <div id="productsList" class="<?php echo $productListClass ?>">
     <?php
-    if ($vtype == 'map') {
-        include(CONF_THEME_PATH . 'products/products-list-map.php');
-    } else {
     ?>
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php
@@ -41,7 +38,7 @@ if ($vtype == 'list') {
                     }
 
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
-                    <div class="item">
+                    <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
                         <!--product tile-->
                         <div class="products">
                             <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product, 'siteLangId' => $siteLangId], false); ?>
@@ -120,8 +117,7 @@ if ($vtype == 'list') {
                 $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
         ?>
-<?php }
-        }
+<?php }        
 ?>
 </div>
 

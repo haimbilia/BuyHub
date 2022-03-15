@@ -158,8 +158,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             </li> -->
                             <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                                 <li class="page-views">
-                                    <button class="btn btn-outline-black btn-map-view listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
-                                        Map view <span class="toggle-icon"></span>
+                                    <button class="btn btn-outline-black btn-map-view <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
+                                        <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
                             <?php } ?>
@@ -169,58 +169,67 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 
                 </div>
             </div>
-            <div class="collection-listing <?php echo $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
-                <aside class="collection-sidebar productFilters-js" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
-                </aside>
-                <main class="collection-content">
-                    <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
-                        <i class="icn">
-                            <svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
-                            </svg>
-                        </i>
-                    </button>
+            <?php
+            $productsData = array(
+                'products' => $products,
+                'tLeftRibbons' => $tLeftRibbons ?? [],
+                'tRightRibbons' => $tRightRibbons ?? [],
+                'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],
+                'page' => $page,
+                'pageCount' => $pageCount,
+                'postedData' => $postedData,
+                'recordCount' => $recordCount,
+                'siteLangId' => $siteLangId,
+                'pageSize' => $pageSize,
+                'pageSizeArr' => $pageSizeArr,
+            );
+            if (!isset($postedData['vtype']) || (isset($postedData['vtype']) && $postedData['vtype'] != "map")) { ?>
+                <div class="collection-listing filter-left">
+                    <aside class="collection-sidebar productFilters-js" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
+                    </aside>
+                    <main class="collection-content">
+                        <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
+                            <i class="icn">
+                                <svg class="svg">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                                </svg>
+                            </i>
+                        </button>
 
-                    <?php
-                    $productsData = array(
-                        'products' => $products,
-                        'tLeftRibbons' => $tLeftRibbons ?? [],
-                        'tRightRibbons' => $tRightRibbons ?? [],
-                        'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],
-                        'page' => $page,
-                        'pageCount' => $pageCount,
-                        'postedData' => $postedData,
-                        'recordCount' => $recordCount,
-                        'siteLangId' => $siteLangId,
-                        'pageSize' => $pageSize,
-                        'pageSizeArr' => $pageSizeArr,
-                    );
-                    if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
-                        <div class="interactive-stores">
-                            <div class="interactive-stores-map">
-                                <div class="map-loader is-loading">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-                                        <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite">
-                                            </animateTransform>
-                                        </path>
-                                    </svg>
+                        <?php
+                        if (false && isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
+                            <div class="interactive-stores">
+                                <div class="interactive-stores-map">
+                                    <div class="map-loader is-loading">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                                            <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                                <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite">
+                                                </animateTransform>
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div class="canvas-map" id="productMap--js"> </div>
                                 </div>
-                                <div class="canvas-map" id="productMap--js"> </div>
+                                <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                             </div>
-                            <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
-                        </div>
-                    <?php } else { ?>
-                        <div class="">
-                            <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
-                        </div>
-                    <?php } ?>
-                </main>
-
-            </div>
+                        <?php } else { ?>
+                            <div class="">
+                                <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
+                            </div>
+                        <?php } ?>
+                    </main>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </section>
+<?php
+if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {
+    include(CONF_THEME_PATH . 'products/products-list-map-view.php');
+    //$this->includeTemplate('products/products-list-map-view.php', $productsData, false)
+   
+} ?>
+
 <section>
     <div class="container">
         <div class="row">

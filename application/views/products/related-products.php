@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if ($relatedProductsRs) { ?>
     <div class="container">
-        <div class="section-head section-head-center">
+        <div class="section-head">
             <div class="section-heading">
                 <h2><?php echo Labels::getLabel('LBL_Similar_Products', $siteLangId); ?>
                 </h2>
@@ -59,5 +59,5 @@ if ($relatedProductsRs) { ?>
             } ?>
         </div>
     </div>
-    <div class="gap"></div>
+
 <?php }

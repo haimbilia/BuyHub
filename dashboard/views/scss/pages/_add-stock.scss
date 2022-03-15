@@ -1,4 +1,5 @@
 .add-stock {
+    position: relative;
     // display: flex;
     // justify-content: space-between;
     @include media-breakpoint-up(lg) {
@@ -24,6 +25,9 @@
                 min-width: 190px;
             }
         }
+    }
+    .sticky-top {
+        top: 105px;
     }
 
     .card {

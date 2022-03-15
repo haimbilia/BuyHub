@@ -6,19 +6,19 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 }
 
 $vtype = $postedData['vtype'] ?? false;
-$productListClass = '';
-if ($vtype == 'list') {
-    $productListClass = 'listing-products--list';
-} elseif ($vtype == 'grid') {
-    $productListClass = 'listing-products--grid';
-}
+// $productListClass = '';
+// if ($vtype == 'list') {
+//     $productListClass = 'listing-products--list';
+// } elseif ($vtype == 'grid') {
+//     $productListClass = 'listing-products--grid';
+// }
 
 ?>
-<div id="productsList" class="<?php echo $productListClass ?>">
+<div id="productsList" class="<?php // echo $productListClass; ?>">
     <?php
-    if ($vtype == 'map') {
-        include(CONF_THEME_PATH . 'products/products-list-map.php');
-    } else {
+    // if (false && $vtype == 'map') {
+    //     include(CONF_THEME_PATH . 'products/products-list-map.php');
+    // } else {
     ?>
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php if ($products) {
@@ -101,5 +101,6 @@ if ($vtype == 'list') {
                 $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message)); ?>
 <?php }
-        } ?>
+       // } 
+       ?>
 </div>
