@@ -569,7 +569,7 @@ class SlidesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'dragdrop',
+            //'dragdrop',
             'select_all',
             'listSerial',
             'slide_media',

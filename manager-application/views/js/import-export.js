@@ -89,10 +89,10 @@
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
-                            $.ykmsg.success(ans.msg);
+                            fcom.displaySuccessMessage(ans.msg);
                         } else {
                             $('#fileupload_div').html('');
-                            $.ykmsg.error(ans.msg);
+                            fcom.displayErrorMessage(ans.msg);
                         }
 
                         if (typeof ans.CSVfileUrl !== 'undefined') {
@@ -103,7 +103,7 @@
                             }, 1000);
                         } */
                     } catch (exc) {
-                        $.ykmsg.error(t);
+                        fcom.displayErrorMessage(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

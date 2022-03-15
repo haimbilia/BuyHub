@@ -12,7 +12,7 @@ class ShopsController extends MyAppController
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $this->set('searchForm', $searchForm);
         $this->_template->addJs('js/slick.min.js');
-        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
         $this->_template->render();
     }
 
@@ -23,7 +23,7 @@ class ShopsController extends MyAppController
         $searchForm->fill($params);
         $this->set('searchForm', $searchForm);
         $this->_template->addJs('js/slick.js');
-        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
         $this->_template->render();
     }
 
@@ -85,7 +85,7 @@ class ShopsController extends MyAppController
             )
         );
 
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $srch->addMultipleFields(['shop_lat', 'shop_lng']);
         }
 
@@ -174,7 +174,7 @@ class ShopsController extends MyAppController
             $this->_template->render();
         }
 
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
         } else {
             $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
@@ -912,12 +912,12 @@ class ShopsController extends MyAppController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);
-
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);        
+        $default_image = 'banner-default-image.png';
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-            AttachedFile::displayOriginalImage($image_name);
+            AttachedFile::displayOriginalImage($image_name, $default_image);
         }
         
     }

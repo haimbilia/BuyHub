@@ -1,9 +1,9 @@
 <?php
 class UrlHelper extends FatUtility
-{
+{    
     public static function getCurrUrl()
     {
-        return self::getUrlScheme() . $_SERVER["REQUEST_URI"];
+        return self::getUrlScheme() . $_SERVER["REQUEST_URI"];        
     }
 
     public static function getUrlScheme()
@@ -220,5 +220,16 @@ class UrlHelper extends FatUtility
             $arr[strstr($val, '=', true)] = substr(strstr($val, '='), 1);
         }
         return $arr;
+    }
+
+    public static function getCacheTimestamp($langId)
+    {
+        $cacheTimeStamp = CacheHelper::get('cacheTimeStamp' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$cacheTimeStamp || empty($cacheTimeStamp)) {
+            $cacheTimeStamp = date('Y-m-d H:i:s');
+            CacheHelper::create('cacheTimeStamp' . $langId, $cacheTimeStamp);
+        }      
+
+        return AttachedFile::setTimeParam($cacheTimeStamp);
     }
 }

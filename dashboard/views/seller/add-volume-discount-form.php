@@ -40,7 +40,7 @@ if (!empty($data) && 0 < count($data)) {
         var ele = $(".selProd--js");
         ele.select2({
                 closeOnSelect: true,
-                dropdownParent: ele.closest('.modal'),
+                dropdownParent: ele.closest('form'),
                 dir: langLbl.layoutDirection,
                 allowClear: true,
                 placeholder: ele.attr("placeholder"),
@@ -58,7 +58,7 @@ if (!empty($data) && 0 < count($data)) {
                     processResults: function(data, params) {
                         params.page = params.page || 1;
                         return {
-                            results: data.products,
+                            results: data.results,
                             pagination: {
                                 more: params.page < data.pageCount,
                             },
@@ -66,13 +66,7 @@ if (!empty($data) && 0 < count($data)) {
                     },
                     cache: true,
                 },
-                minimumInputLength: 0,
-                templateResult: function(result) {
-                    return result.name;
-                },
-                templateSelection: function(result) {
-                    return result.name || result.text;
-                },
+                minimumInputLength: 0,                
             })
             .on("select2:selecting", function(e) {
                 var parentForm = $(this).closest("form").attr("id");
@@ -92,14 +86,11 @@ if (!empty($data) && 0 < count($data)) {
                 $("input[name='voldiscount_percentage']")
                     .attr("disabled", "disabled")
                     .val("");
-            });
+            }).on('select2:open', function(e) {        
+                $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+            })
+            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");;
 
-        var select2Selector = ele.data("select2");
-        select2Selector.$container.addClass("custom-select2");
-        if (ele.attr('multiple') == undefined) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-        } else {
-            select2Selector.$container.addClass("custom-select2-multiple");
-        }
+       
     });
 </script>

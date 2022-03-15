@@ -7,7 +7,7 @@ if (count($arrListing) > 0) {
 
 		$div = $mainDiv->appendElement("div", array("class" => "notification__detail"));
 		$div->appendElement("a", ['href' => 'javascript:void(0)', 'onclick' => "redirectfunc(fcom.makeUrl('SystemLog'), {slog_id:" . $row['slog_id'] . "}, 0, false);", 'class' => 'title'], $types[$row['slog_type']]);
-		$div->appendElement("div", ['class' => 'summary'], $row['slog_title']);
+		$div->appendElement("div", ['class' => 'summary', 'data-bs-toggle' => 'tooltip', 'title' => $row['slog_title']], $row['slog_title']);
 
 		$mainDiv->appendElement("a", ['class' => 'notification__time'], HtmlHelper::getRelativeTime($row['slog_created_at'], $siteLangId));
 		echo $mainDiv->getHtml();

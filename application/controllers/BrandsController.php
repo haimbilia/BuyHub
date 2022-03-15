@@ -54,7 +54,7 @@ class BrandsController extends MyAppController
                 $brandProducts = $db->fetchAll($prodRs);
 
                 foreach ($brandProducts as &$brandProduct) {
-                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($brandProduct['product_id'], "MEDIUM", $brandProduct['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($brandProduct['product_id'], ImageDimension::VIEW_MEDIUM, $brandProduct['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $brandProduct['discounted_text'] = CommonHelper::showProductDiscountedText($brandProduct, $this->siteLangId);
                     $brandProduct['product_image'] = $mainImgUrl;
                     $brandProduct['currency_selprod_price'] = CommonHelper::displayMoneyFormat($brandProduct['selprod_price'], true, false, false);
@@ -104,7 +104,7 @@ class BrandsController extends MyAppController
         $get['brand_id'] = $brandId;
         $get['brand'] = array($brandId); /*For filters*/
         $get['vtype']  = $get['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
         $frm->fill($get);

@@ -28,7 +28,7 @@
     }
     ?>
 </div>
-<div class="card-body">
+<div class="card-table">
     <div class="js-scrollable table-wrap table-responsive">
         <?php
         $arr_flds = array(
@@ -93,13 +93,18 @@
                     case 'action':
                         $ul = $td->appendElement("ul", array("class" => "actions"));
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"), '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>', true);
+                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"), 
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>', true);
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['splatform_id'] . ")"), '<i class="fa fa-trash"></i>', true);
+                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['splatform_id'] . ")"), '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>', true);
                         break;
                     default:
                         $td->appendElement('plaintext', array(), $row[$key], true);

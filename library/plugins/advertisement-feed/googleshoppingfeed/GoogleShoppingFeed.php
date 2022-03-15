@@ -104,7 +104,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setItemGroupId($prodDetail['abprod_item_group_identifier']);
             $product->setBrand(ucfirst($prodDetail['brand_name']));
             $product->setLink(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id'])));
-            $product->setImageLink(UrlHelper::generateFullUrl('image', 'product', array($prodDetail['product_id'], "MEDIUM", $prodDetail['selprod_id'], 0, $this->langId)));
+            $product->setImageLink(UrlHelper::generateFullUrl('image', 'product', array($prodDetail['product_id'], ImageDimension::VIEW_MEDIUM, $prodDetail['selprod_id'], 0, $this->langId)));
             $product->setContentLanguage(strtolower($prodDetail['language_code']));
             $product->setTargetCountry(strtoupper($prodDetail['country_code']));
             $product->setChannel('online');

@@ -3,10 +3,10 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl('Configurations', 'testEmail'), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 1) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 return false;
             }
-            $.ykmsg.error(ans.msg);
+            fcom.displayErrorMessage(ans.msg);
         });
     });
 
@@ -33,8 +33,8 @@ $(document).ready(function () {
             inputElement.attr('data-min_height', 85)
         }
     });
-    $(document).on('change', '.defaultLocationGeoFilter', function () {
-        if ($(this).val() == 1) {
+    $(document).on('change', 'input[name="CONF_DEFAULT_GEO_LOCATION"]', function () {     
+        if ($(this).prop("checked")) {
             $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
             $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
             $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
@@ -179,16 +179,16 @@ $(document).ready(function () {
             success: function (ans) {
                 fcom.removeLoader();
                 if (!ans.status) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                 }
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 getForm(formType, langId);
                 $("#modalBoxJs").modal("hide");
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {
-                    $.ykmsg.error(xhr.responseText);
+                    fcom.displayErrorMessage(xhr.responseText);
                     return;
                 }
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -271,17 +271,17 @@ updateVerificationFile = function (inputBtn, fileType) {
             processData: false,
             success: function (ans) {
                 if (!ans.status) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return false;
                     return;
                 }
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 getForm(document.frmConfiguration.form_type.value);
                 
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {
-                    $.ykmsg.error(xhr.responseText);
+                    fcom.displayErrorMessage(xhr.responseText);
                     return;
                 }
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

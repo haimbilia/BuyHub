@@ -26,7 +26,7 @@ foreach ($shippingRates as $pickUpBy => $levelItems) {
         foreach ($levelItems['products'] as $product) {
             $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
             $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-            $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+            $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
 
             $productItems[$pickUpBy]['products'][] = $product;
         }

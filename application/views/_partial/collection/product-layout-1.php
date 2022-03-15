@@ -33,14 +33,19 @@
                     <div class="item">
                         <?php
                         $displayProductNotAvailableLable = false;
-                        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                             $displayProductNotAvailableLable = true;
                         }
                         include('product-layout-1-list.php'); ?>
                     </div>
                 <?php } ?>
-            </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+            </div>
+            <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+                <div class="section-foot">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?>
+                    </a>
+                </div>
             <?php } ?>
         </div>
     </section>

@@ -12,7 +12,6 @@
             </div>
             <div class="category-layout-1">
                 <?php foreach ($collection['categories'] as $category) {
-
                 ?>
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
@@ -55,9 +54,7 @@
                         </div>
                     </div>
                 <?php } ?>
-
             </div>
-
         </div>
     </section>
 <?php } ?>

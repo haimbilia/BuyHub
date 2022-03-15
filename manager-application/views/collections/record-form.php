@@ -96,7 +96,7 @@ $errorMsg = CommonHelper::replaceStringData($str, ['{LIMIT}' => Collections::LIM
         }, function(e) {
             e.preventDefault();
             if (recordLimit <= $(e.currentTarget).val().length) {
-                $.ykmsg.error('<?php echo $errorMsg; ?>');
+                fcom.displayErrorMessage('<?php echo $errorMsg; ?>');
                 return;
             }
             updateRecord(e, recordId);

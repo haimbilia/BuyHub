@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $displayProductNotAvailableLable = false;
-if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
 ?>
@@ -15,7 +15,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                                                                         $product['selprod_id']
                                                                                                                     )); ?>"><img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array(
                                                                                                                                                     $product['product_id'],
-                                                                                                                                                    "SMALL",
+                                                                                                                                                    ImageDimension::VIEW_SMALL,
                                                                                                                                                     $product['selprod_id'],
                                                                                                                                                     0,
                                                                                                                                                     $siteLangId
@@ -28,11 +28,15 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                                                     $product['selprod_id']
                                                                                                 )); ?>"><?php echo $product['selprod_title']; ?></a></h5>
                                 <?php if (round($product['prod_rating']) > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                                ?> <div class="product-ratings"><i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                </use>
-                                            </svg> </i><span class="rate"><?php echo round($product['prod_rating'], 1); ?></span> </div> <?php
-                                                                                                                                        } ?>
+                                ?> <div class="product-ratings">
+                                        <svg class="svg" width="14" height="14">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                            </use>
+                                        </svg>
+                                        <span class="rate"><?php echo round($product['prod_rating'], 1); ?>
+                                        </span>
+                                    </div> <?php
+                                        } ?>
                             </div>
                         </div>
                     </div>
@@ -89,7 +93,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                 <img data-ratio="1:1 (150x150)" src="' . UrlHelper::generateFileUrl('image', 'shopLogo', array(
                                             $moresellers['shop_id'],
                                             $siteLangId,
-                                            'SMALL'
+                                            ImageDimension::VIEW_THUMB
                                         )) . '" alt="' . $moresellers['shop_name'] . '">
                                                             </a>
                                                         </figure>
@@ -110,12 +114,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                             </div>';
                                         if (isset($product['rating'][$moresellers['selprod_user_id']]) && $product['rating'][$moresellers['selprod_user_id']] > 0) {
                                             $txt .= '<div class="product-ratings">
-                                                                            <i class="icn">
-                                                                                <svg class="svg">
-                                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#star-yellow" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#star-yellow">
+                                                                            
+                                                                                <svg class="svg" width="14" height="14">
+                                                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#star-yellow" >
                                                                                     </use>
                                                                                 </svg>
-                                                                            </i>
+                                                                            
                                                                             <span class="rate">
                                                                                 ' . round($product['rating'][$moresellers['selprod_user_id']], 1) . '
                                                                             </span>

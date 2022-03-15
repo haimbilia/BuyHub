@@ -298,7 +298,7 @@ class ImageAttributesController extends ListingBaseController
     {
         $imgAttrCacheVar = CacheHelper::get('imgAttrCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($imgAttrCacheVar) {
-            return json_decode($imgAttrCacheVar);
+            return json_decode($imgAttrCacheVar, true);
         }
 
         $arr = [

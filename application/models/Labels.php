@@ -67,7 +67,7 @@ class Labels extends MyAppModel
     {
         $labelsPrefixes = CacheHelper::get('labelsPrefixes' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($labelsPrefixes) {
-            return json_decode($labelsPrefixes);
+            return json_decode($labelsPrefixes, true);
         }
 
         $arr =

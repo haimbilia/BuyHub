@@ -1,24 +1,24 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
-if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
 
 $vtype = $postedData['vtype'] ?? false;
-$productListClass = '';
-if ($vtype == 'list') {
-    $productListClass = 'listing-products--list';
-} elseif ($vtype == 'grid') {
-    $productListClass = 'listing-products--grid';
-}
+// $productListClass = '';
+// if ($vtype == 'list') {
+//     $productListClass = 'listing-products--list';
+// } elseif ($vtype == 'grid') {
+//     $productListClass = 'listing-products--grid';
+// }
 
 ?>
-<div id="productsList" class="<?php echo $productListClass ?>">
+<div id="productsList" class="<?php // echo $productListClass; ?>">
     <?php
-    if ($vtype == 'map') {
-        include(CONF_THEME_PATH . 'products/products-list-map.php');
-    } else {
+    // if (false && $vtype == 'map') {
+    //     include(CONF_THEME_PATH . 'products/products-list-map.php');
+    // } else {
     ?>
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php if ($products) {
@@ -54,9 +54,9 @@ if ($vtype == 'list') {
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
                                         <?php
                                         $pictureAttr = [
-                                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
-                                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP'.ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
                                             'data-ratio' => "1:1",
                                             'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']
@@ -101,5 +101,6 @@ if ($vtype == 'list') {
                 $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message)); ?>
 <?php }
-        } ?>
+       // } 
+       ?>
 </div>

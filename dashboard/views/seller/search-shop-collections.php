@@ -29,7 +29,7 @@
     }
     ?>
 </div>
-<div class="card-body">
+<div class="card-table">
     <div class="table-wrap">
         <?php
         $arr_flds = array(
@@ -81,7 +81,6 @@
                         break;
 
                     case 'scollection_active':
-                        /* $td->appendElement( 'plaintext', array(), $activeInactiveArr[$row[$key]],true ); */
                         $active = "";
                         if (applicationConstants::ACTIVE == $row['scollection_active']) {
                             $active = 'checked';
@@ -104,10 +103,10 @@
                                     "onclick" => "getShopCollectionGeneralForm(" . $row['scollection_id'] . ")"
                                 ),
                                 '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>',
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>',
                                 true
                             );
 
@@ -118,7 +117,11 @@
                                     'href' => "javascript:void(0)", 'class' => 'button small green',
                                     'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteShopCollection(" . $row['scollection_id'] . ")"
                                 ),
-                                '<i class="fa fa-trash"></i>',
+                                '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>',
                                 true
                             );
                         }
@@ -152,5 +155,4 @@
         } ?>
         </form>
     </div>
-
 </div>

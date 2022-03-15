@@ -41,6 +41,22 @@ var Dashboard = function () {
 }();
 Dashboard.init();
 
+$(document).on('click', '#showPass', function () {
+    var passInput = $("#password");
+    if ('' == passInput.val()) {
+        return;
+    }
+
+    if (passInput.attr('type') === 'password') {
+        passInput.attr('type', 'text');
+        $(this).addClass('field-password-show');
+    } else {
+        passInput.attr('type', 'password');
+        $(this).removeClass('field-password-show');
+    }
+});
+
+
 $(document).on('click', '.menu-toggle ', function () {
     if (!$(this).parent().hasClass("is--active") && $(".collections-ui").hasClass("is--active")) {
         $(".collections-ui").removeClass("is--active")
@@ -262,28 +278,6 @@ $(document).ready(function () {
 
 });
 
-/*ripple effect*/
-$(function () {
-    var ink, d, x, y;
-    $(".ripplelink, .slick-arrow").click(function (e) {
-        if ($(this).find(".ink").length === 0) {
-            $(this).prepend("<span class='ink'></span>");
-        }
-        ink = $(this).find(".ink");
-        ink.removeClass("animate");
-
-        if (!ink.height() && !ink.width()) {
-            d = Math.max($(this).outerWidth(), $(this).outerHeight());
-            ink.css({ height: d, width: d });
-        }
-        x = e.pageX - $(this).offset().left - ink.width() / 2;
-        y = e.pageY - $(this).offset().top - ink.height() / 2;
-        ink.css({ top: y + 'px', left: x + 'px' }).addClass("animate");
-    });
-});
-
-
-
 /*back-top*/
 $(document).ready(function () {
     /* hide #back-top first */
@@ -326,55 +320,29 @@ $(document).ready(function () {
         }, 2500);
     });
 
+    $('[data-bs-toggle="popover"]').popover();
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 
 
+$(document).ajaxComplete(function () {
+    $('[data-bs-toggle="popover"]').popover();
 
-/*  like animation  */
-$(document).ready(function () {
-    var debug = /*true ||*/ false;
-    var h = document.querySelector('.heart-wrapper-Js');
-
-    /*   function toggleActivate(){
-        h.classList.toggle('is-active');
-      }   */
-
-    if (debug) {
-        var elts = Array.prototype.slice.call(h.querySelectorAll(':scope > *'), 0);
-        var activated = false;
-        var animating = false;
-        var count = 0;
-        var step = 1000;
-
-        function setAnim(state) {
-            elts.forEach(function (elt) {
-                elt.style.animationPlayState = state;
-            });
-        }
-
-        h.addEventListener('click', function () {
-            if (animating) return;
-            if (count > 27) {
-                h.classList.remove('is-active');
-                count = 0;
-                return;
-            }
-            if (!activated) h.classList.add('is-active') && (activated = true);
-
-            animating = true;
-
-            setAnim('running');
-            setTimeout(function () {
-                setAnim('paused');
-                animating = false;
-            }, step);
-        }, false);
-
-        setAnim('paused');
-        elts.forEach(function (elt) {
-            elt.style.animationDuration = step / 1000 * 27 + 's';
-        });
-    }
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 
 $(function () {
@@ -390,7 +358,6 @@ $(function () {
         elem = this;
         initialize();
     };
-
     function initialize() {
         total_li = $(elem).children('ul').children('li').length;
         limit = settings.limit;
@@ -625,7 +592,7 @@ function loadGeoLocation() {
     });
 }
 
-function setGeoAddress(data) {    
+function setGeoAddress(data) {
     var address = '';
     setCookie('_ykGeoLat', data.lat);
     setCookie('_ykGeoLng', data.lng);
@@ -653,7 +620,7 @@ function setGeoAddress(data) {
     var formatedAddr = ('undefined' == typeof data.formatted_address) ? '' : data.formatted_address;
     address = ('' == address) ? formatedAddr : address;
 
-    setCookie('_ykGeoAddress', address);    
+    setCookie('_ykGeoAddress', address);
 
     return address;
 }
@@ -695,6 +662,7 @@ function getCookie(cname) {
 function displayGeoAddress(address) {
     if (0 < $("#ga-autoComplete-header").length) {
         $("#ga-autoComplete-header").val(address);
+        $(".geo-location-selected").text(address);        
     }
 }
 
@@ -706,9 +674,9 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
     var fieldElement = document.getElementById(elementId);
     setTimeout(function () { $("#" + elementId).attr('autocomplete', 'no'); }, 500);
-    var options = { 
+    var options = {
         /* types: ['address'] */
-        fields: ["formatted_address", "geometry", "name","address_components"],
+        fields: ["formatted_address", "geometry", "name", "address_components"],
     }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -736,7 +704,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
                     data['city'] = value;
                 }
             }
-            address = setGeoAddress(data);           
+            address = setGeoAddress(data);
             if ('' == address) {
                 var msg = (langLbl.fieldNotFound).replace('{field}', field);
                 fcom.displayErrorMessage(msg);
@@ -1026,14 +994,14 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
     }
     HTMLMarker.prototype.onAdd = function () {
         this.div = document.createElement('DIV');
-        this.div.className = "float-price " + (this.isDefault == 1?'float-brand':'') ;
-        this.div.style.position = 'absolute';      
+        this.div.className = "float-price " + (this.isDefault == 1 ? 'float-brand' : '');
+        this.div.style.position = 'absolute';
         this.div.innerHTML = this.pointerText;
         var panes = this.getPanes();
         panes.overlayImage.appendChild(this.div);
         var me = this;
         google.maps.event.addDomListener(this.div, 'click', function () {
-            infowindow.setContent(me.content);          
+            infowindow.setContent(me.content);
             infowindow.setPosition(new google.maps.LatLng(me.lat, me.lng));
             infowindow.open(map);
         });
@@ -1102,7 +1070,7 @@ function clearMarkers() {
 
 function createCustomMarkers(customMarkers) {
     $.each(customMarkers, function (index, marker) {
-        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content , marker.isDefault);
+        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content, marker.isDefault);
         customMarker[index].setMap(map);
     });
 }

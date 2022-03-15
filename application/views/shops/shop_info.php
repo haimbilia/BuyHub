@@ -1,101 +1,106 @@
 <?php if (isset($shop)) { ?>
     <div class="shop-information">
-        <div class="shop-logo">
-            <?php
-            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
-            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-            ?>
-            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, 'SMALL')); ?>" alt="<?php echo $shop['shop_name']; ?>">
-        </div>
-
-        <div class="shop-info">
-            <div class="shop-detail">
-                <h6 class="shop-title">
+        <div class="shop-information-start">
+            <div class="shop-information-logo">
+                <?php
+                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
+                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                ?>
+                <img width="" height="" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>">
+            </div>
+            <div class="shop-information-detail">
+                <h6 class="title">
                     <?php echo $shop['shop_name']; ?>
-                    <span class="blk-txt"><?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
+                    <span class="blk-txt">
+                        <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
                             <?php $date = new DateTime($shop['user_regdate']);
                             echo $date->format('M d, Y'); ?>
                         </strong></span>
                 </h6>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                    <div class="product-ratings"> <i class="icn"><svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                            </svg></i> <span class="rate"><?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5';
-                                                            if ($shopTotalReviews) { ?>
-                                - <a href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
-                            <?php } ?> </span>
+                    <div class="product-ratings">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                        </svg>
+                        <span class="rate">
+                            <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5';
+                            if ($shopTotalReviews) { ?>
+                                - <a class="link-black-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
+                            <?php } ?>
+                        </span>
                     </div>
                 <?php } ?>
-                <!-- Shop Badge  -->
+
                 <?php
                 $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
                 $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                 ?>
-                <!-- Shop Badge  -->
             </div>
-            <div class="shop-btn-group">
-                <a class="btn btn-brand btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
-                    <i class="icn" title="<?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?>">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"></use>
-                        </svg>
-                    </i>
-                </a>
-                <?php $showAddToFavorite = true;
-                if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
-                    $showAddToFavorite = false;
-                }
-                ?>
-                <?php if ($showAddToFavorite) { ?>
-                    <a href="javascript:void(0)" title="<?php echo ($shop['is_favorite']) ? Labels::getLabel('Lbl_Unfavorite_Shop', $siteLangId) : Labels::getLabel('Lbl_Favorite_Shop', $siteLangId); ?>" onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" class="btn btn-brand btn-sm <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?>" id="shop_<?php echo $shop['shop_id']; ?>"><i class="icn">
+        </div>
+        <?php if ($socialPlatforms) { ?>
+            <div class="shop-information-end">
+                <ul class="contact-social">
+                    <li class="contact-social-item">
+                        <a class="contact-social-link" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
                             <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
-                            </svg></i></a>
-                <?php } ?>
-                <?php $showMoreButtons = true;
-                if (isset($userParentId) && $userParentId == $shop['shop_user_id']) {
-                    $showMoreButtons = false;
-                } ?>
-                <?php if ($showMoreButtons) {
-                    $shopRepData = ShopReport::getReportDetail($shop['shop_id'], UserAuthentication::getLoggedUserId(true), 'sreport_id');
-                    if (false === UserAuthentication::isUserLogged() || empty($shopRepData)) { ?>
-                        <a href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>" class="btn btn-brand btn-sm">
-                            <i class="icn">
-                                <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
-                                </svg>
-                            </i>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"></use>
+                            </svg>
                         </a>
-                    <?php } ?>
-                    <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())))) { ?>
-                        <a href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>" class="btn btn-brand btn-sm">
-                            <i class="icn">
+                    </li>
+                    <?php $showAddToFavorite = true;
+                    if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
+                        $showAddToFavorite = false;
+                    }
+                    ?>
+                    <?php if ($showAddToFavorite) { ?>
+                        <li class="contact-social-item">
+                            <a class="contact-social-link" title="<?php echo ($shop['is_favorite']) ? Labels::getLabel('Lbl_Unfavorite_Shop', $siteLangId) : Labels::getLabel('Lbl_Favorite_Shop', $siteLangId); ?>" onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?> id="shop_<?php echo $shop['shop_id']; ?>">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
-                                </svg></i></a>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
+                                </svg>
+                            </a>
+                        </li>
                     <?php } ?>
-                <?php } ?>
-            </div>
-            <?php if ($socialPlatforms) { ?>
-                <div class="contact-social">
-                    <h5><strong><?php echo Labels::getLabel('LBL_Follow_Us', $siteLangId); ?></strong> </h5>
+                    <?php $showMoreButtons = true;
+                    if (isset($userParentId) && $userParentId == $shop['shop_user_id']) {
+                        $showMoreButtons = false;
+                    } ?>
+                    <?php if ($showMoreButtons) {
+                        $shopRepData = ShopReport::getReportDetail($shop['shop_id'], UserAuthentication::getLoggedUserId(true), 'sreport_id');
+                        if (false === UserAuthentication::isUserLogged() || empty($shopRepData)) { ?>
+                            <li class="contact-social-item">
+                                <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
+                                    </svg>
 
-                    <ul class="">
-                        <?php foreach ($socialPlatforms as $row) { ?>
-                            <li>
-                                <a <?php if ($row['splatform_url'] != '') { ?> target="_blank" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
-                                    <span class="icon-1">
-                                        <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
-                                    </span><span class="icon-2">
-                                        <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
-                                    </span>
                                 </a>
                             </li>
                         <?php } ?>
-                    </ul>
-                </div>
-            <?php } ?>
-        </div>
+                        <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())))) { ?>
+                            <li class="contact-social-item">
+                                <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
+                                    </svg> </a>
+                            </li>
+                        <?php } ?>
+                    <?php } ?>
+
+                    <?php foreach ($socialPlatforms as $row) { ?>
+                        <li class="contact-social-item">
+                            <a class="contact-social-link" <?php if ($row['splatform_url'] != '') { ?> target="_blank" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
+
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $row['splatform_icon_class']; ?>"></use>
+                                </svg>
+
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php } ?>
     </div>
 <?php } ?>
 <div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">

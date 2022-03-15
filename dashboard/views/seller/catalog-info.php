@@ -1,15 +1,15 @@
 <div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Catalog_info', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo $product['product_name']; ?></h5>
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <?php if ($productImagesArr) { ?>
                     <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                         <?php foreach ($productImagesArr as $afile_id => $image) {
-                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id']), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                            $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id']), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id']), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                            $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id']), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                             <?php if (isset($imageGallery) && $imageGallery) { ?>
                                 <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                                 <?php } ?>
@@ -20,15 +20,14 @@
                         <?php } ?>
                     </div>
                 <?php } else {
-                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                     <div class="item__main"><img src="<?php echo $mainImgUrl; ?>"></div>
                 <?php } ?>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="">
-                    <h3><?php echo $product['product_name']; ?></h3>
                     <div class="product-description-inner">
-                        <ul class="list-stats list-stats-double mt-4">
+                        <ul class="list-stats mt-4">
                             <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</span>
                                 <span class="value"><?php echo $product['prodcat_name']; ?></span>
@@ -67,9 +66,6 @@
                                                 <?php echo '<span>' . $specification['prodspec_name'] . " :</span> " . $specification['prodspec_value']; ?></li>
                                         <?php $count++;
                                         } ?>
-                                        <?php /*if (count($productSpecifications)>5) { ?>
-                                    <li class="link_li"><a href="javascript::void(0)"><?php echo Labels::getLabel('LBL_View_All_Details', $siteLangId); ?></a></li>
-                                    <?php }*/ ?>
                                     </ul>
                                 </div>
                             </div>
@@ -79,28 +75,20 @@
             </div>
         </div>
     </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 <script>
     var layoutDirection = '<?php echo CommonHelper::getLayoutDirection(); ?>';
-    if (layoutDirection == 'rtl') {
-        $('.js-product-gallery').slick({
-            dots: true,
-            arrows: false,
-            autoplay: false,
-            pauseOnHover: false,
-            slidesToShow: 1,
-            draggable: true,
-            rtl: true,
-        });
-    } else {
-        $('.js-product-gallery').slick({
-            dots: true,
-            arrows: false,
-            autoplay: false,
-            pauseOnHover: false,
-            slidesToShow: 1,
-            draggable: true,
-        });
-    }
+    var config = {
+        dots: true,
+        arrows: false,
+        autoplay: true,
+        pauseOnHover: false,
+        slidesToShow: 1,
+        draggable: true,
+    };
+    config['rtl'] = (layoutDirection == 'rtl');
+    $('.js-product-gallery').not('.slick-initialized').slick(config);
+    setTimeout(() => {
+        $('.js-product-gallery').slick('setPosition');
+    }, 500);
 </script>

@@ -3,42 +3,165 @@
     events.initiateCheckout();
 </script>
 
-<button class="order-summary-toggle" data-trigger="order-summary">
-    <span class="order-summary-toggle__inner">
-        <span class="order-summary-toggle__icon-wrapper me-2">
-            <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__icon">
-                <path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z">
-                </path>
-            </svg>
-        </span>
-        <span class="order-summary-toggle__text">
-            <span><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?><i class="arrow">
-                    <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"></use>
-                    </svg>
-
-                </i></span>
-        </span>
-        <span class="order-summary-toggle__total-recap total-recap">
-            <span class="total-recap__final-price" id="netAmountSummary"></span>
-        </span>
-    </span>
-</button>
-
-<section class="" data-content="">
+<section class="section" data-content="">
     <div class="container">
         <div class="checkout-page">
             <main class="checkout-page_main checkout-content-js"> </main>
             <aside class="checkout-page_aside sidebar" data-close-on-click-outside="">
-
-                <div id="order-summary" class="order-summary summary-listing-js">
+                <div class="cart-total summary-listing-js">
                     <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
+                </div>
+                <div class="secure m-4">
+                    <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
+                    <p> <?php echo Labels::getLabel('LBL_Safe_and_Secure_Payments_Easy_returns_100%_Authentic_products', $siteLangId); ?>
+                    </p>
+                </div>
+                <div class="review-total">
+                    <div class="review-total-head">
+                        <h3 class="review-total-title dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#review-cart" aria-haspopup="true" aria-expanded="false" aria-controls="review-cart">
+                            <?php echo Labels::getLabel('LBL_Review_Cart', $siteLangId); ?>
+                            <span class="count-items"> 4 Items</span><i class="dropdown-toggle-custom-arrow"></i>
+                        </h3>
+                    </div>
+                    <div class="review-total-body collapse" id="review-cart">
+                        <ul class="list-cart">
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="list-cart-item block-cart block-cart-sm">
+                                <div class="block-cart-img">
+                                    <div class="products-img">
+                                        <a href="/yokart/apple-iphone-12-187">
+                                            <picture>
+                                                <source type="image/webp" srcset="/yokart/image/product/76/WEBPEXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <source type="image/jpeg" srcset="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" media="(max-width: 767px),(max-width: 1024px)">
+                                                <img loading="lazy" data-ratio="" src="/yokart/image/product/76/EXTRA-SMALL/187/0/1?t=1625562358" alt="Apple iPhone 12" title="Apple iPhone 12">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+
+                                                <a class="title" title="Apple iPhone 12" href="/yokart/apple-iphone-12-187">Apple iPhone 12</a>
+                                                <div class="products-price">
+                                                    <span class="products-price-new">
+                                                        $250.00 </span>
+                                                </div>
+                                                <div class="options">
+                                                    Storage: 64 GB | Color: Green | Quantity: 1 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
 
             </aside>
         </div>
     </div>
 </section>
+<button class="btn-summary" data-trigger="order-summary">
+    <span class="btn-summary-text">
+        <?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?>
+        <svg class="svg arrow" width="16" height="16">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#arrow-right"></use>
+        </svg> </span>
+    <span class="btn-summary-price" id="netAmountSummary"></span>
+</button>
 <input id="hasAddress" class="d-none" value="<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1 ?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

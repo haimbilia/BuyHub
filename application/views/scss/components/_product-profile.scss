@@ -23,16 +23,21 @@
         }
     }
     &-data {
+        display: flex;
         flex: 1;
         min-width: 0px;
+        flex-direction: column;
         .title {
             color: $txt-body;
             font-weight: 500;
             //font-size: 0.88rem;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
             // white-space: nowrap;
             // overflow: hidden;
             // text-overflow: ellipsis;
+        }
+        .products-price {
+            margin-bottom: 1rem;
         }
         .options {
             font-size: 0.75rem;

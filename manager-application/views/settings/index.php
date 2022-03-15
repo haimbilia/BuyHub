@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-toolbar">
                     <div class="maintenance-mode">
-                        <label class="switch switch-sm">
+                        <label class="switch switch-sm switch-icon">
                             <?php
                             $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0);
                             $checked = applicationConstants::ON == $status ? 'checked' : '';

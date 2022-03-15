@@ -2,19 +2,13 @@
 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
 $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
 $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
-$imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-$imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+$imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
 ?>
 <ul class="list-cart list-shippings">
     <li class="list-cart-item shipping-select">
         <div class="shop-detail">
             <h6 class="shop-title">
-                <i class="icn">
-                    <svg class="svg" width="16" height="16">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
-                        </use>
-                    </svg>
-                </i>
                 <?php echo $product['shop_name']; ?>
             </h6>
             <div class="shipping-method">
@@ -44,8 +38,8 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
             </div>
         </div>
     </li>
-    <li class="list-cart-item">
-        <div class="block-img">
+    <li class="list-cart-item block-cart">
+        <div class="block-cart-img">
             <div class="products-img">
                 <a href="<?php echo $productUrl; ?>">
                     <?php
@@ -61,15 +55,20 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                     ?>
                 </a>
             </div>
-            <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                Remove
-            </button>
+
         </div>
-        <div class="block-detail">
-            <div class="block-detail-top">
+        <div class="block-cart-detail">
+            <div class="block-cart-detail-top">
                 <div class="product-profile">
                     <div class="product-profile-data">
                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                        <div class="products-price">
+                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                            <?php if ($product['special_price_found']) { ?>
+                                <span class="products-price-off">
+                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                            <?php } ?>
+                        </div>
                         <div class="options">
                             <?php if (isset($product['options']) && count($product['options'])) {
                                 $optionStr = '';
@@ -81,13 +80,8 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="block-detail-bottom">
-
                 <div class="product-quantity">
-                    <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
                     <div class="quantity quantity-sm">
-
                         <span class="decrease decrease-js">
                             <i class="icn">
                                 <svg class="svg" width="16" height="16">
@@ -104,15 +98,18 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                             </i></span>
                     </div>
                 </div>
+            </div>
+            <div class="block-cart-detail-bottom">
+                <ul class="cart-action">
+                    <li class="cart-action-item">
+                        <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                            <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                        </button>
+                    </li>
+                </ul>
 
 
-                <div class="products-price">
-                    <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                    <?php if ($product['special_price_found']) { ?>
-                        <span class="products-price-off">
-                            <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
-                    <?php } ?>
-                </div>
+
             </div>
         </div>
     </li>

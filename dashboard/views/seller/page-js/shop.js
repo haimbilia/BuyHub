@@ -160,8 +160,8 @@ $(document).on("change", ".state", function () {
         checkRunningAjax();
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function (t) {
+            fcom.removeLoader();
             runningAjaxReq = false;
-            $.mbsmessage.close();
             if (t.langId > 0 && t.shopId > 0) {
                 shopLangForm(t.shopId, t.langId);
                 return;
@@ -253,12 +253,7 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    getShopCollectionGeneralForm = function (scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
-        if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
-            scollection_id = 0;
-        }
-        showYkModalFooter();
+    getShopCollectionGeneralForm = function (scollection_id) { 
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
@@ -270,9 +265,8 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
-            $(ctabId).data('collectionId', t.collection_id);
+            fcom.removeLoader();          
             shopCollections();
-            $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
                 return;
@@ -285,7 +279,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollectionLang'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.scollection_id, t.langId);
             }
@@ -298,34 +292,24 @@ $(document).on("change", ".state", function () {
     };
 
     editShopCollectionLangForm = function (scollection_id, langId, autoFillLangData = 0) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
-        if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
-            return false;
-        }
         if (typeof (langId) == "undefined" || langId < 0) {
             return false;
         }
-
-        markPopupTabActive();
-        showYkModalFooter();
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
         });
     };
 
     sellerCollectionProducts = function (scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
-        }
-        markPopupTabActive();
-        showYkModalFooter();
+        }       
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
             bindAutoComplete();
         });
     };
@@ -334,7 +318,10 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
+            if("openMediaForm" in t){
+                collectionMediaForm(t.scollection_id);
+            }            
         });
     };
 
@@ -350,24 +337,20 @@ $(document).on("change", ".state", function () {
         });
     };
     addForm = function (splatformId) {
-
-        splatformId = splatformId || $(ctabId).data('splatformId');
+     
         if (splatformId < 0 || typeof (splatformId) == "undefined") {
             splatformId = 0;
-        }      
-        markSubTabActive();
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {  
-            $.ykmodal(t);               
-            fcom.removeLoader();            
+        }    
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [splatformId]), '', function (t) {
+            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
-
     setup = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
-            $(ctabId).data('splatformId',t.splatformId);
-            $.mbsmessage.close();
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {          
+            fcom.removeLoader();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
@@ -375,16 +358,14 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    addLangForm = function (splatformId, langId, autoFillLangData = 0) {
-        splatformId = splatformId || $(ctabId).data('splatformId');
+    addLangForm = function (splatformId, langId, autoFillLangData = 0) {       
         if (splatformId < 0 || typeof (splatformId) == "undefined") {
             return false;
-        }
-        markSubTabActive();
+        }       
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
+            $.ykmodal(t);
         });
     };
 
@@ -392,12 +373,12 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
-            $.mbsmessage.close();
+            fcom.removeLoader();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
                 addLangForm(t.splatformId, t.langId);
                 return;
-            } 
+            }
         });
     };
 
@@ -426,9 +407,9 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'changeSocialPlatformStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                $.ykmsg.success(ans.msg);
             } else {
-                $.mbsmessage(ans.msg, true, 'alert--danger');
+                $.ykmsg.error(ans.msg);
             }
         });
     };
@@ -448,12 +429,13 @@ $(document).on("change", ".state", function () {
     returnAddressForm = function () {
         if (1 > $(mtabId).data('shop_id')) {
             return;
-        }
-        fcom.displayProcessing();
+        } 
+        fcom.displayProcessing();       
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
-            fcom.closeAlertMessage();           
+            fcom.closeProcessing();
         });
     };
 
@@ -462,17 +444,16 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
             getReturnAddress();
-            if(0 < t.langId){
-                //returnAddressLangForm(t.langId);
-            }            
+            if (0 < t.langId) {
+                returnAddressLangForm(t.langId);
+            }
         });
     };
 
     returnAddressLangForm = function (langId, autoFillLangData = 0) {
-        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            fcom.closeAlertMessage();
             $.ykmodal(t);
         });
     };
@@ -508,8 +489,11 @@ $(document).on("change", ".state", function () {
     };
 
     pickupAddressForm = function (id, langId = 0) {
+        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id, langId]), '', function (t) {
             fcom.removeLoader();
+            fcom.closeProcessing();
             $.ykmodal(t, false, 'modal-dialog-vertical-md');
             setTimeout(function () { $('.fromTime-js').change(); }, 500);
         });
@@ -519,7 +503,7 @@ $(document).on("change", ".state", function () {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
-                $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
+                $.ykmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
         }
@@ -541,21 +525,15 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    collectionMediaForm = function (el, scollection_id) {
-        scollection_id = scollection_id || $(ctabId).data('collectionId');
+    collectionMediaForm = function (scollection_id) {      
         if (scollection_id < 0 || typeof (scollection_id) == "undefined") {
             return false;
         }
-        markPopupTabActive();   
-        hideYkModalFooter();     
         $(dvt).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
             fcom.removeLoader();
-            $(dvt).html(t);
-            $(el).parent().siblings().removeClass('is-active');
-            $(el).parent().addClass('is-active');
+            $.ykmodal(t);          
             shopCollectionImages(scollection_id);
-            
         });
     };
 
@@ -592,9 +570,9 @@ $(document).on("change", ".state", function () {
         fcom.ajax(fcom.makeUrl('Seller', 'changeShopCollectionStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, 'alert--success');
+                $.ykmsg.success(ans.msg);
             } else {
-                $.mbsmessage(ans.msg, true, 'alert--danger');
+                $.ykmsg.error(ans.msg);
             }
         });
     };
@@ -615,7 +593,7 @@ $(document).on("change", ".state", function () {
     };
 
     bannerPopupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
@@ -644,7 +622,7 @@ $(document).on("change", ".state", function () {
     };
 
     logoPopupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.updateWithAjax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
@@ -652,14 +630,9 @@ $(document).on("change", ".state", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
-                var minHeight = document.frmShopLogo.logo_min_height.value;
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                var minHeight = document.frmShopLogo.logo_min_height.value;               
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
@@ -705,14 +678,17 @@ $(document).on("change", ".state", function () {
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 $("#modalBoxJs").modal("hide");
-                $.mbsmessage.close();
+                fcom.removeLoader();
                 if (ans.status == true) {
-                    $.mbsmessage(ans.msg, true, 'alert--success');
+                    $.ykmsg.success(ans.msg);
                     shopImages(imageType, slideScreen, langId);
                 } else {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');
+                    $.ykmsg.error(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -742,7 +718,7 @@ $(document).on("change", ".state", function () {
                     imageSmoothingQuality: 'high',
                     imageSmoothingEnabled: true,
                 };
-                $(inputBtn).val('');            
+                $(inputBtn).val('');
                 setTimeout(function () { cropImage(file, options, 'uploadCollectionImage', inputBtn); }, 100);
             });
         }
@@ -762,16 +738,18 @@ $(document).on("change", ".state", function () {
             data: formData,
             cache: false,
             contentType: false,
-            processData: false,           
+            processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
             success: function (ans) {
                 fcom.removeLoader();
-                $.mbsmessage.close();             
                 $("#modalBoxJs").modal("hide");
                 if (ans.status == true) {
-                    $.mbsmessage(ans.msg, true, 'alert--success');                 
+                    $.ykmsg.success(ans.msg);
                     shopCollectionImages(scollection_id, lang_id);
                 } else {
-                    $.mbsmessage(ans.msg, true, 'alert--danger');                  
+                    $.ykmsg.error(ans.msg);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -807,7 +785,7 @@ $(document).on("change", ".state", function () {
                 $(contentDv).html(t.html);
                 bindMcc();
             } else {
-                $.mbsmessage(t.msg, false, 'alert--success');
+                $.ykmsg.success(t.msg);
                 $('.pluginPlatform-js').click();
             }
             $(".loader-yk").remove();
@@ -822,6 +800,7 @@ $(document).on("change", ".state", function () {
             fcom.ajax(fcom.makeUrl(keyName, 'getMerchantCategory'), '', function (res) {
                 selector.select2({
                     closeOnSelect: true,
+                    dropdownParent: selector.closest('form'),
                     dir: langLbl.layoutDirection,
                     allowClear: true,
                     placeholder: selector.attr('placeholder'),
@@ -922,11 +901,11 @@ $(document).on("change", ".state", function () {
 
 function bindAutoComplete() {
     $("#scp_selprod_id").select2({
-        dropdownParent:  $("#scp_selprod_id").closest('.modal'),
+        dropdownParent: $("#scp_selprod_id").closest('form'),
         closeOnSelect: true,
         dir: langLbl.layoutDirection,
         allowClear: false,
-        placeholder:  $("#scp_selprod_id").attr('placeholder'),
+        placeholder: $("#scp_selprod_id").attr('placeholder'),
         ajax: {
             url: fcom.makeUrl('seller', 'autoCompleteProducts'),
             dataType: 'json',
@@ -941,7 +920,7 @@ function bindAutoComplete() {
             processResults: function (data, params) {
                 params.page = params.page || 1;
                 return {
-                    results: data.products.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
+                    results: data.results.filter(function (item) { return 1 > $('#selprod-products [name="product_ids[]"][value="' + item.id + '"]').length }),
                     pagination: {
                         more: params.page < data.pageCount
                     }
@@ -951,12 +930,15 @@ function bindAutoComplete() {
         },
         minimumInputLength: 0,
         templateResult: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
+            return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         },
         templateSelection: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
+            return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         }
-    });
+    }).on('select2:open', function(e) {        
+        $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+    })
+    .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
 
 }
 
@@ -994,18 +976,17 @@ $(document).on('click', '.catFile-Js', function () {
                     $(node).val($val);
                 },
                 success: function (ans) {
-                    $.mbsmessage.close();
-                    //$.mbsmessage(ans.msg, true, 'alert--success');
+                    fcom.removeLoader();
                     var dv = '#mediaResponse';
                     $('.text-danger').remove();
                     if (ans.status == true) {
-                        $.mbsmessage(ans.msg, true, 'alert--success');
+                        $.ykmsg.success(ans.msg);
                         $(dv).removeClass('text-danger');
                         $(dv).addClass('badge-success');
                         reloadCategoryBannerList();
                         addCategoryBanner(prodcat_id);
                     } else {
-                        $.mbsmessage(ans.msg, true, 'alert--danger');
+                        $.ykmsg.error(ans.msg);
                         $(dv).removeClass('badge-success');
                         $(dv).addClass('text-danger');
                     }

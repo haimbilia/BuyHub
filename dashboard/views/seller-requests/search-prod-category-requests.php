@@ -34,10 +34,10 @@
                     break;
                 case 'prodcat_name':
                     $catName = (!empty($row['prodcat_name'])) ? $row['prodcat_name'] : $row['prodcat_identifier'];
-                    $html = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('category', 'banner', array($row['prodcat_id'], "", 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $catName . '" alt="' . $catName . '"></figure>
-				<div class="item__description">
-					<div class="item__title">' . $catName . '</div>
-					<div class="item__sub_title"> (' . $row['prodcat_identifier'] . ') </div>
+                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('category', 'banner', array($row['prodcat_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $catName . '" alt="' . $catName . '"></figure>
+				<div class="product-profile__description">
+					<div class="product-profile__title">' . $catName . '</div>
+					<div class="product-profile__sub_title"> (' . $row['prodcat_identifier'] . ') </div>
 				</div></div>';
                     $td->appendElement('plaintext', array(), $html, true);
                     break;

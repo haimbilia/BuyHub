@@ -19,17 +19,12 @@ class HomeController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $statsObj = new Statistics();
-        $orderSalesStats = $statsObj->getOrderSalesStats($this->defaultStatsInterval);
-        $shopsSignupStats = $statsObj->getShopsSignupStats($this->defaultStatsInterval);
-        $userSignupStats = $statsObj->getUserSignupStats($this->defaultStatsInterval);
-
         $analyticArr = array(
             'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
             'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
             'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
         );
-
 
         // simple Caching with:        
         $dashboardInfoCache = FatCache::get('dashboardInfoCache' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
@@ -147,6 +142,11 @@ class HomeController extends ListingBaseController
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
+
+            $dashboardInfo['orderSalesStats'] = $statsObj->getOrderSalesStats($this->defaultStatsInterval);
+            $dashboardInfo['shopsSignupStats'] = $statsObj->getShopsSignupStats($this->defaultStatsInterval);
+            $dashboardInfo['userSignupStats'] = $statsObj->getUserSignupStats($this->defaultStatsInterval);
+
             FatCache::set('dashboardInfoCache' . $this->siteLangId, serialize($dashboardInfo), '.txt');
             //$cache->set("dashboardInfo" . $this->siteLangId, $dashboardInfo, 24 * 60 * 60);
         } else {
@@ -167,9 +167,9 @@ class HomeController extends ListingBaseController
         $this->set('objPrivilege', $this->objPrivilege);
         $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
         $this->set('defaultStatsInterval', $this->defaultStatsInterval);
-        $this->set('orderSalesStats', $orderSalesStats[$this->defaultStatsInterval]);
-        $this->set('shopsSignupStats', $shopsSignupStats[$this->defaultStatsInterval]);
-        $this->set('userSignupStats', $userSignupStats[$this->defaultStatsInterval]);
+        $this->set('orderSalesStats', $dashboardInfo['orderSalesStats'][$this->defaultStatsInterval]);
+        $this->set('shopsSignupStats', $dashboardInfo['shopsSignupStats'][$this->defaultStatsInterval]);
+        $this->set('userSignupStats', $dashboardInfo['userSignupStats'][$this->defaultStatsInterval]);
         $this->_template->render();
     }
 
@@ -321,12 +321,13 @@ class HomeController extends ListingBaseController
         $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
+        $srch->joinShop();
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $srch->setPageSize($limit);
         $srch->addOrder('SUM(op_qty - op_refund_qty)', 'DESC');
-        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id'));
+        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id', 'shop_id'));
         $srch->addHaving('totSoldQty', '>', 0);
         $rs = $srch->getResultSet();
         $productsList = FatApp::getDb()->fetchAll($rs);
@@ -344,7 +345,7 @@ class HomeController extends ListingBaseController
 
         include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
         $analyticArr = array(
-            'clientIda' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
+            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
             'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
             'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")

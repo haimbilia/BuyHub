@@ -7,7 +7,7 @@ class SystemLog extends MyAppModel
     public const MODULE_TYPE_SYSTEM = 1;
     public const MODULE_TYPE_TRANSACTION = 2;
     public const MODULE_TYPE_PLUGIN = 3;
-    
+
     public const TYPE_ERROR = 1;
     public const TYPE_INFO = 2;
     public const TYPE_SUCCESS = 3;
@@ -16,48 +16,49 @@ class SystemLog extends MyAppModel
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $logId);
     }
-    
+
     public static function getSearchObject($isActive = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'sylog');
         return $srch;
     }
-    
+
     public static function getModuleTypes(): array
-    {   
+    {
         $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
         return [
-            self::MODULE_TYPE_SYSTEM =>Labels::getLabel('MSG_System', $langId),
-            self::MODULE_TYPE_TRANSACTION =>Labels::getLabel('MSG_Transaction', $langId),
-            self::MODULE_TYPE_PLUGIN =>Labels::getLabel('MSG_Plugin', $langId),
+            self::MODULE_TYPE_SYSTEM => Labels::getLabel('MSG_System', $langId),
+            self::MODULE_TYPE_TRANSACTION => Labels::getLabel('MSG_Transaction', $langId),
+            self::MODULE_TYPE_PLUGIN => Labels::getLabel('MSG_Plugin', $langId),
         ];
     }
 
     public static function getTypes(): array
-    {   
+    {
         $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
         return [
-            self::TYPE_ERROR =>Labels::getLabel('MSG_Error', $langId),
-            self::TYPE_INFO =>Labels::getLabel('MSG_Info', $langId),
-            self::TYPE_SUCCESS =>Labels::getLabel('MSG_Success', $langId),            
+            self::TYPE_ERROR => Labels::getLabel('MSG_Error', $langId),
+            self::TYPE_INFO => Labels::getLabel('MSG_Info', $langId),
+            self::TYPE_SUCCESS => Labels::getLabel('MSG_Success', $langId),
         ];
     }
 
     public static function clearOldLog()
     {
         FatApp::getDb()->deleteRecords(
-                self::DB_TBL,
-                array(
-                    'smt' => 'slog_created_at < ?',
-                    'vals' => array(
-                        date('Y-m-d', strtotime("-5 Day"))
-                    )
+            self::DB_TBL,
+            array(
+                'smt' => 'slog_created_at < ?',
+                'vals' => array(
+                    date('Y-m-d', strtotime("-5 Day"))
                 )
+            )
         );
     }
 
     public static function system(string $msg, $title = '', $type = self::TYPE_ERROR, &$error = '')
     {
+        $title = empty($title) ? $msg : $title;
         return static::set($msg, '', self::MODULE_TYPE_SYSTEM, $type, $title, $error);
     }
 
@@ -72,14 +73,14 @@ class SystemLog extends MyAppModel
     }
 
     public static function set(string $content = '', string $response = '', int $module_type = self::MODULE_TYPE_SYSTEM, int $type = self::TYPE_ERROR, $title = '', string &$error = ''): bool
-    {        
+    {
         if (!array_key_exists($module_type, self::getModuleTypes()) || !array_key_exists($type, self::getTypes())) {
             $error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);       
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
         $backtrace = json_encode(end($backtrace));
-        
+
         $data = [
             self::DB_TBL_PREFIX . 'module_type' => $module_type,
             self::DB_TBL_PREFIX . 'type' => $type,
@@ -97,5 +98,4 @@ class SystemLog extends MyAppModel
         }
         return true;
     }
-
 }

@@ -291,13 +291,23 @@ class HtmlHelper
                 </div>
                 <script>
                 $.initDropZone("' . $url . '")
+                .on("reset",function(event){    
+                    if(!$(".dz-error").length){
+                        $(".upload_cover").removeClass("hidden");     
+                    }               
+                })
                 .on("addedfile",function(event){                                 
-                    $(".upload_cover").addClass("hidden"); 
+                    $(".upload_cover").addClass("hidden");
                 })
-                .on("queuecomplete",function(event){                                 
-                    $(".upload_cover").removeClass("hidden"); 
+                .on("error",function(event){                 
+                    fcom.displayErrorMessage($(".dz-error-message").text());
+                    this.removeAllFiles(true);
+                    $(".upload_cover").removeClass("hidden");                    
+                })               
+                .on("success",function(event){                                 
+                    $(".upload_cover").removeClass("hidden");                   
                 })
-                    .on("sending", function(file, xhr, formData){';
+                .on("sending", function(file, xhr, formData){';
         if (!empty($callbackfn)) {
             $str .= $callbackfn . '(file, xhr, formData)';;
         }
@@ -447,10 +457,10 @@ class HtmlHelper
         foreach ($images as $key => $image) {
             switch ($imageType) {
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 default:
             }
@@ -674,5 +684,21 @@ class HtmlHelper
     public static function seoFriendlyUrl($url)
     {
         return '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+    }
+
+    public static function getIdentifierText($identifier, $langId)
+    {
+
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) . " : " . $identifier;
+    }
+
+    public static function addIdentierToFrm($fld, $identifier, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+
+        $fld->addFieldTagAttribute('onkeyup', "getIdentifier(this);");
+        $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $langId) . '</small>';
     }
 }

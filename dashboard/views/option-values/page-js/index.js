@@ -18,12 +18,17 @@ $(document).ready(function () {
 		var frm = document.frmRecordSearch;
 		searchRecords(frm);
 	}
-	
-	form = function (optionId, id) {
+
+	form = function (optionId, optionValueId) {
 		optionId = optionId || $('.navTabsJs').data('optionId');
-		id = id || $('.navTabsJs').data('optionValueId');
-		console.log();
-		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, id]), '', function (t) {
+		optionId = 'undefined' == typeof optionId ? 0 : optionId;
+
+		optionValueId = optionValueId || $('.navTabsJs').data('optionValueId');
+		optionValueId = 'undefined' == typeof optionValueId ? 0 : optionValueId;
+
+		$.ykmodal(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId, optionValueId]), '', function (t) {
+			fcom.removeLoader();
 			try {
 				res = jQuery.parseJSON(t);
 				fcom.displayErrorMessage(res.msg);
@@ -40,27 +45,28 @@ $(document).ready(function () {
 			$.ykmsg.close();
 			$('.navTabsJs').data('optionValueId', t.optionValueId);
 			$('.navTabsJs').data('optionId', t.optionId);
-			reloadList();		
+			reloadList();
 			if (t.langId > 0) {
 				langForm(t.optionValueId, t.langId);
-				return;				
-			}	
-			form(t.optionId,t.optionValueId);		
+				return;
+			}
+			form(t.optionId, t.optionValueId);
 		});
 	};
 
 	langForm = function (optionValueId, langId, autoFillLangData = 0) {
 		optionValueId = optionValueId || $('.navTabsJs').data('optionValueId');
-        if (optionValueId < 0 || typeof (optionValueId) == "undefined") {
-            return false;
-        }
-        if (typeof (langId) == "undefined" || langId < 0) {
-            return false;
-        }     
-		markPopupTabActive();       
-        $('#editFormJs').prepend(fcom.getLoader());
+		if (optionValueId < 0 || typeof (optionValueId) == "undefined") {
+			return false;
+		}
+		if (typeof (langId) == "undefined" || langId < 0) {
+			return false;
+		}
+		markPopupTabActive();
+		$.ykmodal(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'langForm', [optionValueId, langId, autoFillLangData]), '', function (t) {
-			$('#editFormJs').html(t);
+			fcom.removeLoader();
+			$.ykmodal(t);
 		});
 	};
 
@@ -73,7 +79,7 @@ $(document).ready(function () {
 			if (t.langId > 0) {
 				langSetup(t.optionValueId, t.langId);
 				return;
-			}			
+			}
 		});
 	};
 
@@ -81,16 +87,17 @@ $(document).ready(function () {
 		var data = '';
 		if (form) {
 			data = fcom.frmData(form);
-		}	
+		}
 		$('#optionValueListing').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('OptionValues', 'search'), data, function (res) {
 			$("#optionValueListing").html(res);
+			fcom.removeLoader();
 		});
 	};
 
 	deleteRecord = function (option_id, id) {
-		if (!confirm(langLbl.confirmDelete)) { return; }		
-		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), {option_id,id}, function (res) {
+		if (!confirm(langLbl.confirmDelete)) { return; }
+		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'deleteRecord'), { option_id, id }, function (res) {
 			reloadList();
 		});
 	};

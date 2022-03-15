@@ -1,7 +1,7 @@
 <?php
 
 trait CustomProducts
-{    
+{
     public function searchCustomProduct()
     {
         if (!User::canAddCustomProduct()) {
@@ -49,7 +49,7 @@ trait CustomProducts
         $this->_template->render(false, false);
     }
 
-    
+
 
     public function productOptions($productId = 0)
     {
@@ -256,13 +256,13 @@ trait CustomProducts
         if ($productRow['product_seller_id'] != $this->userParentId) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $lang_id;
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $lang_id;
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
         $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $option_id, $lang_id, false, 0, 0, true);
         $imgTypesArr = $this->getSeparateImageOptions($product_id, $this->siteLangId);
 
@@ -300,9 +300,9 @@ trait CustomProducts
                 FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             }
         }
-        
+
         $this->validateImageSubscriptionLimit($product_id, $option_id, $lang_id);
-       
+
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_Please_select_a_file", $this->siteLangId));
         }
@@ -464,7 +464,7 @@ trait CustomProducts
         if ($page < 2) {
             $page = 1;
         }
-        $post = FatApp::getPostedData();      
+        $post = FatApp::getPostedData();
         $srch = Countries::getSearchObject(true, $this->siteLangId);
         $srch->addOrder('country_name');
 
@@ -597,9 +597,7 @@ trait CustomProducts
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-        $post = FatApp::getPostedData();
-
-
+       
         $lang_id = $this->siteLangId;
         $frm = $this->getLinksForm($productId);
 
@@ -610,8 +608,8 @@ trait CustomProducts
 
         $srch->addMultipleFields(array('product_id', 'brand_status', 'brand_deleted', 'product_brand_id', 'IFNULL(product_name,product_identifier) as product_name', 'IFNULL(brand_name,brand_identifier) as brand_name'));
         $srch->addCondition('product_id', '=', $productId);
-        $srch->addCondition('brand.brand_active', '=', applicationConstants::YES);
-        $srch->addCondition('brand.brand_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('brand.brand_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $srch->addCondition('brand.brand_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -703,7 +701,7 @@ trait CustomProducts
         $post = FatApp::getPostedData();
 
         $srch = Tag::getSearchObject($this->siteLangId);
-        $srch->addOrder('tag_name');    
+        $srch->addOrder('tag_name');
         $srch->addMultipleFields(array('tag_id', 'tag_name'));
 
         if (!empty($post['keyword'])) {
@@ -718,7 +716,7 @@ trait CustomProducts
         foreach ($options as $key => $option) {
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),        
+                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),
             );
         }
         die(json_encode($json));
@@ -1039,15 +1037,15 @@ trait CustomProducts
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
         $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
         $languagesAssocArr = Language::getAllNames();
-		
-		if(count($languagesAssocArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
-		} else  {
-			$lang_id = array_key_first($languagesAssocArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-       
-		$fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+
+        if (count($languagesAssocArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
+        } else {
+            $lang_id = array_key_first($languagesAssocArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield">';
         $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('FRM_PLEASE_KEEP_IMAGE_DIMENSIONS_GREATER_THAN_500_X_500', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'min_width', 500);
@@ -1141,7 +1139,7 @@ trait CustomProducts
         CommonHelper::jsonEncodeUnicode($data, true);
     }
 
-   
+
 
     public function prodSpecGroupAutoComplete()
     {
@@ -1162,5 +1160,4 @@ trait CustomProducts
         }
         die(json_encode($json));
     }
-    
 }

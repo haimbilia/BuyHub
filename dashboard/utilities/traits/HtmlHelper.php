@@ -320,11 +320,12 @@ class HtmlHelper
         }
     }
 
-    public static function getIdentifierText($identifier, $langId){
+    public static function getIdentifierText($identifier, $langId)
+    {
 
-        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) ." : ".$identifier;
+        return Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $langId) . " : " . $identifier;
     }
-    
+
     public static function displayWordsFirstLetter($keyword, int $len = 2)
     {
         $titleArr = explode(' ', $keyword);
@@ -336,5 +337,13 @@ class HtmlHelper
             }
         }
         return strtoupper($title);
+    }
+
+    public static function getErrorMessageHtml(string $message): string
+    {
+        return '<div class="alert alert-danger" role="alert">
+                    <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                    <div class="alert-text">' . $message . '</div>
+                </div>';
     }
 }

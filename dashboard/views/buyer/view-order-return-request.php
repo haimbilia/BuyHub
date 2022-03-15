@@ -107,7 +107,7 @@
                                 <tr>
                                     <td><?php echo $request['orreason_title']; ?></td>
                                     <td>
-                                        <div class="item__description">
+                                        <div class="product-profile__description">
                                             <span class=""><?php echo FatDate::format($request['orrequest_date']); ?></span>
                                         </div>
                                     </td>
@@ -160,7 +160,7 @@
                                 <ul>
                                     <li>
                                         <div class="msg_db">
-                                            <div class="avtar"><img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($logged_user_id, 'THUMB', 1), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo $logged_user_name; ?>" title="<?php echo $logged_user_name; ?>"></div>
+                                            <div class="avtar"><img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($logged_user_id, ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo $logged_user_name; ?>" title="<?php echo $logged_user_name; ?>"></div>
                                         </div>
                                         <div class="msg__desc">
                                             <span class="msg__title"><?php echo $logged_user_name; ?></span>

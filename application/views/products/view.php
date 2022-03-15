@@ -7,7 +7,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     <section class="">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-10">
+                <div class="col-lg-11">
                     <div class="breadcrumb">
                         <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php');  ?>
                     </div>
@@ -17,35 +17,50 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
                     </div>
                 </div>
             </div>
-
-            <?php include('prod-desc-nav-detail.php'); ?>
-            <?php include('more-sellers.php');  ?>
         </div>
     </section>
-    <?php include('banners.php'); ?>
-    <?php if ($recommendedProducts) { ?>
-        <section class="section bg-brand-light">
-            <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
-        </section>
-    <?php } ?>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+    <section class="section">
+        <div class="container">
+            <?php include('prod-desc-nav-detail.php'); ?>
+        </div>
+    </section>
+
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && !empty($reviews)) { ?>
         <section class="section">
-            <div class="container">
-                <div id="itemRatings">
-                    <?php
-                    echo $frmReviewSearch->getFormHtml();
-                    $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
-                    ?>
-                </div>
+            <div class="container" id="itemRatings">
+                <?php
+                echo $frmReviewSearch->getFormHtml();
+                $this->includeTemplate('_partial/product-reviews.php', array('reviews' => $reviews, 'ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product['product_id'], 'canSubmitFeedback' => $canSubmitFeedback), false);
+                ?>
             </div>
         </section>
     <?php } ?>
+
+    <!-- Banners -->
+    <section class="section">
+        <div class="container">
+            <?php include('banners.php'); ?>
+        </div>
+    </section>
+    <!-- Banners -->
+
+    <?php if ($recommendedProducts) { ?>
+        <!-- Recomended Products -->
+        <section class="section bg-brand-light">
+            <?php include(CONF_THEME_PATH . 'products/recommended-products.php'); ?>
+        </section>
+        <!-- Recomended Products -->
+    <?php } ?>
+
     <?php if ($relatedProductsRs) { ?>
+        <!-- Related Products -->
         <section class="section">
             <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
         </section>
+        <!-- Related Products -->
     <?php } ?>
+
     <div id="recentlyViewedProductsDiv"></div>
 </div>
 <script>
@@ -100,8 +115,6 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
             }
         });
         /* ] */
-
-
     });
 </script>
 
@@ -122,7 +135,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
         <?php if (isset($product['brand_name']) && $product['brand_name'] != '') { ?> "brand": "<?php echo $product['brand_name']; ?>",
         <?php } ?>
         <?php if (isset($product['selprod_sku']) && $product['selprod_sku'] != '') { ?> "sku": "<?php echo $product['selprod_sku']; ?>",
-        <?php } ?> "image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>",
+        <?php } ?> "image": "<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>",
         "offers": {
             "@type": "Offer",
             "availability": "http://schema.org/InStock",

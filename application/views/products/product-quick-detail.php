@@ -5,8 +5,8 @@
             <?php if ($productImagesArr) { ?>
                 <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php foreach ($productImagesArr as $afile_id => $image) {
-                        $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
-                        $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'THUMB', 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                        $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
+                        $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                         <div class=""><?php if (isset($imageGallery) && $imageGallery) { ?>
                                 <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                                 <?php } ?>
@@ -18,7 +18,7 @@
                     <?php } ?>
                 </div>
             <?php } else {
-                $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'MEDIUM', 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
+                $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                 <div class="item__main"><img src="<?php echo $mainImgUrl; ?>"></div>
             <?php
             } ?>
@@ -175,14 +175,14 @@
                     <?php echo $frmBuyProduct->getExternalJs();
                     }
                 } else { ?>
-                    <div class="tag--soldout tag--soldout-full">
+                    <div class="tag-soldout" tag--soldout-full">
                         <h3 class=""><?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></h3>
                         <p class=""><?php echo Labels::getLabel('LBL_This_item_is_currently_out_of_stock', $siteLangId); ?>
                         </p>
                     </div>
                 <?php } ?>
                 <?php if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-                    <div class="tag--soldout tag--soldout-full">
+                    <div class="tag-soldout" tag--soldout-full">
                         <h3 class=""><?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?></h3>
                         <p class="">
                             <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>

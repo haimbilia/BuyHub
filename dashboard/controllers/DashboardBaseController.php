@@ -102,7 +102,7 @@ class DashboardBaseController extends FatController
             $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
             $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
-            $jsVariablesCache = CacheHelper::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+            $jsVariablesCache = CacheHelper::get('jsVariablesDashboardCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
             if (!$jsVariablesCache) {
                 $jsVariables = array(
                     'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->siteLangId),
@@ -203,13 +203,14 @@ class DashboardBaseController extends FatController
                     'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
                     'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->siteLangId),
                     'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
+                    'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                 );
 
                 $languages = Language::getAllNames(false);
                 foreach ($languages as $val) {
                     $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
                 }
-                CacheHelper::create('jsVariablesCache' . $this->siteLangId, serialize($jsVariables), CacheHelper::TYPE_LABELS);
+                CacheHelper::create('jsVariablesDashboardCache' . $this->siteLangId, serialize($jsVariables), CacheHelper::TYPE_LABELS);
             } else {
                 $jsVariables =  unserialize($jsVariablesCache);
             }

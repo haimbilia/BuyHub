@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if ($relatedProductsRs) { ?>
     <div class="container">
-        <div class="section-head section-head-center">
+        <div class="section-head">
             <div class="section-heading">
                 <h2><?php echo Labels::getLabel('LBL_Similar_Products', $siteLangId); ?>
                 </h2>
@@ -38,21 +38,11 @@ if ($relatedProductsRs) { ?>
                         <div class="products-img">
                             <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                 <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
-                                <img data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
+                                <img data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_CLAYOUT3, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
                             </a>
                         </div>
                     </div>
                     <div class="products-foot">
-                        <?php /* if(round($rProduct['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
-                <div class="product-ratings">
-                    <i class="icn"><svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                               ></use>
-                        </svg></i> <span class="rate"><?php echo round($rProduct['prod_rating'],1);?></span>
-                    <?php if(round($rProduct['prod_rating'])==0 ){  ?> <span class="be-first"> <a
-                            href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?>
-                        </a> </span> <?php } ?>
-                </div> <?php } */ ?>
                         <div class="products-category">
                             <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                             </a>
@@ -69,5 +59,5 @@ if ($relatedProductsRs) { ?>
             } ?>
         </div>
     </div>
-    <div class="gap"></div>
+
 <?php }

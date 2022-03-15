@@ -1,22 +1,28 @@
 .slider-testimonials {
     text-align: center;
-    margin: 0 auto;
     padding-bottom: 2rem;
     position: relative;
     display: flex;
+    margin: 10px auto;
+    max-width: 1000px;
     &-item {
         flex: 1;
-        margin: auto;
-        max-width: 1000px;
         padding: 0 1rem;
         transition: all 0.5s ease-in-out;
         display: flex;
+        flex-direction: column;
         @include media-breakpoint-up(lg) {
             align-items: center;
+            flex-direction: row;
         }
     }
     &-image {
         position: relative;
+        @include media-breakpoint-up(lg) {
+            img {
+                display: inline-block;
+            }
+        }
         &:before {
             @include media-breakpoint-up(lg) {
                 content: "";
@@ -46,43 +52,74 @@
         }
     }
     &-data {
-        margin-#{$start-direction}: 6.25rem;
-        margin-top: 6.25rem;
-        text-align: left;
+        text-align: #{$start-direction};
         flex: 1;
         font-size: 1.3rem;
+        @include media-breakpoint-up(lg) {
+            margin-#{$start-direction}: 6.25rem;
+            margin-top: 6.25rem;
+        }
     }
     &-text {
-        max-width: 512px;
+        //max-width: 512px;
+        p {
+            font-weight: 300;
+        }
     }
-
     &-from {
         margin-top: 2rem;
         .name {
             font-size: 1.3rem;
             display: block;
-            font-weight: 600;
+            font-weight: 500;
         }
     }
     .slick-arrow {
         width: 48px;
+        min-width: 48px;
         height: 48px;
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: transparent;
         border: none;
-        opacity: 0;
         transition: all 0.2s ease-in-out;
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-    &:hover {
-        .slick-arrow {
-            transform: scale(1);
-            opacity: 1;
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.9);
+        position: absolute;
+        top: calc(50% - 24px);
+        z-index: 1;
+        text-indent: -999999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:before {
+            content: "";
+            display: inline-block;
+            border-right: 2px solid black;
+            border-bottom: 2px solid black;
+            width: 24px;
+            height: 24px;
+        }
+        &.slick-prev {
+            #{$start-direction}: -150px;
+            &:before {
+                transform: rotate(-225deg);
+                margin-right: -7px;
+            }
+        }
+        &.slick-next {
+            #{$end-direction}: -150px;
+            &:before {
+                margin-left: -7px;
+                transform: rotate(-45deg);
             }
         }
     }
+    // &:hover {
+    //     .slick-arrow {
+    //         transform: scale(1);
+    //         opacity: 1;
+    //         &:hover {
+    //             background-color: rgba(255, 255, 255, 0.9);
+    //         }
+    //     }
+    // }
 
     .slick-center & {
         background-color: #fff;

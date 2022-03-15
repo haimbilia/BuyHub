@@ -34,7 +34,10 @@ class SellerRequestsController extends SellerBaseController
         if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts) && empty($reqBadges)) {
             $noRecordFound = true;
         }
+        $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
 
+        $this->set('approvalRequiredBadges', $approvalRequiredBadges);
+        $this->set('reqBadges', $reqBadges);
         $this->set('canRequestBadge', $this->userPrivilege->canEditBadgesAndRibbons(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
@@ -64,6 +67,7 @@ class SellerRequestsController extends SellerBaseController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('statusArr', Brand::getBrandReqStatusArr($this->siteLangId));
         $this->set('statusClassArr', Brand::getBrandReqStatusClassArr());
+        $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
@@ -429,7 +433,11 @@ class SellerRequestsController extends SellerBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            FatUtility::dieJsonError($record->getError());
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            FatUtility::dieJsonError($msg);
         }
 
         $brandReqId = $record->getMainTableRecordId();
@@ -452,8 +460,11 @@ class SellerRequestsController extends SellerBaseController
             $brandReqId = $record->getMainTableRecordId();
             $brandData = Brand::getAttributesById($brandReqId);
             $email = new EmailHandler();
-            if (!$email->sendBrandRequestAdminNotification($this->siteLangId, $brandData)) {
-            }
+            $email->sendBrandRequestAdminNotification($this->siteLangId, $brandData);
+        }
+
+        if ($this->get('langId') == 0 && !$this->isMediaUploaded($brandReqId)) {
+            $this->set('openMediaForm', true);
         }
 
         $this->set('brandReqId', $brandReqId);
@@ -676,10 +687,8 @@ class SellerRequestsController extends SellerBaseController
 
     private function isMediaUploaded($brandId)
     {
-        if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0)) {
-            return true;
-        }
-        return false;
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0);
+        return (!empty($attachment) && 0 < $attachment['afile_id']);
     }
 
     public function customCatalogInfo($prodReqId)

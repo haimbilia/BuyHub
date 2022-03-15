@@ -3,12 +3,15 @@
 class OrderStatusController extends ListingBaseController
 {
     protected string $modelClass = 'OrderStatus';
-    protected $pageKey = 'MANAGE_ORDER_STATUS';
+    protected string $pageKey = 'MANAGE_ORDER_STATUS';
+    protected bool $isDev = false;
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewOrderStatus();
+        $isDev = UrlHelper::getQueryStringArr('dev');
+        $this->isDev = (!empty($isDev) && 1 == $isDev);
     }
 
     /**
@@ -47,7 +50,7 @@ class OrderStatusController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_STATUS_NAME', $this->siteLangId));
         $this->getListingData();
         $this->setCustomColumnWidth();
         $this->set('autoTableColumWidth', false);
@@ -60,14 +63,17 @@ class OrderStatusController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'orderstatus_name');
+            $this->addSortingElements($frm, 'orderstatus_priority');
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
+        if (true === $this->isDev) {
+            $frm->addHiddenField('', 'dev', 1);
+        }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -86,28 +92,32 @@ class OrderStatusController extends ListingBaseController
     private function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $isDev = FatApp::getPostedData('dev', FatUtility::VAR_INT, 0);
+        $this->isDev = $this->isDev ? $this->isDev : (0 < $isDev);
 
-        $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-
+        
+        $fields = $this->getFormColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_name');
-        if (!array_key_exists($sortBy, $fields) && 'orderstatus_name' != $sortBy) {
-            $sortBy = 'orderstatus_name';
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_priority');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'orderstatus_priority';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getSearchForm($fields);
 
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = ($page <= 0) ? 1 : $page;
-
         $postedData = FatApp::getPostedData();
-        $post = $searchForm->getFormDataFromArray($postedData); 
-        $srch = OrderStatus::getSearchObject(false, $this->siteLangId); 
+        $post = $searchForm->getFormDataFromArray($postedData);
+        if (true === $this->isDev) {
+            $post['dev'] = 1;
+        }
+
+        $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ostatus.orderstatus_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ostatus_l.orderstatus_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -119,22 +129,25 @@ class OrderStatusController extends ListingBaseController
         } else {
             $srch->addCondition('ostatus.orderstatus_type', '=', Orders::ORDER_PRODUCT);
         }
-        
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+
         $srch->doNotCalculateRecords();
-        
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->doNotLimitRecords();
+
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId)); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', 1);
+        $this->set('pageSize', $pageSize);
         $this->set('canEdit', $this->objPrivilege->canEditOrderStatus($this->admin_id, true));
     }
 
@@ -313,12 +326,16 @@ class OrderStatusController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->siteLangId),
             'orderstatus_priority' => Labels::getLabel('LBL_ORDER_STATUS_PRIORITY', $this->siteLangId),
             'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
+
+        if (false === $this->isDev) {
+            unset($arr['dragdrop']);
+        }
+
         CacheHelper::create('orderStatusTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
@@ -326,15 +343,18 @@ class OrderStatusController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return [
-            'dragdrop',
+        $arr = [
             'select_all',
-            'listSerial',
-            'orderstatus_name',
             'orderstatus_priority',
+            'orderstatus_name',
             'orderstatus_is_active',
             'action',
         ];
+
+        if (true === $this->isDev) {
+            array_unshift($arr, 'dragdrop');
+        }
+        return $arr;
     }
 
     /**
@@ -351,22 +371,25 @@ class OrderStatusController extends ListingBaseController
             'select_all' => [
                 'width' => '5%'
             ],
-            'listSerial' => [
-                'width' => '5%'
-            ],
-            'orderstatus_name' => [
-                'width' => '50%'
-            ],
             'orderstatus_priority' => [
                 'width' => '20%'
             ],
+            'orderstatus_name' => [
+                'width' => '45%'
+            ],
             'orderstatus_is_active' => [
-                'width' => '10%'
+                'width' => '15%'
             ],
             'action' => [
-                'width' => '5%'
+                'width' => '10%'
             ],
         ];
+
+        if (false === $this->isDev) {
+            unset($arr['dragdrop']);
+            $arr['orderstatus_name']['width'] = '50%';
+        }
+
         $this->set('tableHeadAttrArr', $arr);
     }
 

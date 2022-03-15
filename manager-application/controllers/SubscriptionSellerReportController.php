@@ -30,6 +30,7 @@ class SubscriptionSellerReportController extends ListingBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_PACKAGE_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
@@ -175,7 +176,7 @@ class SubscriptionSellerReportController extends ListingBaseController
         $spackageSReportsCacheVar = FatCache::get('spackageSReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$spackageSReportsCacheVar) {
             $arr = [
-                'user_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
+                'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
                 'ossubs_subscription_name' => Labels::getLabel('LBL_Package_Name', $this->siteLangId),
                 'ossubs_from_date' => Labels::getLabel('LBL_Activation_Date', $this->siteLangId),
                 'ossubs_till_date' => Labels::getLabel('LBL_Expiry_Date', $this->siteLangId),

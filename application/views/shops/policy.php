@@ -10,7 +10,7 @@
         <section class="section">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-7">
+                    <div class="col-lg-12">
                         <?php if (!empty(array_filter((array) $shop['description']))) { ?>
                             <div class="cms">
                                 <h4><?php echo $shop['description']['title']; ?></h4>
@@ -62,7 +62,7 @@
 </div>
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
 <script type="text/javascript">
-    (function ($) {
+    (function($) {
         if (langLbl.layoutDirection == 'rtl') {
             $('.shops-sliders').slick({
                 dots: false,

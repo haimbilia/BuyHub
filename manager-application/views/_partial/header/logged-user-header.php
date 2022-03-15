@@ -59,7 +59,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="javascript:void()" onclick="clearCache()" title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
+                                <a class="header-action__trigger" href="javascript:void(0)" onclick="clearCache()" title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
@@ -77,10 +77,10 @@
                                         </svg>
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim notificationDropMenuJs">
+                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim notificationDropMenuJs dropDownMenuBlockClose">
                                     <div class="header-notification">
                                         <div class="header-notification__head">
-                                            <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide" id="notifiLinkCount"></span></h5>
+                                            <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide notifiLinkCountJs"></span></h5>
                                             <nav class="nav nav--tabs js-tab">
                                                 <a class="is-current headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(0,this);"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
                                                 <a class="headerNotificationTabJs" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>
@@ -89,13 +89,13 @@
                                         <div class="header-notification__body">
                                             <div class="tab-1 tab-container visible">
                                                 <div class="scroll-y p-3">
-                                                    <div class="notifications" id="notificationList">
+                                                    <div class="notifications notificationListJS">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="header-notification__footer">
-                                            <a id="notifiLinkViewAll" href="javascript:void(0)" class="text-link text-link--arrow"><?php echo  Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                                            <a href="javascript:void(0)" class="text-link text-link--arrow notifiLinkViewAllJs"><?php echo  Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                                             </a>
                                         </div>
                                     </div>
@@ -106,17 +106,15 @@
                             <div class="header-action__item dropdown header-account">
                                 <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>" alt="">
+                                        <img aria-expanded="false" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)) . ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>">
                                     </span>
                                 </a>
 
-                                <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
-
-
+                                <div class="header-action__target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropDownMenuBlockClose">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)); ?>">
+                                                <img alt="<?php echo Labels::getLabel('LBL_ADMIN', $siteLangId); ?>" data-ratio="<?php echo $getProfileImageData[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), ImageDimension::VIEW_CROPED, true)) . ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] ?? time()), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                             </div>
                                             <div class="profile__detail">
                                                 <h6>
@@ -163,8 +161,9 @@
                     </div>
                 </div>
             </div>
-            <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
-                <div class="alert alert-solid-warning fade alertWarningJs show" role="alert">
+
+            <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && ('true' != CommonHelper::getCookie('alert_' . $pageData['plang_id']))) { ?>
+                <div class="alert alert-solid-warning fade alertWarningJs show " role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_warring_msg']); ?></div>
                     <div class="alert-close">
@@ -175,7 +174,7 @@
                 </div>
             <?php } ?>
 
-            <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
+            <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>

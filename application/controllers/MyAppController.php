@@ -38,18 +38,11 @@ class MyAppController extends FatController
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
         }
-
+        $cacheTimeStamp = UrlHelper::getCacheTimestamp($this->siteLangId);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('siteLangCode', $this->siteLangCode);
         $this->set('siteCurrencyId', $this->siteCurrencyId);
         $this->set('siteLangCountryCode', $this->siteLangCountryCode);
-
-        $cacheTimeStamp = CacheHelper::get('cacheTimeStamp' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$cacheTimeStamp) {
-            $cacheTimeStamp = date('Y-m-d H:i:s');
-            CacheHelper::create('cacheTimeStamp' . $this->siteLangId, $cacheTimeStamp);
-        }
-        $cacheTimeStamp = AttachedFile::setTimeParam($cacheTimeStamp);
         $this->set('cacheTimeStamp', $cacheTimeStamp);
 
         $loginData = array(
@@ -67,8 +60,8 @@ class MyAppController extends FatController
         array_pop($arr);
         $urlController = implode('-', $arr);
         $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
-        
-        if(!FatUtility::isAjaxCall() && !in_array($controllerName, ['Cart','Checkout'])){ 
+
+        if (!FatUtility::isAjaxCall() && !in_array($controllerName, ['Cart', 'Checkout'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
@@ -87,9 +80,9 @@ class MyAppController extends FatController
         }
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
-        
+
         $jsVariables = [];
-        if(!FatUtility::isAjaxCall()){
+        if (!FatUtility::isAjaxCall()) {
             $jsVariablesCache = CacheHelper::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
             if (!$jsVariablesCache) {
                 $jsVariables = array(
@@ -201,7 +194,7 @@ class MyAppController extends FatController
                 $jsVariables =  unserialize($jsVariablesCache);
             }
         }
-        
+
         $jsVariables['controllerName'] = $controllerName;
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;

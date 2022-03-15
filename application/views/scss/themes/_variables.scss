@@ -1,5 +1,6 @@
 :root {
     --secondary-color: #0795e6;
+    --secondary-color-inverse: #ffffff;
     --secondary-color-alpha: 7, 149, 230;
 }
 
@@ -14,7 +15,7 @@ $brand-color-inverse: var(--brand-color-inverse);
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
 $secondary-color: #0795e6;
-$secondary-color-inverse: #ffffff;
+$secondary-color-inverse: #fff;
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
 //fixed theme colors
@@ -37,6 +38,7 @@ $bg-secondary-light: rgba(var(--secondary-color-alpha), 0.1);
 $bg-light: #f3f4f5;
 $bg-gray: #f3f4f5;
 $gray-light: #f3f4f5;
+$bg-black: #000;
 $bg-placeholder: rgba(0, 0, 0, 0.03);
 
 //shadow
@@ -72,6 +74,7 @@ $star-color: #ff3a59;
 //Bg brand
 @mixin bg-brand {
     background-color: $brand-color;
+    color: $brand-color-inverse;
     //color: lighten($brand-color, 55%);
 }
 //Push auto

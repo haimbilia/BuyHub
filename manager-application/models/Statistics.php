@@ -6,6 +6,7 @@ class Statistics extends MyAppModel
     public const BY_THIS_WEEK = 7;
     public const BY_THIS_MONTH = 30;
     public const BY_LAST_3_MONTHS = 90;
+    public const BY_THIS_YEAR = 365;
     public const BY_ALL = -1;
 
     public function __construct()
@@ -22,6 +23,27 @@ class Statistics extends MyAppModel
             self::BY_LAST_3_MONTHS =>  Labels::getLabel('LBL_LAST_3_MONTH', $langId),
             self::BY_ALL =>  Labels::getLabel('LBL_ALL', $langId)
         ];
+    }
+
+    public static function getIntervalCondition($interval, $fld)
+    {
+        switch ($interval) {
+            case self::BY_TODAY:
+                return 'DATE(' . $fld . ') = DATE(NOW())';
+                break;
+            case self::BY_THIS_WEEK:
+                return  $fld . ' > DATE(now() - INTERVAL 7 DAY)';
+                break;
+            case self::BY_THIS_MONTH:
+                return  $fld . ' > DATE(now() - INTERVAL 1 MONTH)';
+                break;
+            case self::BY_LAST_3_MONTHS:
+                return  $fld . ' > DATE(now() - INTERVAL 3 MONTH)';
+                break;
+            case self::BY_THIS_YEAR:
+                return 'YEAR(' . $fld . ') = YEAR(NOW())';
+                break;
+        }
     }
 
     public function getDashboardSummary($type)
@@ -202,36 +224,36 @@ class Statistics extends MyAppModel
         switch ($interval) {
             case self::BY_TODAY:
                 $srch->addFld(array('1 AS num_days'));
-                $srch->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'order_date_added'));
                 break;
             case self::BY_THIS_WEEK:
                 $srch->addFld(array('7 AS num_days'));
-                $srch->addDirectCondition('order_date_added > now() - INTERVAL 7 DAY');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'order_date_added'));
                 break;
             case self::BY_THIS_MONTH:
                 $srch->addFld(array('30 AS num_days'));
-                $srch->addDirectCondition('order_date_added > now() - INTERVAL 1 MONTH');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'order_date_added'));
                 break;
             case self::BY_LAST_3_MONTHS:
                 $srch->addFld(array('90 AS num_days'));
-                $srch->addDirectCondition('order_date_added>now() - INTERVAL 3 MONTH');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'order_date_added'));
                 break;
             case self::BY_ALL:
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days'));
-                $srchObj1->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
+                $srchObj1->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'order_date_added'));
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days'));
-                $srchObj7->addDirectCondition('order_date_added > now() - INTERVAL 7 DAY');
+                $srchObj7->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'order_date_added'));
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days'));
-                $srchObj30->addDirectCondition('order_date_added > now() - INTERVAL 1 MONTH');
+                $srchObj30->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'order_date_added'));
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days'));
-                $srchObj90->addDirectCondition('order_date_added > now() - INTERVAL 3 MONTH');
+                $srchObj90->addDirectCondition(self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'order_date_added'));
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days'));
@@ -240,7 +262,7 @@ class Statistics extends MyAppModel
                 break;
             default:
                 $srch->addFld(array('30 AS num_days'));
-                $srch->addDirectCondition('MONTH(order_date_added)=MONTH(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'order_date_added'));
                 break;
         }
 
@@ -263,36 +285,36 @@ class Statistics extends MyAppModel
         switch ($interval) {
             case self::BY_TODAY:
                 $srch->addFld(array('1 AS num_days', 'count(shop_id) as shopSignups'));
-                $srch->addDirectCondition('DATE(shop_created_on) = DATE(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'shop_created_on'));
                 break;
             case self::BY_THIS_WEEK:
                 $srch->addFld(array('7 AS num_days', 'count(shop_id) as shopSignups'));
-                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 7 DAY');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'shop_created_on'));
                 break;
             case self::BY_THIS_MONTH:
                 $srch->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
-                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 1 MONTH');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'shop_created_on'));
                 break;
             case self::BY_LAST_3_MONTHS:
                 $srch->addFld(array('90 AS num_days', 'count(shop_id) as shopSignups'));
-                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 3 MONTH');
+                $srch->addDirectCondition(self::getIntervalCondition($interval, 'shop_created_on'));
                 break;
             case self::BY_ALL:
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days', 'count(shop_id) as shopSignups'));
-                $srchObj1->addDirectCondition('DATE(shop_created_on) = DATE(NOW())');
+                $srchObj1->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'shop_created_on'));
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days', 'count(shop_id) as shopSignups'));
-                $srchObj7->addDirectCondition('shop_created_on > now() - INTERVAL 7 DAY');
+                $srchObj7->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'shop_created_on'));
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
-                $srchObj30->addDirectCondition('shop_created_on > now() - INTERVAL 1 MONTH');
+                $srchObj30->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'shop_created_on'));
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days', 'count(shop_id) as shopSignups'));
-                $srchObj90->addDirectCondition('shop_created_on > now() - INTERVAL 3 MONTH');
+                $srchObj90->addDirectCondition(self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'shop_created_on'));
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days', 'count(shop_id) as shopSignups'));
@@ -301,7 +323,7 @@ class Statistics extends MyAppModel
                 break;
             default:
                 $srch->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
-                $srch->addDirectCondition('MONTH(shop_created_on)=MONTH(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'shop_created_on'));
                 break;
         }
 
@@ -317,30 +339,30 @@ class Statistics extends MyAppModel
     {
         switch ($interval) {
             case self::BY_TODAY:
-                $sql = 'SELECT 1 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and DATE(user_regdate) = DATE(NOW()) and YEAR(user_regdate) = YEAR(NOW())';
+                $sql = 'SELECT 1 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and ' . self::getIntervalCondition($interval, 'user_regdate');
                 break;
             case self::BY_THIS_WEEK:
-                $sql = 'SELECT 7 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE  user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and  user_regdate > now() - INTERVAL 7 DAY';
+                $sql = 'SELECT 7 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE  user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and ' . self::getIntervalCondition($interval, 'user_regdate');
                 break;
             case self::BY_THIS_MONTH:
-                $sql = 'SELECT 30 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and user_regdate > now() - INTERVAL 1 MONTH';
+                $sql = 'SELECT 30 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and ' . self::getIntervalCondition($interval, 'user_regdate');
                 break;
             case self::BY_LAST_3_MONTHS:
-                $sql = 'SELECT 90 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and user_regdate > now() - INTERVAL 3 MONTH';
+                $sql = 'SELECT 90 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and ' . self::getIntervalCondition($interval, 'user_regdate');
                 break;
             case self::BY_ALL:
-                $sql = "SELECT 1 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) and YEAR(user_regdate) = YEAR(NOW())
+                $sql = "SELECT 1 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_TODAY, 'user_regdate') . "
 				UNION ALL
-				SELECT 7 AS num_days, count(user_id) as users FROM `tbl_users` WHERE  user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and  user_regdate > now() - INTERVAL 7 DAY
+				SELECT 7 AS num_days, count(user_id) as users FROM `tbl_users` WHERE  user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and  " . self::getIntervalCondition(self::BY_THIS_WEEK, 'user_regdate') . "
 				UNION ALL
-				SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_regdate > now() - INTERVAL 1 MONTH
+				SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate') . "
 				UNION ALL
-				SELECT 90 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_regdate > now() - INTERVAL 3 MONTH
+				SELECT 90 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'user_regdate') . "
 				UNION ALL
 				SELECT -1 AS num_days, count(user_id) as users FROM `tbl_users` where user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_is_shipping_company!=1";
                 break;
             default:
-                $sql = 'SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and MONTH(user_regdate) = MONTH(NOW()) and YEAR(user_regdate) = YEAR(NOW())';
+                $sql = 'SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and ' . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate');
                 break;
         }
 
@@ -353,51 +375,51 @@ class Statistics extends MyAppModel
         $type = strtolower($type);
         switch ($type) {
             case 'total_members':
-                $sql = "SELECT 1 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) and YEAR(user_regdate) = YEAR(NOW())
+                $sql = "SELECT 1 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_TODAY, 'user_regdate') . "
 				UNION ALL
-				SELECT 7 AS num_days, count(user_id) FROM `tbl_users` WHERE  user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and  YEARWEEK(user_regdate) = YEARWEEK(NOW()) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 7 AS num_days, count(user_id) FROM `tbl_users` WHERE  user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and  " . self::getIntervalCondition(self::BY_THIS_WEEK, 'user_regdate') . "
 				UNION ALL
-				SELECT 30 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and MONTH(user_regdate) = MONTH(NOW()) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 30 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate') . "
 				UNION ALL
-				SELECT 90 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_regdate > date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)
+				SELECT 90 AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'user_regdate') . "
 				UNION ALL
 				SELECT -1 AS num_days, count(user_id) FROM `tbl_users` where user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_is_shipping_company!=1";
 
                 /* buyer/seller data [ */
                 $sql .= " UNION ALL
-				SELECT 'buyer_seller_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) AND (user_is_buyer = 1 OR user_is_supplier = 1) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'buyer_seller_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_buyer = 1 OR user_is_supplier = 1) and " . self::getIntervalCondition(self::BY_TODAY, 'user_regdate') . "
 				UNION ALL
-				SELECT 'buyer_seller_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and YEARWEEK(user_regdate) =  YEARWEEK(NOW()) AND (user_is_buyer = 1 OR user_is_supplier = 1) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'buyer_seller_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_buyer = 1 OR user_is_supplier = 1) and " . self::getIntervalCondition(self::BY_THIS_WEEK, 'user_regdate') . "
 				UNION ALL
-				SELECT 'buyer_seller_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and MONTH(user_regdate) = MONTH(NOW()) AND (user_is_buyer = 1 OR user_is_supplier = 1) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'buyer_seller_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_buyer = 1 OR user_is_supplier = 1) and " . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate') . "
 				UNION ALL
-				SELECT 'buyer_seller_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_regdate > date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH) AND (user_is_buyer = 1 OR user_is_supplier = 1)
+				SELECT 'buyer_seller_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_buyer = 1 OR user_is_supplier = 1) and " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'user_regdate') . "
 				UNION ALL
 				SELECT 'buyer_seller_all' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_buyer = 1 OR user_is_supplier = 1)";
                 /* ] */
 
                 /* advertiser data [ */
                 $sql .= " UNION ALL
-				SELECT 'advertiser_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) AND (user_is_advertiser = 1)  and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'advertiser_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_advertiser = 1)  and " . self::getIntervalCondition(self::BY_TODAY, 'user_regdate') . "
 				UNION ALL
-				SELECT 'advertiser_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and YEARWEEK(user_regdate) =  YEARWEEK(NOW()) AND (user_is_advertiser = 1) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'advertiser_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_advertiser = 1) and " . self::getIntervalCondition(self::BY_THIS_WEEK, 'user_regdate') . "
 				UNION ALL
-				SELECT 'advertiser_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and MONTH(user_regdate) = MONTH(NOW()) AND (user_is_advertiser = 1)  and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'advertiser_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_advertiser = 1)  and " . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate') . "
 				UNION ALL
-				SELECT 'advertiser_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_regdate > date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH) AND (user_is_advertiser = 1)
+				SELECT 'advertiser_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_advertiser = 1) and " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'user_regdate') . "
 				UNION ALL
 				SELECT 'advertiser_all' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_advertiser = 1)";
                 /* ] */
 
                 /* Affiliate data [ */
                 $sql .= " UNION ALL
-				SELECT 'affiliate_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) AND (user_is_affiliate = 1)  and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'affiliate_1' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_affiliate = 1)  and " . self::getIntervalCondition(self::BY_TODAY, 'user_regdate') . "
 				UNION ALL
-				SELECT 'affiliate_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and YEARWEEK(user_regdate) =  YEARWEEK(NOW()) AND (user_is_affiliate = 1) and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'affiliate_7' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_affiliate = 1) and " . self::getIntervalCondition(self::BY_THIS_WEEK, 'user_regdate') . "
 				UNION ALL
-				SELECT 'affiliate_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and MONTH(user_regdate) = MONTH(NOW()) AND (user_is_affiliate = 1)  and YEAR(user_regdate) = YEAR(NOW())
+				SELECT 'affiliate_30' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_affiliate = 1)  and " . self::getIntervalCondition(self::BY_THIS_MONTH, 'user_regdate') . "
 				UNION ALL
-				SELECT 'affiliate_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_regdate > date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH) AND (user_is_affiliate = 1)
+				SELECT 'affiliate_90' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_affiliate = 1) and " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'user_regdate') . "
 				UNION ALL
 				SELECT 'affiliate_all' AS num_days, count(user_id) FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and (user_is_affiliate = 1)";
                 /* ] */
@@ -421,19 +443,19 @@ class Statistics extends MyAppModel
 
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days'));
-                $srchObj1->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
+                $srchObj1->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'order_date_added'));
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days'));
-                $srchObj7->addDirectCondition('YEARWEEK(order_date_added) = YEARWEEK(NOW())');
+                $srchObj7->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'order_date_added'));
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days'));
-                $srchObj30->addDirectCondition('MONTH(order_date_added)=MONTH(NOW())');
+                $srchObj30->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'order_date_added'));
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days'));
-                $srchObj90->addDirectCondition('order_date_added>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
+                $srchObj90->addDirectCondition(self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'order_date_added'));
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days'));
@@ -451,22 +473,22 @@ class Statistics extends MyAppModel
             case 'total_seller_products':
                 $sql = "SELECT 1 as num_days, COUNT(selprod_id) FROM " . SellerProduct::DB_TBL . " sp
 				LEFT OUTER JOIN " . Product::DB_TBL . " p ON sp.selprod_product_id = p.product_id
-				WHERE DATE(selprod_added_on) = DATE( NOW() )
+				WHERE " . self::getIntervalCondition(self::BY_TODAY, 'selprod_added_on') . "
 				AND product_active = " . applicationConstants::ACTIVE . " AND product_approved = " . applicationConstants::YES . " AND selprod_active = " . applicationConstants::ACTIVE . " AND selprod_deleted = " . applicationConstants::NO . "
 				UNION ALL
 				SELECT 7 as num_days, COUNT(selprod_id) FROM " . SellerProduct::DB_TBL . " sp
 				LEFT OUTER JOIN " . Product::DB_TBL . " p ON sp.selprod_product_id = p.product_id
-				WHERE YEARWEEK(selprod_added_on) = YEARWEEK(NOW())
+				WHERE " . self::getIntervalCondition(self::BY_THIS_WEEK, 'selprod_added_on') . "
 				AND product_active = " . applicationConstants::ACTIVE . " AND product_approved = " . applicationConstants::YES . " AND selprod_active = " . applicationConstants::ACTIVE . " AND selprod_deleted = " . applicationConstants::NO . "
 				UNION ALL
 				SELECT 30 as num_days, COUNT(selprod_id) FROM " . SellerProduct::DB_TBL . " sp
 				LEFT OUTER JOIN " . Product::DB_TBL . " p ON sp.selprod_product_id = p.product_id
-				WHERE MONTH(selprod_added_on) = MONTH( NOW() )
+				WHERE " . self::getIntervalCondition(self::BY_THIS_MONTH, 'selprod_added_on') . "
 				AND product_active = " . applicationConstants::ACTIVE . " AND product_approved = " . applicationConstants::YES . " AND selprod_active = " . applicationConstants::ACTIVE . " AND selprod_deleted = " . applicationConstants::NO . "
 				UNION ALL
 				SELECT 90 as num_days, COUNT(selprod_id) FROM " . SellerProduct::DB_TBL . " sp
 				LEFT OUTER JOIN " . Product::DB_TBL . " p ON sp.selprod_product_id = p.product_id
-				WHERE selprod_added_on > DATE_SUB( DATE_ADD( DATE_ADD( LAST_DAY(NOW()), interval 1 DAY ), interval -1 MONTH), INTERVAL 3 MONTH)
+				WHERE " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'selprod_added_on') . "
 				AND product_active = " . applicationConstants::ACTIVE . " AND product_approved = " . applicationConstants::YES . " AND selprod_active = " . applicationConstants::ACTIVE . " AND selprod_deleted = " . applicationConstants::NO . "
 				UNION ALL
 				SELECT -1 AS num_days, COUNT(selprod_id) FROM " . SellerProduct::DB_TBL . " sp
@@ -484,19 +506,19 @@ class Statistics extends MyAppModel
 
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days', 'count(withdrawal_id)'));
-                $srchObj1->addDirectCondition('DATE(withdrawal_request_date) = DATE(NOW())');
+                $srchObj1->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'withdrawal_request_date'));
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days', 'count(withdrawal_id)'));
-                $srchObj7->addDirectCondition('YEARWEEK(withdrawal_request_date) = YEARWEEK(NOW())');
+                $srchObj7->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'withdrawal_request_date'));
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days', 'count(withdrawal_id)'));
-                $srchObj30->addDirectCondition('MONTH(withdrawal_request_date)=MONTH(NOW())');
+                $srchObj30->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'withdrawal_request_date'));
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days', 'count(withdrawal_id)'));
-                $srchObj90->addDirectCondition('withdrawal_request_date>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
+                $srchObj90->addDirectCondition(self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'withdrawal_request_date'));
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days', 'count(withdrawal_id)'));
@@ -509,13 +531,13 @@ class Statistics extends MyAppModel
 
             case 'total_affiliate_commission':
                 $commonAndCondition = "( utxn_type = " . Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP . " OR utxn_type = " . Transactions::TYPE_AFFILIATE_REFERRAL_ORDER . " )";
-                $sql = "SELECT 1 AS num_days, IFNULL(SUM(utxn_credit), 0) FROM tbl_user_transactions WHERE DATE(utxn_date) = DATE( NOW() ) AND " . $commonAndCondition . "
+                $sql = "SELECT 1 AS num_days, IFNULL(SUM(utxn_credit), 0) FROM tbl_user_transactions WHERE " . self::getIntervalCondition(self::BY_TODAY, 'utxn_date') . " AND " . $commonAndCondition . "
 				UNION ALL
-				SELECT 7 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE YEARWEEK( utxn_date ) = YEARWEEK( NOW() ) AND " . $commonAndCondition . "
+				SELECT 7 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE " . self::getIntervalCondition(self::BY_THIS_WEEK, 'utxn_date') . " AND " . $commonAndCondition . "
 				UNION ALL
-				SELECT 30 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE MONTH(utxn_date) = MONTH( NOW() ) AND " . $commonAndCondition . "
+				SELECT 30 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE " . self::getIntervalCondition(self::BY_THIS_MONTH, 'utxn_date') . " AND " . $commonAndCondition . "
 				UNION ALL
-				SELECT 90 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE utxn_date > DATE_SUB( DATE_ADD( DATE_ADD( LAST_DAY( NOW() ), interval 1 DAY), interval -1 MONTH ), INTERVAL 3 MONTH) AND " . $commonAndCondition . "
+				SELECT 90 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'utxn_date') . " AND " . $commonAndCondition . "
 				UNION ALL
 				SELECT -1 AS num_days, IFNULL(SUM( utxn_credit ), 0) FROM tbl_user_transactions WHERE " . $commonAndCondition;
                 $rs = $this->db->query($sql);
@@ -523,13 +545,13 @@ class Statistics extends MyAppModel
                 break;
 
             case 'total_ppc_earnings':
-                $sql = "SELECT 1 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  DATE(pcharge_date)=DATE(NOW())
+                $sql = "SELECT 1 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  " . self::getIntervalCondition(self::BY_TODAY, 'pcharge_date') . "
 				UNION ALL
-				SELECT 7 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE   YEARWEEK(pcharge_date) = YEARWEEK(NOW())
+				SELECT 7 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE   " . self::getIntervalCondition(self::BY_THIS_WEEK, 'pcharge_date') . "
 				UNION ALL
-				SELECT 30 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  MONTH(pcharge_date)=MONTH(NOW())
+				SELECT 30 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  " . self::getIntervalCondition(self::BY_THIS_MONTH, 'pcharge_date') . "
 				UNION ALL
-				SELECT 90 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  pcharge_date>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)
+				SELECT 90 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc  WHERE  " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'pcharge_date') . "
 				UNION ALL
 				SELECT -1 AS num_days,SUM(pcharge_charged_amount) AS totalppcearnings FROM `tbl_promotions_charges` tpc";
 
@@ -538,13 +560,13 @@ class Statistics extends MyAppModel
                 break;
 
             case 'total_subscription_earnings':
-                $sql = "SELECT 1 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub  INNER JOIN tbl_orders on order_id = ossubs_order_id WHERE DATE(ossubs_from_date)=DATE(NOW()) and order_payment_status = 1
+                $sql = "SELECT 1 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub  INNER JOIN tbl_orders on order_id = ossubs_order_id WHERE " . self::getIntervalCondition(self::BY_TODAY, 'ossubs_from_date') . " and order_payment_status = 1
                                 UNION ALL
-                                SELECT 7 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id  WHERE YEARWEEK(ossubs_from_date) = YEARWEEK(NOW()) and order_payment_status = 1
+                                SELECT 7 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id  WHERE " . self::getIntervalCondition(self::BY_THIS_WEEK, 'ossubs_from_date') . " and order_payment_status = 1
                                 UNION ALL
-                                SELECT 30 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id WHERE MONTH(ossubs_from_date)=MONTH(NOW()) and order_payment_status = 1
+                                SELECT 30 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id WHERE " . self::getIntervalCondition(self::BY_THIS_MONTH, 'ossubs_from_date') . " and order_payment_status = 1
                                 UNION ALL
-                                SELECT 90 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id  WHERE ossubs_from_date>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH) and order_payment_status = 1
+                                SELECT 90 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id  WHERE " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'ossubs_from_date') . " and order_payment_status = 1
                                 UNION ALL
                                 SELECT -1 AS num_days,SUM(order_net_amount) AS earnings FROM `tbl_order_seller_subscriptions` osub INNER JOIN tbl_orders on order_id = ossubs_order_id where order_payment_status = 1";
                 $rs = $this->db->query($sql);
@@ -559,19 +581,19 @@ class Statistics extends MyAppModel
                 $srch->addCondition('user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days', 'count(withdrawal_id)'));
-                $srchObj1->addDirectCondition('DATE(withdrawal_request_date) = DATE(NOW())');
+                $srchObj1->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'withdrawal_request_date'));
 
                 $srchObj7 = clone $srch;
                 $srchObj7->addFld(array('7 AS num_days', 'count(withdrawal_id)'));
-                $srchObj7->addDirectCondition('YEARWEEK(withdrawal_request_date) = YEARWEEK(NOW())');
+                $srchObj7->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'withdrawal_request_date'));
 
                 $srchObj30 = clone $srch;
                 $srchObj30->addFld(array('30 AS num_days', 'count(withdrawal_id)'));
-                $srchObj30->addDirectCondition('MONTH(withdrawal_request_date)=MONTH(NOW())');
+                $srchObj30->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'withdrawal_request_date'));
 
                 $srchObj90 = clone $srch;
                 $srchObj90->addFld(array('90 AS num_days', 'count(withdrawal_id)'));
-                $srchObj90->addDirectCondition('withdrawal_request_date>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
+                $srchObj90->addDirectCondition(self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'withdrawal_request_date'));
 
                 $srchObjAll = clone $srch;
                 $srchObjAll->addFld(array('-1 AS num_days', 'count(withdrawal_id)'));
@@ -583,13 +605,13 @@ class Statistics extends MyAppModel
                 break;
 
             case 'total_product_reviews':
-                $sql = "SELECT 1 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE DATE(spreview_posted_on)=DATE(NOW())
+                $sql = "SELECT 1 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE " . self::getIntervalCondition(self::BY_TODAY, 'spreview_posted_on') . "
 				UNION ALL
-				SELECT 7 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE YEARWEEK(spreview_posted_on) = YEARWEEK(NOW())
+				SELECT 7 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE " . self::getIntervalCondition(self::BY_THIS_WEEK, 'spreview_posted_on') . "
 				UNION ALL
-				SELECT 30 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE MONTH(spreview_posted_on)=MONTH(NOW())
+				SELECT 30 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE " . self::getIntervalCondition(self::BY_THIS_MONTH, 'spreview_posted_on') . "
 				UNION ALL
-				SELECT 90 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE spreview_posted_on>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)
+				SELECT 90 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews` WHERE " . self::getIntervalCondition(self::BY_LAST_3_MONTHS, 'spreview_posted_on') . "
 				UNION ALL
 				SELECT -1 AS num_days, count(spreview_id) FROM `tbl_seller_product_reviews`";
 
@@ -622,16 +644,16 @@ class Statistics extends MyAppModel
         $srch->addMultipleFields(array('IF(selprod_title is null or op_selprod_title ="",CONCAT(op_product_name,op_selprod_options) , selprod_title) as product_name', 'sum(op_qty - op_refund_qty) as sold'));
         switch (strtoupper($type)) {
             case 'TODAY':
-                $srch->addDirectCondition('DATE(o.order_date_added)=DATE(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'o.order_date_added'));
                 break;
             case 'WEEKLY':
-                $srch->addDirectCondition('YEARWEEK(o.order_date_added)=YEARWEEK(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'o.order_date_added'));
                 break;
             case 'MONTHLY':
-                $srch->addDirectCondition('MONTH(o.order_date_added)=MONTH(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'o.order_date_added'));
                 break;
             case 'YEARLY':
-                $srch->addDirectCondition('YEAR(o.order_date_added)=YEAR(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_YEAR, 'o.order_date_added'));
                 break;
         }
         /* $srch->addGroupBy('product_name'); */
@@ -647,16 +669,16 @@ class Statistics extends MyAppModel
         $srch = new SearchBase('tbl_search_items', 'tsi');
         switch (strtoupper($type)) {
             case 'TODAY':
-                $srch->addDirectCondition('DATE(tsi.searchitem_date)=DATE(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_TODAY, 'tsi.searchitem_date'));
                 break;
             case 'WEEKLY':
-                $srch->addDirectCondition('YEARWEEK(tsi.searchitem_date)=YEARWEEK(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_WEEK, 'tsi.searchitem_date'));
                 break;
             case 'MONTHLY':
-                $srch->addDirectCondition('MONTH(tsi.searchitem_date)=MONTH(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_MONTH, 'tsi.searchitem_date'));
                 break;
             case 'YEARLY':
-                $srch->addDirectCondition('YEAR(tsi.searchitem_date)=YEAR(NOW())');
+                $srch->addDirectCondition(self::getIntervalCondition(self::BY_THIS_YEAR, 'tsi.searchitem_date'));
                 break;
         }
         $srch->addMultipleFields(array('tsi.*', 'sum(tsi.searchitem_count) as search_count'));

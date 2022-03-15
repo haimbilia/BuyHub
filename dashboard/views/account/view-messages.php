@@ -36,13 +36,13 @@
                             <tr>
                                 <td><?php echo FatDate::format($threadDetails["thread_start_date"], false); ?> </td>
                                 <td>
-                                    <div class="item__description">
+                                    <div class="product-profile__description">
                                         <?php if ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_ORDER_PRODUCT) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["op_invoice_number"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["op_invoice_number"]; ?></span>
                                         <?php } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_SHOP) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["shop_name"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["shop_name"]; ?></span>
                                         <?php } elseif ($threadDetails["thread_type"] == THREAD::THREAD_TYPE_PRODUCT) { ?>
-                                            <span class="item__title"><?php echo $threadDetails["selprod_title"]; ?></span>
+                                            <span class="product-profile__title"><?php echo $threadDetails["selprod_title"]; ?></span>
                                         <?php } ?>
                                     </div>
                                 </td>
@@ -87,12 +87,12 @@
                                         $userImgUpdatedOn = $shopDetails['shop_updated_on'];
                                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                     ?>
-                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, 'thumb'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($shopDetails['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shopDetails['shop_name']; ?>">
                                     <?php } else {
                                         $userImgUpdatedOn = User::getAttributesById($loggedUserId, 'user_updated_on');
                                         $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                     ?>
-                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($loggedUserId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $loggedUserName; ?>">
                                     <?php } ?>
                                 </div>
                                 <div class="msg__desc">

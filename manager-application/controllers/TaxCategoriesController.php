@@ -130,7 +130,8 @@ class TaxCategoriesController extends ListingBaseController
                     'taxcat_plugin_id',
                     'taxcat_active',
                     'taxcat_deleted',
-                    'taxcat_name'
+                    'taxcat_name',
+                    'taxcat_identifier'
                 ],
                 true
             );
@@ -139,6 +140,8 @@ class TaxCategoriesController extends ListingBaseController
             }
             $frm->fill($data);
         }
+        HtmlHelper::addIdentierToFrm($frm->getField($this->modelClass::tblFld('name')), ($data[$this->modelClass::tblFld('identifier')] ?? ''));
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, NULL, true));

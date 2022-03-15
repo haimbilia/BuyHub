@@ -24,10 +24,10 @@ class FormFieldDatePicker
 
         if ($fld->fldType == 'datetime') {
             $calhtml = '<script type="text/javascript">//<![CDATA[
-       $( "#' . $htmlElement->getAttribute('id') . '" ).addClass("fld-date-time").datetimepicker({' . $layoutConf . ' dateFormat:"' . $dateformat . '", changeYear: true, changeMonth: true, showButtonPanel: true, yearRange: "-60:+5"';
+       $( "#' . $htmlElement->getAttribute('id') . '" ).addClass("fld-date-time").datetimepicker({' . $layoutConf . ' dateFormat:"' . $dateformat . '", changeYear: true, changeMonth: true, showButtonPanel: true, yearRange: "-60:+5",onSelect: function () { this.focus(); },onClose: function (){this.focus();';
         } else {
             $calhtml = '<script type="text/javascript">//<![CDATA[
-       $( "#' . $htmlElement->getAttribute('id') . '" ).addClass("fld-date").datepicker({' . $layoutConf . ' dateFormat:"' . $dateformat . '", changeYear: true, changeMonth: true, showButtonPanel: true, yearRange: "-60:+5"';
+       $( "#' . $htmlElement->getAttribute('id') . '" ).addClass("fld-date").datepicker({' . $layoutConf . ' dateFormat:"' . $dateformat . '", changeYear: true, changeMonth: true, showButtonPanel: true, yearRange: "-60:+5",onSelect: function () { this.focus(); },onClose: function (){this.focus(); }';
         }
 
         if (isset($fld->developerTags['date_extra_js'])) {

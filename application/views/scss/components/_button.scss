@@ -1,61 +1,22 @@
-@-webkit-keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-@keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-.invalid {
-    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
-}
-
-$btn-padding: 0.6rem 0.75rem;
-$btn-height: auto;
+$btn-padding: 0 0.75rem;
+$btn-height: 3rem;
 $btn-border: solid 1px transparent;
-$btn-radius: 0;
-$btn-font-size: 1rem;
-$btn-line-height: 1.5;
+$btn-radius: 3px;
+$btn-font-size: 0.85rem;
+$btn-font-weight: 500;
+$btn-line-height: $btn-height;
 .btn {
     border: $btn-border;
     padding: $btn-padding;
     height: $btn-height;
     border-radius: $btn-radius;
     font-size: $btn-font-size;
+    font-weight: $btn-font-weight;
     line-height: $btn-line-height;
     &-brand {
-        background-color: var(--brand-color);
-        color: var(--brand-color-inverse);
+        @include bg-brand;
         &:hover {
-            color: var(--brand-color-inverse);
+            color: $brand-color-inverse;
         }
     }
     &-outline-brand {
@@ -134,24 +95,26 @@ $btn-line-height: 1.5;
         padding-right: 2rem;
     }
     &-sm {
+        height: auto;
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         //border-radius: 0.2rem;
     }
     &-arrow {
-        svg {
+        .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
-            fill: currentColor;
         }
     }
     &-link {
         text-decoration: none;
         color: $txt-body;
         padding: 0;
+        height: auto;
+        line-height: 1;
         .arrow {
             display: inline-block;
             transition: all 0.2s ease-in-out;
@@ -171,9 +134,7 @@ $btn-line-height: 1.5;
     &:focus {
         outline: none !important;
     }
-    &:hover {
-        color: inherit;
-    }
+
     .icn {
         svg {
             width: 16px;
@@ -276,21 +237,64 @@ a.link-arrow {
     }
 }
 .link-underline {
+    padding: 0;
     color: $brand-color;
     position: relative;
     font-size: 0.875rem;
+    font-weight: 500;
     white-space: nowrap;
     text-rendering: optimizeLegibility;
     transition: color 0.3s ease-in-out;
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 50% 100%;
     background-repeat: no-repeat;
-    background-size: 0% 1px;
+    background-size: 0% 2px;
+    background-color: transparent;
     transition: background-size 0.3s;
     text-decoration: none;
-    background-size: 100% 1px;
+    background-size: 100% 2px;
+    border: none;
     &:hover {
         text-decoration: none;
-        background-size: 95% 1px;
+        background-size: 95% 2px;
     }
+}
+@-webkit-keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.invalid {
+    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }

@@ -6,7 +6,7 @@
             <div class="review-block__label">
                 <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
                 <div class="review-block__link">
-                    <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    <button class="link-underline" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                 </div>
 
             </div>
@@ -61,12 +61,7 @@
                         <li class="list-cart-item shipping-select">
                             <div class="shop-detail">
                                 <h6 class="shop-title">
-                                    <i class="icn">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
-                                            </use>
-                                        </svg>
-                                    </i>
+
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
@@ -116,10 +111,10 @@
                             $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                             $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
-                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                            $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
-                            <li class="list-cart-item">
-                                <div class="block-img">
+                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
+                            <li class="list-cart-item block-cart">
+                                <div class="block-cart-img">
                                     <div class="product-profile">
                                         <div class="products-img">
                                             <a href="<?php echo $productUrl; ?>">
@@ -139,17 +134,23 @@
                                         </div>
 
                                     </div>
-                                    <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                                    </button>
+
                                 </div>
-                                <div class="block-detail">
-                                    <div class="block-detail-top">
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
                                         <div class="product-profile">
                                             <div class="product-profile-data">
                                                 <a class="title" href="<?php echo $productUrl; ?>">
                                                     <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
                                                 </a>
+                                                <div class="products-price">
+                                                    <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                                        <span class="products-price-off">
+                                                            <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?>
+                                                        </span>
+                                                    <?php } ?>
+                                                </div>
                                                 <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
                                                         $optionStr = '';
@@ -162,12 +163,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="block-detail-bottom">
-                                        <div class="product-quantity"> <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
+                                        <div class="product-quantity">
                                             <div class="quantity quantity-sm">
-
-                                                <span class="decrease decrease-js"><i class="icn">
+                                                <span class="decrease decrease-js">
+                                                    <i class="icn">
                                                         <svg class="svg" width="16" height="16">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                             </use>
@@ -182,14 +181,17 @@
                                                     </i></span>
                                             </div>
                                         </div>
-                                        <div class="products-price">
-                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                <span class="products-price-off">
-                                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?>
-                                                </span>
-                                            <?php } ?>
-                                        </div>
+                                    </div>
+                                    <div class="block-cart-detail-bottom">
+                                        <ul class="cart-action">
+                                            <li class="cart-action-item">
+                                                <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                                    <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                                </button>
+                                            </li>
+                                        </ul>
+
+
                                     </div>
                                 </div>
 
@@ -209,12 +211,7 @@
                         <li class="list-cart-item shipping-select">
                             <div class="shop-detail">
                                 <h6 class="shop-title">
-                                    <i class="icn">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
-                                            </use>
-                                        </svg>
-                                    </i>
+
                                     <?php echo (0 < $pickUpBy) ? $digiProductData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
@@ -225,29 +222,30 @@
                         <?php foreach ($levelItems['digital_products'] as $pickUpBy => $product) {
                             $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
-                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
-                            <li class="list-cart-item">
-                                <div class="block-img">
+                            <li class="list-cart-item block-cart">
+                                <div class="block-cart-img">
                                     <div class="product-profile">
                                         <div class="product-profile-thumbnail">
                                             <a href="<?php echo $productUrl; ?>">
                                                 <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
                                             </a>
                                         </div>
-
                                     </div>
-                                    <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                        Remove
-                                    </button>
-
                                 </div>
-
-                                <div class="block-detail">
-                                    <div class="block-detail-top">
+                                <div class="block-cart-detail">
+                                    <div class="block-cart-detail-top">
                                         <div class="product-profile">
                                             <div class="product-profile-data">
                                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                <div class="products-price">
+                                                    <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                                        <span class="products-price-off">
+                                                            <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                                    <?php } ?>
+                                                </div>
                                                 <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
                                                         $optionStr = '';
@@ -259,10 +257,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="block-detail-bottom">
                                         <div class="product-quantity">
-                                            <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
                                             <div class="quantity quantity-sm">
                                                 <span class="decrease decrease-js">
                                                     <i class="icn">
@@ -281,15 +276,16 @@
                                                     </i></span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="block-cart-detail-bottom">
+                                        <ul class="cart-action">
+                                            <li class="cart-action-item">
+                                                <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                                    <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                                </button>
+                                            </li>
+                                        </ul>
 
-
-                                        <div class="products-price">
-                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                <span class="products-price-off">
-                                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
-                                            <?php } ?>
-                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -301,7 +297,7 @@
             } ?>
         </div>
         <div class="step_foot">
-            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)" onclick="showAddressList();"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
+            <a class="btn btn-outline-gray btn-wide" href="javascript:void(0)" onclick="showAddressList();"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
             <?php if ($hasPhysicalProd) { ?>
                 <a class="btn btn-brand btn-wide " onClick="setUpPickup();" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
             <?php } else { ?>

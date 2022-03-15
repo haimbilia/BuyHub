@@ -180,7 +180,6 @@ class DiscountCouponsController extends ListingBaseController
         $frm = $this->getForm();
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -304,10 +303,16 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DISCOUNT_TYPE', $this->siteLangId), 'coupon_type', $typeArr)->requirements()->setRequired();
 
         $frm->addRequiredField(Labels::getLabel('FRM_COUPON_TITLE', $this->siteLangId), 'coupon_title');
+
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_COUPON_CODE', $this->siteLangId), 'coupon_code');
         $fld->setUnique(DiscountCoupons::DB_TBL, 'coupon_code', 'coupon_id', 'coupon_id', 'coupon_id');
+
         $frm->addTextArea(Labels::getLabel('FRM_COUPON_DESCRIPTION', $this->siteLangId), 'coupon_description');
 
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'coupon_start_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
+        
         $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_DISCOUNT_IN', $this->siteLangId), 'coupon_discount_in_percent', $percentageFlatArr, '', array(), '');
 
@@ -317,10 +322,6 @@ class DiscountCouponsController extends ListingBaseController
 
         $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_COUPON', $this->siteLangId), 'coupon_uses_count', 1);
         $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_CUSTOMER', $this->siteLangId), 'coupon_uses_coustomer', 1);
-
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'coupon_start_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
 
         $frm->addCheckBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 

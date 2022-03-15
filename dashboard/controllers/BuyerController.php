@@ -699,7 +699,7 @@ class BuyerController extends BuyerBaseController
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
             $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
-            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], "THUMB", $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('postedData', $post);
@@ -762,7 +762,7 @@ class BuyerController extends BuyerBaseController
 
         foreach ($orderProducts as &$op) {
             $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
-            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], "CLAYOUT3", $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {

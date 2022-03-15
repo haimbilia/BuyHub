@@ -31,10 +31,10 @@
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'product_identifier':
-                    $html = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'CustomProduct', array($row['preq_id'], $siteLangId, "SMALL", 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
-                                <div class="item__description">
-                                    <div class="item__title">' . $row['product_name'] . '</div>
-                                    <div class="item__sub_title"> (' . $row[$key] . ') </div>
+                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'CustomProduct', array($row['preq_id'], $siteLangId, ImageDimension::VIEW_SMALL, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
+                                <div class="product-profile__description">
+                                    <div class="product-profile__title">' . $row['product_name'] . '</div>
+                                    <div class="product-profile__sub_title"> (' . $row[$key] . ') </div>
                             </div></div>';
                     $td->appendElement('plaintext', array(), $html, true);
                     break;

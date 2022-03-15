@@ -28,7 +28,7 @@ $badgeName = $badgeData['badge_name'];
 if (Badge::TYPE_BADGE == $badgeType) {
     $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $siteLangId);
     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-    $imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
+    $imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {
     $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $badgeData], false, true);
     $imageHtml = '<div class="badge-wrap">' . $ribbon . '</div>';

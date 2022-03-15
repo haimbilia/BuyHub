@@ -63,6 +63,7 @@ class RatingTypesController extends ListingBaseController
 
         $srch = new RatingTypeSearch($this->siteLangId);
         $attr = array_merge(RatingType::ATTR, RatingType::LANG_ATTR, ['COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
+        $srch->addMultipleFields($attr);
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');

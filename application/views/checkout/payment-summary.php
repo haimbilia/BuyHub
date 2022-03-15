@@ -24,7 +24,11 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         $onclick = 'loadAddressDiv();';
                     }
                     ?>
-                    <a class="link" href="javascript:void(0);" onClick="<?php echo $onclick; ?>"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    <button class="link-underline" onClick="<?php echo $onclick; ?>">
+                        <span>
+                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                        </span>
+                    </button>
                 </div>
             </div>
             <div class="review-block__content">
@@ -39,7 +43,10 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                     <?php if (strlen($address['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                     ?>
-                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                        <p class="phone-txt">
+                            <i class="fas fa-mobile-alt"></i>
+                            <?php echo $addrPhone; ?>
+                        </p>
                     <?php } ?>
                 </div>
             </div>
@@ -51,7 +58,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?>
                     <div class="review-block__link">
-                        <a class="link" href="javascript:void(0);" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                        <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                     </div>
                 </div>
                 <div class="review-block__content">
@@ -83,7 +90,9 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                 ?>
                             </p>
                             <?php if (count($orderPickUpData) > 1) { ?>
-                                <a class="link plus-more" href="javascript:void(0);" onClick="orderPickUpData('<?php echo $orderId; ?>')"><?php echo '+ ' . (count($orderPickUpData) - 1) . ' ' . Labels::getLabel('LBL_More', $siteLangId); ?></a>
+                                <button class="link plus-more" onClick="orderPickUpData('<?php echo $orderId; ?>')">
+                                    <?php echo '+ ' . (count($orderPickUpData) - 1) . ' ' . Labels::getLabel('LBL_More', $siteLangId); ?>
+                                </button>
                             <?php break;
                             } ?>
                         <?php } ?>
@@ -98,18 +107,22 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Shipping:', $siteLangId); ?>
                     <div class="review-block__link">
-                        <a class="link" href="javascript:void(0);" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                        <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                     </div>
                 </div>
                 <div class="review-block__content">
                     <div class="shipping-data">
+                        <ul class="shipping-methods">
+
+                        </ul>
+
                         <ul class="media-more media-more-sm show">
                             <?php foreach ($orderShippingData as $shipData) { ?>
                                 <?php
                                 foreach ($shipData as $data) {
                                     $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
-                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], "EXTRA-SMALL", $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], "WEBPEXTRA-SMALL", $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
+                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], 'WEBP' . ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
                                 ?>
                                     <li>
                                         <span class="circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
@@ -135,8 +148,8 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                             } ?>
                         </ul>
 
-                        <div class="shipping-data_title"><?php echo $data['opshipping_label']; ?></div>
-
+                        <div class="shipping-data_title">
+                            <?php echo $data['opshipping_label']; ?></div>
                     </div>
                 </div>
 
@@ -147,7 +160,9 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
             <li class="review-block-item">
                 <div class="review-block__label">
                     <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?> <div class="review-block__link">
-                        <a class="link" href="javascript:void(0);" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                        <button class="link-underline" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)">
+                            <span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span>
+                        </button>
                     </div>
                 </div>
                 <div class="review-block__content">
@@ -161,7 +176,9 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                     <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
                     ?>
-                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                        <p class="phone-txt">
+                            <i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?>
+                        </p>
                     <?php } ?>
                 </div>
 
@@ -233,11 +250,12 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         <?php echo Labels::getLabel('LBL_Successfully_Used', $siteLangId); ?></span>
                     <ul class="list-actions">
                         <li>
-                            <a href="javascript:void(0)" onClick="removeRewardPoints()"><svg class="svg" width="24px" height="24px">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                            <button onClick="removeRewardPoints()">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
                                     </use>
                                 </svg>
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>

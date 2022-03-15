@@ -234,9 +234,6 @@
             justify-content: flex-end;
             color: #fff;
             margin-#{$start-direction}: auto;
-            .short-links > ul > li:after {
-                content: normal;
-            }
         }
         .c-header-icon {
             display: flex;
@@ -321,14 +318,15 @@
         .quick-search {
         }
     }
-    .short-links {
-        &-item {
-        }
-    }
+
     .my-account {
         &-btn {
             background-color: transparent;
             border: none;
+            display: none;
+            @include media-breakpoint-up(lg) {
+                display: block;
+            }
         }
         &-target {
             min-width: 16rem;
@@ -563,6 +561,9 @@
             font-weight: 600;
             font-size: 0.7rem;
         }
+    }
+    .is-active {
+        color: $brand-color;
     }
 }
 

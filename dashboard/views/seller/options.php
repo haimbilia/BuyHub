@@ -29,8 +29,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-lg-12">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <div class="card-body">
-                        <div id="optionListing"></div>
+                    <div class="card-table" id="optionListing">
                     </div>
                 </div>
             </div>

@@ -12,10 +12,10 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
         $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
         echo $frm->getFormTag(); ?>
         <?php if (1 > $tourStep) { ?>
-        <div class="add-stock" id="productWrapper">
-            <?php require_once(CONF_THEME_PATH . 'products/form-left.php'); ?>
-            <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>                      
-        </div>
+            <div class="add-stock" id="productWrapper">
+                <?php require_once(CONF_THEME_PATH . 'products/form-left.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>
+            </div>
         <?php } else { ?>
             <div class="onboarding">
                 <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
@@ -68,6 +68,9 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
             select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'), {
                 langId
             });
+            select2('product_ship_package', fcom.makeUrl('shippingPackages', 'autoComplete'), {
+                langId
+            });
             select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
                 langId
             });
@@ -116,12 +119,13 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                     $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php }
             } ?>
-            
+
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
             upcType();
+            fixTableColumnWidth();
         });
     </script>
 </main>
@@ -141,16 +145,18 @@ function getVariantUiTr($langId, $i, $productOption = [])
     }
     $tagData = json_encode($tagData);
 
+    $tagifyPlaceholder = Labels::getLabel('FRM_TYPE_TO_SEARCH');
+
     return <<<HTML
     <tr class="rowJs">
-        <td width="30%">
+        <td>
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
             </select>
         </td>
-        <td width="50%">
-            <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
+        <td>
+            <input class="form-tagify optionValuesJs" placeholder='$tagifyPlaceholder' id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
         </td>
-        <td class="align-right" width="20%">
+        <td class="align-right">
             <ul class="actions">
                 <li class="$deleteClass optionsDeleteJs">
                     <a href="javascript:void(0)" class="">

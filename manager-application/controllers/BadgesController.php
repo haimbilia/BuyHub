@@ -543,6 +543,6 @@ class BadgesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, [Badge::DB_TBL_PREFIX . 'shape_type'], Common::excludeKeysForSort());
+        return array_diff($fields, [Badge::DB_TBL_PREFIX . 'shape_type', 'badge_required_approval'], Common::excludeKeysForSort());
     }
 }

@@ -17,7 +17,13 @@
     </td>
     <td>
         <ul class="actions">
-            <li><a title="Delete" href="javascript:void(0);" onclick="deleteSellerProductVolumeDiscount(<?php echo $volDiscountId; ?>)"><i class="fa fa-trash"></i></a></li>
+            <li><a title="Delete" href="javascript:void(0);" onclick="deleteSellerProductVolumeDiscount(<?php echo $volDiscountId; ?>)">
+                <svg class="svg" width="18" height="18">
+                    <use
+                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                    </use>
+                </svg>
+            </a></li>
         </ul>
     </td>
 </tr>

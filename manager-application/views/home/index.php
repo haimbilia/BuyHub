@@ -98,7 +98,6 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-stats list-stats-double">
-
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
                                 <span class="value">
@@ -212,7 +211,7 @@
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TRAFFIC', $siteLangId); ?> </h3>
                         </div>
                         <div class="card-head-toolbar">
-                            <select class="form-select form-select-sm" onclick="traficSource(this.value)">
+                            <select class="form-select form-select-sm" onChange="traficSource(this.value)">
                                 <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
                                 <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
                                 <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
@@ -231,7 +230,7 @@
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_VISITORS_BY_COUNTRIES', $siteLangId); ?> </h3>
                         </div>
                         <div class="card-head-toolbar">
-                            <select class="form-select form-select-sm" onclick="topCountries(this.value)">
+                            <select class="form-select form-select-sm" onChange="topCountries(this.value)">
                                 <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
                                 <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
                                 <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
@@ -250,7 +249,7 @@
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_REFERERS', $siteLangId); ?> </h3>
                         </div>
                         <div class="card-head-toolbar">
-                            <select class="form-select form-select-sm" onclick="topReferers(this.value)">
+                            <select class="form-select form-select-sm" onChange="topReferers(this.value)">
                                 <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
                                 <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
                                 <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
@@ -268,7 +267,7 @@
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SEARCH_ITEMS', $siteLangId); ?> </h3>
                         </div>
                         <div class="card-head-toolbar">
-                            <select class="form-select form-select-sm" onclick="getTopSearchKeyword(this.value)">
+                            <select class="form-select form-select-sm" onChange="getTopSearchKeyword(this.value)">
                                 <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
                                 <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
                                 <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>

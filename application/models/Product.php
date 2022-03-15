@@ -85,6 +85,8 @@ class Product extends MyAppModel
     public const WARRANTY_TYPE_DAY = 0;
     public const WARRANTY_TYPE_MONTH = 1;
     public const WARRANTY_TYPE_YEAR = 2;
+    
+    public const VIEW_MORE_SELLER_COUNT = 2;
 
     public function __construct($id = 0)
     {
@@ -1313,7 +1315,7 @@ class Product extends MyAppModel
         $productSellerShiping['ps_product_id'] = $product_id;
         $productSellerShiping['ps_user_id'] = $userId;
         $productSellerShiping['ps_from_country_id'] = $data_to_be_save['ps_from_country_id'];
-        $productSellerShiping['ps_free'] = $data_to_be_save['ps_free'];
+        $productSellerShiping['ps_free'] = !empty($data_to_be_save['ps_free']) ?? 0;
         if (!FatApp::getDb()->insertFromArray(Product::DB_TBL_PRODUCT_SHIPPING, $productSellerShiping, false, array(), $productSellerShiping)) {
             return false;
         }
@@ -1679,7 +1681,7 @@ END,   special_price_found ) as special_price_found'
 
             switch ($sortBy) {
                 case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('keyword_relevancy', 'DESC');
@@ -1688,7 +1690,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('theprice', $sortOrder);
                     break;
                 case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
                         $srch->addOrder('availableInLocation', 'DESC');
                     }
                     $srch->addOrder('selprod_sold_count', $sortOrder);

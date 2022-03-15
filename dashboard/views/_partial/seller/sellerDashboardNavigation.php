@@ -192,8 +192,8 @@ $plugin = new Plugin();
                     </svg>
                 </span>
                 <span class="dashboard-menu-head">
-                    <?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></span>
-                </span>
+                    <?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?>
+                </span>              
                 <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
                 </i>
             </button>

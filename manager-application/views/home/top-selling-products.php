@@ -31,7 +31,7 @@
                     </td>
                     <td>
                         <div class="user">
-                            <a href="#" class="link-text text-nowrap"><?php echo $product['op_shop_name']; ?></a>
+                            <a href="javascript::void(0)" onClick="redirectToShop(<?php echo $product['shop_id'];?>)" class="link-text text-nowrap"><?php echo $product['op_shop_name']; ?></a>
                         </div>
                     </td>
 

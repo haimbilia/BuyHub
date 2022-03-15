@@ -6,7 +6,6 @@ if (!isset($tbody)) {
 }
 
 $serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
-//CommonHelper::printArray($arrListing,1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $splPriceId = $row['splprice_id'];

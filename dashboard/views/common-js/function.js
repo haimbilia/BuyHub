@@ -842,11 +842,8 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
-    if (null === obj) {
-        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
-    }
-
+    var obj = ele.closest('form').length ? ele.closest('form') : null;
+    
     ele.select2({
         dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
@@ -896,6 +893,12 @@ select2 = function (
             if ("function" == typeof callbackOnUnSelect) {
                 callbackOnUnSelect(e);
             }
+        }).on('select2:open', function (e) {
+            if (ele.attr('multiple') == undefined) {         
+                $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+            }else{         
+                $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
+            }
         });
 
     var select2Selector = ele.data("select2");
@@ -907,14 +910,16 @@ select2 = function (
     if ('undefined' != typeof (select2Selector.selection)) {
         $(select2Selector.selection.$search).attr('name', elementName + '-select2');
     }
-    if (0 < ele.closest(".advancedSearchJs").length) {
-        select2Selector.$container.addClass("w-100");
-    }
 
-    if (0 < ele.closest(".form-group").length) {
-        select2Selector.$container.addClass("w-100");
+    if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
+        select2Selector.$container.addClass("custom-select2-width");
+    }    
+  
+    if (ele.attr('multiple') != undefined) {
+        select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
+    }else{
+        select2Selector.$container.addClass("custom-select2 custom-select2-single");
     }
-    select2Selector.$container.addClass("custom-select2");
 };
 
 var autoOpenSideBar = true;

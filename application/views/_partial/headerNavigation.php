@@ -118,7 +118,7 @@
                                                     <div class="categories-cols categories-cols-media">
                                                         <a href="<?php echo $rootLinkUrl; ?>">
                                                             <figure class="category-media">
-                                                                <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'thumb', array($link['nlink_category_id'], $siteLangId, "ICON", 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $link['nlink_caption']; ?>" />
+                                                                <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'thumb', array($link['nlink_category_id'], $siteLangId, ImageDimension::VIEW_ICON, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $link['nlink_caption']; ?>" />
                                                                 <figcaption>Cold Weather Accessories </figcaption>
                                                             </figure>
                                                         </a>

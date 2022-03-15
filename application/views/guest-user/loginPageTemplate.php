@@ -27,8 +27,10 @@ $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPas
     class="link">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldforgot->developerTags['col'] = 6;
 
+$pwdFld = $loginFrm->getField('password');
+$pwdFld->addFieldTagAttribute('id', 'password');
+
 if (isset($smsPluginStatus) && true === $smsPluginStatus) {
-    $pwdFld = $loginFrm->getField('password');
     $loginWithOtp = $loginFrm->getField('loginWithOtp');
     $loginWithOtp->addFieldTagAttribute('class', 'loginWithOtp--js');
 }
@@ -54,8 +56,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             </div>
             <div class="row pwdField--js">
                 <div class="col-md-12">
-                    <div class="form-group">
+                    <div class="form-group form-group-relative">
                         <?php echo $loginFrm->getFieldHtml('password'); ?>
+                        <span class="input-group-text field-password" id="showPass"></span>
                     </div>
                 </div>
             </div>
@@ -76,18 +79,18 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                 </div>
             <?php } ?>
             <div class="row">
-                <div class="col remember--js">
-                    <div class="form-group">
-                        <?php
-                        $fld = $loginFrm->getFieldHTML('remember_me');
-                        $fld = str_replace("<label >", "", $fld);
-                        $fld = str_replace("</label>", "", $fld);
-                        echo $fld;
-                        ?>
-                        <?php if ($loginFrm->getField('remember_me')); ?>
+                <?php if ($loginFrm->getField('remember_me')) { ?>
+                    <div class="col remember--js">
+                        <div class="form-group">
+                            <?php
+                            $fld = $loginFrm->getFieldHTML('remember_me');
+                            $fld = str_replace("<label >", "", $fld);
+                            $fld = str_replace("</label>", "", $fld);
+                            echo $fld;
+                            ?>
+                        </div>
                     </div>
-
-                </div>
+                <?php } ?>
                 <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
                     <div class="col-auto">
                         <a class="link" href="javaScript:void(0)" data-form="frmLogin" onClick="signInWithPhone(this, true)">
@@ -144,10 +147,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <ul>
                 <?php foreach ($socialLoginApis as $plugin) { ?>
                     <li>
-                        <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn--social btn--<?php echo $plugin['plugin_code']; ?>">
-                            <i class="icn">
-                                <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
-                            </i>
+                        <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
+                            <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+
                         </a>
                     </li>
                 <?php } ?>
@@ -160,17 +162,17 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
         <div class="more-links">
             <?php echo $loginFrm->getFieldHtml('forgot'); ?>
             <?php if (true === $popup) { ?>
-                <a class="btn btn-outline-black btn-block" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="link-underline" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                 </a>
             <?php } else { ?>
-                <a class="btn btn-outline-black btn-block loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                 </a>
             <?php } ?>
             <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-
-                <a class="btn btn-outline-black btn-block" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
+                <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
+                    <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
             <?php } ?>
         </div>
     </div>

@@ -62,14 +62,21 @@ $stateFld->setFieldTagAttribute('id', 'user_state_id');
 $parent = User::getAttributesById(UserAuthentication::getLoggedUserId(true), 'user_parent');
 if (User::isAdvertiser() && $parent == 0) {
     $fld = $frm->getField('user_profile_info');
-    $fld->developerTags['col'] = 6;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
     $fld = $frm->getField('user_products_services');
-    $fld->developerTags['col'] = 6;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-    $userCompFld = $frm->getField('user_company');
-    $userCompFld->developerTags['col'] = 12;
+    $fld = $frm->getField('user_company');
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
+
+$fld = $frm->getField('user_profile_info');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+$fld = $frm->getField('user_products_services');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
 ?>
 <div class="row justify-content-center">
@@ -82,7 +89,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                 $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $userId);
 
-                $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, 'thumb', true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
                 <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                 <?php echo $imgFrm->getFormTag(); ?>

@@ -2,8 +2,12 @@
 
 HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('prodcat_name');
-$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');
-getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
+$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
+
+$fld = $frm->getField('urlrewrite_custom');
+$fld->setFieldTagAttribute('id', "urlrewrite_custom");
+$fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Category', 'view', [$recordId], CONF_WEBROOT_FRONT_URL)) . '</span>';
+$fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
 
 $fld = $frm->getField('prodcat_id');
 $fld->setFieldTagAttribute('id', "prodcat_id");

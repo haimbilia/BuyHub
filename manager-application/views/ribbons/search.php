@@ -60,15 +60,15 @@ foreach ($arrListing as $sn => $row) {
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
-            default : 
+            default:
                 $td->appendElement('plaintext', [], $row[$key], true);
-            break;
+                break;
         }
     }
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

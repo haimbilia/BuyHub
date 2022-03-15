@@ -32,9 +32,12 @@ foreach ($arrListing as $sn=>$row){
 					'href' => $href,
 					'onclick' => $onclick,
 				];
-				if(1 > $row['user_id']){
+		
+				if(1 > $row['user_id'] &&  Notification::TYPE_BLOG == $row['notification_record_type']){
 					$array['onclick'] = false;
 					$array['user']['credential_username'] = Labels::getLabel('LBL_GUEST_USER', $siteLangId);
+					$array['user']['user_id'] = 0;
+					$array['user']['credential_email'] = BlogContribution::getAttributesById($row['notification_record_id'], 'bcontributions_author_email');
 				}
 				$str = $this->includeTemplate('_partial/user/user-info-card.php', $array, false, true);				
 				$td->appendElement('plaintext', [], $str , true);

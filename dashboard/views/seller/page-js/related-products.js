@@ -1,124 +1,8 @@
 var selected_products = [];
 $(document).ready(function () {
-    searchRelatedProducts(document.frmSearch);
+    searchRecords(document.frmSearch);
     $('#related-products').delegate('.remove_related', 'click', function () {
         $(this).parents('li').remove();
-    });
-    $("select[name='product_name']").select2({
-        closeOnSelect: true,
-        dir: langLbl.layoutDirection,
-        allowClear: true,
-        placeholder: $("select[name='product_name']").attr('placeholder'),
-        ajax: {
-            url: fcom.makeUrl('Seller', 'autoCompleteProducts'),
-            dataType: 'json',
-            delay: 250,
-            method: 'post',
-            data: function (params) {
-                return {
-                    keyword: params.term, // search term
-                    page: params.page
-                };
-            },
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                return {
-                    results: data.products,
-                    pagination: {
-                        more: params.page < data.pageCount
-                    }
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        templateResult: function (result) {
-            return result.name;
-        },
-        templateSelection: function (result) {
-            return result.name || result.text;
-        }
-    }).on('select2:selecting', function (e) {
-        var parentForm = $(this).closest('form').attr('id');
-        var item = e.params.args.data;
-        $("#" + parentForm + " input[name='selprod_id']").val(item.id);
-
-        fcom.ajax(fcom.makeUrl('Seller', 'getRelatedProductsList', [item.id]), '', function (t) {
-            var ans = $.parseJSON(t);
-            $('#related-products').empty();
-            for (var key in ans.relatedProducts) {
-                $('#related-products').append(
-                    "<li id=productRelated" + ans.relatedProducts[key]['selprod_id'] + "><span>" + ans.relatedProducts[key]['selprod_title'] + " [" + ans.relatedProducts[key]['product_identifier'] + "]<i class=\"remove_related remove_param fas fa-times\"></i><input type=\"hidden\" name=\"selected_products[]\" value=" + ans.relatedProducts[key]['selprod_id'] + " /></span></li>"
-                );
-            }
-        });
-
-    }).on('select2:unselecting', function (e) {
-        var parentForm = $(this).closest('form').attr('id');
-        $("#" + parentForm + " input[name='selprod_id']").val('');
-    });
-
-    $("select[name='products_related']").select2({
-        closeOnSelect: true,
-        dir: langLbl.layoutDirection,
-        allowClear: true,
-        placeholder: $("select[name='products_related']").attr('placeholder'),
-        ajax: {
-            url: fcom.makeUrl('seller', 'autoCompleteProducts'),
-            dataType: 'json',
-            delay: 250,
-            method: 'post',
-            data: function (params) {
-                var parentForm = $("select[name='products_related']").closest('form').attr('id');
-                return {
-                    keyword: params.term, // search term
-                    page: params.page,
-                    fIsAjax: 1,
-                    selProdId: $("#" + parentForm + " input[name='selprod_id']").val(),
-                    selected_products: selected_products
-                };
-            },
-            beforeSend:
-                function (xhr, opts) {
-                    var parentForm = $("select[name='products_related']").closest('form').attr('id');
-                    var selprod_id = $("#" + parentForm + " input[name='selprod_id']").val();
-                    if (1 > selprod_id) {
-                        xhr.abort();
-                    }
-                    $('input[name="selected_products[]"]').each(function () {
-                        selected_products.push($(this).val());
-                    });
-
-                },
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                return {
-                    results: data.products,
-                    pagination: {
-                        more: params.page < data.pageCount
-                    }
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        templateResult: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-        },
-        templateSelection: function (result) {
-            return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-        }
-    }).on('select2:selecting', function (e) {
-        var parentForm = $(this).closest('form').attr('id');
-        var item = e.params.args.data;
-        $('input[name=\'products_related\']').val('');
-        $('#productRelated' + item.id).remove();
-        $('#related-products').append('<li id="productRelated' + item.id + '"><span> ' + item.name + '[' + item.product_identifier + ']' + '<i class="remove_related remove_param fas fa-times"></i><input type="hidden" name="selected_products[]" value="' +
-            item.id + '" /></span></li>');
-        setTimeout(function () {
-            $("select[name='products_related']").val('').trigger('change');
-        }, 200);
-
     });
 });
 $(document).on('mouseover', "ul.list-tags li span i", function () {
@@ -130,7 +14,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
 
 (function () {
     var dv = '#listing';
-    searchRelatedProducts = function (frm) {
+    searchRecords = function (frm) {
 
         /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
         var data = '';
@@ -151,7 +35,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
             location.href = fcom.makeUrl('Seller', 'relatedProducts');
         } else {
             document.frmSearch.reset();
-            searchRelatedProducts(document.frmSearch);
+            searchRecords(document.frmSearch);
         }
     };
 
@@ -161,12 +45,12 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
         }
         var frm = document.frmSearchVolumeDiscountPaging;
         $(frm.page).val(page);
-        searchRelatedProducts(frm);
+        searchRecords(frm);
     }
 
     reloadList = function () {
         var frm = document.frmRelatedSellerProduct;
-        searchRelatedProducts(frm);
+        searchRecords(frm);
     }
 
     deleteSelprodRelatedProduct = function (selProdId, relProdId) {
@@ -177,7 +61,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteSelprodRelatedProduct', [selProdId, relProdId]), '', function (t) {
             var frm = document.frmSearchVolumeDiscountPaging;
             $(frm.total_record_count).val('');
-            searchRelatedProducts(document.frmSearchVolumeDiscountPaging);
+            searchRecords(document.frmSearchVolumeDiscountPaging);
         });
     }
 
@@ -198,8 +82,17 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
             $("input[name='selprod_id']").val('');
             $('#related-products').empty();
             $(frm).find("select[name='product_name']").trigger('change.select2');
-            searchRelatedProducts(document.frmRelatedSellerProduct);
+            searchRecords(document.frmRelatedSellerProduct);
+            $.ykmodal.close();
         });
+    };
+
+    addNew = function () {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Seller', "relatedProductsForm"), "", function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        }, { fOutMode: 'json' });
     };
 })();
 

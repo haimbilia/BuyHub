@@ -8,75 +8,110 @@
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
             <?php } ?>
             <?php if (count($productSpecifications) > 0) { ?>
-                <div class="detail-content">
-                    <h2 class="h2" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true" aria-controls="specification"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?></h2>
+                <div class="descriptions-item">
+                    <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true" aria-controls="specification"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
+                        <svg class="svg plus" width="16" height="16">
+                            <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </h2>
                     <div id="specification" class="collapse show" data-bs-parent="#accordionExample">
-                        <ul class="list-specification">
-                            <?php foreach ($productSpecifications as $key => $specification) { ?>
-                                <li class="list-specification-item">
-                                    <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                    <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
-                                    </span>
-                                </li>
+                        <div class="descriptions-data">
+                            <ul class="list-specification">
+                                <?php foreach ($productSpecifications as $key => $specification) { ?>
+                                    <li class="list-specification-item">
+                                        <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
+                                        <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                        </span>
+                                    </li>
 
-                            <?php } ?>
-                        </ul>
+                                <?php } ?>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             <?php } ?>
             <?php if (trim($product['product_description']) != '') { ?>
-                <div class="detail-content">
-                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></h2>
+                <div class="descriptions-item">
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
+                        <svg class="svg plus" width="16" height="16">
+                            <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </h2>
                     <div id="description" class="collapse" data-bs-parent="#accordionExample">
-                        <div class="cms">
-                            <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             <?php } ?>
             <?php if ($youtube_embed_code) { ?>
-                <div class="detail-content">
-                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true" aria-controls="collapseOne"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?></h2>
+                <div class="descriptions-item">
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true" aria-controls="collapseOne"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
+                        <svg class="svg plus" width="16" height="16">
+                            <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </h2>
                     <?php if ($youtube_embed_code != "") { ?>
                         <div id="video" class="collapse" data-bs-parent="#accordionExample">
-                            <div class="mb-4 video-wrapper">
-                                <iframe width="100%" height="315" src="//www.youtube.com/embed/<?php echo $youtube_embed_code ?>" allowfullscreen></iframe>
+                            <div class="descriptions-data">
+                                <div class="mb-4 video-wrapper">
+                                    <iframe width="100%" height="315" src="//www.youtube.com/embed/<?php echo $youtube_embed_code ?>" allowfullscreen></iframe>
+                                </div>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
             <?php } ?>
             <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
-                <div class="detail-content">
-                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true" aria-controls="policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?></h2>
+                <div class="descriptions-item">
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true" aria-controls="policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
+                        <svg class="svg plus" width="16" height="16">
+                            <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </h2>
                     <div id="policies" class="collapse" data-bs-parent="#accordionExample">
-                        <div class="cms">
-                            <?php if ($shop['shop_payment_policy'] != '') { ?>
-                                <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
-                                <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
-                                <br>
-                            <?php } ?>
-                            <?php if ($shop['shop_delivery_policy'] != '') { ?>
-                                <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
-                                <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
-                                <br>
-                            <?php } ?>
-                            <?php if ($shop['shop_refund_policy'] != '') { ?>
-                                <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
-                                <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
-                            <?php } ?>
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <?php if ($shop['shop_payment_policy'] != '') { ?>
+                                    <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
+                                    <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
+                                    <br>
+                                <?php } ?>
+                                <?php if ($shop['shop_delivery_policy'] != '') { ?>
+                                    <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
+                                    <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
+                                    <br>
+                                <?php } ?>
+                                <?php if ($shop['shop_refund_policy'] != '') { ?>
+                                    <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
+                                    <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             <?php } ?>
             <?php if (!empty($product['selprodComments'])) { ?>
-                <div class="detail-content">
-                    <h2 class="h2 collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true" aria-controls="extra_comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?></h2>
-                    <div id="policies" class="collapse" data-bs-parent="#accordionExample">
-                        <div class="cms">
-                            <p>
-                                <?php echo CommonHelper::displayNotApplicable($siteLangId, nl2br($product['selprodComments'])); ?>
-                            </p>
+                <div class="descriptions-item">
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true" aria-controls="extra_comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
+                        <svg class="svg plus" width="16" height="16">
+                            <use xlink:href="/yokart/images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </h2>
+                    <div id="extra_comments" class="collapse" data-bs-parent="#accordionExample">
+                        <div class="descriptions-data">
+                            <div class="cms">
+                                <p>
+                                    <?php echo CommonHelper::displayNotApplicable($siteLangId, nl2br($product['selprodComments'])); ?>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -255,8 +255,9 @@ a.link {
     &:hover {
         text-decoration: none;
     }
-    svg {
+    .svg {
         [dir="rtl"] & {
+            margin-#{$start-direction}: 0.5rem;
             transform: scaleX(-1);
         }
     }

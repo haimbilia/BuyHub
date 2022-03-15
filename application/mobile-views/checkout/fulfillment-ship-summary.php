@@ -41,6 +41,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                 'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                 'id' => $shippingcharge['id'],
                                 'carrier_code' => $shippingcharge['carrier_code'],
+                                'service_code' => $key,
                             ];
                         }
                     }
@@ -48,7 +49,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                     foreach ($productData as $product) {
                         $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
                         $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         $data['products'][] = $product;
                     }
                     $data['shipLevel'] = $shipLevel;
@@ -82,13 +83,14 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                     'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
+                                    'service_code' => $key,
                                 ];
                             }
                         }
 
                         $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
                         $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         $data['products'] = [$product];
                         $data['shipLevel'] = $shipLevel;
 
@@ -121,13 +123,14 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                     'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
+                                    'service_code' => $key,
                                 ];
                             }
                         }
 
                         $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
                         $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         $data['products'] = [$product];
                         $data['shipLevel'] = $shipLevel;
 

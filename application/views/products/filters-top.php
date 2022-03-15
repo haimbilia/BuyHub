@@ -16,19 +16,20 @@
         $searchFrm->setFormTagAttribute('onSubmit', 'searchProducts(this); return(false);');
         $keywordFld = $searchFrm->getField('keyword');
         $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Shop_Search', $siteLangId));
-        $keywordFld->htmlAfterField = '<input name="btnSrchSubmit" value="" type="submit" class="input-submit">';
+        // $keywordFld->htmlAfterField = '<input name="btnSrchSubmit" value="" type="submit" class="input-submit">';
         /*$keywordFld = $frmProductSearch->getField('keyword');
     $keywordFld->overrideFldType("hidden");*/ ?>
      <div class="product-search">
          <!--<form class="form">
-        <input placeholder="Search" class="input-field nofocus" value="" type="text">
+        <input placeholder="Search" class="form-control omni-search" value="" type="text">
         <input name="btnSrchSubmit" value="" class="input-submit" type="submit">
     </form>-->
          <?php
             $searchFrm->addFormTagAttribute('class', 'form');
             echo $searchFrm->getFormTag();
             $fld = $searchFrm->getField('keyword');
-            $fld->addFieldTagAttribute("class", "input-field nofocus");
+            $fld->overrideFldType('search');
+            $fld->addFieldTagAttribute("class", "form-control omni-search");
             echo $searchFrm->getFieldHTML('keyword');
             echo $searchFrm->getFieldHTML('shop_id');
             echo $searchFrm->getFieldHTML('join_price');
@@ -41,9 +42,7 @@
 
  <div class="filter-horizontal" id="filters_body--js">
      <ul>
-
          <?php if (isset($categoriesArr) && $categoriesArr) { ?>
-
              <li class="dropdown">
                  <button type="button" class="btn btn-brand filter-trigger dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>

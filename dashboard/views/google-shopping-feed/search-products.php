@@ -71,7 +71,11 @@
                             'href' => 'javascript:void(0)',
                             'title' => Labels::getLabel('LBL_UNLINK', $siteLangId), "onclick" => "unlinkProduct(" . $row['abprod_adsbatch_id'] . ", " . $row['abprod_selprod_id'] . ")"
                         ],
-                        '<i class="fa fa-trash"></i>',
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>',
                         true
                     );
                     $li = $ul->appendElement('li');

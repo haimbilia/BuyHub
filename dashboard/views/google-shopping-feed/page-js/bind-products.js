@@ -99,7 +99,7 @@ $(document).ready(function () {
 		var ele = $(".sellerProductJs");
 		ele.select2({
 			closeOnSelect: true,
-			dropdownParent: ele.closest('.modal'),
+			dropdownParent: ele.closest('form'),
 			dir: langLbl.layoutDirection,
 			allowClear: true,
 			placeholder: ele.attr("placeholder"),
@@ -117,7 +117,7 @@ $(document).ready(function () {
 				processResults: function (data, params) {
 					params.page = params.page || 1;
 					return {
-						results: data.products,
+						results: data.results,
 						pagination: {
 							more: params.page < data.pageCount,
 						},
@@ -125,14 +125,11 @@ $(document).ready(function () {
 				},
 				cache: true,
 			},
-			minimumInputLength: 0,
-			templateResult: function (result) {
-				return result.name;
-			},
-			templateSelection: function (result) {
-				return result.name || result.text;
-			},
-		});
+			minimumInputLength: 0,			
+		}).on('select2:open', function(e) {        
+			$('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+		})
+		.data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");;
 
 		var select2Selector = ele.data("select2");
 		select2Selector.$container.addClass("custom-select2");

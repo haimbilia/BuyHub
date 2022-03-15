@@ -55,19 +55,22 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
     $(document).ready(function() {
         $("#prodcat_parent").select2({
-            dropdownParent: $('.' + $.ykmodal.element)
-        }).on('select2:open', function(e) {
-            $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-        });
+            dropdownParent: $("#prodcat_parent").closest('form'),
+        })
+        .on('select2:open', function(e) {        
+            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        })
+        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
+        
         $("." + $.ykmodal.element).removeAttr('tabindex');
-        $("select[name='prodcat_parent']").data("select2").$container.addClass("custom-select2 custom-select2-width custom-select2-single");
+        
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;
             var ratingtype_name = e.detail.tag.title;
             var prodCatId = $("input[name='prodcat_id']").val();
             if (rt_id == '') {
                 if (1 > canEditRating) {
-                    $.ykmsg.error(ratingEditErr);
+                    fcom.displayErrorMessage(ratingEditErr);
                     e.detail.tag.remove();
                     return;
                 }
@@ -78,9 +81,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         }
 
         removeRatingType = function(e) {
-            var rt_id = e.detail.tag.id;
-            var prodCatId = $("input[name='prodcat_id']").val();
-            if ('' == rt_id || '' == prodCatId) {
+            var rt_id = e.detail.tag.id;      
+            var prodCatId = $("input[name='prodcat_id']").val();           
+            if ('' == rt_id || 1 > prodCatId) {
                 return;
             }
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +
@@ -115,12 +118,11 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             $(element).siblings(".tagify").remove();
             tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
                 whitelist: [],
-                dropdown: {                   
+                dropdown: {
                     enabled: 0 // show suggestions dropdown after 1 typed character
                 },
                 delimiters: "#",
                 editTags: false,
-                closeOnSelect: false,
             }).on('add', addRatingType).on('remove', removeRatingType).on('focus',
                 getRatingTypeAutoComplete);
         };

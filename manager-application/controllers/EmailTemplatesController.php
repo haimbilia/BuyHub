@@ -117,7 +117,7 @@ class EmailTemplatesController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_TEMPLATE', $this->siteLangId), true);
         }
 
-        if (false == (new FatMailer($langId, $tpl))->setTo($to)) {
+        if (false == (new FatMailer($langId, $tpl))->setTo($to)->send()) {
             LibHelper::exitWithError(Labels::getLabel('ERR_MAIL_NOT_SENT', $this->siteLangId), true);
         }
 
@@ -387,8 +387,8 @@ class EmailTemplatesController extends ListingBaseController
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_Logo_Ratio', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_LOGO_RATIO', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
-        $frm->addHiddenField('', 'logo_min_width');
-        $frm->addHiddenField('', 'logo_min_height');
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
 
         $frm->addHtml('', 'email_logo', '');
         $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_Footer_Content', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatUtility::VAR_STRING, ''));
@@ -436,7 +436,7 @@ class EmailTemplatesController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $emptyCartItemsTblHeadingCols = CacheHelper::get($this->pageKey.'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
             return json_decode($emptyCartItemsTblHeadingCols, true);
         }
@@ -448,7 +448,7 @@ class EmailTemplatesController extends ListingBaseController
             'etpl_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create($this->pageKey.'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

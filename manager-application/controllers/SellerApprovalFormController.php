@@ -91,6 +91,7 @@ class SellerApprovalFormController extends ListingBaseController
             'sf_l.sformfieldlang_sformfield_id = sf.sformfield_id AND sf_l.sformfieldlang_lang_id = ' . $this->siteLangId,
             'sf_l'
         );
+        $srch->addMultipleFields(['sf.*', 'sf_l.*', 'COALESCE(sformfield_caption, sformfield_identifier) as sformfield_caption']);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('sf.sformfield_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -102,8 +103,7 @@ class SellerApprovalFormController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize); 
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
+        $records = FatApp::getDb()->fetchAll($rs);        
         $this->set("arrListing", $records); 
 
         $paginationArr = empty($postedData) ? $post : $postedData;
@@ -142,7 +142,13 @@ class SellerApprovalFormController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         if (0 < $recordId) {
-            $data = SupplierFormFields::getAttributesById($recordId);
+            $attr = [
+                'sformfield_id',
+                'COALESCE(sformfield_caption, sformfield_identifier) as sformfield_caption',
+                'sformfield_required',
+                'sformfield_type',
+            ];
+            $data = SupplierFormFields::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $attr, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -170,6 +176,14 @@ class SellerApprovalFormController extends ListingBaseController
 
         $recordId = FatUtility::int($post['sformfield_id']);
 
+        $srch = SupplierFormFields::getSearchObject();
+        $srch->doNotCalculateRecords(); 
+        $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
+        $srch->setPageSize(1); 
+        $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
+        $maxOrder = ((int)current($maxOrder)) + 1;
+        $post['sformfield_display_order'] = $maxOrder;
+
         $recordObj = new SupplierFormFields($recordId);
         $post['sformfield_identifier'] = $post['sformfield_caption'];
         $recordObj->assignValues($post);
@@ -177,7 +191,7 @@ class SellerApprovalFormController extends ListingBaseController
         if (!$recordObj->save()) {
             $msg = $recordObj->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_CAPTION', $this->siteLangId);
             }
             LibHelper::exitWithError($msg, true);
         }

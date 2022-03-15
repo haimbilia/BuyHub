@@ -12,27 +12,8 @@
             } else {
                 $this->includeTemplate('_partial/buyerDashboardNavigation.php');
             } ?>
-        </div>
-        <div class="sidebar-foot">
-            <ul class="dashboard-menu">
-                <li class="dashboard-menu-item">
-                    <button class="dashboard-menu-btn menuLinkJs" type="button" title="">
-                        <span class="dashboard-menu-icon">
-                            <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#globe">
-                                </use>
-                            </svg>
-                        </span>
-                        <span class="dashboard-menu-head">
-                            <?php echo Labels::getLabel('LBL_Localization', $siteLangId); ?>
-                        </span>
-                    </button>
-                </li>
-            </ul>
-        </div>
+        </div>        
     </div>
-
 </sidebar>
-
 <main id="main-area" class="main">
     <?php $this->includeTemplate('_partial/topHeaderDashboard.php', ['siteLangId' => $siteLangId], false); ?>

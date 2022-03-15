@@ -551,6 +551,9 @@ trait ShippingServices
         }
 
         $resp = $this->shippingService->getResponse();
+        if(false === $resp){
+            LibHelper::dieJsonError($this->shippingService->getError());
+        }
 
         if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled' => applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());
@@ -563,7 +566,9 @@ trait ShippingServices
         $frm = $this->getShippingRatesForm($opId);
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getShippingRatesForm($opId): object
@@ -698,7 +703,7 @@ trait ShippingServices
                 if (!empty($shippingRates)) {
                     CacheHelper::create($cacheKey, serialize($shippingRates),CacheHelper::TYPE_SHIPING_API);
                 } else {
-                    SystemLog::system($this->shippingService->getError(),'SelProd ID-'.$orderData['op_id']);
+                    SystemLog::system($this->shippingService->getError(), $this->shippingService->keyName . ' - ' . Labels::getLabel('ERR_UNABLE_TO_FETCH_SHIPPING_RATES'));
                     continue;
                 }
             }

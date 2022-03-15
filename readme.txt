@@ -516,12 +516,68 @@ Updates/Fixes :
     => 061905 - Admin UI: Toggles are not aligned and location selection is not working properly on the 'Product' page under the settings section
     => 061685 - Admin UI: 'Search icon' is not showing in the search field on the automatic badges page
     => 062659 - Admin UI: "Placeholder image" is not showing after deleting the uploaded file and pagination is also not working properly under the collection management
-    
+    => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section 
+    => 062523 - Admin UI: Admin needs to scroll the side menu to see the selected option
+    => 062851 -	Admin UI: "card-body" is refreshing while clicking on the dropdown option on the dashboard and while clicking on the shop's name admin is navigating to the same page
+    => 062610 - Admin UI: Unavailable pointer is not showing on the banner listing section and sr. no. is not showing correctly on the import instruction page
+    => 062603 - Admin UI: Spacing is not consistent between the footer section and last field while opening the drawer
+    => 062881 - Admin UI: Admin is not able to update the commission amount of the default commission, the search is not working according to the product, and the "view log" icon is not showing on the "Commission management" section
+    => 062570 - Admin UI: "Metaballs menu" is not working while clicking on it for the password field on the login page
+    => 062879 - Admin UI: Getting an error while editing the records on the "social platform" section
+    => 062876 - Admin UI: Getting an error while adding the new record under the "seller approval" section and caption name is also not showing while editing the record
+    => 062873 - Admin UI: Pagination is not working on the admin user's permission page
+    => 062678 - Admin UI: The "Remove File" option is not showing properly while trying to upload the large file while adding the Media to server under the Import/Export section
+    => 062816 - Admin UI: Admin is not able to select the dropdown-item of the "product warranty type" field while adding the product
+    => 062468 - Admin UI: Upload image's placeholder is not showing while adding the banners and "Invalid Request" messages is showing while changing the status of the banner on the collection's page under the CMS section
+    => 062864 - Admin UI: Admin is not able to edit the records under the "Categories request" section
+    => 062862 - Admin UI: The buyer's image is not showing properly under the messages' section on the 'order return request' page
+    => 062899 - Admin UI: Getting a UI design issue on the following modules
+    -------------------------------TV-9.4.0.20220304--------------------
+    => 062926 - Seller UI: The header's background color is not visible and the "view order" option is not working for the recent orders
+    => 062930 - Admin UI: The processing message is showing while filling the bank address and press "enter" to go to the next line while adding the seller 
+    => 062932 - Admin UI: UI is not correct if open the other seller in the same browser
+    => 062927 - Seller UI: Product images are not showing while viewing the information of the marketplace products and the "add inventory" icon is not showing while hovering on it and the table column size is also changing while changing the status of the seller shipping
+    => 062853 - Admin UI: Fatal error is showing while clicking on the "SEO Friendly URL" of the brands and URL is not getting highlighted while having on it
+    => 062860 - Admin UI: Font size and color are not correct of the titles and their data while viewing the seller approval's request
+    => 062906 - Admin UI: Getting a UI issue on the Special price and volume discount
+    => 062852 - Admin UI: The size of the "options" and "specification" section is changing according to the data while adding the product
+    => 062966 - Unable to login via social account
+    => 062822 - Admin UI: The rating type's name is not showing in the table
+    => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section 
+    => 062467 - Admin UI: Tooltip is showing while adding and editing the records on the Collections page under the CMS section
+    => 062652 - Admin UI: Admin is not navigating to the "link record" tab after adding the language data and the drop-down design is also not correct while adding the brands under the collection section
+    => 062783 - Admin UI: "Invalid Order" error is showing while changing the order's status to shipped and using self-shipping(in case of shipping plugin is ON) under the Orders section
+    => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section.
+    => 062970 - Seller UI: Delete media functionality is not working while adding the product.
+    => 061671 - Admin UI: Upload image option is not showing and getting a UI issue while selecting a Date while adding and editing the discount coupons
+    => 062440 - Admin UI: Images are not aligned with the Image title and the "reset and save" button is not showing in the footer section while editing the Image attributes under the SEO section
+    => 062994 - unable to set shipment method incase of shipping plugin
+    => 062601 - Admin UI: Page's design is not aligned while clicking on the '+' icon in the blog post categories page, processing and successful messages shows simultaneously and placeholder label is also missing for the whole blog section
+    => 062592 - Admin UI: Double products are selected while binding the products with the discount coupons and UI is also not aligned
+    => 062595 - Admin UI: Approval's sorting is not working on the badges page and getting multiple Ui issues on the same page
+    => 062955 - Seller UI: Error is not showing while seller trying to add the already deleted collection under the manage shop section
+    => 062857 - Admin UI: Getting multiple issues on the product's tag page
+    => 062790 - Admin UI: "Fetch Shipping Rates" functionality is not working and its UI design is also not aligned
+    => 062962 - Seller UI: "Ctrl+F" is opening the browser search even if this option is unselected and the drop-down listing is not aligned while switching between the user-type
+    => 062991 - Seller UI: Drop-down is not showing for the "Select Badge" field while sending the badges' request.
+    => 062946 - Seller UI: Character's count validation is not showing while adding the phone number on the whole seller's dashboard
+    => 062969 - Seller UI: Getting multiple issues while adding the product at the seller's end
+    => 063006 - Seller UI: Fatal error is showing while clicking on the Badges and Ribbons options
+    => 062987 - Seller UI: Records are not showing properly while Drag-drop it under the option's value section and "delete icon" is not showing while hovering on it
+    => 062920 - Seller UI: Getting an error while submitting the "Seller Approval Form"
+    => 062989 - Seller UI: Not able to go to the language data and media section while adding the brands and uploaded media is also not showing in the table
+    => 062988 - Seller UI: "View Tax rates" option is not showing under the Tax category page
+    => 062950 - Seller UI: Loader is not showing while uploading the media and pickup's drawer is showing after uploading the media under the manage shop section
+    => 062967 - Seller UI: Drop-down icon is not showing correctly, the Save button is disabled initially, the tooltip is not showing and the Product warranty field size is changing while selecting the duration while adding the product
+    => 062974 - Seller UI: The product's image is not showing while viewing the details of the seller's product and the seller's shipping is not working for the marketplace products.
+    => 062986 - Seller UI: "Invalid error" is showing under the language data section while adding the options value, the continuous loader is showing while adding/editing the options and their values and previously added data is showing while adding the new options
+    => 062975 - Seller UI: "No Record Found" message is not showing if the seller trying to search the wrong record and the "invalid request" error is showing while trying to add the product's tags. 
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
     => 062190 - Admin UI: "Mark as default" font is not correct and the 'default' tag is showing with the plugin even after inactive and disabling the default status on the "Tax Services, and Shipping Services" pages while accessing the 'Getting Started' section.
-   
+    => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section  [old tagify reopen when unfocus ]
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
         => Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/

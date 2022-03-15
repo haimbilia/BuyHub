@@ -29,13 +29,13 @@ updateMaintenanceModeStatus = function (event,obj, status,langId) {
         var ans = JSON.parse(ans);
         $(obj).prop("checked", 1 == status);
         if (ans.status == 1) {
-            $.ykmsg.success(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);
             $(obj).attr("data-old-status",status);
             $(obj).val(status);
             $(obj).attr({ onclick: "updateMaintenanceModeStatus(event, this, " + nextStatus + ", " + langId + ")"});
         } else {
             $(obj).prop("checked", 1 == oldStatus);
-            $.ykmsg.error(ans.msg);
+            fcom.displayErrorMessage(ans.msg);
         }
         fcom.removeLoader();
     },);

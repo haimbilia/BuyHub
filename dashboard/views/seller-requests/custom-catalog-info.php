@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-3 clearfix">
                 <div id="img-static" class="product-detail-gallery">
-                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'customProduct', array($product['preq_id'], 'MEDIUM', 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) ?>">
+                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'customProduct', array($product['preq_id'], ImageDimension::VIEW_THUMB, 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) ?>">
                 </div>
             </div>
             <div class="col-md-9">

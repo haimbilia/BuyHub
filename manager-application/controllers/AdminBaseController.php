@@ -1,5 +1,7 @@
 <?php
 
+use function GuzzleHttp\json_decode;
+
 class AdminBaseController extends FatController
 {
     protected $objPrivilege;
@@ -58,7 +60,7 @@ class AdminBaseController extends FatController
                 'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
                 'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
             ];
-            CacheHelper::create('curdLangLabelCache' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+            CacheHelper::create('curdLangLabelCache' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($curdLangLabelCache);
         }
@@ -178,11 +180,12 @@ class AdminBaseController extends FatController
                     'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
-                    'maxLengthValidator' => Labels::getLabel('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', $this->siteLangId), /* Used By Maxlength bootstrap validator. */
+                    'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
                     'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
                     'invalidState' => Labels::getLabel('LBL_INVALID_STATE', $this->siteLangId),
                     'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
+                    'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {
@@ -687,7 +690,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
 
         $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
         $fld = $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, ['class' => 'fieldsVisibilityJs'], false, 0);
-        
+
         $stockLevelReqFld = new FormFieldRequirement('selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId));
         $stockLevelReqFld->setRequired(true);
 
@@ -696,7 +699,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
 
         $fld->requirements()->addOnChangerequirementUpdate(1, 'eq', 'selprod_threshold_stock_level', $stockLevelReqFld);
         $fld->requirements()->addOnChangerequirementUpdate(1, 'ne', 'selprod_threshold_stock_level', $stockLevelUnReqFld);
-        
+
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
         $fld->requirements()->setInt();
 

@@ -37,7 +37,7 @@ function setupReviewAbuse(frm){
 
 	/* reviews section[ */
 
-	var dv = '#itemRatings .listing__all';
+	var dv = '#itemRatings .reviewListJs';
 	var currPage = 1;
 
 	reviews = function(frm, append){

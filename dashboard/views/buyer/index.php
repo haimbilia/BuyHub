@@ -34,7 +34,86 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     <div class="content-body">
         <div class="row">
-            <div class="col-lg-8 order-2 order-lg-1">
+            <div class="col-lg-4 order-lg-2">
+                <div class="widget-scroll">
+                    <div class="widget widget-stats">
+                        <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                                <div class="card-head border-0">
+                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div class="stats">
+                                        <div class="stats-number">
+                                            <ul>
+                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Total_Credits', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userBalance); ?></span>
+                                                </li>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="widget widget-stats">
+                        <a href="<?php echo UrlHelper::generateUrl('buyer', 'orders'); ?>">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                <div class="card-head border-0">
+                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></h5>
+
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div class="stats">
+                                        <div class="stats-number">
+                                            <ul>
+                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Total_Orders', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo $ordersCount; ?></span>
+                                                </li>
+                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Pending_Orders', $siteLangId); ?></span>
+                                                    <span class="total-numbers"><?php echo $pendingOrderCount; ?></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="widget widget-stats">
+                        <a href="<?php echo UrlHelper::generateUrl('buyer', 'rewardPoints'); ?>">
+                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                <div class="card-head border-0">
+                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
+                                    </h5>
+
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div class="stats">
+                                        <div class="stats-number">
+                                            <ul>
+                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Current_Reward_Points', $siteLangId); ?></span>
+                                                    <span class="total-numbers"> <?php echo $totalRewardPoints; ?></span>
+                                                </li>
+                                                <li>
+                                                    <span class="total"><?php echo Labels::getLabel('LBL_Currency_Value', $siteLangId); ?></span>
+                                                    <span class="total-numbers">
+                                                        <?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($totalRewardPoints)); ?></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-head border-0">
                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Latest_Orders', $siteLangId); ?>
@@ -152,17 +231,23 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                                     <?php if (count($offers) > 0) {
                                         foreach ($offers as $row) {
-                                            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']); ?>
+                                            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
+                                            $title = ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title'];
+                                            $uploadedTime = AttachedFile::setTimeParam($row['coupon_updated_on']);
+                                            $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, ImageDimension::VIEW_NORMAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                            $imageCouponDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
+
+                                    ?>
                                             <tr>
                                                 <td>
-                                                    <figure class="item__pic"><img src="<?php echo UrlHelper::generateFullUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, 'NORMAL'), CONF_WEBROOT_FRONTEND) ?>" alt="<?php echo ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title']; ?>">
+                                                    <figure class="product-profile__pic"><img src="<?php echo $imgUrl; ?>" data-aspect-ratio="<?php echo $imageCouponDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>" alt="<?php echo $title; ?>">
                                                     </figure>
                                                 </td>
                                                 <td>
-                                                    <div class="item__description">
-                                                        <div class="item__title"><?php echo $discountValue; ?>
+                                                    <div class="product-profile__description">
+                                                        <div class="product-profile__title"><?php echo $discountValue; ?>
                                                             <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <?php echo ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title']; ?>
                                                         </div>
                                                         <span class="coupon-code"><?php echo $row['coupon_code']; ?></span>
@@ -225,13 +310,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 }
                                             } ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
+                                                    <div class="product-profile__description">
                                                         <div class="request__date">
                                                             <?php echo FatDate::format($row['orrequest_date']); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <a title="<?php echo Labels::getLabel('LBL_Invoice_number', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id'])); ?>" href="<?php echo $orderDetailUrl; ?>"><?php echo $row['op_invoice_number']; ?></a>
                                                         </div>
-                                                        <div class="item__sub_title">
+                                                        <div class="product-profile__sub_title">
                                                             <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                     <?php echo $row['op_selprod_title']; ?>
                                                                 </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
@@ -311,14 +396,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 }
                                             } ?> <tr>
                                                 <td>
-                                                    <div class="item__description">
+                                                    <div class="product-profile__description">
                                                         <div class="request__date">
                                                             <?php echo FatDate::format($row['ocrequest_date']); ?></div>
-                                                        <div class="item__title">
+                                                        <div class="product-profile__title">
                                                             <a title="<?php echo Labels::getLabel('Lbl_Invoice_number', $siteLangId) ?>" href="<?php echo $orderDetailUrl; ?>">
                                                                 <?php echo $row['op_invoice_number']; ?> </a>
                                                         </div>
-                                                        <div class="item__sub_title">
+                                                        <div class="product-profile__sub_title">
                                                             <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                     <?php echo $row['op_selprod_title']; ?>
                                                                 </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
@@ -352,85 +437,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 order-1 order-lg-2 ">
-                <div class="widget-scroll">
-                    <div class="widget widget-stats">
-                        <a href="<?php echo UrlHelper::generateUrl('account', 'credits'); ?>">
-                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
-                                <div class="card-head border-0">
-                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="stats">
-                                        <div class="stats-number">
-                                            <ul>
-                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Total_Credits', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userBalance); ?></span>
-                                                </li>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="widget widget-stats">
-                        <a href="<?php echo UrlHelper::generateUrl('buyer', 'orders'); ?>">
-                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
-                                <div class="card-head border-0">
-                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></h5>
 
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="stats">
-                                        <div class="stats-number">
-                                            <ul>
-                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Total_Orders', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo $ordersCount; ?></span>
-                                                </li>
-                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Pending_Orders', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo $pendingOrderCount; ?></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="widget widget-stats">
-                        <a href="<?php echo UrlHelper::generateUrl('buyer', 'rewardPoints'); ?>">
-                            <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
-                                <div class="card-head border-0">
-                                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
-                                    </h5>
-
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="stats">
-                                        <div class="stats-number">
-                                            <ul>
-                                                <li><span class="total"><?php echo Labels::getLabel('LBL_Current_Reward_Points', $siteLangId); ?></span>
-                                                    <span class="total-numbers"> <?php echo $totalRewardPoints; ?></span>
-                                                </li>
-                                                <li>
-                                                    <span class="total"><?php echo Labels::getLabel('LBL_Currency_Value', $siteLangId); ?></span>
-                                                    <span class="total-numbers">
-                                                        <?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($totalRewardPoints)); ?></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>

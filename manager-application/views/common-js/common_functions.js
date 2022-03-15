@@ -12,17 +12,14 @@ function setSiteDefaultLang(langId) {
 }
 
 function getNotifications(type, obj) {
-
-    $("#notificationList").prepend(fcom.getLoader());
+    $(".notificationListJS").prepend(fcom.getLoader());
     let url = fcom.makeUrl("Notifications", "notificationList");
     let viewAllUrl = fcom.makeUrl("Notifications");
     if (type == 1) {
         url = fcom.makeUrl("SystemLog", "notificationList");
         viewAllUrl = fcom.makeUrl("SystemLog");
-    } else {
-        $('.headerNotificationTabJs').removeClass('is-current');
-        $('.headerNotificationTabJs:first').addClass('is-current');
     }
+
     if (typeof obj != undefined) {
         $(obj).siblings().removeClass('is-current');
         $(obj).addClass('is-current');
@@ -33,11 +30,11 @@ function getNotifications(type, obj) {
         "",
         function (res) {
             fcom.removeLoader();
-            $("#notificationList").html(res.html);
-            $('#notifiLinkViewAll').attr('href', viewAllUrl);
-            $('#notifiLinkCount').addClass('hide');
+            $(".notificationListJS").html(res.html);
+            $('.notifiLinkViewAllJs').attr('href', viewAllUrl);
+            $('.notifiLinkCount').addClass('hide');
             if (type == 0) {
-                $('#notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
+                $('.notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
             }
         }
     );
@@ -136,13 +133,13 @@ function googleCaptcha() {
                     });
             });
         } else if ("undefined" === typeof grecaptcha) {
-            $.ykmsg.error(langLbl.invalidGRecaptchaKeys);
+            fcom.displayErrorMessage(langLbl.invalidGRecaptchaKeys);
         }
     }, 200);
 }
 
 getSlugUrl = function (obj, str, extra, pos) {
-    if (pos == undefined) pos = "pre";
+    if (pos == undefined) { pos = "pre" };
     var str = str
         .toString()
         .toLowerCase()
@@ -161,6 +158,10 @@ getSlugUrl = function (obj, str, extra, pos) {
     $(obj)
         .next()
         .html('<a target="_blank" href="' + SITE_ROOT_URL + str + '">' + SITE_ROOT_URL + str + '</a>');
+};
+
+getIdentifier = function (obj) {
+    $(obj).next().html(langLbl.systemIdentifier + " : " + obj.value);
 };
 
 Slugify = function (str, str_val_id, is_slugify) {
@@ -209,10 +210,7 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
-    if (null === obj) {
-        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
-    }
+    var obj = ele.closest('form').length ? ele.closest('form') : null;
 
     ele.select2({
         dropdownParent: obj,
@@ -253,21 +251,21 @@ select2 = function (
         },
         minimumInputLength: 0,
         dropdownPosition: "below",
-    })
-        .on("select2:selecting", function (e) {
-            if ("function" == typeof callbackOnSelect) {
-                callbackOnSelect(e);
-            }
-        })
-        .on("select2:unselecting", function (e) {
-            if ("function" == typeof callbackOnUnSelect) {
-                callbackOnUnSelect(e);
-            }
-        }).on('select2:open', function (e) {
-            if (ele.attr('multiple') == undefined) {
-                $('input.select2-search__field').closest('.select2-container').addClass("custom-select2-single");
-            }
-        });
+    }).on("select2:selecting", function (e) {
+        if ("function" == typeof callbackOnSelect) {
+            callbackOnSelect(e);
+        }
+    }).on("select2:unselecting", function (e) {
+        if ("function" == typeof callbackOnUnSelect) {
+            callbackOnUnSelect(e);
+        }
+    }).on('select2:open', function (e) {
+        if (ele.attr('multiple') == undefined) {
+            $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        } else {
+            $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
+        }
+    });
 
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
@@ -286,8 +284,11 @@ select2 = function (
         select2Selector.$container.addClass("custom-select2-width");
     }
 
+
     if (ele.attr('multiple') != undefined) {
-        select2Selector.$container.addClass("custom-select2-multiple");
+        select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
+    } else {
+        select2Selector.$container.addClass("custom-select2 custom-select2-single");
     }
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
@@ -361,7 +362,6 @@ redirectfunc = async function (url, hiddenfields = {}, nid, newTab) {
     $.each(hiddenfields, function (index, value) {
         inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
     });
-    console.log(inputs);
     $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
 };
 
@@ -373,6 +373,10 @@ markNavActive = function (ele) {
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
+    $('.sidebarMenuJs').animate({
+        scrollTop: ele.closest('ul').offset().top - $('.sidebarMenuJs').offset().top - 30
+    }, 100);
+
 };
 
 $(document).ready(function () {
@@ -398,14 +402,14 @@ $(document).ready(function () {
     /* Active Sidebar Link. */
 
     /* alert-text close */
-    $(".closeAlertJs").on("click", function () {
+    $(document).on('click', '.closeAlertJs', function () {
         $.cookie($(this).attr("data-name"), true, { expires: 30, path: siteConstants.rooturl });
     });
-    /* alert-text close */
 
-    $(".openAlertJs").on("click", function () {
+    /* alert-text close */
+    $(document).on('click', '.openAlertJs', function () {
         if ($(".mainHeaderJs").find(".closeAlertJs").length == 0) {
-            $.removeCookie($(this).attr("data-name"));
+            $.cookie($(this).attr("data-name"), false, { expires: 30, path: siteConstants.rooturl });
             data = "id=" + $(this).attr("data-pageid");
             fcom.updateWithAjax(
                 fcom.makeUrl("PageLanguageData", "displayAlert"),
@@ -420,7 +424,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu').on('click', function (e) {
+    $('.dropdown-menu.dropDownMenuBlockClose').on('click', function (e) {
         e.stopPropagation();
     });
 

@@ -33,14 +33,14 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
                             <h4><?php echo Labels::getLabel('Lbl_Review_of', $siteLangId) . ' ' . $shop['shop_name'], ' ', Labels::getLabel('Lbl_by', $siteLangId), ' : ', $reviewData['user_name']; ?>
                             </h4>
                         </div>
-                        <div class="rowx listing__all">
+                        <div class="rowx reviewListJs">
                             <ul class="reviews-list mt-4">
                                 <li>
                                     <div class="row justify-content-between">
                                         <div class="col-auto">
                                             <div class="profile-avatar">
                                                 <div class="profile-dp">
-                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB, true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile-bio">
                                                     <div class="title">
@@ -99,17 +99,17 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
                                                         $i = 0;
                                                         foreach ($images as $image) {
                                                             $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                                                            $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, 'MINITHUMB', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                                            $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                                            $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                                            $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                                                             if (5 > $i || 5 < $i) { ?>
                                                                 <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
-                                                                    <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this);">
+                                                                    <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this, event);">
                                                                         <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                                                     </a>
                                                                 </li>
                                                             <?php } else { ?>
-                                                                <li class="more-media" onclick="loadMoreImages(this);">
+                                                                <li class="more-media" onclick="loadMoreImages(this, event);">
                                                                     <a class="uploaded-file review-media" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
                                                                         <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                                                     </a>

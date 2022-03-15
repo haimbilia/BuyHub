@@ -1,5 +1,4 @@
 <?php
-
 class AccountController extends LoggedUserController
 {
     public function __construct($action)
@@ -190,9 +189,9 @@ class AccountController extends LoggedUserController
             $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
-        if (!$this->notifyAdminSupplierApproval($userObj, $data, $approval_request)) {
+        if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel("ERR_SELLER_APPROVAL_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError($userObj->getError());
         }
 
         //send notification to admin
@@ -793,7 +792,7 @@ class AccountController extends LoggedUserController
         if (true ===  MOBILE_APP_API_CALL) {
             $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
-            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'thumb', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $userImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_THUMB, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $data = array('userImage' => $userImage);
 
@@ -853,7 +852,7 @@ class AccountController extends LoggedUserController
             $splitPaymentMethods = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
             $bankInfo = $this->bankInfo();
             $personalInfo = $this->personalInfo();
-            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($userId, 'SMALL', true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($userId, ImageDimension::VIEW_SMALL, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
             $this->set('bankInfo', empty($bankInfo) ? (object) array() : $bankInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
@@ -1028,10 +1027,10 @@ class AccountController extends LoggedUserController
         }
 
         if (false === MOBILE_APP_API_CALL) {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, 'croped', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Account', 'userProfileImage', array($userId, ImageDimension::VIEW_CROPED, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         } else {
-            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, 'mini', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_MINI, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('file', $profileImg);
         }
         $this->set('file', $profileImg);
@@ -2355,8 +2354,8 @@ class AccountController extends LoggedUserController
             $message_records = array();
             foreach ($records as $mkey => $mval) {
                 $profile_images_arr = array(
-                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], 'thumb', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], 'thumb', 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_from_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_from_user_id'], ImageDimension::VIEW_THUMB, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                    "message_to_profile_url" => UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($mval['message_to_user_id'], ImageDimension::VIEW_THUMB, 1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     "message_timestamp" => strtotime($mval['message_date'])
                 );
                 $message_records[] = array_merge($mval, $profile_images_arr);
@@ -2819,7 +2818,7 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 
@@ -2851,7 +2850,7 @@ class AccountController extends LoggedUserController
                     </span>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 
@@ -2882,37 +2881,6 @@ class AccountController extends LoggedUserController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
-    }
-
-    private function notifyAdminSupplierApproval($userObj, $data, $approval_request = 1)
-    {
-        $attr = array('user_name', 'credential_username', 'credential_email');
-        $userData = $userObj->getUserInfo($attr);
-
-        if ($userData === false) {
-            return false;
-        }
-
-        $data = array(
-            'user_name' => $userData['user_name'],
-            'username' => $userData['credential_username'],
-            'user_email' => $userData['credential_email'],
-            'reference_number' => $data['reference'],
-        );
-
-        $email = new EmailHandler();
-
-        if (!$email->sendSupplierApprovalNotification(CommonHelper::getLangId(), $data, $approval_request)) {
-            Message::addMessage(
-                Labels::getLabel(
-                    "ERR_ERROR_IN_SENDING_SUPPLIER_APPROVAL_EMAIL",
-                    CommonHelper::getLangId()
-                )
-            );
-            return false;
-        }
-
-        return true;
     }
 
     private function getSupplierForm()
@@ -2979,7 +2947,7 @@ class AccountController extends LoggedUserController
                 $fld->htmlAfterField = '<p class="note">' . $field['sformfield_comment'] . '</p>';
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->siteLangId));
         return $frm;
     }
 

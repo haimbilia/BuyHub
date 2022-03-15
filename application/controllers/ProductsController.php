@@ -102,7 +102,7 @@ class ProductsController extends MyAppController
         }
         
         $get['vtype']  = $get['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $get['vtype'] == 'map') {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         } 
         
@@ -219,7 +219,7 @@ class ProductsController extends MyAppController
         $db = FatApp::getDb();
         $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
         $headerFormParamsAssocArr['vtype']  = $headerFormParamsAssocArr['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && $headerFormParamsAssocArr['vtype'] == 'map') {
+        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $headerFormParamsAssocArr['vtype'] == 'map') {
             $headerFormParamsAssocArr['vtype'] = 'grid';
         } 
 
@@ -548,7 +548,7 @@ class ProductsController extends MyAppController
 
         /* over all catalog product reviews */
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
@@ -797,7 +797,7 @@ class ProductsController extends MyAppController
         }
 
         $displayProductNotAvailableLable = false;
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
 
@@ -1116,7 +1116,7 @@ class ProductsController extends MyAppController
         $productImageUrl = '';
         /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
         if (0 < $afile_id) {
-            $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'FB_RECOMMEND', 0, $afile_id));
+            $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_FB_RECOMMEND, 0, $afile_id));
         }
         $socialShareContent = array(
             'type' => 'Product',
@@ -1738,7 +1738,7 @@ class ProductsController extends MyAppController
         /* ] */
 
         $displayProductNotAvailableLable = false;
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
@@ -1926,17 +1926,16 @@ class ProductsController extends MyAppController
             $product_description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($product["product_description"], true)), 500));
             $product_description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();
 
-            $productImageUrl = '';
-            /* $productImageUrl = UrlHelper::generateFullUrl('Image','product', array($product['product_id'],'', $product['selprod_id'],0,$this->siteLangId )); */
+            /* $productImageUrl = '';            
             if ($productImagesArr) {
                 $afile_id = array_keys($productImagesArr)[0];
-                $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], 'MEDIUM', 0, $afile_id));
-            }
+                $productImageUrl = UrlHelper::generateFullUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $afile_id));
+            } */
         }
 
         $displayProductNotAvailableLable = false;
         //availableInLocation
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
         }
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);

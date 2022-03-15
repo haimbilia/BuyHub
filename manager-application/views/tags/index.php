@@ -13,7 +13,7 @@ $actionItemsData = $actionItemsData + [
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . $actionItemsData['searchFrmTemplate']); ?>
                     <div class="card-table">
-                        <div class="table-responsive table-scrollable js-scrollable listingTableJs">
+                        <div class="table-responsive table-scrollable js-scrollable listingTableJs" data-auto-column-width="<?php echo $autoTableColumWidth; ?>">
                             <?php
                             $tableId = "listingTableJs";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');

@@ -29,7 +29,7 @@ foreach ($messagesList as $sn => $row) {
         switch ($key) {
             case 'user':
                 $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_THUMB);
-                $img = '<img data-aspect-ratio = "'. $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" width="'.$imageUserDimensions['width'].'" height="'.$imageUserDimensions['height'].'" title="' . $row['msg_user_name'] . '" src = "' . UrlHelper::generateFileUrl('Image', 'User', array($row['orrmsg_from_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONT_URL) . '" alt = "' . $row['msg_user_name'] . '" >';
+                $img = '<img data-aspect-ratio = "'. $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" title="' . $row['msg_user_name'] . '" src = "' . UrlHelper::generateFileUrl('Image', 'User', array($row['orrmsg_from_user_id'], ImageDimension::VIEW_THUMB, 1), CONF_WEBROOT_FRONT_URL) . '" alt = "' . $row['msg_user_name'] . '" >';
 
                 $name = '<a class="user-profile_title" href="javascript:void(0)" onclick="redirectUser(' . $row['orrmsg_from_user_id'] . ')">' . $row['msg_user_name'] . ' (' . $row['msg_username'] . ')</a>';
                 $email = $row['msg_user_email'];

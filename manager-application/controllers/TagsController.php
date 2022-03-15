@@ -49,6 +49,8 @@ class TagsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->setCustomColumnWidth();
+        $this->set('autoTableColumWidth', false);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME_AND_MODEL', $langId));
         $this->getListingData();
 
@@ -60,7 +62,7 @@ class TagsController extends ListingBaseController
         $this->_template->addJs([
             'js/select2.js',
             'js/tagify.min.js',
-            'js/tagify.polyfills.min.js',          
+            'js/tagify.polyfills.min.js',
         ]);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
         $this->_template->render(true, true, null, false, false);
@@ -248,13 +250,35 @@ class TagsController extends ListingBaseController
         return array_diff($fields, ['tags'], Common::excludeKeysForSort());
     }
 
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'product_name' => [
+                'width' => '35%'
+            ],
+            'tags' => [
+                'width' => '60%'
+            ],
+        ];
+
+        $this->set('tableHeadAttrArr', $arr);
+    }
+
     public function getBreadcrumbNodes($action)
     {
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-                $this->nodes = [                   
+                $this->nodes = [
                     ['title' => $pageTitle]
                 ];
                 break;

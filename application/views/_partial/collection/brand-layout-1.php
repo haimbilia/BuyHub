@@ -32,7 +32,9 @@
             </div>
 
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
-                <div class="section-action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+                <div class="section-foot">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
+                </div>
             <?php } ?>
         </div>
     </section>

@@ -111,10 +111,11 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active','brand_identifier','IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }
+            }            
+
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
@@ -130,6 +131,7 @@ class BrandsController extends ListingBaseController
             $frm->fill($data);
         }
 
+        HtmlHelper::addIdentierToFrm($frm->getField($this->modelClass::tblFld('name')), ($data[$this->modelClass::tblFld('identifier')] ?? ''));
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

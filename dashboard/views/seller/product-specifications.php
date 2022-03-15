@@ -32,13 +32,17 @@ if (count($productSpecifications) > 0) { ?>
                                 $ul = $td->appendElement('ul', array('class' => 'actions'));
                                 $li = $ul->appendElement('li');
                                 $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), 'onclick' => 'prodSpecificationSection(' . $langId . ',' . $prodSpecId . ')'), '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>', true);
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                            </use>
+                                        </svg>', true);
 
                                 $lia = $li->appendElement('li');
-                                $lia->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), 'onclick' => 'deleteProdSpec(' . $prodSpecId . ',' . $langId . ')'), '<i class="fa fa-trash"></i>', true);
+                                $lia->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), 'onclick' => 'deleteProdSpec(' . $prodSpecId . ',' . $langId . ')'), '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>', true);
                                 break;
                             default:
                                 $td->appendElement('plaintext', array(), $specification[$key], true);

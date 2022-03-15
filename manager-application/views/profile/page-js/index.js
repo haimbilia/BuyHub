@@ -74,7 +74,7 @@
                         }
                     };
                     $(inputBtn).val('');
-                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 500);
                     return;
                 });
             }
@@ -115,7 +115,7 @@
                 $('#loader-js').html(fcom.getLoader());
             },
             success: function (ans) {
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 $("#modalBoxJs").modal("hide");
                 profileInfoForm();
             },

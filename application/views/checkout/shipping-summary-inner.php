@@ -11,7 +11,9 @@
                 } ?>
 
                 <div class="review-block__link" role="cell">
-                    <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    <button class="link-underline" onClick="showAddressList()">
+                        <span>
+                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                 </div>
             </div>
             <div class="review-block__content" role="cell">
@@ -80,7 +82,7 @@
             } ?>
         </div>
         <div class="step_foot">
-            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)" onclick="showAddressList();">
+            <a class="btn btn-outline-gray btn-wide" href="javascript:void(0)" onclick="showAddressList();">
                 <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
             </a>
             <?php if ($hasPhysicalProd) { ?>

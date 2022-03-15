@@ -22,10 +22,10 @@ $(document).on('change', '#imageLanguageJs', function () {
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
-                $.ykmsg.error(t.msg);
+                fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);

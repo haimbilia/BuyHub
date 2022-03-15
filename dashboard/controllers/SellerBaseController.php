@@ -6,7 +6,7 @@ class SellerBaseController extends LoggedUserController
     {
         parent::__construct($action);
         if (UserAuthentication::isGuestUserLogged()) {
-            $msg = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::exitWithError($msg, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
@@ -16,12 +16,12 @@ class SellerBaseController extends LoggedUserController
             $userObj = new User(UserAuthentication::getLoggedUserId());
             $userEmail = current($userObj->getUserInfo('credential_email', !$adminLoggedIn, !$adminLoggedIn));
             if (empty($userEmail)) {
+                $msg = Labels::getLabel('ERR_CONFIGURE_YOUR_EMAIL_FIRST', $this->siteLangId);
+                LibHelper::exitWithError($msg, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail',[], CONF_WEBROOT_FRONTEND));
             }
-            if (true === MOBILE_APP_API_CALL) {
-                $msg = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
-                FatUtility::dieJsonError($msg);
-            }
+
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';

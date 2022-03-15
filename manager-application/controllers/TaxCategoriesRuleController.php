@@ -351,16 +351,14 @@ class TaxCategoriesRuleController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addHTML('', 'space', '');
-        $frm->addHTML('', 'space', '');
         return $frm;
     }
 
     protected function getFormColumns(): array
     {
-        $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($taxTblHeadingCols) {
-            return json_decode($taxTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('taxCatTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
@@ -371,7 +369,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             'taxstr_name' => Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('taxTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('taxCatTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

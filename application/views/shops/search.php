@@ -1,70 +1,73 @@
 <?php
 if (!empty($allShops)) {
     $i = 0;
-    foreach ($allShops as $shop) { ?>
-        <div class="ftshops row <?php echo ($i % 2 != 0) ? 'ftshops-rtl' : ''; ?>">
-            <div class="col-md-12 mb-4">
-                <div class="ftshops_item">
-                    <div class="shop-detail-side">
-                        <div class="shop-detail-inner">
-                            <div class="ftshops_item_head_left">
-                                <div class="ftshops_logo">
-                                    <?php
-                                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
-                                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                                    ?>
-                                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>">
-                                </div>
-                                <div class="ftshops_detail">
-                                    <div class="ftshops_name"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a></div>
-                                    <div class="ftshops_location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
-                                </div>
-                            </div>
-                            <!-- Shop Badge  -->
-                            <?php
-                            $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
-                            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-                            ?>
-                            <!-- Shop Badge  -->
-                            <div class="ftshops_item_head_right">
-                                <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
-                                    <div class="product-ratings"> <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                                            </svg></i> <span class="rate"><?php echo  round($shop['shopRating'], 1); ?><span></span></span>
-                                    </div>
-                                <?php } ?>
-                                <a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true); ?>" class="btn btn-brand btn-sm ripplelink" tabindex="0"><?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrapper">
-                        <div class="row">
-                            <?php
-                            $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+?>
+    <ul class="ftshops">
+        <?php
+        foreach ($allShops as $shop) { ?>
 
-                            $tLeftRibbons = $shop['tLeftRibbons'];
-                            $tRightRibbons = $shop['tRightRibbons'];
-                            foreach ($shop['products'] as $product) {
-                                $selProdRibbons = [];
-                                if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                    $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                                }
-
-                                if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
-                                    $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
-                                }
+            <li class="ftshops_item">
+                <div class="shop-detail-side">
+                    <div class="shop-detail-inner">
+                        <div class="ftshops_logo">
+                            <?php
+                            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
+                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                             ?>
-                                <div class="col-6 col-lg-3 mb-3 mb-md-0">
-                                    <?php include(CONF_THEME_PATH . '_partial/collection/product-layout-1-list.php'); ?>
-                                </div>
-                            <?php } ?>
+                            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>">
                         </div>
+                        <div class="ftshops_detail">
+                            <div class="ftshops_name"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a></div>
+                            <div class="ftshops_location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
+                        </div>
+
+
+                        <?php
+                        $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
+                        $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                        ?>
+                        <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
+                            <div class="product-ratings">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+                                </svg>
+                                <span class="rate"><?php echo  round($shop['shopRating'], 1); ?> </span>
+                            </div>
+                        <?php } ?>
+                        <a class="btn btn-brand btn-sm ripplelink" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true); ?>">
+                            <?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?></a>
+
                     </div>
                 </div>
-            </div>
-        </div>
-<?php $i++;
-    }
+                <div class="product-wrapper">
+                    <div class="row">
+                        <?php
+                        $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
+
+                        $tLeftRibbons = $shop['tLeftRibbons'];
+                        $tRightRibbons = $shop['tRightRibbons'];
+                        foreach ($shop['products'] as $product) {
+                            $selProdRibbons = [];
+                            if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                                $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                            }
+
+                            if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                                $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                            }
+                        ?>
+                            <div class="col-6 col-lg-3 mb-3 mb-md-0">
+                                <?php include(CONF_THEME_PATH . '_partial/collection/product-layout-1-list.php'); ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </li>
+        <?php $i++;
+        }
+        ?>
+    </ul>
+<?php
 } else {
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
 }

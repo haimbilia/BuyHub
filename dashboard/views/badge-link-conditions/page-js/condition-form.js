@@ -170,6 +170,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             allowClear: true,
             dir: langLbl.layoutDirection,
             placeholder: selector.attr('placeholder'),
+            dropdownParent: selector.closest('form'),
             ajax: {
                 url: function () {
                     return getRecordTypeURL()
@@ -234,7 +235,10 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             $(formClass + "select[name='blinkcond_record_type']").attr('disabled', 'disabled');
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
-        });
+        }).on('select2:open', function(e) {        
+            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple")
+        })
+        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");;
     }
 
     searchRecords = function (form) {

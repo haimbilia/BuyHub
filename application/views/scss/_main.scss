@@ -44,6 +44,7 @@
 @import "components/media";
 @import "components/message";
 @import "components/modal";
+@import "components/offcanvas";
 @import "components/multi-list";
 @import "components/pagination";
 @import "components/panel";
@@ -62,7 +63,7 @@
 @import "components/tabs";
 @import "components/wrap-drop";
 @import "components/auto-suggestions";
-@import "components/misc";
+
 @import "components/cards";
 @import "components/switch";
 @import "components/print";
@@ -84,6 +85,7 @@
 @import "components/scrollbar";
 @import "components/file-upload";
 @import "components/more-sellers";
+@import "components/customer-reviews";
 @import "components/interactive-map";
 @import "components/share-this";
 @import "components/cart-summary";
@@ -98,6 +100,7 @@
 @import "components/collection-faq";
 @import "components/collection-incentives";
 @import "components/collection-newsletter";
+@import "components/misc";
 
 // @import "components/collection-faq";
 //
@@ -108,7 +111,7 @@
 //@import 'vendors/facebox';
 @import "vendors/jquery-ui";
 @import "vendors/jquery-ui-timepicker-addon";
-@import "vendors/simplebar";
+//@import "vendors/simplebar";
 @import "vendors/slick";
 @import "vendors/xzoom";
 @import "vendors/tagify";

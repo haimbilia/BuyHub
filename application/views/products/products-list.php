@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
-if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
 
@@ -16,9 +16,6 @@ if ($vtype == 'list') {
 ?>
 <div id="productsList" class="<?php echo $productListClass ?>">
     <?php
-    if ($vtype == 'map') {
-        include(CONF_THEME_PATH . 'products/products-list-map.php');
-    } else {
     ?>
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php
@@ -41,14 +38,14 @@ if ($vtype == 'list') {
                     }
 
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
-                    <div class="item">
+                    <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
                         <!--product tile-->
                         <div class="products">
                             <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product, 'siteLangId' => $siteLangId], false); ?>
                             <?php if ($product['in_stock'] == 0) { ?>
-                                <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
+                                <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                             <?php } ?>
-                            <div class="products-body">
+                            <div class=" products-body">
                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                     <div class="not-available"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
@@ -63,10 +60,10 @@ if ($vtype == 'list') {
                                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
 
                                         $pictureAttr = [
-                                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
-                                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'ratio' => '1:1',
-                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'siteLangId' => $siteLangId,
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
                                             'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name'],
@@ -120,8 +117,7 @@ if ($vtype == 'list') {
                 $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
                 $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
         ?>
-<?php }
-        }
+<?php }        
 ?>
 </div>
 

@@ -27,26 +27,26 @@
                     $prodOrBatchUrl = 'javascript:void(0)';
                     if ($op['op_is_batch']) {
                         $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($op['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($op['op_selprod_id'], $siteLangId, ImageDimension::VIEW_SMALL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                     } else {
                         if (Product::verifyProductIsValid($op['op_selprod_id']) == true) {
                             $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                         }
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($op['selprod_product_id'], "SMALL", $op['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_SMALL, $op['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                     }
                 ?>
                     <tr>
                         <td><?php echo $k; ?></td>
                         <td>
-                            <div class="item">
-                                <figure class="item__pic">
+                            <div class="product-profile">
+                                <figure class="product-profile__pic">
                                     <a href="<?php echo $prodOrBatchUrl; ?>">
                                         <img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $op['op_product_name']; ?>" alt="<?php echo $op['op_product_name']; ?>">
                                     </a>
                                 </figure>
-                                <div class="item__description">
+                                <div class="product-profile__description">
                                     <?php if ($op['op_selprod_title'] != '') { ?>
-                                        <div class="item__title">
+                                        <div class="product-profile__title">
                                             <a title="<?php echo $op['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                 <?php echo $op['op_selprod_title'] . '<br>'; ?>
                                             </a>
@@ -61,7 +61,7 @@
                                             </a>
                                         </div>
                                     <?php } ?>
-                                    <div class="item__brand">
+                                    <div class="product-profile__brand">
                                         <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
                                         <?php echo CommonHelper::displayNotApplicable($siteLangId, $op['op_brand_name']); ?>
                                     </div>

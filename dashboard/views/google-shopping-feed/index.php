@@ -54,8 +54,8 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
                         if (!empty($frmSearch)) {
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
                         } ?>
-                        <div class="card-body">
-                            <div id="listing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
+                        <div class="card-table" id="listing">
+                            <div class="container m-2"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
                         </div>
                     </div>
                 </div>

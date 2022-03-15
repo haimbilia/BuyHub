@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
-if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
 ?>
@@ -19,7 +19,7 @@ if ($products) {
                 foreach ($products as $product) {
                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
-                    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
                     $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
                     $productsByShop[$product['shop_id']]['shop_name'] = $product['shop_name'];
@@ -36,7 +36,7 @@ if ($products) {
                     <li data-shopId="<?php echo $product['shop_id']; ?>">
                         <a class="store" href="<?php echo $productUrl; ?>">
                             <div class="store__img">
-                                <img loading='lazy' data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
+                                <img loading='lazy' data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
                             </div>
                             <div class="store__detail">
                                 <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
@@ -84,7 +84,7 @@ if ($products) {
 foreach ($moreSellersProductsArr as $product) {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
-    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $productsBySelProdCode[$product['selprod_code']][] = [
         'lat' => $product['shop_lat'],
         'lng' => $product['shop_lng'],
@@ -105,7 +105,7 @@ foreach ($moreSellersProductsArr as $product) {
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">
                 <div class="seller_logo">
-                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, 'SMALL']) . '">
+                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '">
                 </div>
                 <div class="seller_detail">
                 <div class="seller_title">' . $marker['shop_name'] . '</div>                

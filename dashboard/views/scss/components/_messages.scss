@@ -1,9 +1,9 @@
 .communication {
     @include media-breakpoint-up(lg) {
         display: grid;
-        grid-gap: 1rem;
-        grid-template-columns: 300px auto 300px;
-        grid-template-areas: "nav content sidebar";
+        grid-gap: 2rem;
+        grid-template-columns: 300px auto;
+        grid-template-areas: "nav content";
     }
     //border-radius: 1rem;
 

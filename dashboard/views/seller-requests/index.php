@@ -38,7 +38,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </li>';
         }
 
-        if ($canRequestBadge) {
+        if ($canRequestBadge && !empty($approvalRequiredBadges)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link" href="javascript:void(0);" onclick="addBadgeReqForm(0)">
                                                     ' . Labels::getLabel('LBL_BADGE_REQUEST', $siteLangId) . '
@@ -59,12 +59,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="card-head">
                 <?php
                 if (!$noRecordFound) {
-                    $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge);
+                    $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge, 'approvalRequiredBadges' => $approvalRequiredBadges, 'reqBadges' => $reqBadges);
                     $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false);
                 }
                 ?>
             </div>
-            <div class="card-body">
+            <div class="card-table">
                 <div class="pagebody--js">
                     <?php if ($noRecordFound) { ?>
                         <div class="row justify-content-center my-5">
@@ -121,22 +121,40 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             <?php } ?>
                             <?php if ($canRequestBadge) { ?>
-                                <div class="col-md-3">
-                                    <div class="no-data-found">
-                                        <div class="img">
-                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
-                                        </div>
-                                        <div class="data">
-                                            <div class="action">
-                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                <?php if (!empty($reqBadges)) { ?>
+                                    <div class="col-md-3">
+                                        <div class="no-data-found">
+                                            <div class="img">
+                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                            </div>
+                                            <div class="data">
+                                                <div class="action">
+                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php } else if (empty($reqBadges) && !empty($approvalRequiredBadges)) { ?>
+                                    <div class="col-md-3">
+                                        <div class="no-data-found">
+                                            <div class="img">
+                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                            </div>
+                                            <div class="data">
+                                                <div class="action">
+                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
                             <?php } ?>
+
                         </div>
                     <?php } else { ?>
-                        <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                        <div id="listing">
+                            <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                        </div>
                     <?php } ?>
                 </div>
                 <span class="editRecord--js"></span>

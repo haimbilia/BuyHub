@@ -31,7 +31,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
     }
 
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
-    $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, 'thumb', true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
 
     <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
@@ -82,7 +82,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                                     <div class="user user-circle">
                                         <?php
                                         $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
-                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], 'thumb', true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                         ?>
                                         <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
                                     </div>
@@ -128,8 +128,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
             <?php } ?>
         </div>
     </div>
-
-    <div class="communication-sidebar userJs">
+    <!-- <div class="communication-sidebar userJs">
         <div class="card mb-0 h-100">
             <div class="card-body">
                 <div class="message__user">
@@ -169,5 +168,5 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <?php } ?>

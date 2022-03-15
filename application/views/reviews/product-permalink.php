@@ -8,7 +8,7 @@
                 <div class="col-md-8 col-sm-8">
                     <div class="prod-info">
                         <div class="prod-info__left">
-                            <div class="product-avtar"><img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'SMALL', $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                            <div class="product-avtar"><img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                             </div>
                         </div>
                         <div class="prod-info__right">
@@ -38,14 +38,14 @@
                             <h4><?php echo Labels::getLabel('Lbl_Review_of', $siteLangId) . ' ' . (($product['selprod_title']) ? $product['selprod_title'] . ' - ' . $product['product_name'] : $product['product_name']), ' ', Labels::getLabel('Lbl_by', $siteLangId), ' : ', $reviewData['user_name']; ?>
                             </h4>
                         </div>
-                        <div class="listing__all">
+                        <div class="reviewListJs">
                             <ul class="reviews-list mt-4">
                                 <li>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="profile-avatar">
                                                 <div class="profile-dp">
-                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB, true)); ?>" alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile-bio">
                                                     <div class="title">
@@ -102,17 +102,17 @@
                                                                 $i = 0;
                                                                 foreach ($images as $image) {
                                                                     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                                                                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, 'MINITHUMB', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                                                    $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                                                    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                                                    $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                                                                     if (5 > $i || 5 < $i) { ?>
                                                                         <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
-                                                                            <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this);">
+                                                                            <a class="uploaded-file" href="javascript:void(0)" onclick="previewImage(this, event);">
                                                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                                                             </a>
                                                                         </li>
                                                                     <?php } else { ?>
-                                                                        <li class="more-media " onclick="loadMoreImages(this);">
+                                                                        <li class="more-media " onclick="loadMoreImages(this, event);">
                                                                             <a class="uploaded-file review-media" href="javascript:void(0)" data-count="<?php echo count($images); ?>+">
                                                                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                                                             </a>

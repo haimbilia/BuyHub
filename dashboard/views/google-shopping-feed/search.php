@@ -88,7 +88,11 @@
                                 'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
                                 'title' => Labels::getLabel('LBL_BIND_PRODUCTS', $siteLangId)
                             ],
-                            '<i class="fa fa-link"></i>',
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#link">
+                                </use>
+                            </svg>',
                             true
                         );
 
@@ -100,7 +104,11 @@
                                 'title' => Labels::getLabel('LBL_PUBLISH', $siteLangId),
                                 'onclick' => "publishBatch(" . $row['adsbatch_id'] . ")"
                             ],
-                            '<i class="fa fa-rss"></i>',
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#publish-rss">
+                                </use>
+                            </svg>',
                             true
                         );
 
@@ -113,10 +121,10 @@
                                 'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
                             ],
                             '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>',
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                </use>
+                            </svg>',
                             true
                         );
                         $li = $ul->appendElement('li');
@@ -126,7 +134,11 @@
                                 'href' => 'javascript:void(0)',
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "deleteBatch(" . $row['adsbatch_id'] . ")"
                             ],
-                            '<i class="fa fa-trash"></i>',
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>',
                             true
                         );
                     } else if (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']) {

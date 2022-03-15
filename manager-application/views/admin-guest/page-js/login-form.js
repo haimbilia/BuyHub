@@ -3,6 +3,22 @@ $(document).ready(function () {
         $(".rememberFldJs").unwrap();
     }
 });
+
+$(document).on('click', '#showPass', function () {
+    var passInput = $("#password");
+    if ('' == passInput.val()) {
+        return;
+    }
+    
+    if (passInput.attr('type') === 'password') {
+        passInput.attr('type', 'text');
+        $(this).addClass('field-password-show');
+    } else {
+        passInput.attr('type', 'password');
+        $(this).removeClass('field-password-show');
+    }
+});
+
 (function () {
     login = function (frm, v) {
         if (!$(frm).validate()) {
@@ -24,21 +40,10 @@ $(document).ready(function () {
 
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "sendResetPasswordLink", [user]), '', function (t) {
             if (0 == t.status) {
-                $.ykmsg.error(t.errorMsg);
+                fcom.displayErrorMessage(t.errorMsg);
                 return false;
             }
-            $.ykmsg.success(t.msg);
+            fcom.displaySuccessMessage(t.msg);
         });
     };
-
-    $('#showPass').on('click', function () {
-        var passInput = $("#password");
-        if (passInput.attr('type') === 'password') {
-            passInput.attr('type', 'text');
-            $(this).html(hideTxt);
-        } else {
-            $(this).html(showTxt);
-            passInput.attr('type', 'password');
-        }
-    });
 })();

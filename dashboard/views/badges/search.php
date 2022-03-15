@@ -99,7 +99,11 @@ foreach ($arrListing as $sn => $row) {
                             $li->appendElement(
                                 'a',
                                 array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
-                                '<i class="fa fa-trash"></i>',
+                                '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>',
                                 true
                             );
                         }

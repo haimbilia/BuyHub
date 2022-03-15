@@ -357,14 +357,14 @@ class CollectionsController extends ListingBaseController
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-            $langData = current($translatedData);
+            $langData = (array) current($translatedData);
         } else {
-            $langData = $this->modelObj::getAttributesByLangId($langId, $recordId);
+            $langData = (array) $this->modelObj::getAttributesByLangId($langId, $recordId);
         }
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
+
         $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
+        $langData += $data;
+        $langFrm->fill($langData);
 
         $this->setFormTitle($data['collection_type'], $data['collection_layout_type']);
 
@@ -386,6 +386,7 @@ class CollectionsController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
         $frm = new Form('frmCollectionLang');
+        $frm->addHiddenField('', 'collection_type');
         $frm->addHiddenField('', 'collection_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 

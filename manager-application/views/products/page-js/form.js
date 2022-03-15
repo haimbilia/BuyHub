@@ -30,7 +30,7 @@
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
-            $('.mainJs').replaceWith(res.html);            
+            $('.mainJs').replaceWith(res.html);
         });
     };
 
@@ -40,7 +40,7 @@
         let productType = $(el).val();
         $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
-            $('.mainJs').replaceWith(res.html);          
+            $('.mainJs').replaceWith(res.html);
         });
     };
 
@@ -66,11 +66,18 @@
             fcom.removeLoader();
         });
     };
+    addShippingPackage = function () {
+        fcom.resetEditorInstance();
+        fcom.updateWithAjax(fcom.makeUrl('shippingPackages', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+    };
     addTagData = function (e) {
         let rt_id = e.detail.data.id;
         if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
-                $.ykmsg.error(tagsEditErr);
+                fcom.displayErrorMessage(tagsEditErr);
                 e.detail.tag.remove();
                 return;
             }
@@ -80,7 +87,7 @@
     removeTagData = function (e) {
         var tag_id = e.detail.tag.id;
         var product_id = getCurrentFrmRecordId();
-        if(1 > product_id){
+        if (1 > product_id) {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
@@ -199,12 +206,12 @@
         var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { recordId, langId }, function (res) {
-            $('#specificationsListJs').html(res.html);         
+            $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
                 $('#specificationsListSeprJs').addClass('hide');
             }
-        },{ fOutMode: 'json'});        
+        }, { fOutMode: 'json' });
     };
 
     editProdSpec = function (el) {
@@ -261,7 +268,7 @@
                 $('#shipping_profile').val(shippingProfileId);
             }
             $('#product_fulfillment_type').trigger('change');
-        },{ fOutMode: 'json'});
+        }, { fOutMode: 'json' });
     };
 
     imageForm = function () {
@@ -279,7 +286,7 @@
             loadImageOptions();
             var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();
-            productImages(recordId, fileType);      
+            productImages(recordId, fileType);
         });
     };
     loadImageOptions = function () {
@@ -399,7 +406,6 @@
             whitelist: value,
             delimiters: "#",
             dropdown: {
-                closeOnSelect: false,
                 enabled: 0,
                 classname: "tags-look",
             },
@@ -433,7 +439,7 @@
         tagifyObjs[index] = tagify;
     };
 
-    upcType = function () {       
+    upcType = function () {
         if (typeof upcTypeTriggerEvent != 'undefined') {
             clearTimeout(upcTypeTriggerEvent);
         }
@@ -442,7 +448,7 @@
             let type = $('.upc_type:checked').val();
             let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
-           
+
             let productOptions = {};
             if (type == 0) {
                 $('#addProductfrm select.optionsJs').each(function () {
@@ -464,12 +470,12 @@
                         productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
                     });
                 });
-            }                      
+            }
             fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {
-                $('#variantsListJs').html(t.html);              
+                $('#variantsListJs').html(t.html);
                 fcom.removeLoader();
                 $('.mainJs').removeClass('isLoading');
-            },{ fOutMode: 'json'});
+            }, { fOutMode: 'json' });
         }, 2000);
     };
     loadCropper = function (inputBtn) {
@@ -485,14 +491,9 @@
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                                
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth / minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,
@@ -526,21 +527,24 @@
             cache: false,
             contentType: false,
             processData: false,
-            success: function (ans) {               
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
+            success: function (ans) {
                 if (ans.status == 0) {
-                    $.ykmsg.error(ans.msg);
+                    fcom.displayErrorMessage(ans.msg);
                     return;
                 }
                 autoOpenSideBar = false;
                 $("#modalBoxJs").modal("hide");
-                $.ykmsg.success(ans.msg);
+                fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
                 }
                 fcom.removeLoader();
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.ykmsg.error(
+                fcom.displayErrorMessage(
                     thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
                 );
             },
@@ -575,7 +579,7 @@
                     });
                 }
             }).disableSelection();
-        },{ fOutMode: 'json'});
+        }, { fOutMode: 'json' });
     };
 
     digitalDownloadsForm = function (type, callback = '') {
@@ -587,7 +591,7 @@
                 callback();
             } else {
                 getDigitalDownloads(type, recordId);
-            }            
+            }
         });
     };
 
@@ -632,19 +636,19 @@
     getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {               
+            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
                 }
                 $("#digitalFrmListJs").html(res.html);
-            },{ fOutMode: 'json'});
+            }, { fOutMode: 'json' });
         } else {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {               
+            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
                 }
                 $("#digitalFrmListJs").html(res.html);
-            },{ fOutMode: 'json'});
+            }, { fOutMode: 'json' });
         }
     };
 
@@ -709,11 +713,10 @@ async function resetOptionValuesTag(e) {
             e.preventDefault();
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
+                dataType: 'json',
                 type: 'POST',
                 data: { recordId, optionId, fIsAjax: 1 }
             });
-
-            response = $.parseJSON(response)
             if (response.status != 1) {
                 fcom.displayErrorMessage(response.msg);
                 return;
@@ -858,7 +861,7 @@ $(document).on('change', '#digitalFrmOptionId', function () {
     getDigitalDownloads(downloadType, recordId, langId, optionCombi);
 });
 
-$('.stock-nav > ul > li a').click(function (e) {
+$(document).on('click', '.stockNavJs > ul > li a', function (e) {
     $(this).closest('li').siblings().removeClass('is-active');
     $(this).closest('li').addClass('is-active');
 });

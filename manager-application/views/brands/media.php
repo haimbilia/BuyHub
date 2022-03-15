@@ -15,7 +15,8 @@ $ratioFld = HtmlHelper::configureRadioAsButton($logoFrm, 'ratio_type');
 $ratioFld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $logoFrm->getField('heading');
-$fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_LOGO', $siteLangId) . '</h3>';
+$fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
+$fld->value = '<h5>' . Labels::getLabel('LBL_LOGO', $siteLangId) . '</h5>';
 
 $fld = $logoFrm->getField('logo');
 $fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</span>';
@@ -31,7 +32,8 @@ HtmlHelper::formatFormFields($imageFrm);
 $imageFrm->setFormTagAttribute('class', 'modal-body form');
 
 $fld = $imageFrm->getField('heading');
-$fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_BANNER', $siteLangId) . '</h3>';
+$fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
+$fld->value = '<h5>' . Labels::getLabel('LBL_BANNER', $siteLangId) . '</h5>';
 
 $fld = $imageFrm->getField('banner');
 $fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';

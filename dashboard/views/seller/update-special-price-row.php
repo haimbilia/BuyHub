@@ -53,7 +53,11 @@
         <ul class="actions">
             <li>
                 <a title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" href="javascript:void(0);" onclick="deleteSellerProductSpecialPrice(<?php echo $splPriceId; ?>)">
-                    <i class="fa fa-trash"></i>
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>'images/retina/sprite-actions.svg#delete">
+                        </use>
+                    </svg>
                 </a>
             </li>
         </ul>

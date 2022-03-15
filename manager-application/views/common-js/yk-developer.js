@@ -13,7 +13,13 @@ $(function () {
 
     $('[data-bs-toggle="popover"]').popover();
     /* Bind bootstrap tooltip with ajax elements. */
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 
 (function () {
@@ -339,7 +345,7 @@ $(function () {
                             "-" +
                             iti.getSelectedCountryData().iso2;
                         if ($('input[name="' + elementName + '"]').length < 1) {
-                            $.ykmsg.error($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
+                            fcom.displayErrorMessage($(input).attr("name") + " " + langLbl.dialCodeFieldNotFound);
                             return;
                         }
                         $('input[name="' + elementName + '"]').val(dCode);
@@ -411,7 +417,13 @@ $(function () {
         $('[data-bs-toggle="popover"]').popover();
 
         /* Bind bootstrap tooltip with ajax elements. */
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip({
+            trigger: 'hover'
+        }).on('click', function () {
+            setTimeout(() => {
+                $(this).tooltip('hide');
+            }, 100);
+        });
 
         /* Bind Scoll hand if table width is wider. */
         new ScrollHint(".js-scrollable");
@@ -549,7 +561,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 );
             });
         } else {
-            $.ykmsg.error(
+            fcom.displayErrorMessage(
                 "Geocode was not successful for the following reason: " + status
             );
         }
