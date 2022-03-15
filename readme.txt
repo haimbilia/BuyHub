@@ -31,7 +31,7 @@ Enhancements :
    => Order Cancellation Requests 
    => Manage Alert text
    => Manage Product Reviews
-   => Multilingual Sitemap
+   => Multilingual Sitemap and canonical url update.
    => Add product screen
 
 

@@ -128,7 +128,7 @@
                                             </use>
                                         </svg>
                                     </i>
-                                    <span class="txt">Wishlist</span>
+                                    <span class="txt" onclick="wishlistBox()"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
