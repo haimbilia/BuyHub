@@ -105,7 +105,7 @@
                             </use>
                         </svg>
                     </h2>
-                    <div id="policies" class="collapse" data-bs-parent="#accordionExample">
+                    <div id="extra_comments" class="collapse" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
                                 <p>

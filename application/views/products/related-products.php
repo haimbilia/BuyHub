@@ -43,16 +43,6 @@ if ($relatedProductsRs) { ?>
                         </div>
                     </div>
                     <div class="products-foot">
-                        <?php /* if(round($rProduct['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
-                <div class="product-ratings">
-                    <i class="icn"><svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                               ></use>
-                        </svg></i> <span class="rate"><?php echo round($rProduct['prod_rating'],1);?></span>
-                    <?php if(round($rProduct['prod_rating'])==0 ){  ?> <span class="be-first"> <a
-                            href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?>
-                        </a> </span> <?php } ?>
-                </div> <?php } */ ?>
                         <div class="products-category">
                             <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                             </a>

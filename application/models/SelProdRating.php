@@ -115,7 +115,6 @@ class SelProdRating extends MyAppModel
             'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',
             'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
         ]);
-        $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
