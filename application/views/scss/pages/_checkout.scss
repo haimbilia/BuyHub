@@ -119,12 +119,12 @@
         flex: 1;
     }
     &_foot {
-        border-top: $border;
+        //border-top: $border;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 3rem;
-        padding-top: 3rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
     }
 }
 
@@ -132,7 +132,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2rem;
     width: 100%;
 }
 
@@ -443,62 +442,18 @@
     &-item {
         position: relative;
         border: $border;
-        border-radius: 4px;
+        //border-radius: 4px;
         //margin-bottom: 1.5rem;
         &.is-active {
-            border-color: $brand-color;
+            //border-color: $brand-color;
         }
     }
     .label-block {
-        padding: 1rem;
+        padding: 2rem;
         cursor: pointer;
         display: flex;
         align-items: flex-start;
         margin: 0;
-    }
-    .addresses {
-        &-actions {
-            border-top: $border;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            .btn-addresses {
-                border: none;
-                height: auto;
-                width: 100%;
-                display: block;
-                color: $secondary-color;
-            }
-        }
-        &-detail {
-            flex: 1;
-            font-size: 0.85rem;
-            color: $txt-gray;
-            line-height: 1.5;
-            margin-bottom: 0;
-            padding: 1rem;
-            .h5 {
-                margin-bottom: 10px;
-                font-weight: 500;
-                font-size: 0.9rem;
-                line-height: 1.5;
-                color: $txt-body;
-                display: flex;
-                align-items: center;
-            }
-            span {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-block;
-                max-width: 50%;
-            }
-
-            .phone-txt {
-                font-weight: 500;
-                margin-top: 8px;
-            }
-        }
     }
 
     .tag {
@@ -515,6 +470,56 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 42%;
+    }
+}
+
+.addresses {
+    &-checkbox {
+        position: absolute;
+        #{$end-direction}: 1rem;
+        top: 1rem;
+    }
+    &-actions {
+        border-top: $border;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        .btn-addresses {
+            border: none;
+            height: auto;
+            width: 100%;
+            display: block;
+            color: $secondary-color;
+        }
+    }
+    &-detail {
+        flex: 1;
+        font-size: 0.9rem;
+        color: $txt-gray;
+        line-height: 1.5;
+        margin-bottom: 0;
+        padding: 2rem;
+        .h5 {
+            margin-bottom: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: $txt-body;
+            display: flex;
+            align-items: center;
+        }
+        span {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            max-width: 50%;
+        }
+
+        .phone-txt {
+            font-weight: 500;
+            margin-top: 10px;
+        }
     }
 }
 
@@ -892,5 +897,23 @@
     }
     .block-cart-detail-top {
         margin-bottom: 0;
+    }
+}
+
+//btn-summary
+
+.btn-summary {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: none;
+    @include bg-brand;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    font-weight: 600;
+    @include media-breakpoint-up(lg) {
+        display: none;
     }
 }
