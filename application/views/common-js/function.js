@@ -639,6 +639,7 @@ function getCookie(cname) {
 function displayGeoAddress(address) {
     if (0 < $("#ga-autoComplete-header").length) {
         $("#ga-autoComplete-header").val(address);
+        $(".geo-location-selected").text(address);        
     }
 }
 
