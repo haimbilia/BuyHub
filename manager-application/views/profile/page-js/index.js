@@ -56,7 +56,7 @@
     };
 
     popupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
@@ -76,7 +76,7 @@
                             var data = e.detail;
                         }
                     };
-                    $(inputBtn).val('');
+                    $(inputBtn).val('');                  
                     setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 500);
                     return;
                 });
