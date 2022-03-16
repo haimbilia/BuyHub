@@ -2,7 +2,7 @@
     <div class="add-stock-column-head">
         <div class="add-stock-column-head-label">
             <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
-            <span class="text-muted"> <span class="required"></span> <?php echo Labels::getLabel('FRM_REQUIRED_INFORMATION', $langId); ?></span>
+            <span class="text-muted"> <span class="required"></span><?php echo CommonHelper::replaceStringData(Labels::getLabel('FRM_FIELDS_WITH_{*}_ARE_MANDATORY', $langId), ['{*}' => '(<span class="spn_must_field">*</span>)']); ?> </span>
         </div>
         <?php
         $langFld =  $frm->getField('lang_id');
@@ -134,13 +134,13 @@
         <div class="card-foot">
             <div class="row justify-content-end">
                 <div class="col-auto">
-                    <a class="btn btn-icon btn-outline-brand"  href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank" >
+                    <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>
                         <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
-                </a>
+                    </a>
                 </div>
             </div>
         </div>
@@ -238,7 +238,7 @@
             <div class="row">
                 <?php
                 echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);             
+                echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
                 echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6, ['id' => 'product_ship_package'], '', '', ['label' => Labels::getLabel('FRM_ADD_SHIPPING_PACKAGE', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addShippingPackage()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                 echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
