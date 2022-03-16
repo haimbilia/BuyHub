@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (isset($pageData['plang_helping_text']) && !empty($pageData['plang_helping_text'])) { ?>
+<?php if (isset($pageData['plang_helping_text']) && !empty(trim($pageData['plang_helping_text']))) { ?>
     <div id="helpCenterJs">
         <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
             <span class="help_label"><?php echo Labels::getLabel('LBL_HELP', $siteLangId); ?></span>
