@@ -12,15 +12,13 @@
                     <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'title']; ?>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
                 </button>
             </div>
             <div class="modal-body">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="empty-stats">
-                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                            <div class="cms">
+                    <div class="card-body p-0">
+                        <div class="help-data">
+                            <div class="cms cms-start">
                                 <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
                             </div>
                         </div>

@@ -13,18 +13,12 @@
                             <?php echo $pageData['plang_title']; ?>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="empty-stats">
-                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                                    <div class="cms">
-                                        <?php echo $pageData['plang_helping_text']; ?>
-                                    </div>
-                                </div>
+                        <div class="help-data">
+                            <div class="cms cms-start">
+                                <?php echo $pageData['plang_helping_text']; ?>
                             </div>
                         </div>
                     </div>

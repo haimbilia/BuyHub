@@ -14,7 +14,6 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
             <?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
         <span class="txt">
             <?php echo Labels::getLabel("LBL_My_Bag", $siteLangId); ?>
-
             <?php /* if (0 < $cartSummary['cartTotal']) { */ ?>
             <!-- <span class="cartValue"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span> -->
             <?php /* } */ ?>
