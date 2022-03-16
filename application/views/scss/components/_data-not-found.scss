@@ -21,7 +21,7 @@
     font-size: 1rem;
 }
 
-.block--empty {
+.block-empty {
     padding: 2rem 20px;
     margin: auto;
     .block__img {
@@ -34,7 +34,8 @@
         display: block;
         margin: 20px auto 0;
     }
-    &-sm {}
+    &-sm {
+    }
     h3 {
         font-size: 1.2rem;
     }

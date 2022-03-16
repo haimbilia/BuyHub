@@ -141,8 +141,10 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
             </div>
         <?php } else { ?>
-            <div class="block-empty m-auto text-center"> <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
-                <h4><?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h4>
+            <div class="block-empty m-auto text-center">
+                <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
+                <h4>
+                    <?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h4>
             </div>
         <?php } ?>
     </div>

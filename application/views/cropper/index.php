@@ -4,7 +4,7 @@
         <div class="loader-positon" id="loader-js"></div>
     </div>
     <span class="gap"></span>
-    <div class="align--center rotator-actions" id="actions">
+    <div class="align-center rotator-actions" id="actions">
         <div class="docs-buttons">
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary" data-method="rotate" data-option="-90" title="<?php echo Labels::getLabel('LBL_Rotate_Left', $siteLangId); ?>">

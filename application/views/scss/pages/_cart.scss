@@ -435,12 +435,10 @@
     &-img {
         margin: 0 auto;
         text-align: center;
-        flex: 0 0 60px;
-        max-width: 60px;
         position: relative;
+        flex: 0 0 clamp(80px, 25%, 200px);
+        max-width: clamp(80px, 25%, 200px);
         @include media-breakpoint-up(lg) {
-            flex: 0 0 212px;
-            max-width: 212px;
         }
         .products-img {
             margin-bottom: 0;
@@ -449,7 +447,7 @@
 
     &-detail {
         padding: 0;
-        padding-#{$start-direction}: 1rem;
+        padding-#{$start-direction}: 2rem;
         flex: 1;
         display: flex;
         flex-direction: column;

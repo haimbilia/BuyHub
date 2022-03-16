@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<?php 
+<?php
 /* <div>
   <?php if($couponsList){ ?>
   <div>
-    <div class="heading3 align--center"><?php echo Labels::getLabel("LBL_Apply_Promo_Coupons", $siteLangId); ?></div>
+    <div class="heading3 align-center"><?php echo Labels::getLabel("LBL_Apply_Promo_Coupons", $siteLangId); ?></div>
     <ul class="coupon-offers">
       <?php $counter = 1; foreach( $couponsList as $coupon_id=>$coupon ){
 				?>
