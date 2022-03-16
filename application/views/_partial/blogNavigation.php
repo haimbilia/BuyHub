@@ -44,34 +44,6 @@
                      </svg>
                  </i>
              </button>
-             <!-- offcanvas-blog-search -->
-             <div class="offcanvas offcanvas-blog-search" data-bs-backdrop="false" tabindex="-1" id="blog-search" aria-labelledby="blog-searchLabel">
-                 <div class="blog-search">
-                     <?php $srchFrm->setFormTagAttribute('onSubmit', 'submitBlogSearch(this); return(false);');
-                        $srchFrm->setFormTagAttribute('class', 'form');
-                        $srchFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                        $srchFrm->developerTags['fld_default_col'] = 12;
-                        $keywordFld = $srchFrm->getField('keyword');
-                        $keywordFld->setFieldTagAttribute('class', 'blog-search-input');
-                        $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_In_Blogs...', $siteLangId));
-                        $submitFld = $srchFrm->getField('btnProductSrchSubmit');
-                        $submitFld->setFieldTagAttribute('class', 'btn');
-                        echo $srchFrm->getFormTag();
-                        echo $srchFrm->getFieldHTML('keyword');
-                        echo $srchFrm->getFieldHTML('btnProductSrchSubmit');
-                        echo $srchFrm->getExternalJS(); ?>
-                     </form>
-                 </div>
-             </div>
-             <!-- <div class="back-to">
-                 <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl(); ?>">
-                     <?php echo Labels::getLabel('LBL_Shop', $siteLangId) . ' ' . FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId);  ?>
-
-                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                     </svg>
-                 </a>
-             </div> -->
          </div>
      </div>
  </div>

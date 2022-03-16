@@ -136,35 +136,15 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <?php } ?>
                             </li>
                             <li class="page-sort-item">
-                                <?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
-                            <!-- <li class="page-views">
-                                <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gridview">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </a>
-                            </li> -->
-                            <!-- <li class="page-views">
-                                <a href="javascript:void(0);" data-vtype="list" class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#listview">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </a>
-                            </li> -->
-                            <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+                                <?php echo $frmProductSearch->getFieldHtml('sortBy'); ?>
+                            </li>                          
+                            <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                                 <li class="page-sort-item">
-                                    <button class="btn btn-outline-black btn-map-view <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" data-vtype="map">
+                                    <button class="btn btn-outline-black btn-map-view <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" onclick="toogleMapView();">
                                         <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
                             <?php } ?>
-
                             <li class="page-sort-item">
                                 <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
                                     <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
@@ -172,9 +152,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
                                     </svg>
                                 </button>
-
-
-
                             </li>
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
@@ -201,8 +178,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     <aside class="collection-sidebar productFilters-js" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
                     </aside>
                     <main class="collection-content">
-
-
                         <?php
                         if (false && isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
                             <div class="interactive-stores">
@@ -238,12 +213,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     <?php
     if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {
         include(CONF_THEME_PATH . 'products/products-list-map-view.php');
-        //$this->includeTemplate('products/products-list-map-view.php', $productsData, false)
-
     } ?>
 </section>
-
-
 <section>
     <div class="container">
         <div class="row">

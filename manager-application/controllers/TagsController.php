@@ -23,7 +23,7 @@ class TagsController extends ListingBaseController
         $fields = $this->getFormColumns($langId);
         $frmSearch = $this->getSearchFrm($fields, $langId);
 
-        $pageData = PageLanguageData::getAttributesByKey('LBL_MANAGE_TAGS', $langId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $langId);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageData['plang_title'] ?? LibHelper::getControllerName(true));
 

@@ -1282,10 +1282,10 @@ $(function () {
     };
 
     wishlistBox = function () {
-        if (isUserLogged() == 0) {
+       /*  if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
-        }
+        } */
         window.location.href = fcom.makeUrl('account', 'wishlist', [], siteConstants.webroot_dashboard);
     };
 

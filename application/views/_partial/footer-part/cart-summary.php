@@ -1,24 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-$user_is_buyer = 0;
-if (UserAuthentication::isUserLogged()) {
-    $user_is_buyer = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_is_buyer');
-}
-if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
-    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
-        <i class="icn">
-            <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
-            </svg>
-        </i>
-        <span class="cart-qty">
-            <?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
-        <span class="txt">
-            <?php echo Labels::getLabel("LBL_My_Bag", $siteLangId); ?>
-            <?php /* if (0 < $cartSummary['cartTotal']) { */ ?>
-            <!-- <span class="cartValue"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span> -->
-            <?php /* } */ ?>
-        </span>
-    </button>
+
+if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
     <!-- offcanvas-side-cart -->
     <div class="offcanvas offcanvas-side-cart offcanvas-end" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
         <div class="offcanvas-header">

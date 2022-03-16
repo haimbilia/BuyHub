@@ -238,24 +238,24 @@ class User extends MyAppModel
         return $this->mainTableRecordId;
     }
 
-    public static function isSeller()
+    public static function isSeller($returnNullIfNotLogged = false)
     {
-        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_supplier'));
+        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_supplier', $returnNullIfNotLogged));
     }
 
-    public static function isBuyer()
+    public static function isBuyer($returnNullIfNotLogged = false)
     {
-        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_buyer'));
+        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_buyer', $returnNullIfNotLogged));
     }
 
-    public static function isAdvertiser()
+    public static function isAdvertiser($returnNullIfNotLogged = false)
     {
-        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_advertiser'));
+        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_advertiser', $returnNullIfNotLogged));
     }
 
-    public static function isAffiliate()
+    public static function isAffiliate($returnNullIfNotLogged = false)
     {
-        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_affiliate'));
+        return (1 == UserAuthentication::getLoggedUserAttribute('user_is_affiliate', $returnNullIfNotLogged));
     }
 
     public static function isSigningUpForSeller()
