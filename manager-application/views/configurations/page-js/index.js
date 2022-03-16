@@ -106,6 +106,9 @@ $(document).ready(function () {
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            if(!validateFileUpload(inputBtn.files[0])){
+                return;    
+            }
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.updateWithAjax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {

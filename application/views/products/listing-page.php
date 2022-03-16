@@ -221,16 +221,16 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                             </div>
                         <?php } ?>
-                    </main> <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
-
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
-                        </svg>
-
-                    </button>
+                        <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                            </svg>
+                        </button>
+                    </main>
                 </div>
             <?php } ?>
         </div>
+
     </div>
     <?php
     if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {

@@ -91,6 +91,9 @@ $(document).ready(function () {
         $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
+				if(!validateFileUpload(inputBtn.files[0])){
+                    return;    
+                }
                 fcom.updateWithAjax(fcom.makeUrl('Account', 'imgCropper'), '', function (t) {
                     $("#modalBoxJs .modal-body").html(t.body);
                     $("#modalBoxJs .modal-footer").html(t.footer);

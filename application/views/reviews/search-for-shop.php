@@ -61,7 +61,7 @@
                                     <span class='moreText hidden'>
                                         <?php echo nl2br($review['spreview_description']); ?>
                                     </span>
-                                    <br><a class="readMore link--arrow btn-link" href="javascript:void(0);">
+                                    <br><a class="readMore link  btn-link" href="javascript:void(0);">
                                         <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                                 <?php } ?>
                             </p>

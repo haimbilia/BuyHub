@@ -141,6 +141,9 @@ $space: 25px;
             padding-#{$start-direction}: $side-bar-size-close;
         }
     }
+    .wrap {
+        padding-#{$start-direction}: $side-bar-size;
+    }
 }
 
 .sidebar-trigger {

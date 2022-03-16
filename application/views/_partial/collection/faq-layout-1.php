@@ -43,11 +43,12 @@
                                         <button class="faq-list-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse<?php echo $faqId; ?>" aria-expanded="<?php echo ($i == 0 ? 'true' : 'false'); ?>">
                                             <?php echo $faq['faq_title']; ?>
                                         </button>
-                                        <p class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>" id="faqCollapse<?php echo $faqId; ?>" data-parent="#faqCollapseParent<?php echo $faqCatId; ?>">
-                                            <span class="faq_data">
+                                        <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>" id="faqCollapse<?php echo $faqId; ?>" data-parent="#faqCollapseParent<?php echo $faqCatId; ?>">
+
+                                            <p class="faq_data">
                                                 <?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?>
-                                            </span>
-                                        </p>
+                                            </p>
+                                        </div>
                                     </li>
                                 <?php $i++;
                                 } ?>

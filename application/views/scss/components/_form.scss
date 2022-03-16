@@ -4,11 +4,12 @@ $input-line-height: $input-height;
 $input-font-size: 0.85rem;
 $input-border-style: solid;
 $input-border-width: 1px;
-$input-border-color: #000;
+$input-border-color: #dedede;
 $input-border: none;
 $input-border-radius: 3px;
 $input-bg: $bg-gray;
 $input-color: #474747;
+$input-border-focus: #000;
 @mixin input {
     border: $input-border-style $input-border-width $input-border-color;
     background-color: transparent;
@@ -25,10 +26,10 @@ $input-color: #474747;
     font-family: inherit;
     transition: 0.3s all ease-in-out;
     appearance: none;
-
     &:focus,
     &:hover {
-        outline: none !important;
+        //outline: ;
+        border-color: $input-border-focus;
         box-shadow: none;
         transition: 0.3s all ease-in-out;
     }

@@ -56,10 +56,13 @@
     };
 
     popupImage = function (inputBtn) {
-        loadCropperSkeleton();
+        loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
+                if(!validateFileUpload(inputBtn.files[0])){
+                    return;    
+                }
                 fcom.updateWithAjax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
                     $("#modalBoxJs .modal-body").html(t.body);
                     $("#modalBoxJs .modal-footer").html(t.footer);
@@ -73,8 +76,8 @@
                             var data = e.detail;
                         }
                     };
-                    $(inputBtn).val('');
-                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 500);
+                    $(inputBtn).val('');                  
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 300);
                     return;
                 });
             }

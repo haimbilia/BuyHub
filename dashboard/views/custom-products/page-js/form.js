@@ -139,7 +139,10 @@ var advanceMedia = false; /* open via advance media*/
             appendEle.find('tbody').append(html);
         }
 
-        appendEle.find('table').removeClass('hidden');
+        if(appendEle.find('table').hasClass('hidden')){
+            appendEle.find('table').removeClass('hidden');        
+            fixTableColumnWidth();            
+        }
 
         $('#sp_label').val('');
         $('#sp_value').val('');
@@ -434,6 +437,9 @@ var advanceMedia = false; /* open via advance media*/
         advanceMedia = isAdvanceMedia;
 
         if (inputBtn.files && inputBtn.files[0]) {
+            if(!validateFileUpload(inputBtn.files[0])){
+                return;    
+            }
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('CustomProducts', "imgCropper"), "", function (t) {

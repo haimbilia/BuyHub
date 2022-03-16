@@ -593,6 +593,9 @@ $(document).on("change", ".state", function () {
     };
 
     bannerPopupImage = function (inputBtn) {
+        if(!validateFileUpload(inputBtn.files[0])){
+            return;    
+        }
         loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
@@ -622,6 +625,9 @@ $(document).on("change", ".state", function () {
     };
 
     logoPopupImage = function (inputBtn) {
+        if(!validateFileUpload(inputBtn.files[0])){
+            return;    
+        }
         loadCropperSkeleton(false);
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {
@@ -698,6 +704,9 @@ $(document).on("change", ".state", function () {
     }
 
     collectionPopupImage = function (inputBtn) {
+        if(!validateFileUpload(inputBtn.files[0])){
+            return;    
+        }
         loadCropperSkeleton();
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
         if (inputBtn.files && inputBtn.files[0]) {

@@ -194,6 +194,9 @@
 .sort-by {
     display: flex;
     align-items: center;
+    &-btn {
+        min-width: 200px;
+    }
 }
 .review-images {
     display: flex;

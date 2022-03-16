@@ -21,11 +21,11 @@
     <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-lg-6">
                     <?php if ($recordCount > 0) { ?>
                         <div class="faq-filters mb-4" id="categoryPanel"></div>
                     <?php } ?>
-                    <ul class="faqlist" id="listing"></ul>
+                    <ul class="faq-list" id="listing"></ul>
                 </div>
             </div>
         </div>

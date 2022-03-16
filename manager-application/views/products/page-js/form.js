@@ -171,7 +171,10 @@
             appendEle.find('tbody').append(html);
         }
 
-        appendEle.find('table').removeClass('hide');
+        if(appendEle.find('table').hasClass('hide')){
+            appendEle.find('table').removeClass('hide');        
+            fixTableColumnWidth();            
+        }
 
         $('#sp_label').val('');
         $('#sp_value').val('');
@@ -211,6 +214,7 @@
                 $('#specificationsListJs').find('table').addClass('hide');
                 $('#specificationsListSeprJs').addClass('hide');
             }
+            fixTableColumnWidth();
         }, { fOutMode: 'json' });
     };
 
@@ -480,6 +484,9 @@
     };
     loadCropper = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            if(!validateFileUpload(inputBtn.files[0])){
+                return;    
+            }
             loadCropperSkeleton(false);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {

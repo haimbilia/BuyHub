@@ -10,4 +10,8 @@ $offcanvas-space: 1rem 2rem;
     &-foot {
         padding: $offcanvas-space;
     }
+
+    &-end {
+        border: none;
+    }
 }

@@ -7,18 +7,21 @@
     max-width: 1000px;
     &-item {
         flex: 1;
-        padding: 0 1rem;
+        padding: 2rem;
         transition: all 0.5s ease-in-out;
         display: flex;
         flex-direction: column;
         @include media-breakpoint-up(lg) {
             align-items: center;
             flex-direction: row;
+            padding: 0 1rem;
         }
     }
     &-image {
+        margin-bottom: 1rem;
         position: relative;
         @include media-breakpoint-up(lg) {
+            margin-bottom: 0;
             img {
                 display: inline-block;
             }

@@ -124,11 +124,9 @@ var fcom = {
     },
 
     updateWithAjax: function (url, data, fn, options, autoClose = true) {
-        fcom.displayProcessing();
-        let processingClass = fcom.processingCounter;        
+        fcom.displayProcessing();     
         var o = $.extend(true, { fOutMode: 'json' }, options);
         this.ajax(url, data, function (ans) {
-            fcom.closeProcessing(processingClass);
             fcom.removeLoader();
             if (ans.status != 1) {
                 fcom.displayErrorMessage(ans.msg);

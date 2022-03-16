@@ -109,7 +109,7 @@
         });
     };
 
-    updateStatus = function (frm) {
+    updateStatus = function (frm) {       
         if (!$(frm).validate()) return;
         var op_id = $(frm.op_id).val();
         var data = fcom.frmData(frm);
@@ -137,6 +137,7 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
                 $("#allSellerJs").trigger('change');
+                getOrderCommentForm( frm.order_id.value, frm.op_id.value);                
             });
         }
     };
@@ -323,6 +324,7 @@
             }
             fcom.displaySuccessMessage(t.msg);
             $.ykmodal.close();
+            setTimeout(function () { window.location.reload(); }, 300);
         });
     };
 })();
