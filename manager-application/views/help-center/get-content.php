@@ -21,7 +21,7 @@
                         <div class="empty-stats">
                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
                             <div class="cms">
-                                <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
+                                <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
                             </div>
                         </div>
                     </div>
