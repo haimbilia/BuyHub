@@ -50,7 +50,7 @@ if (isset($client_secret)) {
                 }
             });
         }
-        $(document).ready(function() {
+        $(function () {
             //$('.cc-payment').addClass('payment-load');
             loadCardConfirmation();
         });

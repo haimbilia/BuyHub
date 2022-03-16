@@ -263,11 +263,11 @@ if (!empty($postList)) { ?>
         ]
     });
 
-    $('.arrows--left').click(function() {
+    $('.arrows--left').on('click', function() {
         $('.js-popular-stories').slick('slickPrev');
     })
 
-    $('.arrows--right').click(function() {
+    $('.arrows--right').on('click', function() {
         $('.js-popular-stories').slick('slickNext');
     })
 </script>

@@ -7,6 +7,6 @@ $(document).on('click', '.anchor--js', function (event) {
 	$('html, body').animate({ scrollTop: target_top }, 1000);
 });
 
-$(document).ready(function () {
+$(function () {
 	$(".cg--js ul li:first").addClass('iss--active');
 });

@@ -1,27 +1,13 @@
-$("document").ready(function () {
-
-    $('.xzoom, .xzoom-gallery').bind('click', function (event) {
-        var xzoom = $(this).data('xzoom');
-        xzoom.closezoom();
-        var gallery = xzoom.gallery().cgallery;
-        var i, images = new Array();
-        for (i in gallery) {
-            images[i] = { src: gallery[i] };
-        }
-        $.magnificPopup.open({ items: images, type: 'image', gallery: { enabled: true } });
-        event.preventDefault();
-    });
+$(function () {
     var tabsReferences = [];
-    $(document).ready(function () {
-        if (0 < $('a.nav-scroll-js').length) {
-            $('a.nav-scroll-js').each(function () {
-                tabsReferences.push($(this).attr('href'));
-            });
-        }
-    });
+    if (0 < $('a.nav-scroll-js').length) {
+        $('a.nav-scroll-js').each(function () {
+            tabsReferences.push($(this).attr('href'));
+        });
+    }
 
     /* Product Main image to be static on scroll par a particular window scroll range[ */
-    $(window).scroll(function () {
+    $(window).on("scroll", function () {
         var scrollTop = $(window).scrollTop();
 
         $.each(tabsReferences, function (index, value) {
@@ -36,91 +22,19 @@ $("document").ready(function () {
                 $(".nav-scroll-js").removeClass('is-active');
             }
         });
-
-        /*		var prodDetailHeight = $('.product-detail').height();
-                var dv = $("#img-static");
-                var mainNavposition = $('.main-bar').position();
-                var mainNavHeight = $('.main-bar').height();
-	
-                if($('.gallery-js').is(':visible')){
-                    if(prodDetailHeight > dv.height() && $(window).width() > 991){
-                        dv.addClass( "img-static-scroll" );
-                    }
-                    dv.css('top',parseInt(mainNavposition.top)+parseInt(mainNavHeight)+40);
-                    //dv.css('width',dv.parent('div').width());
-                    dv.css('width',$('.details__body').width());
-                    dv.removeClass( "img-absolute-scroll" );
-                    $('.details__body').css('height','');
-                }
-	
-                if(prodDetailHeight > dv.height() && $(window).width() > 991){
-                    var scrollTop = $(this).scrollTop();
-                    var divTop = $(".stop-img-static--js").offset().top;
-	
-                    if(scrollTop == 0){
-                        dv.removeClass( "img-static-scroll" );
-                        dv.removeClass( "img-absolute-scroll" );
-                        $('.details__body').css('height','');
-                    }else if( (scrollTop + dv.height()) >= divTop - 105){
-                        $('.details__body').css('height',$('.product-detail').height());
-                        dv.css('top','');
-                        dv.removeClass( "img-static-scroll" );
-                        dv.addClass( "img-absolute-scroll" );
-                    }else{
-                        dv.addClass( "img-static-scroll" );
-                        dv.css('top',parseInt(mainNavposition.top)+parseInt(mainNavHeight)+40);
-                        dv.css('width',dv.parent('div').width());
-                        dv.removeClass( "img-absolute-scroll" );
-                        $('.details__body').css('height','');
-                    }
-                }else{
-	
-                    dv.removeClass( "img-static-scroll" );
-                    dv.css('top','');
-                    dv.css('width','');
-                }*/
-
-        $(".xzoom, .xzoom-gallery").xzoom();
     });
-
-    /* ] */
-    /* Product Main image to be static on scroll par a particular window scroll range[ */
-    /* $(window).scroll(function(){
-        var scrollTop = $(this).scrollTop();
-        var divTop = $(".stop-img-static--js").offset().top;
-        var dv = $("#img-static");
-        var mainNavposition = $('.main-bar').position();
-        var mainNavHeight = $('.main-bar').height();
-        if( scrollTop > 165 && scrollTop < ( divTop - 700) ){
-            dv.addClass( "img-static-scroll" );
-            //dv.css('top',80);
-            dv.css('top',parseInt(mainNavposition.top)+parseInt(mainNavHeight)+10);
-            dv.css('width',dv.parent('div').width());
-        } else {
-            dv.removeClass( "img-static-scroll" );
-            dv.css('top','auto');
-            dv.css('width','auto');
-        }
-    }); */
-    /* ] */
 
     $(".cancel").on('click', function () {
         $(this).closest('.addon--js').toggleClass('cancelled--js ');
         $(this).toggleClass('remove-add-on');
     });
 
-    $(".be-first").click(function () {
+    $(".be-first").on('click', function () {
         $('html, body').animate({ scrollTop: $("#itemRatings").offset().top - 130 }, 'slow');
         fcom.scrollToTop($("#itemRatings"));
     });
 
-
-    /* var frmObj = $(this).parents("form");
-    var selprod_id = $(frmObj).find('input[name="selprod_id"]').val();
-    var quantity = $(frmObj).find('input[name="quantity"]').val();
-    cart.add(selprod_id, quantity); */
-
-    $(".itemthumb").click(function () {
+    $(".itemthumb").on('click', function () {
         var mainSrc = $(this).find('img').attr('main-src');
         $(".item__main").find('img').attr('src', mainSrc);
     });
@@ -137,7 +51,7 @@ $("document").ready(function () {
         }
     });
      */
-    $(".link_li").click(function (event) {
+    $(".link_li").on('click', function (event) {
         event.preventDefault();
 
         var target_offset = $(".product--specifications").offset();
@@ -145,7 +59,7 @@ $("document").ready(function () {
         $('html, body').animate({ scrollTop: target_top }, 1000);
     });
     /* for click scroll function */
-    $(".scroll").click(function (event) {
+    $(".scroll").on('click', function (event) {
         /* event.preventDefault();
         var full_url = this.href;
         var parts = full_url.split("#");
@@ -156,7 +70,7 @@ $("document").ready(function () {
         $('html, body').animate({ scrollTop: target_top }, 1000); */
     });
 
-    $(".link--write").click(function () {
+    $(".link--write").on('click', function () {
         $('html, body').animate({ scrollTop: $("#itemRatings").offset().top - 130 }, 'slow');
         fcom.scrollToTop($("#itemRatings"));
     });
@@ -325,9 +239,9 @@ function setupReviewAbuse(frm) {
 
     loadMoreImages = function (obj, e) {
         e.preventDefault();
-        $(obj).attr("onclick", "previewImage(this, event);");
+        $(obj).removeAttr("onclick");
         $(obj).find('.moreMediaCountJs').remove();
-        $(obj).parent().siblings('.moreMediaJs').removeClass("d-none");
+        $(obj).siblings('.moreMediaJs').removeClass("d-none");
         return false;
     }
 

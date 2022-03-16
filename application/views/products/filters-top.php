@@ -477,7 +477,7 @@
          }
      });
 
-     $("#accordian li span.acc-trigger").click(function() {
+     $("#accordian li span.acc-trigger").on('click', function() {
          var link = $(this);
          var closest_ul = link.siblings("ul");
 

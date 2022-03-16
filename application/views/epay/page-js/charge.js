@@ -22,7 +22,7 @@
 (function($){
 	var _this			= false;
 	var _subText 		= false;
-	$(document).ready(function() {
+	$(function () {
 		$(window).on('load',function(){
 			try{
 				

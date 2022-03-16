@@ -52,7 +52,7 @@ switch( $affiliate_register_step_number ){
 		$stateId = isset( $stateId ) ? $stateId : 0;
 		?>
 		<script language="javascript">
-		$(document).ready(function(){
+		$(function (){
 			getCountryStates($( "#user_country_id" ).val(),'<?php echo $stateId ;?>','#user_state_id');
 		});	
 		</script>

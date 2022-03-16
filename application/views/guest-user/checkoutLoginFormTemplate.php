@@ -83,11 +83,11 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
 
 <script>
     /*Tabs*/
-    $(document).ready(function() {
+    $(function () {
         $(".tabs-content-js").hide();
         $(".tabs--flat-js li:first").addClass("is-active").show();
         $(".tabs-content-js:first").show();
-        $(".tabs--flat-js li").click(function() {
+        $(".tabs--flat-js li").on('click', function() {
             $(".tabs--flat-js li").removeClass("is-active");
             $(this).addClass("is-active");
             $(".tabs-content-js").hide();

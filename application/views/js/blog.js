@@ -1,6 +1,6 @@
-$(document).ready(function () {
+$(function () {
 
-	$('.wrapper-menu').click(function () {
+	$('.wrapper-menu').on('click', function () {
 		$('html').toggleClass("nav-opened");
 		$(this).toggleClass("open");
 
@@ -16,7 +16,7 @@ $(document).ready(function () {
 		$('html').removeClass("nav-opened");
 	})
 
-	$('.js-tabs li').click(function() {
+	$('.js-tabs li').on('click', function() {
 		$(this).siblings().removeClass('is--active');
 		$(this).addClass('is--active');
 		moveToTargetDiv(this);

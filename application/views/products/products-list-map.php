@@ -131,7 +131,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(document).ready(function() {
+    $(function () {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);

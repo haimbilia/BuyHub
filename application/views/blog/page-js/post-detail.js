@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(function (){
 
-	/*$('.toggle-nav--vertical-js').click(function(){
+	/*$('.toggle-nav--vertical-js').on('click', function(){
 		$(this).toggleClass("active");
 		if($(window).width()<990){
 			$('.nav--vertical-js').slideToggle();

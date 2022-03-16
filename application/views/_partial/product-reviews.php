@@ -98,7 +98,7 @@ $productView = $productView ?? false;
         'clip': 'rect(0px, <?php echo $pixelToFillRight; ?>px, 160px, 0px)'
     });
 
-    $(document).ready(function() {
+    $(function () {
         function DropDown(el) {
             this.dd = el;
             this.placeholder = this.dd.children('span');
@@ -136,7 +136,7 @@ $productView = $productView ?? false;
         $(function() {
             // create new variable for each menu
             var dd1 = new DropDown($('.js-wrap-drop-reviews'));
-            $(document).click(function() {
+            $(document).on('click', function() {
                 // close menu on document click
                 $('.wrap-drop').removeClass('active');
             });

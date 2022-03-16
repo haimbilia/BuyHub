@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 	var type = $('input[name="fulfillment_type"]:checked').val();
 	listCartProducts(type);
 });

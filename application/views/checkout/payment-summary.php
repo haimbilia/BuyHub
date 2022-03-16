@@ -380,12 +380,12 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
 <?php if ($cartSummary['orderPaymentGatewayCharges']) { ?>
     <script type="text/javascript">
         var tabsId = '#payment_methods_tab';
-        $(document).ready(function() {
+        $(function () {
             $(tabsId + " li:first a").addClass('active');
             if ($(tabsId + ' li a.active').length > 0) {
                 loadTab($(tabsId + ' li a.active'));
             }
-            $(tabsId + ' a').click(function() {
+            $(tabsId + ' a').on('click', function() {
                 if ($(this).hasClass('active')) {
                     return false;
                 }
