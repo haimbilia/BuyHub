@@ -7,13 +7,13 @@ $arr_flds = array(
     'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $langId)
 );
 
-$tbl = new HtmlElement('table', array('class' => 'table table-variants'));
-$th = $tbl->appendElement('thead')->appendElement('tr');
+$tbl = new HtmlElement('table', array('class' => 'table table-variants listingTableJs'));
+$th = $tbl->appendElement('thead',['class'=>'tableHeadJs'])->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ($key == 'action') {
-        $e = $th->appendElement('th', array('class' => 'align-right'), $val);
+        $e = $th->appendElement('th', array('class' => 'align-right','width'=> '10%'), $val);
     } else {
-        $e = $th->appendElement('th', array(), $val);
+        $e = $th->appendElement('th', array('width'=> '30%'), $val);
     }
 }
 $tbody = $tbl->appendElement('tbody');
