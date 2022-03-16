@@ -58,7 +58,7 @@ class HelpCenterController extends ListingBaseController
         }
 
         $this->set('record', $record);
-        $json['html'] = $this->_template->render(false, false, 'help-center/get-content.php', true, false);
+        $json['html'] = $this->_template->render(false, false, 'help-center/get-content.php', true, true);
         $json['status'] = applicationConstants::SUCCESS;
         $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
 

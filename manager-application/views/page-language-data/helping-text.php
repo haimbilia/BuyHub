@@ -20,9 +20,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="empty-stats">
-                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
                                     <div class="cms">
-                                        <?php echo $pageData['plang_helping_text']; ?>
+                                        <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
                                     </div>
                                 </div>
                             </div>
