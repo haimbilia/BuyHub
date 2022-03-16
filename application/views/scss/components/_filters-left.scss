@@ -114,7 +114,7 @@
     flex-wrap: wrap;
     align-items: center;
     margin: 0;
-
+    grid-gap: 10px;
     &-head {
         display: flex;
         justify-content: space-between;
@@ -129,16 +129,12 @@
         border: $border-black;
         padding: 0.5rem;
         margin: 0;
-        margin-#{$end-direction}: 1rem;
+
         font-size: inherit;
         //background: $bg-brand-light;
         color: $txt-body;
         font-weight: 300;
         //height: 28px;
-
-        &:last-child {
-            margin-#{$end-direction}: 0;
-        }
         &.more {
             font-weight: 600;
             padding-#{$end-direction}: 14px;

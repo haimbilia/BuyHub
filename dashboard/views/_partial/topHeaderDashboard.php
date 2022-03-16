@@ -81,37 +81,36 @@
             $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
         }
         ?>
-        <ul class="c-header-links">
-            <li>
-                <a title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
-                    <i class="icn icn--dashboard">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#dashboard">
-                            </use>
-                        </svg>
-                    </i>
-                </a>
-            </li>
-            <li><a title="<?php echo Labels::getLabel('LBL_Home', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home">
-                            </use>
-                        </svg>
-                    </i>
-                </a>
-            </li>
-            <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-                <li>
-                    <a title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>"><i class="icn icn--home">
-                            <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
-                                </use>
-                            </svg>
-                        </i>
-                    </a>
-                </li>
-            <?php } ?>
-        </ul>
+        <a class="c-header-icon btn" title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
+
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#dashboard">
+                </use>
+            </svg>
+
+        </a>
+
+        <a class="c-header-icon btn" title="<?php echo Labels::getLabel('LBL_Home', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home">
+                </use>
+            </svg>
+
+        </a>
+
+        <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
+
+            <a class="c-header-icon btn" title="<?php echo Labels::getLabel('LBL_Shop', $siteLangId); ?>" data-org-url="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
+
+                <svg class="svg" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                    </use>
+                </svg>
+
+            </a>
+
+        <?php } ?>
+
         <button class="c-header-icon btn quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#icon-search">
@@ -119,7 +118,7 @@
             </svg>
         </button>
         <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
-            <a class="c-header-icon bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
+            <a class="c-header-icon btn bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
                 <svg class="svg bell-shake-delay" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
                     </use>

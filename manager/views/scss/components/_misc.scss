@@ -1895,6 +1895,10 @@ mark,
     border-top-right-radius: 0 !important;
 }
 
+.help-data {
+    padding: 1.5rem 1rem;
+}
+
 .form-edit {
     display: flex;
     flex-direction: column;
@@ -2057,7 +2061,7 @@ mark,
 
 //CMS
 .cms {
-    word-break: break-all;
+    word-break: break-word;
     font-size: 0.85rem;
     line-height: 1.8;
     color: $txt-body;
