@@ -46,22 +46,6 @@
                                             <?php echo Labels::getLabel('LBL_Summary', $siteLangId); ?>
                                         </h3>
                                     </div>
-                                    <div class="cart-total-body">
-                                        <div class="promotional-code">
-                                            <div class="promotional-code-head">
-                                                <h5 class="promotional-code-title">Promotional Code</h5> <button class="link-underline">View Promotions</button>
-                                            </div>
-                                            <form class="form">
-                                                <div class="input-group">
-                                                    <input class="form-control" placeholder="NEW10" type="text" value="">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" name="" class="btn btn-secondary btn-wide">Apply</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
                                     <div id="js-cartFinancialSummary"></div>
                                     <div class="cart-action">
                                         <button class="btn btn-brand btn-block" type="button" onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>

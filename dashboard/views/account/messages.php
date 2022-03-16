@@ -38,6 +38,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                         $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 
                         $fld = $frmSearch->getField('keyword');
+                        $fld->addFieldtagAttribute('autocomplete', 'off');
                         $fld->addFieldtagAttribute('class', 'form-control omni-search');
                         $fld->addFieldtagAttribute('title', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));
                         $fld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_USER_NAME,_SUBJECT_OR_COMMENT', $siteLangId));

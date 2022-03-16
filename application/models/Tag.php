@@ -148,7 +148,7 @@ class Tag extends MyAppModel
                     $data_to_update = array('product_tags_string' => $product_tags_string[$lang_id]);                    
                     $prodObj->updateLangData($lang_id, $data_to_update);
                 } else {
-                    $data_to_update = array('product_tags_string' => '', 'product_name' => $productName);
+                    $data_to_update = array('product_tags_string' => '');
                     $prodObj->updateLangData($lang_id, $data_to_update);
                 }
             }

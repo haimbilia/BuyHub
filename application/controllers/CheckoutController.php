@@ -2103,10 +2103,6 @@ class CheckoutController extends MyAppController
 
     public function getCouponForm()
     {
-        /* if( !UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()){
-        Message::addErrorMessage(Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId));
-        FatUtility::dieWithError( Message::getHtml() );
-    } */
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
         $couponsList = DiscountCoupons::getValidCoupons($loggedUserId, $this->siteLangId, '', $orderId);
