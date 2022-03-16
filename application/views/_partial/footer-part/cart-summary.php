@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-if (User::isBuyer() || (!UserAuthentication::isUserLogged())) { ?>
+if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
     <!-- offcanvas-side-cart -->
     <div class="offcanvas offcanvas-side-cart offcanvas-end" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
         <div class="offcanvas-header">

@@ -142,7 +142,7 @@
                                     </i>
                                 </button>
                             </li>
-                            <?php if ($controllerName != 'Cart' && (User::isBuyer() || (!UserAuthentication::isUserLogged()))) { ?>
+                            <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item">
                                     <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
                                         <i class="icn">
