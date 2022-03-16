@@ -54,6 +54,22 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                 swipeToSlide: true,
                 //adaptiveHeight: true,
 
+                responsive: [{
+                        breakpoint: 768,
+                        settings: {
+                            arrows: false,
+                            dots: true,
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            arrows: false,
+                            dots: true,
+                        }
+                    }
+                ]
+
 
             });
         </script>

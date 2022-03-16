@@ -141,7 +141,7 @@ $header-height: 122px;
 .quick-nav {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     @include media-breakpoint-up(lg) {
     }
     &-item {

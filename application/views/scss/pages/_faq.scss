@@ -77,13 +77,16 @@ div.faqanswer {
 }
 
 .faq-filters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-gap: 10px;
     a {
         border: $border;
         border-radius: $radius4;
-        margin: 5px 0;
         padding: 0.5rem;
         color: $txt-body;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         display: inline-block;
         position: relative;
         overflow: hidden;

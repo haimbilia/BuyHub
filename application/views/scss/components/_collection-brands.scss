@@ -1,12 +1,15 @@
 .brand-layout-1 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-gap: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 1px;
     justify-content: center;
     flex: 0 0 100%;
-    @include media-breakpoint-down(sm) {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-gap: 3rem;
     }
+
     .brand {
         &-logo {
             // width: 160px;
@@ -35,14 +38,19 @@
 }
 .brand-layout-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 200px);
-    grid-gap: 3rem;
+    grid-template-columns: repeat(auto-fit, 145px);
+    grid-gap: 1px;
     justify-content: center;
     flex: 0 0 100%;
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(auto-fit, 200px);
+        grid-gap: 3rem;
+    }
     .brand {
         display: flex;
         flex-direction: column;
-        justify-content: start;
+        justify-content: flex-start;
         &:nth-child(even) {
             flex-direction: column-reverse;
         }

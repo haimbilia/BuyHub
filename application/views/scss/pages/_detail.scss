@@ -20,6 +20,8 @@
         width: 500px;
     }
     .product-gallery {
+        position: sticky;
+        top: $header-height;
         display: flex;
     }
     .slider-for {

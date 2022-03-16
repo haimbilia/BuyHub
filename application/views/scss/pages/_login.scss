@@ -361,7 +361,15 @@
         }
     }
 }
-
+.more-links {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-gap: 1rem;
+    padding-bottom: 1rem;
+}
 .other-links {
     display: flex;
     align-items: center;

@@ -138,13 +138,13 @@
 //Review Blocks
 .review-block {
     margin-bottom: 2rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
     border-radius: $radius-common;
     border: $border;
     color: $txt-gray;
-    > li {
+    &-item {
         position: relative;
-        padding: 1rem;
+        padding: 2rem;
         display: flex;
         border-bottom: $border;
         flex-direction: column;
@@ -155,7 +155,7 @@
     }
     &__label {
         color: $txt-body;
-        font-size: 0.99rem;
+        font-size: 1.2rem;
         margin-bottom: 0.5rem;
         font-weight: 500;
         display: flex;
@@ -174,8 +174,8 @@
     }
     &__link {
         position: absolute;
-        top: 1rem;
-        #{$end-direction}: 1rem;
+        top: 2rem;
+        #{$end-direction}: 2rem;
         .svg {
             width: 1rem;
             height: 1rem;
@@ -476,8 +476,8 @@
 .addresses {
     &-checkbox {
         position: absolute;
-        #{$end-direction}: 1rem;
-        top: 1rem;
+        #{$start-direction}: 1.5rem;
+        top: 2rem;
     }
     &-actions {
         border-top: $border;
@@ -489,7 +489,7 @@
             height: auto;
             width: 100%;
             display: block;
-            color: $secondary-color;
+            text-decoration: underline;
         }
     }
     &-detail {
@@ -499,6 +499,7 @@
         line-height: 1.5;
         margin-bottom: 0;
         padding: 2rem;
+        padding-#{$start-direction}: 4rem;
         .h5 {
             margin-bottom: 10px;
             font-weight: 500;

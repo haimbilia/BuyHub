@@ -11,13 +11,12 @@
                     }
                     ?>
                 </h5>
-                <a onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link" href="javascript:void(0)">
-                    <?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?></a>
+                <button onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link-underline">
+                    <?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?>
+                </button>
             </div>
             <div class="step_body">
-
                 <?php if ($addresses) { ?>
-
                     <ul class="list-addresses scroll scroll-y">
                         <?php foreach ($addresses as $address) {
                             $selected_shipping_address_id = (!$selected_shipping_address_id && $address['addr_is_default']) ? $address['addr_id'] : $selected_shipping_address_id; ?>

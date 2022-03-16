@@ -60,18 +60,20 @@
         #{$end-direction}: calc(50% - 38vw);
     }
     .slick-dots {
-        padding: 0.5rem 1rem;
-        position: absolute;
-        bottom: 50px;
-        #{$start-direction}: 0;
-        #{$end-direction}: 0;
-        margin: 0 auto;
-        text-align: center;
-        background-color: #fff;
-        box-shadow: $shadow3;
-        border-radius: 20px;
-        display: inline-block;
-        width: max-content;
+        @include media-breakpoint-up(lg) {
+            padding: 0.5rem 1rem;
+            position: absolute;
+            bottom: 50px;
+            #{$start-direction}: 0;
+            #{$end-direction}: 0;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #fff;
+            box-shadow: $shadow3;
+            border-radius: 20px;
+            display: inline-block;
+            width: max-content;
+        }
         li {
             vertical-align: middle;
             display: inline-block;
