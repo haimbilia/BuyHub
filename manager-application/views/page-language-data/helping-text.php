@@ -17,7 +17,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="cms help-data">
-                            <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
+                            <?php echo html_entity_decode(nl2br($pageData['plang_helping_text']), ENT_QUOTES, 'utf-8'); ?>
                         </div>
                     </div>
                 </div>
