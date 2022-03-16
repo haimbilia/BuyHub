@@ -74,7 +74,7 @@ $(function () {
 	};
 
 	triggerApplyCoupon = function (coupon_code) {
-		document.frmPromoCoupons.coupon_code.value = coupon_code;
+		$(".couponCodeJs").val(coupon_code);
 		applyPromoCode(document.frmPromoCoupons);
 		return false;
 	};

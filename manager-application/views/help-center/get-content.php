@@ -15,14 +15,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="help-data">
-                            <div class="cms cms-start">
-                                <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
-                            </div>
-                        </div>
-                    </div>
+                <div class="cms help-data">
+                    <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
                 </div>
             </div>
         </div>
