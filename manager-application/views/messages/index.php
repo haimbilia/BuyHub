@@ -29,6 +29,7 @@
 
                         $fld = $frmSearch->getField('keyword');
                         $fld->addFieldtagAttribute('class', 'form-control omni-search');
+                        $fld->addFieldtagAttribute('autocomplete', 'off');
 
                         $fld = $frmSearch->getField('message_to');
                         $fld->addFieldtagAttribute('id', 'searchFrmSellerIdJs');
@@ -47,7 +48,7 @@
                                         </svg>
                                     </span>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim communication-filter">
+                                <div class="dropdown-menu dropDownMenuBlockClose dropdown-menu-right dropdown-menu-anim communication-filter">
                                     <div class="form-group">
                                         <label class="label">
                                             <?php
