@@ -162,6 +162,8 @@ class ProductsController extends MyAppController
         }
         $data['tLeftRibbons'] = $tLeftRibbons;
         $data['tRightRibbons'] = $tRightRibbons;
+        $data['tRightRibbons'] = $tRightRibbons;
+        $data['showBreadcrumb'] = true;
         $this->set('data', $data);
 
         $this->includeProductPageJsCss();

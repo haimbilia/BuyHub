@@ -229,25 +229,17 @@ $(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
     });
 });
 
-/* for toggling of grid/list view[ */
-$(document).on('click', '.listing-view-toggle--js', function () {
-    var vtype = $(this).data('vtype');
-    var currentActiveVType = $('.listing-view-toggle--js.active').data('vtype');
-    if (vtype == 'map' || currentActiveVType == 'map') {
-        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
-        window.location.href = getSearchQueryUrl(true);
-    } else {
-        $('.listing-view-toggle--js').removeClass('active');
-        $(this).addClass('active')
-        if (vtype == 'list') {
-            $('#productsList').removeClass('listing-products--grid').addClass('listing-products--list');
-        } else {
-            $('#productsList').removeClass('listing-products--list').addClass('listing-products--grid');
-        }
-    }
-    $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
 
-});
+toogleMapView = function (){
+    let vtype = 'map';
+    if($("form[name=frmProductSearch] input[name=vtype]").val() != vtype){
+        console.log('ffff');
+        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
+    }else{
+        $("form[name=frmProductSearch] input[name=vtype]").val('');  
+    } 
+    window.location.href = getSearchQueryUrl(true);  
+}
 
 /* function updateQueryStringParameter(uri, key, value) {
   var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
