@@ -142,12 +142,11 @@
                                     </i>
                                 </button>
                             </li>
-                            <li class="quick-nav-item" id="cartSummary">
-                                <?php if ($controllerName != 'Cart') { ?>
+                            <?php if ($controllerName != 'Cart') { ?>
+                                <li class="quick-nav-item" id="cartSummary">
                                     <?php $this->includeTemplate('_partial/headerWishListAndCartSummary.php'); ?>
-                                <?php } ?>
-
-                            </li>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>
