@@ -160,7 +160,7 @@ if (CommonHelper::demoUrl()) { ?>
     } ?>
     <?php if (FatApp::getConfig('CONF_PWA_SERVICE_WORKER', FatUtility::VAR_INT, 1)) { ?>
         <script>
-            $(function () {
+            $(function() {
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', function() {
                         navigator.serviceWorker.register(
@@ -206,7 +206,7 @@ if (CommonHelper::demoUrl()) { ?>
     $menu.find(".mm-next").addClass("mm-fullsubopen");
 </script>
 
-
+<?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 
 </body>
 
