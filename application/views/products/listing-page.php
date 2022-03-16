@@ -166,12 +166,15 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <?php } ?>
 
                             <li class="page-sort-item">
-                                <button class="btn btn-outline-black btn-filters" type="button">
+                                <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
                                     <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
                                     <svg class="svg" width="18" height="18">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
                                     </svg>
                                 </button>
+
+
+
                             </li>
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
@@ -255,7 +258,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 </section>
 <div class="gap"></div>
 <script>
-    $(function () {
+    $(function() {
         $currentPageUrl = "<?php echo html_entity_decode($canonicalUrl, ENT_QUOTES, 'utf-8'); ?>";
         $productSearchPageType = '<?php echo $productSearchPageType; ?>';
         $recordId = <?php echo $recordId; ?>;
