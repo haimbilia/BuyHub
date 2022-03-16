@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	searchListing(document.frmsearchWhoFavouriteShop);		
 });
 (function() {

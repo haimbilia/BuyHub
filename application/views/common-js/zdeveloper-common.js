@@ -13,7 +13,7 @@ $(window).on("load", function () {
     }
 });
 
-$(document).ready(function () {
+$(function () {
     $(document).on("click", ".selectItem--js", function () {
         if ($(this).prop("checked") == false) {
             $(".selectAll-js").prop("checked", false);
@@ -42,6 +42,9 @@ $(document).ready(function () {
         $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
     }
 
+    /* Binding Feather Light gallery */
+    bindFeatherLight();
+    /* Binding Feather Light gallery */
 });
 $(document).on("keyup", "input.otpVal-js", function (e) {
     if ("" != $(this).val()) {
@@ -938,7 +941,7 @@ $(document).mouseup(function (e) {
         $("#search-suggestions-js").html("");
     }
 });
-$(document).ready(function () {
+$(function () {
     var searchSuggestionsJs = $("#search-suggestions-js");
     var currentRequest = null;
     removeAutoSuggest = function () {
@@ -1011,7 +1014,7 @@ $(document).ready(function () {
     ) {
         $(".system_message").show();
     }
-    $(".close").click(function () {
+    $(".close").on('click', function () {
         $(".system_message").hide();
     });
     markAsFavorite = function (selProdId) {
@@ -1289,14 +1292,14 @@ $(document).ready(function () {
     $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
     });
-    $(".cc-cookie-accept-js").click(function () {
+    $(".cc-cookie-accept-js").on('click', function () {
         var data = {
             statistical_cookies: 1,
             personalise_cookies: 1,
         };
         updateUserCookies(data);
     });
-    $(".cookie-preferences-js").click(function () {
+    $(".cookie-preferences-js").on('click', function () {
         $.facebox(function () {
             fcom.ajax(
                 fcom.makeUrl("Custom", "cookiePreferencesData"),
@@ -1750,13 +1753,13 @@ $("document").ready(function () {
         return false;
     });
 });
-$(document).ready(function () {
+$(function () {
     if ($(window).width() < 1025) {
         $("html").removeClass("sticky-demo-header");
         $("div.demo-header").hide();
     }
 });
-$(document).ready(function () {
+$(function () {
     new ScrollHint(".js-scrollable", {
         i18n: {
             scrollable: langLbl.scrollable,
@@ -1789,17 +1792,21 @@ $(document).ajaxComplete(function () {
             $("html").removeClass("pop-on");
         });
     }
-    $("body").click(function () {
+    $("body").on('click', function () {
         if ($("html").hasClass("pop-on")) {
             $("html").removeClass("pop-on");
         }
     });
     installJsColor();
+
+    /* Binding Feather Light gallery */
+    bindFeatherLight();
+    /* Binding Feather Light gallery */
 });
-$(document).ready(function () {
+$(function () {
     $("body")
         .find("*[data-trigger]")
-        .click(function () {
+        .on("click", function () {
             var targetElmId = $(this).data("trigger");
             var elmToggleClass = targetElmId + "--on";
             if ($("body").hasClass(elmToggleClass)) {
@@ -1810,11 +1817,11 @@ $(document).ready(function () {
         });
     $("body")
         .find("*[data-bs-target-close]")
-        .click(function () {
+        .on("click", function () {
             var targetElmId = $(this).data("target-close");
             $("body").toggleClass(targetElmId + "--on");
         });
-    $("body").mouseup(function (event) {
+    $("body").on("mouseup", function (event) {
         if (
             $(event.target).data("trigger") != "" &&
             typeof $(event.target).data("trigger") !== typeof undefined
@@ -1985,6 +1992,23 @@ function loadMoreImages(obj, e) {
     $(obj).removeClass("more-media").removeAttr("onclick");
     $(obj).nextAll().removeClass("d-none");
     return false;
+}
+
+function bindFeatherLight(element = '') {
+    element = '' == element ? 'featherLightJs' : element;
+    if (0 < $('.' + element).length) {
+        if ('undefined' == typeof $.fn.featherlightGallery) {
+            fcom.displayErrorMessage('Please Include Feather Light JS Library Files.');
+            return;
+        }
+
+        $('.' + element).featherlightGallery({
+            previousIcon: '«',
+            nextIcon: '»',
+            galleryFadeIn: 300,
+            openSpeed: 300
+        });
+    }
 }
 
 function redirectUrl(url) {

@@ -900,4 +900,10 @@ class MyAppController extends FatController
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_CONFIRM_ORDER', $langId));
         return $frm;
     }
+
+    public function includeFeatherLight()
+    {
+        $this->_template->addJs(['js/featherlight/featherlight.min.js', 'js/featherlight/featherlight.gallery.min.js', 'js/featherlight/jquery.detect_swipe.min.js']);
+        $this->_template->addCss(['css/featherlight/featherlight.min.css', 'css/featherlight/featherlight.gallery.min.css']);
+    }
 }

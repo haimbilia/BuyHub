@@ -211,8 +211,13 @@ trait ShippingServices
     {
         $db = FatApp::getDb();
         $data = $this->getOrderProductDetail($opId);
-        if (empty($data) || 1 > $data['opshipping_plugin_id']) {
+        if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            LibHelper::dieJsonError($msg);
+        }
+
+        if (1 > $data['opshipping_plugin_id']) {
+            $msg = Labels::getLabel("ERR_PLEASE_FETCH_SHIPPING_RATES", $this->langId);
             LibHelper::dieJsonError($msg);
         }
 

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	// Target your element
 	//searchProducts( document.frmProductSearch );	
 	if($(".shop-navigations").length){

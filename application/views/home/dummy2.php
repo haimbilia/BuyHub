@@ -727,7 +727,7 @@
                             <div id="description" class="collapse" data-bs-parent="#descriptions">
                                 <div class="descriptions-data">
                                     <div class="cms">
-                                        <ul class="a-unordered-list a-vertical a-spacing-mini" style="box-sizing: border-box; margin: 0px 0px 0px 18px; color: rgb(17, 17, 17); padding: 0px; font-family: " amazon="" ember",="" arial,="" sans-serif;="" font-size:="" 14px;="" background-color:="" rgb(255,="" 255,="" 255);"="">
+                                        <ul class="a-unordered-list a-vertical a-spacing-mini" style="box-sizing: border-box; margin: 0px 0px 0px 18px; color: rgb(17, 17, 17); padding: 0px; font-family:roboto; " amazon="" ember",="" arial,="" sans-serif;="" font-size:="" 14px;="" background-color:="" rgb(255,="" 255,="" 255);"="">
                                             <li style="box-sizing: border-box; list-style: disc; overflow-wrap: break-word; margin: 0px;"><span class="a-list-item" style="box-sizing: border-box;">6.1-inch Super Retina XDR display</span></li>
                                             <li style="box-sizing: border-box; list-style: disc; overflow-wrap: break-word; margin: 0px;"><span class="a-list-item" style="box-sizing: border-box;">Ceramic Shield, tougher than any smartphone glass</span></li>
                                             <li style="box-sizing: border-box; list-style: disc; overflow-wrap: break-word; margin: 0px;"><span class="a-list-item" style="box-sizing: border-box;">A14 Bionic chip, the fastest chip ever in a smartphone</span></li>

@@ -8,7 +8,7 @@
 </ul>
 <?php if (count($product['moreSellersArr']) > 0) { ?>
     <script>
-        $(document).ready(function() {
+        $(function () {
             moreSellerRows('<?php echo $product['selprod_code']; ?>', <?php echo $product['selprod_user_id']; ?>);
         });
     </script>

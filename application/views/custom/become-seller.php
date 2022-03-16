@@ -114,7 +114,7 @@
     var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
     /******** for faq accordians  ****************/
 
-    $('.accordians__trigger-js').click(function() {
+    $('.accordians__trigger-js').on('click', function() {
         if ($(this).hasClass('is-active')) {
             $(this).removeClass('is-active');
             $(this).siblings('.accordians__target-js').slideUp();

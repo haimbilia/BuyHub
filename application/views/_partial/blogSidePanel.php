@@ -131,7 +131,7 @@
 
 <script>
     /* for blog links */
-    $('.link--toggle-js').click(function() {
+    $('.link--toggle-js').on('click', function() {
         if ($(this).hasClass('is-active')) {
             $(this).removeClass('is-active');
             $(this).next('.nav--toggled-js > ul > li ul').find('.link--toggle-js').removeClass('is-active');

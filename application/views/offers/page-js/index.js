@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	searchCoupons(document.frmCouponSrch);
 });
 (function() {

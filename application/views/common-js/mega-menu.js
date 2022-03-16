@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 
     /* for navigation drop down */
     $('.navchild').hover(function () {

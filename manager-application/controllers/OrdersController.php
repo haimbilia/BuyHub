@@ -216,7 +216,7 @@ class OrdersController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function orderCommentsForm()
+    public function orderCommentsForm($orderId = 0 )
     {
         $opRow = $this->getCommentDataSrchObj([
             'ops.*', 'order_number', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone',
@@ -240,8 +240,10 @@ class OrdersController extends ListingBaseController
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         $data = [
             'op_id' => $opId,
+            'order_id' => $orderId,
             'op_status_id' => $opRow['op_status_id'],
-            'tracking_number' => $opRow['opship_tracking_number']
+            'tracking_number' => $opRow['opship_tracking_number'],
+            
         ];
 
         if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
@@ -372,6 +374,7 @@ class OrdersController extends ListingBaseController
         }
         $frm->addHiddenField('', 'shipped_by_plugin', 0, ['id' => 'shippedByPluginJs']);
         $frm->addHiddenField('', 'op_id', 0);
+        $frm->addHiddenField('', 'order_id', 0);
         return $frm;
     }
 

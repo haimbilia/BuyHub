@@ -81,7 +81,7 @@
             $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', array(), CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
         }
         ?>
-        <?php /*  <ul class="c-header-links">
+        <ul class="c-header-links">
             <li>
                 <a title="<?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?>" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>">
                     <i class="icn icn--dashboard">
@@ -111,7 +111,7 @@
                     </a>
                 </li>
             <?php } ?>
-        </ul> <?php */ ?>
+        </ul>
         <button class="c-header-icon btn quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#icon-search">

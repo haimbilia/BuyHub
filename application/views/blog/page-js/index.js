@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	//searchBlogs(document.frmBlogSearch);
 	/* bannerAdds(); */
 });

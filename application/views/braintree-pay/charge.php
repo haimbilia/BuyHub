@@ -137,7 +137,7 @@ if (isset($clientToken)) {
             }
         }
 
-        $(document).ready(function() {
+        $(function () {
             var paymentAmount = "<?php echo $paymentAmount; ?>";
             var currencyCode = "<?php echo $currencyCode; ?>";
             var clientToken = "<?php echo $clientToken; ?>";

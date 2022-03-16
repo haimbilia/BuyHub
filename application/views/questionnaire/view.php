@@ -119,7 +119,7 @@ $formFields = $frm->getAllFields();
     <div class="gap"></div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
+$(function () {
     $('.star-rating').barrating({
         showSelectedRating: false
     });

@@ -36,7 +36,7 @@
     </script>
     <script>
         var clics = 0;
-        $(document).ready(function() {
+        $(function () {
             $('.faqanswer').hide();
             $('#faqcloseall').hide();
             $(document).on("click", 'h3', function() {

@@ -19,10 +19,12 @@
                 <?php foreach ($productImagesArr as $afile_id => $image) {
                     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                     $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
-                    <img alt="" class="xzoom active" id="xzoom-default" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+                    <a class="thumbnail featherLightJs" href="<?php echo $mainImgUrl; ?>">
+                        <img class="active" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+                    </a>
                 <?php break;
                 } ?>
             <?php } else {
@@ -30,11 +32,13 @@
                 $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_ORIGINAL, 0)), CONF_IMG_CACHE_TIME, '.jpg');
                 $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.webp');
             ?>
-                <img alt="" class="xzoom" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+                <a class="thumbnail featherLightJs" href="<?php echo $mainImgUrl; ?>">
+                    <img src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+                </a>
             <?php } ?>
         </div>
         <?php if ($productImagesArr) { ?>
-            <div class="slider-nav xzoom-thumbs" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-nav">
+            <div class="slider-nav" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-nav">
                 <?php foreach ($productImagesArr as $afile_id => $image) {
                     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                     $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -43,11 +47,11 @@
                     /* $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id']) ), CONF_IMG_CACHE_TIME, '.jpg'); */ ?>
                     <div>
                         <div class="thumb">
-                            <a href="<?php echo $originalImgUrl; ?>">
+                            <a class="thumbnail featherLightJs" href="<?php echo $originalImgUrl; ?>">
                                 <picture>
                                     <source type="image/webp" srcset="<?php echo $mainWebpImgUrl; ?>">
                                     <source type="image/jpeg" srcset="<?php echo $mainImgUrl; ?>">
-                                    <img alt="" class="xzoom-gallery" width="80" src="<?php echo $mainImgUrl; ?>">
+                                    <img width="80" src="<?php echo $mainImgUrl; ?>">
                                 </picture>
                             </a>
                         </div>

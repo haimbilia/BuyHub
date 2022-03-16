@@ -6,7 +6,7 @@
 <?php  } ?>
 <script src="https://beautiful.start.payfort.com/checkout.js"></script>
 <script>
-    $(document).ready(function() {
+    $(function () {
 
         var cancelPay = '<?php echo CommonHelper::getPaymentCancelPageUrl(); ?>';
         StartCheckout.config({

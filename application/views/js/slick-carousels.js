@@ -1,5 +1,5 @@
 //Start of Common Carousel
-$(document).ready(function () {
+$(function () {
     var _carousel = $('.js-carousel');
     _carousel.each(function () {
 
