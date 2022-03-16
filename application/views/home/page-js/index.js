@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     $('.navchild').hover(function () {
         reinitSlick();
     });

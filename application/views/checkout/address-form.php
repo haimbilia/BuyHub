@@ -59,7 +59,7 @@ $cancelFld->setFieldTagAttribute('onclick', 'resetAddress(' . $addressType . ')'
     </div>
 </div>
 <script language="javascript">
-    $(document).ready(function() {
+    $(function () {
         getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
     });
 </script>

@@ -195,7 +195,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+    $(function () {
         var layoutDirection = '<?php echo CommonHelper::getLayoutDirection(); ?>';
         if (layoutDirection == 'rtl') {
             $('.js-product-gallery').slick({
@@ -218,13 +218,13 @@
             });
         }
 
-        $('#close-quick-js').click(function() {
+        $('#close-quick-js').on('click', function() {
             if ($('html').removeClass('quick-view--open')) {
                 $('.quick-view').removeClass('quick-view--open');
             }
         });
 
-        /* $('#close-quick-js').click(function () {
+        /* $('#close-quick-js').on('click', function () {
             if ($('html').removeClass('quick-view--open')) {
                 $(document).trigger('close.facebox');
                 $('.quick-view').removeClass('quick-view--open');
@@ -271,12 +271,12 @@
 
         $(function() {
             // create new variable for each menu
-            $(document).click(function() {
+            $(document).on('click', function() {
                 // close menu on document click
                 $('.wrap-drop').removeClass('active');
             });
 
-            $('.js-wrap-drop-quick').click(function() {
+            $('.js-wrap-drop-quick').on('click', function() {
                 $(this).parent().siblings().children('.js-wrap-drop-quick').removeClass('active');
             });
         });

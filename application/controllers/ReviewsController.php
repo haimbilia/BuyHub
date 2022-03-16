@@ -54,6 +54,7 @@ class ReviewsController extends MyAppController
         $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
         $this->set('ratingAspects', $ratingAspects);
 
+        $this->includeFeatherLight();
         $this->set('product', $product);
         $this->_template->render();
     }

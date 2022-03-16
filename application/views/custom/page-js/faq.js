@@ -1,5 +1,5 @@
 window.recordCount = 0;
-$(document).ready(function(){
+$(function (){
 	searchFaqs('faq', 0);
 	faqRightPanel();
 });

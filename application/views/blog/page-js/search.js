@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	searchBlogs(keyword);
 	$(frmBlogSearch.keyword).val(keyword);
 	/*$("#search-keyword-js").keyup(function(){

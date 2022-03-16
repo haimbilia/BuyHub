@@ -27,7 +27,7 @@
     </div>
 </section>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(function (){
         setTimeout(function() {
             $('form[name="frmPayuIndia"]').submit();
         }, 2000);

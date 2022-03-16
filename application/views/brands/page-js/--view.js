@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	/* bannerAdds(); */
 
 	searchProducts(document.frmProductSearch);

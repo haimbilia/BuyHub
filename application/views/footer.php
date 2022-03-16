@@ -160,7 +160,7 @@ if (CommonHelper::demoUrl()) { ?>
     } ?>
     <?php if (FatApp::getConfig('CONF_PWA_SERVICE_WORKER', FatUtility::VAR_INT, 1)) { ?>
         <script>
-            $(document).ready(function() {
+            $(function () {
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', function() {
                         navigator.serviceWorker.register(

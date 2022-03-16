@@ -41,7 +41,7 @@ if (null != $btn) {
     </div>
 </section>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
         setTimeout(function () {
             $('form[name="frmPayFort"]').submit();
         }, 2000);

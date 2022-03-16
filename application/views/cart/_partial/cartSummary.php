@@ -2,7 +2,7 @@
 <?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
     <div class="coupons-applied">
         <h6 class="coupons-applied-title">
-            Code: <?php echo $cartSummary['cartDiscounts']['coupon_code']; ?>
+            <?php echo Labels::getLabel('LBL_Code:', $siteLangId); ?><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?>
             <button class="btn-close" onClick="removePromoCode()"></button>
         </h6>
         <p class="coupons-applied-desc">
@@ -11,17 +11,34 @@
         </p>
     </div>
 <?php } else { ?>
-    <div class="coupons">
-        <button class="btn btn-block btn-coupons" onclick="getPromoCode()">
-            <i class="icn">
-                <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#coupon">
-                    </use>
-                </svg>
-            </i>
-            <span>
-                <?php echo Labels::getLabel('LBL_Add_promo_code_or_gift_card', $siteLangId); ?></span></button>
+    <div class="coupons cart-total-body">
+        <div class="promotional-code">
+            <div class="promotional-code-head">
+                <h5 class="promotional-code-title">
+                    <?php echo Labels::getLabel('LBL_PROMOTIONAL_CODE', $siteLangId); ?>
+                </h5>
+                <button class="link-underline" onclick="getPromoCode()">
+                    <?php echo Labels::getLabel('LBL_VIEW_PROMOTIONS', $siteLangId); ?>
+                </button>
+            </div>
 
+            <?php
+            $PromoCouponsFrm->setFormTagAttribute('class', 'form');
+            $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
+            $fld = $PromoCouponsFrm->getField('btn_submit');
+            $fld->setFieldTagAttribute('class', 'btn btn-secondary btn-wide');
+            $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+            echo $PromoCouponsFrm->getFormTag(); ?>
+                <div class="input-group">
+                    <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
+                    <div class="input-group-append">
+                        <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
+                    </div>
+                </div>
+            </form>
+            <?php echo $PromoCouponsFrm->getExternalJs(); ?>
+
+        </div>
     </div>
 <?php } ?>
 <div class="cart-total-head">
@@ -48,14 +65,6 @@
             <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
         </li>
     <?php } ?>
-    <?php /* if (isset($cartSummary['taxOptions']) && !empty($cartSummary['taxOptions'])) {
-        foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
-        <li >
-            <span class="label"><?php echo $taxVal['title']; ?></span> <span
-                class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
-        </li>
-        <?php   }
-    } */ ?>
     <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
         <li class="cart-summary-item">
             <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>

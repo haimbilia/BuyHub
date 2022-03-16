@@ -1,5 +1,5 @@
 window.recordCount = 0;
-$(document).ready(function(){
+$(function (){
 	$(document).on('click','.acc_ctrl',function(e){
 		/* $(".questions-section").hide(); */
 		e.preventDefault();
@@ -119,7 +119,7 @@ $(document).on('click',".scroll",function( event ){
 		$('html, body').animate({scrollTop:target_top}, 1000);
 	}
 });
-$(document).ready(function() {
+$(function () {
 	$('.faqanswer').hide();
 	$('#faqcloseall').hide();
 	$(document).on("click", 'h3', function() {

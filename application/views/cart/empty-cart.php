@@ -69,7 +69,7 @@
 <?php }	?>
 </div>
 <script>
-$(document).ready(function(){
+$(function (){
 	$(".hide_on_no_product").hide();
 });
 </script>

@@ -88,7 +88,7 @@
         }).render("#paypal-buttons");
     }
 
-    $(document).ready(function () {
+    $(function () {
         loadPayPalButtons();
         setTimeout(function () {
             if ('' != $("#paypal-buttons").html()) {

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 	var type = $('input[name="fulfillment_type"]:checked').val();
 	listCartProducts(type);
 });
@@ -74,7 +74,7 @@ $(document).ready(function () {
 	};
 
 	triggerApplyCoupon = function (coupon_code) {
-		document.frmPromoCoupons.coupon_code.value = coupon_code;
+		$(".couponCodeJs").val(coupon_code);
 		applyPromoCode(document.frmPromoCoupons);
 		return false;
 	};

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function (){
 	// Target your element
 	if($(".shop-navigations").length){
 		$('.shop-navigations').colourBrightness();

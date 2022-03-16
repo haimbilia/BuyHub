@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     $('.gallery').modaal({
         type: 'image'
     });
@@ -55,17 +55,17 @@ $(document).ready(function () {
         });
         /* var dd1 = new DropDown($('.js-wrap-drop'));
         create new variable for each menu */
-        $(document).click(function () {
+        $(document).on('click', function () {
             /* close menu on document click */
             $('.wrap-drop').removeClass('active');
         });
-        $('.js-wrap-drop').click(function () {
+        $('.js-wrap-drop').on('click', function () {
             $(this).parent().siblings().children('.js-wrap-drop').removeClass('active');
             /* $(this).siblings().children('.js-wrap-drop').addClass('active'); */
         });
     });
 
-    $(".dropdown-menu li a").click(function () {
+    $(".dropdown-menu li a").on('click', function () {
         var selText = $(this).html();
         $(this).parents('.dropdown').find('.dropdown-toggle').html(selText);
     });

@@ -25,7 +25,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
         <!-- Related Products -->
     <?php } ?>
-        
+
     <section class="section">
         <div class="container">
             <?php include('prod-desc-nav-detail.php'); ?>
@@ -47,7 +47,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
             'product_id' => $product['product_id'], 
             'canSubmitFeedback' => $canSubmitFeedback
             'productview' => $productviewk
-        ], false); */    
+        ], false); */
         $product_id = $product['product_id'];
         include(CONF_THEME_PATH . '_partial/product-reviews.php');
     } ?>
@@ -63,28 +63,10 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     var mainSelprodId = <?php echo $product['selprod_id']; ?>;
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';
 
-    $(document).ready(function() {
+    $(function () {
         recentlyViewedProducts(<?php echo $product['selprod_id']; ?>);
         /*zheight = $(window).height() - 180; */
         zwidth = $(window).width() / 3 - 15;
-
-        if (layout == 'rtl') {
-            $('.xzoom, .xzoom-gallery').xzoom({
-                zoomWidth: zwidth,
-                /*zoomHeight: zheight,*/
-                title: true,
-                tint: '#333',
-                position: 'left'
-            });
-        } else {
-            $('.xzoom, .xzoom-gallery').xzoom({
-                zoomWidth: zwidth,
-                /*zoomHeight: zheight,*/
-                title: true,
-                tint: '#333',
-                Xoffset: 2
-            });
-        }
 
         window.setInterval(function() {
             var scrollPos = $(window).scrollTop();

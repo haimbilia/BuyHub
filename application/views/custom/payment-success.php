@@ -343,7 +343,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
 </div>
 <?php if (true === $print) { ?>
     <script>
-        $(document).ready(function() {
+        $(function () {
             setTimeout(() => {
                 window.print();
             }, 1000);

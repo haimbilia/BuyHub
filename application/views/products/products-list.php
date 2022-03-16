@@ -122,7 +122,7 @@ if ($vtype == 'list') {
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(function () {
         var e = document.getElementById("pageSizeSelect");
         var pageSize = e.options[e.selectedIndex].value;
         $('#pageSize').val(pageSize);

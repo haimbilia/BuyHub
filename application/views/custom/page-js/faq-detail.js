@@ -1,5 +1,5 @@
 window.recordCount = 0;
-$(document).ready(function(){
+$(function (){
    /* $(document).delegate('.acc_ctrl','click',function(e){ 
 
 	 

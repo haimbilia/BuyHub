@@ -1,7 +1,7 @@
 var searchArr = [];
 var page = 1;
 
-$(document).ready(function () {
+$(function () {
 
     /* [is use to reload page when user hit back button */
     $(window).on('popstate', function () {
@@ -163,11 +163,11 @@ $(document).ready(function () {
     })
     /******** function for left collapseable links  ****************/
     $(".block__body-js").show();
-    $(".block__head-js").click(function () {
+    $(".block__head-js").on('click', function () {
         $(this).toggleClass("is-active");
     });
 
-    $(".block__head-js").click(function () {
+    $(".block__head-js").on('click', function () {
         $(this).siblings(".block__body-js").slideToggle("slow");
     });
 

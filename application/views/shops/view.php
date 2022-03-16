@@ -29,7 +29,7 @@ $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop[
     
     echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
     <script>
-        $(document).ready(function() {
+        $(function () {
             $('.js-shop-slider').slick(getSlickSliderSettings(3, 1, langLbl.layoutDirection, false, {
                 1199: 3,
                 1024: 2,
