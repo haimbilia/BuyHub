@@ -18,14 +18,14 @@ $(document).on({
             url: url,
             maxFiles: maxFiles,
             addRemoveLinks: true,
-            maxFilesize: 100,
+            maxFilesize: (langLbl.allowedFileSize/ ( 1024 * 1024)),
             uploadMultiple : maxFiles >  1,
             acceptedFiles: acceptedFiles,
             autoProcessQueue: true,
             dictDefaultMessage: langLbl.dropFilesToUpload,
             dictInvalidFileType: invalidFileTypeMsg,
             dictRemoveFileConfirmation: langLbl.areYouSure,
-            previewTemplate: previewTemplate
+            previewTemplate: previewTemplate,
         });
 
         ykDropzone.on("success", function (file, res) {  

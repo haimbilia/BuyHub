@@ -296,13 +296,13 @@ class HtmlHelper
                         $(".upload_cover").removeClass("hidden");     
                     }               
                 })
-                .on("addedfile",function(event){                                 
+                .on("addedfile",function(event){  
                     $(".upload_cover").addClass("hidden");
                 })
-                .on("error",function(event){                 
-                    fcom.displayErrorMessage($(".dz-error-message").text());
-                    this.removeAllFiles(true);
-                    $(".upload_cover").removeClass("hidden");                    
+                .on("error",function(event){  
+                    $(".upload_cover").removeClass("hidden");    
+                    this.removeFile(event);            
+                    fcom.displayErrorMessage($(".dz-error-message").text());                                                         
                 })               
                 .on("success",function(event){                                 
                     $(".upload_cover").removeClass("hidden");                   
