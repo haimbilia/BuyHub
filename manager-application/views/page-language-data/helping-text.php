@@ -13,18 +13,11 @@
                             <?php echo $pageData['plang_title']; ?>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="empty-stats">
-                                    <div class="cms">
-                                        <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="cms help-data">
+                            <?php echo html_entity_decode($pageData['plang_helping_text'], ENT_QUOTES, 'utf-8'); ?>
                         </div>
                     </div>
                 </div>
