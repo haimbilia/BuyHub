@@ -177,11 +177,9 @@ $header-height: 122px;
             color: $secondary-color;
         }
     }
-    .icn {
-        .svg {
-            color: $secondary-color;
-            margin-#{$end-direction}: 8px;
-        }
+    .svg {
+        color: $secondary-color;
+        margin-#{$end-direction}: 8px;
     }
 
     .txt {
