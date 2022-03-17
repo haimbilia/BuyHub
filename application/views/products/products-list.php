@@ -120,7 +120,10 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 <script>
     $(function() {
         var e = document.getElementById("pageSizeSelect");
-        var pageSize = e.options[e.selectedIndex].value;
-        $('#pageSize').val(pageSize);
+        if(e != null){
+            var pageSize = e.options[e.selectedIndex].value;
+            $('#pageSize').val(pageSize);
+        }
+        
     })
 </script>

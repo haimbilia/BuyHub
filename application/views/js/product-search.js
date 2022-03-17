@@ -559,7 +559,9 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     if (addPriceFilter) {
         addPricefilter();
     }
-    rangeSlider.noUiSlider.set([minPrice, maxPrice]);
+ 
+    //rangeSlider.noUiSlider.set([minPrice, maxPrice]);
+   
 }
 
 (function () {

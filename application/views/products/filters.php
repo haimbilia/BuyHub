@@ -430,50 +430,31 @@ if (isset($prodcat_code)) {
                             <?php
                             } ?>
 
-                            /* left side filters scroll bar[ */
+                             /* left side filters expand-collapse functionality [ */
+                             $('.span--expand').bind('click', function() {
+                                 $(this).parent('li.level').toggleClass('is-active');
+                                 $(this).toggleClass('is-active');
+                                 $(this).next('ul').toggle("");
+                             });
+                             $('.span--expand').click();
+                             /* ] */
 
-                            <?php
-                            if (true === $shopCatFilters) {
-                            ?>
-                                // new SimpleBar(document.getElementById('accordian'));
-                            <?php
-                            } ?>
-                            var x = document.getElementsByClassName("scrollbar-filters");
-                            var i;
-                            for (i = 0; i < x.length; i++) {
-                                new SimpleBar(x[i]);
-                            }
-                            /* ] */
+                             updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
+                         });
 
-                            /* left side filters expand-collapse functionality [ */
-                            $('.span--expand').bind('click', function() {
-                                $(this).parent('li.level').toggleClass('is-active');
-                                $(this).toggleClass('is-active');
-                                $(this).next('ul').toggle("");
-                            });
-                            $('.span--expand').click();
-                            /* ] */
+                         $("#accordian li span.acc-trigger").on('click', function() {
+                             var link = $(this);
+                             var closest_ul = link.siblings("ul");
 
-                            updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
-
-                            if ('rtl' == langLbl.layoutDirection && 0 < $("[data-simplebar]").length) {
-                                $("[data-simplebar]").attr('data-simplebar-direction', 'rtl');
-                            }
-                        });
-
-                        $("#accordian li span.acc-trigger").on('click', function() {
-                            var link = $(this);
-                            var closest_ul = link.siblings("ul");
-
-                            if (link.hasClass("is-active")) {
-                                closest_ul.slideUp();
-                                link.removeClass("is-active");
-                            } else {
-                                closest_ul.slideDown();
-                                link.addClass("is-active");
-                            }
-                        });
-                        $('.dropdown-menu').on('click', function(e) {
-                            e.stopPropagation();
-                        });
-                    </script>
+                             if (link.hasClass("is-active")) {
+                                 closest_ul.slideUp();
+                                 link.removeClass("is-active");
+                             } else {
+                                 closest_ul.slideDown();
+                                 link.addClass("is-active");
+                             }
+                         });
+                         $('.dropdown-menu').on('click', function(e) {
+                             e.stopPropagation();
+                         });
+                     </script>
