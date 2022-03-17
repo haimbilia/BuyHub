@@ -345,10 +345,10 @@ class HomeController extends ListingBaseController
 
         include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
         $analyticArr = array(
-            /* 'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
+            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
             'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
             'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
-            'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID") */
+            'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
         );
 
         $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
