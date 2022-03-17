@@ -64,9 +64,9 @@
                                 <img width="120" height="68" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                             </a>
                         </div>
-                        <div class="geo-location">
-                            <div class="geo-location_inner">
-                                <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+                            <div class="geo-location">
+                                <div class="geo-location_inner">
                                     <div class="dropdown">
                                         <?php
                                         $geoAddress = '';
@@ -113,9 +113,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                     <div class="top-bar__right">
                         <ul class="quick-nav">

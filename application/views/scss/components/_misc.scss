@@ -564,3 +564,27 @@ a:hover {
         }
     }
 }
+
+.processing {
+    background-color: rgba(255,255,255,0.55);
+    position: absolute;
+    z-index: 1024;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:after{
+        position: absolute;
+    content: "";
+    background-color: rgba(255,255,255,0.05);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1; 
+    }
+}
