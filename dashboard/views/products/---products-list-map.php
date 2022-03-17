@@ -1,5 +1,7 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+die();
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) ) {

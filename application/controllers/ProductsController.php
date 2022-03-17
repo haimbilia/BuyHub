@@ -219,12 +219,7 @@ class ProductsController extends MyAppController
     public function filters()
     {
         $db = FatApp::getDb();
-        $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
-        $headerFormParamsAssocArr['vtype']  = $headerFormParamsAssocArr['vtype'] ?? 'grid';
-        if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $headerFormParamsAssocArr['vtype'] == 'map') {
-            $headerFormParamsAssocArr['vtype'] = 'grid';
-        } 
-
+        $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();        
         $categoryId = 0;
         if (array_key_exists('category', $headerFormParamsAssocArr)) {
             $categoryId = FatUtility::int($headerFormParamsAssocArr['category']);

@@ -286,8 +286,7 @@ class ShopsController extends MyAppController
                 ];
             }
         }
-        /* Shop and SelProd Badge */
-
+        /* Shop and SelProd Badge */   
         $this->set('data', $data);
 
         if (false === MOBILE_APP_API_CALL) {
