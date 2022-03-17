@@ -262,8 +262,13 @@
                                                     ?>
                          <li><label class="checkbox optionvalue" id="optionvalue_<?php echo $optionRow['optionvalue_id']; ?>"><input name="optionvalues" value="<?php echo $optionValueId; ?>" type="checkbox" <?php if (in_array($optionRow['optionvalue_id'], $optionValueCheckedArr)) {
                                                                                                                                                                                                                     echo "checked='true'";
-                                                                                                                                                                                                                } ?>><?php echo ($optionRow['optionvalue_name']) ? $optionRow['optionvalue_name'] : $optionRow['optionvalue_identifier']; ?>
-                             </label></li>
+                                                                                                                                                                                                                } ?>>
+                            <?php if($optionRow['option_is_color']  == 1)  { ?>
+                                    <div><?php echo "#".$optionRow['optionvalue_color_code']; ?> </div>
+                            <?php  }  ?>  
+                            <?php echo ($optionRow['optionvalue_name']) ? $optionRow['optionvalue_name'] : $optionRow['optionvalue_identifier']; ?>
+                             </label>
+                        </li>
 
                  <?php
                 }

@@ -6,15 +6,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
     $displayProductNotAvailableLable = true;
 }
 
-$vtype = $postedData['vtype'] ?? false;
-$productListClass = '';
-if ($vtype == 'list') {
-    $productListClass = 'listing-products--list';
-} elseif ($vtype == 'grid') {
-    $productListClass = 'listing-products--grid';
-}
 ?>
-<div id="productsList" class="<?php echo $productListClass ?>">
+<div id="productsList">
     <?php
     ?>
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
@@ -98,6 +91,8 @@ if ($vtype == 'list') {
                 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
                 $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
         ?>
+
+        <?php if(1 < $pageCount) {?>
         <div class="collection-pager">
             <?php
                 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
@@ -110,6 +105,7 @@ if ($vtype == 'list') {
                 </select>
             <?php } ?>
         </div>
+        <?php } ?>
     <?php } else { ?>
 </div> <?php
                 $arr['recordDisplayCount'] = $recordCount;
