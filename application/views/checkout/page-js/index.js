@@ -179,11 +179,6 @@ $("document").ready(function () {
             if ($(".payment-js").hasClass("is-active") == false) {
                 setCheckoutFlow("BILLING");
             }
-            /* $(addressFormDiv).html( ans ).show(); */
-            /* $(addressWrapper).hide(); */
-            /* $(addressWrapperContainer).hide(); */
-            /* $(addressWrapper).hide(); */
-            /* $(addressFormDiv).addClass("is-current"); */
         });
     };
 

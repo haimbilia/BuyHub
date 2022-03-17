@@ -70,36 +70,24 @@
                     </ul>
 
                 <?php } ?>
-
-                <div id="addressFormDiv" style="display:none">
-                    <?php $tplDataArr = array(
-                        'siteLangId' => $siteLangId,
-                        'addressFrm' => $addressFrm,
-                        'labelHeading' => Labels::getLabel('LBL_Add_New_Address', $siteLangId),
-                        'stateId' => $stateId,
-                        'addressType' => $addressType,
-                    ); ?> <?php //echo $addressFrm->getFormHtml(); ?>
-                    <?php $this->includeTemplate('checkout/address-form.php', $tplDataArr, false);    ?>
-                </div>
             </div>
 
             <div class="step_foot">
                 <div class="checkout-actions">
-                    <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-                        <button class="btn btn-outline-gray btn-wide" onclick="loadPaymentSummary();">
-                            <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                        </button>
-                    <?php } else { ?>
-                        <button class="btn btn-outline-gray btn-wide" onclick="goToBack();">
-                            <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                        </button>
-                    <?php } ?>
-                    <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-                        <button class="btn btn-brand btn-wide" id="btn-continue-js" onClick="setUpBillingAddressSelection(this);"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></button>
-                    <?php } else { ?>
-                        <button class="btn btn-brand btn-wide" id="btn-continue-js" onClick="setUpAddressSelection();">
-                            <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></button>
-                    <?php } ?>
+                    <?php
+                    $backJsFunc = 'goToBack();';
+                    $contiJsFunc = 'setUpAddressSelection();';
+                    if ($addressType == Address::ADDRESS_TYPE_BILLING) {
+                        $backJsFunc = 'loadPaymentSummary();';
+                        $contiJsFunc = 'setUpBillingAddressSelection(this);';
+                    }
+                    ?>
+                    <button class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
+                        <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
+                    </button>
+                    <button class="btn btn-brand btn-wide" id="btn-continue-js" onclick="<?php echo $contiJsFunc; ?>">
+                        <?php echo Labels::getLabel('LBL_CONTINUE', $siteLangId); ?>
+                    </button>
                 </div>
             </div>
         </div>
