@@ -61,7 +61,7 @@ class BlogComment extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getBlogCommentStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case self::COMMENT_STATUS_PENDING:
                 $status = HtmlHelper::INFO;

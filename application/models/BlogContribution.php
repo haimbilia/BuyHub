@@ -42,7 +42,7 @@ class BlogContribution extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getBlogContributionStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case self::BLOG_CONTRIBUTION_PENDING:
                 $status = HtmlHelper::INFO;

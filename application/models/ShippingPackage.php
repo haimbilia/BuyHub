@@ -39,7 +39,7 @@ class ShippingPackage extends MyAppModel
     public static function getUnitTypeHtml(int $langId, int $status): string
     {
         $arr = self::getUnitTypes($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case applicationConstants::LENGTH_CENTIMETER:
                 $status = HtmlHelper::INFO;

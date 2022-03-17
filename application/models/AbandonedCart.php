@@ -353,7 +353,7 @@ class AbandonedCart extends MyAppModel
     public static function getActionLabelHtml(int $langId, int $status): string
     {
         $arr = self::getActionArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::ACTION_ADDED:
                 $status = HtmlHelper::DANGER;

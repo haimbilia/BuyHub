@@ -1188,7 +1188,7 @@ class DiscountCoupons extends MyAppModel
     public static function getTypeHtml(int $langId, int $status): string
     {
         $arr = self::getTypeArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::TYPE_DISCOUNT:
                 $status = HtmlHelper::INFO;
