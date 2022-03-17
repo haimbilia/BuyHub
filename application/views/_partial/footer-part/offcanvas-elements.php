@@ -10,8 +10,7 @@ if ($controllerName != 'Cart') {
 
 <!-- offcanvas-filters -->
 <div class="offcanvas offcanvas-end  offcanvas-filters" tabindex="-1" id="filters-right" aria-labelledby="filters-right">
-    <div class="offcanvas-header">
-        <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+    <div class="offcanvas-header">       
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body productFiltersJs">
