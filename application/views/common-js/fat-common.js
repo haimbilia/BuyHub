@@ -133,6 +133,10 @@ var fcom = {
 			fcom.closeProcessing(processingClass);
 			fcom.removeLoader();
 			if (ans.status != 1) {
+				if (typeof ans.displayLoginForm != 'undefined' && ans.displayLoginForm == 1) {
+					loginPopUpBox(true);
+					return;
+				}
 				fcom.displayErrorMessage(ans.msg);
 				return;
 			}

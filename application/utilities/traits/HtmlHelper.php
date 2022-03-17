@@ -339,6 +339,14 @@ class HtmlHelper
         return strtoupper($title);
     }
 
+    public static function getSuccessMessageHtml(string $message): string
+    {
+        return '<div class="alert alert-success" role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                    <div class="alert-text">' . $message . '</div>
+                </div>';
+    }
+    
     public static function getErrorMessageHtml(string $message): string
     {
         return '<div class="alert alert-danger" role="alert">

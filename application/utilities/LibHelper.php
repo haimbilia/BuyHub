@@ -26,13 +26,21 @@ class LibHelper extends FatUtility
         FatUtility::dieJsonError($message);
     }
 
-    public static function dieWithError($message)
+    public static function dieWithError($message, bool $withHtml = false)
     {
+        if (true === $withHtml) {
+            if (method_exists('HtmlHelper', 'getErrorMessageHtml')) {
+                FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+            }
+            Message::addErrorMessage($message);
+            FatUtility::dieWithError(Message::getHtml());
+        }
         FatUtility::dieWithError($message);
     }
 
-    public static function exitWithError($message, $json = false, $redirect = false)
-    {
+    public static function exitWithError($message, $json = false, $redirect = false, $jsonData = [])
+    {      
+        
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
                 array_walk_recursive($message, function (&$item) {
@@ -42,19 +50,20 @@ class LibHelper extends FatUtility
                 $message = strip_tags($message);
             }
             header('Content-Type: application/json; charset=utf-8');
-            FatUtility::dieJsonError($message);
+            $jsonData += ['msg' => $message, 'status' => 0];
+            FatUtility::dieJsonError($jsonData);
         }
 
         $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
         if (true === $json || 'json' == $fOutMode) {
             header('Content-Type: application/json; charset=utf-8');
-            FatUtility::dieJsonError($message);
+            $jsonData += ['msg' => $message, 'status' => 0];
+            FatUtility::dieJsonError($jsonData);
         }
 
         $fIsAjax = FatApp::getPostedData('fIsAjax', FatUtility::VAR_STRING);
         if (1 == $fIsAjax && 'html' == $fOutMode) {
-            Message::addErrorMessage($message);
-            FatUtility::dieWithError(Message::getHtml());
+            self::dieWithError($message, true);
         }
 
         if (true === $redirect) {
@@ -62,12 +71,7 @@ class LibHelper extends FatUtility
             return;
         }
 
-        if (method_exists('HtmlHelper', 'getErrorMessageHtml')) {
-            FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
-        }
-
-        Message::addErrorMessage($message);
-        FatUtility::dieWithError(Message::getHtml());
+        self::dieWithError($message, true);
     }
 
     public static function exitWithSuccess($message, $json = false, $redirect = false)

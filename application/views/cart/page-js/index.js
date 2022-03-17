@@ -16,7 +16,7 @@ $(function () {
 			$(".pickupLblJs").addClass("is-active");
 			$(".shippingLblJs").removeClass("is-active");
 		}
-		$('#cartList').html(fcom.getLoader());
+		$('#cartList').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Cart', 'listing', [fulfilmentType]), '', function (res) {
 			fcom.removeLoader();
 			var json = $.parseJSON(res);
@@ -48,29 +48,9 @@ $(function () {
 	};
 
 	getPromoCode = function () {
-		fcom.displayProcessing();
-		if (isUserLogged() == 0) {
-			loginPopUpBox(true);
-			return false;
-		}
-
-		fcom.ajax(fcom.makeUrl('Checkout', 'getCouponForm'), '', function (t) {
-			$.ykmsg.close();
-			try {
-				t = $.parseJSON(t);
-				if (typeof t.status != 'undefined' && 1 > t.status) {
-					fcom.displayErrorMessage(t.msg);
-					$.facebox.close();
-					if (typeof t.url != 'undefined') {
-						setTimeout(function () { document.location.href = t.url; }, 1000);
-					}
-					return false;
-				}
-			}
-			catch (exc) { }
-			$.facebox(t);
-			$("input[name='coupon_code']").focus();
-		});
+		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCouponForm"), '', function (res) {
+            $.ykmodal(res.html);
+        });
 	};
 
 	triggerApplyCoupon = function (coupon_code) {
@@ -80,15 +60,10 @@ $(function () {
 	};
 
 	applyPromoCode = function (frm) {
-		if (isUserLogged() == 0) {
-			loginPopUpBox(true);
-			return false;
-		}
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {
-			$.facebox.close();
-			$.ykmsg.close();
+			$.ykmodal.close();
 			listCartProducts();
 		});
 	};
@@ -200,8 +175,10 @@ $(function () {
 	}
 
 	getCartFinancialSummary = function (type) {
+		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Cart', 'getCartFinancialSummary', [type]), '', function (res) {
 			$("#js-cartFinancialSummary").html(res);
+			fcom.removeLoader();
 		});
 	}
 

@@ -198,20 +198,20 @@ class ThemeColorController extends ListingBaseController
 
         $data = [
             "CONF_THEME_FONT_FAMILY_URL" => "",
-            "CONF_THEME_FONT_FAMILY" => 'Poppins',
+            "CONF_THEME_FONT_FAMILY" => 'Montserrat',
             "CONF_THEME_COLOR" => "#FF3A59",
             "CONF_THEME_COLOR_RGB" => "255,58,89",
             "CONF_THEME_COLOR_HSL" => "351,100%,61%",
             "CONF_THEME_COLOR_INVERSE" => "#ffffff",
             "CONF_THEME_COLOR_INVERSE_RGB" => "255,255,255",
             "CONF_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
-            "CONF_SECONDARY_THEME_COLOR" => "#6DCDEF",
-            "CONF_SECONDARY_THEME_COLOR_RGB" => "109 205 239",
+            "CONF_SECONDARY_THEME_COLOR" => "#0795e6",
+            "CONF_SECONDARY_THEME_COLOR_RGB" => "7, 149, 230",
             "CONF_SECONDARY_THEME_COLOR_HSL" => "196,80%,68%",
             "CONF_SECONDARY_THEME_COLOR_INVERSE" => "#ffffff",
             "CONF_SECONDARY_THEME_COLOR_INVERSE_RGB" => "255,255,255",
             "CONF_SECONDARY_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
-            "CONF_THEME_FONT_WEIGHT" => '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]',
+            "CONF_THEME_FONT_WEIGHT" => '[{"id":"regular","value":"Montserrat - Regular","subset":["devanagari","latin","latin-ext"]}]',
         ];
 
         $record = new Configurations();
