@@ -530,6 +530,11 @@ class ShopsController extends MyAppController
         $this->_template->addJs('js/slick.js');
         $this->_template->addJs('js/shop-nav.js');
         $this->_template->addJs('js/jquery.colourbrightness.min.js');
+        if (UserAuthentication::isUserLogged()) {
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
+            $this->set('userParentId', $userParentId);
+        }
 
         $this->_template->render();
     }

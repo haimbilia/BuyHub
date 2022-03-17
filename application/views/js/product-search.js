@@ -368,10 +368,10 @@ function removePageSideFromLink() {
 }
 
 function showSelectedFilters() {
-    if (($("#filters a").length) > 1) {
-        $('#resetAll').css('display', 'block');
+    if (($("#filters a").length) > 0) {
+        $('#resetAllJs,#mapFilterJs').css('display', 'block');       
     } else {
-        $('#resetAll').css('display', 'none');
+        $('#resetAllJs,#mapFilterJs').css('display', 'none');
     }
 }
 
@@ -617,7 +617,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         }
         $("input[id=keyword]").val(keyword);
         reloadProductListing(frm);
-        $('#resetAll').css('display', 'block');
+        $('#resetAllJs').css('display', 'block');
     };
 
     loadProductListingfilters = function (frm) {

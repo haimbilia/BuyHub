@@ -34,7 +34,7 @@ foreach ($brandsArr as $brand) {
     <div class="filter-directory">
         <div class="filter-directory_bar">
             <input type="text" placeholder="Search brand"
-                class="form-control filter-directory_search_input magni-search" onKeyup="autoKeywordSearch(this.value)">
+                class="form-control filter-directory_search_input omni-search" onKeyup="autoKeywordSearch(this.value)">
             <ul class="filter-directory_indices bfilter-js">
                 <?php
         foreach (range('A', 'Z') as $char) {

@@ -44,6 +44,7 @@ if (isset($product)) {
 ?>
 <div id="body" class="body template-<?php echo $template_id; ?>">
 <?php
+$this->includeTemplate('shops/_breadcrumb.php');
 $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
 $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);
 ?>
