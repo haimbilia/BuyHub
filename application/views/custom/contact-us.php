@@ -42,119 +42,98 @@ $fld->developerTags['col'] = 12;
                 <div class="col-xl-9">
                     <div class="row">
                         <div class="col-md-7">
-                            <div class="bg-gray rounded p-4">
+                            <div class=" ">
                                 <?php //echo $contactFrm->getFormHtml(); 
                                 ?>
                                 <?php echo $contactFrm->getFormTag(); ?>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $contactFrm->getField('name');
-                                                    echo $fld->getCaption();
-                                                    ?>
-                                                    <span class="spn_must_field">*</span>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $contactFrm->getFieldHtml('name'); ?>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <?php $fld = $contactFrm->getField('name');
+                                                echo $fld->getCaption();
+                                                ?>
+                                                <span class="spn_must_field">*</span>
+                                            </label> <?php echo $contactFrm->getFieldHtml('name'); ?>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $contactFrm->getField('email');
-                                                    echo $fld->getCaption();
-                                                    ?>
-                                                    <span class="spn_must_field">*</span>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $contactFrm->getFieldHtml('email'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $contactFrm->getField('phone');
-                                                    echo $fld->getCaption();
-                                                    ?>
-                                                    <span class="spn_must_field">*</span>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $contactFrm->getFieldHtml('phone'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $contactFrm->getField('message');
-                                                    echo $fld->getCaption();
-                                                    ?>
-                                                    <span class="spn_must_field">*</span>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $contactFrm->getFieldHtml('message'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <label class="checkbox">
-                                                        <?php
-                                                        $fld = $contactFrm->getFieldHTML('agree');
-                                                        $fld = str_replace("<label >", "", $fld);
-                                                        $fld = str_replace("</label>", "", $fld);
-                                                        echo $fld;
-                                                        ?>
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <?php $fld = $contactFrm->getField('email');
+                                                echo $fld->getCaption();
+                                                ?>
+                                                <span class="spn_must_field">*</span>
+                                            </label>
+                                            <?php echo $contactFrm->getFieldHtml('email'); ?>
 
-                                                        <?php
-                                                        $arr = [
-                                                            "{terms-conditions}" => "<a href='" . $termsAndConditionsLinkHref . "'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . "</a>",
-                                                            "{privacy-policy}" => "<a href='" . $privacyPolicyLinkHref . "'>" . Labels::getLabel('LBL_Privacy_Policy', $siteLangId) . "</a>"
-                                                        ];
-                                                        echo strtr(Labels::getLabel('LBL_I_agree_to_the_{terms-conditions}_and_{privacy-policy}', $siteLangId), $arr);
-                                                        ?>
-                                                    </label>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $contactFrm->getFieldHtml('btn_submit'); ?>
-                                                    <?php echo $contactFrm->getFieldHtml('fatpostsectkn'); ?>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+
+                                            <label class="form-label">
+                                                <?php $fld = $contactFrm->getField('phone');
+                                                echo $fld->getCaption();
+                                                ?>
+                                                <span class="spn_must_field">*</span>
+                                            </label>
+
+
+                                            <?php echo $contactFrm->getFieldHtml('phone'); ?>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <?php $fld = $contactFrm->getField('message');
+                                                echo $fld->getCaption();
+                                                ?>
+                                                <span class="spn_must_field">*</span>
+                                            </label>
+                                            <?php echo $contactFrm->getFieldHtml('message'); ?>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="checkbox">
+                                                <?php
+                                                $fld = $contactFrm->getFieldHTML('agree');
+                                                $fld = str_replace("<label >", "", $fld);
+                                                $fld = str_replace("</label>", "", $fld);
+                                                echo $fld;
+                                                ?>
+
+                                                <?php
+                                                $arr = [
+                                                    "{terms-conditions}" => "<a href='" . $termsAndConditionsLinkHref . "'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . "</a>",
+                                                    "{privacy-policy}" => "<a href='" . $privacyPolicyLinkHref . "'>" . Labels::getLabel('LBL_Privacy_Policy', $siteLangId) . "</a>"
+                                                ];
+                                                echo strtr(Labels::getLabel('LBL_I_agree_to_the_{terms-conditions}_and_{privacy-policy}', $siteLangId), $arr);
+                                                ?>
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+
+
+                                            <?php echo $contactFrm->getFieldHtml('btn_submit'); ?>
+                                            <?php echo $contactFrm->getFieldHtml('fatpostsectkn'); ?>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -164,36 +143,36 @@ $fld->developerTags['col'] = 12;
                         </div>
                         <div class="col-md-5">
                             <div class="contact-address">
-                                <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId); ?>
-                                </h6>
-                                <p class="">
-                                    <?php
-                                    $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
-                                    ?>
-                                    <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
-                                </p>
-
-                                <div class="divider"></div>
-
-                                <h6><?php echo Labels::getLabel('LBL_Fax', $siteLangId); ?>
-                                </h6>
-                                <p class="">
-                                    <?php
-                                    $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
-                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
-                                    <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
-                                </p>
-
-                                <div class="divider"></div>
-
-                                <h6><?php echo Labels::getLabel('LBL_Address', $siteLangId); ?>
-                                </h6>
-                                <p class="">
-                                    <?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
-                                </p>
-
-                                <?php $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
+                                <div class="contact-address-item">
+                                    <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId); ?>
+                                    </h6>
+                                    <p class="">
+                                        <?php
+                                        $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                        ?>
+                                        <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
+                                    </p>
+                                </div>
+                                <div class="contact-address-item">
+                                    <h6><?php echo Labels::getLabel('LBL_Fax', $siteLangId); ?>
+                                    </h6>
+                                    <p class="">
+                                        <?php
+                                        $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
+                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
+                                        <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
+                                    </p>
+                                </div>
+                                <div class="contact-address-item">
+                                    <h6><?php echo Labels::getLabel('LBL_Address', $siteLangId); ?>
+                                    </h6>
+                                    <p class="">
+                                        <?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
+                                    </p>
+                                </div>
+                                <div class="contact-address-item">
+                                    <?php $this->includeTemplate('_partial/footerSocialMedia.php'); ?></div>
                             </div>
 
                         </div>
