@@ -41,16 +41,20 @@
     padding: 3rem 0;
     display: flex;
     align-items: center;
-    flex-direction: row;
-    @include media-breakpoint-down(md) {
+    flex-direction: column;
+    @include media-breakpoint-up(lg) {
+        flex-direction: row;
     }
     &-start {
         display: flex;
         align-items: center;
         flex-direction: row;
+        grid-gap: 1.5rem;
     }
     &-end {
-        margin-#{$start-direction}: auto;
+        @include media-breakpoint-up(lg) {
+            margin-#{$start-direction}: auto;
+        }
     }
     &-logo {
         border: $border-black;
@@ -73,7 +77,6 @@
         }
     }
     &-detail {
-        padding-#{$start-direction}: 3rem;
         display: flex;
         flex-direction: column;
         .title {

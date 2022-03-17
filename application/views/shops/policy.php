@@ -1,9 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 
-<div id="body" class="body template-<?php echo $template_id; ?>">
+<div id="body" class="body template-<?php echo $template_id; ?>">   
     <?php
+    $this->includeTemplate('shops/_breadcrumb.php');
+    $userParentId = (isset($userParentId)) ? $userParentId : 0;
     $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'frmProductSearch' => $frmProductSearch, 'template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
-    $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);
+    $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);    
     ?>
 
     <?php if ($shop['description'] != '' || $shop['shop_payment_policy'] != '' || $shop['shop_delivery_policy'] != '' || $shop['shop_refund_policy'] != '' || $shop['shop_additional_info'] != '' || $shop['shop_seller_info'] != '') { ?>

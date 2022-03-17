@@ -499,8 +499,6 @@ a:hover {
     align-items: center;
     justify-content: center;
     grid-gap: 1rem;
-    display: flex;
-    align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
     .btn {
@@ -509,7 +507,10 @@ a:hover {
         padding: 0;
         width: 42px;
         height: 42px;
-        display: block;
+        // display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 0;
         &-prev span {
             display: inline-block;
@@ -566,7 +567,7 @@ a:hover {
 }
 
 .processing {
-    background-color: rgba(255,255,255,0.55);
+    background-color: rgba(255, 255, 255, 0.55);
     position: absolute;
     z-index: 1024;
     top: 0;
@@ -577,14 +578,14 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    &:after{
+    &:after {
         position: absolute;
-    content: "";
-    background-color: rgba(255,255,255,0.05);
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1; 
+        content: "";
+        background-color: rgba(255, 255, 255, 0.05);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
     }
 }

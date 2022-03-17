@@ -11,8 +11,10 @@ $shopPolicyArr = array(
 );
 ?>
 
-<div id="body" class="body template-<?php echo $template_id;?>"   >
+<div id="body" class="body template-<?php echo $template_id;?>"   >  
     <?php
+        $this->includeTemplate('shops/_breadcrumb.php');
+        $userParentId = (isset($userParentId)) ? $userParentId : 0;
         $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'collectionData' => $collectionData, 'action' => $action, 'shopRating' => $shopRating, 'shopTotalReviews' => $shopTotalReviews, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
         $this->includeTemplate('shops/templates/'.$template_id.'.php', $variables, false);
     ?>

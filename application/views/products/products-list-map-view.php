@@ -13,7 +13,10 @@
         </div>
     </div>
     <div class="interactive-stores-list stores">
-        <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
+
+        <?php 
+        $colMdVal = 3;        
+        $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>
 <?php

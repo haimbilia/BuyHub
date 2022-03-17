@@ -17,7 +17,9 @@
         }
     }
     &-toolbar {
-        margin-#{$start-direction}: auto;
+        @include media-breakpoint-up(lg) {
+            margin-#{$start-direction}: auto;
+        }
     }
     &-title {
         display: flex;
