@@ -582,7 +582,7 @@ function defaultSetUpLogin(frm, v) {
                 $(document.body).css({ cursor: "wait" });
                 $(".loaderJs").remove();
             }
-            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
+            return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {

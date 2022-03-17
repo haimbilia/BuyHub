@@ -717,9 +717,6 @@ class CartController extends MyAppController
 
         $couponCode = $post['coupon_code'];
 
-        /* $couponObj = new DiscountCoupons();
-        $couponInfo = $couponObj->getCoupon($couponCode,$this->siteLangId);
-        */
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
         $couponInfo = DiscountCoupons::getValidCoupons($loggedUserId, $this->siteLangId, $couponCode, $orderId);
         if ($couponInfo == false) {
@@ -734,7 +731,6 @@ class CartController extends MyAppController
         $holdCouponData = array(
             'couponhold_coupon_id' => $couponInfo['coupon_id'],
             'couponhold_user_id' => UserAuthentication::getLoggedUserId(),
-            /* 'couponhold_usercart_id'=>$cartObj->cart_id, */
             'couponhold_added_on' => date('Y-m-d H:i:s'),
         );
 

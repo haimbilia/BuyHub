@@ -14,49 +14,47 @@ if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Apply_Promo_Coupons', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
-    <div class="p-5">
-        <?php
-        $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-5');
-        $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
-        $fld = $PromoCouponsFrm->getField('coupon_code');
-        $fld->addFieldTagAttribute('class', 'couponCodeJs');
-        
-        $fld = $PromoCouponsFrm->getField('btn_submit');
-        $fld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
-        $PromoCouponsFrm->setJsErrorDisplay('afterfield');
-        echo $PromoCouponsFrm->getFormTag();
-        echo $PromoCouponsFrm->getFieldHtml('coupon_code');
-        echo $PromoCouponsFrm->getFieldHtml('btn_submit');
-        echo $PromoCouponsFrm->getExternalJs();
-        ?>
-        </form>
-        <div class="row">
-            <?php if ($couponsList) { ?>
-                <div class="col-md-12">
-                    <h6 class="h6">
-                        <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
-                    </h6>
-                </div>
-                <div class="col-md-12">
-                    <ul class="coupon-offers">
-                        <?php $counter = 1;
-                        foreach ($couponsList as $coupon_id => $coupon) {    ?>
-                            <li>
-                                <div class="coupon-code" onClick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
-                                    <?php echo $coupon['coupon_code']; ?></div>
-                                <?php if ($coupon['coupon_description'] != '') { ?>
-                                    <p><?php echo $coupon['coupon_description']; ?> </p>
-                                <?php } ?>
-                            </li>
-                        <?php $counter++;
-                        } ?>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                <?php } else {
-                echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId);
-            } ?>
-                </div>
-        </div>
+    <?php
+    $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-5');
+    $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
+    $fld = $PromoCouponsFrm->getField('coupon_code');
+    $fld->addFieldTagAttribute('class', 'couponCodeJs');
+
+    $fld = $PromoCouponsFrm->getField('btn_submit');
+    $fld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
+    $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+    echo $PromoCouponsFrm->getFormTag();
+    echo $PromoCouponsFrm->getFieldHtml('coupon_code');
+    echo $PromoCouponsFrm->getFieldHtml('btn_submit');
+    echo $PromoCouponsFrm->getExternalJs();
+    ?>
+    </form>
+    <div class="row">
+        <?php if ($couponsList) { ?>
+            <div class="col-md-12">
+                <h6 class="h6">
+                    <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
+                </h6>
+            </div>
+            <div class="col-md-12">
+                <ul class="coupon-offers">
+                    <?php $counter = 1;
+                    foreach ($couponsList as $coupon_id => $coupon) {    ?>
+                        <li>
+                            <div class="coupon-code" onClick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
+                                <?php echo $coupon['coupon_code']; ?></div>
+                            <?php if ($coupon['coupon_description'] != '') { ?>
+                                <p><?php echo $coupon['coupon_description']; ?> </p>
+                            <?php } ?>
+                        </li>
+                    <?php $counter++;
+                    } ?>
+                </ul>
+            </div>
+            <div class="col-md-12">
+            <?php } else {
+            echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId);
+        } ?>
+            </div>
     </div>
 </div>

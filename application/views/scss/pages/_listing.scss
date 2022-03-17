@@ -16,6 +16,9 @@
             flex-direction: row;
         }
     }
+    &-toolbar {
+        margin-#{$start-direction}: auto;
+    }
     &-title {
         display: flex;
         flex-direction: column;

@@ -33,14 +33,7 @@ $(function () {
         $(this).next(".accordianbody").slideToggle();
         $(this).parent().parent().siblings().children().children().next().slideUp();
         return false;
-    });
-    if (
-        "rtl" == langLbl.layoutDirection &&
-        0 < $("[data-simplebar]").length &&
-        1 > $("[data-simplebar-direction='rtl']").length
-    ) {
-        $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
-    }
+    });  
 
     /* Binding Feather Light gallery */
     bindFeatherLight();
@@ -770,7 +763,7 @@ sendResetPasswordLink = function (user) {
                 $(document.body).css({ cursor: "wait" });
                 $(".loaderJs").remove();
             }
-            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
+            return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
