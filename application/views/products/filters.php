@@ -264,7 +264,7 @@
                                                                                                                                                                                                                     echo "checked='true'";
                                                                                                                                                                                                                 } ?>>
                             <?php if($optionRow['option_is_color']  == 1)  { ?>
-                                    <div><?php echo "#".$optionRow['optionvalue_color_code']; ?> </div>
+                                    <div><?php echo "".$optionRow['optionvalue_color_code']; ?> </div>
                             <?php  }  ?>  
                             <?php echo ($optionRow['optionvalue_name']) ? $optionRow['optionvalue_name'] : $optionRow['optionvalue_identifier']; ?>
                              </label>
@@ -429,21 +429,6 @@
                              <?php
                                 } ?>
 
-                             /* left side filters scroll bar[ */
-
-                             <?php
-                                if (true === $shopCatFilters) {
-                                ?>
-                                 // new SimpleBar(document.getElementById('accordian'));
-                             <?php
-                                } ?>
-                             var x = document.getElementsByClassName("scrollbar-filters");
-                             var i;
-                             for (i = 0; i < x.length; i++) {
-                                 new SimpleBar(x[i]);
-                             }
-                             /* ] */
-
                              /* left side filters expand-collapse functionality [ */
                              $('.span--expand').bind('click', function() {
                                  $(this).parent('li.level').toggleClass('is-active');
@@ -454,10 +439,6 @@
                              /* ] */
 
                              updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
-
-                             if ('rtl' == langLbl.layoutDirection && 0 < $("[data-simplebar]").length) {
-                                 $("[data-simplebar]").attr('data-simplebar-direction', 'rtl');
-                             }
                          });
 
                          $("#accordian li span.acc-trigger").on('click', function() {
