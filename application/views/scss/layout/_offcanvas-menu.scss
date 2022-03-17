@@ -61,29 +61,74 @@
 }
 
 .profile {
-    background-color: $brand-color;
-    color: $brand-color-inverse;
-    padding: 2rem 1rem;
+    background-color: $bg-gray;
+    color: $txt-body;
+    padding: 1rem 2rem;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+    grid-gap: 1rem;
+    font-size: 0.8rem;
     &-image {
-        margin-#{$end-direction}: 1rem;
         margin-bottom: 1rem;
     }
     &-avatar {
-        // border-radius: 50%;
-        // max-width: 80px;
+        border-radius: 50%;
+        max-width: 80px;
         // box-shadow: $shadow1;
     }
     &-name {
         font-weight: 500;
         font-size: 1rem;
     }
+    &-email,
+    &-phone {
+        font-weight: 300;
+        font-size: 0.8rem;
+    }
+}
 
-    &-menu {
+.account-nav {
+    display: flex;
+
+    flex-direction: column;
+    font-size: 1rem;
+    &-item {
+        border-bottom: $border;
+    }
+
+    &-link {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+    }
+
+    .icon {
+        display: inline-block;
+        font-size: inherit;
+        font-style: normal;
+        height: 1em;
+        position: relative;
+        text-indent: -9999px;
+        vertical-align: middle;
+        width: 1em;
+        font-size: 0.8rem;
+        transform: scale(1);
+        margin-#{$start-direction}: auto;
+        &::before {
+            content: "";
+            display: block;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            border: 0.1rem solid currentColor;
+            border-bottom: 0;
+            border-right: 0;
+            height: 0.65em;
+            width: 0.65em;
+            transform: translate(-75%, -50%) rotate(135deg);
+        }
     }
 }
 
