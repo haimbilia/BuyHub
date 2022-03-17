@@ -40,15 +40,15 @@ if (isset($prodcat_code)) {
 } ?>
 
 <div class="" id="filters_body--js">
-    <div class="selected-filters" id="filters">
+    <div class="sidebar-widget">
         <div class="selected-filters-head">
             <h5> <?php echo Labels::getLabel('LBL_Filtered_by_:', $siteLangId); ?></h5>
             <button type="button" class="btn btn-underline-black" id="resetAll" onClick="resetListingFilter()" style="display:none;">
                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
             </button>
         </div>
-
-
+        <div class="selected-filters" id="filters">
+        </div>
     </div>
     <?php if (isset($categoriesArr) && $categoriesArr) { ?>
         <div class="sidebar-widget">

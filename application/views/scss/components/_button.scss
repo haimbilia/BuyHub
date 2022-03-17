@@ -258,6 +258,10 @@ a.link-arrow {
         text-decoration: none;
         background-size: 95% 2px;
     }
+
+    &-black {
+        color: $black;
+    }
 }
 @-webkit-keyframes moltinShake {
     12.5% {
