@@ -592,7 +592,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         var data = fcom.frmData(frm);
         var currUrl = getSearchQueryUrl(true);
         fcom.ajax(currUrl, data, function (res) {
-            $('#productsList').replaceWith(res);
+            fcom.removeLoader();
+            $('#productsList').replaceWith(res);frmProductSearchPaging
             var frm = document.frmProductSearchPaging;
             var recordCount = parseInt($(frm.recordDisplayCount).val());
             $('#total_records').html(recordCount);
@@ -618,7 +619,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     };
 
     loadProductListingfilters = function (frm) {
-        $('.productFilters-js').html(fcom.getLoader());
+        $('.productFiltersJs').html(fcom.getLoader());
         var url = window.location.href;
         if ($currentPageUrl == removeLastSpace(url) + '/index') {
             url = fcom.makeUrl('Products', 'filters');
@@ -632,7 +633,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
 
         var data = fcom.frmData(frm);
         fcom.ajax(url, data, function (res) {
-            $('.productFilters-js').html(res);
+            $('.productFiltersJs').html(res);
             getSetSelectedOptionsUrl(frm);
             fcom.removeLoader();
         });
