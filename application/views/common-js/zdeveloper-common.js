@@ -33,14 +33,7 @@ $(function () {
         $(this).next(".accordianbody").slideToggle();
         $(this).parent().parent().siblings().children().children().next().slideUp();
         return false;
-    });
-    if (
-        "rtl" == langLbl.layoutDirection &&
-        0 < $("[data-simplebar]").length &&
-        1 > $("[data-simplebar-direction='rtl']").length
-    ) {
-        $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
-    }
+    });  
 
     /* Binding Feather Light gallery */
     bindFeatherLight();

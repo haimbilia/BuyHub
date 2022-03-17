@@ -95,7 +95,11 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
         </section>
     <?php } ?>
 <?php } ?>
-<?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
+
+
+<?php
+
+$this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
 <section class="section">
     <div class="container">
         <div class="collection-search">
@@ -146,7 +150,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                         <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
-                                <?php  if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
+                                <?php  if ($vtype == "map") { ?>
                                     <li class="page-sort-item">
                                         <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
                                             <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
@@ -177,7 +181,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                 'pageSize' => $pageSize,
                 'pageSizeArr' => $pageSizeArr,
             );
-            if (!isset($postedData['vtype']) || (isset($postedData['vtype']) && $postedData['vtype'] != "map")) { ?>
+            if ($vtype != "map") { ?>
                 <div class="collection-listing filter-left">
                     <aside class="collection-sidebar productFiltersJs"  data-close-on-click-outside="collection-sidebar">
                     </aside>
@@ -196,7 +200,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
         </div>
     </div>
     <?php
-    if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {
+    if ($vtype == "map") {
         include(CONF_THEME_PATH . 'products/products-list-map-view.php');
     } ?>
 </section>

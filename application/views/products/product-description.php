@@ -197,58 +197,58 @@
     <?php if (count($upsellProducts) > 0) { ?>
         <div class="side-blocks product-add-ons">
             <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
-            <div class="addons-scrollbar scroll scroll-x">
-                <ul class="list-addons list-addons--js">
-                    <?php foreach ($upsellProducts as $usproduct) {
-                        $cancelClass = '';
-                        $uncheckBoxClass = '';
-                        if ($usproduct['selprod_stock'] <= 0) {
-                            $cancelClass = 'cancel cancelled--js';
-                            $uncheckBoxClass = 'remove-add-on';
-                        } ?>
-                        <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
-                            <div class="product-profile">
-                                <figure class="product-profile__pic">
-                                    <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
-                                    </a>
-                                </figure>
-                                <div class="product-profile-data">
-                                    <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
 
-                                    <div class="products-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
-                                    </div>
-                                    <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <span class="decrease decrease-js"><i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                    </use>
-                                                </svg>
-                                            </i></span>
-                                        <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                            <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
-                                        </div>
-                                        <span class="increase increase-js"><i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                    </use>
-                                                </svg>
-                                            </i></span>
-                                    </div>
+            <ul class="list-addons list-addons--js">
+                <?php foreach ($upsellProducts as $usproduct) {
+                    $cancelClass = '';
+                    $uncheckBoxClass = '';
+                    if ($usproduct['selprod_stock'] <= 0) {
+                        $cancelClass = 'cancel cancelled--js';
+                        $uncheckBoxClass = 'remove-add-on';
+                    } ?>
+                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
+                        <div class="product-profile">
+                            <figure class="product-profile__pic">
+                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
+                                </a>
+                            </figure>
+                            <div class="product-profile-data">
+                                <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
+
+                                <div class="products-price">
+                                    <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
                                 </div>
-                                <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                    <div class="tag-soldout">
-                                        <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                                <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                    <span class="decrease decrease-js"><i class="icn">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                </use>
+                                            </svg>
+                                        </i></span>
+                                    <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                        <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                     </div>
-                                <?php  } ?>
+                                    <span class="increase increase-js"><i class="icn">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                </use>
+                                            </svg>
+                                        </i></span>
+                                </div>
                             </div>
-                            <label class="checkbox">
-                                <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            </label>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </div>
+                            <?php if ($usproduct['selprod_stock'] <= 0) { ?>
+                                <div class="tag-soldout">
+                                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                                </div>
+                            <?php  } ?>
+                        </div>
+                        <label class="checkbox">
+                            <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                        </label>
+                    </li>
+                <?php } ?>
+            </ul>
+
         </div>
     <?php } ?>
 </div>

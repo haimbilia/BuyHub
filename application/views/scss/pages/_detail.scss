@@ -359,6 +359,8 @@
     }
 }
 .list-addons {
+    max-height: 350px;
+    overflow-y: auto;
     &-item {
         padding: 1.5rem 1.5rem;
         border-bottom: $border;
@@ -874,13 +876,6 @@
             }
         }
     }
-}
-
-.addons-scrollbar {
-    max-height: 250px;
-    overflow-y: auto;
-    border: $border;
-    border-radius: $radius-common;
 }
 
 .video-wrapper {

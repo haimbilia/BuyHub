@@ -2,11 +2,12 @@
 $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop['shop_id'], $siteLangId, 0, 0, $template_id));
 ?>
 <div id="body" class="body template-<?php echo $template_id; ?>">
+
     <?php
     $userParentId = (isset($userParentId)) ? $userParentId : 0;
     $shopData = array_merge($data, array('template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId));
     $this->includeTemplate('shops/templates/' . $template_id . '.php', $shopData, false);
-    
+
     echo $this->includeTemplate('products/listing-page.php', $shopData, false);
     if (!empty($collectionData)) { ?>
         <section class="section pt-0">
@@ -25,11 +26,11 @@ $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop[
                 </div>
             </div>
         </section>
-    <?php } 
-    
+    <?php }
+
     echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
     <script>
-        $(function () {
+        $(function() {
             $('.js-shop-slider').slick(getSlickSliderSettings(3, 1, langLbl.layoutDirection, false, {
                 1199: 3,
                 1024: 2,
