@@ -247,7 +247,7 @@ class BlogPost extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getBlogPostStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case applicationConstants::DRAFT:
                 $status = HtmlHelper::INFO;

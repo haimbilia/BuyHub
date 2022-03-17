@@ -1757,11 +1757,11 @@ DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_STRIPE_CONNECT_WEEK_DAY
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_STRIPE_CONNECT_MONTH_DAY_DESC';
 
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
-('FRM_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', 0),
-('FRM_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', 0),
-('FRM_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', 0),
-('FRM_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', 0)
-ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+('FRM_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', 1, 'How frequently available funds are paid out. One of: daily, manual, weekly, or monthly. Default is daily.', 1),
+('FRM_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', 1, 'The number of days charge funds are held before being paid out. May also be set to minimum, representing the lowest available value for the account country. Default is minimum. The delay_days parameter does not apply when the interval is manual.', 1),
+('FRM_STRIPE_CONNECT_WEEK_DAY_DESC', 1, 'The day of the week when available funds are paid out, specified as monday, tuesday, etc. (required and applicable only if interval is weekly.)', 1),
+('FRM_STRIPE_CONNECT_MONTH_DAY_DESC', 1, 'The day of the month when available funds are paid out, specified as a number between 1–31. Payouts nominally scheduled between the 29th and 31st of the month are instead sent on the last day of a shorter month. Required and applicable only if interval is monthly.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = 1;
 
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_You_need_to_create_private_products_in_order_to_add_tags";
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES

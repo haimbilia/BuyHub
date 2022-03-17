@@ -264,7 +264,8 @@ class ProductRequest extends MyAppModel
     public static function getPaymentStatusHtml(int $langId, int $status, string $extraInfo = ''): string
     {
         $arr = self::getStatusArr($langId);
-        $msg = $arr[$status] . ' ' . $extraInfo;
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
+        $msg = $msg . ' ' . $extraInfo;
         switch ($status) {
             case Orders::ORDER_PAYMENT_PENDING:
                 $status = HtmlHelper::INFO;
