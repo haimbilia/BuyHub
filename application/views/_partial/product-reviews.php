@@ -81,7 +81,7 @@ $productView = $productView ?? false;
 
                             <!-- Comments Section -->
                             <div class="rating-layout-end reviewListJs"></div>
-                            <div id="loadMoreReviewsBtnDiv" class="align--center"></div>
+                            <div id="loadMoreReviewsBtnDiv" class="align-center"></div>
                             <!-- Comments Section -->
                         </div>
                     </div>
@@ -98,7 +98,7 @@ $productView = $productView ?? false;
         'clip': 'rect(0px, <?php echo $pixelToFillRight; ?>px, 160px, 0px)'
     });
 
-    $(function () {
+    $(function() {
         function DropDown(el) {
             this.dd = el;
             this.placeholder = this.dd.children('span');

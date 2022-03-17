@@ -8,14 +8,14 @@
                 </div>
                 <div class="section-action">
                     <div class="slider-controls">
-                        <button class="btn btn-prev" type="button" data-href="#product-listing"> <span class=""></span>
+                        <button class="btn btn-prev" type="button" data-href="#product-listing-rp"> <span class=""></span>
                         </button>
-                        <button class="btn btn-next" type="button" data-href="#product-listing"> <span class=""></span>
+                        <button class="btn btn-next" type="button" data-href="#product-listing-rp"> <span class=""></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="js-carousel product-listing recommended-products" id="product-listing" data-view="4" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-view="4" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
                 $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];

@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 ">
-                <div class="message message--success align--center cms">
+                <div class="message message--success align-center cms">
                     <i class="fa fa-check-circle"></i>
                     <div class="section-head  section--head--center">
                         <div class="section-heading">

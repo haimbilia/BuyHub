@@ -105,7 +105,7 @@
     vertical-align: top;
 }
 
-.panel__head .links--inline {
+.panel__head .links-inline {
     float: right;
     width: auto;
 }
@@ -114,20 +114,20 @@
     float: right;
 }
 
-.panel__head .links--inline li {
+.panel__head .links-inline li {
     padding: 0 0 0 20px;
     position: relative;
 }
 
-.panel__head .links--inline li strong {
+.panel__head .links-inline li strong {
     color: #555555;
 }
 
-.panel__head .links--inline li:after {
+.panel__head .links-inline li:after {
     content: "|";
     margin-#{$start-direction}: 5px;
 }
 
-.panel__head .links--inline li:last-child:after {
+.panel__head .links-inline li:last-child:after {
     content: normal;
 }

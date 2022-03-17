@@ -6,7 +6,7 @@
         <li class="is--active"><a href="#"><?php echo Labels::getLabel('LBL_Confirmation', $siteLangId); ?></a></li>
     </ul>
 </div>
-<div class="message message--success align--center cms">
+<div class="message message--success align-center cms">
     <i class="fa fa-check-circle"></i>
     <div class="section-head  section--head--center">
         <div class="section-heading">

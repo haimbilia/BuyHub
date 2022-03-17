@@ -363,11 +363,15 @@ class Navigation
     public static function blogNavigation($template)
     {
         $siteLangId = CommonHelper::getLangId();
-        $blog = new BlogController();
-        $srchFrm = $blog->getBlogSearchForm();
         $categoriesArr = BlogPostCategory::getRootBlogPostCatArr($siteLangId);
-        $template->set('srchFrm', $srchFrm);
         $template->set('categoriesArr', $categoriesArr);
         $template->set('siteLangId', $siteLangId);
+    }
+    
+    public static function blogNavigationSearchForm($template)
+    {
+        $blog = new BlogController();
+        $blogSearchFrm = $blog->getBlogSearchForm();
+        $template->set('blogSearchFrm', $blogSearchFrm);
     }
 }

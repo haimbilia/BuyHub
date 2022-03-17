@@ -142,9 +142,23 @@
                                     </i>
                                 </button>
                             </li>
-                            <?php if ($controllerName != 'Cart') { ?>
-                                <li class="quick-nav-item" id="cartSummary">
-                                    <?php $this->includeTemplate('_partial/headerWishListAndCartSummary.php'); ?>
+                            <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
+                                <li class="quick-nav-item">
+                                    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
+                                        <i class="icn">
+                                            <svg class="svg" width="20" height="20">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
+                                            </svg>
+                                        </i>
+                                        <span class="cart-qty">
+                                            <?php
+                                            $cartObj = new Cart();
+                                            echo (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts(); ?>
+                                        </span>
+                                        <span class="txt">
+                                            <?php echo Labels::getLabel("LBL_MY_BAG", $siteLangId); ?>
+                                        </span>
+                                    </button>
                                 </li>
                             <?php } ?>
                         </ul>
@@ -166,8 +180,6 @@
                             </i>
                         </button>
                     </div>
-                    <?php //$this->includeTemplate('_partial/headerSearchFormArea.php'); 
-                    ?>
                 </div>
             </div>
         </div>
@@ -220,67 +232,3 @@
             </button>
         </li>
     </ul>
-
-    
-    <!-- offcanvas-gps-location -->
-    <div class="offcanvas offcanvas-gps-location offcanvas-bottom" tabindex="-1" id="offcanvas-gps-location">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title"> </h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="geo-location">
-                <div class="geo-location_inner">
-                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                        <div class="dropdown">
-                            <?php
-                            $geoAddress = '';
-                            if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-                                $geoAddress = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
-                                if (empty($address)) {
-                                    $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
-                                }
-                            }
-                            if (empty($geoAddress)) {
-                                $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
-                            }
-                            $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
-                            ?>
-                            <button class="button-geo-location geo-location_trigger" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                <svg class="svg" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
-                                    </use>
-                                </svg>
-
-                                <div class="geo-location-selected">
-                                    <?php echo $geoAddress; ?>
-                                </div>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
-                                <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
-                                    <!-- <div class="or">
-                                        <span>Or</span>
-                                    </div> -->
-                                    <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
-
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
-                                            </use>
-                                        </svg>
-
-                                        <span class="txt">
-                                            <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
-                                        </span>
-                                    </button>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-
-    </div>

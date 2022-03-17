@@ -2,7 +2,7 @@
 
 class Common
 {
-    public static function headerWishListAndCartSummary($template)
+    public static function cartSummary($template)
     {
         $cartObj = new Cart();
         $cartObj->invalidateCheckoutType();
