@@ -2137,7 +2137,7 @@ END,   special_price_found ) as special_price_found'
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getApproveUnApproveArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::APPROVED:
                 $status = HtmlHelper::SUCCESS;

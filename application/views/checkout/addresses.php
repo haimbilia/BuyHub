@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
 <div class="step">
-    <form class="form ">
+    <form class="form">
         <div class="step_section">
             <div class="step_head">
                 <h5 class="step_title">
@@ -63,7 +64,6 @@
                                             </button>
                                         </div>
                                     <?php } ?>
-
                                 </label>
                             </li>
                         <?php } ?>
@@ -76,8 +76,9 @@
                         'siteLangId' => $siteLangId,
                         'addressFrm' => $addressFrm,
                         'labelHeading' => Labels::getLabel('LBL_Add_New_Address', $siteLangId),
-                        'stateId'    =>    $stateId,
-                    ); ?>
+                        'stateId' => $stateId,
+                        'addressType' => $addressType,
+                    ); ?> <?php //echo $addressFrm->getFormHtml(); ?>
                     <?php $this->includeTemplate('checkout/address-form.php', $tplDataArr, false);    ?>
                 </div>
             </div>
@@ -101,8 +102,6 @@
                     <?php } ?>
                 </div>
             </div>
-
         </div>
-
     </form>
 </div>

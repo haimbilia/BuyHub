@@ -294,7 +294,7 @@ class Transactions extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = Transactions::getStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::STATUS_PENDING:
                 $status = HtmlHelper::INFO;
@@ -318,7 +318,7 @@ class Transactions extends MyAppModel
     public static function getWithdrawlStatusHtml(int $langId, int $status): string
     {
         $arr = Transactions::getWithdrawlStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::WITHDRAWL_STATUS_PENDING:
                 $status = HtmlHelper::INFO;

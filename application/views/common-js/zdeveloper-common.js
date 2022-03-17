@@ -1331,7 +1331,6 @@ $(function () {
             data,
             function (rsp) {
                 var ans = $.parseJSON(rsp);
-                console.log(ans);
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                 } else {

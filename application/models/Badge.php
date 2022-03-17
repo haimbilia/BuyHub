@@ -423,7 +423,7 @@ class Badge extends MyAppModel
     public static function getApprovalTypeHtml(int $langId, int $status, int $conditionType): string
     {
         $arr = self::getApprovalStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case self::APPROVAL_OPEN:
                 $status = HtmlHelper::INFO;

@@ -95,7 +95,7 @@ class UserGdprRequest extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getUserRequestStatusesArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case self::STATUS_COMPLETE:
                 $status = HtmlHelper::SUCCESS;

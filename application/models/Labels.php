@@ -47,7 +47,7 @@ class Labels extends MyAppModel
     public static function getTypeBtnHtml(int $langId, int $status): string
     {
         $arr = self::getTypeArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::TYPE_WEB:
                 $status = HtmlHelper::SUCCESS;

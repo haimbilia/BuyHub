@@ -106,7 +106,7 @@ class SelProdReview extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getReviewStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::STATUS_PENDING:
                 $status = HtmlHelper::INFO;
