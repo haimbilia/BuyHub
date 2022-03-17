@@ -31,13 +31,21 @@ if (0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
         <link rel="alternate" hreflang="<?php echo strtolower($langCode); ?>" href="<?php echo $canonicalUrl; ?>">
 <?php }
 } ?>
-<?php $googleFontFamily = "'Poppins', sans-serif !important";
+<?php $googleFontFamily = "'Montserrat', sans-serif !important";
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
+
 $themeColor = FatApp::getConfig('CONF_THEME_COLOR_RGB', FatUtility::VAR_STRING, "rgb(255,58,89)");
 $themeColor = (false === strpos($themeColor, 'rgb') ? 'rgb(' . $themeColor . ')' : $themeColor);
 $themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
 $themeColorInverse = (false === strpos($themeColorInverse, 'rgb') ? 'rgb(' . $themeColorInverse . ')' : $themeColorInverse);
+
+
+$secondaryColor = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_RGB', FatUtility::VAR_STRING, "rgb(109,205,239)");
+$secondaryColor = (false === strpos($secondaryColor, 'rgb') ? 'rgb(' . $secondaryColor . ')' : $secondaryColor);
+$secondaryColorInverse = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
+$secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb(' . $secondaryColorInverse . ')' : $secondaryColorInverse);
+
 if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
@@ -45,7 +53,8 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
 <?php
 } else { ?>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+     
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,300,regular,500,600&subset=cyrillic,cyrillic-ext,latin,latin-ext,vietnamese" rel="stylesheet">
 <?php } ?>
 
 <style>
@@ -61,9 +70,9 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
         <?php } else { ?>--brand-color: <?php echo $themeColor; ?>;
         --brand-color-alpha: <?php echo strtr($themeColor, ["rgb(" => "", ")" => ""]); ?>;
         --brand-color-inverse: <?php echo $themeColorInverse; ?>;
-        --secondary-color: <?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --secondary-color-alpha: <?php echo strtr(FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''), ["rgb(" => "", ")" => ""]); ?>;
-        --secondary-color-inverse: <?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color: <?php echo $secondaryColor; ?>;
+        --secondary-color-alpha: <?php echo strtr($secondaryColor, ["rgb(" => "", ")" => ""]); ?>;
+        --secondary-color-inverse: <?php echo $secondaryColorInverse; ?>;
         <?php } ?>
     }
 </style>

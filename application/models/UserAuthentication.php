@@ -495,7 +495,7 @@ class UserAuthentication extends FatModel
         unset($_SESSION['subscription_shopping_cart']["order_id"]);
         unset($_SESSION['shopping_cart']["order_id"]);
         unset($_SESSION["order_id"]);
-        
+
         session_regenerate_id();
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME] = array(
             'user_id' => $data['user_id'],
@@ -872,7 +872,7 @@ class UserAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL_USER_PRR);
-        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', 'mysql_func_' .$uId, 'AND', true);
+        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', 'mysql_func_' . $uId, 'AND', true);
         $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'token', '=', $token);
         $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'expiry', '>', date('Y-m-d H:i:s'));
         $srch->doNotCalculateRecords();
@@ -920,24 +920,19 @@ class UserAuthentication extends FatModel
         return false;
     }
 
-    public static function checkLogin($redirect = true)
+    public static function checkLogin($redirect = true, $redirectUrl = '')
     {
         if (static::isUserLogged() || static::isGuestUserLogged()) {
             return true;
         }
-        if (true === MOBILE_APP_API_CALL) {
-            $message = Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId());
-            FatUtility::dieJsonError($message);
-        }
 
-        if (FatUtility::isAjaxCall()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+        $message = Labels::getLabel('MSG_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId());
+        LibHelper::exitWithError($message, false, $redirect, ['displayLoginForm' => 1]);
 
         $_SESSION['referer_page_url'] = UrlHelper::getCurrUrl();
         if ($redirect == true) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
+            $redirectUrl = (empty($redirectUrl) ? UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND) : $redirectUrl);
+            FatApp::redirectUser($redirectUrl);
         }
 
         return false;

@@ -40,4 +40,3 @@ if (CommonHelper::demoUrl()) {
             } ?>
         </div>
     </div>
-    <?php /*?> <div id="quick-view-section" class="quick-view"></div>    <?php */ ?>
