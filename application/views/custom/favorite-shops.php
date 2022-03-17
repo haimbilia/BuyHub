@@ -4,8 +4,7 @@
             <div class="col-md-8 col-sm-7">
                 <div class="cell">
                     <div class="cell__left">
-                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>"
-                                src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($userInfo['user_id'], ImageDimension::VIEW_THUMB, '1'), CONF_WEBROOT_FRONTEND); ?>">
+                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($userInfo['user_id'], ImageDimension::VIEW_THUMB, '1'), CONF_WEBROOT_FRONTEND); ?>">
                         </div>
                     </div>
                     <div class="cell__right">
@@ -17,7 +16,7 @@
                 </div>
             </div>
             <div class="col-md-4 col-sm-5 align--right" style="padding-top:20px;">
-                <ul class="links--inline">
+                <ul class="links-inline">
                     <li class="is--active"><strong id="favShopCount">XX</strong>
                         <?php echo Labels::getLabel('LBL_Favorite_Shops', $siteLangId); ?></li>
                 </ul>

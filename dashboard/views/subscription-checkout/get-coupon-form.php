@@ -33,7 +33,7 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
         <div class="row">
             <?php if ($couponsList) { ?>
                 <div>
-                    <div class="heading3 align--center">
+                    <div class="heading3 align-center">
                         <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
                     </div>
                     <ul class="coupon-offers">

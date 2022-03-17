@@ -6,7 +6,7 @@
     <div class="content-body">
         <div class="card">
             <div class="card-body">
-                <div class="message message--success align--center cms">
+                <div class="message message--success align-center cms">
                     <?php if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_PENDING) { ?>
                         <i class="fa fa-hourglass-1"></i>
                         <div class="section-head section-head-center">
@@ -15,7 +15,7 @@
                                         ?> </h2>
                             </div>
                         </div>
-                        <div class="block--empty text-center">
+                        <div class="block-empty text-center">
                             <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
                         </div>
 

@@ -56,13 +56,13 @@
 <?php if (!empty($faqs)) { ?>
     <section class="section section--faqs">
         <div class="container container--fixed">
-            <h3 class="align--center"><?php echo Labels::getLabel('Lbl_Frequently_Asked_Questions', $siteLangId); ?></h3>
+            <h3 class="align-center"><?php echo Labels::getLabel('Lbl_Frequently_Asked_Questions', $siteLangId); ?></h3>
             <div class="row">
                 <div class="container--faqs">
                     <?php $this->includeTemplate('_partial/faq-list.php', array('list' => $faqs, 'siteLangId' => $siteLangId, 'showViewAllButton' => true), false); ?>
                 </div>
                 <span class="gap"></span>
-                <div class="align--center">
+                <div class="align-center">
                     <a href="<?php echo UrlHelper::generateUrl('Custom', 'faq'); ?>" class="btn btn-brand btn--h-large"><?php echo Labels::getLabel('LBL_View_All', $siteLangId) ?></a>
                 </div>
             </div>

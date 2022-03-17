@@ -182,6 +182,10 @@
     &-foot {
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
+        @include media-breakpoint-up(lg) {
+            flex-direction: row;
+        }
     }
 
     .reviews-by {
@@ -232,12 +236,11 @@
 
 .rated-by {
     margin: 2rem 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
     @include media-breakpoint-up(lg) {
-        flex-direction: row;
-        align-items: center;
+        grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
     }
     &-item {
         border-radius: $radius-common;
