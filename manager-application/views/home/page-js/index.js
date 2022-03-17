@@ -39,6 +39,9 @@
 
 		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
+			if (typeof t.analyticsError != 'undefined' && t.analyticsError == 1) {
+				$('.topReferersJs').parent().find('select').hide();
+			}
 			$('.topReferersJs').html(t.html);
 		}, { fOutMode: 'json' });
 	};
@@ -49,6 +52,9 @@
 
 		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
+			if (typeof t.analyticsError != 'undefined' && t.analyticsError == 1) {
+				$('.topCountriesJs').parent().find('select').hide();
+			}
 			$('.topCountriesJs').html(t.html);
 		}, { fOutMode: 'json' });
 	};
@@ -83,6 +89,9 @@
 				var trafic = new google.visualization.PieChart(document.getElementById('piechart'));
 				trafic.draw(dataTraficSrc, optionsTraficSrc);
 			} else {
+				if (typeof t.analyticsError != 'undefined' && t.analyticsError == 1) {
+					$('#piechart').parent().parent().find('select').hide();
+				}
 				$('#piechart').html(t.html);
 			}
 		}, { fOutMode: 'json' });

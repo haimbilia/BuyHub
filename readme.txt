@@ -574,6 +574,14 @@ Updates/Fixes :
     => 062975 - Seller UI: "No Record Found" message is not showing if the seller trying to search the wrong record and the "invalid request" error is showing while trying to add the product's tags. 
     => 063079 - Admin UI: Json error is showing while uploading the banner under the collection section
     
+UAT points:
+    => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
+    => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
+    => Admin dashboard? Top search keywords > No records found message should be displayed
+    => Admin dashboard (Top referrers)? Verify the %age should be displayed or not. We can remove it when it's not required.
+    => Top Search Items replaced with Top Search Keywords
+    => Labels search issue when we have data with type 0
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

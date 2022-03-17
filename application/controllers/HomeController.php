@@ -958,7 +958,7 @@ class HomeController extends MyAppController
                     }
                     $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on'));
                     $shopObj->addOrder('ctr.ctr_display_order', 'ASC');
-
+                    
                     $rs = $shopObj->getResultSet();
                     $recordCount = $shopObj->recordCount();
                     if (empty($recordCount)) {

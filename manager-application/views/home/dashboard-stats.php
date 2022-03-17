@@ -3,12 +3,11 @@ switch (strtoupper($stats_type)) {
     case 'TOP_COUNTRIES': 
         if (null != $stats_info && array_key_exists('rows', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
             echo '<ul class="list-stats list-stats-double">';
-            foreach ($stats_info['rows'] as $key => $val) {
-                $cls = (1 >  $val['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success';
+            foreach ($stats_info['rows'] as $key => $val) {                
                 echo '<li class="list-stats-item">
                         <span class="label">' . $key . '</span>
                         <span class="value">
-                            <i class="icn fas ' . $cls . '"></i>' . $val['%age'] . '%</span>
+                            <i class="icn fas"></i>' . $val['%age'] . '%</span>
                     </li>';
             }
             echo '</ul>';
@@ -20,17 +19,16 @@ switch (strtoupper($stats_type)) {
     case 'TOP_REFERRERS':
         if (null != $stats_info && array_key_exists('rows', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
             echo '<ul class="list-stats list-stats-inline ">';
-            foreach ($stats_info['rows'] as $key => $val) {
-                $cls = (30 <  $val['visit']) ? 'fa-arrow-up font-success' : '';
+            foreach ($stats_info['rows'] as $key => $val) {                
                 echo '<li class="list-stats-item">
                     <span class="label">' . $key . '</span>
                     <span class="value">
-                        <i class="icn fas ' . $cls . '"></i>' . $val['visit'] . '%</span>
+                        <i class="icn fas"></i>' . $val['visit'] . '</span>
                 </li>';
             }
             echo '</ul>';
         } else {
-            echo Labels::getLabel('LBL_No_Record_Found', $siteLangId);
+            echo Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId);
         }
         break;
     case 'TRAFFIC_SOURCE':
@@ -45,7 +43,7 @@ switch (strtoupper($stats_type)) {
             $pieChatStats = rtrim($pieChatStats, ',');
             echo $pieChatStats .= "],['title','Traffic source']";
         } else {
-            echo  Labels::getLabel('LBL_No_Record_Found', $siteLangId);
+            echo  Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId);
         }
         break;
     case 'VISITORS_STATS':
@@ -68,7 +66,7 @@ switch (strtoupper($stats_type)) {
             $chatStats = rtrim($chatStats, ',');
             echo $chatStats .= "]";
         } else {
-            echo  Labels::getLabel('LBL_No_Record_Found', $siteLangId);
+            echo  Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId);
         }
         break;
     case 'TOP_PRODUCTS':
@@ -82,7 +80,7 @@ switch (strtoupper($stats_type)) {
                 echo '<li>' . $row['product_name'] . '<span class="count">' . $row['sold'] . ' sold</span></li>';
             }
         } else {
-            echo "<li>" . Labels::getLabel('LBL_No_Record_Found', $siteLangId) . "</li>";
+            echo "<li>" . Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId) . "</li>";
         }
 
         break;
@@ -94,17 +92,17 @@ switch (strtoupper($stats_type)) {
                 if ($count > 11) {
                     break;
                 }
-                $cls = (30 <  $row['search_count']) ? 'fa-arrow-up font-success' : '';
+                
                 $keyword = ($row['searchitem_keyword'] == '') ? 'Blank Search' : $row['searchitem_keyword'];
                 echo '<li class="list-stats-item">
                     <span class="label">' . $keyword . '</span>
                     <span class="value">
-                        <i class="icn fas ' . $cls . '"></i>' . $row['search_count'] . '</span>
+                        <i class="icn fas"></i>' . $row['search_count'] . '</span>
                 </li>';
             }
             echo '</ul>';
         } else {
-            echo Labels::getLabel('LBL_No_Record_Found', $siteLangId);
+            echo Labels::getLabel('LBL_NO_RECORD_FOUND', $siteLangId);
         }
         break;
 }
