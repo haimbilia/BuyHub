@@ -436,7 +436,7 @@ class FaqController extends ListingBaseController
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
 
-        $srch = Faq::getSearchObject($this->siteLangId);
+        $srch = Faq::getSearchObject($this->siteLangId, true);
         $srch->addMultipleFields(array('faq_id, IFNULL(faq_title, faq_identifier) as faq_title'));
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
@@ -449,6 +449,10 @@ class FaqController extends ListingBaseController
         if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
             $srch->addCondition('faq_id', 'NOT IN', array_keys($alreadyAdded));
         }
+
+        $srch->joinTable(FaqCategory::DB_TBL, 'LEFT OUTER JOIN', 'fc.faqcat_id = f.faq_faqcat_id', 'fc');
+        $srch->addCondition('fc.faqcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('fc.faqcat_active', '=', applicationConstants::ACTIVE);
 
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();

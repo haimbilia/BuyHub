@@ -1092,6 +1092,8 @@ class HomeController extends MyAppController
                     $faqSearchTempObj->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'faqcat_id = fc.' . FaqCategory::tblFld('id') . ' and fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'fc_l');
                     $faqSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'faq_id = ctr.ctr_record_id', 'ctr');
                     $faqSearchTempObj->addMultipleFields($attr);
+                    $faqSearchTempObj->addCondition('fc.faqcat_deleted', '=', applicationConstants::NO);
+                    $faqSearchTempObj->addCondition('fc.faqcat_active', '=', applicationConstants::ACTIVE);
                     $faqSearchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     //$faqSearchTempObj->addCondition('faq_id', 'IN', array_keys($faqIds));
                     $faqSearchTempObj->addGroupBy('faq_id');

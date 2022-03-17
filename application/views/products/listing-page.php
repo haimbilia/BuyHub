@@ -71,18 +71,20 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
             switch ($slideScreen['afile_screen']) {
                 case applicationConstants::SCREEN_MOBILE:
                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BRAND_IMAGE, $postedData['brand_id'], 0, 0, applicationConstants::SCREEN_MOBILE);
-                    $mobile_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
+                    $mobile_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE, 0, applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
                     break;
                 case applicationConstants::SCREEN_IPAD:
                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BRAND_IMAGE, $postedData['brand_id'], 0, 0, applicationConstants::SCREEN_IPAD);
-                    $tablet_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, 'TABLET', 0, applicationConstants::SCREEN_IPAD)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
+                    $tablet_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, ImageDimension::VIEW_TABLET, 0, applicationConstants::SCREEN_IPAD)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
                     break;
                 case applicationConstants::SCREEN_DESKTOP:
                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BRAND_IMAGE, $postedData['brand_id'], 0, 0, applicationConstants::SCREEN_DESKTOP);
-                    $desktop_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, 'DESKTOP', 0, applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
+                    $desktop_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'BrandImage', array($postedData['brand_id'], $siteLangId, ImageDimension::VIEW_DESKTOP, 0, applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
                     break;
             }
-        } ?>
+        }
+        
+        ?>
         <section class="bg-shop shop-banner">
             <picture>
                 <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
@@ -144,15 +146,17 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                         <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
-                            <?php } ?>
-                            <li class="page-sort-item">
-                                <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
-                                    <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
-                                    <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
-                                    </svg>
-                                </button>
-                            </li>
+                                <?php  if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
+                                    <li class="page-sort-item">
+                                        <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
+                                            <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
+                                            </svg>
+                                        </button>
+                                    </li>
+                                <?php } 
+                                } ?>
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                     </div>
@@ -175,30 +179,12 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
             );
             if (!isset($postedData['vtype']) || (isset($postedData['vtype']) && $postedData['vtype'] != "map")) { ?>
                 <div class="collection-listing filter-left">
-                    <aside class="collection-sidebar productFilters-js" id="collection-sidebar" data-close-on-click-outside="collection-sidebar">
+                    <aside class="collection-sidebar productFiltersJs"  data-close-on-click-outside="collection-sidebar">
                     </aside>
-                    <main class="collection-content">
-                        <?php
-                        if (false && isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
-                            <div class="interactive-stores">
-                                <div class="interactive-stores-map">
-                                    <div class="map-loader is-loading">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-                                            <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                                <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite">
-                                                </animateTransform>
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="canvas-map" id="productMap--js"> </div>
-                                </div>
-                                <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
-                            </div>
-                        <?php } else { ?>
-                            <div class="">
-                                <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
-                            </div>
-                        <?php } ?>
+                    <main class="collection-content">                      
+                        <div class="">
+                            <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
+                        </div>
                         <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
@@ -208,7 +194,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                 </div>
             <?php } ?>
         </div>
-
     </div>
     <?php
     if (isset($postedData['vtype']) && $postedData['vtype'] == "map") {

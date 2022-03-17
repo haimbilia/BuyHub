@@ -162,7 +162,7 @@ class User extends MyAppModel
     public static function getUserTypeHtml(int $langId, int $status): string
     {
         $arr = static::getUserTypesArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::USER_TYPE_BUYER:
                 $status = HtmlHelper::SUCCESS;

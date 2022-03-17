@@ -12,8 +12,13 @@ var cartReviewDiv = "#cart-review";
 var paymentDiv = "#payment";
 var financialSummary = ".summary-listing-js";
 
-function checkLogin() {
-    if (isUserLogged() == 0) {
+async function checkLogin() {
+    let ans = await $.ajax({
+        url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),       
+        dataType: "json",
+    });
+
+    if (parseInt(ans.isUserLogged) == 0) {
         loginPopUpBox();
         return false;
     }
@@ -47,13 +52,8 @@ function showAddressFormDiv(address_type) {
     }
 }
 function showAddressList() {
-    if (!checkLogin()) {
-        return false;
-    }
     loadAddressDiv();
     setCheckoutFlow("BILLING");
-    /* resetShippingSummary(); */
-    /* resetPaymentSummary(); */
 }
 function resetAddress(address_type) {
     loadAddressDiv(address_type);
@@ -179,11 +179,6 @@ $("document").ready(function () {
             if ($(".payment-js").hasClass("is-active") == false) {
                 setCheckoutFlow("BILLING");
             }
-            /* $(addressFormDiv).html( ans ).show(); */
-            /* $(addressWrapper).hide(); */
-            /* $(addressWrapperContainer).hide(); */
-            /* $(addressWrapper).hide(); */
-            /* $(addressFormDiv).addClass("is-current"); */
         });
     };
 
@@ -316,31 +311,24 @@ $("document").ready(function () {
                     loadFinancialSummary();
                     loadPaymentSummary();
                     setCheckoutFlow("PAYMENT");
-                    /* loadShippingSummary(); */
-                    /* loadCartReviewDiv(); */
                 }
             }
         );
     };
 
-    /* loadAddressDiv = function (addr_id) { */
     loadAddressDiv = function (address_type) {
-        /* $(addressDiv).html( fcom.getLoader()); */
-        /* fcom.ajax(fcom.makeUrl('Checkout', 'addresses'), '', function(ans) { */
-        /* 	$(addressDiv).html(ans); */
-        /* 	$('.section-checkout').removeClass('is-current'); */
-        /* 	$(addressDiv).addClass('is-current'); */
-        /* 	$(addressDiv).find(".address-"+addr_id +" label .radio").click(); */
-        /* }); */
+        fcom.displayProcessing();
         if (!checkLogin()) {
             return false;
         }
-        $(pageContent).html(fcom.getLoader());
+        $(pageContent).prepend(fcom.getLoader());
         if (typeof address_type == "undefined") {
             address_type = 0;
         }
         var data = "address_type=" + address_type;
         fcom.ajax(fcom.makeUrl("Checkout", "addresses"), data, function (ans) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             $(pageContent).html(ans);
             setCheckoutFlow("BILLING");
         });

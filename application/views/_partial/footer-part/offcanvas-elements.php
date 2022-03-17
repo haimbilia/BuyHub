@@ -14,8 +14,7 @@ if ($controllerName != 'Cart') {
         <h5 id="offcanvasRightLabel">Offcanvas right</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
-        Filter Right
+    <div class="offcanvas-body productFiltersJs">     
     </div>
 </div>
 

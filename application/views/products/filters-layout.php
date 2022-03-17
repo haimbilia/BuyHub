@@ -145,6 +145,6 @@
         </div> <?php
             } ?>
     <div class="filters">
-        <div class="filters__ele productFilters-js"></div>
+        <div class="filters__ele productFiltersJs"></div>
     </div>
 </aside>

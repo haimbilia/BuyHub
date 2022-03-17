@@ -336,7 +336,7 @@ class OrderReturnRequest extends MyAppModel
     public static function getStatusHtml(int $langId, int $status): string
     {
         $arr = self::getRequestStatusArr($langId);
-        $msg = $arr[$status];
+        $msg = $arr[$status] ?? Labels::getLabel('LBL_N/A', $langId);
         switch ($status) {
             case static::RETURN_REQUEST_STATUS_PENDING:
                 $status = HtmlHelper::INFO;
