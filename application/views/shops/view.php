@@ -5,7 +5,7 @@ $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop[
     <?php
     $this->includeTemplate('shops/_breadcrumb.php');
     $userParentId = (isset($userParentId)) ? $userParentId : 0;
-    $shopData = array_merge($data, array('template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId));
+    $shopData = array_merge($data, array('template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId, 'showBanner' => ($showBanner ?? false)));
     $this->includeTemplate('shops/templates/' . $template_id . '.php', $shopData, false);
     echo $this->includeTemplate('products/listing-page.php', $shopData, false);
     if (!empty($collectionData)) { ?>
