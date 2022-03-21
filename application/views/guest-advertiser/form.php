@@ -25,7 +25,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 <div class="row">
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_NAME', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_NAME', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_name'); ?></div>
             </div>
@@ -33,7 +33,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
     </div>
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover">
                     <?php
@@ -48,7 +48,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 <div class="row">
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_USERNAME', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_USERNAME', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_username'); ?></div>
             </div>
@@ -56,7 +56,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
     </div>
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_email'); ?></div>
             </div>
@@ -66,7 +66,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 <div class="row">
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_password'); ?></div>
                 <span class="form-text text-muted"><?php echo sprintf(
@@ -78,7 +78,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
     </div>
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"><?php echo Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId); ?> <span class="mandatory">*</span></label></div>
+            <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('password1'); ?></div>
             </div>
@@ -88,7 +88,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 <div class="row">
     <div class="col-md-6">
         <div class="field-set">
-            <div class="caption-wraper"><label class="field_label"></label></div>
+            <div class="caption-wraper"><label class="form-label"></label></div>
             <div class="field-wraper">
                 <div class="field_cover">
                     <?php echo $frm->getFieldHTML('user_id'); ?>

@@ -43,7 +43,7 @@ if (isset($prodcat_code)) {
     <div class="sidebar-widget">
         <div class="selected-filters-head">
             <h5> <?php echo Labels::getLabel('LBL_Filtered_by_:', $siteLangId); ?></h5>
-            <button type="button" class="btn btn-underline-black" id="resetAllJs" onClick="resetListingFilter()" style="display:none;">
+            <button type="button" class="link-underline link-underline-black" id="resetAllJs" onClick="resetListingFilter()" style="display:none;">
                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
             </button>
         </div>
@@ -219,7 +219,8 @@ if (isset($prodcat_code)) {
 
                 <?php if (count($brandsArr) >= 10) { ?>
                     <div class="view-all">
-                        <a href="javascript:void(0)" onClick="brandFilters()" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?> </a>
+                        <button type="button" onClick="brandFilters()" class="link-underline">
+                            <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?> </button>
                     </div>
                 <?php } ?>
             </div>
@@ -264,8 +265,8 @@ if (isset($prodcat_code)) {
                                                                                                                                                                                                                     echo "checked='true'";
                                                                                                                                                                                                                 } ?>>
                                 <?php if ($optionRow['option_is_color']  == 1) { ?>
-                                    <span class="color-dot">
-                                        <?php echo "#" . $optionRow['optionvalue_color_code']; ?> </span>
+                                    <span class="color-dot" style="background-color: <?php echo "#" . $optionRow['optionvalue_color_code']; ?>;">
+                                    </span>
                                 <?php  }  ?>
                                 <?php echo ($optionRow['optionvalue_name']) ? $optionRow['optionvalue_name'] : $optionRow['optionvalue_identifier']; ?>
                             </label>

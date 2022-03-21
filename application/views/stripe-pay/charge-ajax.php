@@ -150,7 +150,7 @@ if (!isset($error)) {
         <div class="col-md-12">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
+                    <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -164,7 +164,7 @@ if (!isset($error)) {
         <div class="col-md-12">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo Labels::getLabel('LBL_CARD_HOLDER_NAME', $siteLangId); ?></label>
+                    <label class="form-label"><?php echo Labels::getLabel('LBL_CARD_HOLDER_NAME', $siteLangId); ?></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -178,7 +178,7 @@ if (!isset($error)) {
         <div class="col-md-4">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
+                    <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -194,7 +194,7 @@ if (!isset($error)) {
         <div class="col-md-4">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
+                    <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -210,7 +210,7 @@ if (!isset($error)) {
         <div class="col-md-4">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
+                    <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -225,7 +225,7 @@ if (!isset($error)) {
         <div class="col-md-12">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"></label>
+                    <label class="form-label"></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">

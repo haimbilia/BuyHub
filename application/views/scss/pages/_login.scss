@@ -4,6 +4,9 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    @include media-breakpoint-up(md) {
+        align-items: center;
+    }
     .banner-side {
         background: #000;
         background-repeat: no-repeat;

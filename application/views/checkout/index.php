@@ -2,12 +2,11 @@
 <script>
     events.initiateCheckout();
 </script>
-
 <section class="section" data-content="">
     <div class="container">
         <div class="checkout-page">
             <main class="checkout-page_main checkout-content-js"> </main>
-            <aside class="checkout-page_aside sidebar" data-close-on-click-outside="">
+            <aside class="checkout-page_aside sidebar">
                 <div class="cart-total summary-listing-js">
                     <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
                 </div>
@@ -154,7 +153,7 @@
         </div>
     </div>
 </section>
-<button class="btn-summary" data-trigger="order-summary">
+<button class="btn-summary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
     <span class="btn-summary-text">
         <?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?>
         <svg class="svg arrow" width="16" height="16">
@@ -162,6 +161,18 @@
         </svg> </span>
     <span class="btn-summary-price" id="netAmountSummary"></span>
 </button>
+<!-- offcanvas-order-summary -->
+<div class="offcanvas offcanvas-start  offcanvas-order-summary" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <h3>Order summery data goes here</h3>
+
+    </div>
+</div>
+
 <input id="hasAddress" class="d-none" value="<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1 ?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

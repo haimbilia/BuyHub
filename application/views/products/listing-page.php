@@ -83,8 +83,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     break;
             }
         }
-        
-        ?>
+
+    ?>
         <section class="bg-shop shop-banner">
             <picture>
                 <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
@@ -143,14 +143,14 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                             </li>
                             <li class="page-sort-item">
                                 <?php echo $frmProductSearch->getFieldHtml('sortBy'); ?>
-                            </li>                          
+                            </li>
                             <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                                 <li class="page-sort-item">
                                     <button class="btn btn-outline-black btn-map-view <?php echo $vtype == 'map' ? 'active' : ''; ?>" type="button" onclick="toogleMapView();">
                                         <?php echo Labels::getLabel('LBL_MAP_VIEW', $siteLangId); ?> <span class="toggle-icon"></span>
                                     </button>
                                 </li>
-                                <?php  if ($vtype == "map") { ?>
+                                <?php if ($vtype == "map") { ?>
                                     <li class="page-sort-item">
                                         <button class="btn btn-outline-black btn-filters" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
                                             <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
@@ -160,8 +160,8 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                                             <span class="dot-count" id="mapFilterJs"></span>
                                         </button>
                                     </li>
-                                <?php } 
-                                } ?>
+                            <?php }
+                            } ?>
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                     </div>
@@ -184,9 +184,9 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
             );
             if ($vtype != "map") { ?>
                 <div class="collection-listing filter-left">
-                    <aside class="collection-sidebar productFiltersJs"  data-close-on-click-outside="collection-sidebar">
+                    <aside class="collection-sidebar productFiltersJs" data-close-on-click-outside="collection-sidebar">
                     </aside>
-                    <main class="collection-content">                      
+                    <main class="collection-content">
                         <div class="">
                             <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                         </div>

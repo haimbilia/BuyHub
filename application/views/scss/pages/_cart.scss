@@ -436,8 +436,8 @@
         margin: 0 auto;
         text-align: center;
         position: relative;
-        flex: 0 0 clamp(80px, 25%, 200px);
-        max-width: clamp(80px, 25%, 200px);
+        flex: 0 0 clamp(80px, 50%, 170px);
+        max-width: clamp(80px, 50%, 170px);
         @include media-breakpoint-up(lg) {
         }
         .products-img {

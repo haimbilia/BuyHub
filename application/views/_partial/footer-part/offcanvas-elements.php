@@ -142,7 +142,7 @@ if ($controllerName != 'Cart') {
 
 <!-- offcanvas-filters -->
 <div class="offcanvas offcanvas-end  offcanvas-filters" tabindex="-1" id="filters-right" aria-labelledby="filters-right">
-    <div class="offcanvas-header">       
+    <div class="offcanvas-header">
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body productFiltersJs">
@@ -150,7 +150,7 @@ if ($controllerName != 'Cart') {
 </div>
 
 <!-- offcanvas-account -->
-<div class="offcanvas offcanvas-account offcanvas-start" tabindex="-1" id="offcanvas-account">
+<div class="offcanvas offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Profile </h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -203,7 +203,7 @@ if ($controllerName != 'Cart') {
 </div>
 
 <!-- offcanvas-gps-location -->
-<div class="offcanvas offcanvas-gps-location offcanvas-bottom" tabindex="-1" id="offcanvas-gps-location">
+<div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"> </h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -263,6 +263,9 @@ if ($controllerName != 'Cart') {
         </div>
     </div>
 </div>
+
+
+
 
 <!-- Blog Search Form -->
 <?php $this->includeTemplate('_partial/footer-part/blog-search-form.php'); ?>

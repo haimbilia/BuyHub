@@ -3,9 +3,9 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('id', 'twocheckout');
 ?>
 <section class="payment-section">
-    <div class="payable-amount">            
+    <div class="payable-amount">
         <div class="payable-amount__head">
-            <div class="payable-amount--header">              
+            <div class="payable-amount--header">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
             <div class="payable-amount--decription">
@@ -14,28 +14,28 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                 <p><?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: <?php echo $orderInfo["invoice"]; ?></p>
             </div>
         </div>
-        <div class="payable-amount__body payment-from">                
+        <div class="payable-amount__body payment-from">
             <?php if ($paymentType == 'HOSTED') { /* Hosted Checkout */ ?>
                 <div class="payable-form__body">
                     <?php if (!isset($error)) : ?>
                         <p><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE..', $siteLangId) ?>:</p>
                         <?php
                         $btn = $frm->getField('btn_submit');
-                        if(null != $btn){
+                        if (null != $btn) {
                             $btn->setWrapperAttribute('class', 'd-none');
-                        }                                                
+                        }
                         echo $frm->getFormHtml(); ?>
                     <?php else : ?>
                         <div class="alert alert--danger"><?php echo $error; ?></div>
-                    <?php endif; ?>              
+                    <?php endif; ?>
                     <script type="text/javascript">
-                        $(function () {
-                            setTimeout(function () {
+                        $(function() {
+                            setTimeout(function() {
                                 $('form#twocheckout').submit();
                             }, 200);
                         });
                     </script>
-                </div>    
+                </div>
                 <?php
             } else { /* API Checkout */
                 if (!isset($error)) :
@@ -46,14 +46,14 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                     $frm->getField('expYear')->addFieldTagAttribute('id', 'expYear');
                     echo $frm->getFormTag();
                     echo $frm->getFieldHtml('token');
-                    ?>
+                ?>
                     <?php echo $frm->getFormTag(); ?>
                     <div class="payable-form__body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">
                                     <div class="caption-wraper">
-                                        <label class="field_label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
+                                        <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
@@ -68,7 +68,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                             <div class="col-6">
                                 <div class="field-set">
                                     <div class="caption-wraper">
-                                        <label class="field_label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
+                                        <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
@@ -80,7 +80,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                             <div class="col-6">
                                 <div class="field-set">
                                     <div class="caption-wraper">
-                                        <label class="field_label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
+                                        <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
@@ -88,13 +88,13 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                                         </div>
                                     </div>
                                 </div>
-                            </div>                        
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">
                                     <div class="caption-wraper">
-                                        <label class="field_label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
+                                        <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
@@ -102,20 +102,20 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
-                        <?php echo $frm->getExternalJs(); ?>                       
+                        <?php echo $frm->getExternalJs(); ?>
                         <div id="ajax_message"></div>
                     </div>
                     <div class="payable-form__footer">
                         <div class="row">
-                            <div class="col-md-6">                                    
+                            <div class="col-md-6">
                                 <?php
                                 $btn = $frm->getField('btn_submit');
                                 $btn->addFieldTagAttribute('class', 'btn btn-secondary');
                                 $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
                                 echo $frm->getFieldHtml('btn_submit');
-                                ?> 
+                                ?>
                             </div>
                             <div class="col-md-6 d-md-block d-none">
                                 <?php if (FatUtility::isAjaxCall()) { ?>
@@ -124,10 +124,10 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                                     </a>
                                 <?php } else { ?>
                                     <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
-                                <?php } ?>                        
+                                <?php } ?>
                             </div>
-                        </div>  
-                    </div>                     
+                        </div>
+                    </div>
                     </form>
                 <?php else : ?>
                     <div class="alert alert--danger"><?php echo $error ?></div>
@@ -142,17 +142,17 @@ $frm->setFormTagAttribute('id', 'twocheckout');
 <?php
 if ($paymentType != 'HOSTED') {
     if (!FatUtility::isAjaxCall()) {
-        ?>
+?>
         <script type="text/javascript" src="https://www.2checkout.com/checkout/api/2co.min.js"></script>
     <?php } ?>
     <script type="text/javascript">
-        $("#ccNo").keydown(function () {
+        $("#ccNo").keydown(function() {
             var obj = $(this);
             var cc = obj.val();
             obj.attr('class', 'p-cards');
             if (cc != '') {
                 var data = "cc=" + cc;
-                fcom.ajax(fcom.makeUrl('AuthorizeAimPay', 'checkCardType'), data, function (t) {
+                fcom.ajax(fcom.makeUrl('AuthorizeAimPay', 'checkCardType'), data, function(t) {
                     var ans = $.parseJSON(t);
                     var card_type = ans.card_type.toLowerCase();
                     obj.addClass('type-bg p-cards ' + card_type);
@@ -163,7 +163,7 @@ if ($paymentType != 'HOSTED') {
         var frmApiCheckout = '';
 
         // Called when token created successfully.
-        var successCallback = function (cdata) {
+        var successCallback = function(cdata) {
             var myForm = document.getElementById('twocheckout');
             // Set the token as the value for the token input
             myForm.token.value = cdata.response.token.token;
@@ -173,7 +173,7 @@ if ($paymentType != 'HOSTED') {
             data += '&outmode=json&is_ajax_request=yes';
 
             var action = $(myForm).attr('action');
-            fcom.ajax(action, data, function (response) {
+            fcom.ajax(action, data, function(response) {
                 try {
                     var json = $.parseJSON(response);
 
@@ -190,7 +190,7 @@ if ($paymentType != 'HOSTED') {
         };
 
         // Called when token creation fails.
-        var errorCallback = function (data) {
+        var errorCallback = function(data) {
             // Retry the token request if ajax call fails
             if (data.errorCode === 200) {
                 // This error code indicates that the ajax call failed. We recommend that you retry the token request.
@@ -201,7 +201,7 @@ if ($paymentType != 'HOSTED') {
             }
         };
 
-        var tokenRequest = function () {
+        var tokenRequest = function() {
             // Setup token request arguments
             var args = {
                 sellerId: "<?php echo $sellerId; ?>",
@@ -218,11 +218,10 @@ if ($paymentType != 'HOSTED') {
         // Pull in the public encryption key for our environment
         TCO.loadPubKey("<?php echo $transaction_mode; ?>");
 
-        $(document).on("submit", "#twocheckout", function (event) {
+        $(document).on("submit", "#twocheckout", function(event) {
             event.preventDefault();
             $(this).data('requestRunning', false);
             tokenRequest();
         });
     </script>
 <?php } ?>
-  

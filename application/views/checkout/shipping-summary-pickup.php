@@ -3,14 +3,15 @@
 <div id="shipping-summary" class="step">
     <ul class="review-block">
         <li class="review-block-item">
-            <div class="review-block__label">
-                <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
-                <div class="review-block__link">
-                    <button class="link-underline" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
+            <div class="review-block-head">
+                <h5 class="h5"> <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
+                </h5>
+                <div class="review-block-action">
+                    <button class="link-underline" type="button" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                 </div>
 
             </div>
-            <div class="review-block__content">
+            <div class="review-block-body">
                 <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
                     <?php if (strlen($addresses['addr_address2']) > 0) {
                         echo ", " . $addresses['addr_address2']; ?>
