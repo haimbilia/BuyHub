@@ -32,8 +32,7 @@ class BuyTogetherProductsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'buy-together-products/page-js/index.js']);
-        $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
-        $this->set('autoTableColumWidth', false);
+        $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);       
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -358,6 +357,31 @@ class BuyTogetherProductsController extends ListingBaseController
         CacheHelper::create('relatedProdsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
+    }
+
+
+     /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'product_name' => [
+                'width' => '25%'
+            ],
+            'upsell_products' => [
+                'width' => '65%'
+            ],            
+            'action' => [
+                'width' => '5%'
+            ],
+        ];
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function getDefaultColumns(): array

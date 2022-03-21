@@ -33,7 +33,6 @@ class RelatedProductsController extends ListingBaseController
 
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'related-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
-        $this->set('autoTableColumWidth', false);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -365,6 +364,30 @@ class RelatedProductsController extends ListingBaseController
         CacheHelper::create('relatedProdsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
+    }
+
+     /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'product_name' => [
+                'width' => '25%'
+            ],
+            'related_products' => [
+                'width' => '65%'
+            ],            
+            'action' => [
+                'width' => '5%'
+            ],
+        ];
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function getDefaultColumns(): array
