@@ -33,6 +33,7 @@ class VolumeDiscountController extends ListingBaseController
 
         $this->_template->addJs(['js/select2.js', 'volume-discount/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

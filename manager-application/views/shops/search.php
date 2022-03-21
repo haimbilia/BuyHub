@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'shop_name':
-                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId, 'onclick' => 'return false;'], false, true);
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId, 'onclick' => 'return false;', 'useFeatherLightJs' => 1], false, true);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'shop_featured':

@@ -33,6 +33,7 @@ class BuyTogetherProductsController extends ListingBaseController
         $this->getListingData();
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'buy-together-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
+        $this->includeFeatherLightJsCss();
         $this->set('autoTableColumWidth', false);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

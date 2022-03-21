@@ -51,6 +51,7 @@ class CustomProductsController extends ListingBaseController
 
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->addJs(array('custom-products/page-js/index.js', 'js/select2.js'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -115,14 +116,14 @@ class CustomProductsController extends ListingBaseController
             $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
         }
 
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);       
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
         if (0 < $recordId) {
             $srch->addCondition('preq_id', '=', $recordId);
         }
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name','credential_username','credential_email'));
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name', 'credential_username', 'credential_email'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -155,7 +156,7 @@ class CustomProductsController extends ListingBaseController
             );
             $records[] = $arr;
         }
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
@@ -203,7 +204,7 @@ class CustomProductsController extends ListingBaseController
             if ($productData && !empty($productData['preq_lang_data'])) {
                 $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
             }
-        }     
+        }
 
         if (empty($productData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -293,7 +294,7 @@ class CustomProductsController extends ListingBaseController
             }
         }
         $productData['upc_type'] = applicationConstants::YES;
-        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);        
+        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);
         if (!empty($productData['preq_ean_upc_code']) && count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
             $productData['upc_type'] = applicationConstants::NO;
         }
@@ -834,7 +835,7 @@ class CustomProductsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        
+
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
@@ -886,10 +887,10 @@ class CustomProductsController extends ListingBaseController
             $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
             $data['preq_content']['product_option_values'][] = $opValuesArr;
         }
-   
+
         unset(
             $post['options'],
-            $post['optionValues'],        
+            $post['optionValues'],
             $post['product_upcs'],
             $post['lang_id'],
             $post['record_id'],
@@ -1031,8 +1032,8 @@ class CustomProductsController extends ListingBaseController
 
         $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_'.$getImageDimensions['width'].'_x_'.$getImageDimensions['height'].'', $this->siteLangId) . '</small>';
-      
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_' . $getImageDimensions['width'] . '_x_' . $getImageDimensions['height'] . '', $this->siteLangId) . '</small>';
+
         $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
         $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
         $frm->addHiddenField('', 'preq_id', $preq_id);
@@ -1380,7 +1381,7 @@ class CustomProductsController extends ListingBaseController
         $frm->setRequiredStarWith('caption');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs','placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs', 'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ProductRequest::getStatusArr($this->siteLangId));
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -1460,7 +1461,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('downloadType', $post['download_type']);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-    }   
+    }
 
     protected function getFormColumns(): array
     {

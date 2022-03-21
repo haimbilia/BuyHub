@@ -50,6 +50,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
         $this->_template->addJs(['js/select2.js', 'order-cancellation-requests/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

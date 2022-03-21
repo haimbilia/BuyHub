@@ -29,6 +29,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_REFERENCE_NUMBER_OR_USER_DETAIL', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(['seller-approval-requests/page-js/index.js']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

@@ -31,6 +31,7 @@ class UserGdprRequestsController extends ListingBaseController
         $this->getListingData();
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->addJs(['js/select2.js', 'user-gdpr-requests/page-js/index.js']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

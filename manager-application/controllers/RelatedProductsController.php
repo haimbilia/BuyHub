@@ -33,6 +33,7 @@ class RelatedProductsController extends ListingBaseController
 
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'related-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
+        $this->includeFeatherLightJsCss();
         $this->set('autoTableColumWidth', false);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
