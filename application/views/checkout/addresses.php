@@ -1,95 +1,104 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $addressType == Address::ADDRESS_TYPE_BILLING || !$cartHasPhysicalProduct) {
+            echo Labels::getLabel('LBL_Billing_Address', $siteLangId);
+        } else {
+            echo Labels::getLabel('LBL_Delivery_Address', $siteLangId);
+        }
+        ?>
+    </h5>
+</div>
 
-<div class="step">
-    <form class="form">
-        <div class="step_section">
-            <div class="step_head">
-                <h5 class="step_title">
-                    <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $addressType == Address::ADDRESS_TYPE_BILLING || !$cartHasPhysicalProduct) {
-                        echo Labels::getLabel('LBL_Billing_Address', $siteLangId);
-                    } else {
-                        echo Labels::getLabel('LBL_Delivery_Address', $siteLangId);
-                    }
-                    ?>
-                </h5>
-                <button onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link-underline">
-                    <?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?>
-                </button>
-            </div>
-            <div class="step_body">
-                <?php if ($addresses) { ?>
-                    <ul class="list-addresses scroll scroll-y">
-                        <?php foreach ($addresses as $address) {
-                            $selected_shipping_address_id = (!$selected_shipping_address_id && $address['addr_is_default']) ? $address['addr_id'] : $selected_shipping_address_id; ?>
-                            <?php $checked = false;
-                            if ($addressType == 0 && $selected_shipping_address_id == $address['addr_id']) {
-                                $checked = true;
-                            }
-                            if ($addressType == Address::ADDRESS_TYPE_BILLING && $selected_billing_address_id == $address['addr_id']) {
-                                $checked = true;
-                            }
-                            ?>
-                            <li class="list-addresses-item addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : '' ?>">
-                                <label class="addresses" for="s-<?php echo $address['addr_id']; ?>">
-                                    <span class="radio addresses-checkbox">
-                                        <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?> name="shipping_address_id" value="<?php echo $address['addr_id']; ?>" type="radio" id="s-<?php echo $address['addr_id']; ?>">
-                                    </span>
-                                    <div class="addresses-detail">
-                                        <h5 class="h5">
-                                            <?php echo $address['addr_name']; ?><span class="tag"><?php echo ($address['addr_title'] != '') ? $address['addr_title'] : $address['addr_name']; ?></span>
-                                        </h5>
-                                        <p>
-                                            <?php echo $address['addr_address1']; ?>
-                                            <?php if (strlen($address['addr_address2']) > 0) {
-                                                echo ", " . $address['addr_address2']; ?>
+<form class="form">
+    <div class="modal-body">
+        <div class="step">
+            <div class="step_section">
+                <div class="step_head">
+                    <button onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?>
+                    </button>
+                </div>
+                <div class="step_body">
+                    <?php if ($addresses) { ?>
+                        <ul class="list-addresses scroll scroll-y">
+                            <?php foreach ($addresses as $address) {
+                                $selected_shipping_address_id = (!$selected_shipping_address_id && $address['addr_is_default']) ? $address['addr_id'] : $selected_shipping_address_id; ?>
+                                <?php $checked = false;
+                                if ($addressType == 0 && $selected_shipping_address_id == $address['addr_id']) {
+                                    $checked = true;
+                                }
+                                if ($addressType == Address::ADDRESS_TYPE_BILLING && $selected_billing_address_id == $address['addr_id']) {
+                                    $checked = true;
+                                }
+                                ?>
+                                <li class="list-addresses-item addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : '' ?>">
+                                    <label class="addresses" for="s-<?php echo $address['addr_id']; ?>">
+                                        <span class="radio addresses-checkbox">
+                                            <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?> name="shipping_address_id" value="<?php echo $address['addr_id']; ?>" type="radio" id="s-<?php echo $address['addr_id']; ?>">
+                                        </span>
+                                        <div class="addresses-detail">
+                                            <h5 class="h5">
+                                                <?php echo $address['addr_name']; ?><span class="tag"><?php echo ($address['addr_title'] != '') ? $address['addr_title'] : $address['addr_name']; ?></span>
+                                            </h5>
+                                            <p>
+                                                <?php echo $address['addr_address1']; ?>
+                                                <?php if (strlen($address['addr_address2']) > 0) {
+                                                    echo ", " . $address['addr_address2']; ?>
+                                                <?php } ?>
+                                            </p>
+                                            <p><?php echo $address['addr_city'] . ", " . $address['state_name'] . ", " . $address['country_name'] . ", " . $address['addr_zip']; ?>
+                                            </p>
+                                            <?php if (strlen($address['addr_phone']) > 0) {
+                                                $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                            ?>
+                                                <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                                             <?php } ?>
-                                        </p>
-                                        <p><?php echo $address['addr_city'] . ", " . $address['state_name'] . ", " . $address['country_name'] . ", " . $address['addr_zip']; ?>
-                                        </p>
-                                        <?php if (strlen($address['addr_phone']) > 0) {
-                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                        ?>
-                                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
-                                        <?php } ?>
-                                    </div>
-                                    <?php if (!commonhelper::isAppUser()) { ?>
-                                        <div class="addresses-actions">
-                                            <button class="btn btn-icon btn-addresses" type="button" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-
-                                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
-                                            </button>
-                                            <button class="btn btn-icon btn-addresses" type="button" onclick="removeAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-
-                                                <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                                            </button>
                                         </div>
-                                    <?php } ?>
-                                </label>
-                            </li>
-                        <?php } ?>
-                    </ul>
+                                        <?php if (!commonhelper::isAppUser()) { ?>
+                                            <div class="addresses-actions">
+                                                <button class="btn btn-icon btn-addresses" type="button" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
 
-                <?php } ?>
-            </div>
+                                                    <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                                                </button>
+                                                <button class="btn btn-icon btn-addresses" type="button" onclick="removeAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
 
-            <div class="step_foot">
-                <div class="checkout-actions">
-                    <?php
-                    $backJsFunc = 'goToBack();';
-                    $contiJsFunc = 'setUpAddressSelection();';
-                    if ($addressType == Address::ADDRESS_TYPE_BILLING) {
-                        $backJsFunc = 'loadPaymentSummary();';
-                        $contiJsFunc = 'setUpBillingAddressSelection(this);';
-                    }
-                    ?>
-                    <button class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
-                        <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-                    </button>
-                    <button class="btn btn-brand btn-wide" id="btn-continue-js" onclick="<?php echo $contiJsFunc; ?>">
-                        <?php echo Labels::getLabel('LBL_CONTINUE', $siteLangId); ?>
-                    </button>
+                                                    <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                                </button>
+                                            </div>
+                                        <?php } ?>
+                                    </label>
+                                </li>
+                            <?php } ?>
+                        </ul>
+
+                    <?php } ?>
+                </div>
+
+                <div class="step_foot">
+                    <div class="checkout-actions">
+                        <?php
+                        $backJsFunc = 'goToBack();';
+                        $contiJsFunc = 'setUpAddressSelection();';
+                        if ($addressType == Address::ADDRESS_TYPE_BILLING) {
+                            $backJsFunc = 'loadPaymentSummary();';
+                            $contiJsFunc = 'setUpBillingAddressSelection(this);';
+                        }
+                        ?>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+    <div class="modal-footer">
+        <div class="d-flex">
+            <button class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
+                <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
+            </button>
+            <button class="btn btn-brand btn-wide" id="btn-continue-js" onclick="<?php echo $contiJsFunc; ?>">
+                <?php echo Labels::getLabel('LBL_CONTINUE', $siteLangId); ?>
+            </button>
+        </div>
+    </div>
+</form>

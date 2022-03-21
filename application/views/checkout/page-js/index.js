@@ -317,19 +317,15 @@ $("document").ready(function () {
     };
 
     loadAddressDiv = function (address_type) {
-        fcom.displayProcessing();
-        if (!checkLogin()) {
-            return false;
-        }
-        $(pageContent).prepend(fcom.getLoader());
         if (typeof address_type == "undefined") {
             address_type = 0;
         }
+        fcom.displayProcessing();
         var data = "address_type=" + address_type;
         fcom.ajax(fcom.makeUrl("Checkout", "addresses"), data, function (ans) {
             fcom.removeLoader();
             fcom.closeProcessing();
-            $(pageContent).html(ans);
+            $.ykmodal(ans);
             setCheckoutFlow("BILLING");
         });
     };
