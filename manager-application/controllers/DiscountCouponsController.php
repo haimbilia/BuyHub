@@ -431,7 +431,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $this->_template->addJs(['js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
         $this->_template->addCss(['css/tagify.min.css']);
-        $this->_template->render();
+        $this->_template->render(true, true, NULL,false,false);
     }
 
     /* Coupon Type Subscription Purchase. */
