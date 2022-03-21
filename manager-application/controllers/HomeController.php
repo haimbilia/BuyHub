@@ -39,7 +39,7 @@ class HomeController extends ListingBaseController
 
                 $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
                 if (!$accountId) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('LBL_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT', $this->siteLangId));
                 } else {
                     $this->set('configuredAnalytics', true);
                 }
@@ -358,6 +358,9 @@ class HomeController extends ListingBaseController
             if (strtoupper($type) == 'TOP_PRODUCTS') {
                 $statsObj = new Statistics();
                 $result = $statsObj->getTopProducts($interval, $this->siteLangId, 10);
+            } else if (strtoupper($type) == 'TOP_SEARCH_KEYWORD') {
+                $statsObj = new Statistics();
+                $result = $statsObj->getTopSearchKeywords($interval, 10);
             } else {
                 try {
                     $analytics = new Ykart_analytics($analyticArr);
@@ -373,25 +376,25 @@ class HomeController extends ListingBaseController
                         case 'TOP_REFERRERS':
                             $result = $analytics->getTopReferrers($interval, 9);
                             break;
-                        case 'TOP_SEARCH_KEYWORD':
-                            //$result=$analytics->getSearchTerm($interval,9);
+                            /* case 'TOP_SEARCH_KEYWORD':
                             $statsObj = new Statistics();
                             $result = $statsObj->getTopSearchKeywords($interval, 10);
-                            break;
+                            break; */
                         case 'TRAFFIC_SOURCE':
                             $result = $analytics->getTrafficSource($interval);
                             break;
                         case 'VISITORS_STATS':
                             $result = $analytics->getVisitsByDate();
                             break;
-                        case 'TOP_PRODUCTS':
+                            /* case 'TOP_PRODUCTS':
                             $statsObj = new Statistics();
                             $result = $statsObj->getTopProducts($interval, $this->siteLangId, 10);
-                            break;
+                            break; */
                     }
                 } catch (exception $e) {
                     $str = "<li class='list-stats-item'>" . $e->getMessage() . "</li>";
                     $this->set('html', $str);
+                    $this->set('analyticsError', 1);
                     $this->_template->render(false, false, 'json-success.php', true, false);
                 }
             }

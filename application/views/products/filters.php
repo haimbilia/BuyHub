@@ -15,7 +15,7 @@ if (isset($prodcat_code)) {
 <?php if ($shopCatFilters) {
     $searchFrm->setFormTagAttribute('onSubmit', 'searchProducts(this); return(false);');
     $keywordFld = $searchFrm->getField('keyword');
-    $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Shop_Search', $siteLangId));
+    $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_PRODUCT_SEARCH', $siteLangId));
     // $keywordFld->htmlAfterField = '<input name="btnSrchSubmit" value="" type="submit" class="input-submit">';
     /*$keywordFld = $frmProductSearch->getField('keyword');
     $keywordFld->overrideFldType("hidden");*/ ?>
@@ -43,7 +43,7 @@ if (isset($prodcat_code)) {
     <div class="sidebar-widget">
         <div class="selected-filters-head">
             <h5> <?php echo Labels::getLabel('LBL_Filtered_by_:', $siteLangId); ?></h5>
-            <button type="button" class="btn btn-underline-black" id="resetAll" onClick="resetListingFilter()" style="display:none;">
+            <button type="button" class="btn btn-underline-black" id="resetAllJs" onClick="resetListingFilter()" style="display:none;">
                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
             </button>
         </div>
@@ -218,7 +218,7 @@ if (isset($prodcat_code)) {
 
 
                 <?php if (count($brandsArr) >= 10) { ?>
-                    <div class="text-right">
+                    <div class="view-all">
                         <a href="javascript:void(0)" onClick="brandFilters()" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?> </a>
                     </div>
                 <?php } ?>
@@ -430,31 +430,31 @@ if (isset($prodcat_code)) {
                             <?php
                             } ?>
 
-                             /* left side filters expand-collapse functionality [ */
-                             $('.span--expand').bind('click', function() {
-                                 $(this).parent('li.level').toggleClass('is-active');
-                                 $(this).toggleClass('is-active');
-                                 $(this).next('ul').toggle("");
-                             });
-                             $('.span--expand').click();
-                             /* ] */
+                            /* left side filters expand-collapse functionality [ */
+                            $('.span--expand').bind('click', function() {
+                                $(this).parent('li.level').toggleClass('is-active');
+                                $(this).toggleClass('is-active');
+                                $(this).next('ul').toggle("");
+                            });
+                            $('.span--expand').click();
+                            /* ] */
 
-                             updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
-                         });
+                            updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
+                        });
 
-                         $("#accordian li span.acc-trigger").on('click', function() {
-                             var link = $(this);
-                             var closest_ul = link.siblings("ul");
+                        $("#accordian li span.acc-trigger").on('click', function() {
+                            var link = $(this);
+                            var closest_ul = link.siblings("ul");
 
-                             if (link.hasClass("is-active")) {
-                                 closest_ul.slideUp();
-                                 link.removeClass("is-active");
-                             } else {
-                                 closest_ul.slideDown();
-                                 link.addClass("is-active");
-                             }
-                         });
-                         $('.dropdown-menu').on('click', function(e) {
-                             e.stopPropagation();
-                         });
-                     </script>
+                            if (link.hasClass("is-active")) {
+                                closest_ul.slideUp();
+                                link.removeClass("is-active");
+                            } else {
+                                closest_ul.slideDown();
+                                link.addClass("is-active");
+                            }
+                        });
+                        $('.dropdown-menu').on('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    </script>

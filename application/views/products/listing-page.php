@@ -157,6 +157,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
                                             </svg>
+                                            <span class="dot-count" id="mapFilterJs"></span>
                                         </button>
                                     </li>
                                 <?php } 

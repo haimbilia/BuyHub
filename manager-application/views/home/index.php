@@ -40,12 +40,12 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
-                                        <?php echo Labels::getLabel('NAV_AFFILIATE_SIGNUPS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
-                                        <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_AFFILIATE_SIGNUPS', $siteLangId); ?>
                                     </a>
                                 </li>
                             </ul>
@@ -63,12 +63,11 @@
                                 <div class="statistics" id="monthlySignupsJs"> </div>
                             </div>
                             <div class="tab-pane" id="tabs_4">
-                                <div class="statistics" id="monthlyAffiliateSignupsJs"> </div>
-                            </div>
-                            <div class="tab-pane" id="tabs_5">
                                 <div class="statistics" id="monthlyProductsJs"> </div>
                             </div>
-
+                            <div class="tab-pane" id="tabs_5">
+                                <div class="statistics" id="monthlyAffiliateSignupsJs"> </div>
+                            </div>
                         </div>
                     </div>
 
@@ -100,27 +99,23 @@
                         <ul class="list-stats list-stats-double">
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                <span class="value">                                    
                                     <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['reached_checkout']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                <span class="value">                                   
                                     <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                <span class="value">                                    
                                     <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>
 
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (0 < $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                <span class="value">                                    
                                     <?php echo $dashboardInfo['conversionStats']['cancelled']['%age']; ?>%</span>
 
                             </li>
@@ -142,26 +137,22 @@
                             <ul class="list-stats list-stats-double">
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Today', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['today']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                    <span class="value">                                        
                                         <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Weekly', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['weekly']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                    <span class="value">                                        
                                         <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['lastMonth']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                    <span class="value">                                        
                                         <?php echo $dashboardInfo['visitsCount']['lastMonth'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['last3Month']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                    <span class="value">                                        
                                         <?php echo $dashboardInfo['visitsCount']['last3Month'] ?></span>
                                 </li>
 
@@ -264,7 +255,7 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SEARCH_ITEMS', $siteLangId); ?> </h3>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SEARCH_KEYWORDS', $siteLangId); ?> </h3>
                         </div>
                         <div class="card-head-toolbar">
                             <select class="form-select form-select-sm" onChange="getTopSearchKeyword(this.value)">

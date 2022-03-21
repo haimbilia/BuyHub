@@ -1766,4 +1766,5 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = 1;
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_You_need_to_create_private_products_in_order_to_add_tags";
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_ORDER_ID', 1, 'Order ID', 1)
-ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+update `tbl_collections` set `collection_primary_records` = 5 WHERE `collection_primary_records` <= 0

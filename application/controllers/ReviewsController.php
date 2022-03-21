@@ -170,6 +170,14 @@ class ReviewsController extends MyAppController
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
+            $this->set('userParentId', $userParentId);
+        }
+        if (UserAuthentication::isUserLogged()) {
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
+            $this->set('userParentId', $userParentId);
         }
         
         /* sub query to find out that logged user have marked current shop as favorite or not[ */

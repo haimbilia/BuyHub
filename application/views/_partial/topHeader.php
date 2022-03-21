@@ -123,33 +123,32 @@
                             <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
                             <li class="quick-nav-item item-desktop">
                                 <button type="button" class="quick-nav-link button-store">
-                                    <i class="icn">
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#wishlist">
-                                            </use>
-                                        </svg>
-                                    </i>
+
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#wishlist">
+                                        </use>
+                                    </svg>
+
                                     <span class="txt" onclick="wishlistBox()"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
                                 <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
-                                    <i class="icn">
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
-                                            </use>
-                                        </svg>
-                                    </i>
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                                        </use>
+                                    </svg>
+
                                 </button>
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item">
                                     <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
-                                        <i class="icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
-                                            </svg>
-                                        </i>
+
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
+                                        </svg>
+
                                         <span class="cart-qty">
                                             <?php
                                             $cartObj = new Cart();
@@ -172,12 +171,12 @@
                     <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>
                     <div class="main-search">
                         <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
-                            <i class="icn">
-                                <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
-                                    </use>
-                                </svg>
-                            </i>
+
+                            <svg class="svg" width="20" height="20">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                                </use>
+                            </svg>
+
                         </button>
                     </div>
                 </div>
@@ -194,6 +193,18 @@
                 </svg>
                 <span class="txt">Home</span>
             </a>
+        </li>
+        <li class="mobile-actions-item" role="none">
+            <button type="button" class="mobile-actions-link btn-open first">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
+                    </use>
+                </svg>
+                <span class="txt">Open!</span>
+            </button>
+
+
+
         </li>
         <li class="mobile-actions-item active" role="none">
             <button class="mobile-actions-link btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">

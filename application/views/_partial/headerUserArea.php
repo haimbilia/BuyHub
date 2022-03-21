@@ -29,11 +29,9 @@ if (!UserAuthentication::isUserLogged()) {
         <li class="quick-nav-item">
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
-                    <i class="icn">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
-                        </svg>
-                    </i>
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                    </svg>
                     <span class="txt">
                         <?php echo Labels::getLabel('LBL_Account', $siteLangId); ?> </span>
                 </button>
@@ -66,11 +64,9 @@ if (!UserAuthentication::isUserLogged()) {
     <li class="quick-nav-item item-desktop">
         <div class="dropdown">
             <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
-                <i class="icn">
-                    <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
-                    </svg>
-                </i>
+                <svg class="svg" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                </svg>
                 <span class="txt">
                     <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span>
             </button>
