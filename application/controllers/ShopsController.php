@@ -294,6 +294,7 @@ class ShopsController extends MyAppController
             $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js'));
         }
 
+        $this->set('showBanner', true);
         $this->_template->render();
     }
 
@@ -349,7 +350,7 @@ class ShopsController extends MyAppController
             array(
                 'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
                 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite'
+                'IFNULL(ufs.ufs_id, 0) as is_favorite','u_cred.credential_username as shop_owner_username','u.user_name as shop_owner_name',
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
@@ -658,7 +659,7 @@ class ShopsController extends MyAppController
         $frm->fill($frmData);
         $this->set('frm', $frm);
         $this->set('loggedUserData', $loggedUserData);
-        $this->set('shop', $shop);
+        //$this->set('shop', $shop);
         $this->_template->render();
     }
 
@@ -765,8 +766,7 @@ class ShopsController extends MyAppController
 
         $frm = $this->getReportSpamForm($this->siteLangId);
         $frm->fill(array('shop_id' => $shop_id));
-        $this->set('frm', $frm);
-        $this->set('shop', $shop);
+        $this->set('frm', $frm);       
         $this->set('template_id', SHOP::TEMPLATE_ONE);
         $this->_template->render();
     }
