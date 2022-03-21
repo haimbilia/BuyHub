@@ -58,7 +58,7 @@
                             <?php
                             $warrantTypes = Product::getWarrantyUnits($langId);
                             ?>
-                            <label class="label"><?php echo $fld->getCaption(); ?></label>
+                            <label class="label"><?php echo $fld->getCaption(); ?><span class="spn_must_field">*</span></label>
                             <div class="input-group">
                                 <?php echo $fld->getHtml(); ?>
                                 <div class="input-group-append">

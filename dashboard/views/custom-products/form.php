@@ -238,14 +238,14 @@ if (0 < $recordId) {
                     </div>
                 </div>
                 <div class="card card-toggle" id="tax-shipping">
-                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                    <div class="card-head dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="true" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                             </h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="collapse" id="stock-block4">
+                    <div class="collapse show" id="stock-block4">
                         <div class="card-body">
                             <div class="row">
                                 <?php
