@@ -19,12 +19,13 @@ $header-height: 122px;
         }
     }
     .top-bar {
-        @include media-breakpoint-up(lg) {
-            border-bottom: $border;
-        }
-        padding: 0;
+        padding: 10px 0;
         fill: currentColor;
         transition: all 300ms linear 0s;
+        @include media-breakpoint-up(lg) {
+            border-bottom: $border;
+            padding: 0;
+        }
         &__inner {
             display: grid;
             align-items: center;

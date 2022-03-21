@@ -194,6 +194,18 @@
                 <span class="txt">Home</span>
             </a>
         </li>
+        <li class="mobile-actions-item" role="none">
+            <button type="button" class="mobile-actions-link btn-open first">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
+                    </use>
+                </svg>
+                <span class="txt">Open!</span>
+            </button>
+
+
+
+        </li>
         <li class="mobile-actions-item active" role="none">
             <button class="mobile-actions-link btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">
                 <svg class="svg" width="24" height="24">
