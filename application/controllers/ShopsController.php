@@ -287,6 +287,7 @@ class ShopsController extends MyAppController
             }
         }
         /* Shop and SelProd Badge */   
+        $data['pageTitle'] = Labels::getLabel('LBL_SHOP_PRODUCTS', $this->siteLangId);
         $this->set('data', $data);
 
         if (false === MOBILE_APP_API_CALL) {
@@ -491,13 +492,13 @@ class ShopsController extends MyAppController
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
             'recordId' => $shop_id,
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
-            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        $data = array_merge($data, $arr);
-        $this->set('data', $data);
+        $data = array_merge($data, $arr);       
 
         if (FatUtility::isAjaxCall()) {
+            $this->set('data', $data);
             $this->set('products', $data['products']);
             $this->set('page', $data['page']);
             $this->set('pageCount', $data['pageCount']);
@@ -508,6 +509,10 @@ class ShopsController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
+
+        $data['pageTitle'] =  Labels::getLabel('LBL_SHOP_TOP_PRODUCTS', $this->siteLangId);
+
+        $this->set('data', $data);
 
         $this->includeProductPageJsCss();
         $this->_template->addJs('js/slick.min.js');
