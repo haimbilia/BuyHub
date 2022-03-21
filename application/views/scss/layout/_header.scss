@@ -143,15 +143,16 @@ $header-height: 122px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    grid-gap: 1rem;
+
     @include media-breakpoint-up(lg) {
+        grid-gap: 3rem;
     }
     &-item {
         display: block;
         padding: 0;
         position: relative;
-        @include media-breakpoint-up(lg) {
-            margin-#{$start-direction}: 3.2rem;
-        }
+
         &.item-desktop {
             display: none;
             @include media-breakpoint-up(lg) {

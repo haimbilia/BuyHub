@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop['shop_id'], $siteLangId, 0, 0, $template_id));
 ?>
-<div id="body" class="body template-<?php echo $template_id; ?>">    
+<div id="body" class="body template-<?php echo $template_id; ?>">
     <?php
     $this->includeTemplate('shops/_breadcrumb.php');
     $userParentId = (isset($userParentId)) ? $userParentId : 0;
     $shopData = array_merge($data, array('template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId));
-    $this->includeTemplate('shops/templates/' . $template_id . '.php', $shopData, false);   
+    $this->includeTemplate('shops/templates/' . $template_id . '.php', $shopData, false);
     echo $this->includeTemplate('products/listing-page.php', $shopData, false);
     if (!empty($collectionData)) { ?>
         <section class="section pt-0">
