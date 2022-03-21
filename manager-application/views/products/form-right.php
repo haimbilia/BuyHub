@@ -98,8 +98,8 @@
                 <thead class="tableHeadJs">
                     <tr>
                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                        <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                        <th class="align-right" width="10%"></th>
+                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                        <th class="align-right" width="20%"></th>
                     </tr>
                 </thead>
                 <tbody>

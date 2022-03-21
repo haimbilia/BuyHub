@@ -121,9 +121,9 @@ if (0 < $recordId) {
                             <table class="table listingTableJs" id="variantsJs">
                                 <thead class="tableHeadJs">
                                     <tr>
-                                        <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                        <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                        <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                        <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                        <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
