@@ -46,7 +46,7 @@ if (isset($prodcat_code)) {
             <button type="button" class="btn btn-underline-black" id="resetAllJs" onClick="resetListingFilter()" style="display:none;">
                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
             </button>
-        </div>        
+        </div>
         <div class="selected-filters" id="filters">
         </div>
     </div>
@@ -430,31 +430,31 @@ if (isset($prodcat_code)) {
                             <?php
                             } ?>
 
-                             /* left side filters expand-collapse functionality [ */
-                             $('.span--expand').bind('click', function() {
-                                 $(this).parent('li.level').toggleClass('is-active');
-                                 $(this).toggleClass('is-active');
-                                 $(this).next('ul').toggle("");
-                             });
-                             $('.span--expand').click();
-                             /* ] */
+                            /* left side filters expand-collapse functionality [ */
+                            $('.span--expand').bind('click', function() {
+                                $(this).parent('li.level').toggleClass('is-active');
+                                $(this).toggleClass('is-active');
+                                $(this).next('ul').toggle("");
+                            });
+                            $('.span--expand').click();
+                            /* ] */
 
-                             updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
-                         });
+                            updatePriceFilter(<?php echo floor($priceArr['minPrice']); ?>, <?php echo ceil($priceArr['maxPrice']); ?>);
+                        });
 
-                         $("#accordian li span.acc-trigger").on('click', function() {
-                             var link = $(this);
-                             var closest_ul = link.siblings("ul");
+                        $("#accordian li span.acc-trigger").on('click', function() {
+                            var link = $(this);
+                            var closest_ul = link.siblings("ul");
 
-                             if (link.hasClass("is-active")) {
-                                 closest_ul.slideUp();
-                                 link.removeClass("is-active");
-                             } else {
-                                 closest_ul.slideDown();
-                                 link.addClass("is-active");
-                             }
-                         });
-                         $('.dropdown-menu').on('click', function(e) {
-                             e.stopPropagation();
-                         });
-                     </script>
+                            if (link.hasClass("is-active")) {
+                                closest_ul.slideUp();
+                                link.removeClass("is-active");
+                            } else {
+                                closest_ul.slideDown();
+                                link.addClass("is-active");
+                            }
+                        });
+                        $('.dropdown-menu').on('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    </script>

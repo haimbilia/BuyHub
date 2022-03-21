@@ -76,9 +76,24 @@
 }
 
 .collection-content {
+    position: relative;
     flex-basis: 0;
     flex-grow: 1;
     max-width: 100%;
+}
+
+.btn-filters {
+    .dot-count {
+        width: 10px;
+        height: 10px;
+
+        background: $secondary-color;
+        display: block;
+        position: absolute;
+        #{$end-direction}: -3px;
+        top: -3px;
+        border-radius: 20px;
+    }
 }
 
 .collection-pager {
@@ -509,39 +524,8 @@
         }
     }
 }
-
 .product-search {
-    margin: 0 auto;
-    margin-bottom: 15px;
-    .form {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border: $border;
-        border-radius: $radius4;
-        input[type="text"] {
-            flex: 1;
-            background: none;
-            border: none;
-            &:focus {
-                box-shadow: none;
-            }
-        }
-    }
-    .input-submit {
-        background: url(images/retina/magni-gray.svg) no-repeat center;
-        background-size: 20px auto;
-        width: 40px;
-        height: 40px;
-        min-width: inherit;
-        border: none;
-        padding: 0;
-        margin: 0;
-        &:hover {
-            box-shadow: none;
-            outline: 0;
-        }
-    }
+    margin-bottom: 2rem;
 }
 
 .reset-all {
