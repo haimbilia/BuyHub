@@ -120,7 +120,7 @@
                     <div class="top-bar__right">
                         <ul class="quick-nav">
                             <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
-                            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
+                            <?php $this->includeTemplate('_partial/headerUserArea.php',['layoutType' => applicationConstants::SCREEN_DESKTOP] ); ?>
                             <li class="quick-nav-item item-desktop">
                                 <button type="button" class="quick-nav-link button-store">
 
