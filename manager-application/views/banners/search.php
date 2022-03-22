@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
             case 'banner_img':
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
                 $getBannerRatio = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_MINI_THUMB);
-                $img = '<img data-aspect-ratio = "'.$getBannerRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'].'" width="'.$getBannerRatio['width'].'" height="'.$getBannerRatio['height'].'"  src="' . UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
+                $img = '<a href="' . UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT), CONF_WEBROOT_FRONT_URL)) . '" data-featherlight="image"><img data-aspect-ratio = "' . $getBannerRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" width="' . $getBannerRatio['width'] . '" height="' . $getBannerRatio['height'] . '"  src="' . UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" /></a>';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'banner_target':
@@ -45,9 +45,9 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onclick' => 'editRecord('.$row['banner_id'].','.$row['banner_blocation_id'].');'];
+                    $data['editButton'] = ['onclick' => 'editRecord(' . $row['banner_id'] . ',' . $row['banner_blocation_id'] . ');'];
                 }
-             
+
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

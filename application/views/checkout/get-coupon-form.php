@@ -1,20 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
-if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
-    <div class="alert alert--success">
-        <a href="javascript:void(0)" class="btn-close" onClick="removePromoCode()"></a>
-        <p><?php echo Labels::getLabel('LBL_Promo_Code', $siteLangId); ?>
-            <strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong>
-            <?php echo Labels::getLabel('LBL_Successfully_Applied', $siteLangId); ?>
-        </p>
-    </div>
-<?php } ?>
 
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Apply_Promo_Coupons', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
     <?php
+    if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
+        <div class="alert alert--success">
+            <a href="javascript:void(0)" class="btn-close" onClick="removePromoCode()"></a>
+            <p><?php echo Labels::getLabel('LBL_Promo_Code', $siteLangId); ?>
+                <strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong>
+                <?php echo Labels::getLabel('LBL_Successfully_Applied', $siteLangId); ?>
+            </p>
+        </div>
+    <?php }
+    
     $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-5');
     $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
     $fld = $PromoCouponsFrm->getField('coupon_code');

@@ -35,6 +35,7 @@ class SpecialPriceController extends ListingBaseController
 
         $this->_template->addJs(['js/select2.js', 'special-price/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -81,19 +82,19 @@ class SpecialPriceController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name'
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name', 'IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name'
             )
         );
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
-        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet()); 
-        $this->set("arrListing", $arrListing);  
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $arrListing);
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -114,7 +115,7 @@ class SpecialPriceController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

@@ -65,7 +65,7 @@ class BadgesController extends ListingBaseController
 
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'badges/page-js/index.js']);
         $this->_template->addCss(['css/cropper.css']);
-
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -298,7 +298,7 @@ class BadgesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('ratioJs',$ratioJs);
+        $this->set('ratioJs', $ratioJs);
         $this->set('displayFooterButtons', false);
         $this->set('getBadgeDimensions', $getBadgeDimensions);
         $this->set('activeGentab', false);

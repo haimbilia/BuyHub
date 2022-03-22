@@ -30,7 +30,10 @@ foreach ($arrListing as $sn => $row) {
                 $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, ImageDimension::VIEW_THUMB);
                 $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, $siteLangId);
                 $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                $td->appendElement('img', ['data-aspect-ratio' => $getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'], 'src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
+
+                $imgA = $td->appendElement('a', ['href' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_ORIGINAL, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'data-featherlight' => 'image'], '', true);
+
+                $imgA->appendElement('img', ['data-aspect-ratio' => $getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'], 'src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
                 $statusHtm = Badge::getApprovalTypeHtml($siteLangId, $row[$key], $row[Badge::DB_TBL_PREFIX . 'trigger_type']);
@@ -67,15 +70,15 @@ foreach ($arrListing as $sn => $row) {
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
-            default : 
+            default:
                 $td->appendElement('plaintext', [], $row[$key], true);
-            break;
+                break;
         }
     }
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

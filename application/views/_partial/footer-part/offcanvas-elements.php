@@ -150,57 +150,12 @@ if ($controllerName != 'Cart') {
 </div>
 
 <!-- offcanvas-account -->
-<div class="offcanvas offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Profile </h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-        <div class="profile">
-            <div class="profile-image">
-                <img class="profile-avatar" width="80" height="80" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="">
-            </div>
-            <div class="profile-data">
-                <h6 class="profile-name">Hi, Michael Williams </h6>
-                <p class="profile-email">pawan.kumar.dz@ablysoft.com</p>
-                <p class="profile-phone">+91 9888881405</p>
-            </div>
 
-        </div>
-
-        <ul class="account-nav">
-            <li class="account-nav-item">
-                <a class="account-nav-link" href="">Orders <i class="icon icon-arrow-right"></i></a>
-            </li>
-            <li class="account-nav-item">
-                <a class="account-nav-link" href="">Offers & Rewards <i class="icon icon-arrow-right"></i></a>
-            </li>
-            <li class="account-nav-item">
-                <a class="account-nav-link" href="">General <i class="icon icon-arrow-right"></i></a>
-            </li>
-            <li class="account-nav-item">
-                <a class="account-nav-link" href="">Profile <i class="icon icon-arrow-right"></i></a>
-            </li>
-            <li class="account-nav-item">
-                <a class="account-nav-link" href=""> Language <i class="icon icon-arrow-right"></i></a>
-            </li>
-            <li class="account-nav-item">
-                <a class="account-nav-link" href=""> Currency <i class="icon icon-arrow-right"></i></a>
-            </li>
-
-        </ul>
-    </div>
-    <div class="offcanvas-foot">
-        <button class="btn btn-logout" type="button">
-            <i class="icn">
-                <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">
-                    </use>
-                </svg>
-            </i>
-            logout</button>
-    </div>
-</div>
+<?php
+if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
+    $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
+}
+?>
 
 <!-- offcanvas-gps-location -->
 <div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">

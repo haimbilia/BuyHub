@@ -33,6 +33,8 @@ class BrandsController extends ListingBaseController
 
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'brands/page-js/index.js']);
+        $this->includeFeatherLightJsCss();
+        
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

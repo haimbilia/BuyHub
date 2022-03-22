@@ -350,11 +350,11 @@ class BadgeLinkConditionsController extends ListingBaseController
             $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
 
             if (1 > $this->badgeLinkCondId) {
-                $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_SELLER', $this->siteLangId)]);
-                $fld->requirement->setRequired(true);
-
                 $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_RECORD_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr, '', [], '');
+                $fld->requirement->setRequired(true);
+
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'blinkcond_user_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_SELLER', $this->siteLangId)]);
                 $fld->requirement->setRequired(true);
             }
 
@@ -627,7 +627,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         $obj = new BadgeLinkCondition($recordId);
         if (!$obj->deleteRecord(false)) {
             LibHelper::exitWithError($obj->getError(), true);

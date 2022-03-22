@@ -33,7 +33,7 @@ class BuyTogetherProductsController extends ListingBaseController
         $this->getListingData();
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'buy-together-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
-        $this->set('autoTableColumWidth', false);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -52,6 +52,7 @@ class BuyTogetherProductsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $fields = $this->getFormColumns();
+        $this->setCustomColumnWidth();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
 
@@ -301,8 +302,8 @@ class BuyTogetherProductsController extends ListingBaseController
         if ($recordId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
-        $this->markAsDeleted($recordId);        
+
+        $this->markAsDeleted($recordId);
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -358,6 +359,31 @@ class BuyTogetherProductsController extends ListingBaseController
         CacheHelper::create('relatedProdsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
+    }
+
+
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'listSerial' => [
+                'width' => '5%'
+            ],
+            'product_name' => [
+                'width' => '25%'
+            ],
+            'upsell_products' => [
+                'width' => '65%'
+            ],
+            'action' => [
+                'width' => '5%'
+            ],
+        ];
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     protected function getDefaultColumns(): array

@@ -112,7 +112,7 @@ class BadgeLinkCondition extends MyAppModel
     public static function getConditionTypeHtml(int $langId, int $type): string
     {
         $arr = self::getConditionTypesArr($langId);
-        $msg = $arr[$type];
+        $msg = $arr[$type] ?? '';
         switch ($type) {
             case self::COND_TYPE_AVG_RATING_SHOP:
                 $status = 'warning';

@@ -31,6 +31,7 @@ class DeletedUsersController extends ListingBaseController
 
         $this->_template->addJs(array('js/select2.js', 'deleted-users/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
