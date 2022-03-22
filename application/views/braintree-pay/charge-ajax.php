@@ -14,7 +14,7 @@ if (!isset($error)) : ?>
         <div class="col-md-12">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"></label>
+                    <label class="form-label"></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
@@ -111,7 +111,7 @@ if (!isset($error)) : ?>
             }
         };
 
-        $(function () {
+        $(function() {
             var paymentAmount = "<?php echo $paymentAmount; ?>";
             var currencyCode = "<?php echo $currencyCode; ?>";
             var clientToken = "<?php echo $clientToken; ?>";

@@ -573,6 +573,7 @@ Updates/Fixes :
     => 062986 - Seller UI: "Invalid error" is showing under the language data section while adding the options value, the continuous loader is showing while adding/editing the options and their values and previously added data is showing while adding the new options
     => 062975 - Seller UI: "No Record Found" message is not showing if the seller trying to search the wrong record and the "invalid request" error is showing while trying to add the product's tags. 
     => 063079 - Admin UI: Json error is showing while uploading the banner under the collection section
+    => 063178 - Admin UI: The "recent requests" is not showing on the top of the table under the cancellation request and the "update status" design is not the same on the "return request and cancel request page".
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

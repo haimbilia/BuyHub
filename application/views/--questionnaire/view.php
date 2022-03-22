@@ -27,7 +27,7 @@ $formFields = $frm->getAllFields();
                                     <div class="col-md-4">
                                         <div class="field-set">
                                             <div class="caption-wraper">
-                                                <label class="field_label"><?php echo Labels::getLabel('Lbl_Name', $siteLangId); ?>
+                                                <label class="form-label"><?php echo Labels::getLabel('Lbl_Name', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>
                                             </div>
                                             <div class="field-wraper">
@@ -41,7 +41,7 @@ $formFields = $frm->getAllFields();
                                     <div class="col-md-4">
                                         <div class="field-set">
                                             <div class="caption-wraper">
-                                                <label class="field_label"><?php echo Labels::getLabel('Lbl_Email', $siteLangId); ?>
+                                                <label class="form-label"><?php echo Labels::getLabel('Lbl_Email', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>
                                             </div>
                                             <div class="field-wraper">
@@ -55,7 +55,7 @@ $formFields = $frm->getAllFields();
                                     <div class="col-md-4">
                                         <div class="field-set">
                                             <div class="caption-wraper">
-                                                <label class="field_label"><?php echo Labels::getLabel('Lbl_Gender', $siteLangId); ?>
+                                                <label class="form-label"><?php echo Labels::getLabel('Lbl_Gender', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>
                                             </div>
                                             <div class="field-wraper">

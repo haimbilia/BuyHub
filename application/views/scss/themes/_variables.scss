@@ -12,10 +12,13 @@ $black: #000;
 //dynamic theme colors
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
+
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
-$secondary-color: #0795e6;
-$secondary-color-inverse: #fff;
+
+$secondary-color: var(--secondary-color);
+$secondary-color-inverse: var(--secondary-color-inverse);
+
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
 

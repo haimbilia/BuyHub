@@ -1966,8 +1966,7 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'taxrule_id', 0);
         $fld = $frm->addFloatField(Labels::getLabel('FRM_TAX_RATE(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
-        $frm->addHiddenField('', 'combinedTaxDetails');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
+        $frm->addHiddenField('', 'combinedTaxDetails');      
         return $frm;
     }
 

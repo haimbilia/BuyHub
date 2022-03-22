@@ -8,7 +8,7 @@ if (!empty($orderShippingData)) {
         <ul class="review-block scroll-y" style="max-height:400px;">
             <?php foreach ($orderShippingData as $shipData) { ?>
                 <li>
-                    <div class="review-block__content">
+                    <div class="review-block-body">
                         <div class="shipping-data">
                             <ul class="media-more media-more-sm show">
                                 <?php

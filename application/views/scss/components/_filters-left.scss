@@ -107,6 +107,16 @@
     &_body {
         padding: 1rem 0;
     }
+    .color-dot {
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        line-height: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-#{$end-direction}: 5px;
+    }
 }
 
 .selected-filters {

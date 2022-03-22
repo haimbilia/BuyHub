@@ -27,9 +27,9 @@ foreach ($paymentMethods as $key => $val) {
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <section id="payment" class="section-checkout">
+                            <div id="payment">
                                 <div class="payment-area">
-                                    <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
+                                    <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" id="payment_methods_tab">
                                         <?php foreach ($paymentMethods as $key => $val) {
                                             $pmethodCode = $val['plugin_code'];
                                             $pmethodId = $val['plugin_id'];
@@ -43,13 +43,10 @@ foreach ($paymentMethods as $key => $val) {
                                         <?php
                                         } ?>
                                     </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane fade show active" role="tabpanel">
-                                            <div class="tabs-container" id="tabs-container"></div>
-                                        </div>
-                                    </div>
+                                    <div class="payment-block" id="tabs-container"></div>
                                 </div>
-                            </section>
+
+                            </div>
                         </div>
                     <?php } else {
                         echo Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $siteLangId);
@@ -62,7 +59,7 @@ foreach ($paymentMethods as $key => $val) {
 <?php if ($orderInfo['order_net_amount']) { ?>
     <script type="text/javascript">
         var tabsId = '#payment_methods_tab';
-        $(function () {
+        $(function() {
             $(tabsId + " li:first a").addClass('active');
             if ($(tabsId + ' li a.active').length > 0) {
                 loadTab($(tabsId + ' li a.active'));

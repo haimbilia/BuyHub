@@ -8,18 +8,23 @@ if (!empty($orderPickUpData)) {
         <ul class="review-block">
             <?php foreach ($orderPickUpData as $address) { ?>
                 <li class="review-block-item">
-                    <div class="review-block__label">
-                        <strong><?php echo ($address['opshipping_by_seller_user_id'] > 0) ? $address['op_shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?></strong>
-                        <div class="review-block__link">
+                    <div class="review-block-head">
+                        <h5 class="h5">
+                            <?php echo ($address['opshipping_by_seller_user_id'] > 0) ? $address['op_shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
+                        </h5>
+                        <div class="review-block-action">
                             <?php
                             $fromTime = date('H:i', strtotime($address["opshipping_time_slot_from"]));
                             $toTime = date('H:i', strtotime($address["opshipping_time_slot_to"]));
                             ?>
-                            <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["opshipping_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?></p>
+                            <p class="time-txt">
+                                <i class="fas fa-calendar-day"></i>
+                                <?php echo FatDate::format($address["opshipping_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                            </p>
 
                         </div>
                     </div>
-                    <div class="review-block__content">
+                    <div class="review-block-body">
                         <div class="delivery-address">
                             <?php echo $address['oua_name']; ?>
                             <p><?php echo $address['oua_address1']; ?>

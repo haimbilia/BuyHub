@@ -124,8 +124,8 @@ if (0 < $recordId) {
                                 <thead class="tableHeadJs">
                                     <tr>
                                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                        <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                        <th class="align-right" width="10%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                        <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                        <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>

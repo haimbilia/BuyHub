@@ -13,6 +13,12 @@
     position: sticky;
     top: 0;
     z-index: 2;
+    .container {
+        max-width: none;
+        @include media-breakpoint-up(lg) {
+            padding: 0 3rem;
+        }
+    }
     &_inner {
         display: flex;
         justify-content: space-between;
@@ -153,26 +159,25 @@
             border-bottom: none;
         }
     }
-    &__label {
+    &-head {
         color: $txt-body;
         font-size: 1.2rem;
-        margin-bottom: 0.5rem;
         font-weight: 500;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        margin-bottom: 1rem;
     }
-    &__content {
+    &-body {
         flex: 1;
         overflow: hidden;
-        padding-#{$end-direction}: 100px;
         .selected-slot {
             font-weight: 600;
             padding-top: 0.5rem;
             display: block;
         }
     }
-    &__link {
+    &-action {
         position: absolute;
         top: 2rem;
         #{$end-direction}: 2rem;
@@ -182,16 +187,38 @@
             margin-#{$end-direction}: 8px;
         }
     }
-    .shipping-data {
+}
+.shipping-methods {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    &-item {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: $border;
+        &:last-child {
+            border-bottom: 0;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    &-head {
+        margin-bottom: 1rem;
         display: flex;
         align-items: center;
-        &_title {
-            font-size: 0.85rem;
-            margin-#{$start-direction}: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        flex-direction: row;
+        justify-content: space-between;
+        .h6 {
+            margin: 0;
+            font-weight: 600;
         }
+    }
+    &-body {
+        font-size: 0.85rem;
+    }
+    &-type {
+        font-weight: 600;
     }
 }
 
@@ -334,41 +361,52 @@
 }
 
 .payment-area {
+    border: $border;
     .payments-nav {
         display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        border: $border;
-        border-radius: $radius-common;
-        margin: 1rem 0;
+        flex-direction: column;
+
         &-item {
-            flex: 1;
-            font-size: 0.85rem;
-            text-align: center;
+            border-bottom: $border;
         }
 
         &-link {
             white-space: nowrap;
-            padding: 0.6rem 0.8rem;
+            padding: 1.6rem 2rem;
+            padding-#{$start-direction}: 4.1rem;
             display: block;
+            position: relative;
+            font-weight: 600;
+            &:before {
+                position: absolute;
+                #{$start-direction}: 2rem;
+                content: "";
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: solid 4px #fff;
+                background-color: transparent;
+                outline: solid 1px $border-color;
+            }
             &:hover,
             &.active {
-                background: $secondary-color;
-                color: $secondary-color-inverse;
+                &:before {
+                    background-color: $secondary-color;
+                    outline: solid 1px $secondary-color;
+                }
             }
         }
     }
-    .tab-content {
-        // border: $border;
-        // border-radius: $radius-common;
-        padding: 2rem;
-    }
+
     .paypal-data {
         text-align: center;
         p {
             padding: 1rem;
             font-size: 0.8rem;
         }
+    }
+    .payment-block {
+        padding: 2rem;
     }
 }
 
@@ -707,52 +745,6 @@
     }
 }
 
-.wallet-balance {
-    border: $border;
-    border-radius: $radius-common;
-    padding: 1.5rem;
-    margin-top: 0;
-    /*background-color: $bg-gray;*/
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .wallet {
-        display: flex;
-        align-items: center;
-        flex: 1;
-        &__txt {
-            display: flex;
-            align-items: center;
-            .svg {
-                width: 40px;
-                height: 40px;
-                margin-#{$end-direction}: 12px;
-                margin-#{$start-direction}: 5px;
-                fill: $txt-gray;
-            }
-            p {
-                font-size: 0.75rem;
-                font-weight: 300;
-                color: $txt-gray;
-                margin-bottom: 5px;
-                line-height: 1;
-                text-transform: uppercase;
-            }
-            .currency-value {
-                display: block;
-                font-weight: 600;
-                color: $txt-body;
-                font-size: 1.2rem;
-            }
-        }
-    }
-    &_info {
-        flex: 1;
-        font-size: 0.8rem;
-        color: $txt-gray;
-    }
-}
-
 .form-inline {
     position: relative;
     input {
@@ -916,5 +908,92 @@
     font-weight: 600;
     @include media-breakpoint-up(lg) {
         display: none;
+    }
+}
+
+//Wallet
+.use-reward-block {
+}
+.wallet-options {
+    color: $txt-body;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    &-list {
+        border: $border;
+        padding: 2rem;
+    }
+    &-value {
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+    .form-apply {
+        margin-bottom: 1rem;
+        position: relative;
+        .btn-apply {
+            top: 0;
+            bottom: 0;
+            border: 0;
+            background-color: transparent;
+            color: $brand-color;
+            font-weight: 600;
+            position: absolute;
+            #{$end-direction}: 1rem;
+        }
+    }
+    .wallet-credits {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        strong {
+            font-weight: 600;
+        }
+    }
+}
+
+//old wallet
+.wallet-balance {
+    border: $border;
+    border-radius: $radius-common;
+    padding: 1.5rem;
+    margin-top: 0;
+    /*background-color: $bg-gray;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .wallet {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        &__txt {
+            display: flex;
+            align-items: center;
+            .svg {
+                width: 40px;
+                height: 40px;
+                margin-#{$end-direction}: 12px;
+                margin-#{$start-direction}: 5px;
+                fill: $txt-gray;
+            }
+            p {
+                font-size: 0.75rem;
+                font-weight: 300;
+                color: $txt-gray;
+                margin-bottom: 5px;
+                line-height: 1;
+                text-transform: uppercase;
+            }
+            .currency-value {
+                display: block;
+                font-weight: 600;
+                color: $txt-body;
+                font-size: 1.2rem;
+            }
+        }
+    }
+    &_info {
+        flex: 1;
+        font-size: 0.8rem;
+        color: $txt-gray;
     }
 }

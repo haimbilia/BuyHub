@@ -192,8 +192,8 @@ $(document).ready(function () {
             tagify = new Tagify(element, {
                 whitelist: [],
                 dropdown: {
-                    position: 'text',
-                    enabled: 1 // show suggestions dropdown after 1 typed character
+                    position: 'input',
+                    enabled: 0 // show suggestions dropdown after 1 typed character
                 },
                 hooks: {
                     beforeRemoveTag: function (tags) {
