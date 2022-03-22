@@ -6,7 +6,10 @@
 <section class="section" data-content="">
     <div class="container">
         <div class="checkout-page">
-            <main class="checkout-page_main checkout-content-js"> </main>
+            <main class="checkout-page_main checkout-content-js">
+                <!-- Load Skeleton -->
+                <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.html'); ?>
+            </main>
             <aside class="checkout-page_aside sidebar" data-close-on-click-outside="">
                 <div class="cart-total summary-listing-js">
                     <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>

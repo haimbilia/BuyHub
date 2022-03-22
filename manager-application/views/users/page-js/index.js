@@ -37,7 +37,7 @@ $(document).ready(function () {
     updatePassword = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePassword'), data, function (t) {
             fcom.removeLoader();
             $.ykmodal.close();

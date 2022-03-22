@@ -9,13 +9,35 @@ class LoggedUserController extends DashboardBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        UserAuthentication::checkLogin();
+        UserAuthentication::checkLogin(true);
+
         $this->userId = UserAuthentication::getLoggedUserId(true);
+        $errMessage = Labels::getLabel('MSG_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId());
+        if ($this->userId < 1) {
+            LibHelper::exitWithError($errMessage, false, true, ['displayLoginForm' => 1]);
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
+        }
+
         $user = new User($this->userId);
         $this->userInfo = $user->getUserInfo(array(), false, false);
 
-        if (false == $this->userInfo || (!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_active'] != applicationConstants::ACTIVE)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
+        $invalidAccess = (
+            ($this->userId < 1) ||
+            false === $this->userInfo ||
+            (
+                !UserAuthentication::isGuestUserLogged() &&
+                (
+                    $this->userInfo['credential_verified'] == applicationConstants::NO ||
+                    $this->userInfo['credential_active'] == applicationConstants::NO
+                )
+            ) ||
+            !isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) ||
+            empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME])
+        );
+
+
+        if (true === $invalidAccess) {
+            LibHelper::exitWithError($errMessage, false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -23,14 +45,13 @@ class LoggedUserController extends DashboardBaseController
             $user = new User($this->userInfo['user_parent']);
             $parentUserInfo = $user->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
+                LibHelper::exitWithError($errMessage, false, true, ['displayLoginForm' => 1]);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
             }
         }
 
         if (!isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
-            $userPreferedDashboardType = ($this->userInfo['user_preferred_dashboard']) ? $this->userInfo['user_preferred_dashboard'] : $this->userInfo['user_registered_initially_for'];
-
+            $userPreferedDashboardType = $this->userInfo['user_preferred_dashboard'] ?? $this->userInfo['user_registered_initially_for'];
             switch ($userPreferedDashboardType) {
                 case User::USER_TYPE_BUYER:
                     $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';
@@ -47,20 +68,9 @@ class LoggedUserController extends DashboardBaseController
             }
         }
 
-        if ((!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_verified'] != 1) && !($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] && $_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] > 0)) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
-        }
 
-        if ($this->userId < 1) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
-        }
-
-        /* Thease actions are used while configuring Phone from "Configure Email/Phone Page". */
+        /* These actions are used while configuring Phone from "Configure Email/Phone Page". */
         $allowedActions = ['getotp', 'resendotp', 'validateotp'];
-        /* $addPhoneValidaion = true;
-        if (true == SmsArchive::canSendSms()) {
-            $addPhoneValidaion = empty($this->userInfo['user_phone']) ? true : false;
-        } */
         if (!in_array(strtolower($action), $allowedActions) && empty($this->userInfo['user_phone']) && empty($this->userInfo['credential_email'])) {
             if (true == SmsArchive::canSendSms()) {
                 $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);

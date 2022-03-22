@@ -14,7 +14,7 @@ var financialSummary = ".summary-listing-js";
 
 async function checkLogin() {
     let ans = await $.ajax({
-        url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),       
+        url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),
         dataType: "json",
     });
 
@@ -391,20 +391,8 @@ $("document").ready(function () {
     };
 
     loadShippingSummaryDiv = function () {
-        /* $(shippingSummaryDiv).show(); */
-        /* $(addressDiv).html(fcom.getLoader() ); */
-        /* $(shippingSummaryDiv).append(fcom.getLoader() ); */
-        /* loadShippingAddress(); */
-        /* $('.section-checkout').removeClass('is-current'); */
-        /* $(shippingSummaryDiv).addClass('is-current'); */
-        /* $(shippingSummaryDiv + ".selected-panel-data").html( fcom.getLoader()); */
-        /* fcom.ajax(fcom.makeUrl('Checkout', 'shippingSummary'), '' , function(ans) { */
-        /* 	$(shippingSummaryDiv ).html( ans ); */
-        /* 	$(".sduration_id-Js").trigger("change"); */
-        /* }); */
-        $(pageContent).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Checkout", "shippingSummary"), "", function (ans) {
-            $(pageContent).html(ans);
+            $(pageContent).hide().html(ans).fadeIn();
             $(".sduration_id-Js").trigger("change");
             setCheckoutFlow("SHIPPING");
         });
