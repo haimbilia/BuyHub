@@ -8,7 +8,7 @@ $frm->developerTags['fld_default_col'] = 12;
 <section class="payment-section">
     <div class="payable-amount">
         <div class="payable-amount__head">
-            <div class="payable-amount--header">              
+            <div class="payable-amount--header">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
             <div class="payable-amount--decription">
@@ -22,7 +22,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bussiness-name"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -34,7 +34,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-name"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -46,7 +46,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-branch"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -58,7 +58,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#account"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -70,7 +70,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#ifsc"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -82,7 +82,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li>
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -94,7 +94,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <li class="notes">
                     <i class="icn">
                         <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes"></use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#bank-notes"></use>
                         </svg>
                     </i>
                     <div class="lable">
@@ -108,14 +108,14 @@ $frm->developerTags['fld_default_col'] = 12;
             if (!isset($error)) :
                 $frm->setFormTagAttribute('onsubmit', 'confirmPayment(this); return(false);');
                 $frm->setFormTagAttribute('class', 'form form--payment');
-                ?>
+            ?>
                 <?php echo $frm->getFormTag(); ?>
                 <div class="payable-form__body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="field-set">
                                 <div class="caption-wraper">
-                                    <label class="field_label"><?php echo $frm->getField('opayment_method')->getCaption(); ?></label>
+                                    <label class="form-label"><?php echo $frm->getField('opayment_method')->getCaption(); ?></label>
                                 </div>
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -129,7 +129,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         <div class="col-md-12">
                             <div class="field-set">
                                 <div class="caption-wraper">
-                                    <label class="field_label"><?php echo $frm->getField('opayment_gateway_txn_id')->getCaption(); ?></label>
+                                    <label class="form-label"><?php echo $frm->getField('opayment_gateway_txn_id')->getCaption(); ?></label>
                                 </div>
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -143,7 +143,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         <div class="col-md-12">
                             <div class="field-set">
                                 <div class="caption-wraper">
-                                    <label class="field_label"><?php echo $frm->getField('opayment_amount')->getCaption(); ?></label>
+                                    <label class="form-label"><?php echo $frm->getField('opayment_amount')->getCaption(); ?></label>
                                 </div>
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -157,7 +157,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         <div class="col-md-12">
                             <div class="field-set">
                                 <div class="caption-wraper">
-                                    <label class="field_label"><?php echo $frm->getField('opayment_comments')->getCaption(); ?></label>
+                                    <label class="form-label"><?php echo $frm->getField('opayment_comments')->getCaption(); ?></label>
                                 </div>
                                 <div class="field-wraper">
                                     <div class="field_cover">
@@ -173,40 +173,40 @@ $frm->developerTags['fld_default_col'] = 12;
                     <div class="alert alert--danger"><?php echo $error ?></div>
                 <?php endif; ?>
                 <div id="ajax_message"></div>
-            </div>                   
-            <div class="payable-form__footer">
-                <div class="row">
-                    <div class="col-md-6">                                    
-                        <?php
-                        $btn = $frm->getField('btn_submit');
-                        $btn->addFieldTagAttribute('class', 'btn btn-secondary');
-                        $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
-                        echo $frm->getFieldHtml('btn_submit');
-                        ?> 
+                </div>
+                <div class="payable-form__footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php
+                            $btn = $frm->getField('btn_submit');
+                            $btn->addFieldTagAttribute('class', 'btn btn-secondary');
+                            $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
+                            echo $frm->getFieldHtml('btn_submit');
+                            ?>
+                        </div>
+                        <div class="col-md-6 d-md-block d-none">
+                            <?php if (FatUtility::isAjaxCall()) { ?>
+                                <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand">
+                                    <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
+                                </a>
+                            <?php } else { ?>
+                                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
+                            <?php } ?>
+                        </div>
                     </div>
-                    <div class="col-md-6 d-md-block d-none">
-                        <?php if (FatUtility::isAjaxCall()) { ?>
-                            <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand">
-                                <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
-                            </a>
-                        <?php } else { ?>
-                            <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
-                        <?php } ?>                        
-                    </div>
-                </div>  
-            </div> 
+                </div>
 
-            </form>
-            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                </form>
+                <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                     <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
-            <?php } ?>
+                <?php } ?>
         </div>
     </div>
-</div>
-</div>
+    </div>
+    </div>
 </section>
 <script>
-    var confirmPayment = function (frm) {
+    var confirmPayment = function(frm) {
         var me = $(frm);
         if (me.data('requestRunning')) {
             return;
@@ -216,7 +216,7 @@ $frm->developerTags['fld_default_col'] = 12;
         $("input[type='submit']").val(langLbl.processing);
         var data = fcom.frmData(frm);
         var action = me.attr('action');
-        fcom.ajax(action, data, function (t) {
+        fcom.ajax(action, data, function(t) {
             try {
                 var json = $.parseJSON(t);
                 var el = $('#ajax_message');

@@ -41,6 +41,7 @@
         }
     }
     &-user {
+        margin: auto;
         @include media-breakpoint-down(lg) {
             border-radius: 50%;
             width: 100px;
@@ -55,12 +56,12 @@
         }
     }
     &-data {
-        text-align: #{$start-direction};
         flex: 1;
         font-size: 1.3rem;
         @include media-breakpoint-up(lg) {
             margin-#{$start-direction}: 6.25rem;
             margin-top: 6.25rem;
+            text-align: #{$start-direction};
         }
     }
     &-text {

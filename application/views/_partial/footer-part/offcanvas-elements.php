@@ -158,7 +158,7 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 ?>
 
 <!-- offcanvas-gps-location -->
-<div class="offcanvas offcanvas-gps-location offcanvas-bottom" tabindex="-1" id="offcanvas-gps-location">
+<div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"> </h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -218,6 +218,9 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
         </div>
     </div>
 </div>
+
+
+
 
 <!-- Blog Search Form -->
 <?php $this->includeTemplate('_partial/footer-part/blog-search-form.php'); ?>

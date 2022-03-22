@@ -22,7 +22,7 @@ foreach ($productSpecifications as  $specification) {
     $prodSpecId = $specification['prodspec_id'];
     $tr = $tbody->appendElement('tr',['data-id' => $prodSpecId ]);
     foreach ($arr_flds as $key => $val) {   
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class'=> str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key)."Js"];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class'=> str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key)."Js text-break"];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'action':

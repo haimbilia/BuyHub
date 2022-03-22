@@ -34,7 +34,7 @@
 .radio {
     margin: 0;
     font-size: 0.8rem;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1rem;
     cursor: pointer;
     &.brand {
@@ -71,7 +71,6 @@ $checkbox-size: 20px;
     outline: none;
     position: relative;
     z-index: 1;
-
     vertical-align: middle;
 }
 

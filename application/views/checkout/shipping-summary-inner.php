@@ -1,22 +1,26 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div id="shipping-summary" class="step">
+
+
+
     <ul class="review-block">
         <li class="review-block-item">
-            <div class="review-block__label">
-                <?php if ($hasPhysicalProd) {
-                    echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
-                } else {
-                    echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
-                } ?>
+            <div class="review-block-head">
+                <h5 class="h5"> <?php if ($hasPhysicalProd) {
+                                    echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
+                                } else {
+                                    echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
+                                } ?>
+                </h5>
 
-                <div class="review-block__link" role="cell">
+                <div class="review-block-action" role="cell">
                     <button class="link-underline" onClick="showAddressList()">
                         <span>
                             <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                 </div>
             </div>
-            <div class="review-block__content" role="cell">
+            <div class="review-block-body" role="cell">
                 <div class="delivery-address">
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
                         <?php if (strlen($addresses['addr_address2']) > 0) {

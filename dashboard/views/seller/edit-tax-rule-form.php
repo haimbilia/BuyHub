@@ -5,8 +5,6 @@ $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'updateTaxRule(this); return(false);');
 
-$btnSubmit = $frm->getField('btn_submit');
-$btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Edit_tax_rule', $siteLangId); ?></h5>
@@ -48,20 +46,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
                         </div>
                     </div>
                 </div>
-            <?php } ?>
-            <div class="col-md-12">
-                <div class="field-set">
-                    <div class="caption-wraper"><label class="field_label">
-
-                        </label>
-                    </div>
-                    <div class="field-wraper">
-                        <div class="field_cover">
-                            <?php echo $frm->getFieldHtml('btn_submit'); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>            
         </div>
         </form>
         <?php echo $frm->getExternalJs(); ?>

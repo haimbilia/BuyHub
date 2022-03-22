@@ -28,7 +28,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['product_id'],
-                                                'value' => htmlspecialchars_decode($item['product_name'], ENT_QUOTES),
+                                                'value' => $item['product_name'],
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -38,7 +38,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['prodcat_id'],
-                                                'value' => htmlspecialchars_decode($item['prodcat_name'], ENT_QUOTES),
+                                                'value' => $item['prodcat_name'],
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -49,7 +49,7 @@
                                             $userName = $item['user_name'] . ' ( ' . $item['credential_username'] . ' )';
                                             $tagifyData[] = [
                                                 'id' => $item['user_id'],
-                                                'value' => htmlspecialchars_decode($userName, ENT_QUOTES),
+                                                'value' => $userName,
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -59,7 +59,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['shop_id'],
-                                                'value' => htmlspecialchars_decode($item['shop_name'], ENT_QUOTES),
+                                                'value' => $item['shop_name'],
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -69,7 +69,7 @@
                                         array_walk($data, function ($item) use (&$tagifyData, $linkType, $recordId) {
                                             $tagifyData[] = [
                                                 'id' => $item['brand_id'],
-                                                'value' => htmlspecialchars_decode($item['brand_name'], ENT_QUOTES),
+                                                'value' => $item['brand_name'],
                                                 'linkType' => $linkType,
                                                 'recordId' => $recordId,
                                             ];
@@ -85,8 +85,7 @@
                                     switch ($key) {
                                         case 'items':
                                             $data = $linksTypeData[$linkType];
-
-                                            $td->appendElement('plaintext', [], "<input class='form-control tagifyJs' data-link-type='" . $linkType . "' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH', $siteLangId)."' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData) . "'>", true);
+                                            $td->appendElement('plaintext', [], "<input class='form-control tagifyJs' data-link-type='" . $linkType . "' placeholder='".Labels::getLabel('FRM_TYPE_TO_SEARCH', $siteLangId)."' data-record-id='" . $recordId . "' value='" . json_encode($tagifyData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) . "'>", true);
                                             break;
                                         default:
                                             $td->appendElement('plaintext', [], $label, true);

@@ -198,14 +198,24 @@ class TaxCategoriesRuleController extends ListingBaseController
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_COMBINED_TAX_COMBINATION', $this->siteLangId), true);
             }
         }
+
+        $ruleId = $post['taxrule_id'];
+        $taxRuleObj = new TaxRule($ruleId);
+
+        $oldTaxStrId = 0;
+        if(0 < $ruleId){
+            $oldTaxStrId =  $taxRuleObj::getAttributesById($ruleId, 'taxrule_taxstr_id');
+        }
+
+
         $this->validateStateCountry($post);
-        $taxRuleObj = new TaxRule($post['taxrule_id']);
+       
         unset($post['taxrule_id']);
         $taxRuleObj->assignValues($post);
         if (!$taxRuleObj->save()) {
             LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
-
+        
 
         if (!$taxRuleObj->addUpdateRate($post['trr_rate'])) {
             LibHelper::exitWithError($taxRuleObj->getError(), true);
@@ -216,6 +226,36 @@ class TaxCategoriesRuleController extends ListingBaseController
         if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId), true);
         }
+      
+        /* ] */
+    
+        /** [ deleting all combined rates and rule rate of sellers if rule taxstr_id changed */
+        if(0 < $ruleId){  
+            if(0 < $oldTaxStrId){ 
+                 if($oldTaxStrId != $post['taxrule_taxstr_id']){ 
+                    if (!FatApp::getDb()->deleteRecords(
+                        TaxRule::DB_RATES_TBL,
+                        array(
+                            'smt' => TaxRule::DB_RATES_TBL_PREFIX . 'taxrule_id = ? and '. TaxRule::DB_RATES_TBL_PREFIX . 'user_id != ?',
+                            'vals' => array($ruleId, 0)
+                        )
+                    )) {                       
+                        LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                    }
+
+                    if (!FatApp::getDb()->deleteRecords(
+                        TaxRule::DB_DETAIL_TBL,
+                        array(
+                            'smt' => TaxRule::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ?',
+                            'vals' => array($ruleId)
+                        )
+                    )) {
+                        LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                    }
+                 }
+            }
+        }
+
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */

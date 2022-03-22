@@ -101,8 +101,7 @@ if ($printData) {
         fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {});
     }
 
-    abc = function(e){
-        console.log(e);
+    hideDropDown = function(e){       
         e.detail.tagify.dropdown.hide();
     };
 
@@ -152,7 +151,7 @@ if ($printData) {
                         })
                     }
                 }
-            }).on('input', getProducts).on('focus', getProducts).on('dropdown:select', bindProduct).on('dropdown:hide', abc);
+            }).on('input', getProducts).on('focus', getProducts).on('dropdown:select', bindProduct).on('dropdown:hide', hideDropDown);
         });
     };
 

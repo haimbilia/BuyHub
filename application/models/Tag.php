@@ -132,6 +132,11 @@ class Tag extends MyAppModel
         if ($languages) {
             foreach ($languages as $lang_id => $lang_name) {
                 $productTags = Product::getProductTags($productId, $lang_id, true);
+                if(empty($productTags)){
+                    if (!$prodObj::getAttributesByLangId($lang_id, $productId, 'productlang_product_id')) {
+                        continue;
+                    }
+                }
                 $productTagsStringArr[$lang_id] = [];
 
                 if (!empty($productTags)) {
