@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $orderIdFld = $frmSearch->getField('op_invoice_number');
+$orderIdFld->addFieldTagAttribute('autocomplete', 'off');
 $orderIdFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_BY_INVOICE_NUMBER', $siteLangId));
 
 $ocrequestDateFromFld = $frmSearch->getField('ocrequest_date_from');

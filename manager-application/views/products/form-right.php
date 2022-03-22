@@ -58,7 +58,7 @@
                             <?php
                             $warrantTypes = Product::getWarrantyUnits($langId);
                             ?>
-                            <label class="label"><?php echo $fld->getCaption(); ?></label>
+                            <label class="label"><?php echo $fld->getCaption(); ?><span class="spn_must_field">*</span></label>
                             <div class="input-group">
                                 <?php echo $fld->getHtml(); ?>
                                 <div class="input-group-append">
@@ -98,8 +98,8 @@
                 <thead class="tableHeadJs">
                     <tr>
                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                        <th width="50%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                        <th class="align-right" width="10%"></th>
+                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                        <th class="align-right" width="20%"></th>
                     </tr>
                 </thead>
                 <tbody>
