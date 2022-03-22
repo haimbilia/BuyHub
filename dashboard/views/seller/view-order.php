@@ -66,7 +66,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 <?php
                                 if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
                                     $statusName = isset($orderDetail['orderstatus_name']) ? $orderDetail['orderstatus_name'] : $orderDetail['orderstatus_identifier']; ?>
-                                    <span class="notice">
+                                    <span class="badge badge-danger ms-2">
                                         <?php echo $statusName; ?>
                                     </span>
                                 <?php } ?>
