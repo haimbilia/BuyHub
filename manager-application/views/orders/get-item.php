@@ -190,6 +190,28 @@ foreach ($op['taxOptions'] as $key => $val) {
                 <span class="lable"><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?>:</span>
                 <span class="value" <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>
             </li>
+
+            <?php if (isset($op['op_product_dimension_unit']) && isset($unitTypeArray[$op['op_product_dimension_unit']])) {
+                $unitType = $unitTypeArray[$op['op_product_dimension_unit']];
+            ?>
+
+                <li class="list-stats-item list-stats-item-full">
+                    <span class="value"><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?>:</span>
+                </li>
+                <li class="list-stats-item">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_LENGTH', $siteLangId); ?></span>
+                    <span class="value"><?php echo $op['op_product_length'] . ' ' . $unitType; ?></span>
+                </li>
+                <li class="list-stats-item">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_WIDTH', $siteLangId); ?></span>
+                    <span class="value"><?php echo $op['op_product_width'] . ' ' . $unitType; ?></span>
+                </li>
+                <li class="list-stats-item">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_HEIGHT', $siteLangId); ?></span>
+                    <span class="value"><?php echo $op['op_product_height'] . ' ' . $unitType; ?></span>
+                </li>
+
+            <?php } ?>
         </ul>
     </div>
 </div>
