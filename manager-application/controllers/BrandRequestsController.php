@@ -35,9 +35,10 @@ class BrandRequestsController extends ListingBaseController
             'js/select2.js',
             'brand-requests/page-js/index.js'
         ]);
+        $this->includeFeatherLightJsCss();
         
         $this->getListingData();
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BRAND_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BRAND_NAME', $this->siteLangId));        
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

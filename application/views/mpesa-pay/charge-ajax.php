@@ -6,7 +6,7 @@ echo $frm->getFormTag(); ?>
     <div class="col-md-12">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId); ?></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId); ?></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover">
@@ -22,7 +22,7 @@ echo $frm->getFormTag(); ?>
     <div class="col-md-12">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"></label>
+                <label class="form-label"></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover">
@@ -40,7 +40,7 @@ echo $frm->getFormTag(); ?>
 </form>
 <?php echo $frm->getExternalJs(); ?>
 <script>
-    var confirmPayment = function (frm) {
+    var confirmPayment = function(frm) {
         var me = $(frm);
         if (me.data('requestRunning')) {
             return;
@@ -52,7 +52,7 @@ echo $frm->getFormTag(); ?>
         fcom.displayProcessing();
         var data = fcom.frmData(frm);
         var action = me.attr('action');
-        fcom.ajax(action, data, function (t) {
+        fcom.ajax(action, data, function(t) {
             btnEle.val(btnText).removeAttr('disabled');
             try {
                 var json = $.parseJSON(t);

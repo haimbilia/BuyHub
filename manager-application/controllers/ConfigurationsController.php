@@ -405,7 +405,7 @@ class ConfigurationsController extends ListingBaseController
                 $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');
                 $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
-                $faxFld->addFieldTagAttribute('dir',Language::getLayoutDirection($langId));
+                $faxFld->addFieldTagAttribute('dir', Language::getLayoutDirection($langId));
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId);
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'CONF_COUNTRY', $countriesArr, '', ['id' => 'user_country_id', 'onChange' => 'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')'], Labels::getLabel('FRM_SELECT', $langId));
@@ -561,7 +561,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ACTIVATE_GEO_LOCATION", $langId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld,Labels::getLabel("FRM_PLEASE_INSURE_GOOGLE_MAP_API_IS_FILLED", $langId));
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_PLEASE_INSURE_GOOGLE_MAP_API_IS_FILLED", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $prodGeoSettingArr = applicationConstants::getProductListingSettings($langId);
@@ -1717,7 +1717,7 @@ class ConfigurationsController extends ListingBaseController
 
                 /* block start */
 
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId) . ' </h6>
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_APPS_SHORTCUT_ICON", $langId) . ' </h6>
                      <span class="form-text text-muted">
                          <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SHORTCUT_ICON_ON_MOBILE_APPS_WHEN_MARKED_AS_SHORTCUT", $langId) . '</span>');
 
@@ -1733,7 +1733,7 @@ class ConfigurationsController extends ListingBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId)],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_MOBILE_APPS_SHORTCUT_ICON", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',

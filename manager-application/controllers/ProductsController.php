@@ -55,6 +55,7 @@ class ProductsController extends ListingBaseController
 
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->addJs(array('products/page-js/index.js', 'js/select2.js'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

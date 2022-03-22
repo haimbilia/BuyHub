@@ -29,6 +29,7 @@ class ThresholdProductsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(['threshold-products/page-js/index.js']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

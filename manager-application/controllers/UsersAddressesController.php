@@ -32,6 +32,7 @@ class UsersAddressesController extends ListingBaseController
 
         $this->_template->addJs(array('js/select2.js', 'users-addresses/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -328,7 +329,7 @@ class UsersAddressesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_address','addr_phone'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_address', 'addr_phone'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

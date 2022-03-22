@@ -54,6 +54,7 @@ class SlidesController extends ListingBaseController
         $this->setCustomColumnWidth();
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'slides/page-js/index.js']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

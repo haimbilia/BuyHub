@@ -6,17 +6,19 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 <div class="step">
     <ul class="review-block">
         <li class="review-block-item">
-            <div class="review-block__label">
-                <?php
-                if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) {
-                    echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
-                    $address = $billingAddressArr;
-                } else {
-                    echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
-                    $address = $shippingAddressArr;
-                }
-                ?>
-                <div class="review-block__link">
+            <div class="review-block-head">
+                <h5 class="h5">
+                    <?php
+                    if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) {
+                        echo Labels::getLabel('LBL_Billing_to:', $siteLangId);
+                        $address = $billingAddressArr;
+                    } else {
+                        echo Labels::getLabel('LBL_Shipping_to:', $siteLangId);
+                        $address = $shippingAddressArr;
+                    }
+                    ?>
+                </h5>
+                <div class="review-block-action">
                     <?php
                     if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $cartHasPhysicalProduct == false) {
                         $onclick = 'loadAddressDiv(' . Address::ADDRESS_TYPE_BILLING . ');';
@@ -31,7 +33,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                     </button>
                 </div>
             </div>
-            <div class="review-block__content">
+            <div class="review-block-body">
                 <div class="delivery-address">
                     <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
                         <?php if (strlen($address['addr_address2']) > 0) {
@@ -55,13 +57,13 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 
         <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP && !empty($orderPickUpData)) { ?>
             <li class="review-block-item">
-                <div class="review-block__label">
-                    <?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?>
-                    <div class="review-block__link">
+                <div class="review-block-head">
+                    <h5 class="h5"><?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?></h5>
+                    <div class="review-block-action">
                         <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                     </div>
                 </div>
-                <div class="review-block__content">
+                <div class="review-block-body">
                     <div class="delivery-address">
                         <?php foreach ($orderPickUpData as $address) { ?>
                             <p><strong><?php echo ($address['opshipping_by_seller_user_id'] > 0) ? $address['op_shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?></strong>
@@ -104,53 +106,103 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 
         <?php if ($cartHasPhysicalProduct && $fulfillmentType == Shipping::FULFILMENT_SHIP && !empty($orderShippingData)) { ?>
             <li class="review-block-item">
-                <div class="review-block__label">
-                    <?php echo Labels::getLabel('LBL_Shipping:', $siteLangId); ?>
-                    <div class="review-block__link">
+                <div class="review-block-head">
+                    <h5 class="h5"><?php echo Labels::getLabel('LBL_Shipping:', $siteLangId); ?></h5>
+                    <div class="review-block-action">
                         <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                     </div>
                 </div>
-                <div class="review-block__content">
-                    <div class="shipping-data">
-                        <ul class="shipping-methods">
+                <div class="review-block-body">
 
-                        </ul>
+                    <ul class="shipping-methods">
+                        <li class="shipping-methods-item">
+                            <div class="shipping-methods-head">
+                                <h6 class="h6">Sinan Shopee</h6>
+                                <button class="link-underline" type="button">Edit</button>
+                            </div>
+                            <div class="shipping-methods-body">
+                                <span class="shipping-methods-type">Standard </span>
+                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
+                                <p><strong>Items:</strong> 10</p>
+                            </div>
 
-                        <ul class="media-more media-more-sm show">
-                            <?php foreach ($orderShippingData as $shipData) { ?>
-                                <?php
-                                foreach ($shipData as $data) {
-                                    $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
-                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], 'WEBP' . ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
-                                ?>
-                                    <li>
-                                        <span class="circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
-                                            <?php
-                                            $pictureAttr = [
-                                                'webpImageUrl' => $imageWebpUrl,
-                                                'jpgImageUrl' => $imageUrl,
-                                                'imageUrl' => $imageUrl,
-                                                'alt' => $data['op_selprod_title'],
-                                                'siteLangId' => $siteLangId,
-                                            ];
+                        </li>
+                        <li class="shipping-methods-item">
+                            <div class="shipping-methods-head">
+                                <h6 class="h6">Sinan Shopee</h6>
+                                <button class="link-underline" type="button">Edit</button>
+                            </div>
+                            <div class="shipping-methods-body">
+                                <span class="shipping-methods-type">Standard </span>
+                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
+                                <p><strong>Items:</strong> 10</p>
+                            </div>
 
-                                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
-                                            ?>
-                                        </span>
-                                    </li>
-                                <?php } ?>
-                                <?php if (count($orderShippingData) > 1) { ?>
-                                    <li> <span class="circle plus-more" onClick="orderShippingData('<?php echo $orderId; ?>')"><?php echo '+ ' . (count($orderShippingData) - 1); ?></span>
-                                    </li>
-                                <?php }  ?>
-                            <?php break;
-                            } ?>
-                        </ul>
+                        </li>
+                        <li class="shipping-methods-item">
+                            <div class="shipping-methods-head">
+                                <h6 class="h6">Sinan Shopee</h6>
+                                <button class="link-underline" type="button">Edit</button>
+                            </div>
+                            <div class="shipping-methods-body">
+                                <span class="shipping-methods-type">Standard </span>
+                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
+                                <p><strong>Items:</strong> 10</p>
+                            </div>
 
-                        <div class="shipping-data_title">
-                            <?php echo $data['opshipping_label']; ?></div>
-                    </div>
+                        </li>
+                        <li class="shipping-methods-item">
+                            <div class="shipping-methods-head">
+                                <h6 class="h6">Sinan Shopee</h6>
+                                <button class="link-underline" type="button">Edit</button>
+                            </div>
+                            <div class="shipping-methods-body">
+                                <span class="shipping-methods-type">Standard </span>
+                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
+                                <p><strong>Items:</strong> 10</p>
+                            </div>
+
+                        </li>
+
+
+                    </ul>
+
+                    <ul class="media-more media-more-sm show">
+                        <?php foreach ($orderShippingData as $shipData) { ?>
+                            <?php
+                            foreach ($shipData as $data) {
+                                $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
+                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], 'WEBP' . ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
+                            ?>
+                                <li>
+                                    <span class="circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
+                                        <?php
+                                        $pictureAttr = [
+                                            'webpImageUrl' => $imageWebpUrl,
+                                            'jpgImageUrl' => $imageUrl,
+                                            'imageUrl' => $imageUrl,
+                                            'alt' => $data['op_selprod_title'],
+                                            'siteLangId' => $siteLangId,
+                                        ];
+
+                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                        ?>
+                                    </span>
+                                </li>
+                            <?php } ?>
+                            <?php if (count($orderShippingData) > 1) { ?>
+                                <li> <span class="circle plus-more" onClick="orderShippingData('<?php echo $orderId; ?>')"><?php echo '+ ' . (count($orderShippingData) - 1); ?></span>
+                                </li>
+                            <?php }  ?>
+                        <?php break;
+                        } ?>
+                    </ul>
+
+
+                    <?php echo $data['opshipping_label']; ?>
+
+
                 </div>
 
             </li>
@@ -158,14 +210,15 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 
         <?php if ($cartHasPhysicalProduct && $fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId != $billingAddressId) { ?>
             <li class="review-block-item">
-                <div class="review-block__label">
-                    <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?> <div class="review-block__link">
+                <div class="review-block-head">
+                    <h5 class="h5"><?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?></h5>
+                    <div class="review-block-action">
                         <button class="link-underline" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)">
                             <span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span>
                         </button>
                     </div>
                 </div>
-                <div class="review-block__content">
+                <div class="review-block-body">
                     <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
                         <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
                             echo ", " . $billingAddressArr['addr_address2']; ?>
@@ -307,8 +360,34 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 </div>
             <?php } ?>
 
+            <div class="use-reward-block mb-5">
+                <h6 class="h6">Use Reward and Wallet Credits</h6>
+                <div class="wallet-options">
+                    <div class="wallet-options-list">
+                        <form class="form form-apply" action="">
+                            <input type="text" placeholder="Use Reward Point">
+                            <button class="btn-apply">Apply</button>
+                        </form>
+                        <p class="txt-sm">Maximum 1865 Rewards Point Redeem For This Order</p>
+                    </div>
+                    <div class="wallet-options-list">
+                        <label class="checkbox wallet-credits">
+                            <input type="checkbox" name="" value="1">
+                            Wallet Credits: <strong>$3,169.32</strong> </label>
+                        <p class="txt-sm">Use My Wallet Balance To Pay For My Order</p>
+                    </div>
+                    <div class="wallet-options-list">
+                        <p class="txt-sm">Available Rewards Points</p>
+                        <div class="wallet-options-value">100000</div>
+                    </div>
+                    <div class="wallet-options-list">
+                        <p class="txt-sm">Points Worth</p>
+                        <div class="wallet-options-value">$100,000.00</div>
+                    </div>
 
-            <section id="payment" class="section-checkout">
+                </div>
+            </div>
+            <div id="payment">
                 <?php if ($cartSummary['orderNetAmount'] <= 0) { ?>
                     <div class="confirm-payment" id="wallet">
                         <?php
@@ -326,7 +405,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 if ($cartSummary['orderPaymentGatewayCharges']) { ?>
                     <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
                         <?php if ($cartSummary['orderPaymentGatewayCharges'] && 0 < count($paymentMethods)) { ?>
-                            <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" role="tablist" id="payment_methods_tab">
+                            <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" id="payment_methods_tab">
                                 <?php foreach ($paymentMethods as $key => $val) {
                                     $pmethodCode = $val['plugin_code'];
                                     if ($cartHasDigitalProduct && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
@@ -346,17 +425,14 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                 <?php
                                 } ?>
                             </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" role="tabpanel">
-                                    <div class="tabs-container" id="tabs-container"></div>
-                                </div>
+                            <div class="payment-block" id="tabs-container">
                             </div>
                         <?php } else {
                             echo Labels::getLabel("LBL_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
                         } ?>
                     </div>
                 <?php } ?>
-            </section>
+            </div>
         </div>
 
     </div>
@@ -380,7 +456,7 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
 <?php if ($cartSummary['orderPaymentGatewayCharges']) { ?>
     <script type="text/javascript">
         var tabsId = '#payment_methods_tab';
-        $(function () {
+        $(function() {
             $(tabsId + " li:first a").addClass('active');
             if ($(tabsId + ' li a.active').length > 0) {
                 loadTab($(tabsId + ' li a.active'));

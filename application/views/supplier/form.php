@@ -23,7 +23,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-6">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_NAME', $siteLangId); ?> <span class="mandatory">*</span></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_NAME', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_name'); ?></div>
@@ -33,7 +33,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-6">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_USERNAME', $siteLangId); ?> <span class="mandatory">*</span></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_USERNAME', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_username'); ?></div>
@@ -43,7 +43,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-12">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?> <span class="mandatory">*</span></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_email'); ?></div>
@@ -53,7 +53,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-6">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_password'); ?></div>
@@ -64,7 +64,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-6">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"><?php echo Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId); ?></label>
+                <label class="form-label"><?php echo Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId); ?></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('password1'); ?></div>
@@ -108,7 +108,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-12">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="field_label"></label>
+                <label class="form-label"></label>
             </div>
             <div class="field-wraper">
                 <div class="field_cover">

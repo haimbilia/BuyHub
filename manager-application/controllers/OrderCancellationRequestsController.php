@@ -50,6 +50,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
         $this->_template->addJs(['js/select2.js', 'order-cancellation-requests/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -58,7 +59,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'order_date_added', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'ocrequest_date', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
@@ -102,18 +103,12 @@ class OrderCancellationRequestsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'ocrequest_date');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'ocrequest_date';
         }
 
-        if ('buyer_detail' == $sortBy) {
-            $sortBy = 'buyer.user_name';
-        } else if ('vendor_detail' == $sortBy) {
-            $sortBy = 'seller.user_name';
-        }
-
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data);
@@ -126,8 +121,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinOrderSellerUser();
         $srch->joinOrderProductStatus();
         $srch->joinOrderCancelReasons();
-        $srch->addOrderProductCharges(); 
-        
+        $srch->addOrderProductCharges();
+
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('op_invoice_number', '=', $keyword);
@@ -148,8 +143,8 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addCondition('ocrequest_id', '=', $post['ocrequest_id']);
         }
 
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);   
-        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, $recordId); 
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
+        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, $recordId);
         if (0 < $reasonId) {
             $srch->addCondition('ocrequest_ocreason_id', '=', $reasonId);
         }
@@ -173,30 +168,30 @@ class OrderCancellationRequestsController extends ListingBaseController
         if (!empty($dateTo)) {
             $srch->addDateToCondition($dateTo);
         }
-        
+
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->addMultipleFields(
             array(
                 'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email','seller.user_name as seller_name','seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email','op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
                 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
                 'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS user_id',
                 'buyer.user_updated_on AS user_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id','seller.user_updated_on AS seller_updated_on','seller.user_id AS seller_id', 'ocrequest_admin_comment'
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id', 'seller.user_updated_on AS seller_updated_on', 'seller.user_id AS seller_id', 'ocrequest_admin_comment'
             )
         );
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
-        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr()); 
+        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
@@ -276,7 +271,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED, 'eq', 'ocrequest_refund_in_wallet', $reqFld1);
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING, 'eq', 'ocrequest_refund_in_wallet', $fld1);
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED, 'eq', 'ocrequest_refund_in_wallet', $fld1);
-        
+
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED, 'eq', 'ocrequest_admin_comment', $reqFld2);
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING, 'eq', 'ocrequest_admin_comment', $fld2);
         $statusFld->requirements()->addOnChangerequirementUpdate(OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED, 'eq', 'ocrequest_admin_comment', $fld2);
@@ -401,7 +396,7 @@ class OrderCancellationRequestsController extends ListingBaseController
 
     public function viewComment($ocrequestId)
     {
-        $ocrequestId = FatUtility::int($ocrequestId);        
+        $ocrequestId = FatUtility::int($ocrequestId);
         $srch = new OrderCancelRequestSearch($this->siteLangId);
         $srch->joinOrderCancelReasons();
         $srch->addMultipleFields(['ocreason_title', 'ocrequest_message']);
@@ -412,7 +407,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function viewAdminComment($ocrequestId)
     {
         $ocrequestId = FatUtility::int($ocrequestId);

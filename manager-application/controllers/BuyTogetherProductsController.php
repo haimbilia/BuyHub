@@ -32,7 +32,8 @@ class BuyTogetherProductsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'buy-together-products/page-js/index.js']);
-        $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);       
+        $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -301,8 +302,8 @@ class BuyTogetherProductsController extends ListingBaseController
         if ($recordId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
-        $this->markAsDeleted($recordId);        
+
+        $this->markAsDeleted($recordId);
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -361,7 +362,7 @@ class BuyTogetherProductsController extends ListingBaseController
     }
 
 
-     /**
+    /**
      * setCustomColumnWidth
      *
      * @return void
@@ -377,7 +378,7 @@ class BuyTogetherProductsController extends ListingBaseController
             ],
             'upsell_products' => [
                 'width' => '65%'
-            ],            
+            ],
             'action' => [
                 'width' => '5%'
             ],

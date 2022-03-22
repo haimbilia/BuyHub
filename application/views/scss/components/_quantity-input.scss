@@ -21,7 +21,8 @@ $quantity-size: 26px;
         min-width: $quantity-size;
         color: $txt-gray;
         &:hover {
-            color: $txt-body;
+            color: $secondary-color;
+            border-color: currentColor;
         }
         &.not-allowed {
             background: none;

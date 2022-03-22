@@ -48,6 +48,7 @@ class WithdrawalRequestsController extends ListingBaseController {
             $frmSearch->fill($data);
         }
         $this->_template->addJs('withdrawal-requests/page-js/index.js');
+        $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 

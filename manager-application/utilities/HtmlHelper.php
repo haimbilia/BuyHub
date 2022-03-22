@@ -458,9 +458,11 @@ class HtmlHelper
             switch ($imageType) {
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                     $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgOrgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_SMALL, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgOrgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_ORIGINAL, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 default:
             }
@@ -477,15 +479,17 @@ class HtmlHelper
             if ($updatedOn) {
                 $uploadedTime = AttachedFile::setTimeParam($updatedOn);
                 $imgSrc  = UrlHelper::getCachedUrl($imgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgOrgSrc  = UrlHelper::getCachedUrl($imgOrgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             }
             $str .= '
                 <span class="media media-sm media-circle"
                     data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
+                    <a href="' . $imgOrgSrc . '" data-featherlight="image">
                     <img data-aspect-ratio="1:1"
                         src="' . $imgSrc . '"
-                        alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
+                        alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '"></a>
                 </span>';
             $count++;
         }
@@ -495,9 +499,10 @@ class HtmlHelper
                 data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
+                <a href="' . $imgOrgSrc . '" data-featherlight="image">
                 <img data-aspect-ratio="1:1"
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
-                    alt="' . $defaultImageName . '">
+                    alt="' . $defaultImageName . '"></a>
             </span>';
         }
 
