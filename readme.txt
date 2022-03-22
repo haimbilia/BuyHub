@@ -574,6 +574,7 @@ Updates/Fixes :
     => 062975 - Seller UI: "No Record Found" message is not showing if the seller trying to search the wrong record and the "invalid request" error is showing while trying to add the product's tags. 
     => 063079 - Admin UI: Json error is showing while uploading the banner under the collection section
     => 063178 - Admin UI: The "recent requests" is not showing on the top of the table under the cancellation request and the "update status" design is not the same on the "return request and cancel request page".
+    => 063180 - Seller UI: Search icon is not showing if seller select the keyword from the suggestions, canceled label design is also not correct and placeholder color is not same for all the fields under the "advanced search".
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -583,6 +584,7 @@ UAT points:
     => Top Search Items replaced with Top Search Keywords
     => Labels search issue when we have data with type 0
     => Admin listing pages: logo/image should get enlarged on mouse hover/click (examples brand/badge listing page)
+    => Change label active to activate and in-active to deactivate for all the listing pages.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
