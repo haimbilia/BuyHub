@@ -28,7 +28,7 @@ class LabelsController extends ListingBaseController
                     'onclick' => 'updateFile()',
                     'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#laptop">
                                 </use>
@@ -41,7 +41,7 @@ class LabelsController extends ListingBaseController
                     'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
                     'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $this->siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#mobile">
                                 </use>
@@ -109,21 +109,21 @@ class LabelsController extends ListingBaseController
         $type = FatApp::getPostedData('label_type', FatUtility::VAR_INT, -1);
         if ($type > -1) {
             $srch->addCondition('label_type', '=', $type);
-        } 
+        }
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('lbl.label_lang_id', '=', $this->siteLangId);
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $page = FatUtility::int($page);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder); 
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->addOrder($sortBy, $sortOrder);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -175,7 +175,7 @@ class LabelsController extends ListingBaseController
             unset($languages[$siteDefaultLangId]);
             foreach (array_keys($languages) as $langId) {
                 $updateLangDataobj = new TranslateLangData(Labels::DB_TBL);
-                $translatedData = $updateLangDataobj->directTranslate(['label_caption' => $record[$siteDefaultLangId]['label_caption']], $langId, CommonHelper::getDefaultFormLangId() );
+                $translatedData = $updateLangDataobj->directTranslate(['label_caption' => $record[$siteDefaultLangId]['label_caption']], $langId, CommonHelper::getDefaultFormLangId());
                 if (false === $translatedData) {
                     LibHelper::exitWithError($updateLangDataobj->getError(), true);
                 }
@@ -269,7 +269,7 @@ class LabelsController extends ListingBaseController
         $fld->overrideFldType('search');
 
         $frm->addSelectBox(Labels::getLabel('FRM_PLATFORM', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
 

@@ -23,8 +23,8 @@ class AbandonedCartController extends ListingBaseController {
                 'title' => Labels::getLabel('LBL_VIEW_BY_PRODUCT', $this->siteLangId),
                 'onclick' => ''
             ],
-            'label' => '<svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#view"></use>
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view"></use>
                         </svg><span>' . Labels::getLabel('BTN_PRODUCTS', $this->siteLangId) . '</span>',
         ];
 
