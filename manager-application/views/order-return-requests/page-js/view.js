@@ -53,7 +53,7 @@
 
     requestStatusForm = function (orrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "requestStatusForm", [orrequestId]), "", function (t) {
-            $.ykmodal(t.html);
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
