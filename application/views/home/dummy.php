@@ -262,3 +262,21 @@
          </div>
      </div>
  </section>
+ <div id="toast-container" class="toast-bottom-center">
+     <div class="toast warningMsgJs toast-warning" aria-live="assertive" style="">
+         <div class="toast-progress"></div><button type="button" class="toast-close-button" role="button">×</button>
+         <div class="toast-message">This is warning</div>
+     </div>
+     <div class="toast errorMsgJs toast-error" aria-live="assertive" style="">
+         <div class="toast-progress"></div><button type="button" class="toast-close-button" role="button">×</button>
+         <div class="toast-message">This is error</div>
+     </div>
+     <div class="toast infoMsgJs toast-info" aria-live="polite" style="">
+         <div class="toast-progress"></div><button type="button" class="toast-close-button" role="button">×</button>
+         <div class="toast-message">This is info</div>
+     </div>
+     <div class="toast successMsgJs toast-success" aria-live="polite" style="">
+         <div class="toast-progress"></div><button type="button" class="toast-close-button" role="button">×</button>
+         <div class="toast-message">This is success</div>
+     </div>
+ </div>

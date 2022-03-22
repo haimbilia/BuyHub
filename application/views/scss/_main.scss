@@ -34,10 +34,7 @@
 @import "components/graph";
 @import "components/hamburger";
 @import "components/heart";
-@import "components/ion.rangeSlider";
-@import "components/ion.rangeSlider.skinHTML5";
-@import "components/jquery.datetimepicker";
-@import "components/jquery-ui-timepicker-addon";
+
 @import "components/label";
 @import "components/loader";
 @import "components/login-wrapper";
@@ -45,6 +42,7 @@
 @import "components/media";
 @import "components/message";
 @import "components/modal";
+@import "components/toaster";
 @import "components/offcanvas";
 @import "components/multi-list";
 @import "components/pagination";
@@ -64,7 +62,6 @@
 @import "components/tabs";
 @import "components/wrap-drop";
 @import "components/auto-suggestions";
-
 @import "components/cards";
 @import "components/switch";
 @import "components/print";
@@ -101,6 +98,10 @@
 @import "components/collection-faq";
 @import "components/collection-incentives";
 @import "components/collection-newsletter";
+@import "components/ion.rangeSlider";
+@import "components/ion.rangeSlider.skinHTML5";
+@import "components/jquery.datetimepicker";
+@import "components/jquery-ui-timepicker-addon";
 @import "components/misc";
 
 // @import "components/collection-faq";
