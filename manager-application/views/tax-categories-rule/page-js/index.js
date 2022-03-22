@@ -1,5 +1,6 @@
 
 (function () {
+    
     getCombinedTaxes = function (taxStrId) {
         if (taxStrId == 0) {
             return;
@@ -35,11 +36,29 @@ function checkStatesDefault(countryId, stateIds, field) {
         var firstChild = '<option value = "-1" >All</option>';
         $(field).append(firstChild);
         $(field).append(res.html);
-        $(field).find("option[value='-1']:eq(1)").remove();
+        $(field).find("option[value='']").remove();
+        if( $(field).attr('id') !=   'taxruleloc_from_state_id'){
+            $(field).find("option[value='-1']").hide();   
+        }       
         if ($.isArray(stateIds)) {
             $(stateIds).each(function (index, val) {
                 $(field).find("option[value=" + val + "]").attr('selected', 'selected');
             });
         }
+        $('select[name="taxruleloc_type"]').trigger('change');
     });
 }
+
+$('body').on('change', 'select[name="taxruleloc_type"]', function () {
+    var dv = '#taxruleloc_to_state_id';
+    if ($(this).val() == -1) {
+        $(dv).val(-1);
+        $(dv).attr('disabled', true);
+        $(dv + " option[value='-1']").show();
+    } else {
+        $(dv).removeAttr('disabled');
+        $(dv).val( "");
+        $(dv + " option[value='-1']").hide();
+    }
+   
+});
