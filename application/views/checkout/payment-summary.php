@@ -113,7 +113,6 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                     </div>
                 </div>
                 <div class="review-block-body">
-
                     <ul class="shipping-methods">
                         <li class="shipping-methods-item">
                             <div class="shipping-methods-head">
@@ -198,13 +197,8 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         <?php break;
                         } ?>
                     </ul>
-
-
                     <?php echo $data['opshipping_label']; ?>
-
-
                 </div>
-
             </li>
         <?php } ?>
 

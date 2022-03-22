@@ -1767,4 +1767,8 @@ DELETE FROM tbl_language_labels WHERE label_key = "LBL_You_need_to_create_privat
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_ORDER_ID', 1, 'Order ID', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
-update `tbl_collections` set `collection_primary_records` = 5 WHERE `collection_primary_records` <= 0
+update `tbl_collections` set `collection_primary_records` = 5 WHERE `collection_primary_records` <= 0;
+
+-- ---- Remove EPage content for checkout page ---- --
+DELETE FROM `tbl_extra_pages` WHERE `epage_type` = 23;
+

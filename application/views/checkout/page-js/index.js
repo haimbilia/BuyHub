@@ -101,13 +101,12 @@ $("document").ready(function () {
     };
 
     loadFinancialSummary = function () {
-        $(financialSummary).html(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "getFinancialSummary"),
             "",
             function (ans) {
                 $(financialSummary).html(ans.data);
-                $("#netAmountSummary").html(ans.netAmount);
+                $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
             },
             [],
             false

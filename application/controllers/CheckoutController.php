@@ -230,11 +230,9 @@ class CheckoutController extends MyAppController
             $et->sendRequest();
         }
 
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_RIGHT_BLOCK, $this->siteLangId);
-        $this->set('pageData', $pageData);
         $this->set('addresses', $addresses);
         $this->set('headerData', $headerData);
+        $this->set('cartItemsCount', $this->cartObj->countProducts());
 
         $this->_template->render(true, false);
     }
