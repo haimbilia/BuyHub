@@ -1929,18 +1929,16 @@ class CheckoutController extends MyAppController
         $address = new Address($address_id, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
+        $stateId = 0;
         if ($address_id) {
             $stateId = $addresses['addr_state_id'];
-        } else {
-            $stateId = 0;
         }
         $addressFrm->fill($addresses);
         $this->set('addressFrm', $addressFrm);
         $this->set('address_id', $address_id);
+        $labelHeading = Labels::getLabel('MSG_ADD_ADDRESS', $this->siteLangId);
         if ($address_id > 0) {
             $labelHeading = Labels::getLabel('MSG_EDIT_ADDRESS', $this->siteLangId);
-        } else {
-            $labelHeading = Labels::getLabel('MSG_ADD_ADDRESS', $this->siteLangId);
         }
 
         $cartHasPhysicalProduct = false;
@@ -1953,6 +1951,7 @@ class CheckoutController extends MyAppController
         $this->set('stateId', $stateId);
         $addressType = FatApp::getPostedData('address_type', FatUtility::VAR_INT, 0);
         $this->set('addressType', $addressType);
+        $this->set('address_id', $address_id);
         $this->_template->render(false, false, 'checkout/address-form.php');
     }
 
