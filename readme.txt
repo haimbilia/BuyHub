@@ -582,6 +582,7 @@ UAT points:
     => Top Search Items replaced with Top Search Keywords
     => Labels search issue when we have data with type 0
     => Admin listing pages: logo/image should get enlarged on mouse hover/click (examples brand/badge listing page)
+    => Change label active to activate and in-active to deactivate for all the listing pages.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
