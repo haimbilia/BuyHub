@@ -703,7 +703,7 @@ class BrandsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'brand_logo',
             'brand_identifier',
             'seo_url',

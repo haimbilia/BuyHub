@@ -118,7 +118,7 @@ class ShopReportsController extends ListingBaseController
         }
 
         $arr = [        
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_REPORTED_BY', $this->siteLangId),
             'reportreason_title' => Labels::getLabel('LBL_REPORT_REASON', $this->siteLangId),
@@ -132,7 +132,7 @@ class ShopReportsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [         
-            'listSerial',
+            /* 'listSerial', */
             'shop_name',
             'user_name',
             'reportreason_title',

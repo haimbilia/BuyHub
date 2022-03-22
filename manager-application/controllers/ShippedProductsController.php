@@ -275,7 +275,7 @@ class ShippedProductsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+          /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'total_seller_ship' => Labels::getLabel('LBL_SHIPPED_BY_SELLER', $this->siteLangId),
             'total_admin_seller_ship' => Labels::getLabel('LBL_SHIPPED_BY_ADMIN', $this->siteLangId),
@@ -289,7 +289,7 @@ class ShippedProductsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'total_seller_ship',
             'total_admin_seller_ship',

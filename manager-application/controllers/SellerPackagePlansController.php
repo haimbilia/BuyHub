@@ -266,7 +266,7 @@ class SellerPackagePlansController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'spplan_price' => Labels::getLabel('LBL_PLAN_PRICE', $this->siteLangId),
             'spplan_interval' => Labels::getLabel('LBL_INTERVAL', $this->siteLangId),
             'spplan_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -280,7 +280,7 @@ class SellerPackagePlansController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'spplan_price',
             'spplan_interval',
             'spplan_active',

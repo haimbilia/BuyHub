@@ -358,7 +358,7 @@ class RelatedProductsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
             'related_products' => Labels::getLabel('LBL_Related_Products', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -396,7 +396,7 @@ class RelatedProductsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'product_name',
             'related_products',
             'action'

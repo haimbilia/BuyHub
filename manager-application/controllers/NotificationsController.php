@@ -235,7 +235,7 @@ class NotificationsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+          /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
             'notification' => Labels::getLabel('LBL_NOTIFICATION', $this->siteLangId),
             'notification_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
@@ -248,7 +248,7 @@ class NotificationsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'user_name',
             'notification',
             'notification_added_on',

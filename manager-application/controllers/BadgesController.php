@@ -515,7 +515,7 @@ class BadgesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
@@ -531,7 +531,7 @@ class BadgesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             Badge::DB_TBL_PREFIX . 'shape_type',
             Badge::DB_TBL_PREFIX . 'name',
             Badge::DB_TBL_PREFIX . 'trigger_type',

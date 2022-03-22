@@ -235,7 +235,7 @@ class OrderReturnReasonsController extends ListingBaseController {
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             /* 'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->siteLangId), */
             'orreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION', $this->siteLangId),
@@ -248,7 +248,7 @@ class OrderReturnReasonsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'orreason_identifier',
             'orreason_title',
             'action',

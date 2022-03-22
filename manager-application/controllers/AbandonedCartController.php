@@ -181,7 +181,7 @@ class AbandonedCartController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
             'selprod_title' => Labels::getLabel('LBL_SELLER_PRODUCT', $this->siteLangId),
             'abandonedcart_qty' => Labels::getLabel('LBL_QTY', $this->siteLangId),
@@ -196,7 +196,7 @@ class AbandonedCartController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'user_name',
             'selprod_title',
             'abandonedcart_qty',

@@ -402,7 +402,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'taxrule_name' => Labels::getLabel('LBL_RULE_NAME', $this->siteLangId),
             'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'trr_rate' => Labels::getLabel('LBL_TAX_RATE(%)', $this->siteLangId),
@@ -417,7 +417,7 @@ class TaxCategoriesRuleController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'taxrule_name',
             'taxcat_identifier',
             'trr_rate',

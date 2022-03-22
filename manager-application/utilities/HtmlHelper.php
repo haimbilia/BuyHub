@@ -7,6 +7,8 @@ class HtmlHelper
     public const PRIMARY = 4;
     public const INFO = 5;
 
+    public const RECORD_COUNT_LIMIT = 11;
+
     public static function getLoader()
     {
         return '<div class="table-processing">
@@ -498,11 +500,10 @@ class HtmlHelper
             <span class="media media-sm media-circle"
                 data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
-                data-original-title="' . $defaultImageName . '">
-                <a href="' . $imgOrgSrc . '" data-featherlight="image">
+                data-original-title="' . $defaultImageName . '">                
                 <img data-aspect-ratio="1:1"
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
-                    alt="' . $defaultImageName . '"></a>
+                    alt="' . $defaultImageName . '">
             </span>';
         }
 
@@ -705,5 +706,10 @@ class HtmlHelper
 
         $fld->addFieldTagAttribute('onkeyup', "getIdentifier(this);");
         $fld->htmlAfterField = "<small class='form-text text-muted'>" . HtmlHelper::getIdentifierText($identifier, $langId) . '</small>';
+    }
+
+    public static function displayNumberWithPlus(int $recordCount)
+    {
+        return ((self::RECORD_COUNT_LIMIT - 1) < $recordCount) ? $recordCount . '+' : $recordCount;
     }
 }

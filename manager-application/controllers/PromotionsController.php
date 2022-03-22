@@ -1063,7 +1063,7 @@ class PromotionsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'promotion_name' => Labels::getLabel('LBL_PROMOTION_NAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'promotion_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
@@ -1087,7 +1087,7 @@ class PromotionsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'promotion_name',
             'user_name',
             'promotion_type',

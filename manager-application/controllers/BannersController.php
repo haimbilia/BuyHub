@@ -647,7 +647,7 @@ class BannersController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'banner_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'banner_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'banner_img' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
@@ -668,7 +668,7 @@ class BannersController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'banner_title',
             'banner_type',
             'banner_img',

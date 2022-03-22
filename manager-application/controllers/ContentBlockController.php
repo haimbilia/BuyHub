@@ -668,7 +668,7 @@ class ContentBlockController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'epage_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'epage_label' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'epage_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -687,7 +687,7 @@ class ContentBlockController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'epage_label',
             'epage_active',
             'action',

@@ -311,7 +311,7 @@ class LabelsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'label_key' => Labels::getLabel('LBL_LABEL_TYPE', $this->siteLangId),
             'label_caption' => Labels::getLabel('LBL_CAPTION', $this->siteLangId),
             'label_type' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),
@@ -325,7 +325,7 @@ class LabelsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'label_caption',
             'label_key',
             'label_type',

@@ -210,7 +210,7 @@ class TransactionsController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -227,7 +227,7 @@ class TransactionsController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'utxn_id',
             'user_name',
             'utxn_date',

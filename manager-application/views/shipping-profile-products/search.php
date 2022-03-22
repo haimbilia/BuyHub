@@ -1,7 +1,4 @@
 <?php
-
-use Google\Service\Script;
-
  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 if (!empty($productsData)) {

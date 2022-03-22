@@ -303,7 +303,7 @@ trait OrdersPackage
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
             'buyer_user_name' => Labels::getLabel('LBL_BUYER_NAME', $this->siteLangId),
             'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
@@ -320,7 +320,7 @@ trait OrdersPackage
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'order_number',
             'buyer_user_name',
             'order_date_added',

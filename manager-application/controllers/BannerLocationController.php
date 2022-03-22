@@ -328,7 +328,7 @@ class BannerLocationController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'blocation_name' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'blocation_banner_width' => Labels::getLabel('LBL_PREFFERED_WIDTH_(IN_PIXELS)', $this->siteLangId),
             'blocation_banner_height' => Labels::getLabel('LBL_PREFFERED_HEIGHT_(IN_PIXELS)', $this->siteLangId),
@@ -349,7 +349,7 @@ class BannerLocationController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'blocation_name',
             'blocation_banner_width',
             'blocation_banner_height',

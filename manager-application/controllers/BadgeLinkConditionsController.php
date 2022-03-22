@@ -677,7 +677,7 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'cond_seller_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_RECORD_TYPE', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId),
@@ -695,7 +695,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'cond_seller_name',
             BadgeLinkCondition::DB_TBL_PREFIX . 'record_type',
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type',

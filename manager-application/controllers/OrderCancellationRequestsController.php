@@ -431,7 +431,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'reuqest_detail' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
             'buyer_detail' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
             'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
@@ -452,7 +452,7 @@ class OrderCancellationRequestsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'reuqest_detail',
             'buyer_detail',
             'vendor_detail',
