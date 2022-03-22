@@ -117,16 +117,19 @@
                 </use>
             </svg>
         </button>
-        <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
-            <a class="c-header-icon btn bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
-                <svg class="svg bell-shake-delay" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
-                    </use>
-                </svg>
+        <?php if ($userPrivilege->canViewMessages(0, true)) {
+            if ($activeTab == 'B' || $activeTab == 'S') {
+        ?>
+                <a class="c-header-icon btn bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
+                    <svg class="svg bell-shake-delay" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
+                        </use>
+                    </svg>
 
-                <span class="h-badge">
-                    <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
-        <?php } ?>
+                    <span class="h-badge">
+                        <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
+        <?php }
+        } ?>
         <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
     </div>
 </header>

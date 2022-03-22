@@ -103,7 +103,7 @@ if (!$print) { ?>
                             <?php
                             if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
                                 $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
-                                <span class="notice">
+                                <span class="badge badge-danger ms-2">
                                     <?php echo $statusName; ?>
                                 </span>
                             <?php } ?>

@@ -207,7 +207,25 @@ class TaxStructureController extends ListingBaseController {
         unset($post['taxstr_id']);
         $post['taxstr_identifier'] = $post['taxstr_name'];
         $post['taxstr_is_combined'] = $post['taxstr_is_combined'] ?? 0;
+
         $record = new TaxStructure($recordId);
+      
+        if(0 < $recordId){          
+
+            /** [ checking if structure is attached to any Tax rule */
+            $isOldStrIsComb = TaxStructure::getAttributesById($recordId, 'taxstr_is_combined');
+            if($isOldStrIsComb != $post['taxstr_is_combined']){
+                $srch = TaxRule::getSearchObject();
+                $srch->addCondition('taxrule_taxstr_id', '=', $recordId);
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1); 
+                if(FatApp::getDb()->fetch($srch->getResultSet())){
+                    LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_CHANGE_TAXTYPE_AS_TAX_STRUCTURE_IS_ALREADY_ATTATCHED_TO_SOME_TAX_RULE'), true);
+                }                
+            }
+            /** ] */
+        }
+        
         $record->assignValues($post);
         if (!$record->save()) {
             $msg = $record->getError();

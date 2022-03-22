@@ -255,9 +255,9 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    grid-gap: 1rem;
     .btn {
-        flex: 0 0 48%;
-        max-width: 48%;
+        flex: 1;
     }
 }
 

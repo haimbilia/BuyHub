@@ -37,7 +37,16 @@ class LibHelper extends FatUtility
         }
         FatUtility::dieWithError($message);
     }
-
+    
+    /**
+     * exitWithError
+     *
+     * @param  mixed $message : Can be Array as well when called from self::dieJsonResponse()
+     * @param  bool $json
+     * @param  bool $redirect
+     * @param  array $jsonData
+     * @return void
+     */
     public static function exitWithError($message, $json = false, $redirect = false, $jsonData = [])
     {      
         
@@ -50,14 +59,24 @@ class LibHelper extends FatUtility
                 $message = strip_tags($message);
             }
             header('Content-Type: application/json; charset=utf-8');
-            $jsonData += ['msg' => $message, 'status' => 0];
+            
+            if (is_array($message)) {
+                $jsonData += $message;
+            } else {
+                $jsonData += ['msg' => $message, 'status' => 0];
+            }
+
             FatUtility::dieJsonError($jsonData);
         }
 
         $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
         if (true === $json || 'json' == $fOutMode) {
             header('Content-Type: application/json; charset=utf-8');
-            $jsonData += ['msg' => $message, 'status' => 0];
+            if (is_array($message)) {
+                $jsonData += $message;
+            } else {
+                $jsonData += ['msg' => $message, 'status' => 0];
+            }
             FatUtility::dieJsonError($jsonData);
         }
 
@@ -333,11 +352,11 @@ class LibHelper extends FatUtility
      */
     public static function dieJsonResponse(array $data = [], int $langId = 0)
     {
-        $status = array_key_exists('status', $data) && 0 < FatUtility::int($data['status']) ? FatUtility::int($data['status']) : Plugin::RETURN_FALSE;
+        $status = (int) $data['status'] ?? Plugin::RETURN_FALSE;
         $langId = 0 < $langId ? $langId : CommonHelper::getLangId();
 
         $msg = (0 < $status ? Labels::getLabel("MSG_SUCCESS", $langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $langId));
-        $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
+        $data['msg'] = $data['msg'] ?? $msg;
 
         $respData = [];
         if (array_key_exists('data', $data)) {
