@@ -29,19 +29,19 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_MANAGEMENT', $siteLangId); ?>">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
+                <span class="menu-title"><?php echo Labels::getLabel('NAV_PRODUCT_MANAGEMENT', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PRODUCT_CATALOG" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -51,7 +51,31 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerProducts"]' href="<?php echo UrlHelper::generateUrl('SellerProducts'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_INVENTORY', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductCategories"]' href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -80,30 +104,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductCategories"]' href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerProducts"]' href="<?php echo UrlHelper::generateUrl('SellerProducts'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_INVENTORY', $siteLangId); ?></span>
-                            </a>
-                        </li>
-                    <?php } ?>
+
                     <?php if ($objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Options", "OptionValues"]' href="<?php echo UrlHelper::generateUrl('Options'); ?>">
@@ -189,7 +190,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if ($objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <?php if ($objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true) && 0 < FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>">
                                 <span class="nav_icon">
@@ -197,7 +198,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOM_PRODUCT_CATALOG_REQUESTS', $siteLangId); ?>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_MASTER_PRODUCT_REQUESTS', $siteLangId); ?>
                                     <?php if (!$quickSearch && $custProdReqCount) { ?>(<?php echo $custProdReqCount; ?>)<?php } ?></span>
                             </a>
                         </li>
@@ -300,7 +301,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <?php if ($objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UserGdprRequests"]' href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
                                 <span class="nav_icon">
@@ -1099,7 +1100,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["CatalogReport"]' href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
+                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>

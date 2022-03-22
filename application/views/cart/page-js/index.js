@@ -88,11 +88,6 @@ $(function () {
 
 	moveToWishlist = function (selprod_id, event, key) {
 		event.stopPropagation();
-		if (isUserLogged() == 0) {
-			loginPopUpBox();
-			return false;
-		}
-
 		fcom.ajax(fcom.makeUrl('Account', 'moveToWishList', [selprod_id], siteConstants.webroot_dashboard), '', function (resp) {
 			removeFromCart(key);
 		});

@@ -123,6 +123,7 @@ class GuestUserController extends MyAppController
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, current($frm->getValidationErrors()));
             LibHelper::dieJsonResponse($resp);
         }
+
         $frm->expireSecurityToken(FatApp::getPostedData());
 
         $password = FatApp::getPostedData('password');
@@ -152,7 +153,7 @@ class GuestUserController extends MyAppController
         if (!empty($dialCode) && false === strpos($userName, $dialCode)) {
             $userName = trim($dialCode) . trim($userName);
         }
-
+        
         if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $authentication->getError());
             LibHelper::dieJsonResponse($resp);
@@ -165,7 +166,6 @@ class GuestUserController extends MyAppController
         $user = new User($userId);
         $userSelectedCookies = $user->getUserSelectedCookies();
         if (CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)) {
-            //$user = new User($userId);            
             $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
             $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
@@ -227,18 +227,8 @@ class GuestUserController extends MyAppController
                     $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'Ad';
                     break;
             }
-
-
-            /* if( User::isBuyer()  || User::isSigningUpBuyer()){
-              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';
-              } else if( User::isSeller() || User::isSigningUpForSeller() ){
-              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-              } else if( User::isAdvertiser() || User::isSigningUpAdvertiser() ){
-              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'Ad';
-              } else if( User::isAffiliate()  || User::isSigningUpAffiliate()){
-              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
-              } */
         }
+
         if ($redirectUrl == '') {
             $redirectUrl = User::getPreferedDashbordRedirectUrl($preferredDashboard);
         }

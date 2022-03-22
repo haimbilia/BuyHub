@@ -2,7 +2,7 @@
 
 class AdminAuthentication extends FatModel
 {
-    public const SESSION_ELEMENT_NAME = 'yokartAdmin';
+    public const SESSION_ELEMENT_NAME = User::ADMIN_SESSION_ELEMENT_NAME;
     public const ADMIN_REMEMBER_ME_COOKIE_NAME = 'yokartAdmin_remember_me';
     public static $_instance;
 

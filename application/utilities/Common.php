@@ -74,9 +74,7 @@ class Common
     public static function headerUserArea($template)
     {
         $template->set('siteLangId', CommonHelper::getLangId());
-        $isUserLogged = UserAuthentication::isUserLogged();
-        $template->set('isUserLogged', $isUserLogged);
-        if ($isUserLogged) {
+        if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
             $userId = UserAuthentication::getLoggedUserId();
             $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
@@ -113,7 +111,7 @@ class Common
         /* $frm->addSelectBox('', 'category', $categoriesArr, '', array(), Labels::getLabel('LBL_All', CommonHelper::getLangId()) ); */
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'category');
-       /*  $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId())); */
+        /*  $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId())); */
         return $frm;
     }
 

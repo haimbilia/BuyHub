@@ -68,9 +68,9 @@ class Importexport extends ImportexportCommon
         switch (strtoupper($type)) {
             case 'EXPORT':
                 $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MARKETPLACE_PRODUCTS', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
-                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_SELLER_INVENTORIES', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
                 $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
@@ -83,16 +83,15 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('NAV_TAX_CATEGORIES', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_USERS] = Labels::getLabel('NAV_USERS', $langId);
-                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);
-                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);                   
                 } else {
                     $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 }
                 break;
             case 'IMPORT':
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MARKETPLACE_PRODUCTS', $langId);
+                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
-                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_SELLER_INVENTORIES', $langId);
+                $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
@@ -105,7 +104,6 @@ class Importexport extends ImportexportCommon
                     $arr[static::TYPE_STATE] = Labels::getLabel('NAV_STATES', $langId);
                     $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);
                     //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('NAV_POLICY_POINTS', $langId);
-                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 } else {
                     unset($arr[static::TYPE_PRODUCTS]);
                     $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
