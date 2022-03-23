@@ -1,23 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-
-<?php /* ?> <div class="section__action js-editCart" style="display:block;"><a href="javascript:void(0);"
-        onClick="editCart()"
-        class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Edit_Cart', $siteLangId);?></a> </div>
-<?php */ ?>
-<?php /*  if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
-<div class="applied-coupon">
-    <span><?php echo Labels::getLabel("LBL_Coupon", $siteLangId); ?>
-        "<strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong>"
-        <?php echo Labels::getLabel("LBL_Applied", $siteLangId); ?></span> <a href="javascript:void(0)"
-        onClick="removePromoCode()"
-        class="btn btn-brand btn-sm"><?php echo Labels::getLabel("LBL_Remove", $siteLangId); ?></a>
-</div>
-<?php } else { ?>
-<div class="coupon"> <a class="coupon-input btn btn-brand btn-block" href="javascript:void(0)"
-        onclick="getPromoCode()"><?php echo Labels::getLabel('LBL_I_have_a_coupon', $siteLangId); ?></a> </div>
-
-<?php } */ ?>
-
 <div class="cart-total-head">
     <h3 class="cart-total-title">
         <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?> </h3>

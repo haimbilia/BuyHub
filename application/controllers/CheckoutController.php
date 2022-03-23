@@ -9,7 +9,7 @@ class CheckoutController extends MyAppController
     {
         parent::__construct($action);
         UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));
-        
+
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
@@ -230,11 +230,9 @@ class CheckoutController extends MyAppController
             $et->sendRequest();
         }
 
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_RIGHT_BLOCK, $this->siteLangId);
-        $this->set('pageData', $pageData);
         $this->set('addresses', $addresses);
         $this->set('headerData', $headerData);
+        $this->set('cartItemsCount', $this->cartObj->countProducts());
 
         $this->_template->render(true, false);
     }
@@ -1494,7 +1492,8 @@ class CheckoutController extends MyAppController
             $this->_template->render();
         }
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function paymentTab($order_id, $plugin_id)
@@ -1929,18 +1928,16 @@ class CheckoutController extends MyAppController
         $address = new Address($address_id, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
+        $stateId = 0;
         if ($address_id) {
             $stateId = $addresses['addr_state_id'];
-        } else {
-            $stateId = 0;
         }
         $addressFrm->fill($addresses);
         $this->set('addressFrm', $addressFrm);
         $this->set('address_id', $address_id);
+        $labelHeading = Labels::getLabel('MSG_ADD_ADDRESS', $this->siteLangId);
         if ($address_id > 0) {
             $labelHeading = Labels::getLabel('MSG_EDIT_ADDRESS', $this->siteLangId);
-        } else {
-            $labelHeading = Labels::getLabel('MSG_ADD_ADDRESS', $this->siteLangId);
         }
 
         $cartHasPhysicalProduct = false;
@@ -1953,6 +1950,7 @@ class CheckoutController extends MyAppController
         $this->set('stateId', $stateId);
         $addressType = FatApp::getPostedData('address_type', FatUtility::VAR_INT, 0);
         $this->set('addressType', $addressType);
+        $this->set('address_id', $address_id);
         $this->_template->render(false, false, 'checkout/address-form.php');
     }
 
@@ -2017,7 +2015,8 @@ class CheckoutController extends MyAppController
         $frm = new Form('frmRewards');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
+
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('LBL_APPLY', $this->siteLangId), 'submit', 'btn_submit', 'btn-apply'));
         return $frm;
     }
 

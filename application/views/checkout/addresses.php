@@ -10,16 +10,11 @@
     </h5>
 </div>
 
-<form class="form">
-    <div class="modal-body">
-        <div class="step">
-            <div class="step_section">
-                <div class="step_head">
-                    <button onclick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link-underline">
-                        <?php echo Labels::getLabel('LBL_ADD_NEW_ADDRESS', $siteLangId); ?>
-                    </button>
-                </div>
-                <div class="step_body">
+<div class="modal-body form-edit">
+    <form class="form">
+        <div class="form-edit-body loaderContainerJs">
+            <div class="row">
+                <div class="col-md12">
                     <?php if ($addresses) { ?>
                         <ul class="list-addresses scroll scroll-y">
                             <?php foreach ($addresses as $address) {
@@ -61,23 +56,32 @@
 
                                                     <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                                                 </button>
-                                                <button class="btn btn-icon btn-addresses" type="button" onclick="removeAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-
-                                                    <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
-                                                </button>
+                                                <?php if ($selected_billing_address_id != $address['addr_id']) { ?>
+                                                    <button class="btn btn-icon btn-addresses" type="button" onclick="removeAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
+                                                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                                    </button>
+                                                <?php } ?>
                                             </div>
                                         <?php } ?>
                                     </label>
                                 </li>
                             <?php } ?>
+                            <li class="list-addresses-item addrListJs">
+                                <div class="addresses-detail">
+                                    <button class="btn btn-add-address" type="button" onclick="showAddressFormDiv(<?php echo $addressType; ?>);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg mb-4" width="52" height="52" viewBox="0 0 24 24" fill="#000000">
+                                            <path d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M20 1v3h3v2h-3v3h-2V6h-3V4h3V1h2zm-8 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm1-9.94v2.02A6.53 6.53 0 0 0 12 5c-3.35 0-6 2.57-6 6.2 0 2.34 1.95 5.44 6 9.14 4.05-3.7 6-6.79 6-9.14V11h2v.2c0 3.32-2.67 7.25-8 11.8-5.33-4.55-8-8.48-8-11.8C4 6.22 7.8 3 12 3c.34 0 .67.02 1 .06z" />
+                                        </svg>
+                                        <?php echo Labels::getLabel('LBL_ADD_NEW_ADDRESS', $siteLangId); ?>
+                                    </button>
+                                </div>
+                            </li>
                         </ul>
-
                     <?php } ?>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
         <div class="form-edit-foot">
             <div class="row">
                 <?php
@@ -89,16 +93,16 @@
                 }
                 ?>
                 <div class="col">
-                    <button class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
+                    <button type="button" class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
                         <?php echo Labels::getLabel('LBL_RESET', $siteLangId); ?>
                     </button>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-brand btn-wide" id="btn-continue-js" onclick="<?php echo $contiJsFunc; ?>">
-                        <?php echo Labels::getLabel('LBL_CONTINUE', $siteLangId); ?>
+                    <button type="button" class="btn btn-brand btn-wide" id="btn-continue-js" onclick="<?php echo $contiJsFunc; ?>" title="<?php echo Labels::getLabel('LBL_SET_SELECTED_ADDRESS_AS_SHIPPING_ADDRESS', $siteLangId); ?>" data-bs-toggle="tooltip">
+                        <?php echo Labels::getLabel('LBL_SAVE', $siteLangId); ?>
                     </button>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>

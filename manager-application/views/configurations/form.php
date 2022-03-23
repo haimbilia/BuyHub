@@ -75,7 +75,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
                 $('.listingFilter').attr('disabled', 'disabled');
                 $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
             } else {
-                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true).val(0); // enable
+                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
             }
 
             if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {

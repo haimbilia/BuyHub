@@ -109,102 +109,36 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 <div class="review-block-head">
                     <h5 class="h5"><?php echo Labels::getLabel('LBL_Shipping:', $siteLangId); ?></h5>
                     <div class="review-block-action">
-                        <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
+                        <button type="button" class="link-underline" onclick="loadShippingSummaryDiv();">
+                            <span>
+                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                            </span>
+                        </button>
                     </div>
                 </div>
                 <div class="review-block-body">
-
                     <ul class="shipping-methods">
-                        <li class="shipping-methods-item">
-                            <div class="shipping-methods-head">
-                                <h6 class="h6">Sinan Shopee</h6>
-                                <button class="link-underline" type="button">Edit</button>
-                            </div>
-                            <div class="shipping-methods-body">
-                                <span class="shipping-methods-type">Standard </span>
-                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
-                                <p><strong>Items:</strong> 10</p>
-                            </div>
-
-                        </li>
-                        <li class="shipping-methods-item">
-                            <div class="shipping-methods-head">
-                                <h6 class="h6">Sinan Shopee</h6>
-                                <button class="link-underline" type="button">Edit</button>
-                            </div>
-                            <div class="shipping-methods-body">
-                                <span class="shipping-methods-type">Standard </span>
-                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
-                                <p><strong>Items:</strong> 10</p>
-                            </div>
-
-                        </li>
-                        <li class="shipping-methods-item">
-                            <div class="shipping-methods-head">
-                                <h6 class="h6">Sinan Shopee</h6>
-                                <button class="link-underline" type="button">Edit</button>
-                            </div>
-                            <div class="shipping-methods-body">
-                                <span class="shipping-methods-type">Standard </span>
-                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
-                                <p><strong>Items:</strong> 10</p>
-                            </div>
-
-                        </li>
-                        <li class="shipping-methods-item">
-                            <div class="shipping-methods-head">
-                                <h6 class="h6">Sinan Shopee</h6>
-                                <button class="link-underline" type="button">Edit</button>
-                            </div>
-                            <div class="shipping-methods-body">
-                                <span class="shipping-methods-type">Standard </span>
-                                <p>3 – 7 Business Days: Arrives between February 28 - March 04</p>
-                                <p><strong>Items:</strong> 10</p>
-                            </div>
-
-                        </li>
-
-
-                    </ul>
-
-                    <ul class="media-more media-more-sm show">
-                        <?php foreach ($orderShippingData as $shipData) { ?>
-                            <?php
-                            foreach ($shipData as $data) {
-                                $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
-                                $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], 'WEBP' . ImageDimension::VIEW_EXTRA_SMALL, $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
-                            ?>
-                                <li>
-                                    <span class="circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
-                                        <?php
-                                        $pictureAttr = [
-                                            'webpImageUrl' => $imageWebpUrl,
-                                            'jpgImageUrl' => $imageUrl,
-                                            'imageUrl' => $imageUrl,
-                                            'alt' => $data['op_selprod_title'],
-                                            'siteLangId' => $siteLangId,
-                                        ];
-
-                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
-                                        ?>
-                                    </span>
+                        <?php foreach ($orderShippingData as $shipData) {
+                            foreach ($shipData as $data) { ?>
+                                <li class="shipping-methods-item">
+                                    <div class="shipping-methods-head">
+                                        <h6 class="h6">
+                                            <?php echo ($data['opshipping_by_seller_user_id'] > 0) ? $data['op_shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null,  ''); ?>
+                                        </h6>
+                                    </div>
+                                    <div class="shipping-methods-body">
+                                        <span class="shipping-methods-type"><?php echo $data['opshipping_label']; ?></span>
+                                        <p><?php echo $data['opshipping_label']; ?></p>
+                                        <p>
+                                            <strong><?php echo Labels::getLabel('LBL_ITEMS:'); ?></strong>
+                                            <?php echo $data['op_qty']; ?>
+                                        </p>
+                                    </div>
                                 </li>
-                            <?php } ?>
-                            <?php if (count($orderShippingData) > 1) { ?>
-                                <li> <span class="circle plus-more" onClick="orderShippingData('<?php echo $orderId; ?>')"><?php echo '+ ' . (count($orderShippingData) - 1); ?></span>
-                                </li>
-                            <?php }  ?>
-                        <?php break;
+                        <?php }
                         } ?>
                     </ul>
-
-
-                    <?php echo $data['opshipping_label']; ?>
-
-
                 </div>
-
             </li>
         <?php } ?>
 
@@ -245,148 +179,116 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
         </div>
         <div class="step_body">
             <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
-                <label class="checkbox mb-4"><input onClick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1"><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
+                <label class="checkbox mb-4"><input onClick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
+                    <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
                 </label>
-            <?php } ?>
-            <?php if (empty($cartSummary['cartRewardPoints'])) { ?>
-                <?php if ($rewardPoints > 0) { ?>
-                    <div class="rewards">
-                        <div class="rewards__points">
-                            <ul>
-                                <li>
-                                    <p><?php echo Labels::getLabel('LBL_AVAILABLE_REWARDS_POINTS', $siteLangId); ?></p>
-                                    <span class="count"><?php echo $rewardPoints; ?></span>
-                                </li>
-                                <li>
-                                    <p><?php echo Labels::getLabel('LBL_POINTS_WORTH', $siteLangId); ?></p>
-                                    <span class="count"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($rewardPoints), true, false, true, false, true); ?></span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="info">
-                            <span>
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"></use>
-                                </svg>
-                                <?php
-                                $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
-                                $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
-                                $canBeUsed = min(min($rewardPoints, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
-                                $str = Labels::getLabel('LBL_MAXIMUM_{REWARDS}_REWARDS_POINT_REDEEM_FOR_THIS_ORDER', $siteLangId);
-                                echo CommonHelper::replaceStringData($str, ['{REWARDS}' => $canBeUsed]); ?>
-                            </span>
-                        </div>
-                        <?php
-                        $redeemRewardFrm->setFormTagAttribute('class', 'form form-inline');
-                        $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
-                        $redeemRewardFrm->setJsErrorDisplay('afterfield');
-                        $fld = $redeemRewardFrm->getField('redeem_rewards');
-                        $fld->setFieldTagAttribute('class', 'form-control');
-                        $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
-                        $fld = $redeemRewardFrm->getField('btn_submit');
-                        $fld->setFieldTagAttribute('class', 'btn btn-submit');
-                        echo $redeemRewardFrm->getFormTag();  ?>
-                        <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
-                        <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
-                        </form>
-                        <?php echo  $redeemRewardFrm->getExternalJs(); ?>
-                    </div>
-                <?php } ?>
-            <?php } else { ?>
-                <div class="info">
-                    <span> <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                            </use>
-                        </svg> <?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
-                        <strong><?php echo $cartSummary['cartRewardPoints']; ?>
-                            (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
-                        <?php echo Labels::getLabel('LBL_Successfully_Used', $siteLangId); ?></span>
-                    <ul class="list-actions">
-                        <li>
-                            <button onClick="removeRewardPoints()">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                    </use>
-                                </svg>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            <?php } ?>
-
-
-            <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-                <div class="wallet-balance">
-                    <label class="checkbox wallet">
-                        <input onChange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
-
-                        <span class="wallet__txt">
-                            <svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet">
-                                </use>
-                            </svg>
-                            <div class="">
-                                <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></p>
-                                <span class="currency-value" dir="ltr"><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></span>
-                            </div>
-                        </span>
-                    </label>
-                    <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
-                        $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
-                        $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
-                        $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
-                        $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                        $WalletPaymentForm->developerTags['fld_default_col'] = 12;
-                        //echo $WalletPaymentForm->getFormHtml(); 
-                        echo $WalletPaymentForm->getFormTag();
-                        echo $WalletPaymentForm->getFieldHTML('btn_submit');
-                        echo $WalletPaymentForm->getExternalJS();
-                    ?>
-                        </form>
-
-                        <script type="text/javascript">
-                            function confirmOrder(frm) {
-                                var data = fcom.frmData(frm);
-                                var action = $(frm).attr('action');
-                                fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
-                                    $(location).attr("href", action);
-                                });
-                            }
-                        </script>
-                    <?php } else { ?>
-                        <div class="wallet-balance_info">
-                            <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?></div>
-                    <?php } ?>
-                </div>
             <?php } ?>
 
             <div class="use-reward-block mb-5">
-                <h6 class="h6">Use Reward and Wallet Credits</h6>
+                <h6 class="h6">
+                    <?php echo Labels::getLabel('LBL_USE_REWARD_AND_WALLET_CREDITS', $siteLangId); ?>
+                </h6>
                 <div class="wallet-options">
-                    <div class="wallet-options-list">
-                        <form class="form form-apply" action="">
-                            <input type="text" placeholder="Use Reward Point">
-                            <button class="btn-apply">Apply</button>
-                        </form>
-                        <p class="txt-sm">Maximum 1865 Rewards Point Redeem For This Order</p>
-                    </div>
-                    <div class="wallet-options-list">
-                        <label class="checkbox wallet-credits">
-                            <input type="checkbox" name="" value="1">
-                            Wallet Credits: <strong>$3,169.32</strong> </label>
-                        <p class="txt-sm">Use My Wallet Balance To Pay For My Order</p>
-                    </div>
-                    <div class="wallet-options-list">
-                        <p class="txt-sm">Available Rewards Points</p>
-                        <div class="wallet-options-value">100000</div>
-                    </div>
-                    <div class="wallet-options-list">
-                        <p class="txt-sm">Points Worth</p>
-                        <div class="wallet-options-value">$100,000.00</div>
-                    </div>
+                    <?php if (empty($cartSummary['cartRewardPoints'])) {
+                        if ($rewardPoints > 0) { ?>
+                            <div class="wallet-options-list">
+                                <?php
+                                $redeemRewardFrm->setFormTagAttribute('class', 'form form-apply');
+                                $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
+                                $redeemRewardFrm->setJsErrorDisplay('afterfield');
+                                $fld = $redeemRewardFrm->getField('redeem_rewards');
+                                $fld->setFieldTagAttribute('class', 'form-control');
+                                $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
 
+                                echo $redeemRewardFrm->getFormTag();
+                                echo $redeemRewardFrm->getFieldHtml('redeem_rewards');
+                                echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
+                                </form>
+                                <?php echo  $redeemRewardFrm->getExternalJs(); ?>
+
+                                <p class="txt-sm">
+                                    <?php
+                                    $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
+                                    $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
+                                    $canBeUsed = min(min($rewardPoints, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+                                    $str = Labels::getLabel('LBL_MAXIMUM_{REWARDS}_REWARDS_POINT_REDEEM_FOR_THIS_ORDER', $siteLangId);
+                                    echo CommonHelper::replaceStringData($str, ['{REWARDS}' => $canBeUsed]); ?>
+                                </p>
+                            </div>
+                        <?php
+                        }
+                    } else { ?>
+                        <div class="info">
+                            <span> <svg class="svg">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                    </use>
+                                </svg> <?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
+                                <strong><?php echo $cartSummary['cartRewardPoints']; ?>
+                                    (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
+                                <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?></span>
+                            <ul class="list-actions">
+                                <li>
+                                    <button onClick="removeRewardPoints()">
+                                        <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                            </use>
+                                        </svg>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php } ?>
+
+                    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+                        <div class="wallet-options-list">
+                            <label class="checkbox wallet-credits">
+                                <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
+                                <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>
+                                <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
+                            </label>
+
+                            <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
+                                $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
+                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+                                $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
+                                $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+                                $WalletPaymentForm->developerTags['fld_default_col'] = 12;
+                                echo $WalletPaymentForm->getFormTag();
+                                echo $WalletPaymentForm->getFieldHTML('btn_submit');
+                                echo $WalletPaymentForm->getExternalJS();
+                            ?>
+                                </form>
+
+                                <script type="text/javascript">
+                                    function confirmOrder(frm) {
+                                        var data = fcom.frmData(frm);
+                                        var action = $(frm).attr('action');
+                                        fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
+                                            $(location).attr("href", action);
+                                        });
+                                    }
+                                </script>
+                            <?php } else { ?>
+                                <p class="txt-sm">
+                                    <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?>
+                                </p>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+
+                    <div class="wallet-options-list">
+                        <p class="txt-sm"><?php echo Labels::getLabel('LBL_AVAILABLE_REWARDS_POINTS', $siteLangId); ?></p>
+                        <div class="wallet-options-value"><?php echo $rewardPoints; ?></div>
+                    </div>
+                    <div class="wallet-options-list">
+                        <p class="txt-sm"><?php echo Labels::getLabel('LBL_POINTS_WORTH', $siteLangId); ?></p>
+                        <div class="wallet-options-value">
+                            <?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($rewardPoints), true, false, true, false, true); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div id="payment">
                 <?php if ($cartSummary['orderNetAmount'] <= 0) { ?>
                     <div class="confirm-payment" id="wallet">
