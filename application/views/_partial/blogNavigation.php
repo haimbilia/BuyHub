@@ -12,6 +12,7 @@
              </a>
          </div>
          <div class="header-blog-right">
+             <span class="blog-overlay" id="blog-overlay"></span>
              <?php if (!empty($categoriesArr)) {
                     $noOfCharAllowedInNav = 60;
                     $navLinkCount = 0;
