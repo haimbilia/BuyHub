@@ -582,6 +582,13 @@ Updates/Fixes :
     => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section.
     => 063125 - Affiliate UI: Getting multiple issue on the Account tab.
     => 063124 - Affiliate UI: Email section is not clickable on home page.
+    => 063122 - Affiliate UI: Getting multiple issue on the Home page.
+    => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end 
+    => 063185 - Seller UI: Blank screen is showing with some random message while clicking on the "Approval Refund " button under the return request section
+    => 063158 - Seller UI: "Net Amount" calculation is not correct in the order's details page, order's quantity is missing, and address's format is also not correct at the seller's end
+    => 063153 - Seller UI: The dropdown icon is not correct while selecting a zone and getting UI issues while adding/editing the shipping profile
+    => 063104 - Seller UI: Suggestion to give the option to upload the media while sending the category request
+    => 063186 - Seller UI: Spacing issue between the search field and advanced search icon at the seller's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -592,6 +599,8 @@ UAT points:
     => Labels search issue when we have data with type 0
     => Admin listing pages: logo/image should get enlarged on mouse hover/click (examples brand/badge listing page)
     => Change label active to activate and in-active to deactivate for all the listing pages.
+    => S.no can be removed from the listing page. Total page record count should be displayed as the footer
+    => Displayed record count with plus sign (10+) in the left navigation section under requests.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

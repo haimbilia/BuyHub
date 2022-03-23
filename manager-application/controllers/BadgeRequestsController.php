@@ -341,7 +341,7 @@ class BadgeRequestsController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'badge_name' => Labels::getLabel('LBL_BADGE_NAME', $this->siteLangId),
             'media' => Labels::getLabel('LBL_BADGE', $this->siteLangId),
             'seller' => Labels::getLabel('LBL_REQUESTED_BY', $this->siteLangId),
@@ -360,7 +360,7 @@ class BadgeRequestsController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+           /*  'listSerial', */
             'badge_name',
             'media',
             'seller',

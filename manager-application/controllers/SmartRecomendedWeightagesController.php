@@ -143,7 +143,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [    
-            'listSerial',
+            /* 'listSerial', */
             'swsetting_name',
             'swsetting_weightage',
         ];

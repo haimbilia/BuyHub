@@ -9,6 +9,12 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
     brandMediaForm(brand_id, lang_id);
 });
 
+$(document).on('change', '#catLanguageJs', function () {
+    let lang_id = $(this).val();
+    let recordId = $(this).closest("form").find('input[name="record_id"]').val();
+    categoryReqMediaForm(recordId, lang_id);
+});
+
 (function () {
     var runningAjaxReq = false;
     var dv = '#listing';
@@ -243,28 +249,110 @@ $(document).on('change', '#brandlogoLanguageJs', function () {
 
     /* Product Category  request [*/
     addCategoryReqForm = function (id = 0) {
-        id = id || $('.navTabsJs').data('category-id');
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
     };
 
-    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {
-        categoryReqId = categoryReqId || $('.navTabsJs').data('category-id');
-        $("#categoryReqFormJs").prepend(fcom.getLoader());
+    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {       
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqLangForm', [categoryReqId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
-            $("#categoryReqFormJs").html(t);
+            $.ykmodal(t);
         });
     };
+
+    categoryReqMediaForm = function (categoryReqId, langId = 0) {   
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqMediaForm', [categoryReqId, langId]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmodal(t);            
+        });
+    };
+
+    categoryPopupImage = function (inputBtn) {
+        if(!validateFileUpload(inputBtn.files[0])){
+            return;    
+        }
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'imgCropper'), '', function (t) {
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                var frmName = $(inputBtn).closest('form').attr('name');
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+                var options = {                    
+                    aspectRatio: minWidth / minHeight,
+                    preview: '.img-preview',
+                    imageSmoothingQuality: 'high',
+                    imageSmoothingEnabled: true,
+                    crop: function (e) {
+                        var data = e.detail;
+                    }
+                };
+                var file = inputBtn.files[0];
+                $(inputBtn).val('');
+                setTimeout(function () { cropImage(file, options, 'uploadCategoryLogo', inputBtn); }, 100);
+            });
+        }
+    };
+
+    uploadCategoryLogo = function (formData) {
+        var frmName = formData.get("frmName");
+        var frm = document.forms[frmName];       
+        let langId = 0;
+        if ('undefined' != typeof frm.lang_id) {
+            langId = frm.lang_id.value;
+        }
+
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function(key, input) {
+            formData.append(input.name, input.value);
+        });
+        $.ajax({
+            url: fcom.makeUrl('SellerRequests', 'uploadCategoryLogo'),
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
+            success: function (ans) {
+                fcom.removeLoader();
+                $("#modalBoxJs").modal("hide");
+                if (ans.status == true) {
+                    categoryReqMediaForm(ans.recordId, langId);
+                    searchProdCategoryRequests();
+                    fcom.displaySuccessMessage(ans.msg);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
+
+    removeCategoryLogo = function (recordId, langId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'removeCategoryLogo', [recordId, langId]), '', function (t) {
+            categoryReqMediaForm(recordId, langId);
+            searchBrandRequests();
+        });
+    }
 
     setupCategoryReq = function (frm) {
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {
-            $('.navTabsJs').data('category-id', t.categoryReqId);
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {          
             if (0 < t.langId) {
                 addCategoryReqLangForm(t.categoryReqId, t.langId);
             }

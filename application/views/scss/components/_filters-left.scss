@@ -143,7 +143,7 @@
         font-size: inherit;
         //background: $bg-brand-light;
         color: $txt-body;
-        font-weight: 300;
+        font-weight: $font-weight-light;
         //height: 28px;
         &.more {
             font-weight: 600;

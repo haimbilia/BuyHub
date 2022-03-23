@@ -343,11 +343,11 @@ class SellerRequestsController extends SellerBaseController
 
         $categoryReqId = $post['prodcat_id'];
 
-        if ($categoryReqId == 0 || $lang_id == 0) {
+        if (1 > $categoryReqId || 1 > $lang_id) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
-        if ($categoryReqId > 0 && !UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
+        if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
 
@@ -374,6 +374,106 @@ class SellerRequestsController extends SellerBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $lang_id), 'prodcat_name');
 
         return $frm;
+    }    
+
+    public function categoryReqMediaForm($recordId, $langId)
+    {
+        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);       
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0, $langId, false);
+     
+        $frm = $this->getCategoryReqImagesFrm($recordId, $langId); 
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $this->set('image', $image);
+        $this->set('languages', Language::getAllNames());
+        $this->_template->render(false, false);
+    }
+
+    private function getCategoryReqImagesFrm($recordId = 0 , $langId = 0)
+    {
+        $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
+        $frm->addHiddenField('', 'record_id', $recordId);      
+        $mediaLanguages = applicationConstants::getAllLanguages();
+        if (count($mediaLanguages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $mediaLanguages, $langId, array(), '');
+        } else {
+            $langid = array_key_first($mediaLanguages);
+            $frm->addHiddenField('', 'lang_id', $langid);
+        }
+
+        $dimension = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
+        $frm->addHiddenField('', 'min_width', $dimension['width']);
+        $frm->addHiddenField('', 'min_height', $dimension['height']);       
+        $frm->addHtml('', 'cat_icon', '');  
+        return $frm;
+    }
+
+    public function uploadCategoryLogo()
+    {
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
+        if (!$recordId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $recordId)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
+        }
+
+        $fileHandlerObj = new AttachedFile();   
+        if (!$fileHandlerObj->saveAttachment(
+            $_FILES['cropped_image']['tmp_name'],
+            $fileHandlerObj::FILETYPE_CATEGORY_ICON,
+            $recordId,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            true,
+            $lang_id           
+        )) {
+            FatUtility::dieJsonError($fileHandlerObj->getError());
+        }
+
+        $this->set('recordId', $recordId);
+        $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function removeCategoryLogo($recordId = 0, $lang_id = 0)
+    {
+        $recordId = FatUtility::int($recordId);
+        $lang_id = FatUtility::int($lang_id);
+        if (!$recordId) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $recordId)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0, 0, $lang_id)) {
+            FatUtility::dieJsonError($fileHandlerObj->getError());
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     /* ] */

@@ -2054,7 +2054,8 @@ class CheckoutController extends MyAppController
         $products = $this->cartObj->getProducts($this->siteLangId);
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
         $this->set('products', $products);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function loadShippingSummary()

@@ -331,12 +331,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function() {
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
+                fcom.removeLoader();
                 fcom.closeProcessing();
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     fcom.displaySuccessMessage(ans.msg);
-                    $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status });
+                    $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ", '" + callback + "')", "data-old-status": status });
                     if ("" != callback) {
                         eval(callback);
                     }

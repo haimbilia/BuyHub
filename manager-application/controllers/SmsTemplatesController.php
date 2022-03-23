@@ -259,7 +259,7 @@ class SmsTemplatesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'stpl_name' => Labels::getLabel('LBL_name', $this->siteLangId),
             'stpl_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -277,7 +277,7 @@ class SmsTemplatesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'stpl_name',
             'stpl_status',
             'action',

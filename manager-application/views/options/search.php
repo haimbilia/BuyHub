@@ -29,6 +29,11 @@ foreach ($arrListing as $sn => $row) {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
                 break;
+            case 'option_is_separate_images':
+            case 'option_display_in_filter':
+            case 'option_is_color':
+                $td->appendElement('plaintext', $tdAttr, applicationConstants::getYesNoArr($siteLangId)[$row[$key]], true);
+                break;
             case 'user_name':
                 if ($row['user_name'] != '') {
                     $td->appendElement('plaintext', $tdAttr, $row['user_name'], true);
@@ -48,7 +53,7 @@ foreach ($arrListing as $sn => $row) {
                     $data['otherButtons'] = [
                         [
                             'attr' => [
-                                'href' => UrlHelper::generateUrl('OptionValues', 'list', array($row[Option::DB_TBL_PREFIX . 'id'])),                        
+                                'href' => UrlHelper::generateUrl('OptionValues', 'list', array($row[Option::DB_TBL_PREFIX . 'id'])),
                                 'title' => Labels::getLabel('LBL_OPTION_VALUES', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
@@ -70,7 +75,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

@@ -507,7 +507,7 @@ class PluginsController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->siteLangId),
             'plugin_name' => Labels::getLabel('LBL_PLUGIN', $this->siteLangId),
             'plugin_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -522,7 +522,7 @@ class PluginsController extends ListingBaseController
         return [
             'dragdrop',
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'plugin_icon',
             'plugin_name',
             'plugin_active',

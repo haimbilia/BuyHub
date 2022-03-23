@@ -103,7 +103,7 @@ class SentEmailsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'earch_sent_on' => Labels::getLabel('LBL_Sent_On', $this->siteLangId),
             'earch_subject' => Labels::getLabel('LBL_Subject', $this->siteLangId),
             'earch_to_email' => Labels::getLabel('LBL_Sent_To', $this->siteLangId),
@@ -118,7 +118,7 @@ class SentEmailsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         $arr = [
-            'listSerial',
+            /* 'listSerial', */
             'earch_sent_on',
             'earch_subject',
             'earch_to_email',

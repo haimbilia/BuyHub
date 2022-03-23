@@ -1771,4 +1771,6 @@ update `tbl_collections` set `collection_primary_records` = 5 WHERE `collection_
 
 -- ---- Remove EPage content for checkout page ---- --
 DELETE FROM `tbl_extra_pages` WHERE `epage_type` = 23;
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_ORDERED_QUANTITY', 1, 'Quantity', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 

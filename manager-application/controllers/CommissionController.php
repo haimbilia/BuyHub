@@ -372,7 +372,7 @@ class CommissionController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+          /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
             'commsetting_user_id' => Labels::getLabel('LBL_SHOP/_SELLER_NAME', $this->siteLangId),
             'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->siteLangId),
@@ -387,7 +387,7 @@ class CommissionController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'commsetting_prodcat_id',
             'commsetting_user_id',
             'commsetting_product_id',

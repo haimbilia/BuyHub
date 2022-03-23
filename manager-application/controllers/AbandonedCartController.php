@@ -23,8 +23,8 @@ class AbandonedCartController extends ListingBaseController {
                 'title' => Labels::getLabel('LBL_VIEW_BY_PRODUCT', $this->siteLangId),
                 'onclick' => ''
             ],
-            'label' => '<svg class="svg" width="18" height="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#view"></use>
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view"></use>
                         </svg><span>' . Labels::getLabel('BTN_PRODUCTS', $this->siteLangId) . '</span>',
         ];
 
@@ -181,7 +181,7 @@ class AbandonedCartController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
             'selprod_title' => Labels::getLabel('LBL_SELLER_PRODUCT', $this->siteLangId),
             'abandonedcart_qty' => Labels::getLabel('LBL_QTY', $this->siteLangId),
@@ -196,7 +196,7 @@ class AbandonedCartController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'user_name',
             'selprod_title',
             'abandonedcart_qty',

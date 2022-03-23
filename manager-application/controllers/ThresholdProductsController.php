@@ -134,7 +134,7 @@ class ThresholdProductsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'selprod_stock' => Labels::getLabel('LBL_STOCK_LEFT', $this->siteLangId),
             'selprod_threshold_stock_level' => Labels::getLabel('LBL_THRESHOLD_STOCK', $this->siteLangId),
@@ -148,7 +148,7 @@ class ThresholdProductsController extends ListingBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'selprod_stock',
             'selprod_threshold_stock_level',

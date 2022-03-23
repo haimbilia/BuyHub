@@ -45,7 +45,7 @@
         }
         p {
             font-size: 1rem;
-            font-weight: 300;
+            font-weight: $font-weight-light;
         }
     }
     &-foot {
@@ -109,7 +109,7 @@
         line-height: 1.8;
         margin-bottom: 1rem;
         word-break: break-word;
-        font-weight: 300;
+        font-weight: $font-weight-light;
         color: $txt-gray;
     }
     &.space {
@@ -450,7 +450,7 @@
 span.subheading {
     color: #555555;
     display: block;
-    font-weight: 300;
+    font-weight: $font-weight-light;
     font-size: 1.2rem;
 }
 .txt-sm {

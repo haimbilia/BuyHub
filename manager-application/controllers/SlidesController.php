@@ -552,7 +552,7 @@ class SlidesController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'slide_media' => Labels::getLabel('LBL_MEDIA', $this->siteLangId),
             'slide_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'slide_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -572,7 +572,7 @@ class SlidesController extends ListingBaseController
         return [
             //'dragdrop',
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'slide_media',
             'slide_title',
             'slide_active',

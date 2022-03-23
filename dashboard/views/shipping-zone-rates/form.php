@@ -9,11 +9,28 @@ $nameFld = $frm->getField('shiprate_identifier');
 $nameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_will_see_this_at_checkout.", $siteLangId) . "</span>";
 
 $costFld = $frm->getField('shiprate_cost');
-$costFld->htmlAfterField = "<div class='gap'></div><p class='add-condition--js'><a class='link' href='javascript:void(0);' onclick='modifyRateFields(1);'>" . Labels::getLabel("LBL_Add_Condition", $siteLangId) . "</a></p> <p class='remove-condition--js' style='display : none;'><a class='link' href='javascript:void(0);' onclick='modifyRateFields(0);'>" . Labels::getLabel("LBL_Remove_Condition", $siteLangId) . "</a></p>";
 $extraClass = 'd-none';
 if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) {
     $extraClass = '';
 }
+
+$fld = $frm->getField('add_condition');
+$fld->value = '<a href="javascript:void(0)" class="btn btn-icon btn-outline-brand add-condition--js" onclick="modifyRateFields(1)" title="' . Labels::getLabel("LBL_ADD_CONDITION", $siteLangId) . '" data-bs-toggle="tooltip" data-placement="top">
+<svg class="svg btn-icon-start" width="18" height="18">
+    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+    </use>
+</svg>
+<span>' . Labels::getLabel("LBL_ADD_CONDITION", $siteLangId) . '</span>
+</a>
+<a href="javascript:void(0)" class="btn btn-icon btn-outline-brand remove-condition--js"  style="display : none;" onclick="modifyRateFields(0)" title="' . Labels::getLabel("LBL_REMOVE_CONDITION", $siteLangId) . '" data-bs-toggle="tooltip" data-placement="top">
+<svg class="svg" width="18" height="18">
+    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
+    </use>
+</svg>
+<span>' . Labels::getLabel("LBL_REMOVE_CONDITION", $siteLangId) . '</span>
+</a>';
+
+
 
 $cndFld = $frm->getField('shiprate_condition_type');
 $cndFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);

@@ -337,7 +337,7 @@ class ShippingProfileController extends ListingBaseController
             return json_decode($shippingProfileCols, true);
         }
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'shipprofile_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'totalProducts' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId),
             'rates' => Labels::getLabel('LBL_RATES_FOR', $this->siteLangId),
@@ -350,7 +350,7 @@ class ShippingProfileController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'shipprofile_name',
             'totalProducts',
             'rates',

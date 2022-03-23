@@ -262,7 +262,7 @@
 
 .cat-accordion {
     width: 100%;
-    font-weight: 300;
+    font-weight: $font-weight-light;
     font-size: 0.8rem;
     margin: 0;
     li {
@@ -410,7 +410,7 @@
 
 .sort-by li.sort {
     color: #555555;
-    font-weight: 300;
+    font-weight: $font-weight-light;
     margin: 0;
 }
 

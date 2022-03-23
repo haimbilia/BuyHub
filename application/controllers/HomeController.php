@@ -368,6 +368,8 @@ class HomeController extends MyAppController
         }
 
         $pathname = FatApp::getPostedData('pathname', FatUtility::VAR_STRING, '');
+        $pathname = str_replace(ltrim(CONF_WEBROOT_FRONTEND,'/'), '', $pathname);
+
         $redirectUrl = '';
         if (empty($pathname)) {
             $redirectUrl = UrlHelper::generateFullUrl();
@@ -405,7 +407,7 @@ class HomeController extends MyAppController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (!empty($row)) {
-                    $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false);
+                    $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false);
 
                     if (false == $isDefaultLangId) {
                         $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
@@ -415,15 +417,15 @@ class HomeController extends MyAppController
             }
 
             if (empty($redirectUrl)) {
-                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false);
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false);
                 if (false == $isDefaultLangId) {
                     $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .=  ltrim($pathname, '/');
+                $redirectUrl .=  ltrim($pathname, '/');;   
             }
         } else {
             if (empty($redirectUrl)) {
-                $redirectUrl = UrlHelper::generateFullUrl('', '', [], '', null, false, false, false) . ltrim($pathname, '/');
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false) . ltrim($pathname, '/');   
             }
         }
 
@@ -958,7 +960,7 @@ class HomeController extends MyAppController
                     }
                     $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on'));
                     $shopObj->addOrder('ctr.ctr_display_order', 'ASC');
-                    
+
                     $rs = $shopObj->getResultSet();
                     $recordCount = $shopObj->recordCount();
                     if (empty($recordCount)) {

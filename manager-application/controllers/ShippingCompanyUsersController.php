@@ -306,7 +306,7 @@ class ShippingCompanyUsersController extends ListingBaseController
         }
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'credential_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -320,7 +320,7 @@ class ShippingCompanyUsersController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'credential_username',
             'user_name',
             'credential_active',

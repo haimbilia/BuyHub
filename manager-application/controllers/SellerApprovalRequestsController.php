@@ -249,7 +249,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'usuprequest_reference' => Labels::getLabel('LBL_REFERENCE_NUMBER', $this->siteLangId),
             'user_details' => Labels::getLabel('LBL_USER_DETAIL', $this->siteLangId),
             'usuprequest_date' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
@@ -263,7 +263,7 @@ class SellerApprovalRequestsController extends ListingBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'usuprequest_reference',
             'user_details',
             'usuprequest_date',

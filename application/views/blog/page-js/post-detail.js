@@ -1,12 +1,12 @@
+$(document).on('click', '.blogPageBurgerIconJs', function () {
+    $(".blogOverlayJs, .menuNavJs").addClass('open');
+});
+
+$(document).on('click', '.blogOverlayJs', function () {
+    $(".blogOverlayJs, .menuNavJs").removeClass('open');
+});
+
 $(function () {
-
-    /*$('.toggle-nav--vertical-js').on('click', function(){
-        $(this).toggleClass("active");
-        if($(window).width()<990){
-            $('.nav--vertical-js').slideToggle();
-        }
-    });*/
-
     /* blog slider */
     if (langLbl.layoutDirection == 'rtl') {
         $('.post__pic').slick({
