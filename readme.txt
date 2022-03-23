@@ -582,6 +582,7 @@ Updates/Fixes :
     => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section.
     => 063125 - Affiliate UI: Getting multiple issue on the Account tab.
     => 063124 - Affiliate UI: Email section is not clickable on home page.
+    => 063122 - Affiliate UI: Getting multiple issue on the Home page.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
