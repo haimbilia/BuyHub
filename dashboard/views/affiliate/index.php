@@ -188,7 +188,7 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                                                 }
                                             } else {
                                                     ?> <tr>
-                                            <td colspan="3">
+                                            <td colspan="4">
                                                 <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
                                             </td>
                                         </tr> <?php

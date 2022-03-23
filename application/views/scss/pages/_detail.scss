@@ -125,7 +125,7 @@
 
     .brand-title {
         font-size: 1rem;
-        font-weight: 300;
+        font-weight: $font-weight-light;
         color: $txt-gray;
     }
     .products-title {
@@ -134,7 +134,7 @@
         .h1 {
             font-size: 1.625rem;
             line-height: 1.5;
-            font-weight: 300;
+            font-weight: $font-weight-light;
             color: #000;
             overflow-wrap: break-word;
             word-wrap: break-word;
@@ -162,7 +162,7 @@
             font-size: 1.625rem;
         }
         &-old {
-            font-weight: 300;
+            font-weight: $font-weight-light;
             font-size: 1.125rem;
             text-decoration: line-through;
         }
@@ -344,7 +344,7 @@
     &-value {
         color: $txt-gray;
         font-size: 0.875rem;
-        font-weight: 300;
+        font-weight: $font-weight-light;
         margin-bottom: 10px;
     }
     .products-price {
@@ -388,7 +388,7 @@
 
     .title {
         font-size: 0.875rem;
-        font-weight: 300;
+        font-weight: $font-weight-light;
         color: $txt-gray;
     }
     .products-price {
@@ -666,7 +666,7 @@
 }
 
 .profile-bio .deg {
-    font-weight: 300;
+    font-weight: $font-weight-light;
     color: lighten($txt-body, 50%);
     font-size: 0.875rem;
 }

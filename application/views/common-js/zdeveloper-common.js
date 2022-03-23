@@ -1082,7 +1082,9 @@ $(function () {
             includeGuestLogin = false;
         }
         data = "includeGuestLogin=" + includeGuestLogin;
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl("GuestUser", "LogInFormPopUp"), data, function (t) {
+            fcom.closeProcessing();
             try {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {

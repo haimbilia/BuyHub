@@ -26,6 +26,9 @@ $third-color-inverse: var(--third-color-inverse);
 $txt-body: rgba(0, 0, 0, 0.87);
 $txt-gray: rgba(0, 0, 0, 0.67);
 $text-muted: #888888 !default;
+//Font weight
+$font-weight-light: 400;
+
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;
@@ -46,7 +49,6 @@ $bg-black: #000;
 $bg-placeholder: rgba(0, 0, 0, 0.03);
 
 //shadow
-
 $shadow-rgb: var(--shadow-rgb);
 $shadow0: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 $shadow1: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
