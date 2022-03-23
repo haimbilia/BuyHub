@@ -139,7 +139,6 @@ if ($controllerName != 'Cart') {
     </ul>
 </div>
 <div class="zeynep-overlay"></div>
-
 <!-- offcanvas-filters -->
 <div class="offcanvas offcanvas-end  offcanvas-filters" tabindex="-1" id="filters-right" aria-labelledby="filters-right">
     <div class="offcanvas-header">
@@ -148,7 +147,6 @@ if ($controllerName != 'Cart') {
     <div class="offcanvas-body productFiltersJs">
     </div>
 </div>
-
 <!-- offcanvas-account -->
 
 <?php
@@ -156,7 +154,6 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
     $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
 }
 ?>
-
 <!-- offcanvas-gps-location -->
 <div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
     <div class="offcanvas-header">
@@ -219,7 +216,35 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
     </div>
 </div>
 
+<!-- offcanvas-seller-nav -->
 
+
+<div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav" aria-labelledby="offcanvas-seller-nav">
+    <div class="offcanvas-body p-0">
+        <ul class="seller-nav">
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">About Us </a>
+            </li>
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">Privacy Policy</a>
+            </li>
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">Terms and Conditions</a>
+            </li>
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">4th Tab</a>
+            </li>
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">Seller Nav 1</a>
+            </li>
+            <li class="seller-nav-item">
+                <a class="seller-nav-link" href="#">Seller Nav 1</a>
+            </li>
+
+        </ul>
+
+    </div>
+</div>
 
 
 <!-- Blog Search Form -->

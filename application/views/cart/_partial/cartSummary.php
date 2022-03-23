@@ -11,7 +11,7 @@
         </p>
     </div>
 <?php } else { ?>
-    <div class="coupons cart-total-body">
+    <div class="cart-total-body">
         <div class="promotional-code">
             <div class="promotional-code-head">
                 <h5 class="promotional-code-title">
@@ -29,12 +29,12 @@
             $fld->setFieldTagAttribute('class', 'btn btn-secondary btn-wide');
             $PromoCouponsFrm->setJsErrorDisplay('afterfield');
             echo $PromoCouponsFrm->getFormTag(); ?>
-                <div class="input-group">
-                    <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
-                    <div class="input-group-append">
-                        <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
-                    </div>
+            <div class="input-group">
+                <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
+                <div class="input-group-append">
+                    <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
                 </div>
+            </div>
             </form>
             <?php echo $PromoCouponsFrm->getExternalJs(); ?>
 
@@ -46,40 +46,40 @@
         <?php echo Labels::getLabel('LBL_Price', $siteLangId); ?>
     </h3>
 </div>
-<ul class="cart-summary">
-    <li class="cart-summary-item">
-        <span class="label"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?>
-        </span>
-        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
-    </li>
-    <?php if ($cartSummary['cartVolumeDiscount']) { ?>
+<div class="cart-total-body">
+    <ul class="cart-summary">
         <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
-            <span class="value txt-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+            <span class="label"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?>
+            </span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
         </li>
-    <?php } ?>
+        <?php if ($cartSummary['cartVolumeDiscount']) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
+                <span class="value txt-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+            </li>
+        <?php } ?>
 
-    <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+        <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+            </li>
+        <?php } ?>
+        <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+                <span class="value txt-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+            </li>
+        <?php } ?>
+        <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
+        $netChargeAmt = $netChargeAmt - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0); ?>
+        <li class="cart-summary-item highlighted">
+            <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
         </li>
-    <?php } ?>
-    <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-            <span class="value txt-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
-        </li>
-    <?php } ?>
-    <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
-    $netChargeAmt = $netChargeAmt - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0); ?>
-    <li class="cart-summary-item highlighted">
-        <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
-        <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
-    </li>
-</ul>
-
-
+    </ul>
+</div>
 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
     <p class="included"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $cartSummary['orderNetAmount']); ?>
     </p>

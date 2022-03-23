@@ -103,7 +103,7 @@
     flex-direction: column;
     width: 100%;
     &_section {
-        margin-bottom: 2rem;
+        //margin-bottom: 2rem;
         &:last-child {
             margin: 0;
         }
@@ -130,7 +130,12 @@
         align-items: center;
         justify-content: space-between;
         margin-top: 2rem;
-        padding-top: 2rem;
+        padding: 2rem 0;
+        position: sticky;
+        bottom: 0;
+        background: rgba(255, 255, 255, 1);
+        backdrop-filter: blur(2px);
+        box-shadow: 0 -10px 50px -25px rgba(82, 63, 105, 0.5);
     }
 }
 
@@ -471,9 +476,9 @@
 }
 
 .list-addresses {
-    grid-template-columns: repeat(2, 1fr);
     display: grid;
     grid-gap: 3rem;
+    grid-template-columns: auto;
     @include media-breakpoint-down(sm) {
         grid-template-columns: auto;
     }
@@ -508,6 +513,20 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 42%;
+    }
+    .btn-add-address {
+        display: flex;
+        border: dashed 2px $border-color;
+        border-radius: 3px;
+        margin: auto;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 2rem;
+        width: 100%;
+
+        .svg {
+            margin-#{$end-direction}: 10px;
+        }
     }
 }
 

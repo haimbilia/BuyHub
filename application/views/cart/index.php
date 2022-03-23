@@ -12,7 +12,9 @@
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
-                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php if ($pickUpProductsCount == 0) { echo "checked='true'";} ?>> <svg class="svg" width="18" height="18">
+                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php if ($pickUpProductsCount == 0) {
+                                                                                                                                                                                        echo "checked='true'";
+                                                                                                                                                                                    } ?>> <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId); ?></label>
@@ -20,7 +22,9 @@
                                         </li>
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>)">
                                             <label class="control-label radio pickupLblJs">
-                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php if ($shipProductsCount == 0) { echo "checked='true'";} ?>>
+                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php if ($shipProductsCount == 0) {
+                                                                                                                                                                                        echo "checked='true'";
+                                                                                                                                                                                    } ?>>
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                                     </use>
@@ -41,18 +45,22 @@
                                             <?php echo Labels::getLabel('LBL_Summary', $siteLangId); ?>
                                         </h3>
                                     </div>
-                                    <div id="js-cartFinancialSummary">
-                                        <?php include(CONF_THEME_PATH . 'cart/_partial/summary-skeleton.php'); ?>
+                                    <div class="cart-total-body">
+                                        <div id="js-cartFinancialSummary">
+                                            <?php include(CONF_THEME_PATH . 'cart/_partial/summary-skeleton.php'); ?>
+                                        </div>
                                     </div>
-                                    <div class="cart-action">
-                                        <button class="btn btn-brand btn-block" type="button" onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
-                                        </button>
-                                        <a class="link-underline" href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Continue_Shopping', $siteLangId); ?></a>
-                                    </div>
-                                    <div class="secure">
-                                        <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
-                                        <p> <?php echo Labels::getLabel('LBL_Safe_and_Secure_Payments_Easy_returns_100%_Authentic_products', $siteLangId); ?>
-                                        </p>
+                                    <div class="cart-total-foot">
+                                        <div class="cart-action">
+                                            <button class="btn btn-brand btn-block" type="button" onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
+                                            </button>
+                                            <a class="link-underline" href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Continue_Shopping', $siteLangId); ?></a>
+                                        </div>
+                                        <div class="secure">
+                                            <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
+                                            <p> <?php echo Labels::getLabel('LBL_Safe_and_Secure_Payments_Easy_returns_100%_Authentic_products', $siteLangId); ?>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -12,7 +12,7 @@ $btnFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
 
 $fromFldHtml = new HtmlElement('div', array('class' => 'field-set'));
 $fromFldCaptionWrapper = $fromFldHtml->appendElement('div', array('class' => 'caption-wraper'));
-$fromFldCaptionWrapper->appendElement('label', array('class' => 'field_label'), Labels::getLabel('LBL_From', $siteLangId));
+$fromFldCaptionWrapper->appendElement('label', array('class' => 'form-label'), Labels::getLabel('LBL_From', $siteLangId));
 
 $fromFldFieldWrapper = $fromFldHtml->appendElement('div', array('class' => 'field-wraper'));
 $fromFldData = $loggedUserData['credential_username'] . ' (<em>' . $loggedUserData['user_name'] . '</em>)';
@@ -23,7 +23,7 @@ $fromFld->value = $fromFldHtml->getHtml();
 
 $toFldHtml = new HtmlElement('div', array('class' => 'field-set'));
 $toFldCaptionWrapper = $toFldHtml->appendElement('div', array('class' => 'caption-wraper'));
-$toFldCaptionWrapper->appendElement('label', array('class' => 'field_label'), Labels::getLabel('LBL_To', $siteLangId));
+$toFldCaptionWrapper->appendElement('label', array('class' => 'form-label'), Labels::getLabel('LBL_To', $siteLangId));
 
 $toFldFieldWrapper = $toFldHtml->appendElement('div', array('class' => 'field-wraper'));
 $toFldFieldWrapper->appendElement('div', array('class' => 'field_cover'), $shop['shop_owner_name'] . ' (<em>' . $shop['shop_name'] . '</em>)', true);
@@ -34,7 +34,7 @@ if (isset($product)) {
     $productFld = $frm->getField('about_product');
     $productFldHTML = new HtmlElement('div', array('class' => 'field-set'));
     $productFldCaptionWrapper = $productFldHTML->appendElement('div', array('class' => 'caption-wraper'));
-    $productFldCaptionWrapper->appendElement('label', array('class' => 'field_label'), Labels::getLabel('LBL_About_Product', $siteLangId));
+    $productFldCaptionWrapper->appendElement('label', array('class' => 'form-label'), Labels::getLabel('LBL_About_Product', $siteLangId));
 
     $productFldFieldWrapper = $productFldHTML->appendElement('div', array('class' => 'field-wraper'));
     $productFldFieldWrapper->appendElement('div', array('class' => 'field_cover'), $product['selprod_title'], true);
@@ -43,16 +43,16 @@ if (isset($product)) {
 }
 ?>
 <div id="body" class="body template-<?php echo $template_id; ?>">
-<?php
-$this->includeTemplate('shops/_breadcrumb.php');
-$variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
-$this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);
-?>
+    <?php
+    $this->includeTemplate('shops/_breadcrumb.php');
+    $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
+    $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);
+    ?>
 
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-7">       
+                <div class="col-md-7">
                     <div class="section__head">
                         <h4><?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?></h4>
                     </div>
@@ -68,7 +68,7 @@ $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, f
 </div>
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
 <script type="text/javascript">
-    (function ($) {
+    (function($) {
         if (langLbl.layoutDirection == 'rtl') {
             $('.shops-sliders').slick({
                 dots: false,

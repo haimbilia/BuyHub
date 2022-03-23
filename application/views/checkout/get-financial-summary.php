@@ -3,74 +3,89 @@
     <h3 class="cart-total-title">
         <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?> </h3>
 </div>
-<ul class="cart-summary">
-    <li class="cart-summary-item">
-        <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
-    </li>
-    <?php if ($cartSummary['cartVolumeDiscount']) { ?>
+<div class="cart-total-body">
+    <ul class="cart-summary">
         <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
-            </span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
         </li>
-    <?php } ?>
-    <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
-        </li>
-    <?php } ?>
-    <?php if (/* 0 < $shippingAddress && */isset($cartSummary['taxOptions'])) {
-        foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
+        <?php if ($cartSummary['cartVolumeDiscount']) { ?>
             <li class="cart-summary-item">
-                <span class="label"><?php echo $taxVal['title']; ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
+                <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
+                </span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
             </li>
-    <?php }
-    } ?>
-    <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+        <?php } ?>
+        <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+            </li>
+        <?php } ?>
+        <?php if (/* 0 < $shippingAddress && */isset($cartSummary['taxOptions'])) {
+            foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
+                <li class="cart-summary-item">
+                    <span class="label"><?php echo $taxVal['title']; ?></span>
+                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
+                </li>
+        <?php }
+        } ?>
+        <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+            </li>
+        <?php } ?>
+        <?php if ($cartSummary['originalShipping']) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
+            </li>
+        <?php  } ?>
+        <?php if (!empty($cartSummary['cartRewardPoints'])) {
+            $appliedRewardPointsDiscount = CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']);
+        ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Reward_point_discount', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($appliedRewardPointsDiscount); ?></span>
+            </li>
+        <?php } ?>
+        <?php if (array_key_exists('roundingOff', $cartSummary) && $cartSummary['roundingOff'] != 0) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['roundingOff']); ?></span>
+            </li>
+        <?php } ?>
+        <?php if (0 < $cartSummary['totalSaving']) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
+                <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
+            </li>
+        <?php } ?>
+        <?php $orderNetAmt = $cartSummary['orderNetAmount'];
+        /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>
+        <li class="cart-summary-item highlighted">
+            <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
         </li>
-    <?php } ?>
-    <?php if ($cartSummary['originalShipping']) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
-        </li>
-    <?php  } ?>
-    <?php if (!empty($cartSummary['cartRewardPoints'])) {
-        $appliedRewardPointsDiscount = CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']);
-    ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_Reward_point_discount', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($appliedRewardPointsDiscount); ?></span>
-        </li>
-    <?php } ?>
-    <?php if (array_key_exists('roundingOff', $cartSummary) && $cartSummary['roundingOff'] != 0) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
-            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['roundingOff']); ?></span>
-        </li>
-    <?php } ?>
-    <?php if (0 < $cartSummary['totalSaving']) { ?>
-        <li class="cart-summary-item">
-            <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-            <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
-        </li>
-    <?php } ?>
-    <?php $orderNetAmt = $cartSummary['orderNetAmount'];
-    /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>
-    <li class="cart-summary-item highlighted">
-        <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
-        <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
-    </li>
-    <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-        <p class="form-text text-muted mt-1"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderNetAmt); ?> </p>
-    <?php } ?>
+        <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+            <p class="form-text text-muted mt-1"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderNetAmt); ?> </p>
+        <?php } ?>
 
-</ul>
+    </ul>
+</div>
+<div class="cart-total-foot">
+    <div class="cart-action">
+        <?php if ($cartHasPhysicalProduct) { ?>
+            <button class="btn btn-brand btn-block" type="button" onclick="setUpShippingMethod();">
+                <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+            </button>
+        <?php } else { ?>
+            <button class="btn btn-brand btn-block" type="button" onclick="loadPaymentSummary();">
+                <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+            </button>
+        <?php } ?>
+    </div>
+</div>
 <?php /*  ?><p class="earn-points"><svg class="svg" width="20" height="20">
             <use xlink:href="../images/retina/sprite.svg#rewards" href="../images/retina/sprite.svg#rewards">
             </use>

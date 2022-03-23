@@ -2079,13 +2079,14 @@ class CheckoutController extends MyAppController
         $this->set('shippingAddress', $shippingAddress);
         $this->set('products', $products);
         $this->set('cartSummary', $cartSummary);
-        //CommonHelper::printArray($cartSummary, true);
+        $this->set('cartHasPhysicalProduct', $this->cartObj->hasPhysicalProduct());
         $data = $this->_template->render(false, false, 'checkout/get-financial-summary.php', true, false);
 
         $orderNetAmt = $cartSummary['orderNetAmount'];
         /* if (0 == $shippingAddress) {
             $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];
         } */
+
         $netAmount = CommonHelper::displayMoneyFormat($orderNetAmt);
         $this->set('netAmount', $netAmount);
         $this->set('data', $data);

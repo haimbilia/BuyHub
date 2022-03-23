@@ -62,7 +62,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                                         </svg>
                                         <span class="txt">
-                                            <?php echo Labels::getLabel('LBL_Account', $siteLangId); ?> </span>
+                                            <?php echo Labels::getLabel('LBL_Login', $siteLangId); ?> </span>
                                     </button>
                                 </div>
                             </li>

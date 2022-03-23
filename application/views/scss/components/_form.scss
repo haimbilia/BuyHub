@@ -96,7 +96,8 @@ $input-border-focus: #000;
     }
 
     &-label,
-    .label {
+    .label,
+    .field_label {
         font-size: 0.8rem;
         color: $txt-body;
         margin: 0;
