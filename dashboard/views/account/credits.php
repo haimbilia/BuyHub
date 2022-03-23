@@ -42,7 +42,7 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                                     </small>
                                 <?php } ?>
                                 <div class="row">
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-7">
                                         <select name='payout_type' class='custom-select payout_type'>
                                             <?php
                                             foreach ($payouts as $type => $name) { ?>
@@ -52,7 +52,7 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                                         </select>
 
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-5">
                                         <a href="javascript:void(0)" onclick="withdrawalReqForm()" class="btn btn-brand btn-block">
                                             <?php echo Labels::getLabel('LBL_Withdraw', $siteLangId); ?>
                                         </a>

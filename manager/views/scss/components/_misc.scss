@@ -2394,7 +2394,7 @@ $header-height: 65px;
 
 .main {
     flex: 1;
-    padding-top: 2rem;
+    padding: 2rem 1rem 0;
     flex: 1;
     &.isLoading {
         overflow: hidden;

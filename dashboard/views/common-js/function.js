@@ -940,3 +940,4 @@ loadCropperSkeleton = function (reopenSideBarOnClose = true) {
 editDropZoneImages = function (obj) {
     $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
 }
+

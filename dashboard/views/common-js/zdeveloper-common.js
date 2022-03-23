@@ -11,6 +11,11 @@ $(window).on("load", function () {
         var scrollPosition = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100);
         $('#scrollElement-js').animate({ scrollTop: scrollPosition }, 1000);
     }   
+    
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+});
 });
 
 $(window).scroll(function () {
@@ -1347,3 +1352,4 @@ function getImageTemplate(fileName, src) {
                 </div>
             </li>`;
 }
+
