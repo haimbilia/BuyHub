@@ -578,7 +578,8 @@ Updates/Fixes :
     => 063105 - Seller UI: Double fields are showing even if it is not a "combined tax" while editing the tax at the seller's end
     => 063126 - Affiliate UI: Nothing happens when the user clicks on Notifications icon.
     => 063159 - Admin UI: "Shipping Packages" information is not showing under the order's details page at the admin's end.
-    => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end 
+    => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end
+    => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section 
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

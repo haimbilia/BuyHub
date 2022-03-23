@@ -29,7 +29,7 @@ $text-muted: #888888 !default;
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;
-$border-black: solid 1px $black;
+$border-black: solid 1px #000;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //outline

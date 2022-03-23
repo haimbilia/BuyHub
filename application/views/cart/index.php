@@ -12,9 +12,7 @@
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
-                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php if ($pickUpProductsCount == 0) {
-                                                                                                                                                                                        echo "checked='true'";
-                                                                                                                                                                                    } ?>> <svg class="svg" width="18" height="18">
+                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php if ($pickUpProductsCount == 0) { echo "checked='true'";} ?>> <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
                                                     </use>
                                                 </svg><?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId); ?></label>
@@ -22,10 +20,7 @@
                                         </li>
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>)">
                                             <label class="control-label radio pickupLblJs">
-                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php if ($shipProductsCount == 0) {
-                                                                                                                                                                                        echo "checked='true'";
-                                                                                                                                                                                    } ?>>
-
+                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php if ($shipProductsCount == 0) { echo "checked='true'";} ?>>
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                                     </use>
@@ -46,7 +41,9 @@
                                             <?php echo Labels::getLabel('LBL_Summary', $siteLangId); ?>
                                         </h3>
                                     </div>
-                                    <div id="js-cartFinancialSummary"></div>
+                                    <div id="js-cartFinancialSummary">
+                                        <?php include(CONF_THEME_PATH . 'cart/_partial/summary-skeleton.php'); ?>
+                                    </div>
                                     <div class="cart-action">
                                         <button class="btn btn-brand btn-block" type="button" onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
                                         </button>
