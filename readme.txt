@@ -580,6 +580,7 @@ Updates/Fixes :
     => 063159 - Admin UI: "Shipping Packages" information is not showing under the order's details page at the admin's end.
     => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end 
     => 063185 - Seller UI: Blank screen is showing with some random message while clicking on the "Approval Refund " button under the return request section
+    => 063158 - Seller UI: "Net Amount" calculation is not correct in the order's details page, order's quantity is missing, and address's format is also not correct at the seller's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

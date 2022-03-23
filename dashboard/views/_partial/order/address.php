@@ -44,7 +44,7 @@
             <strong>
                 <i class="icn">
                     <svg width="16px" height="16px" class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#test">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
                         </use>
                     </svg></i>
                 <?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?>

@@ -117,7 +117,7 @@ foreach ($arr as $childOrder) {
                         <span class="value">
                             <?php
                             if (true === $primaryOrder) {
-                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT', true), true, false, true, false, true);
+                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT'), true, false, true, false, true);
                             } else {
                                 echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true);
                             }

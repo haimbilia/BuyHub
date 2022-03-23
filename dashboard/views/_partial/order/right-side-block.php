@@ -9,6 +9,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                 <tr>
                     <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
+                    <th><?php echo Labels::getLabel('LBL_ORDERED_QUANTITY', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></th>
                 </tr>
             </thead>
@@ -20,6 +21,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                             <?php $this->includeTemplate('_partial/product/product-info-html.php', $this->variables + ['order' => $childOrder], false); ?>
                         </td>
                         <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
+                        <td><?php echo $childOrder['op_qty']; ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder), true, false, true, false, true); ?></td>
                     </tr>
                 <?php } ?>
