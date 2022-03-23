@@ -68,5 +68,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
         checkStatesDefault(<?php echo $fromCountryId; ?>, <?php echo json_encode($fromStateIds); ?>, '#taxruleloc_from_state_id');
         checkStatesDefault(<?php echo $toCountryId; ?>, <?php echo json_encode($toStateIds); ?>, '#taxruleloc_to_state_id');
         $('#taxrule_taxstr_id').trigger('change');
+       
     });
 </script>

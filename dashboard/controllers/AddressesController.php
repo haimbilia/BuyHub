@@ -165,15 +165,16 @@ class AddressesController extends LoggedUserController
             }
             $recordId = $shopDetails['shop_id'];
         } else {
-            $userId = $this->userId;
+            echo $userId = $this->userId;
             $userDefaultAddress = Address::getDefaultByRecordId(Address::TYPE_USER, $userId);
+            CommonHelper::printArray($userDefaultAddress);
             if ($userDefaultAddress['addr_id'] == $addrId) {
                 $message = Labels::getLabel('MSG_Select_another_address', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
             $recordId = $userId;
         }
-
+        die('hi');
         $db = FatApp::getDb();
         if (!$db->deleteRecords(Address::DB_TBL, array('smt' => 'addr_record_id = ? AND addr_id = ?', 'vals' => array($recordId, $addrId)))) {
             LibHelper::dieJsonError($db->getError());

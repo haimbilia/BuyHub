@@ -6,16 +6,16 @@
     <div class="container">
         <div class="checkout-page">
             <main class="checkout-page_main checkout-content-js">
-                <!-- Load Skeleton -->
-                <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.html'); ?>
+                <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.php'); ?>
             </main>
             <aside class="checkout-page_aside sidebar">
                 <div class="cart-total summary-listing-js">
-                    <?php echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
+                    <?php include(CONF_THEME_PATH . 'checkout/_partial/price-summary-skeleton.php'); ?>
                 </div>
                 <div class="secure m-4">
                     <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
-                    <p> <?php echo Labels::getLabel('LBL_Safe_and_Secure_Payments_Easy_returns_100%_Authentic_products', $siteLangId); ?>
+                    <p>
+                        <?php echo Labels::getLabel('LBL_SAFE_AND_SECURE_PAYMENTS_EASY_RETURNS_100%_AUTHENTIC_PRODUCTS', $siteLangId); ?>
                     </p>
                 </div>
                 <div class="review-total">

@@ -577,7 +577,9 @@ Updates/Fixes :
     => 063180 - Seller UI: Search icon is not showing if seller select the keyword from the suggestions, canceled label design is also not correct and placeholder color is not same for all the fields under the "advanced search".
     => 063105 - Seller UI: Double fields are showing even if it is not a "combined tax" while editing the tax at the seller's end
     => 063126 - Affiliate UI: Nothing happens when the user clicks on Notifications icon.
-     
+    => 063159 - Admin UI: "Shipping Packages" information is not showing under the order's details page at the admin's end.
+    => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end 
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

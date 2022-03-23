@@ -79,7 +79,8 @@
                         <span class="lable"><?php echo Labels::getLabel('LBL_TO_STATES', $siteLangId); ?>:
                         </span>
                         <span class="value"><?php echo TaxRule::getTypeOptions($siteLangId)[$row['taxruleloc_type']]; ?><br>
-                            <?php echo $row['to_state'] ?></span>
+                            <?php echo $row['to_state'] ?>
+                        </span>
 
 
                     </li>

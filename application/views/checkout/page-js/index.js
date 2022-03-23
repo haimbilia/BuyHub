@@ -55,9 +55,7 @@ function showAddressList() {
     loadAddressDiv();
     setCheckoutFlow("BILLING");
 }
-function resetAddress(address_type) {
-    loadAddressDiv(address_type);
-}
+
 function showShippingSummaryDiv() {
     return loadShippingSummaryDiv();
 }
@@ -103,13 +101,12 @@ $("document").ready(function () {
     };
 
     loadFinancialSummary = function () {
-        $(financialSummary).html(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "getFinancialSummary"),
             "",
             function (ans) {
                 $(financialSummary).html(ans.data);
-                $("#netAmountSummary").html(ans.netAmount);
+                $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
             },
             [],
             false
@@ -134,8 +131,6 @@ $("document").ready(function () {
             }
         );
     };
-
-    setPickupAddress = function (shopId) { };
 
     removeAddress = function (id, address_type) {
         if (!checkLogin()) {
@@ -164,18 +159,18 @@ $("document").ready(function () {
     };
 
     editAddress = function (address_id, address_type) {
-        if (!checkLogin()) {
-            return false;
-        }
         if (typeof address_id == "undefined") {
             address_id = 0;
         }
         if (typeof address_type == "undefined") {
             address_type = 0;
         }
+
+        $.ykmodal(fcom.getLoader());
         var data = "address_id=" + address_id + "&address_type=" + address_type;
         fcom.ajax(fcom.makeUrl("Checkout", "editAddress"), data, function (ans) {
-            $(pageContent).html(ans);
+            fcom.removeLoader();
+            $.ykmodal(ans);
             if ($(".payment-js").hasClass("is-active") == false) {
                 setCheckoutFlow("BILLING");
             }
@@ -183,11 +178,10 @@ $("document").ready(function () {
     };
 
     setUpAddress = function (frm, address_type) {
-        if (!checkLogin()) {
-            return false;
-        }
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
+        
+        $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl(
                 "Addresses",
@@ -197,6 +191,8 @@ $("document").ready(function () {
             ),
             data,
             function (t) {
+                fcom.closeProcessing();
+                fcom.removeLoader();
                 if (t.status == 1) {
                     if ($("#hasAddress").length > 0) {
                         $("#hasAddress").val(1);
@@ -228,30 +224,22 @@ $("document").ready(function () {
     };
 
     setUpAddressSelection = function (addr_id) {
-        if (!checkLogin()) {
-            return false;
-        }
-
         if (typeof addr_id == "undefined") {
-            var shipping_address_id = $(
-                'input[name="shipping_address_id"]:checked'
-            ).val();
+            var shipping_address_id = $('input[name="shipping_address_id"]:checked').val();
         } else {
             var shipping_address_id = addr_id;
         }
         var isShippingSameAsBilling = 1;
-        var data =
-            "shipping_address_id=" +
-            shipping_address_id +
-            "&billing_address_id=" +
-            shipping_address_id +
-            "&isShippingSameAsBilling=" +
-            isShippingSameAsBilling;
+        var data = "shipping_address_id=" + shipping_address_id + "&billing_address_id=" + shipping_address_id + "&isShippingSameAsBilling=" + isShippingSameAsBilling;
+        $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpAddressSelection"),
             data,
             function (t) {
+                fcom.closeProcessing();
+                fcom.removeLoader();
                 if (t.status == 1) {
+                    showAddressList();
                     if (t.loadAddressDiv) {
                         loadAddressDiv();
                     } else {
@@ -320,6 +308,7 @@ $("document").ready(function () {
         if (typeof address_type == "undefined") {
             address_type = 0;
         }
+        $.ykmodal(fcom.getLoader());
         fcom.displayProcessing();
         var data = "address_type=" + address_type;
         fcom.ajax(fcom.makeUrl("Checkout", "addresses"), data, function (ans) {
@@ -419,12 +408,6 @@ $("document").ready(function () {
     };
 
     loadCartReviewDiv = function () {
-        /* $(cartReviewDiv).html( fcom.getLoader() ); */
-        /* $('.section-checkout').removeClass('is-current'); */
-        /* $(cartReviewDiv).addClass('is-current'); */
-        /* fcom.ajax(fcom.makeUrl('Checkout', 'reviewCart'), '', function(ans) { */
-        /* 	$(cartReviewDiv).html(ans); */
-        /* }); */
         $(pageContent).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Checkout", "reviewCart"), "", function (ans) {
             $(pageContent).html(ans);

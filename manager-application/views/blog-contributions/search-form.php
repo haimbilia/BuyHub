@@ -8,6 +8,11 @@ $frmSearch->setFormTagAttribute('class', 'form form-search');
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+$keyWordFld->setFieldtagAttribute('title', $keywordPlaceholder);
+
+
+$fld = $frmSearch->getField('bcontributions_status');
+$fld->setFieldtagAttribute('title', $fld->getCaption());
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
