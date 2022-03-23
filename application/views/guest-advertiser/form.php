@@ -8,11 +8,8 @@ $btn = $frm->getField('btn_submit');
 $btn->addFieldTagAttribute("class", "btn btn-brand");
 ?>
 
-<div class="section-head">
-    <div class="section-heading">
-        <h2><?php echo Labels::getLabel('LBL_Advertise_With_Us', $siteLangId); ?></h2>
-    </div>
-</div>
+<h2><?php echo Labels::getLabel('LBL_Advertise_With_Us', $siteLangId); ?></h2>
+
 <div class="registeration-process">
     <ul>
         <li class="is--active"><a href="#"><?php echo Labels::getLabel('LBL_Details', $siteLangId); ?></a></li>

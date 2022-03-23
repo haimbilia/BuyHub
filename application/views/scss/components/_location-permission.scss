@@ -37,7 +37,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
-        font-weight: 300;
+        font-weight: $font-weight-light;
     }
 
     &_body {
@@ -116,7 +116,7 @@
             margin: 0 1rem;
             position: relative;
             min-width: 300px;
-            font-weight: 300;
+            font-weight: $font-weight-light;
             &:after {
                 position: absolute;
                 #{$end-direction}: 1.2rem;

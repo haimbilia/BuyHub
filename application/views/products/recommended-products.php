@@ -1,10 +1,9 @@
 <?php if ($recommendedProducts) { ?>
-    <section class="section bg-brand-light">
+    <section class="section">
         <div class="container">
             <div class="section-head">
                 <div class="section-heading">
-                    <h2><?php echo Labels::getLabel('LBL_Recommended_Products', $siteLangId); ?>
-                    </h2>
+                    <h2><?php echo Labels::getLabel('LBL_Recommended_Products', $siteLangId); ?></h2>
                 </div>
                 <div class="section-action">
                     <div class="slider-controls">

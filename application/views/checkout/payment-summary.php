@@ -26,7 +26,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         $onclick = 'loadAddressDiv();';
                     }
                     ?>
-                    <button class="link-underline" onClick="<?php echo $onclick; ?>">
+                    <button class="link-underline" onclick="<?php echo $onclick; ?>">
                         <span>
                             <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                         </span>
@@ -60,7 +60,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 <div class="review-block-head">
                     <h5 class="h5"><?php echo Labels::getLabel('LBL_Pickup_Address:', $siteLangId); ?></h5>
                     <div class="review-block-action">
-                        <button class="link-underline" onClick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
+                        <button class="link-underline" onclick="loadShippingSummaryDiv();"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
                     </div>
                 </div>
                 <div class="review-block-body">
@@ -92,7 +92,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                 ?>
                             </p>
                             <?php if (count($orderPickUpData) > 1) { ?>
-                                <button class="link plus-more" onClick="orderPickUpData('<?php echo $orderId; ?>')">
+                                <button class="link plus-more" onclick="orderPickUpData('<?php echo $orderId; ?>')">
                                     <?php echo '+ ' . (count($orderPickUpData) - 1) . ' ' . Labels::getLabel('LBL_More', $siteLangId); ?>
                                 </button>
                             <?php break;
@@ -147,7 +147,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                 <div class="review-block-head">
                     <h5 class="h5"><?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?></h5>
                     <div class="review-block-action">
-                        <button class="link-underline" onClick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)">
+                        <button class="link-underline" onclick="loadAddressDiv(<?php echo Address::ADDRESS_TYPE_BILLING; ?>)">
                             <span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span>
                         </button>
                     </div>
@@ -179,7 +179,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
         </div>
         <div class="step_body">
             <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
-                <label class="checkbox mb-4"><input onClick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
+                <label class="checkbox mb-4"><input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
                     <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
                 </label>
             <?php } ?>
@@ -228,12 +228,12 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                 <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?></span>
                             <ul class="list-actions">
                                 <li>
-                                    <button onClick="removeRewardPoints()">
+                                    <a class="link" href="javascript:void(0);" onclick="removeRewardPoints()">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
                                             </use>
                                         </svg>
-                                    </button>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -249,7 +249,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
 
                             <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
                                 $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
-                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                                 $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
                                 $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
                                 $WalletPaymentForm->developerTags['fld_default_col'] = 12;
@@ -382,7 +382,7 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
             if (!tabObj || !tabObj.length) {
                 return;
             }
-
+            fcom.displayProcessing();
             fcom.ajax(tabObj.attr('href'), '', function(response) {
                 var paymentMethod = tabObj.data('paymentmethod');
                 if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {

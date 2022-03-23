@@ -170,7 +170,7 @@
     .products-head-specification {
         color: lighten($txt-body, 50%);
         font-size: 1em;
-        font-weight: 300;
+        font-weight: $font-weight-light;
     }
     &.item--sold {
         opacity: 0.3;
@@ -189,7 +189,7 @@
         li {
             color: lighten($txt-body, 50%);
             font-size: 0.9em;
-            font-weight: 300;
+            font-weight: $font-weight-light;
             margin: 4px 0;
             position: relative;
             padding: 0 16px;
@@ -543,10 +543,10 @@
     font-weight: 600;
     &_old {
         color: $txt-gray;
-        font-weight: 300;
+        font-weight: $font-weight-light;
     }
     &_off {
-        font-weight: 300;
+        font-weight: $font-weight-light;
     }
 }
 

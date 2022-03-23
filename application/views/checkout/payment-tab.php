@@ -116,6 +116,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
         var getExternalLibraryUrl = $(frm).data('external');
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(res) {
+            fcom.removeLoader();
             try {
                 var ans = $.parseJSON(res);
                 if (1 > ans.status) {
@@ -153,6 +154,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
     function loadChargeForm(action) {
         fcom.ajax(action, '', function(t) {
             $.ykmsg.close();
+            fcom.removeLoader();
             try {
                 var ans = $.parseJSON(t);
                 if (1 > ans.status) {

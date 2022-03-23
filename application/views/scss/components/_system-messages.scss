@@ -123,7 +123,7 @@
 }
 
 .div_info li {
-    font-weight: 300;
+    font-weight: $font-weight-light;
     font-size: 1em;
     position: relative;
     padding: 0 0 5px 0;
@@ -157,7 +157,7 @@
 
 .div_msg {
     li {
-        font-weight: 300;
+        font-weight: $font-weight-light;
         font-size: 1em;
         position: relative;
         padding: 0 0 10px 0;
