@@ -2171,12 +2171,8 @@ class BuyerController extends BuyerBaseController
 
         if (abs($opDetail['opcharge_amount']) > 0) {
             $orrequestQty = FatUtility::int($post['orrequest_qty']);
-
             $volumeDiscountPerItem = abs($opDetail['opcharge_amount']) / $opDetail['op_qty'];
             $amtChargeBackToBuyer = ($opDetail['op_qty'] - $orrequestQty) * $volumeDiscountPerItem;
-
-            $pricePerItemCharged = $opDetail['op_unit_price'] - $volumeDiscountPerItem;
-
             if ($amtChargeBackToBuyer > ($opDetail['op_unit_price'] - $volumeDiscountPerItem) * abs($orrequestQty)) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_Order_not_eligible_for_partial_qty_refund', $this->siteLangId));
             }
@@ -2310,9 +2306,8 @@ class BuyerController extends BuyerBaseController
         if (true === MOBILE_APP_API_CALL) {
             $this->set('msg', $msg);
             $this->_template->render();
-        }
-        Message::addMessage($msg);
-        FatUtility::dieJsonSuccess(Message::getHtml());
+        }     
+        FatUtility::dieJsonSuccess($msg);
         // $this->_template->render(false, false, 'json-success.php');
     }
 

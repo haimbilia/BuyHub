@@ -579,7 +579,8 @@ Updates/Fixes :
     => 063126 - Affiliate UI: Nothing happens when the user clicks on Notifications icon.
     => 063159 - Admin UI: "Shipping Packages" information is not showing under the order's details page at the admin's end.
     => 063106 - Seller UI: Updated records are not showing correctly while editing the tax category rules at the seller's end 
-
+    => 063185 - Seller UI: Blank screen is showing with some random message while clicking on the "Approval Refund " button under the return request section
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
