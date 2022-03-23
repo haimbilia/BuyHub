@@ -767,7 +767,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
-        
+
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId)) {
             $message = Labels::getLabel($fileHandlerObj->getError(), $this->siteLangId);
@@ -1025,7 +1025,7 @@ class AccountController extends LoggedUserController
             unset($post['user_dob']);
         }
 
-        $userphone = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, 0);
+        $userphone = FatApp::getPostedData('user_phone');
         if (CommonHelper::isFieldEncrypted($userphone) == true) {
             unset($post['user_phone']);
         }
