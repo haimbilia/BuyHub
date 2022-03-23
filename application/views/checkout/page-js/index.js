@@ -623,7 +623,7 @@ $("document").ready(function () {
             data,
             function (rsp) {
                 $.ykmsg.close();
-                $.facebox(rsp, "modal-lg faceboxWidth medium-fb-width");
+                $.ykmodal(rsp, true, 'modal-dialog-vertical-md');
                 $("input[name='coupon_code']").focus();
             }
         );
