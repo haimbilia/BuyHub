@@ -68,7 +68,17 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
                 break;
             case 'plugin_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \'reloadList()\')' : 'return false;';
+                $fn = 'reloadList()';
+                if (in_array($row['plugin_type'], [Plugin::TYPE_SHIPMENT_TRACKING, Plugin::TYPE_SHIPPING_SERVICES]) && ('AfterShipShipment' == $row['plugin_code'] || 'ShipStationShipping' == $row['plugin_code']) && Plugin::INACTIVE == $row[$key]) {
+                    $isShipStationActive = Plugin::isActive('ShipStationShipping');
+                    $isAfterShipActive = Plugin::isActive('AfterShipShipment');
+                    if ('AfterShipShipment' == $row['plugin_code'] && true === $isShipStationActive) {
+                        $fn = 'redirectToTrackingCodeRelation()';
+                    } else if ('ShipStationShipping' == $row['plugin_code'] && true === $isAfterShipActive) {
+                        $fn = 'redirectToTrackingCodeRelation()';
+                    }
+                }
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \''. $fn . '\')' : 'return false;';
                 if (!empty($otherPluginTypes) && $canEdit) {
                     if (empty($msg)) {
                         $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $siteLangId);
