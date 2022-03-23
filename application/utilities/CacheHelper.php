@@ -31,7 +31,7 @@ class CacheHelper extends FatCache
             return;
         }
 
-        $file = CONF_UPLOADS_PATH . '/cache_keys.txt';
+        $file = rtrim(CONF_UPLOADS_PATH, '/') . '/cache_keys.txt';
         $data = [];
         if (file_exists($file)) {
             $data = (array) json_decode(file_get_contents($file), true);
@@ -46,7 +46,7 @@ class CacheHelper extends FatCache
 
     public static function getKeysByType(int $type = 0): array
     {
-        $file = CONF_UPLOADS_PATH . '/cache_keys.txt';
+        $file = rtrim(CONF_UPLOADS_PATH, '/') . '/cache_keys.txt';
         if (file_exists($file)) {
             $data = (array) json_decode(file_get_contents($file), true);
             if (isset($data[$type])) {
