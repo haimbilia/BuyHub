@@ -219,11 +219,12 @@ class ShippingZoneRatesController extends SellerBaseController
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RATE_IDENTIFIER', $this->siteLangId), 'shiprate_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_IDENTIFIER', $this->siteLangId), 'shiprate_identifier');
 
-        $fld = $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
+        $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
+        $frm->addHtml('', 'add_condition', '');
 
-        $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
+        $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, ShippingRate::CONDITION_TYPE_WEIGHT , array('class' => 'list-inline'));
 
         $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);
