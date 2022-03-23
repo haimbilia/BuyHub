@@ -27,6 +27,7 @@ $(document).ready(function () {
 	personalInfo = function (el) {
 		$(tabListing).html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'personalInfo'), '', function (res) {
+			fcom.removeLoader();
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
