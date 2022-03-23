@@ -30,9 +30,12 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
             <a class="nav-link active" href="javascript:void(0);" onclick="addCategoryReqForm(<?php echo $categoryReqId; ?>);">
                 <?php echo Labels::getLabel('LBL_General', $siteLangId); ?>
             </a>        
-            <a class="nav-link <?php echo (0 == $categoryReqId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $categoryReqId) ? "onclick='addCategoryReqLangForm(" . $categoryReqId . "," . array_key_first($languages) . ");'" : ""; ?>>
+            <a class="nav-link <?php echo (0 == $categoryReqId) ? 'disabled' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $categoryReqId) ? "onclick='addCategoryReqLangForm(" . $categoryReqId . "," . array_key_first($languages) . ");'" : ""; ?>>
                 <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
-            </a>   
+            </a>  
+            <a class="nav-link <?php echo (0 == $categoryReqId) ? 'disabled' : ''; ?>" href="javascript:void(0);" <?php if ($categoryReqId > 0) { ?> onclick="categoryReqMediaForm(<?php echo $categoryReqId ?>);" <?php } ?>>
+            <?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>
+        </a>
         </nav>
         <?php } ?>
     </div>
