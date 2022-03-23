@@ -263,7 +263,7 @@ class RatingTypesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $this->siteLangId),
             'ratingtype_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'ratingtype_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -277,7 +277,7 @@ class RatingTypesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'ratingtype_name',
             'ratingtype_type',
             'ratingtype_active',

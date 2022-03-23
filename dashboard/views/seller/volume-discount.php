@@ -1,6 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('class', 'form');
-
 $keywordFld = $frmSearch->getField('keyword');
 if (0 < $selProd_id) {
     $keywordFld->setFieldTagAttribute('readonly', 'readonly');

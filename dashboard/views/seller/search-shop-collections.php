@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="card-head border-0 pt-4">
+<div class="card-head border-0 py-4">
     <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
     <?php
     if ($canEdit) {

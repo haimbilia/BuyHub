@@ -3163,10 +3163,11 @@ class SellerController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
 
-        /* Update To Shipping Service */
+        /* Update To Shipping Service         
         $this->langId = $this->siteLangId;
         $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty'], UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
-        /* Update To Shipping Service */
+        Update To Shipping Service 
+        */
 
         /* email notification handling[ */
         $emailNotificationObj = new EmailHandler();

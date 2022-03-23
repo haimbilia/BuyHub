@@ -89,7 +89,7 @@ class ShopsController extends ListingBaseController
             LibHelper::exitWithSuccess([
                 'listingHtml' => $this->_template->render(false, false, 'shops/search.php', true),
                 'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-                    ], true);
+            ], true);
         }
     }
 
@@ -100,7 +100,7 @@ class ShopsController extends ListingBaseController
         $frm = $this->getForm($shop_id);
         $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < $shop_id) {
-            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, ['*','IFNULL(shop_name,shop_identifier) as shop_name'], applicationConstants::JOIN_RIGHT);
+            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, ['*', 'IFNULL(shop_name,shop_identifier) as shop_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -229,14 +229,14 @@ class ShopsController extends ListingBaseController
             $shopLayoutTemplateId = 10001;
         }
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
-        
-        $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
-   
-        $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
+
+        $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
+
+        $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
 
 
-        $this->set('getShopDimensions',$getShopDimensions);
-        $this->set('getShopLogoSquare',$getShopLogoSquare);
+        $this->set('getShopDimensions', $getShopDimensions);
+        $this->set('getShopLogoSquare', $getShopLogoSquare);
         $this->set('getShopLogoRactangle', $getShopLogoRactangle);
 
 
@@ -271,9 +271,9 @@ class ShopsController extends ListingBaseController
         if ($file_type == 'logo') {
             $logo = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) > 1) ? false : true);
 
-          
+
             $aspectRatioType = $logo['afile_aspect_ratio'];
-            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+            $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
 
             $this->set('image', $logo);
             $this->set('imageFunction', 'shopLogo');
@@ -325,17 +325,17 @@ class ShopsController extends ListingBaseController
         $fileHandlerObj->deleteFile($file_type, $shop_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-                        $_FILES['cropped_image']['tmp_name'],
-                        $file_type,
-                        $shop_id,
-                        0,
-                        $_FILES['cropped_image']['name'],
-                        -1,
-                        false,
-                        $lang_id,
-                        $slide_screen,
-                        $aspectRatio
-                )) {
+            $_FILES['cropped_image']['tmp_name'],
+            $file_type,
+            $shop_id,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $lang_id,
+            $slide_screen,
+            $aspectRatio
+        )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -476,7 +476,7 @@ class ShopsController extends ListingBaseController
         $fld->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'shop_state', array(), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'shop_postalcode');     
+        $frm->addRequiredField(Labels::getLabel('FRM_POSTAL_CODE', $this->siteLangId), 'shop_postalcode');
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
         $fld->requirements()->setInt();
@@ -513,7 +513,7 @@ class ShopsController extends ListingBaseController
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_SHOP_NAME', $lang_id), 'shop_name');
-        $this->appendLangFormFields($frm);      
+        $this->appendLangFormFields($frm);
         return $frm;
     }
 
@@ -526,7 +526,7 @@ class ShopsController extends ListingBaseController
         $frm->addTextarea(Labels::getLabel('FRM_DELIVERY_POLICY', $lang_id), 'shop_delivery_policy');
         $frm->addTextarea(Labels::getLabel('FRM_REFUND_POLICY', $lang_id), 'shop_refund_policy');
         $frm->addTextarea(Labels::getLabel('FRM_ADDITIONAL_INFORMATION', $lang_id), 'shop_additional_info');
-        $frm->addTextarea(Labels::getLabel('FRM_SELLER_INFORMATION', $lang_id), 'shop_seller_info');      
+        $frm->addTextarea(Labels::getLabel('FRM_SELLER_INFORMATION', $lang_id), 'shop_seller_info');
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         $languageArr = Language::getDropDownList();
@@ -584,7 +584,7 @@ class ShopsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'shop_name',
             'numOfProducts',
             'numOfReports',
@@ -601,5 +601,4 @@ class ShopsController extends ListingBaseController
     {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
-
 }

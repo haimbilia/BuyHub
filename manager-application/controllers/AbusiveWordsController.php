@@ -256,7 +256,7 @@ class AbusiveWordsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->siteLangId),
             'language_name' => Labels::getLabel('LBL_Language', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -274,7 +274,7 @@ class AbusiveWordsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'abusive_keyword',
             'language_name',
             'action',

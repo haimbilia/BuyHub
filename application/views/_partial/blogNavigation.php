@@ -12,7 +12,7 @@
              </a>
          </div>
          <div class="header-blog-right">
-             <span class="blog-overlay" id="blog-overlay"></span>
+             <span class="blog-overlay blogOverlayJs" id="blog-overlay"></span>
              <?php if (!empty($categoriesArr)) {
                     $noOfCharAllowedInNav = 60;
                     $navLinkCount = 0;
@@ -26,7 +26,7 @@
                         }
                         $navLinkCount++;
                     } ?>
-                 <div class="menu-nav">
+                 <div class="menu-nav menuNavJs">
                      <ul class="nav-blog <?php echo ($navLinkCount > 4) ? 'justify-content-between' : ''; ?>">
                          <?php $mainNavigation = array_slice($categoriesArr, 0, $navLinkCount, true);
                             foreach ($mainNavigation as $id => $cat) { ?>
@@ -39,7 +39,7 @@
                  </div>
              <?php } ?>
 
-             <button class="btn-menu" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-menu" aria-controls="offcanvas-blog-menu">
+             <button class="btn-menu blogPageBurgerIconJs" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-menu" aria-controls="offcanvas-blog-menu">
                  <svg class="svg" width="20" height="20">
                      <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#burgerMenu">
                      </use>

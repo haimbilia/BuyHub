@@ -349,7 +349,7 @@ class SocialPlatformController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'splatform_identifier' => Labels::getLabel('LBL_Title', $this->siteLangId),
             'splatform_url' => Labels::getLabel('LBL_URL', $this->siteLangId),
             'splatform_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -363,7 +363,7 @@ class SocialPlatformController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'splatform_identifier',
             'splatform_url',
             'splatform_active',

@@ -444,7 +444,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'prodcat_parent' => Labels::getLabel('LBL_PARENT_CATEGORY', $this->siteLangId),
             'prodcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'prodcat_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
@@ -457,7 +457,7 @@ class ProductCategoriesRequestController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'prodcat_parent',
             'prodcat_name',
             'prodcat_requested_on',

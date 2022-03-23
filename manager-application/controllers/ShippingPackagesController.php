@@ -189,7 +189,7 @@ class ShippingPackagesController extends ListingBaseController
             return json_decode($shopsTblHeadingCols, true);
         }
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'shippack_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'dimensions' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
             'shippack_units' => Labels::getLabel('LBL_UNIT', $this->siteLangId),
@@ -202,7 +202,7 @@ class ShippingPackagesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'shippack_name',
             'dimensions',
             'shippack_units',

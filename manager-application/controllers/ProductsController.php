@@ -1408,7 +1408,7 @@ class ProductsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'images',
             'product_identifier',
             'user_name',

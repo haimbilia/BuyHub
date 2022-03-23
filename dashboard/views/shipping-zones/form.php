@@ -74,7 +74,7 @@ if (!empty($excludeLocations)) {
                                                 <input type="checkbox" name="shiploc_zone_ids[]" value="<?php echo $zone['zone_id']; ?>" class="countries-js checkbox_zone_<?php echo $zone['zone_id']; ?>" <?php echo ($countCounties == $totalCountries && $countCounties != 0) ? 'checked' : ''; ?>>
                                                 <?php echo $zone['zone_name']; ?>
                                             </label>
-                                            <label class="out-of-state dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">
+                                            <label class="out-of-state dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#zone_<?php echo $zone['zone_id']; ?>" aria-expanded="false" aria-controls="zone_<?php echo $zone['zone_id']; ?>">
                                                 <i class="dropdown-toggle-custom-arrow"></i>
                                             </label>
                                         </div>

@@ -32,14 +32,22 @@
                 case 'listserial':
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
-                case 'prodcat_name':
-                    $catName = (!empty($row['prodcat_name'])) ? $row['prodcat_name'] : $row['prodcat_identifier'];
-                    $html = '<div class="product-profile"><figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('category', 'banner', array($row['prodcat_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $catName . '" alt="' . $catName . '"></figure>
-				<div class="product-profile__description">
-					<div class="product-profile__title">' . $catName . '</div>
-					<div class="product-profile__sub_title"> (' . $row['prodcat_identifier'] . ') </div>
-				</div></div>';
-                    $td->appendElement('plaintext', array(), $html, true);
+                case 'prodcat_name':  
+                    $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_THUMB);
+                    $uploadedTime = AttachedFile::setTimeParam($row['prodcat_updated_on']);
+                    $image = '<img data-aspect-ratio = "' . $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'] . '" title="' . $row['prodcat_name'] . '" alt="' . $row['prodcat_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('category', 'icon', array($row['prodcat_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
+
+                    $html = '<div class="product-profile">
+                                <figure class="product-profile__pic">
+                                    ' . $image . '
+                                </figure>
+                                <div class="product-profile__description">
+                                    <div class="product-profile__title">' . $row['prodcat_name'] . '</div>
+                                    <div class="product-profile__sub_title"> (' . $row['prodcat_identifier'] . ') </div>
+                                </div>
+                            </div>';
+                    $td->appendElement('plaintext', array(), $html, true);                   
+
                     break;
                 case 'prodcat_parent':
                     $prodCat = new productCategory();

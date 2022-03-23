@@ -327,7 +327,7 @@ class WithdrawalRequestsController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_USER_DETAILS', $this->siteLangId),
             'user_balance' => Labels::getLabel('LBL_BALANCE', $this->siteLangId),
             'withdrawal_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
@@ -347,7 +347,7 @@ class WithdrawalRequestsController extends ListingBaseController {
      */
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'user_name',
             'user_balance',
             'withdrawal_amount',

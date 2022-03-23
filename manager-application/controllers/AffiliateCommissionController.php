@@ -332,7 +332,7 @@ class AffiliateCommissionController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
             'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate_User', $this->siteLangId),
             'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
@@ -346,7 +346,7 @@ class AffiliateCommissionController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'afcommsetting_prodcat_id',
             'afcommsetting_user_id',
             'afcommsetting_fees',

@@ -298,7 +298,7 @@ class EmptyCartItemsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'emptycartitem_identifier' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'emptycartitem_url' => Labels::getLabel('LBL_URL', $this->siteLangId),
             'emptycartitem_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -313,7 +313,7 @@ class EmptyCartItemsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'emptycartitem_identifier',
             'emptycartitem_url',
             'emptycartitem_active',

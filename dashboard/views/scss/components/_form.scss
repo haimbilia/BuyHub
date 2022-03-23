@@ -397,6 +397,9 @@ form.custom-form {
             height: 2rem !important;
         }
     }
+    .input-group-append{
+        min-width: 90px;
+    }
 }
 
 .icon-group {

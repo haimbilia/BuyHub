@@ -297,7 +297,7 @@ class PickupAddressesController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'addr_title' => Labels::getLabel('LBL_ADDRESS_LABEL', $this->siteLangId),
             'addr_detail' => Labels::getLabel('LBL_ADDRESS_DETAIL', $this->siteLangId),
             'addr_phone' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId),
@@ -310,7 +310,7 @@ class PickupAddressesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'addr_title',
             'addr_detail',
             'addr_phone',

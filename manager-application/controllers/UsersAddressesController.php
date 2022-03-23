@@ -300,7 +300,7 @@ class UsersAddressesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'addr_title' => Labels::getLabel('LBL_Address_Label', $this->siteLangId),
             'user_address' => Labels::getLabel('LBL_Address', $this->siteLangId),
@@ -317,7 +317,7 @@ class UsersAddressesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'user_name',
             'addr_title',
             'user_address',

@@ -239,7 +239,7 @@ class TagsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'tags',
         ];

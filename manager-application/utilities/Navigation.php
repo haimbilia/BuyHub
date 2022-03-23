@@ -1,6 +1,7 @@
 <?php
 class Navigation
 {
+
     public static function setLeftNavigationVals($template)
     {
         $db = FatApp::getDb();
@@ -12,7 +13,8 @@ class Navigation
         $supReqSrchObj->addCondition('usuprequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $supReqSrchObj->addMultipleFields(array('count(usuprequest_id) as countOfRec'));
         $supReqSrchObj->doNotCalculateRecords();
-        $supReqSrchObj->doNotLimitRecords();
+        // $supReqSrchObj->doNotLimitRecords();
+        $supReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $supReqResult = $db->fetch($supReqSrchObj->getResultset());
         $supReqCount = FatUtility::int($supReqResult['countOfRec']);
 
@@ -21,7 +23,7 @@ class Navigation
         $catReqSrchObj->addCondition('scatrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $catReqSrchObj->addMultipleFields(array('count(scatrequest_id) as countOfRec'));
         $catReqSrchObj->doNotCalculateRecords();
-        $catReqSrchObj->doNotLimitRecords();
+        $catReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $catReqResult = $db->fetch($catReqSrchObj->getResultset());
         $catReqCount = FatUtility::int($catReqResult['countOfRec']);
 
@@ -30,7 +32,7 @@ class Navigation
         $custReqSrchObj->addCondition('preq_status', '=', 'mysql_func_' . ProductRequest::STATUS_PENDING, 'AND', true);
         $custReqSrchObj->addMultipleFields(array('count(preq_id) as countOfRec'));
         $custReqSrchObj->doNotCalculateRecords();
-        $custReqSrchObj->doNotLimitRecords();
+        $custReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $custProdReqResult = $db->fetch($custReqSrchObj->getResultset());
         $custProdReqCount = FatUtility::int($custProdReqResult['countOfRec']);
 
@@ -39,7 +41,7 @@ class Navigation
         $brandReqSrchObj->addCondition('brand_status', '=', 'mysql_func_' . Brand::BRAND_REQUEST_PENDING, 'AND', true);
         $brandReqSrchObj->addMultipleFields(array('count(brand_id) as countOfRec'));
         $brandReqSrchObj->doNotCalculateRecords();
-        $brandReqSrchObj->doNotLimitRecords();
+        $brandReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $brandReqResult = $db->fetch($brandReqSrchObj->getResultset());
         $brandReqCount = FatUtility::int($brandReqResult['countOfRec']);
 
@@ -48,14 +50,14 @@ class Navigation
         $categoryReqSrchObj->addOrder('m.prodcat_active', 'DESC');
         $categoryReqSrchObj->addMultipleFields(array('count(prodcat_id) as countOfRec'));
         $categoryReqSrchObj->doNotCalculateRecords();
-        $categoryReqSrchObj->doNotLimitRecords();
+        $categoryReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $categoryReqResult = $db->fetch($categoryReqSrchObj->getResultset());
         $categoryReqCount = FatUtility::int($categoryReqResult['countOfRec']);
 
         /* withdrawal requests */
         $drReqSrchObj = new WithdrawalRequestsSearch();
         $drReqSrchObj->doNotCalculateRecords();
-        $drReqSrchObj->doNotLimitRecords();
+        $drReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $drReqSrchObj->addCondition('withdrawal_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $drReqSrchObj->addMultipleFields(array('count(withdrawal_id) as countOfRec'));
         $drReqResult = $db->fetch($drReqSrchObj->getResultset());
@@ -64,7 +66,7 @@ class Navigation
         /* order cancellation requests */
         $orderCancelReqSrchObj = new OrderCancelRequestSearch($langId);
         $orderCancelReqSrchObj->doNotCalculateRecords();
-        $orderCancelReqSrchObj->doNotLimitRecords();
+        $orderCancelReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $orderCancelReqSrchObj->addCondition('ocrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $orderCancelReqSrchObj->addMultipleFields(array('count(ocrequest_id) as countOfRec'));
         $orderCancelReqResult = $db->fetch($orderCancelReqSrchObj->getResultset());
@@ -73,7 +75,7 @@ class Navigation
         /* order return/refund requests */
         $orderRetReqSrchObj = new OrderReturnRequestSearch();
         $orderRetReqSrchObj->doNotCalculateRecords();
-        $orderRetReqSrchObj->doNotLimitRecords();
+        $orderRetReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $orderRetReqSrchObj->addCondition('orrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $orderRetReqSrchObj->addMultipleFields(array('count(orrequest_id) as countOfRec'));
         $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
@@ -82,7 +84,7 @@ class Navigation
         /* blog contributions */
         $blogContrSrchObj = BlogContribution::getSearchObject();
         $blogContrSrchObj->doNotCalculateRecords();
-        $blogContrSrchObj->doNotLimitRecords();
+        $blogContrSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $blogContrSrchObj->addCondition('bcontributions_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $blogContrSrchObj->addMultipleFields(array('count(bcontributions_id) as countOfRec'));
         $blogContrResult = $db->fetch($blogContrSrchObj->getResultset());
@@ -91,7 +93,7 @@ class Navigation
         /* blog comments */
         $blogCommentsSrchObj = BlogComment::getSearchObject();
         $blogCommentsSrchObj->doNotCalculateRecords();
-        $blogCommentsSrchObj->doNotLimitRecords();
+        $blogCommentsSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $blogCommentsSrchObj->addCondition('bpcomment_approved', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $blogCommentsSrchObj->addMultipleFields(array('count(bpcomment_id) as countOfRec'));
         $blogCommentsResult = $db->fetch($blogCommentsSrchObj->getResultset());
@@ -100,7 +102,7 @@ class Navigation
         /* threshold level products */
         $selProdSrchObj = SellerProduct::getSearchObject($langId);
         $selProdSrchObj->doNotCalculateRecords();
-        $selProdSrchObj->doNotLimitRecords();
+        $selProdSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
 
         $selProdSrchObj->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         // $selProdSrchObj->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = '.CommonHelper::getLangId(), 'p_l');
@@ -120,7 +122,7 @@ class Navigation
             $sellerOrderSrchObj = new OrderProductSearch($langId, true, false);
             $sellerOrderSrchObj->addStatusCondition($sellerOrderStatusArr);
             $sellerOrderSrchObj->addMultipleFields(array('count(op_id) as countOfRec'));
-            $sellerOrderSrchObj->doNotLimitRecords();
+            $sellerOrderSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
             $sellerOrderResult = $db->fetch($sellerOrderSrchObj->getResultset());
             $sellerOrderCount = FatUtility::int($sellerOrderResult['countOfRec']);
             $template->set('sellerOrderCount', $sellerOrderCount);
@@ -131,19 +133,24 @@ class Navigation
         $gdprSrch->addCondition('ureq_status', '=', 'mysql_func_' . UserGdprRequest::STATUS_PENDING, 'AND', true);
         $gdprSrch->addCondition('ureq_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $gdprSrch->getResultSet();
+        $gdprSrch->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $gdprReqCount = $gdprSrch->recordCount();
 
         /* Badge requests */
         $badgeRequest = new SearchBase(BadgeRequest::DB_TBL, 'breq');
-        $badgeRequest->addMultipleFields([BadgeRequest::DB_TBL_PREFIX . 'id']);
+        $badgeRequest->addMultipleFields(['count(' . BadgeRequest::DB_TBL_PREFIX . 'id) as countOfRec']);
         $badgeRequest->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' . BadgeRequest::REQUEST_PENDING, 'AND', true);
-        $badgeRequest->getResultSet();
-        $badgeRequestCount = $badgeRequest->recordCount();
+        $badgeRequest->doNotCalculateRecords();
+        $badgeRequest->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
+        $badgeRequestResult = $db->fetch($badgeRequest->getResultset());
+        $badgeRequestCount = FatUtility::int($badgeRequestResult['countOfRec']);
 
         /* Order return requests */
         $orderRetReqSrchObj = OrderReturnRequest::getSearchObject();
         $orderRetReqSrchObj->addCondition('orrequest_status', '=', 'mysql_func_' . OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING, 'AND', true);
         $orderRetReqSrchObj->addMultipleFields(array('count(orrequest_id) as countOfRec'));
+        $orderRetReqSrchObj->doNotCalculateRecords();
+        $orderRetReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
         $orderRetReqCount = FatUtility::int($orderRetReqResult['countOfRec']);
 

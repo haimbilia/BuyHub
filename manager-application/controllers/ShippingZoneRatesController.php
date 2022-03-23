@@ -45,16 +45,7 @@ class ShippingZoneRatesController extends ListingBaseController {
                 $data['is_condition'] = 1;
             }
             $frm->fill($data);
-        }
-        $generalTab = [
-            'attr' => [
-                'href' => 'javascript:void(0);',
-                'onclick' => "addEditShipRates(" . $zoneId . "," . $rateId . ");",
-                'title' => Labels::getLabel('LBL_GENERAL', $this->siteLangId)
-            ],
-            'label' => Labels::getLabel('LBL_GENERAL', $this->siteLangId),
-            'isActive' => true
-        ];
+        }       
         $this->set('activeGentab', true);
         $this->set('languages', Language::getAllNames());
         $this->set('zoneId', $zoneId);
@@ -234,12 +225,12 @@ class ShippingZoneRatesController extends ListingBaseController {
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $this->siteLangId), 'shiprate_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $this->siteLangId), 'shiprate_name');
 
         $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
         $frm->addHtml('', 'add_condition', '');
 
-        $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
+        $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, ShippingRate::CONDITION_TYPE_WEIGHT, array('class' => 'list-inline'));
 
         $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);

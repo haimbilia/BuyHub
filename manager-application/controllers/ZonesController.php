@@ -240,7 +240,7 @@ class ZonesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             /*'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->siteLangId),*/
             'zone_name' => Labels::getLabel('LBL_ZONE_NAME', $this->siteLangId),
             'zone_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -255,7 +255,7 @@ class ZonesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'zone_identifier',
             'zone_name',
             'zone_active',

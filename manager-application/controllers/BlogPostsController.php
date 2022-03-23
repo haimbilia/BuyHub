@@ -604,7 +604,7 @@ class BlogPostsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
             'categories' => Labels::getLabel('LBL_POST_CATEGORY', $this->siteLangId),
             'post_published_on' => Labels::getLabel('LBL_PUBLISHED_DATE', $this->siteLangId),
@@ -620,7 +620,7 @@ class BlogPostsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'post_title',
             'categories',
             'post_published_on',
