@@ -101,16 +101,12 @@ $("document").ready(function () {
     };
 
     loadFinancialSummary = function () {
-        fcom.updateWithAjax(
-            fcom.makeUrl("Checkout", "getFinancialSummary"),
-            "",
+        fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary"), "",
             function (ans) {
                 fcom.removeLoader();
                 $(financialSummary).html(ans.data);
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
-            },
-            [],
-            false
+            }
         );
     };
 
@@ -291,12 +287,13 @@ $("document").ready(function () {
         /*        if (!checkLogin()) { */
         /*            return false; */
         /*        } */
+        $(shippingSummaryDiv).prepend(fcom.getLoader());
         var data = $("#shipping-summary select").serialize();
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpShippingMethod"),
             data,
             function (t) {
-                fcom.closeProcessing();
+                fcom.removeLoader();
                 if (t.status == 1) {
                     loadFinancialSummary();
                     loadPaymentSummary();
@@ -418,10 +415,10 @@ $("document").ready(function () {
     };
 
     loadCartReview = function () {
-        $(reviewSection).show();
-        fcom.ajax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
+        $(reviewSection).show().prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
             fcom.removeLoader();
-            $(reviewSection).html(ans);
+            $(reviewSection).html(ans.html);
         });
     };
 
@@ -438,15 +435,13 @@ $("document").ready(function () {
     };
 
     walletSelection = function (el) {
-        if (!checkLogin()) {
-            return false;
-        }
         var wallet = $(el).is(":checked") ? 1 : 0;
         var data = "payFromWallet=" + wallet;
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "walletSelection"),
             data,
             function (ans) {
+                fcom.removeLoader();
                 loadPaymentSummary();
             }
         );
