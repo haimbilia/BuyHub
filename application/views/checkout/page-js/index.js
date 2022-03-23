@@ -11,6 +11,7 @@ var shippingSummaryDiv = "#shipping-summary";
 var cartReviewDiv = "#cart-review";
 var paymentDiv = "#payment";
 var financialSummary = ".summary-listing-js";
+var reviewSection = ".review-section-js";
 
 async function checkLogin() {
     let ans = await $.ajax({
@@ -51,6 +52,7 @@ function showAddressFormDiv(address_type) {
         setCheckoutFlow("BILLING");
     }
 }
+
 function showAddressList() {
     loadAddressDiv();
     setCheckoutFlow("BILLING");
@@ -59,9 +61,7 @@ function showAddressList() {
 function showShippingSummaryDiv() {
     return loadShippingSummaryDiv();
 }
-function showCartReviewDiv() {
-    return loadCartReviewDiv();
-}
+
 $("document").ready(function () {
     $(document).on("keydown", "#cc_number", function () {
         var obj = $(this);
@@ -105,6 +105,7 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "getFinancialSummary"),
             "",
             function (ans) {
+                fcom.removeLoader();
                 $(financialSummary).html(ans.data);
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
             },
@@ -180,7 +181,7 @@ $("document").ready(function () {
     setUpAddress = function (frm, address_type) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        
+
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl(
@@ -295,9 +296,11 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "setUpShippingMethod"),
             data,
             function (t) {
+                fcom.closeProcessing();
                 if (t.status == 1) {
                     loadFinancialSummary();
                     loadPaymentSummary();
+                    loadCartReview();
                     setCheckoutFlow("PAYMENT");
                 }
             }
@@ -415,23 +418,23 @@ $("document").ready(function () {
     };
 
     loadCartReview = function () {
+        $(reviewSection).show();
         fcom.ajax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
-            $(cartReviewDiv).html(ans);
+            fcom.removeLoader();
+            $(reviewSection).html(ans);
         });
     };
 
     loadPaymentSummary = function () {
-        if (!checkLogin()) {
-            return false;
-        }
-        $(pageContent).html(fcom.getLoader());
-
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl("Checkout", "PaymentSummary"), "", function (ans) {
-            $.ykmsg.close();
-            $(pageContent).html(ans);
-            $(paymentDiv).addClass("is-current");
-        });
+        fcom.updateWithAjax(
+            fcom.makeUrl("Checkout", "PaymentSummary"),
+            '',
+            function (res) {
+                fcom.removeLoader();
+                $(pageContent).html(res.html);
+                $(paymentDiv).addClass("is-current");
+            }
+        );
     };
 
     walletSelection = function (el) {

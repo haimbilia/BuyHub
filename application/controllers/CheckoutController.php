@@ -9,7 +9,7 @@ class CheckoutController extends MyAppController
     {
         parent::__construct($action);
         UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));
-        
+
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
@@ -1492,7 +1492,8 @@ class CheckoutController extends MyAppController
             $this->_template->render();
         }
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function paymentTab($order_id, $plugin_id)
@@ -2014,7 +2015,8 @@ class CheckoutController extends MyAppController
         $frm = new Form('frmRewards');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
+
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('LBL_APPLY', $this->siteLangId), 'submit', 'btn_submit', 'btn-apply'));
         return $frm;
     }
 

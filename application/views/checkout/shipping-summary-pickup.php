@@ -34,7 +34,7 @@
                 <?php
                 $cartObj = new Cart();
                 if ($cartObj->hasPhysicalProduct()) {
-                    echo Labels::getLabel('LBL_Pickup_Summary', $siteLangId);
+                    echo Labels::getLabel('LBL_PICKUP_SUMMARY', $siteLangId);
                 } else {
                     echo Labels::getLabel('LBL_REVIEW_CHECKOUT', $siteLangId);
                 }
@@ -62,7 +62,6 @@
                         <li class="list-cart-item shipping-select">
                             <div class="shop-detail">
                                 <h6 class="shop-title">
-
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
