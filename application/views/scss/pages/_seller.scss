@@ -80,6 +80,7 @@
 }
 
 .hero-banner {
+    color: #fff;
     background-repeat: repeat;
     background-position: center;
     position: relative;
@@ -95,7 +96,7 @@
         bottom: 0;
         z-index: 0;
         content: "";
-        opacity: 0.3;
+        opacity: 0.6;
         background: #232526;
         /* fallback for old browsers */
         /* Chrome 10-25, Safari 5.1-6 */
@@ -121,13 +122,12 @@
     align-items: center;
     padding: 1rem 0;
     .seller-slogan-txt {
-        position: static;
-        bottom: 0;
         h3 {
             font-size: clamp(2rem, 50%, 4rem);
             font-weight: 600;
             line-height: 1.5;
             margin-bottom: 1.5rem;
+            color: currentColor;
             span {
                 display: block;
                 font-size: 1rem;
@@ -135,7 +135,7 @@
             }
         }
         p {
-            color: inherit;
+            color: currentColor;
         }
     }
     ul {
