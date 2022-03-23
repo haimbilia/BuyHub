@@ -92,7 +92,7 @@
                         $discountPrice = $row['selprod_price'] - $row[$column];
                         $discountPercentage = round(($discountPrice / $row['selprod_price']) * 100, 2);
                         $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $siteLangId);
-                        $div->appendElement('div', array("class" => 'percentValJs badge badge-success'), $discountPercentage, true);
+                        $div->appendElement('div', array("class" => 'percentValJs badge badge-success ms-1'), $discountPercentage, true);
                     }
                     break;
                 case 'action':
