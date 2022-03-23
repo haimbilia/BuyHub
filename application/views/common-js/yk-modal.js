@@ -12,7 +12,7 @@
             modalClass = modalClassParm;
             dialogClass = 'modal-dialog-centered ' + dialogClassParm;
         }
-        
+
         isloader = $(data).hasClass("loaderJs");
 
         init(modalClass, dialogClass);
@@ -146,10 +146,14 @@
     /* $('.' + $.ykmodal.element).on("scroll", function () {
         console.log("Scrolling");
     });
-    $(document).on("shown.bs.modal", "." + $.ykmodal.element, function () {
-        $(this).on("scroll", function () {
-        });
-    }); */
+     */
+    $(document).on("show.bs.modal", "." + $.ykmodal.element, function () {
+        // document.querySelector("body").style.overflow = 'hidden';
+    });
+
+    $(document).on("hide.bs.modal	", "." + $.ykmodal.element, function () {
+        // document.querySelector("body").style.overflow = 'hidden';
+    });
 
 
     /* Submit Form on Enter Key Press. For sidebar forms. */
