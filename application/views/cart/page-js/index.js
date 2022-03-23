@@ -170,9 +170,8 @@ $(function () {
 	}
 
 	getCartFinancialSummary = function (type) {
-		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Cart', 'getCartFinancialSummary', [type]), '', function (res) {
-			$("#js-cartFinancialSummary").html(res);
+			$("#js-cartFinancialSummary").hide().html(res).fadeIn();
 			fcom.removeLoader();
 		});
 	}

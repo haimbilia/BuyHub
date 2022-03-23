@@ -30,13 +30,11 @@ class LoggedUserController extends DashboardBaseController
                     $this->userInfo['credential_verified'] == applicationConstants::NO ||
                     $this->userInfo['credential_active'] == applicationConstants::NO
                 )
-            ) ||
-            !isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) ||
-            empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME])
+            )
         );
+        $isLoginByAdmin = (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && !empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]));
 
-
-        if (true === $invalidAccess) {
+        if (true === $invalidAccess && false === $isLoginByAdmin) {
             LibHelper::exitWithError($errMessage, false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }

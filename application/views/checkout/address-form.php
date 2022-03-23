@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$addressFrm->setFormTagAttribute('class', 'form');
+HtmlHelper::formatFormFields($addressFrm, 6);
+$addressFrm->setFormTagAttribute('class', 'form modalFormJs');
+$addressFrm->setFormTagAttribute('data-onclear', 'editAddress(' . $address_id . ', ' . $addressType . ')');
 $addressFrm->setFormTagAttribute('onsubmit', 'setUpAddress(this, ' . $addressType . '); return(false);');
 
 $countryFld = $addressFrm->getField('addr_country_id');
@@ -9,23 +11,28 @@ $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value, 0 ,\
 $stateFld = $addressFrm->getField('addr_state_id');
 $stateFld->setFieldTagAttribute('id', 'addr_state_id');
 
-$submitFld = $addressFrm->getField('btn_submit');
-$submitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+$fld = $addressFrm->getField('btn_submit');
+$addressFrm->removeField($fld);
 
-$cancelFld = $addressFrm->getField('btn_cancel');
-$cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-wide');
-$cancelFld->setFieldTagAttribute('onclick', 'resetAddress(' . $addressType . ')');
+$fld = $addressFrm->getField('btn_cancel');
+$addressFrm->removeField($fld);
 ?>
-
-<div class="step">
-    <div class="step_section">
-        <div class="step_head">
-            <h5 class="step_title"><?php echo Labels::getLabel('LBL_ADDRESS_DETAILS', $siteLangId); ?></h5>
-        </div>
-        <div class="step_body">
-            <?php echo $addressFrm->getFormHtml(); ?>
-        </div>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <a class="back" href="javascript:void(0);" onclick="showAddressList()">
+            <svg class="svg" width="24" height="24">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                </use>
+            </svg>
+        </a>
+        <?php echo $labelHeading; ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $addressFrm->getFormHtml(); ?>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/sidebar/form-edit-foot.php'); ?>
 </div>
 <script language="javascript">
     $(document).ready(function() {

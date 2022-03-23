@@ -130,7 +130,7 @@
     $(document).on("click", ".submitBtnJs", function () {
         if ($('.' + $.ykmodal.element).hasClass("show")) {
             var form = $('.' + $.ykmodal.element + ' form');
-            if (true === extendEditorJs) {
+            if ('undefined' != typeof extendEditorJs && true === extendEditorJs) {
                 var onSubmit = form.attr('onsubmit');
                 if ('undefined' != typeof onSubmit) {
                     onSubmit = onSubmit.replace("return(false);", "");
