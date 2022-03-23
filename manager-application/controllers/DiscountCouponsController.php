@@ -790,7 +790,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'coupon_title' => Labels::getLabel('LBL_COUPON_TITLE', $this->siteLangId),
             'coupon_code' => Labels::getLabel('LBL_COUPON_CODE', $this->siteLangId),
             'coupon_type' => Labels::getLabel('LBL_COUPON_TYPE', $this->siteLangId),
@@ -808,7 +808,7 @@ class DiscountCouponsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+          /*   'listSerial', */
             'coupon_title',
             'coupon_code',
             'coupon_type',

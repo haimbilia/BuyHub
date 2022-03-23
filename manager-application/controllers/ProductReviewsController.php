@@ -300,7 +300,7 @@ class ProductReviewsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'selprod_title' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
             'seller_username' => Labels::getLabel('LBL_REVIEW_FOR', $this->siteLangId),
             'reviewed_by' => Labels::getLabel('LBL_REVIEWED_BY', $this->siteLangId),
@@ -321,7 +321,7 @@ class ProductReviewsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'selprod_title',
             'seller_username',
             'reviewed_by',

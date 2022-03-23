@@ -241,7 +241,7 @@ class PageLanguageDataController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'plang_key' => Labels::getLabel('LBL_KEY', $this->siteLangId),
             'plang_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
@@ -258,7 +258,7 @@ class PageLanguageDataController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'plang_key',
             'plang_title',
             'action'

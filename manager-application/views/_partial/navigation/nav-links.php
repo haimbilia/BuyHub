@@ -173,7 +173,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if (!$quickSearch && $brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if (!$quickSearch && $brandReqCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($brandReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -186,7 +186,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
-                                    <?php if (!$quickSearch && $categoryReqCount) { ?>(<?php echo $categoryReqCount; ?>)<?php } ?></span>
+                                    <?php if (!$quickSearch && $categoryReqCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($categoryReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -199,7 +199,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_MASTER_PRODUCT_REQUESTS', $siteLangId); ?>
-                                    <?php if (!$quickSearch && $custProdReqCount) { ?>(<?php echo $custProdReqCount; ?>)<?php } ?></span>
+                                    <?php if (!$quickSearch && $custProdReqCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($custProdReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -211,7 +211,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?>(<?php echo $supReqCount; ?>)<?php } ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($supReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -223,7 +223,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?>(<?php echo $threshSelProdCount; ?>)<?php } ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -239,7 +239,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span>
                                 <span class="nav_text">
                                     <?php echo Labels::getLabel('NAV_ORDER_RETURN_REQUESTS', $siteLangId); ?>
-                                    <?php if (!$quickSearch && $orderRetReqCount) { ?>(<?php echo $orderRetReqCount; ?>)<?php } ?>
+                                    <?php if (!$quickSearch && $orderRetReqCount) { ?>(<?php echo HtmlHelper::displayNumberWithPlus($orderRetReqCount); ?>)<?php } ?>
                                 </span>
                             </a>
                         </li>
@@ -256,7 +256,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <span class="nav_text">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
-                                    $menuLabel .= (!$quickSearch && $drReqCount ? ' (' . $drReqCount . ')' : '');
+                                    $menuLabel .= (!$quickSearch && $drReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($drReqCount) . ')' : '');
                                     echo $menuLabel;
                                     ?>
                                 </span>
@@ -275,7 +275,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <span class="nav_text">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_CANCELLATION_REQUESTS', $siteLangId);
-                                    $menuLabel .= (!$quickSearch && $orderCancelReqCount ? ' (' . $orderCancelReqCount . ')' : '');
+                                    $menuLabel .= (!$quickSearch && $orderCancelReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($orderCancelReqCount) . ')' : '');
                                     echo $menuLabel;
                                     ?>
                                 </span>
@@ -294,7 +294,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <span class="nav_text">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_BADGE_REQUEST', $siteLangId);
-                                    $menuLabel .= (!$quickSearch && $badgeRequestCount ? ' (' . $badgeRequestCount . ')' : '');
+                                    $menuLabel .= (!$quickSearch && $badgeRequestCount ? ' (' . HtmlHelper::displayNumberWithPlus($badgeRequestCount) . ')' : '');
                                     echo $menuLabel;
                                     ?>
                                 </span>
@@ -313,7 +313,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <span class="nav_text">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId);
-                                    $menuLabel .= (!$quickSearch && $gdprReqCount ? ' (' . $gdprReqCount . ')' : '');
+                                    $menuLabel .= (!$quickSearch && $gdprReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($gdprReqCount) . ')' : '');
                                     echo $menuLabel;
                                     ?> </span>
                             </a>

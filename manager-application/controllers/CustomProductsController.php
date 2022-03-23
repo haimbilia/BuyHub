@@ -1471,7 +1471,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
             'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
@@ -1488,7 +1488,7 @@ class CustomProductsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'images',
             'product_identifier',
             'user_name',

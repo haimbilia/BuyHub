@@ -625,7 +625,7 @@ class ContentPagesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'cpage_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'cpage_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -643,7 +643,7 @@ class ContentPagesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'cpage_title',
             'action',
         ];

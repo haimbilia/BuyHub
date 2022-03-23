@@ -135,7 +135,7 @@ class RecomendedTagProductsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'tag_name' => Labels::getLabel('LBL_Tag', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'tpr_weightage' => Labels::getLabel('LBL_System_Weightage', $this->siteLangId),
@@ -154,7 +154,7 @@ class RecomendedTagProductsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'tag_name',
             'product_name',
             'tpr_weightage',

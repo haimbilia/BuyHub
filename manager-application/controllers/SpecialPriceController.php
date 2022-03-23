@@ -458,7 +458,7 @@ class SpecialPriceController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
@@ -475,7 +475,7 @@ class SpecialPriceController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'selprod_price',
             'splprice_price',

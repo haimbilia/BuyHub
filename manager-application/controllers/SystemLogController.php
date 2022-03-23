@@ -188,7 +188,7 @@ class SystemLogController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'slog_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
             'slog_content' => Labels::getLabel('LBL_Content', $this->siteLangId),
             'slog_response' => Labels::getLabel('LBL_Response', $this->siteLangId),
@@ -204,7 +204,7 @@ class SystemLogController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'slog_title',
             'slog_content',
             'slog_response',

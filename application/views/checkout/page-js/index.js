@@ -11,6 +11,7 @@ var shippingSummaryDiv = "#shipping-summary";
 var cartReviewDiv = "#cart-review";
 var paymentDiv = "#payment";
 var financialSummary = ".summary-listing-js";
+var reviewSection = ".review-section-js";
 
 async function checkLogin() {
     let ans = await $.ajax({
@@ -51,6 +52,7 @@ function showAddressFormDiv(address_type) {
         setCheckoutFlow("BILLING");
     }
 }
+
 function showAddressList() {
     loadAddressDiv();
     setCheckoutFlow("BILLING");
@@ -59,9 +61,7 @@ function showAddressList() {
 function showShippingSummaryDiv() {
     return loadShippingSummaryDiv();
 }
-function showCartReviewDiv() {
-    return loadCartReviewDiv();
-}
+
 $("document").ready(function () {
     $(document).on("keydown", "#cc_number", function () {
         var obj = $(this);
@@ -101,15 +101,12 @@ $("document").ready(function () {
     };
 
     loadFinancialSummary = function () {
-        fcom.updateWithAjax(
-            fcom.makeUrl("Checkout", "getFinancialSummary"),
-            "",
+        fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary"), "",
             function (ans) {
+                fcom.removeLoader();
                 $(financialSummary).html(ans.data);
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
-            },
-            [],
-            false
+            }
         );
     };
 
@@ -180,7 +177,7 @@ $("document").ready(function () {
     setUpAddress = function (frm, address_type) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        
+
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl(
@@ -290,14 +287,17 @@ $("document").ready(function () {
         /*        if (!checkLogin()) { */
         /*            return false; */
         /*        } */
+        $(shippingSummaryDiv).prepend(fcom.getLoader());
         var data = $("#shipping-summary select").serialize();
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpShippingMethod"),
             data,
             function (t) {
+                fcom.removeLoader();
                 if (t.status == 1) {
                     loadFinancialSummary();
                     loadPaymentSummary();
+                    loadCartReview();
                     setCheckoutFlow("PAYMENT");
                 }
             }
@@ -415,35 +415,33 @@ $("document").ready(function () {
     };
 
     loadCartReview = function () {
-        fcom.ajax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
-            $(cartReviewDiv).html(ans);
+        $(reviewSection).show().prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
+            fcom.removeLoader();
+            $(reviewSection).html(ans.html);
         });
     };
 
     loadPaymentSummary = function () {
-        if (!checkLogin()) {
-            return false;
-        }
-        $(pageContent).html(fcom.getLoader());
-
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl("Checkout", "PaymentSummary"), "", function (ans) {
-            $.ykmsg.close();
-            $(pageContent).html(ans);
-            $(paymentDiv).addClass("is-current");
-        });
+        fcom.updateWithAjax(
+            fcom.makeUrl("Checkout", "PaymentSummary"),
+            '',
+            function (res) {
+                fcom.removeLoader();
+                $(pageContent).html(res.html);
+                $(paymentDiv).addClass("is-current");
+            }
+        );
     };
 
     walletSelection = function (el) {
-        if (!checkLogin()) {
-            return false;
-        }
         var wallet = $(el).is(":checked") ? 1 : 0;
         var data = "payFromWallet=" + wallet;
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "walletSelection"),
             data,
             function (ans) {
+                fcom.removeLoader();
                 loadPaymentSummary();
             }
         );
@@ -625,7 +623,7 @@ $("document").ready(function () {
             data,
             function (rsp) {
                 $.ykmsg.close();
-                $.facebox(rsp, "modal-lg faceboxWidth medium-fb-width");
+                $.ykmodal(rsp, true, 'modal-dialog-vertical-md');
                 $("input[name='coupon_code']").focus();
             }
         );

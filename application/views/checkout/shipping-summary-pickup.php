@@ -34,7 +34,7 @@
                 <?php
                 $cartObj = new Cart();
                 if ($cartObj->hasPhysicalProduct()) {
-                    echo Labels::getLabel('LBL_Pickup_Summary', $siteLangId);
+                    echo Labels::getLabel('LBL_PICKUP_SUMMARY', $siteLangId);
                 } else {
                     echo Labels::getLabel('LBL_REVIEW_CHECKOUT', $siteLangId);
                 }
@@ -62,7 +62,6 @@
                         <li class="list-cart-item shipping-select">
                             <div class="shop-detail">
                                 <h6 class="shop-title">
-
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
@@ -91,7 +90,7 @@
                                 <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
                                 <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
                                 <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                                    <a class="text-link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
+                                    <a class="text-link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0); return false;" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
                                         <?php
                                         if (!empty($levelItems['pickup_address'])) {
                                             echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);

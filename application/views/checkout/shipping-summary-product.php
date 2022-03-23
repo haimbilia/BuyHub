@@ -95,7 +95,8 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                     </use>
                                 </svg>
-                            </i></span>
+                            </i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -107,9 +108,6 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                         </button>
                     </li>
                 </ul>
-
-
-
             </div>
         </div>
     </li>

@@ -438,7 +438,7 @@ class VolumeDiscountController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'voldiscount_min_qty' => Labels::getLabel('LBL_MINIMUM_QUANTITY', $this->siteLangId),
             'voldiscount_percentage' => Labels::getLabel('LBL_DISCOUNT', $this->siteLangId) . ' (%)',
@@ -453,7 +453,7 @@ class VolumeDiscountController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'voldiscount_min_qty',
             'voldiscount_percentage',

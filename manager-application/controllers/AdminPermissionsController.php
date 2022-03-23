@@ -270,7 +270,7 @@ class AdminPermissionsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
             'module' => Labels::getLabel('LBL_Module', $this->siteLangId),
             'permission' => Labels::getLabel('LBL_Permissions', $this->siteLangId),
         ];
@@ -283,7 +283,7 @@ class AdminPermissionsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'module',
             'permission'
         ];

@@ -6,7 +6,7 @@ $frm->developerTags['fld_default_col'] = 6;
 
 $submitFld = $frm->getField('btn_submit');
 $submitFld->developerTags['col'] = 12;
-$submitFld->developerTags['noCaptionTag'] = true;
+$submitFld->developerTags['noCaptionTag'] = (User::isAffiliate()) ? false : true;
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 
 HtmlHelper::formatFormFields($frm, 6);
@@ -71,11 +71,6 @@ if (User::isAdvertiser() && $parent == 0) {
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
-$fld = $frm->getField('user_profile_info');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-$fld = $frm->getField('user_products_services');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'uploadProfileImage'));
 ?>

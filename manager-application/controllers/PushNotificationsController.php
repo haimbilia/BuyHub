@@ -508,7 +508,7 @@ class PushNotificationsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'pnotification_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'pnotification_user_auth_type' => Labels::getLabel('FRM_NOTIFICATION_FOR_(USERS)', $this->siteLangId),
             'pnotification_device_os' => Labels::getLabel('LBL_DEVICE_TYPE', $this->siteLangId),
@@ -523,7 +523,7 @@ class PushNotificationsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            /* 'listSerial', */
             'pnotification_title',
             'pnotification_user_auth_type',
             'pnotification_device_os',

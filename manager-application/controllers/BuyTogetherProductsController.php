@@ -351,7 +351,7 @@ class BuyTogetherProductsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
             'upsell_products' => Labels::getLabel('LBL_BUY_TOGETHER_PRODUCTS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -370,11 +370,11 @@ class BuyTogetherProductsController extends ListingBaseController
     protected function setCustomColumnWidth(): void
     {
         $arr = [
-            'listSerial' => [
+           /*  'listSerial' => [
                 'width' => '5%'
-            ],
+            ], */
             'product_name' => [
-                'width' => '25%'
+                'width' => '30%'
             ],
             'upsell_products' => [
                 'width' => '65%'
@@ -390,7 +390,7 @@ class BuyTogetherProductsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'product_name',
             'upsell_products',
             'action'

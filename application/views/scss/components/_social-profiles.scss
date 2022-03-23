@@ -21,16 +21,19 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    display: grid;
+    grid-gap: 1rem;
+    padding: 1.5rem;
+    grid-template-columns: 1fr 1fr;
     li {
         font-size: 0.8rem;
         display: block;
         position: relative;
         transition: all 0.3s ease;
-        flex: 0 0 40%;
-        max-width: 40%;
+        margin: 0;
         border-radius: 40px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        margin: 1rem;
+
         a {
             cursor: pointer;
             display: block;

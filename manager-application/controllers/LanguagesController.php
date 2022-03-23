@@ -272,7 +272,7 @@ class LanguagesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'language_code' => Labels::getLabel('LBL_Language_Code', $this->siteLangId),
             'language_name' => Labels::getLabel('LBL_Language_Name', $this->siteLangId),
             'language_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -287,7 +287,7 @@ class LanguagesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'language_code',
             'language_name',
             'language_active',

@@ -1,31 +1,21 @@
 .header-supplier {
-    font-size: 0.85rem;
-    color: $txt-gray;
+    color: $txt-body;
+
     .logo-bar {
-        padding: 10px 0;
-        .logo {
-            margin: 0;
-            img {
-                &[data-ratio="16:9"] {
-                    max-width: 120px;
-                }
-                &[data-ratio="1:1"] {
-                    max-width: 60px;
-                }
-            }
-        }
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 2fr;
+        //padding: 1rem 0;
     }
-    .short-links {
-        ul {
-            min-height: 27px;
-            font-size: 0.85rem;
-            li {
-                margin-#{$start-direction}: 1rem;
-                a {
-                    &:hover {
-                        color: $brand-color-inverse;
-                    }
-                }
+}
+
+.short-links {
+    margin-#{$start-direction}: auto;
+    li {
+        margin-#{$start-direction}: 1rem;
+        a {
+            &:hover {
+                color: $brand-color-inverse;
             }
         }
     }
@@ -41,26 +31,25 @@
 
 .short-nav {
     @include media-breakpoint-down(md) {
-        & {
-            background-color: #fff;
-            box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.05);
-            z-index: 1050;
-            position: fixed;
-            -webkit-overflow-scrolling: touch;
-            top: 0;
-            #{$start-direction}: -280px;
-            bottom: 0;
-            overflow-y: auto;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            width: 280px;
-            -webkit-transition: left 0.3s ease, right 0.3s ease;
-            transition: left 0.3s ease, right 0.3s ease;
-            ul {
-                display: flex;
-                flex-direction: column;
-            }
+        background-color: #fff;
+        box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.05);
+        z-index: 1050;
+        position: fixed;
+        -webkit-overflow-scrolling: touch;
+        top: 0;
+        #{$start-direction}: -280px;
+        bottom: 0;
+        overflow-y: auto;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        width: 280px;
+        -webkit-transition: left 0.3s ease, right 0.3s ease;
+        transition: left 0.3s ease, right 0.3s ease;
+        ul {
+            display: flex;
+            flex-direction: column;
         }
+
         &--on & {
             background: $gray-light;
             padding: 0;
@@ -90,14 +79,15 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
-.banner {
+.hero-banner {
+    color: #fff;
     background-repeat: repeat;
     background-position: center;
     position: relative;
     background-attachment: fixed;
     background-size: 25%;
-    background-color: var(--brand-color);
-    color: var(--brand-color-inverse);
+    //background-color: var(--brand-color);
+    // color: var(--brand-color-inverse);
     &:after {
         position: absolute;
         top: 0;
@@ -106,7 +96,7 @@
         bottom: 0;
         z-index: 0;
         content: "";
-        opacity: 0.3;
+        opacity: 0.6;
         background: #232526;
         /* fallback for old browsers */
         /* Chrome 10-25, Safari 5.1-6 */
@@ -118,6 +108,11 @@
         position: relative;
         z-index: 1;
     }
+    &-inner {
+        display: grid;
+        grid-gap: 4rem;
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 .seller-slogan {
@@ -127,19 +122,20 @@
     align-items: center;
     padding: 1rem 0;
     .seller-slogan-txt {
-        position: static;
-        bottom: 0;
         h3 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 50%, 4rem);
             font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            color: currentColor;
             span {
                 display: block;
-                font-size: 2rem;
+                font-size: 1rem;
                 color: inherit;
             }
         }
         p {
-            color: inherit;
+            color: currentColor;
         }
     }
     ul {
@@ -157,6 +153,9 @@
     color: $txt-body;
     width: 100%;
     border-radius: $radius4;
+    h2 {
+        margin-bottom: 1rem;
+    }
 }
 
 .seller-register-form.affiliate-register-form {

@@ -875,8 +875,8 @@
 }
 
 .review-total {
-    border: $border-black;
     padding: 2rem;
+    border: $border-black;
     &-head {
         padding-bottom: 1rem;
         margin-bottom: 2rem;
@@ -977,7 +977,7 @@
             }
             p {
                 font-size: 0.75rem;
-                font-weight: 300;
+                font-weight: $font-weight-light;
                 color: $txt-gray;
                 margin-bottom: 5px;
                 line-height: 1;

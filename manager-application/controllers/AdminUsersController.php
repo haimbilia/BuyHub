@@ -465,7 +465,7 @@ class AdminUsersController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
             'admin_name' => Labels::getLabel('LBL_FULL_NAME', $this->siteLangId),
             'admin_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'admin_email' => Labels::getLabel('LBL_EMAIL', $this->siteLangId),
@@ -481,7 +481,7 @@ class AdminUsersController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+          /*   'listSerial', */
             'admin_name',
             'admin_username',
             'admin_email',

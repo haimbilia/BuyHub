@@ -7,7 +7,7 @@ class TrackingCodeRelationController extends AdminBaseController
     {
         parent::__construct($action);
         if (!$this->objPrivilege->canViewTrackingRelationCode()) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_activate_ship_station_and_tracking_plugins', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_ACTIVATE_SHIP_STATION_AND_TRACKING_PLUGINS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
     }
@@ -16,18 +16,18 @@ class TrackingCodeRelationController extends AdminBaseController
     {
         $shipmentTracking = new ShipmentTracking();
         if (false === $shipmentTracking->init($this->siteLangId)) {
-            LibHelper::exitWithError($shipmentTracking->getError());
+            LibHelper::exitWithError($shipmentTracking->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
 
         if (false === $shipmentTracking->getTrackingCouriers()) {
-            LibHelper::exitWithError($shipmentTracking->getError());
+            LibHelper::exitWithError($shipmentTracking->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
 
         $trackingCourier = $shipmentTracking->getResponse();
         if ($trackingCourier == false) {
-            LibHelper::exitWithError($shipmentTracking->getError());
+            LibHelper::exitWithError($shipmentTracking->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
 
@@ -35,13 +35,13 @@ class TrackingCodeRelationController extends AdminBaseController
         $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, ['plugin_code', 'plugin_id']);
         $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->siteLangId], $error, $this->siteLangId);
         if ($shipApi->init() === false) {
-            LibHelper::exitWithError($shipApi->getError());
+            LibHelper::exitWithError($shipApi->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
 
         $carriers = $shipApi->getCarriers();
         if (empty($carriers)) {
-            LibHelper::exitWithError($shipApi->getError());
+            LibHelper::exitWithError($shipApi->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
 

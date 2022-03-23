@@ -292,7 +292,7 @@ class StatesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'state_name' => Labels::getLabel('LBL_State_Name', $this->siteLangId),
             'state_code' => Labels::getLabel('LBL_State_Code', $this->siteLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->siteLangId),
@@ -308,7 +308,7 @@ class StatesController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'state_identifier',
             'state_name',
             'state_code',

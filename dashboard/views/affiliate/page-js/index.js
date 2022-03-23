@@ -1,37 +1,42 @@
 var facebookScope = "email";
-$(document).ready(function(){
-	$('.showbutton').click(function() {
+$(document).ready(function () {
+	$('.showbutton').click(function () {
 		$(this).toggleClass("active");
 		$('.showwrap').slideToggle("600");
 	});
 
-	$("#facebook_btn").click(function(event) {
+	$("#facebook_btn").click(function (event) {
 		event.preventDefault();
 		fbSubmit();
 	});
 
-	$("#twitter_btn").click(function(event) {
+	$("#twitter_btn").click(function (event) {
 		event.preventDefault();
 		twitter_login();
 	});
 	personalInfo();
+
+	$('.open-bulk-email-form').click(function () {
+		$('.bulk-email-form').show();
+	});
 });
 
-(function() {
+(function () {
 	var tabListing = "#tabListing";
 
-	personalInfo = function(el){
-		$(tabListing).html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Account','personalInfo'), '', function(res){
+	personalInfo = function (el) {
+		$(tabListing).html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'personalInfo'), '', function (res) {
+			fcom.removeLoader();
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
 		});
 	};
 
-	copy = function(obj){
+	copy = function (obj) {
 		var copyText = obj.attr('title');
-		document.addEventListener('copy', function(e) {
+		document.addEventListener('copy', function (e) {
 			e.clipboardData.setData('text/plain', copyText);
 			e.preventDefault();
 		}, true);
@@ -39,43 +44,43 @@ $(document).ready(function(){
 		alert('copied text: ' + copyText);
 	}
 
-	addressInfo = function( el ){
-		$(tabListing).html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Affiliate','addressInfo'), '', function(res){
+	addressInfo = function (el) {
+		$(tabListing).html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Affiliate', 'addressInfo'), '', function (res) {
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
 		});
 	};
 
-	setUpMailAffiliateSharing = function( frm ) {
-		if ( !$(frm).validate() ) return;
+	setUpMailAffiliateSharing = function (frm) {
+		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
-		fcom.updateWithAjax( fcom.makeUrl('Affiliate', 'setUpMailAffiliateSharing'), data, function(t) {
+		fcom.updateWithAjax(fcom.makeUrl('Affiliate', 'setUpMailAffiliateSharing'), data, function (t) {
 			frm.reset();
 		});
 	};
 
-	fbSubmit = function(){
-		FB.login(checkLoginStatus, {scope:'email'});
+	fbSubmit = function () {
+		FB.login(checkLoginStatus, { scope: 'email' });
 	};
 
-	checkLoginStatus = function(response) {
+	checkLoginStatus = function (response) {
 		if (response.status === 'connected') {
 			facebook_redirect(response);
 		} else if (response.status === 'not_authorized') {
-			FB.login(function(response) {
+			FB.login(function (response) {
 				facebook_redirect(response);
 			}, {
-				scope : facebookScope
+				scope: facebookScope
 			});
 		} else {
-			FB.login(function(response) {
+			FB.login(function (response) {
 				if (response.authResponse) {
 					facebook_redirect(response);
 				}
 			}, {
-				scope : facebookScope
+				scope: facebookScope
 			});
 		}
 	}

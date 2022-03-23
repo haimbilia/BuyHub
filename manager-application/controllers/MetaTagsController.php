@@ -731,7 +731,7 @@ class MetaTagsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'meta_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId)
         ];
 
@@ -816,7 +816,7 @@ class MetaTagsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+           /*  'listSerial', */
             'meta_title',
             'bpcategory_name',
             'post_title',

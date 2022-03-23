@@ -505,7 +505,7 @@ class TestimonialsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'testimonial_title' => Labels::getLabel('LBL_TESTIMONIAL_TITLE', $this->siteLangId),
             'testimonial_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -523,7 +523,7 @@ class TestimonialsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+           /*  'listSerial', */
             'testimonial_title',
             'testimonial_active',
             'action',

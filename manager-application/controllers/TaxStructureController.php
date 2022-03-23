@@ -351,7 +351,7 @@ class TaxStructureController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'taxstr_identifier' => Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $this->siteLangId),
             'taxstr_is_combined' => Labels::getLabel('LBL_COMBINED_TAX', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION', $this->siteLangId),
@@ -363,7 +363,7 @@ class TaxStructureController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
+           /*  'listSerial', */
             'taxstr_identifier',
             'taxstr_is_combined',
             'action',

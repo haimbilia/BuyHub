@@ -7,34 +7,28 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 <div id="body" class="body">
     <?php $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, $slogan['epage_id'], 0, $siteLangId);
     $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE)) . ")" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);"; ?>
-    <div class="banner" style="<?php echo $bgImageUrl; ?>">
+    <div class="hero-banner" style="<?php echo $bgImageUrl; ?>">
         <div class="container">
-            <div class="row">
-                <div class="col-xl-7 col-lg-6">
-                    <div class="seller-slogan">
-                        <div class="seller-slogan-txt">
-                            <?php echo FatUtility::decodeHtmlEntities($slogan['epage_content']); ?> </div>
-                    </div>
+            <div class="hero-banner-inner">
+
+                <div class="seller-slogan">
+                    <div class="seller-slogan-txt">
+                        <?php echo FatUtility::decodeHtmlEntities($slogan['epage_content']); ?> </div>
                 </div>
-                <div class="col-xl-5 col-lg-6">
-                    <div class="seller-register-form">
-                        <div class="section-head">
-                            <div class="section-heading">
-                                <h2><?php echo Labels::getLabel('L_Register_Today', $siteLangId); ?></h2>
-                            </div>
-                        </div>
-                        <div class="gap"></div>
-                        <?php $sellerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                        $sellerFrm->developerTags['fld_default_col'] = 12;
-                        echo $sellerFrm->getFormHtml(); ?>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class=""><?php echo FatUtility::decodeHtmlEntities($formText['epage_content']); ?>
-                                </div>
-                            </div>
-                        </div>
+
+
+                <div class="seller-register-form">
+                    <h2><?php echo Labels::getLabel('L_Register_Today', $siteLangId); ?></h2>
+                    <?php $sellerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
+                    $sellerFrm->developerTags['fld_default_col'] = 12;
+                    echo $sellerFrm->getFormHtml(); ?>
+
+                    <div class="cms">
+                        <?php echo FatUtility::decodeHtmlEntities($formText['epage_content']); ?>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>

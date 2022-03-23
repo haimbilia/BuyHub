@@ -449,7 +449,7 @@ class FaqCategoriesController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'faqcat_name' => Labels::getLabel('LBL_category_Name', $this->siteLangId),
             'faqcat_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -469,7 +469,7 @@ class FaqCategoriesController extends ListingBaseController
         return [
             'dragdrop',
             'select_all',
-            'listSerial',
+            /* 'listSerial', */
             'faqcat_name',
             'faqcat_active',
             'action',

@@ -2651,7 +2651,7 @@ class SellerProductsController extends ListingBaseController
     {
         return [
             'select_all',
-            'listSerial',
+            /*  'listSerial', */
             'selprod_title',
             'user_name',
             'selprod_price',

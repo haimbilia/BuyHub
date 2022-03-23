@@ -157,19 +157,27 @@ $(document).ajaxComplete(function () {
                 fcom.closeProcessing();
             }
         }).disableSelection();
-    },
+    };
+
     deleteIcon = function (recordId) {
         if (!confirm(langLbl.confirmDelete)) {
             return;
         }
         fcom.updateWithAjax(
             fcom.makeUrl('plugins', "deleteIcon"),
-            {recordId},
+            { recordId },
             function (t) {
                 editRecord(recordId);
             }
         );
     };
+
+    /* Aftership redirecting to Mapping page with Shipstation if enabled. */
+    redirectToTrackingCodeRelation = function (ele) {
+        reloadList();
+        redirectfunc(fcom.makeUrl('TrackingCodeRelation'));
+    };
+    /* ----- */
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {

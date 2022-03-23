@@ -5,6 +5,9 @@ $sharingFrm->addFormTagAttribute('class', 'form');
 $sharingFrm->addFormTagAttribute('onsubmit', 'setUpMailAffiliateSharing(this);return false;');
 $sharingFrm->developerTags['colClassPrefix'] = 'col-xs-12 col-md-';
 $sharingFrm->developerTags['fld_default_col'] = 12;
+
+$submitFld = $sharingFrm->getField('btn_submit');
+$submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
 
 <div class="content-wrapper content-space">
@@ -111,7 +114,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                         </div>
                     <?php
                                     } ?>
-                    <div class="widget widget-stats">
+                    <div class="widget widget-stats open-bulk-email-form">
                         <button class="btn block-social" type="button" style="background-color:#00B2FF">
                             <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
@@ -125,15 +128,6 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                 </div>
             </div>
             <div class="col-lg-8">
-                <div class="card" style="display:none;">
-                    <div class="card-head border-0">
-                        <h5 class="card-title">
-                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
-                    </div>
-                    <div class="card-body pt-0">
-                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
-
-                </div>
                 <div class="card">
                     <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
@@ -194,7 +188,7 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                                                 }
                                             } else {
                                                     ?> <tr>
-                                            <td colspan="3">
+                                            <td colspan="4">
                                                 <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false); ?>
                                             </td>
                                         </tr> <?php
@@ -279,6 +273,15 @@ $sharingFrm->developerTags['fld_default_col'] = 12;
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="card bulk-email-form" style="display:none;">
+                    <div class="card-head border-0">
+                        <h5 class="card-title">
+                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
+
                 </div>
             </div>
 
