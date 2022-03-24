@@ -102,10 +102,13 @@ $("document").ready(function () {
 
     loadFinancialSummary = function (isShippingSelected) {
         isShippingSelected = ('undefined' == typeof isShippingSelected ? 0 : isShippingSelected);
+        if (0 < isShippingSelected) {
+            $(financialSummary).prepend(fcom.getLoader());
+        }
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
                 fcom.removeLoader();
-                $(financialSummary).html(ans.data);
+                $(financialSummary).html(ans.html);
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
             }
         );
@@ -295,7 +298,6 @@ $("document").ready(function () {
                 if (t.status == 1) {
                     loadFinancialSummary(1);
                     loadPaymentSummary();
-                    // loadCartReview();
                     setCheckoutFlow("PAYMENT");
                 }
             }
@@ -409,7 +411,7 @@ $("document").ready(function () {
         loadShippingSummary();
         loadCartReviewDiv();
     };
-    
+
     /* Not In Use. */
     loadCartReviewDiv = function () {
         $(pageContent).html(fcom.getLoader());
@@ -447,6 +449,7 @@ $("document").ready(function () {
             data,
             function (ans) {
                 fcom.removeLoader();
+                loadFinancialSummary(1);
                 loadPaymentSummary();
             }
         );
@@ -490,6 +493,7 @@ $("document").ready(function () {
     };
 
     removePromoCode = function () {
+        $(financialSummary).prepend(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Cart", "removePromoCode"),
             "",
@@ -503,15 +507,14 @@ $("document").ready(function () {
     };
 
     useRewardPoints = function (frm) {
-        checkLogin();
-        $.ykmsg.close();
         if (!$(frm).validate()) return;
+        $(financialSummary).prepend(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "useRewardPoints"),
             data,
             function (res) {
-                loadFinancialSummary();
+                loadFinancialSummary(1);
                 loadPaymentSummary();
             }
         );
@@ -524,7 +527,7 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "removeRewardPoints"),
             "",
             function (res) {
-                loadFinancialSummary();
+                loadFinancialSummary(1);
                 loadPaymentSummary();
             }
         );
