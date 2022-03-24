@@ -1448,6 +1448,7 @@ class CheckoutController extends MyAppController
         if ($fulfillmentType == Shipping::FULFILMENT_PICKUP) {
             $orderPickUpData = $orderObj->getOrderPickUpData($order_id, $this->siteLangId);
         }
+
         if ($fulfillmentType == Shipping::FULFILMENT_SHIP) {
             $orderShippingData = $orderObj->getOrderShippingData($order_id, $this->siteLangId);
             foreach ($orderShippingData as $data) {
@@ -1500,13 +1501,11 @@ class CheckoutController extends MyAppController
     {
         $plugin_id = FatUtility::int($plugin_id);
         if (!$plugin_id) {
-            FatUtility::dieWithError(Labels::getLabel("ERR_INVALID_REQUEST!", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST!", $this->siteLangId));
         }
 
         if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
-            /* Message::addErrorMessage( Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId) );
-            FatUtility::dieWithError( Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
         }
         $user_id = UserAuthentication::getLoggedUserId();
 
@@ -1523,14 +1522,14 @@ class CheckoutController extends MyAppController
         if (!$orderInfo) {
             /* Message::addErrorMessage( Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId) );
             $this->set('error', Message::getHtml() ); */
-            FatUtility::dieWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
         // $paymentMethod = Plugin::getAttributesByCode($methodCode, Plugin::ATTRS, $this->siteLangId);
         $this->plugin = PluginHelper::callPlugin($methodCode, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->plugin) {
-            FatUtility::dieWithError($error);
+            LibHelper::exitWithError($error);
         }
         $paymentMethod = $this->plugin->getSettings();
 
@@ -1571,7 +1570,7 @@ class CheckoutController extends MyAppController
             if ($this->cartObj->hasDigitalProduct()) {
                 $str = Labels::getLabel('ERR_{COD}_IS_NOT_AVAILABLE_IF_YOUR_CART_HAS_ANY_DIGITAL_PRODUCT', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
-                FatUtility::dieWithError($str);
+                LibHelper::exitWithError($str);
             }
             $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
             $user_id = UserAuthentication::getLoggedUserId();
@@ -1582,18 +1581,18 @@ class CheckoutController extends MyAppController
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
                 $str = str_replace('{min}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MIN_COD_ORDER_LIMIT")), $str);
                 $str = str_replace('{max}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MAX_COD_ORDER_LIMIT")), $str);
-                FatUtility::dieWithError($str);
+                LibHelper::exitWithError($str);
             }
 
             if ($cartSummary['cartWalletSelected'] && $userWalletBalance < $cartSummary['orderNetAmount']) {
                 $str = Labels::getLabel('ERR_WALLET_CAN_NOT_BE_USED_ALONG_WITH_{COD}', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
-                FatUtility::dieWithError($str);
-                //$this->set('error', $str );
+                LibHelper::exitWithError($str);
             }
         }
         /* ] */
-        $this->_template->render(false, false, '', false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function walletSelection()
@@ -2070,26 +2069,19 @@ class CheckoutController extends MyAppController
         $this->cartObj->removeProductShippingMethod();
     }
 
-    public function getFinancialSummary()
+    public function getFinancialSummary(int $isShippingSelected = 0)
     {
-        //$this->cartObj->disableCache();
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();
         $this->set('shippingAddress', $shippingAddress);
+        $this->set('isShippingSelected', $isShippingSelected);
         $this->set('products', $products);
         $this->set('cartSummary', $cartSummary);
         $this->set('cartHasPhysicalProduct', $this->cartObj->hasPhysicalProduct());
-        $data = $this->_template->render(false, false, 'checkout/get-financial-summary.php', true, false);
-
-        $orderNetAmt = $cartSummary['orderNetAmount'];
-        /* if (0 == $shippingAddress) {
-            $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];
-        } */
-
-        $netAmount = CommonHelper::displayMoneyFormat($orderNetAmt);
-        $this->set('netAmount', $netAmount);
-        $this->set('data', $data);
+        $this->set('fulfillmentType', $this->cartObj->getCartCheckoutType());
+        $this->set('netAmount', CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']));
+        $this->set('data', $this->_template->render(false, false, 'checkout/get-financial-summary.php', true, false));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
