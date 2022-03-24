@@ -493,6 +493,7 @@ $("document").ready(function () {
     };
 
     removePromoCode = function () {
+        $(financialSummary).prepend(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Cart", "removePromoCode"),
             "",
@@ -506,15 +507,14 @@ $("document").ready(function () {
     };
 
     useRewardPoints = function (frm) {
-        checkLogin();
-        $.ykmsg.close();
         if (!$(frm).validate()) return;
+        $(financialSummary).prepend(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "useRewardPoints"),
             data,
             function (res) {
-                loadFinancialSummary();
+                loadFinancialSummary(1);
                 loadPaymentSummary();
             }
         );
@@ -527,7 +527,7 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "removeRewardPoints"),
             "",
             function (res) {
-                loadFinancialSummary();
+                loadFinancialSummary(1);
                 loadPaymentSummary();
             }
         );
