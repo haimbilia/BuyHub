@@ -1421,38 +1421,13 @@ class CheckoutController extends MyAppController
         $userWalletBalance = User::getUserBalance($userId, true);
 
         if (false === MOBILE_APP_API_CALL) {
-            $WalletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
             $confirmForm = $this->getConfirmFormWithNoAmount($this->siteLangId);
-
-            if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
-                $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
-                $WalletPaymentForm->fill(array('order_id' => $order_id));
-                $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-                $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
-            }
 
             if ($cartSummary['orderNetAmount'] <= 0) {
                 $confirmForm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
                 $confirmForm->fill(array('order_id' => $order_id));
                 /* $confirmForm->setFormTagAttribute('onsubmit', 'confirmOrderWithoutPayment(this); return(false);'); */
                 $confirmForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_ORDER', $this->siteLangId));
-            }
-
-            $redeemRewardFrm = $this->getRewardsForm($this->siteLangId);
-            $this->set('redeemRewardFrm', $redeemRewardFrm);
-        }
-
-        $orderPickUpData = '';
-        $orderShippingData = '';
-        $shippingData = [];
-        if ($fulfillmentType == Shipping::FULFILMENT_PICKUP) {
-            $orderPickUpData = $orderObj->getOrderPickUpData($order_id, $this->siteLangId);
-        }
-
-        if ($fulfillmentType == Shipping::FULFILMENT_SHIP) {
-            $orderShippingData = $orderObj->getOrderShippingData($order_id, $this->siteLangId);
-            foreach ($orderShippingData as $data) {
-                $shippingData[$data['opshipping_code']][] = $data;
             }
         }
 
@@ -1470,7 +1445,6 @@ class CheckoutController extends MyAppController
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
         $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
         if (false === MOBILE_APP_API_CALL) {
-            $this->set('WalletPaymentForm', $WalletPaymentForm);
             $this->set('confirmForm', $confirmForm);
         }
 
@@ -1480,9 +1454,7 @@ class CheckoutController extends MyAppController
         $this->set('billingAddressArr', $billingAddressArr);
         $this->set('shippingAddressArr', $shippingAddressArr);
         $this->set('orderId', $order_id);
-        $this->set('orderPickUpData', $orderPickUpData);
-        $this->set('orderShippingData', $shippingData);
-        // die(';l;l;l;');
+
         if (true === MOBILE_APP_API_CALL) {
             $this->set('products', $cartProducts);
             $this->set('orderType', $orderData['order_type']);
@@ -2015,7 +1987,7 @@ class CheckoutController extends MyAppController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
 
-        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('LBL_APPLY', $this->siteLangId), 'submit', 'btn_submit', 'btn-apply'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
         return $frm;
     }
 
@@ -2071,9 +2043,20 @@ class CheckoutController extends MyAppController
 
     public function getFinancialSummary(int $isShippingSelected = 0)
     {
+        $userId = UserAuthentication::getLoggedUserId();
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();
+        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
+        $userWalletBalance = User::getUserBalance($userId, true);
+        if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
+            $orderId = $_SESSION['order_id'] ?? '';
+            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId)));
+            $walletPaymentForm->fill(array('order_id' => $orderId));
+            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
+            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
+        }
+
         $this->set('shippingAddress', $shippingAddress);
         $this->set('isShippingSelected', $isShippingSelected);
         $this->set('products', $products);
@@ -2081,7 +2064,12 @@ class CheckoutController extends MyAppController
         $this->set('cartHasPhysicalProduct', $this->cartObj->hasPhysicalProduct());
         $this->set('fulfillmentType', $this->cartObj->getCartCheckoutType());
         $this->set('netAmount', CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']));
-        $this->set('data', $this->_template->render(false, false, 'checkout/get-financial-summary.php', true, false));
+        $this->set('redeemRewardFrm', $this->getRewardsForm($this->siteLangId));
+        $this->set('rewardPoints', UserRewardBreakup::rewardPointBalance($userId));
+        $this->set('userWalletBalance', $userWalletBalance);
+        $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
+        $this->set('walletPaymentForm', $walletPaymentForm);
+        $this->set('html', $this->_template->render(false, false, 'checkout/get-financial-summary.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
