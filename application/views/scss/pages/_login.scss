@@ -137,17 +137,18 @@
 
 .buttons-list {
     ul {
+        margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
+        grid-gap: 10px;
         li {
-            margin: 0 10px;
             .btn-social {
                 padding: 0;
                 height: auto;
                 flex: 1;
                 margin: 0;
-                background: rgba(0, 0, 0, 0.1);
+                //background: rgba(0, 0, 0, 0.1);
                 width: 40px;
                 height: 40px;
                 display: flex;

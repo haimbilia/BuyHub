@@ -1,5 +1,5 @@
 .checkout {
-    --header-height: 90px;
+    --header-height: 65px;
     --btn-height: 50px;
 }
 .header-checkout {
@@ -523,6 +523,10 @@
         justify-content: center;
         padding: 2.5rem 2rem;
         width: 100%;
+        &:hover {
+            border-color: $secondary-color;
+            color: $secondary-color;
+        }
 
         .svg {
             margin-#{$end-direction}: 10px;
