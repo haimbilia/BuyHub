@@ -1,56 +1,45 @@
-class ykevents {
-    static _validateAndTrigger(event, data = '')
-    {
+var ykevents = {
+    _validateAndTrigger: function (event, data = '') {
         if (typeof fbPixel !== 'undefined' && true == fbPixel) {
             fbq('track', event, data);
-        }  
-    }
+        }
+    },
+    addToCart: function () {
+        ykevents._validateAndTrigger('AddToCart');
+    },
 
-    static addToCart()
-    {
-        this._validateAndTrigger('AddToCart');
-    }
+    addToWishList: function () {
+        ykevents._validateAndTrigger('AddToWishlist');
+    },
 
-    static addToWishList()
-    {
-        this._validateAndTrigger('AddToWishlist');
-    }
+    contactUs: function () {
+        ykevents._validateAndTrigger('Contact');
+    },
 
-    static contactUs()
-    {
-        this._validateAndTrigger('Contact');
-    }
+    customizeProduct: function () {
+        ykevents._validateAndTrigger('CustomizeProduct');
+    },
 
-    static customizeProduct()
-    {
-        this._validateAndTrigger('CustomizeProduct');
-    }
+    initiateCheckout: function () {
+        ykevents._validateAndTrigger('InitiateCheckout');
+    },
 
-    static initiateCheckout()
-    {
-        this._validateAndTrigger('InitiateCheckout');
-    }
+    search: function () {
+        ykevents._validateAndTrigger('search');
+    },
 
-    static purchase(data)
-    {
-        this._validateAndTrigger('Purchase', data);
-    }
-
-    static search()
-    {
-        this._validateAndTrigger('Search');
-    }
+    purchase: function (data) {
+        ykevents._validateAndTrigger('Purchase', data);
+    },
 
     /* 
         A visit to a web page you care about. For example, a product or landing page. View content tells you if someone visits a web page's URL, but not what they do or see on that web page.
     */
-    static viewContent()
-    {
-        this._validateAndTrigger('ViewContent');
-    }
+    viewContent: function () {
+        ykevents._validateAndTrigger('viewContent');
+    },
 
-    static newsLetterSubscription()
-    {
-        this._validateAndTrigger('CompleteRegistration');
-    }
-}
+    newsLetterSubscription: function () {
+        ykevents._validateAndTrigger('CompleteRegistration');
+    },
+};
