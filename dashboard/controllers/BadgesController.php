@@ -95,7 +95,6 @@ class BadgesController extends SellerBaseController
         $srch->addMultipleFields($attr);
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $srch->getResultSet();
-        echo $srch->getError();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
 
