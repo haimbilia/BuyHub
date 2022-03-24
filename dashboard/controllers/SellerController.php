@@ -1966,7 +1966,7 @@ class SellerController extends SellerBaseController
         $frm->addHiddenField('', 'taxrule_id', 0);
         $fld = $frm->addFloatField(Labels::getLabel('FRM_TAX_RATE(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
-        $frm->addHiddenField('', 'combinedTaxDetails');      
+        $frm->addHiddenField('', 'combinedTaxDetails');
         return $frm;
     }
 
@@ -5984,5 +5984,13 @@ class SellerController extends SellerBaseController
             );
         }
         die(json_encode($json));
+    }
+
+    public function getCancellationRequestComment()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 }
