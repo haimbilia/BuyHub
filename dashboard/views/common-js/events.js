@@ -1,4 +1,4 @@
-class events {
+class systemEvents {
     static _validateAndTrigger(event, data = '') {
         if (typeof fbPixel !== 'undefined' && true == fbPixel) {
             fbq('track', event, data);

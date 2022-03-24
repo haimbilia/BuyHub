@@ -377,7 +377,7 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
                     $("[data-id=" + selprod_id + "]").removeClass("is-active");
                 }
                 if (ans.action == "A") {
-                    events.addToWishList();
+                    systemEvents.addToWishList();
                     $(dv)
                         .find(".wishListCheckBox_" + ans.wish_list_id)
                         .addClass("is-active");

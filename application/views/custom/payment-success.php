@@ -4,7 +4,7 @@
         value: <?php echo $orderInfo['order_net_amount']; ?>,
         currency: '<?php echo $orderInfo['order_currency_code']; ?>'
     };
-    events.purchase(data);
+    systemEvents.purchase(data);
 </script>
 <?php
 $products = $orderInfo['orderProducts'];
