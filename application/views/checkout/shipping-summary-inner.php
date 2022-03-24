@@ -44,7 +44,7 @@
                 <?php
                 $cartObj = new Cart();
                 if ($cartObj->hasPhysicalProduct()) {
-                    echo Labels::getLabel('LBL_Shipping_Summary', $siteLangId);
+                    echo Labels::getLabel('LBL_SHIPPING_SUMMARY', $siteLangId);
                 } else {
                     echo Labels::getLabel('LBL_REVIEW_CHECKOUT', $siteLangId);
                 }

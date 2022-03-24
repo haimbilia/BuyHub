@@ -99,7 +99,8 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
     </div>
 <?php } ?>
 <script type="text/javascript">
-    $("document").ready(function() {
+    var paymentMethodBlockJs = '<?php echo $pmethodCode; ?>-js';
+    $(document).ready(function() {
         <?php if (isset($error)) { ?>
             fcom.displayErrorMessage(<?php echo $error; ?>);
         <?php } ?>
@@ -132,7 +133,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                 fcom.ajax(getExternalLibraryUrl, '', function(t) {
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
-                        $("#tabs-container form input[type='submit']").val(langLbl.confirmPayment);
+                        $("." + paymentMethodBlockJs + " form input[type='submit']").val(langLbl.confirmPayment);
                         fcom.displayErrorMessage(json.msg);
                         return;
                     }
@@ -159,14 +160,14 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                 var ans = $.parseJSON(t);
                 if (1 > ans.status) {
                     fcom.displayErrorMessage(ans.msg);
-                    $('#tabs-container').html(ans.msg);
+                    $('.' + paymentMethodBlockJs).html(ans.msg);
                     return false;
                 } else if ('undefined' != typeof ans.redirect) {
                     location.href = ans.redirect;
                 } else {
-                    $('#tabs-container').html(ans.html);
+                    $('.' + paymentMethodBlockJs).html(ans.html);
                     <?php if ('stripeconnect' == strtolower($pmethodCode)) { ?>
-                        $('#tabs-container').addClass('p-0');
+                        $('.' + paymentMethodBlockJs).addClass('p-0');
                     <?php } ?>
                 }
             } catch (e) {
