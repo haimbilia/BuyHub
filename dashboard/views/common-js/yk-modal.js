@@ -12,7 +12,7 @@
             modalClass = modalClassParm;
             dialogClass = 'modal-dialog-centered ' + dialogClassParm;
         }
-        
+
         isloader = $(data).hasClass("loaderJs");
 
         init(modalClass, dialogClass);
