@@ -18,7 +18,7 @@ trait BadgeRequestSetup
             BadgeRequest::ATTR,
             [
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
-                Badge::DB_TBL_PREFIX . 'id'
+                Badge::DB_TBL_PREFIX . 'id', BadgeLinkCondition::DB_TBL_PREFIX . 'from_date', BadgeLinkCondition::DB_TBL_PREFIX . 'to_date'
             ]
         ));
 
@@ -205,7 +205,7 @@ trait BadgeRequestSetup
     {
         $this->userPrivilege->canEditBadgesAndRibbons();
         $frm = $this->getBadgeForm($badgeReqId, $badgeId);
-        $badgeId = 0;
+        $badgeId = $badgeId;
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
             $srch->addCondition('breq_id', '=', $badgeReqId);

@@ -300,7 +300,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->addDirectCondition('(
             CASE
                 WHEN (
-                        (blinkcond_id > 0 AND breq_user_id = ' . UserAuthentication::getLoggedUserId() . ')
+                        (blinkcond_id > 0 AND breq_id IS NULL AND blinkcond_user_id = ' . UserAuthentication::getLoggedUserId() . ')
                         OR
                         (breq_id IS NOT NULL AND breq_status = 1 AND breq_user_id = ' . UserAuthentication::getLoggedUserId() . ') 
                     )
