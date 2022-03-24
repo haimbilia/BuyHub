@@ -98,32 +98,36 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
             if (!tabObj || !tabObj.length) {
                 return;
             }
-            $('.paymentBlockJs').hide();
-            fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
-                var paymentMethod = tabObj.data('paymentmethod');
-                if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
-                    $("#paypal-buttons").html("");
-                }
+            var paymentMethod = tabObj.data('paymentmethod');
+            $('.paymentBlockJs').slideUp();
+            if (0 < $('.' + paymentMethod + '-js').children().length) {
+                $('.' + paymentMethod + '-js').slideDown();
+            } else {
+                fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
+                    if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
+                        $("#paypal-buttons").html("");
+                    }
 
-                $('.' + paymentMethod + '-js').html(res.html).fadeIn();
-                if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
-                    if (true == enableGcaptcha) {
-                        googleCaptcha();
-                    }
-                    $.ykmsg.close();
-                } else {
-                    var form = '.' + paymentMethod + '-js form';
-                    if (0 < $(form).length) {
-                        $('.' + paymentMethod + '-js').prepend(fcom.getLoader());
-                        if (0 < $(form + " input[type='submit']").length) {
-                            $(form + " input[type='submit']").val(langLbl.requestProcessing);
+                    $('.' + paymentMethod + '-js').html(res.html).slideDown();
+                    if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
+                        if (true == enableGcaptcha) {
+                            googleCaptcha();
                         }
-                        setTimeout(function() {
-                            $(form).submit()
-                        }, 100);
+                        $.ykmsg.close();
+                    } else {
+                        var form = '.' + paymentMethod + '-js form';
+                        if (0 < $(form).length) {
+                            $('.' + paymentMethod + '-js').prepend(fcom.getLoader());
+                            if (0 < $(form + " input[type='submit']").length) {
+                                $(form + " input[type='submit']").val(langLbl.requestProcessing);
+                            }
+                            setTimeout(function() {
+                                $(form).submit()
+                            }, 100);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     </script>
 <?php }
