@@ -100,8 +100,9 @@ $("document").ready(function () {
         });
     };
 
-    loadFinancialSummary = function () {
-        fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary"), "",
+    loadFinancialSummary = function (isShippingSelected) {
+        isShippingSelected = ('undefined' == typeof isShippingSelected ? 0 : isShippingSelected);
+        fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
                 fcom.removeLoader();
                 $(financialSummary).html(ans.data);
@@ -284,9 +285,6 @@ $("document").ready(function () {
     };
 
     setUpShippingMethod = function () {
-        /*        if (!checkLogin()) { */
-        /*            return false; */
-        /*        } */
         $(shippingSummaryDiv).prepend(fcom.getLoader());
         var data = $("#shipping-summary select").serialize();
         fcom.updateWithAjax(
@@ -295,9 +293,9 @@ $("document").ready(function () {
             function (t) {
                 fcom.removeLoader();
                 if (t.status == 1) {
-                    loadFinancialSummary();
+                    loadFinancialSummary(1);
                     loadPaymentSummary();
-                    loadCartReview();
+                    // loadCartReview();
                     setCheckoutFlow("PAYMENT");
                 }
             }
@@ -379,21 +377,16 @@ $("document").ready(function () {
         resetPaymentSummary();
     };
 
-    loadShippingSummaryDiv = function () {
+    loadShippingSummaryDiv = function (reloadFinancialSummary) {
+        reloadFinancialSummary = ('undefined' == typeof reloadFinancialSummary ? false : reloadFinancialSummary)
         fcom.ajax(fcom.makeUrl("Checkout", "shippingSummary"), "", function (ans) {
             $(pageContent).hide().html(ans).fadeIn();
             $(".sduration_id-Js").trigger("change");
             setCheckoutFlow("SHIPPING");
+            if (reloadFinancialSummary) {
+                loadFinancialSummary();
+            }
         });
-    };
-
-    viewOrder = function () {
-        if (!checkLogin()) {
-            return false;
-        }
-        resetPaymentSummary();
-        loadShippingSummary();
-        loadCartReviewDiv();
     };
 
     resetPaymentSummary = function () {
@@ -407,6 +400,17 @@ $("document").ready(function () {
         );
     };
 
+    /* Not In Use. */
+    viewOrder = function () {
+        if (!checkLogin()) {
+            return false;
+        }
+        resetPaymentSummary();
+        loadShippingSummary();
+        loadCartReviewDiv();
+    };
+    
+    /* Not In Use. */
     loadCartReviewDiv = function () {
         $(pageContent).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Checkout", "reviewCart"), "", function (ans) {
@@ -414,6 +418,7 @@ $("document").ready(function () {
         });
     };
 
+    /* Not In Use. */
     loadCartReview = function () {
         $(reviewSection).show().prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "loadCartReview"), "", function (ans) {
@@ -641,6 +646,7 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "setUpPickUp"),
             data,
             function (t) {
+                loadFinancialSummary(1);
                 loadPaymentSummary();
                 setCheckoutFlow("PAYMENT");
             }
