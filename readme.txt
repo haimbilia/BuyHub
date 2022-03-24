@@ -590,6 +590,7 @@ Updates/Fixes :
     => 063104 - Seller UI: Suggestion to give the option to upload the media while sending the category request
     => 063186 - Seller UI: Spacing issue between the search field and advanced search icon at the seller's end.
     => 063103 - Seller UI: Badges request option is not showing if the "record" is linked with the badge and error is showing while clicking on the "request" icon on the badges page.
+    => 063101 - Seller UI: Badges functionality is not working properly at the seller's end.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

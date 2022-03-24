@@ -84,7 +84,7 @@ $(document).on('change', '.icon-language-js', function () {
             } else {
                 $('.editRecord--js').html(t);
             }
-            
+
             bindRecordsSelect2();
             updateRecordIds();
             $("select[name='breq_blinkcond_id']").trigger('change');
@@ -133,7 +133,7 @@ $(document).on('change', '.icon-language-js', function () {
         $("#" + searchSelector).html("");
         var recordType = $('[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete',[],siteConstants.webrootfront);
+            return fcom.makeUrl('Products', 'autoComplete', [], siteConstants.webrootfront);
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
         } else if (RECORD_TYPE_SHOP == recordType) {
@@ -221,10 +221,10 @@ $(document).on('change', '.icon-language-js', function () {
             // });
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
-        }).on('select2:open', function(e) {        
-            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple")
+        }).on('select2:open', function (e) {
+            $('#select2-' + $(this).attr("id") + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple")
         })
-        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");;
+            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");;
     }
 
 
@@ -286,3 +286,9 @@ $(document).on('change', '.icon-language-js', function () {
     }
 
 })()
+
+
+$(document).on("click", ".submitBtnJs", function () {
+    var form = $('form[name=frmBadgeReq]');
+    form.submit();
+});

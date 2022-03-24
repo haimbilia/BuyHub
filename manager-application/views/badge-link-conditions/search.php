@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'cond_seller_name':
                 $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
-                $td->appendElement('plaintext', array(), $str, true); 
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $htm = BadgeLinkCondition::getRecordTypeHtml($siteLangId, $row[$key]);
@@ -40,7 +40,7 @@ foreach ($arrListing as $sn => $row) {
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
                 $lbl = $row[$key];
                 if (!empty($lbl) && BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']) {
-                    $lbl = $row[$key] . '%';    
+                    $lbl = $row[$key] . '%';
                 }
                 $td->appendElement('plaintext', [], (!empty($lbl) ? $lbl : Labels::getLabel('LBL_N/A', $siteLangId)), true);
                 break;
@@ -61,12 +61,22 @@ foreach ($arrListing as $sn => $row) {
                     $data['editButton'] = [
                         'onclick' => 'editConditionRecord(' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'] . ', ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ')'
                     ];
-                    $data['deleteButton'] = [];
+
+                    $attr = [
+                        'class' => 'disabled',
+                        'title' => Labels::getLabel('ERR_NOT_ALLOWED_TO_DELETE_THIS_RECORD_AS_BADGE_REQUEST_ADDED', $siteLangId),
+                        'onclick' => 'javascript:void(0);',
+                    ];
+                    $badgeRequested =  BadgeRequest::getAttributesByConditionId($row['blinkcond_id'], 'breq_id');
+                    if ($badgeRequested === false) {
+                        $attr = [];
+                    }
+                    $data['deleteButton'] = $attr;
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
-            default : 
+            default:
                 $td->appendElement('plaintext', [], $row[$key], true);
                 break;
         }
@@ -74,7 +84,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
