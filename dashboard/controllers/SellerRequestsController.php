@@ -374,18 +374,18 @@ class SellerRequestsController extends SellerBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $lang_id), 'prodcat_name');
 
         return $frm;
-    }    
+    }
 
     public function categoryReqMediaForm($recordId, $langId)
     {
-        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);       
+        $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true);
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0, $langId, false);
-     
-        $frm = $this->getCategoryReqImagesFrm($recordId, $langId); 
+
+        $frm = $this->getCategoryReqImagesFrm($recordId, $langId);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('image', $image);
@@ -393,10 +393,10 @@ class SellerRequestsController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    private function getCategoryReqImagesFrm($recordId = 0 , $langId = 0)
+    private function getCategoryReqImagesFrm($recordId = 0, $langId = 0)
     {
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
-        $frm->addHiddenField('', 'record_id', $recordId);      
+        $frm->addHiddenField('', 'record_id', $recordId);
         $mediaLanguages = applicationConstants::getAllLanguages();
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $mediaLanguages, $langId, array(), '');
@@ -405,10 +405,10 @@ class SellerRequestsController extends SellerBaseController
             $frm->addHiddenField('', 'lang_id', $langid);
         }
 
-        $dimension = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
+        $dimension = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_DEFAULT);
         $frm->addHiddenField('', 'min_width', $dimension['width']);
-        $frm->addHiddenField('', 'min_height', $dimension['height']);       
-        $frm->addHtml('', 'cat_icon', '');  
+        $frm->addHiddenField('', 'min_height', $dimension['height']);
+        $frm->addHtml('', 'cat_icon', '');
         return $frm;
     }
 
@@ -435,7 +435,7 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
         }
 
-        $fileHandlerObj = new AttachedFile();   
+        $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->saveAttachment(
             $_FILES['cropped_image']['tmp_name'],
             $fileHandlerObj::FILETYPE_CATEGORY_ICON,
@@ -444,7 +444,7 @@ class SellerRequestsController extends SellerBaseController
             $_FILES['cropped_image']['name'],
             -1,
             true,
-            $lang_id           
+            $lang_id
         )) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }

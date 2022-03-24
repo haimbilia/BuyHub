@@ -825,16 +825,15 @@ class DashboardBaseController extends FatController
         }
     }
 
-    public function accessLocation()
+   /*  public function accessLocation()
     {
-        if (true === CommonHelper::isAppUser()) {
-            /* Restrict to open location popup in case of app webview. */
+        if (true === CommonHelper::isAppUser()) {          
             FatUtility::dieJsonSuccess(Labels::getLabel('MSG_APP_ACCESS', $this->siteLangId));
         }
 
         $this->set('frm', $this->getGoogleAutocompleteAddressForm());
         $this->_template->render(false, false, '_partial/access-location.php');
-    }
+    } */
 
     protected function getGoogleAutocompleteAddressForm()
     {

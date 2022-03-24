@@ -1774,3 +1774,6 @@ DELETE FROM `tbl_extra_pages` WHERE `epage_type` = 23;
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_ORDERED_QUANTITY', 1, 'Quantity', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('ERR_NOT_ALLOWED_TO_DELETE_THIS_RECORD_AS_BADGE_REQUEST_ADDED', 1, 'Not allowed to delete this record as badge request added', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

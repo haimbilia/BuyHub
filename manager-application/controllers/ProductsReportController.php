@@ -266,7 +266,7 @@ class ProductsReportController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'category_id', $categoriesAssocArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

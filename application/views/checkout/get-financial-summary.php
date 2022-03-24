@@ -1,7 +1,73 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
+    <div class="cart-total-head">
+        <h3 class="cart-total-title">
+            <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
+        </h3>
+    </div>
+    <div class="cart-total-body">
+        <div class="cart-summary mb-4">
+            <?php
+            if (empty($cartSummary['cartRewardPoints'])) {
+                $redeemRewardFrm->setFormTagAttribute('class', 'form form-apply');
+                $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
+                $redeemRewardFrm->setJsErrorDisplay('afterfield');
+                $fld = $redeemRewardFrm->getField('redeem_rewards');
+                $fld->setFieldTagAttribute('class', 'form-control');
+                $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
+
+                $fld = $redeemRewardFrm->getField('btn_submit');
+                $fld->setFieldTagAttribute('class', 'btn btn-secondary btn-wide');
+
+                echo $redeemRewardFrm->getFormTag(); ?>
+                <div class="input-group">
+                    <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
+                    <div class="input-group-append">
+                        <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
+                    </div>
+                </div>
+                </form>
+                <?php echo $redeemRewardFrm->getExternalJs(); ?>
+
+                <p class="txt-sm">
+                    <?php
+                    $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
+                    $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
+                    $canBeUsed = min(min($rewardPoints, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+                    $str = Labels::getLabel('LBL_MAXIMUM_{REWARDS}_OUT_OF_{AVAILABLE-REWARDS}_REWARD_POINTS_CAN_BE_REDEEMED_FOR_THIS_ORDER.', $siteLangId);
+                    echo CommonHelper::replaceStringData($str, ['{REWARDS}' => '<b>' . $canBeUsed . '</b>', '{AVAILABLE-REWARDS}' => '<b>' . $rewardPoints . '</b>']); ?>
+                </p>
+            <?php } else { ?>
+                <div class="info">
+                    <span>
+                        <svg class="svg">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                            </use>
+                        </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
+                        <strong><?php echo $cartSummary['cartRewardPoints']; ?>
+                            (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
+                        <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?>
+                    </span>
+                    <ul class="list-actions">
+                        <li>
+                            <a class="link" href="javascript:void(0);" onclick="removeRewardPoints()">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+<?php } ?>
+
 <div class="cart-total-head">
     <h3 class="cart-total-title">
-        <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?> </h3>
+        <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?>
+    </h3>
 </div>
 <div class="cart-total-body">
     <ul class="cart-summary">
@@ -21,7 +87,7 @@
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
             </li>
         <?php } ?>
-        <?php if (/* 0 < $shippingAddress && */isset($cartSummary['taxOptions'])) {
+        <?php if (isset($cartSummary['taxOptions'])) {
             foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
                 <li class="cart-summary-item">
                     <span class="label"><?php echo $taxVal['title']; ?></span>
@@ -61,8 +127,7 @@
                 <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
             </li>
         <?php } ?>
-        <?php $orderNetAmt = $cartSummary['orderNetAmount'];
-        /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>
+        <?php $orderNetAmt = $cartSummary['orderNetAmount']; ?>
         <li class="cart-summary-item highlighted">
             <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
             <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></span>
@@ -73,85 +138,59 @@
 
     </ul>
 </div>
-<div class="cart-total-foot">
-    <div class="cart-action">
-        <?php if ($cartHasPhysicalProduct) { ?>
-            <button class="btn btn-brand btn-block" type="button" onclick="setUpShippingMethod();">
-                <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
-            </button>
-        <?php } else { ?>
-            <button class="btn btn-brand btn-block" type="button" onclick="loadPaymentSummary();">
-                <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
-            </button>
-        <?php } ?>
+<?php if (1 > $isShippingSelected) { ?>
+    <div class="cart-total-foot">
+        <div class="cart-action">
+            <?php if ($cartHasPhysicalProduct) {
+                $fn = Shipping::FULFILMENT_SHIP == $fulfillmentType ? 'setUpShippingMethod();' : 'setUpPickup();'; ?>
+                <button class="btn btn-brand btn-block" type="button" onclick="<?php echo $fn; ?>">
+                    <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                </button>
+            <?php } else { ?>
+                <button class="btn btn-brand btn-block" type="button" onclick="loadPaymentSummary();">
+                    <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                </button>
+            <?php } ?>
+        </div>
     </div>
-</div>
-<?php /*  ?><p class="earn-points"><svg class="svg" width="20" height="20">
-            <use xlink:href="../images/retina/sprite.svg#rewards" href="../images/retina/sprite.svg#rewards">
-            </use>
-        </svg> You will earn 575 points </p> <?php */ ?>
+<?php } else { ?>
+    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+        <div class="divider"></div>
+        <div class="cart-total-foot">
+            <div class="cart-action">
+                <label class="checkbox wallet-credits">
+                    <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
+                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>
+                    <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
+                </label>
 
-<!-- <h5 class="h5">
-    <?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?> - <?php echo count($products); ?>
-    <?php echo Labels::getLabel('LBL_item(s)', $siteLangId); ?>
-</h5>
-<div class="order-summary_list">
-    <ul class="list-cart">
-        <?php foreach ($products as $product) {
-            $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
-            $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-            $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-        ?>
-            <li class="list-cart-item block-cart">
-                <div class="block-img block-img-sm">
-                    <div class="products-img">
-                        <a href="<?php echo $productUrl; ?>">
-                            <?php
-                            $pictureAttr = [
-                                'webpImageUrl' => $imageWebpUrl,
-                                'jpgImageUrl' => $imageUrl,
-                                'imageUrl' => $imageUrl,
-                                'ratio' => '1:1',
-                                'alt' => $product['product_name'],
-                                'siteLangId' => $siteLangId,
-                            ];
+                <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
+                    $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
+                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-block');
+                    $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
+                    $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+                    $walletPaymentForm->developerTags['fld_default_col'] = 12;
+                    echo $walletPaymentForm->getFormTag();
+                    echo $walletPaymentForm->getFieldHTML('btn_submit');
+                    echo $walletPaymentForm->getExternalJS();
+                ?>
+                    </form>
 
-                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
-                            ?>
-                        </a>
-                    </div> <span class="product-qty"><?php echo $product['quantity']; ?></span>
-                </div>
-                <div class="block-cart-detail">
-                    <div class="block-cart-detail-top">
-                        <div class="product-profile">
-                            <div class="product-profile-data">
-                                <a class="title" href="<?php echo $productUrl; ?>" title="<?php echo $product['product_name'] ?>"><?php echo $product['selprod_title'] ?></a>
-                                <div class="options">
-                                    <?php if (isset($product['options']) && count($product['options'])) {
-                                        $optionStr = '';
-                                        foreach ($product['options'] as $key => $option) {
-                                            $optionStr .= $option['optionvalue_name'] . '|';
-                                        }
-                                        echo rtrim($optionStr, '|');
-                                    } ?>
-                                </div>
-                                <div class="products-price">
-                                    <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </li>
-        <?php } ?>
-    </ul>
-</div> -->
-
-<?php /*?><div class="place-order">
-    <p>By placing an order, you agree to Yokart.com's <a href=""> Terms & Conditions</a> and
-        <a href=""> Privacy Policy </a>
-    </p>
-    <button class="btn btn-brand btn-lg btn-block"></span>Place Order</button>
-</div> <?php */ ?>
+                    <script type="text/javascript">
+                        function confirmOrder(frm) {
+                            var data = fcom.frmData(frm);
+                            var action = $(frm).attr('action');
+                            fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
+                                $(location).attr("href", action);
+                            });
+                        }
+                    </script>
+                <?php } else { ?>
+                    <p class="txt-sm">
+                        <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?>
+                    </p>
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
+<?php } ?>

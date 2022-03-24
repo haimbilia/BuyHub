@@ -17,7 +17,7 @@
 
 </head>
 <?php $adminSidebar = $_COOKIE['adminSidebar'] ?? 0;
-$adminSidebar = (FatApp::getController() == 'ProductsController' && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
+$adminSidebar = (in_array(FatApp::getController(), ['ProductsController','CustomProductsController']) &&  FatApp::getAction() == 'form') ? 0 : $adminSidebar;
 ?>
 
 <body class="<?php echo $bodyClass; ?>" data-sidebar-minimize="<?php echo (0 < $adminSidebar) ? 'off' : 'on' ?>">

@@ -11,8 +11,8 @@ class BadgeRequest extends MyAppModel
 
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
-        self::DB_TBL_PREFIX . 'blinkcond_id', 
-        self::DB_TBL_PREFIX . 'record_type', 
+        self::DB_TBL_PREFIX . 'blinkcond_id',
+        self::DB_TBL_PREFIX . 'record_type',
         self::DB_TBL_PREFIX . 'message',
         self::DB_TBL_PREFIX . 'status',
         self::DB_TBL_PREFIX . 'requested_on',
@@ -29,7 +29,7 @@ class BadgeRequest extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $ratingTypeId);
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
-    
+
     /**
      * getStatusArr
      *
@@ -48,7 +48,7 @@ class BadgeRequest extends MyAppModel
             CacheHelper::create('getBadgeRequestStatusArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
-    
+
         return json_decode($arr, true);
     }
 
@@ -70,5 +70,44 @@ class BadgeRequest extends MyAppModel
         $srch->setPageSize(1);
         $row = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (int) (empty($row) ? -1 : $row[self::DB_TBL_PREFIX . 'status']);
+    }
+
+    /**
+     * getAttributesByConditionId
+     *
+     * @param  int $condId
+     * @param  mixed $attr
+     * @return void
+     */
+    public static function getAttributesByConditionId($condId, $attr = null)
+    {
+        $condId = FatUtility::int($condId);
+        $db = FatApp::getDb();
+
+        $srch = new SearchBase(static::DB_TBL);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition(static::tblFld('blinkcond_id'), '=', $condId);
+
+        if (null != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        }
+
+        $rs = $srch->getResultSet();
+        $row = $db->fetch($rs);
+
+        if (!is_array($row)) {
+            return false;
+        }
+
+        if (is_string($attr)) {
+            return $row[$attr];
+        }
+
+        return $row;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 $adminSidebar = $_COOKIE['adminSidebar'] ?? 0;
-$adminSidebar = (FatApp::getController() == 'ProductsController' && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
+$adminSidebar = (in_array(FatApp::getController(), ['ProductsController','CustomProductsController']) && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
 ?>
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">

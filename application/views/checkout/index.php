@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <script>
-    events.initiateCheckout();
+    ykevents.initiateCheckout();
 </script>
 <section class="section" data-content="">
     <div class="container">
@@ -9,30 +9,16 @@
                 <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.php'); ?>
             </main>
             <aside class="checkout-page_aside sidebar">
-                <div class="cart-total summary-listing-js">
-                    <?php include(CONF_THEME_PATH . 'checkout/_partial/price-summary-skeleton.php'); ?>
-                </div>
-                <div class="secure">
-                    <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
-                    <p>
-                        <?php echo Labels::getLabel('LBL_SAFE_AND_SECURE_PAYMENTS_EASY_RETURNS_100%_AUTHENTIC_PRODUCTS', $siteLangId); ?>
-                    </p>
-                </div>
-                <div class="review-section-js" style="display: none;">
-                    <!-- Sekeleton -->
-                    <ul class="review-block">
-                        <li class="review-block-item">
-                            <div class="review-block__label skeleton w-25"></div>
-                            <div class="review-block__content" role="cell">
-                                <div class="delivery-address">
-                                    <p class="skeleton"></p>
-                                    <p class="skeleton"></p>
-                                    <p class="skeleton w-25"></p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <!-- Sekeleton -->
+                <div class="sticky-summary">
+                    <div class="cart-total summary-listing-js">
+                        <?php include(CONF_THEME_PATH . 'checkout/_partial/price-summary-skeleton.php'); ?>
+                    </div>
+                    <div class="secure">
+                        <img class="svg" width="32" height="32" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/shield-fill-check.svg" alt="">
+                        <p>
+                            <?php echo Labels::getLabel('LBL_SAFE_AND_SECURE_PAYMENTS_EASY_RETURNS_100%_AUTHENTIC_PRODUCTS', $siteLangId); ?>
+                        </p>
+                    </div>
                 </div>
             </aside>
         </div>

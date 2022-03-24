@@ -296,9 +296,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </thead>
                                     <tbody>
                                         <?php if (count($orders) > 0) {
-                                            foreach ($orders as $orderId => $row) { 
-                                                $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));                                                
-                                                ?>
+                                            foreach ($orders as $orderId => $row) {
+                                                $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));
+                                        ?>
                                                 <tr>
                                                     <td>
                                                         <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row, 'siteLangId' => $siteLangId, 'showDate' => true], false, true); ?>
@@ -572,10 +572,26 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                     <td>
                                                         <div class="request__reason">
                                                             <?php echo Labels::getLabel('Lbl_Reason', $siteLangId) ?>:
-                                                            <?php echo $row['ocreason_title']; ?> </div>
+                                                            <?php echo $row['ocreason_title']; ?>
+                                                        </div>
                                                         <div class="request__comments">
                                                             <?php echo Labels::getLabel('Lbl_Comments', $siteLangId) ?>:
-                                                            <?php echo $row['ocrequest_message']; ?> </div>
+                                                            <?php
+                                                            $comentDetail = $row['ocrequest_message'];
+                                                            if (strlen($comentDetail) > 25) {
+                                                                echo  $newDetail = strlen($comentDetail) > 25 ? substr($comentDetail, 0, 25) . "..." : $comentDetail;
+                                                            ?>
+                                                                <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="<?php echo Labels::getLabel('LBL_VIEW_MORE', $siteLangId); ?>" onclick='getCancellationRequestComment(<?php echo $row['ocrequest_id']; ?>)'>
+                                                                    <svg class="svg" width="10" height="10">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#more">
+                                                                        </use>
+                                                                    </svg>
+                                                                </button>
+                                                            <?php } else {
+                                                                echo $row['ocrequest_message'];
+                                                            }
+                                                            ?>
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <span class="badge badge-inline <?php echo $cancelReqStatusClassArr[$row['ocrequest_status']]; ?>">
@@ -613,4 +629,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         $(this).toggleClass("is-active");
         return false;
     });
+
+    getCancellationRequestComment = function(recordId) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', "getCancellationRequestComment"), "recordId=" + recordId, function(t) {
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+        });
+    };
 </script>

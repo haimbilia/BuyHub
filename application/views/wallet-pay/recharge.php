@@ -84,8 +84,8 @@ foreach ($paymentMethods as $key => $val) {
                 return;
             }
 
-            fcom.ajax(tabObj.attr('href'), '', function(response) {
-                $('#tabs-container').html(response);
+            fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
+                $('#tabs-container').html(res.html);
                 var paymentMethod = tabObj.data('paymentmethod');
                 var form = '#tabs-container form';
                 if (0 < $(form).length) {

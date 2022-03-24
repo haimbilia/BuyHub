@@ -247,7 +247,7 @@ class ShopsReportController extends ListingBaseController
         $fld->htmlAfterField = $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

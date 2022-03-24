@@ -588,7 +588,9 @@ Updates/Fixes :
     => 063158 - Seller UI: "Net Amount" calculation is not correct in the order's details page, order's quantity is missing, and address's format is also not correct at the seller's end
     => 063153 - Seller UI: The dropdown icon is not correct while selecting a zone and getting UI issues while adding/editing the shipping profile
     => 063104 - Seller UI: Suggestion to give the option to upload the media while sending the category request
-    => 063186 - Seller UI: Spacing issue between the search field and advanced search icon at the seller's end
+    => 063186 - Seller UI: Spacing issue between the search field and advanced search icon at the seller's end.
+    => 063103 - Seller UI: Badges request option is not showing if the "record" is linked with the badge and error is showing while clicking on the "request" icon on the badges page.
+    => 063101 - Seller UI: Badges functionality is not working properly at the seller's end.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -601,6 +603,7 @@ UAT points:
     => Change label active to activate and in-active to deactivate for all the listing pages.
     => S.no can be removed from the listing page. Total page record count should be displayed as the footer
     => Displayed record count with plus sign (10+) in the left navigation section under requests.
+    => Listing pages>> Search Filter --- Add Submit button prior to Clear Button
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

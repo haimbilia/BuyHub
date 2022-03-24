@@ -76,7 +76,7 @@ class ProductReviewsController extends ListingBaseController
         $this->addSortingElements($frm, 'spreview_posted_on', applicationConstants::SORT_DESC);
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 
