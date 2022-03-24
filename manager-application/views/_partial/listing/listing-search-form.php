@@ -168,14 +168,14 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             }
                             ?>
                             <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-                                <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                <a class="btn advanced-trigger ms-2 collapsed advSrchToggleJs" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                         </use>
                                     </svg>
                                 </a>
                             <?php } ?>
-                            <div class="input-group-append">
+                            <div class="input-group-append advSrchBtnJs">
                                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                             </div>
                         </div>
@@ -193,6 +193,12 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                 <div class="row">
                     <?php foreach ($fldsGroup as $frmFld) {
                         $fld = $frmSearch->getField($frmFld['name']);
+                        if ('btn_clear' == strtolower($frmFld['name'])) {
+                            $clearBtn = $fld;
+                            $fld = $frmSearch->getField('btn_submit');
+                            $fld->attachField($clearBtn);
+                        }
+
                         $class = (string) $fld->getFieldtagAttribute('class');
                         $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                         $class = ltrim($class, ' ');

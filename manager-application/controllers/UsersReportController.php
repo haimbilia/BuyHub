@@ -217,7 +217,7 @@ class UsersReportController extends ListingBaseController
         $fld->overrideFldType('search');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
 
         return $frm;
     }

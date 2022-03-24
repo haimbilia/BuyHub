@@ -280,7 +280,7 @@ class ManualShippingApiController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
     

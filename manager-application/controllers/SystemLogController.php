@@ -138,7 +138,7 @@ class SystemLogController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'log_type', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + SystemLog::getTypes(), -1, array(), ''); 
         $frm->addSelectBox(Labels::getLabel('FRM_MODULE_TYPE', $this->siteLangId), 'module_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getModuleTypes(), -1, array(), '');
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         
         return $frm;
     }
