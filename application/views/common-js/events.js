@@ -1,4 +1,4 @@
-class systemEvents {
+class ykevents {
     static _validateAndTrigger(event, data = '')
     {
         if (typeof fbPixel !== 'undefined' && true == fbPixel) {

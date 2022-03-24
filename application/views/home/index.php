@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <script>
-systemEvents.viewContent();
+ykevents.viewContent();
 </script>
 
 <div id="body" class="body"   >

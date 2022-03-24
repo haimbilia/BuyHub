@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <script>
-    systemEvents.initiateCheckout();
+    ykevents.initiateCheckout();
 </script>
 <section class="section" data-content="">
     <div class="container">

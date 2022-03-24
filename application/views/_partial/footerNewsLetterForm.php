@@ -70,7 +70,7 @@ $emailFld->setFieldTagAttribute('class', 'newsletter-form-input');
     (function() {
         setUpNewsLetter = function(frm) {
             if (!$(frm).validate()) return;
-            systemEvents.newsLetterSubscription();
+            ykevents.newsLetterSubscription();
             var data = fcom.frmData(frm);
             fcom.updateWithAjax(fcom.makeUrl('MyApp', 'setUpNewsLetter'), data, function(t) {
                 if (t.status) {

@@ -19,7 +19,7 @@ $fld->developerTags['col'] = 12;
 
 ?>
 <script>
-    systemEvents.contactUs();
+    ykevents.contactUs();
 </script>
 <div id="body" class="body">
 
