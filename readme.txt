@@ -592,7 +592,8 @@ Updates/Fixes :
     => 063103 - Seller UI: Badges request option is not showing if the "record" is linked with the badge and error is showing while clicking on the "request" icon on the badges page.
     => 063101 - Seller UI: Badges functionality is not working properly at the seller's end.
     => 063191 - Seller UI: "Dropdown icon and cross icon" is not aligned while binding the product and the "successful message" is not showing while editing the details under the special price and volume discount section
-
+    => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
