@@ -2765,7 +2765,7 @@ trait SellerProducts
 
         $json = array(
             'status' => true,
-            'msg' => $this->str_update_record,
+            'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
             'data' => array('value' => CommonHelper::numberFormat($value))
         );
         FatUtility::dieJsonSuccess($json);
@@ -3125,7 +3125,7 @@ trait SellerProducts
 
         $upsellProds = FatApp::getDb()->fetchAll($srch->getResultSet(), 'upsell_sellerproduct_id');
         foreach ($upsellProds as $productId => $upsellProd) {
-            $srch = SellerProduct::searchUpsellProducts($this->siteLangId);
+            $srch = SellerProduct::searchUpsellProducts($this->siteLangId, [], false);
             $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority');
             $srch->addOrder('priority', 'DESC');
             $srch->addCondition('upsell_sellerproduct_id', '=', $productId);
