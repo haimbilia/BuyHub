@@ -175,16 +175,12 @@ $(document).on('change', ".inputDateJs", function () {
         if ('' != value && value != oldValue) {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.displayProcessing();
-            fcom.ajax(fcom.makeUrl("Seller", "updateSpecialPriceColValue"), data, function (t) {
-                fcom.closeProcessing();
-                var ans = $.parseJSON(t);
-                if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
+            fcom.updateWithAjax(fcom.makeUrl("Seller", "updateSpecialPriceColValue"), data, function (ans) { 
+                if (ans.status != 1) {             
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {
                     updatedValue = ans.data.value;
-
                     percentDiv.text(discountPercentage);
                 }
                 obj.attr('data-value', value);
