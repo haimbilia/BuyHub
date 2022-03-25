@@ -36,7 +36,7 @@ $(document).ready(function () {
     serviceAccountForm = function () {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(keyName, 'serviceAccountForm'), '', function (res) {
-            $.ykmodal(res);
+            $.ykmodal(res, true, 'modal-dialog-vertical-md');
             fcom.removeLoader();
         });
     };
