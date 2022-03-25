@@ -23,18 +23,13 @@
             </div>
 
             <?php
-            $PromoCouponsFrm->setFormTagAttribute('class', 'form');
+            $PromoCouponsFrm->setFormTagAttribute('class', 'form form-apply');
             $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
-            $fld = $PromoCouponsFrm->getField('btn_submit');
-            $fld->setFieldTagAttribute('class', 'btn btn-secondary btn-wide');
             $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+
             echo $PromoCouponsFrm->getFormTag(); ?>
-            <div class="input-group">
-                <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
-                <div class="input-group-append">
-                    <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
-                </div>
-            </div>
+            <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
+            <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
             </form>
             <?php echo $PromoCouponsFrm->getExternalJs(); ?>
 

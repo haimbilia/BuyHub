@@ -46,9 +46,6 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                                         <div class="block-cart-detail-top">
                                             <div class="product-profile">
                                                 <div class="product-profile-data">
-                                                    <div class="category">
-                                                        <a href="<?php echo $shopUrl; ?>"><?php echo $product['shop_name']; ?> </a>
-                                                    </div>
                                                     <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                                                     <div class="products-price">
                                                         <span class="products-price-new">

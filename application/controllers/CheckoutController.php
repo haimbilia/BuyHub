@@ -841,7 +841,6 @@ class CheckoutController extends MyAppController
             }
         }
 
-
         $criteria = array('isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true);
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
         $cartHasPhysicalProduct = $this->cartObj->hasPhysicalProduct();
@@ -1987,7 +1986,7 @@ class CheckoutController extends MyAppController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_APPLY', $langId), 'button', 'btn_submit', 'btn-apply'));
         return $frm;
     }
 

@@ -103,13 +103,17 @@ $("document").ready(function () {
     loadFinancialSummary = function (isShippingSelected) {
         isShippingSelected = ('undefined' == typeof isShippingSelected ? 0 : isShippingSelected);
         if (0 < isShippingSelected) {
-            $(financialSummary).prepend(fcom.getLoader());
+            $(financialSummary).prepend(fcom.getLoader(true));
         }
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
-                fcom.removeLoader();
-                $(financialSummary).html(ans.html);
+                $(financialSummary).hide().html(ans.html).fadeIn();
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
+                setTimeout(() => {
+                    if (0 < $(financialSummary + ' .loaderJs').length) {
+                        fcom.removeLoader();
+                    }
+                }, 1000);
             }
         );
     };
@@ -294,12 +298,9 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "setUpShippingMethod"),
             data,
             function (t) {
-                fcom.removeLoader();
-                if (t.status == 1) {
-                    loadFinancialSummary(1);
-                    loadPaymentSummary();
-                    setCheckoutFlow("PAYMENT");
-                }
+                loadPaymentSummary();
+                loadFinancialSummary(1);
+                setCheckoutFlow("PAYMENT");
             }
         );
     };
@@ -430,13 +431,18 @@ $("document").ready(function () {
     };
 
     loadPaymentSummary = function () {
+        $(pageContent).prepend(fcom.getLoader(true));
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "PaymentSummary"),
             '',
             function (res) {
-                fcom.removeLoader();
-                $(pageContent).html(res.html);
+                $(pageContent).hide().html(res.html).fadeIn();
                 $(paymentDiv).addClass("is-current");
+                setTimeout(() => {
+                    if (0 < $(pageContent + ' .loaderJs').length) {
+                        fcom.removeLoader();
+                    }
+                }, 1000);
             }
         );
     };
@@ -663,28 +669,15 @@ $("document").ready(function () {
     };
 
     setUpBillingAddressSelection = function (elm) {
-        if (!checkLogin()) {
-            return false;
-        }
-
-        var billing_address_id = $(
-            'input[name="shipping_address_id"]:checked'
-        ).val();
+        var billing_address_id = $('input[name="shipping_address_id"]:checked').val();
         var isShippingSameAsBilling = 0;
-        var data =
-            "billing_address_id=" +
-            billing_address_id +
-            "&isShippingSameAsBilling=" +
-            isShippingSameAsBilling;
+        var data = "billing_address_id=" + billing_address_id + "&isShippingSameAsBilling=" + isShippingSameAsBilling;
         fcom.updateWithAjax(
-            fcom.makeUrl("Checkout", "setUpBillingAddressSelection"),
-            data,
+            fcom.makeUrl("Checkout", "setUpBillingAddressSelection"), data,
             function (t) {
-                if (t.status == 1) {
-                    loadFinancialSummary();
-                    loadPaymentSummary();
-                    setCheckoutFlow("PAYMENT");
-                }
+                loadFinancialSummary(1);
+                loadPaymentSummary();
+                setCheckoutFlow("PAYMENT");
             }
         );
     };
