@@ -16,16 +16,9 @@
                 $fld->setFieldTagAttribute('class', 'form-control');
                 $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
 
-                $fld = $redeemRewardFrm->getField('btn_submit');
-                $fld->setFieldTagAttribute('class', 'btn btn-secondary btn-wide');
-
                 echo $redeemRewardFrm->getFormTag(); ?>
-                <div class="input-group">
-                    <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
-                    <div class="input-group-append">
-                        <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
-                    </div>
-                </div>
+                <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
+                <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
                 </form>
                 <?php echo $redeemRewardFrm->getExternalJs(); ?>
 

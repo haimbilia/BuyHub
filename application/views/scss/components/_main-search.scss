@@ -94,7 +94,7 @@
         text-transform: uppercase;
         color: $txt-body;
         font-size: 0.8rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         padding: 0;
     }
     .text-suggestions {
@@ -177,7 +177,7 @@
     .matched {
         display: block;
         .matched-brands {
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
     }
 }
