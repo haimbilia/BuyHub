@@ -758,11 +758,8 @@ sendResetPasswordLink = function (user) {
     $.extend(fcom, {
         processingCounter: 0,
         processingClass: 'processingJs',
-        getLoader: function (addAsNew) {
-            if (typeof addAsNew === 'undefined') {
-                $(document.body).css({ cursor: "wait" });
-                $(".loaderJs").remove();
-            }
+        getLoader: function (addAsNew = false) {
+            $(document.body).css({ cursor: "wait" });
             return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         scrollToTop: function (obj) {

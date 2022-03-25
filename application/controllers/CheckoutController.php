@@ -841,7 +841,6 @@ class CheckoutController extends MyAppController
             }
         }
 
-
         $criteria = array('isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true);
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
         $cartHasPhysicalProduct = $this->cartObj->hasPhysicalProduct();

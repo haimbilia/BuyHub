@@ -15,7 +15,9 @@
                 <div class="review-block-action" role="cell">
                     <button class="link-underline" onClick="showAddressList()">
                         <span>
-                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></button>
+                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                        </span>
+                    </button>
                 </div>
             </div>
             <div class="review-block-body" role="cell">

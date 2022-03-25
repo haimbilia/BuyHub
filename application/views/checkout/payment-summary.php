@@ -1,18 +1,52 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="step">
+    <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
+        <label class="checkbox mb-4">
+            <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
+            <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
+        </label>
+    <?php } else { ?>
+        <ul class="review-block">
+            <li class="review-block-item">
+                <div class="review-block-head">
+                    <h5 class="h5">
+                        <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
+                    </h5>
+
+                    <div class="review-block-action" role="cell">
+                        <button class="link-underline" onClick="loadAddressDiv(1)">
+                            <span>
+                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="review-block-body" role="cell">
+                    <div class="delivery-address">
+                        <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
+                            <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
+                                echo ", " . $billingAddressArr['addr_address2']; ?>
+                            <?php } ?>
+                        </p>
+                        <p><?php echo $billingAddressArr['addr_city'] . ", " . $billingAddressArr['state_name'] . ", " . $billingAddressArr['country_name'] . ", " . $billingAddressArr['addr_zip']; ?>
+                        </p>
+
+                        <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
+                            $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
+                        ?>
+                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    <?php } ?>
     <div class="step_section">
         <div class="step_head">
             <h5 class="step_title"><?php echo Labels::getLabel('LBL_PAYMENT_SUMMARY', $siteLangId); ?></h5>
         </div>
         <div class="step_body">
-            <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
-                <label class="checkbox mb-4">
-                    <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
-                    <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
-                </label>
-            <?php } ?>
-
             <div id="payment">
                 <?php if ($cartSummary['orderNetAmount'] <= 0) { ?>
                     <div class="confirm-payment" id="wallet">
@@ -100,34 +134,30 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
             }
             var paymentMethod = tabObj.data('paymentmethod');
             $('.paymentBlockJs').slideUp();
-            if (0 < $('.' + paymentMethod + '-js').children().length) {
-                $('.' + paymentMethod + '-js').slideDown();
-            } else {
-                fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
-                    if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
-                        $("#paypal-buttons").html("");
-                    }
+            fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
+                if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
+                    $("#paypal-buttons").html("");
+                }
 
-                    $('.' + paymentMethod + '-js').html(res.html).slideDown();
-                    if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
-                        if (true == enableGcaptcha) {
-                            googleCaptcha();
-                        }
-                        $.ykmsg.close();
-                    } else {
-                        var form = '.' + paymentMethod + '-js form';
-                        if (0 < $(form).length) {
-                            $('.' + paymentMethod + '-js').prepend(fcom.getLoader());
-                            if (0 < $(form + " input[type='submit']").length) {
-                                $(form + " input[type='submit']").val(langLbl.requestProcessing);
-                            }
-                            setTimeout(function() {
-                                $(form).submit()
-                            }, 100);
-                        }
+                $('.' + paymentMethod + '-js').html(res.html).slideDown();
+                if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
+                    if (true == enableGcaptcha) {
+                        googleCaptcha();
                     }
-                });
-            }
+                    $.ykmsg.close();
+                } else {
+                    var form = '.' + paymentMethod + '-js form';
+                    if (0 < $(form).length) {
+                        $('.' + paymentMethod + '-js').prepend(fcom.getLoader());
+                        if (0 < $(form + " input[type='submit']").length) {
+                            $(form + " input[type='submit']").val(langLbl.requestProcessing);
+                        }
+                        setTimeout(function() {
+                            $(form).submit()
+                        }, 100);
+                    }
+                }
+            });
         }
     </script>
 <?php }
