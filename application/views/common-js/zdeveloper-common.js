@@ -244,6 +244,7 @@ function recentlyViewedProducts(selprodId) {
         fcom.makeUrl("Products", "recentlyViewedProducts", [selprodId]),
         "",
         function (ans) {
+            fcom.removeLoader();
             $("#recentlyViewedProductsDiv").html(ans);
             $(".js-collection-corner:not(.slick-initialized)").slick(
                 getSlickSliderSettings(5, 1, langLbl.layoutDirection, true)
@@ -444,7 +445,7 @@ removeFromCart = function (key) {
                 $(".emtyCartBtn-js").hide();
             }
             listCartProducts();
-            $("#cartSummary").load(fcom.makeUrl("cart", "getCartSummary"));
+            $('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
         }
         $.ykmsg.close();
         fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
@@ -1739,7 +1740,7 @@ $("document").ready(function () {
                 ans.total = "9+";
             }
             $("span.cartQuantity").html(ans.total);
-            $("#cartSummary").load(fcom.makeUrl("cart", "getCartSummary"));
+            $("#side-cart").load(fcom.makeUrl("cart", "getCartSummary") + " #side-cart > *");
         });
         return false;
     });

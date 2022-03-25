@@ -157,7 +157,7 @@ function setupReviewAbuse(frm) {
         data += '&productView=1';
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
             $.ykmsg.close();
-
+            fcom.removeLoader();
             if (ans.totalRecords) {
                 $('#reviews-pagination-strip--js').show();
             }

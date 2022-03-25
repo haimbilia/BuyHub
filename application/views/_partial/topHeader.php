@@ -143,21 +143,7 @@
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item">
-                                    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
-
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
-                                        </svg>
-
-                                        <span class="cart-qty">
-                                            <?php
-                                            $cartObj = new Cart();
-                                            echo (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts(); ?>
-                                        </span>
-                                        <span class="txt">
-                                            <?php echo Labels::getLabel("LBL_MY_BAG", $siteLangId); ?>
-                                        </span>
-                                    </button>
+                                    <?php $this->includeTemplate('_partial/footer-part/cart-summary.php'); ?>
                                 </li>
                             <?php } ?>
                         </ul>

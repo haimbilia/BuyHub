@@ -1,6 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
+    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
+        <svg class="svg" width="20" height="20">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
+        </svg>
+
+        <span class="cart-qty">
+            <?php
+            $cartObj = new Cart();
+            echo (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts(); ?>
+        </span>
+        <span class="txt">
+            <?php echo Labels::getLabel("LBL_MY_BAG", $siteLangId); ?>
+        </span>
+    </button>
     <!-- offcanvas-side-cart -->
     <div class="offcanvas offcanvas-side-cart offcanvas-end" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
         <div class="offcanvas-header">

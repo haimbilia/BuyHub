@@ -186,10 +186,6 @@ $(function () {
         e.stopPropagation();
     });
 
-    $('#cartSummary').on('click', '.cart-detail', function (e) {
-        e.stopPropagation();
-    });
-
     /* $('.main-search').on('click','.form--search-popup',function(e){
 
         if(!$(e.target).hasClass('close-layer')){
