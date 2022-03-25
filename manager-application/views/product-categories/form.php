@@ -57,8 +57,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         $("#prodcat_parent").select2({
             dropdownParent: $("#prodcat_parent").closest('form'),
         })
-        .on('select2:open', function(e) {        
-            $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        .on('select2:open', function(e) {
+            $("#prodcat_parent").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");            
         })
         .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
         

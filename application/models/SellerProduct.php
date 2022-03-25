@@ -296,7 +296,7 @@ class SellerProduct extends MyAppModel
         return true;
     }
 
-    public static function searchUpsellProducts($lang_id, $attr = [])
+    public static function searchUpsellProducts($lang_id, $attr = [], $forFrontend = true)
     {
         $splPriceForDate = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
         $srch = new SearchBase(static::DB_TBL_UPSELL_PRODUCTS);
@@ -304,32 +304,50 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
-        $srch->joinTable(
-            SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
-            'LEFT OUTER JOIN',
-            'm.splprice_selprod_id = selprod_id AND \'' . $splPriceForDate . '\' BETWEEN m.splprice_start_date AND m.splprice_end_date',
-            'm'
-        );
+        
+        if(true === $forFrontend){
+            $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
+            $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
-        $srch->joinTable(
-            SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
-            'LEFT OUTER JOIN',
-            's.splprice_selprod_id = selprod_id AND s.splprice_price < m.splprice_price
-             AND \'' . $splPriceForDate . '\' BETWEEN s.splprice_start_date AND s.splprice_end_date',
-            's'
-        );
+            $srch->joinTable(
+                SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
+                'LEFT OUTER JOIN',
+                'm.splprice_selprod_id = selprod_id AND \'' . $splPriceForDate . '\' BETWEEN m.splprice_start_date AND m.splprice_end_date',
+                'm'
+            );
 
-        $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
-        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
+            $srch->joinTable(
+                SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE,
+                'LEFT OUTER JOIN',
+                's.splprice_selprod_id = selprod_id AND s.splprice_price < m.splprice_price
+                AND \'' . $splPriceForDate . '\' BETWEEN s.splprice_start_date AND s.splprice_end_date',
+                's'
+            );
 
-        $srch->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-        $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+            $srch->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);        
 
-        if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
-        } else {
-            $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'product_brand_id = brand.brand_id', 'brand');
-            $srch->addDirectCondition("(CASE WHEN product_brand_id > 0 THEN (brand.brand_active = " . applicationConstants::YES . " AND brand.brand_deleted = " . applicationConstants::NO . ") ELSE 1=1 END)");
+            if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+                $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
+            } else {
+                $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'product_brand_id = brand.brand_id', 'brand');
+                $srch->addDirectCondition("(CASE WHEN product_brand_id > 0 THEN (brand.brand_active = " . applicationConstants::YES . " AND brand.brand_deleted = " . applicationConstants::NO . ") ELSE 1=1 END)");
+            }
+
+            if (empty($attr)) {
+                $attr = array(
+                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                    'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
+                );
+            }
+
+        }else{
+            if (empty($attr)) {
+                $attr = array(
+                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id',
+                    'product_updated_on'
+                );
+            }
         }
 
         if (!empty($attr)) {
@@ -338,12 +356,8 @@ class SellerProduct extends MyAppModel
             } else {
                 $srch->addMultipleFields($attr);
             }
-        } else {
-            $srch->addMultipleFields(array(
-                'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
-                'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
-            ));
         }
+
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);

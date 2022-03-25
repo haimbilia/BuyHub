@@ -5,7 +5,7 @@ $(document).ready(function () {
         allowClear: true,
         placeholder: $("#prodcatIdJs").attr('placeholder')
     }).on('select2:open', function(e) {        
-        $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+        $("#prodcatIdJs").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");
     }).data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
 
 });

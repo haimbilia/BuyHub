@@ -46,11 +46,8 @@ $(document).on('change', ".inputDateJs", function () {
         if ('' != value && value != oldValue) {
             fcom.displayProcessing();
             var data = 'tag_id=' + tagId + '&product_id=' + productId + '&' + attribute + '=' + value;
-            fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-                fcom.closeProcessing();
-                var ans = $.parseJSON(t);
-                if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (ans) {
+                if (ans.status != 1) {                  
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {
