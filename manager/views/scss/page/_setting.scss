@@ -5,6 +5,10 @@
     max-width: 900px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    @media (max-width: 1280px) {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    }
     grid-gap: 0.5rem;
     .setting {
         border: $border-transparent;

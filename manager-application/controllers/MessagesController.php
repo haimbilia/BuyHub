@@ -22,7 +22,7 @@ class MessagesController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

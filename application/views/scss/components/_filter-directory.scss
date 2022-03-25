@@ -3,50 +3,36 @@
         color: inherit;
     }
     .filter-directory_bar {
-
         display: flex;
-
         align-items: center;
         border-bottom: $border;
         padding: 0 0 1rem 0;
         margin-bottom: 1rem;
         @include media-breakpoint-down(md) {
-            & {
-                flex-direction: column;
-            }
+            flex-direction: column;
         }
         .filter-directory_search_input {
             margin-#{$end-direction}: 1rem;
-            
-            -ms-flex: 0 0 170px;
-            flex: 0 0 170px;
-            max-width: 170px;
+            flex: 0 0 200px;
+            max-width: 200px;
             @include media-breakpoint-down(md) {
-                & {
-                    margin: 0;
-                    margin-bottom: 1rem;
-                    flex: auto;
-                    max-width: none;
-                }
+                margin: 0;
+                margin-bottom: 1rem;
+                flex: auto;
+                max-width: none;
             }
         }
         .filter-directory_indices {
-            
-            
             display: flex;
             -ms-flex-pack: distribute;
             justify-content: space-around;
-            
-           
             flex: 1;
             flex-direction: row;
             flex-wrap: nowrap;
             @include media-breakpoint-down(md) {
-                & {
-                    justify-content: flex-start;
-                    overflow-x: auto;
-                    width: 100%;
-                }
+                justify-content: flex-start;
+                overflow-x: auto;
+                width: 100%;
             }
             li {
                 font-size: 0.8rem;
@@ -65,16 +51,10 @@
 .filter-directory_list {
     padding: 0;
     height: 465px;
-    
     display: flex;
-
     flex-direction: column;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-align:flex-start;
-    -ms-flex-align:flex-start;
     align-items: flex-start;
-    -ms-flex-line-pack:flex-start;
     align-content: flex-start;
     white-space: nowrap;
     overflow-y: auto;

@@ -228,9 +228,9 @@ $(".navTabsJs li a").click(function () {
 			callChart('monthlysalesearningsJs', $SalesEarningsKey, $SalesEarningsVal, $position);
 		} else if (activeTab == 'tabs_3') {
 			callChart('monthlySignupsJs', $signupsKey, $signupsVal, $position);
-		} else if (activeTab == 'tabs_4') {
-			callChart('monthlyAffiliateSignupsJs', $affiliateSignupsKey, $affiliateSignupsVal, $position);
 		} else if (activeTab == 'tabs_5') {
+			callChart('monthlyAffiliateSignupsJs', $affiliateSignupsKey, $affiliateSignupsVal, $position);
+		} else if (activeTab == 'tabs_4') {
 			callChart('monthlyProductsJs', $productsKey, $productsVal, $position);
 		}
 	}

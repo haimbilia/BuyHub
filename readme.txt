@@ -603,6 +603,7 @@ UAT points:
     => Change label active to activate and in-active to deactivate for all the listing pages.
     => S.no can be removed from the listing page. Total page record count should be displayed as the footer
     => Displayed record count with plus sign (10+) in the left navigation section under requests.
+    => Listing pages>> Search Filter --- Add Submit button prior to Clear Button
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

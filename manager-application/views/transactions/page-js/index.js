@@ -16,11 +16,6 @@ $(document).ready(function () {
         });
     };
 
-    showDescription = function (obj) {
-        console.log($(obj).find('span').html());
-        $.ykmodal($(obj).find('span').html(),true);
-    };
-
     getDescription = function (recordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "getDescription"), "recordId=" + recordId, function (t) {
             $.ykmodal(t.html, true);

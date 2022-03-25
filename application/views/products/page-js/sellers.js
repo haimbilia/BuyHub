@@ -16,7 +16,7 @@ $("document").ready(function(){
 			var selprod_id = $(this).attr('data-id');
 			var quantity = $(this).attr('data-min-qty');
             data = "selprod_id="+selprod_id+"&quantity="+quantity;
-            events.addToCart();
+            ykevents.addToCart();
 			fcom.updateWithAjax(fcom.makeUrl('cart', 'add' ),data, function(ans) {
                 if (ans['redirect']) {
                     location = ans['redirect'];

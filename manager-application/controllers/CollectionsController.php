@@ -175,7 +175,7 @@ class CollectionsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', Collections::getLayoutTypeArr($this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

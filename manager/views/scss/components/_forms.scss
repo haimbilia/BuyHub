@@ -67,6 +67,7 @@ $input-color: #474747;
     }
     [dir="rtl"] & {
         padding-#{$start-direction}: 30px;
+        padding-#{$end-direction}: 1rem;
         background-position: calc(0% - -12px) center;
     }
 }

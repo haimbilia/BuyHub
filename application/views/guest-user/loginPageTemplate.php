@@ -24,7 +24,7 @@ $remembermeField->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $fldforgot = $loginFrm->getField('forgot');
 $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
-    class="link">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
+    class="link-underline">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
 $fldforgot->developerTags['col'] = 6;
 
 $pwdFld = $loginFrm->getField('password');
@@ -93,17 +93,19 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                 <?php } ?>
                 <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
                     <div class="col-auto">
-                        <a class="link" href="javaScript:void(0)" data-form="frmLogin" onClick="signInWithPhone(this, true)">
-                            <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?>
-                        </a>
+                        <div class="form-group">
+                            <button class="link-underline" data-form="frmLogin" onClick="signInWithPhone(this, true)">
+                                <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?>
+                            </button>
+                        </div>
                     </div>
             </div>
             <div class="row">
                 <div class="col-md-12 d-none getOtpBtnBlock--js">
                     <div class="form-group">
-                        <a href="javaScript:void(0)" onclick="getLoginOtp(this);" class="btn btn-brand btn-wide btn-block">
+                        <button onclick="getLoginOtp(this);" class="btn btn-secondary btn-block">
                             <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -120,7 +122,7 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                     </p>
                 </div>
                 <div class="col-auto d-none">
-                    <a class="link resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
+                    <button class="link-underline resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></button>
                 </div>
             </div>
         <?php } else { ?>

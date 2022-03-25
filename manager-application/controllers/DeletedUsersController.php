@@ -166,7 +166,7 @@ class DeletedUsersController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('placeholder' => Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

@@ -580,7 +580,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

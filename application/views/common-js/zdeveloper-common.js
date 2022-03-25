@@ -420,7 +420,7 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
                     $("[data-id=" + selprod_id + "]").removeClass("is-active");
                 }
                 if (ans.action == "A") {
-                    events.addToWishList();
+                    ykevents.addToWishList();
                     $(dv)
                         .find(".wishListCheckBox_" + ans.wish_list_id)
                         .addClass("is-active");
@@ -452,7 +452,7 @@ removeFromCart = function (key) {
 };
 
 function submitSiteSearch(frm, page) {
-    events.search();
+    ykevents.search();
     var keyword = $.trim($(frm).find('input[name="keyword"]').val());
     keyword = keyword.replace("&", "++");
     if (3 > keyword.length || "" === keyword) {
@@ -1702,7 +1702,7 @@ $(document).on("click", "#btn-demo", function () {
 });
 $("document").ready(function () {
     $(document).on("click", ".add-to-cart--js", function (event) {
-        events.addToCart();
+        ykevents.addToCart();
         $btn = $(this);
         event.preventDefault();
         var data = fcom.frmData(document.frmBuyProduct);
