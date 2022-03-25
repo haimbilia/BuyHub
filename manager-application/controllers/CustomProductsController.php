@@ -1471,7 +1471,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
             'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
@@ -1512,6 +1512,14 @@ class CustomProductsController extends ListingBaseController
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => $pageTitle]
+                ];
+                break;
+            case 'form':
+                $pageData = PageLanguageData::getAttributesByKey('MASTER_PRODUCT_REQUEST_FORM', $this->siteLangId);               
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('CustomProducts')],
+                    ['title' => Labels::getLabel('LBL_FORM', $this->siteLangId)]
                 ];
                 break;
             default:
