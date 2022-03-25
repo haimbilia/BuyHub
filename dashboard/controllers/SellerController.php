@@ -5260,7 +5260,7 @@ class SellerController extends SellerBaseController
         }
         $json = array(
             'status' => true,
-            'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
+            'msg' => $this->str_update_record,
             'data' => array('value' => $value)
         );
         FatUtility::dieJsonSuccess($json);

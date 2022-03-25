@@ -153,6 +153,7 @@
 .cart-total {
     padding: 2rem;
     border: $border-black;
+    position: relative;
     &-head {
         padding-bottom: 1rem;
         margin-bottom: 2rem;
@@ -172,6 +173,11 @@
         display: flex;
         flex-direction: column;
         grid-gap: 1rem;
+        .link-underline {
+            display: inline-block;
+            width: fit-content;
+            margin: auto;
+        }
     }
 }
 .promotional-code {

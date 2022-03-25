@@ -7,7 +7,7 @@ $keywordFld = $pSrchFrm->getField('keyword');
 /* $submitFld = $pSrchFrm->getField('btnSiteSrchSubmit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
 
-$keywordFld->setFieldTagAttribute('class', 'search--keyword--js');
+$keywordFld->setFieldTagAttribute('class', 'search--keyword--js omni-search');
 $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_for_Product...', $siteLangId));
 /* $keywordFld->setFieldTagAttribute('autofocus','autofocus'); */
 $keywordFld->setFieldTagAttribute('id', 'header_search_keyword');

@@ -146,11 +146,8 @@ $(document).ready(function () {
         if ('' != value && value != oldValue) {
             fcom.displayProcessing();
             var data = 'attribute=' + attribute + "&voldiscount_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
-            fcom.ajax(fcom.makeUrl("Seller", "updateVolumeDiscountColValue"), data, function (t) {
-                fcom.closeProcessing();
-                var ans = $.parseJSON(t);
+            fcom.updateWithAjax(fcom.makeUrl("Seller", "updateVolumeDiscountColValue"), data, function (ans) { 
                 if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {
@@ -159,7 +156,6 @@ $(document).ready(function () {
                 obj.attr('data-value', value);
                 obj.attr('data-formated-value', updatedValue);
                 obj.text(updatedValue);
-
             });
         } else {
             obj.text(formattedValue);

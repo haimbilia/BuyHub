@@ -35,11 +35,8 @@ $(document).ready(function () {
         if ('' != value && value != oldValue) {
             fcom.displayProcessing();
             var data = 'attribute=' + attribute + "&voldiscount_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
-            fcom.ajax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (t) {
-                fcom.closeProcessing();
-                var ans = $.parseJSON(t);
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (ans) {  
                 if (ans.status != 1) {
-                    fcom.displayErrorMessage(ans.msg);
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {

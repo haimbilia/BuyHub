@@ -48,35 +48,6 @@
         }
     }
 }
-
-.checkout-page {
-    //min-height: calc(100vh - (var(--header-height)));
-    display: flex;
-    @include media-breakpoint-down(sm) {
-        padding-bottom: var(--btn-height);
-        flex-direction: column;
-    }
-    .main {
-        flex: 1;
-        @include media-breakpoint-up(xl) {
-            padding-#{$end-direction}: 60px;
-            flex: 0 0 60%;
-            max-width: 60%;
-        }
-    }
-    .sidebar {
-        //background: $bg-gray;
-        //border-#{$start-direction}: $border;
-        position: relative;
-        flex: 1;
-        background-position: left top;
-
-        @include media-breakpoint-down(lg) {
-            display: none;
-        }
-    }
-}
-
 .checkout-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -87,6 +58,7 @@
         display: block;
     }
     &_main {
+        position: relative;
         padding: 0;
     }
     &_aside {
@@ -370,9 +342,12 @@
     .payments-nav {
         display: flex;
         flex-direction: column;
-
+        position: relative;
         &-item {
             border-bottom: $border;
+            &:last-child {
+                border-bottom: 0;
+            }
         }
 
         &-link {
@@ -385,6 +360,7 @@
             &:before {
                 position: absolute;
                 #{$start-direction}: 2rem;
+                top: calc(50% - 9px);
                 content: "";
                 width: 18px;
                 height: 18px;
@@ -395,6 +371,7 @@
             }
             &:hover,
             &.active {
+                color: $secondary-color;
                 &:before {
                     background-color: $secondary-color;
                     outline: solid 1px $secondary-color;
@@ -941,7 +918,6 @@
     color: $txt-body;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
     &-list {
         border: $border;
         padding: 2rem;
@@ -950,27 +926,23 @@
         font-weight: 600;
         font-size: 1.4rem;
     }
-
-    .form-apply {
-        margin-bottom: 1rem;
-        position: relative;
-        .btn-apply {
-            top: 0;
-            bottom: 0;
-            border: 0;
-            background-color: transparent;
-            color: $brand-color;
-            font-weight: 600;
-            position: absolute;
-            #{$end-direction}: 1rem;
-        }
+}
+.wallet-credits {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    border: solid 2px $secondary-color;
+    border-radius: 3px;
+    margin: auto;
+    align-items: center;
+    padding: 2rem;
+    width: 100%;
+    background-color: transparent;
+    color: $secondary-color;
+    &:hover {
     }
-    .wallet-credits {
-        font-size: 1rem;
-        margin-bottom: 1rem;
-        strong {
-            font-weight: 600;
-        }
+    strong {
+        font-weight: 600;
     }
 }
 

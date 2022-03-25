@@ -107,7 +107,7 @@ class BuyTogetherProductsController extends ListingBaseController
         $rs = $prodSrch->getResultSet();
         $upsellProds = FatApp::getDb()->fetchAll($rs, 'upsell_sellerproduct_id');
         foreach ($upsellProds as $productId => $upsellProd) {
-            $srch = SellerProduct::searchUpsellProducts($this->siteLangId);
+            $srch = SellerProduct::searchUpsellProducts($this->siteLangId, [], false);
             $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority');
             $srch->addOrder('priority', 'DESC');
             $srch->addCondition('upsell_sellerproduct_id', '=', $productId);
@@ -115,7 +115,7 @@ class BuyTogetherProductsController extends ListingBaseController
             $srch->addGroupBy('upsell_sellerproduct_id');
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $rs = $srch->getResultSet();
+            $rs = $srch->getResultSet();            
             $upsellProds[$productId]['products'] = FatApp::getDb()->fetchAll($rs);
             $upsellProds[$productId]['credential_username'] = $upsellProd['credential_username'];
         }
