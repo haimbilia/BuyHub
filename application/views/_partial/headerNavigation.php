@@ -181,7 +181,7 @@
                                                 <a  data-submenu="mobileHeadCatChild<?php echo $children['prodcat_id'];?>" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
                                                 <div id="mobileHeadCatChild<?php echo $children['prodcat_id'];?>" class="submenu">
                                                     <div class="submenu-header" data-submenu-close="mobileHeadCatChild<?php echo $children['prodcat_id'];?>">
-                                                        <a href="#"><?php $link['nlink_caption'] ?></a>
+                                                        <a href="#"><?php echo $link['nlink_caption'] ?></a>
                                                     </div>
                                                     <label><?php echo $children['prodcat_name']; ?></label>   
                                                     <?php if (isset($children['children']) && count($children['children']) > 0) { ?>                                               
