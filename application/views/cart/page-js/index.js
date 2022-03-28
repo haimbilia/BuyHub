@@ -131,7 +131,7 @@ $(function () {
 		fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart'), data, function (ans) {
 			addRemoveWishListProduct(selprod_id, wish_list_id, event);
 			listCartProducts(fulfilmentType);
-			$('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
+			$('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
 			setTimeout(function () {
 				if (1 > $("#cartList").length) {
 					location.reload();
@@ -144,7 +144,7 @@ $(function () {
 		if (confirm(langLbl.confirmRemove)) {
 			fcom.updateWithAjax(fcom.makeUrl('Cart', 'removePickupOnlyProducts'), '', function (ans) {
 				listCartProducts(2);
-				$('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
+				$('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
 			});
 		}
 	}
@@ -153,7 +153,7 @@ $(function () {
 		if (confirm(langLbl.confirmRemove)) {
 			fcom.updateWithAjax(fcom.makeUrl('Cart', 'removeShippedOnlyProducts'), '', function (ans) {
 				listCartProducts(1);
-				$('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
+				$('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
 			});
 		}
 	}
