@@ -1,7 +1,7 @@
 .footer {
     color: $txt-gray;
     background: $bg-white;
-    padding-bottom: 1rem !important;
+    //padding-bottom: 1rem !important;
     &-logo {
         max-width: 120px;
         margin-bottom: 1.5rem;
@@ -100,11 +100,6 @@
 
     &-bottom {
         border-top: $border;
-        padding-bottom: 80px;
-        @include media-breakpoint-up(lg) {
-            padding-bottom: 0;
-        }
-
         &-inner {
             display: flex;
             align-items: center;
@@ -300,4 +295,21 @@
 
 .footerSubCategories li a:hover {
     color: $brand-color;
+}
+
+.about-platform {
+    margin-bottom: 2rem;
+    h1,
+    h2,
+    h3 {
+        font-weight: 500;
+        color: $txt-body;
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+    }
+    p {
+        color: $txt-gray;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
 }

@@ -83,6 +83,34 @@ class Common
             $template->set('userEmail', UserAuthentication::getLoggedUserAttribute('user_email'));
             $template->set('profilePicUrl', $profileImage);
             $template->set('userPhone', UserAuthentication::getLoggedUserAttribute('user_phone'));
+         
+            if(CONF_WEBROOT_URL === CONF_WEBROOT_DASHBOARD){
+
+                $shopDetails = Shop::getAttributesByUserId($userId, array('shop_id'), false);
+                $shop_id = 0;
+                if (!false == $shopDetails) {
+                    $shop_id = $shopDetails['shop_id'];
+                }
+
+                $controller = str_replace('Controller', '', FatApp::getController());
+                $activeTab = 'B';
+                $sellerActiveTabControllers = array('Seller');
+                $buyerActiveTabControllers = array('Buyer');
+    
+                if (in_array($controller, $sellerActiveTabControllers)) {
+                    $activeTab = 'S';
+                } elseif (in_array($controller, $buyerActiveTabControllers)) {
+                    $activeTab = 'B';
+                } elseif (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
+                    $activeTab = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'];
+                }
+    
+                $shop = new Shop(0, $userId);
+                $isShopActive = $shop->isActive();
+                $template->set('shop_id', $shop_id);
+                $template->set('activeTab', $activeTab);  
+                $template->set('isShopActive', $isShopActive);
+            } 
         }
     }
 

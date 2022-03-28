@@ -25,10 +25,11 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
 ?>
 <div id="body" class="body">
     <section class="section">
-        <div class="order-completed">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-9">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9">
+                    <div class="order-completed">
                         <div class="thanks-screen text-center">
                             <!-- Icon -->
                             <div class="success-animation">
@@ -92,16 +93,14 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                         <ul class="completed-detail">
                             <?php if (!empty($orderInfo['shippingAddress'])) {
                                 $shippingAddress = $orderInfo['shippingAddress']; ?>
-                                <li>
+                                <li class="completed-detail-item">
                                     <h4>
-                                        <svg class="svg" width="22px" height="22px">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
-                                            </use>
-                                        </svg>
+
                                         <?php echo Labels::getLabel("LBL_SHIPPING_ADDRESS", $siteLangId); ?>
                                     </h4>
                                     <p>
-                                        <strong><?php echo $shippingAddress['oua_name']; ?></strong><br>
+                                        <strong><?php echo $shippingAddress['oua_name']; ?></strong>
+                                        <br>
                                         <?php
                                         echo $shippingAddress['oua_address1'];
                                         if (!empty($shippingAddress['oua_address2'])) {
@@ -116,12 +115,9 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                 <?php }
                             if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
                                 if (!empty($orderFulFillmentTypeArr) && Shipping::FULFILMENT_PICKUP == $fulfillmentType) { ?>
-                                    <li>
+                                    <li class="completed-detail-item">
                                         <h4>
-                                            <svg class="svg" width="22px" height="22px">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
-                                                </use>
-                                            </svg> <?php echo Labels::getLabel('LBL_ORDER_PICKUP', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('LBL_ORDER_PICKUP', $siteLangId); ?>
                                         </h4>
 
                                         <?php
@@ -158,12 +154,9 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                         <?php } ?>
                                     </li>
                                 <?php } else if (!empty($shippingMethod)) { ?>
-                                    <li>
+                                    <li class="completed-detail-item">
                                         <h4>
-                                            <svg class="svg" width="22px" height="22px">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping-method" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping-method">
-                                                </use>
-                                            </svg> <?php echo Labels::getLabel('LBL_SHIPPING_METHOD', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('LBL_SHIPPING_METHOD', $siteLangId); ?>
                                         </h4>
                                         <p><?php echo Labels::getLabel('LBL_PREFERRED_METHOD', $siteLangId); ?>: <br>
                                         <ol class="preferred-shipping-list">
@@ -173,13 +166,10 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     </li>
                                 <?php }
                                 if (!empty($orderInfo['billingAddress'])) { ?>
-                                    <li>
+                                    <li class="completed-detail-item">
                                         <?php $billingAddress = $orderInfo['billingAddress']; ?>
                                         <h4>
-                                            <svg class="svg" width="22px" height="22px">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#billing-detail" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#billing-detail">
-                                                </use>
-                                            </svg>
+
                                             <?php echo Labels::getLabel("LBL_BILLING_ADDRESS", $siteLangId); ?>
                                         </h4>
                                         <p>
@@ -198,69 +188,80 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                             <?php }
                             } ?>
                         </ul>
-                        <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
-                            <div class="row justify-content-center">
-                                <div class="col-md-12">
-                                    <div class="completed-cart">
-                                        <div class="row justify-content-between">
-                                            <div class="col-md-7">
-                                                <div class="bg-gray h-100 rounded p-4">
-                                                    <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart">
-                                                        <?php
-                                                        $shippingCharges = $subTotal = 0;
-                                                        $selProdTotalSpecialPrice = 0;
-                                                        if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
-                                                            foreach ($products as $key => $product) {
-                                                                $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['op_selprod_id']));
-                                                                $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['op_shop_id']));
-                                                                $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                                $productTitle =  ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
-                                                                if (array_key_exists('op_special_price', $product)) {
-                                                                    $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
-                                                                }
-                                                        ?>
-                                                                <li class="list-cart-item block-cart">
-                                                                    <div class="block-cart-img">
-                                                                        <div class="product-profile">
-                                                                            <div class="product-profile-thumbnail">
-                                                                                <a href="<?php echo $productUrl; ?>">
-                                                                                    <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>">
-                                                                                </a>
-                                                                                <span class="product-qty"><?php echo $product['op_qty']; ?></span>
-                                                                            </div>
-                                                                            <div class="product-profile-data">
-                                                                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                                                                <div class="products-price">
-                                                                                    <?php
-                                                                                    $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
-                                                                                    echo CommonHelper::displayMoneyFormat($txnAmount);
-                                                                                    $shippingCharges += $product['op_actual_shipping_charges'];
-                                                                                    ?>
-                                                                                </div>
-                                                                                <div class="options">
-                                                                                    <p class=""> <?php echo $product['op_selprod_options']; ?></p>
-                                                                                </div>
-                                                                            </div>
+                    </div>
+                    <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <div class="completed-cart cart-page">
+                                    <div class="cart-page_main">
+                                        <div class="cart-page-head">
+                                            <h2 class="h2">
+                                                <?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h2>
+                                        </div>
+
+                                        <ul class="list-cart">
+                                            <?php
+                                            $shippingCharges = $subTotal = 0;
+                                            $selProdTotalSpecialPrice = 0;
+                                            if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
+                                                foreach ($products as $key => $product) {
+                                                    $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['op_selprod_id']));
+                                                    $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['op_shop_id']));
+                                                    $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                                                    $productTitle =  ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
+                                                    if (array_key_exists('op_special_price', $product)) {
+                                                        $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
+                                                    }
+                                            ?>
+                                                    <li class="list-cart-item block-cart block-cart-sm">
+                                                        <div class="block-cart-img">
+                                                            <div class="products-img">
+                                                                <a href="<?php echo $productUrl; ?>">
+                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>">
+                                                                </a>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="block-cart-detail">
+                                                            <div class="block-cart-detail-top">
+                                                                <div class="product-profile">
+                                                                    <div class="product-profile-data">
+                                                                        <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                                                        <div class="products-price">
+                                                                            <?php
+                                                                            $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
+                                                                            echo CommonHelper::displayMoneyFormat($txnAmount);
+                                                                            $shippingCharges += $product['op_actual_shipping_charges'];
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="options">
+                                                                            <p class=""> <?php echo $product['op_selprod_options']; ?></p>
+                                                                            <span class="product-qty"><?php echo $product['op_qty']; ?></span>
                                                                         </div>
                                                                     </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                                                </li>
-                                                            <?php }
-                                                        } else {
-                                                            foreach ($products as $subscription) { ?>
-                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
-                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
-                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
-                                                                <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
-                                                        <?php }
-                                                        } ?>
-                                                    </ul>
+                                                    </li>
+                                                <?php }
+                                            } else {
+                                                foreach ($products as $subscription) { ?>
+                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
+                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
+                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
+                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
+                                            <?php }
+                                            } ?>
+                                        </ul>
+                                    </div>
+                                    <div class="cart-page_aside">
+                                        <div class="sticky-summary">
+                                            <div class="cart-total">
+                                                <div class="cart-total-head">
+                                                    <h3 class="cart-total-title"><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h3>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="bg-gray rounded h-100 p-4">
-                                                    <h5><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
+                                                <div class="cart-total-body">
                                                     <ul class="cart-summary">
                                                         <?php if (0 < $subTotal) { ?>
                                                             <li class="cart-summary-item">
@@ -326,24 +327,27 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                         <?php } ?>
 
                                                     </ul>
-
                                                 </div>
+
+
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                        <?php } ?>
-                    </div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
+
     </section>
 
 </div>
 <?php if (true === $print) { ?>
     <script>
-        $(function () {
+        $(function() {
             setTimeout(() => {
                 window.print();
             }, 1000);
