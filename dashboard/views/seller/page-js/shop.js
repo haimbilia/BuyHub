@@ -820,7 +820,10 @@ $(document).on("change", ".state", function () {
                     $("." + valueFld).val(item.id);
                 }).on('select2:unselecting', function (e) {
                     $("." + valueFld).val("");
-                });
+                }).on('select2:open', function(e) {    
+                    selector.data("select2").$dropdown.addClass("custom-select2 custom-select2-single");
+                })
+                .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");;
             });
         }
     }
@@ -944,8 +947,8 @@ function bindAutoComplete() {
         templateSelection: function (result) {
             return (typeof result.text !== 'undefined') ? result.text : result.text + '[' + result.product_identifier + ']';
         }
-    }).on('select2:open', function(e) {        
-        $('#select2-'+ $(this).attr("id") +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+    }).on('select2:open', function(e) {     
+        $("#scp_selprod_id").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");           
     })
     .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
 

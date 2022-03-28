@@ -143,21 +143,7 @@
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item">
-                                    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
-
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
-                                        </svg>
-
-                                        <span class="cart-qty">
-                                            <?php
-                                            $cartObj = new Cart();
-                                            echo (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts(); ?>
-                                        </span>
-                                        <span class="txt">
-                                            <?php echo Labels::getLabel("LBL_MY_BAG", $siteLangId); ?>
-                                        </span>
-                                    </button>
+                                    <?php $this->includeTemplate('_partial/footer-part/cart-summary.php'); ?>
                                 </li>
                             <?php } ?>
                         </ul>
@@ -168,7 +154,7 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>
+                    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
                         <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
 
@@ -202,9 +188,6 @@
                 </svg>
                 <span class="txt">Open!</span>
             </button>
-
-
-
         </li>
         <li class="mobile-actions-item active" role="none">
             <button class="mobile-actions-link btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">
