@@ -26,7 +26,7 @@ $("document").ready(function(){
                 /* $('html, body').animate({ scrollTop: 0 }, 'slow');
                 $('html').toggleClass("cart-is-active");
                 $('.cart').toggleClass("cart-is-active"); */
-                $('#cartSummary').load(fcom.makeUrl('cart', 'getCartSummary'));
+                $('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
 			});
 			return false;
 		}); 

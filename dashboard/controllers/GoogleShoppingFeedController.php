@@ -171,7 +171,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $frm = new Form('frmServiceAccount');
         $privateKey = $frm->addTextArea(Labels::getLabel('FRM_SERVICE_ACCOUNT_DETAIL', $this->siteLangId), 'service_account');
         $privateKey->requirements()->setRequired();
-        $privateKey->htmlAfterField = $this->settings['plugin_description'];
+        $frm->addHTML('', 'plugin_description', $this->settings['plugin_description']);
         return $frm;
     }
 

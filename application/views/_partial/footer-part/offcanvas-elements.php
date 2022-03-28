@@ -1,9 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-if ($controllerName != 'Cart') {
-    /* offcanvas-side-cart */
-    $this->includeTemplate('_partial/footer-part/cart-summary.php');
-} ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <!-- Header Search Form -->
 <?php $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
