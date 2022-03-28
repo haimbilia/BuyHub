@@ -595,6 +595,7 @@ Updates/Fixes :
     => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section
     => 063323 - Advertiser UI: Request Withdrawal: Reset button is not working.
+    => 063331 - Affiliate UI: The user is not able to update/change the email address.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
