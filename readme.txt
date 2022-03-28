@@ -596,6 +596,7 @@ Updates/Fixes :
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section
     => 063323 - Advertiser UI: Request Withdrawal: Reset button is not working.
     => 063331 - Affiliate UI: The user is not able to update/change the email address.
+    => 063314 - Advertiser UI: Getting multiple issue on My Promotions Page.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
