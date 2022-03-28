@@ -8,9 +8,8 @@ trait RecordOperations
     {
         $recordId = $classObj->getMainTableRecordId();
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
-            Message::addErrorMessage($classObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }       
+            FatUtility::dieJsonError($classObj->getError());
+        }
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
@@ -21,18 +20,17 @@ trait RecordOperations
                 }
             }
         }
-       
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                FatUtility::dieJsonError($updateLangDataobj->getError());
             }
-        }  
-        
+        }
+
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
-    } 
+    }
 }

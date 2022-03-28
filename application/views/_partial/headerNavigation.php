@@ -29,137 +29,123 @@
     }
 
 ?>
-
-
-
-
-
-
+    <?php if($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
     <!-- Start Navigation Bar -->
+        <div class="navigation-wrapper">
+            <ul class="navigation">
+                <?php
+                if (count($headerNavigation)) {
+                    foreach ($headerNavigation as $nav) {
 
-    <div class="navigation-wrapper">
-        <ul class="navigation">
-            <?php
-            if (count($headerNavigation)) {
-                foreach ($headerNavigation as $nav) {
+                        if ($nav['pages']) {
 
-                    if ($nav['pages']) {
+                            $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
+                            foreach ($mainNavigation as $link) {
 
-                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
-                        foreach ($mainNavigation as $link) {
+                                $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
+                                $uploadedTime = AttachedFile::setTimeParam($catThumb['afile_updated_at']);
+                                $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
+                                $OrgnavUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
+                                $rootLinkUrl = UrlHelper::generateUrl('category', 'view', array($link['nlink_category_id']));
+                                $href = $navUrl;
+                                $navchild = '';
+                                $target = $link['nlink_target'];
+                                if (0 < count($link['children'])) {
+                                    $href = 'javascript:void(0)';
+                                    $navchild = 'navchild';
+                                    $target = '_self';
+                                }
+                ?>
 
-                            $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
-                            $uploadedTime = AttachedFile::setTimeParam($catThumb['afile_updated_at']);
-                            $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
-                            $OrgnavUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
-                            $rootLinkUrl = UrlHelper::generateUrl('category', 'view', array($link['nlink_category_id']));
-                            $href = $navUrl;
-                            $navchild = '';
-                            $target = $link['nlink_target'];
-                            if (0 < count($link['children'])) {
-                                $href = 'javascript:void(0)';
-                                $navchild = 'navchild';
-                                $target = '_self';
-                            }
-            ?>
+                                <li class="navigation-item <?php echo $navchild; ?>">
+                                    <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                    <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
 
-                            <li class="navigation-item <?php echo $navchild; ?>">
-                                <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
-                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
+                                        <span class="link__mobilenav"></span>
+                                        <div class="subnav">
+                                            <div class="subnav-inner">
+                                                <div class="container">
+                                                    <div class="categories-block">
+                                                        <?php $subyChild = 0;
+                                                        foreach ($link['children'] as $children) {
+                                                            $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                                            $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                        ?>
+                                                            <div class="categories-cols">
 
-                                    <span class="link__mobilenav"></span>
-                                    <div class="subnav">
-                                        <div class="subnav-inner">
-                                            <div class="container">
-                                                <div class="categories-block">
-
-                                                    <?php $subyChild = 0;
-                                                    foreach ($link['children'] as $children) {
-                                                        $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
-                                                        $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                    ?>
-                                                        <div class="categories-cols">
-
-                                                            <ul class="categories-list">
-
-                                                                <li class="categories-list-item">
-                                                                    <a class="categories-list-link categories-list-head" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
-
-                                                                </li>
-                                                                <?php $subChild = 0;
-                                                                foreach ($children['children'] as $childCat) {
-                                                                    $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
-                                                                    $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                                ?>
+                                                                <ul class="categories-list">
 
                                                                     <li class="categories-list-item">
-                                                                        <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
-                                                                            <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                                        <a class="categories-list-link categories-list-head" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+
                                                                     </li>
+                                                                    <?php $subChild = 0;
+                                                                    foreach ($children['children'] as $childCat) {
+                                                                        $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                                        $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                                    ?>
+
+                                                                        <li class="categories-list-item">
+                                                                            <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                                <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                                        </li>
 
 
-                                                                <?php
-                                                                    if ($subChild++ == 7) {
-                                                                        break;
+                                                                    <?php
+                                                                        if ($subChild++ == 7) {
+                                                                            break;
+                                                                        }
                                                                     }
-                                                                }
 
-                                                                if ($subyChild++ == 3) {
-                                                                    break;
-                                                                } ?>
-                                                            </ul>
+                                                                    if ($subyChild++ == 3) {
+                                                                        break;
+                                                                    } ?>
+                                                                </ul>
+
+                                                            </div>
+
+                                                        <?php
+                                                        } ?>
+
+
+                                                        <div class="categories-cols categories-cols-media">
+                                                            <a href="<?php echo $rootLinkUrl; ?>">
+                                                                <figure class="category-media">
+                                                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'thumb', array($link['nlink_category_id'], $siteLangId, ImageDimension::VIEW_ICON, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $link['nlink_caption']; ?>" />
+                                                                    <figcaption>Cold Weather Accessories </figcaption>
+                                                                </figure>
+                                                            </a>
 
                                                         </div>
-
-                                                    <?php
-                                                    } ?>
-
-
-                                                    <div class="categories-cols categories-cols-media">
-                                                        <a href="<?php echo $rootLinkUrl; ?>">
-                                                            <figure class="category-media">
-                                                                <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'thumb', array($link['nlink_category_id'], $siteLangId, ImageDimension::VIEW_ICON, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $link['nlink_caption']; ?>" />
-                                                                <figcaption>Cold Weather Accessories </figcaption>
-                                                            </figure>
-                                                        </a>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php } ?>
+                                    <?php } ?>
 
 
-                            </li>
+                                </li>
 
 
 
 
-            <?php
+                <?php
+                            }
                         }
                     }
-                }
-            } ?>
-        </ul>
-    </div>
-
+                } ?>
+            </ul>
+        </div>
     <!-- End Navigation Bar -->
-
-
-
-  <!-- Start Mobile Navigation Bar -->
-
-
-    <nav id="menu">
+    <?php } ?>
+  <?php if($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
+      <!-- Start Mobile Navigation Bar -->
         <ul>
             <?php
             if (count($headerNavigation)) {
                 foreach ($headerNavigation as $nav) {
-
                     if ($nav['pages']) {
-
-                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
+                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);                       
                         foreach ($mainNavigation as $link) {
 
                             $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
@@ -171,59 +157,63 @@
                             $navchild = '';
                             $target = $link['nlink_target'];
                             if (0 < count($link['children'])) {
-                                $href = 'javascript:void(0)';
+                                $href = '#';
                                 $navchild = 'navchild';
                                 $target = '_self';
                             }
-            ?>
-
-
-                            <li>
-                                <a class="" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
-                                <ul>
-                                    <?php if (isset($link['children']) && count($link['children']) > 0) {
-
-
+                        ?>
+                            <li class="<?php echo (isset($link['children']) && count($link['children']) > 0 ? 'has-submenu' : '' );?>">
+                                <a data-submenu="mobileHeadCat<?php echo $link['nav_id'];?>" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                <div id="mobileHeadCat<?php echo  $link['nav_id'];?>" class="submenu">
+                                <div class="submenu-header" data-submenu-close="mobileHeadCat<?php echo $link['nav_id'];?>">
+                                    <a href="#"><?php echo Labels::getLabel('NAV_MAIN_MENU', $siteLangId); ?></a>
+                                </div>
+                                <label><?php echo $link['nlink_caption']; ?></label>    
+                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>                            
+                                <ul>                                   
+                                    <?php 
                                         foreach ($link['children'] as $children) {
                                             $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                             $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
 
-
                                     ?>
+                                            <li class="<?php echo (isset($children['children']) && count($children['children']) > 0 ? 'has-submenu' : '' );?>">
+                                                <a  data-submenu="mobileHeadCatChild<?php echo $children['prodcat_id'];?>" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+                                                <div id="mobileHeadCatChild<?php echo $children['prodcat_id'];?>" class="submenu">
+                                                    <div class="submenu-header" data-submenu-close="mobileHeadCatChild<?php echo $children['prodcat_id'];?>">
+                                                        <a href="#"><?php echo $link['nlink_caption'] ?></a>
+                                                    </div>
+                                                    <label><?php echo $children['prodcat_name']; ?></label>   
+                                                    <?php if (isset($children['children']) && count($children['children']) > 0) { ?>                                               
+                                                    <ul>
+                                                        <?php
+                                                        foreach ($children['children'] as $childCat) {
+                                                            $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                            $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                        ?>
 
-
-                                            <li><a class="" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
-                                                <ul>
-
-                                                    <?php
-                                                    foreach ($children['children'] as $childCat) {
-                                                        $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
-                                                        $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                    ?>
-
-                                                        <li class="">
-                                                            <a class="" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
-                                                                <span><?php echo $childCat['prodcat_name']; ?></span></a>
-                                                        </li>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </ul>
-
-
+                                                            <li>
+                                                                <a data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                    <span><?php echo $childCat['prodcat_name']; ?></span>
+                                                                </a>
+                                                            </li>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </ul>
+                                                    </div>
+                                                <?php } ?>
                                             </li>
-
-
-
-
-
-
                                     <?php
                                         }
-                                    }
+                                    
                                     ?>
                                 </ul>
-
+                                <?php
+                                        
+                                    }
+                                    ?>
+                                </div>
 
                             </li>
 
@@ -236,8 +226,8 @@
             ?>
 
         </ul>
-    </nav>
+  
 <!-- End Mobile Navigation Bar -->
-
+<?php } ?>
 
 <?php } ?>
