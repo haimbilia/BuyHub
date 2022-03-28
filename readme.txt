@@ -597,6 +597,8 @@ Updates/Fixes :
     => 063323 - Advertiser UI: Request Withdrawal: Reset button is not working.
     => 063331 - Affiliate UI: The user is not able to update/change the email address.
     => 063314 - Advertiser UI: Getting multiple issue on My Promotions Page.
+    => 063352 - Seller UI: Warning message is showing while clicking on the "badges" on the breadcrumb on the "Bind Condition" page under the badges section at the seller's end.
+    => 063362 - Seller UI: Seller navigates to the dashboard while clicking on the 'reports' on the breadcrumb under the Sales Report section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
