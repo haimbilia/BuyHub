@@ -200,7 +200,12 @@ $blog-header-height: 58px;
             height: 100%;
         }
         iframe {
-            @extend img;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
     }
 

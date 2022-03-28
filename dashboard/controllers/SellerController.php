@@ -2483,8 +2483,7 @@ class SellerController extends SellerBaseController
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Shop::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($shop_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                FatUtility::dieJsonError($updateLangDataobj->getError());
             }
         }
 

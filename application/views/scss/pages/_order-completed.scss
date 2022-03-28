@@ -115,9 +115,9 @@
     }
     h4 {
         font-weight: 500;
-        font-size: 0.95rem;
+        font-size: 1rem;
         margin-bottom: 1.5rem;
-        color: $brand-color;
+
         .svg {
             margin-#{$end-direction}: 5px;
             width: 1rem;
@@ -125,7 +125,7 @@
         }
     }
     p {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
     .preferred-shipping-list {
         max-height: 200px;
@@ -142,15 +142,7 @@
 }
 
 .completed-cart {
-    margin-top: 2rem;
-    .list-cart {
-        > li {
-            padding: 1rem 1rem;
-        }
-    }
-    .product-price {
-        color: $txt-body;
-    }
+    margin-top: 1rem;
 }
 
 .any-question {
