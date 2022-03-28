@@ -44,7 +44,20 @@ if (!$userActiveTab) {
         <nav class="nav my-account-nav">
             <a class="my-account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"> <svg class="svg" width="14" height="14">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-dashboard"></use>
-                </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?></a>
+                </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?>
+            </a>
+            <a class="my-account-nav-link" target="_blank" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"> <svg class="svg" width="14" height="14">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#back-home"></use>
+                </svg><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
+            </a>
+            <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
+            <a class="my-account-nav-link" title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
+                <svg class="svg" width="14" height="14">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                    </use>
+                </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
+            </a>
+            <?php } ?>
             <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
                 <svg class="svg" width="14" height="14">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-user"></use>

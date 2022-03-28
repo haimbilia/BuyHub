@@ -87,11 +87,14 @@ class Navigation
         $threadObj = new Thread();
         $todayUnreadMessageCount = $threadObj->getMessageCount($userId, Thread::MESSAGE_IS_UNREAD, date('Y-m-d'));
         /*]*/
+
+        /*
         $shopDetails = Shop::getAttributesByUserId($userId, array('shop_id'), false);
         $shop_id = 0;
         if (!false == $shopDetails) {
             $shop_id = $shopDetails['shop_id'];
         }
+        */
 
         $controller = str_replace('Controller', '', FatApp::getController());
         $activeTab = 'B';
@@ -105,14 +108,14 @@ class Navigation
         } elseif (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
             $activeTab = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'];
         }
-
+        /*
         $shop = new Shop(0, $userId);
         $isShopActive = $shop->isActive();
-
-        $template->set('userPrivilege', UserPrivilege::getInstance());
-        $template->set('activeTab', $activeTab);
         $template->set('shop_id', $shop_id);
         $template->set('isShopActive', $isShopActive);
+        */
+        $template->set('userPrivilege', UserPrivilege::getInstance());
+        $template->set('activeTab', $activeTab);       
         $template->set('todayUnreadMessageCount', $todayUnreadMessageCount);
     }
 
