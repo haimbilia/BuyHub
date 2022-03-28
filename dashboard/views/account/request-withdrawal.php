@@ -59,7 +59,7 @@ $cancelBtnFld->developerTags['col'] = 3; */
     </h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-body sectionbody space">
+    <div class="form-edit-body loaderContainerJs sectionbody space">
         <div class="row">
             <div class="col-md-12">
                 <?php echo $frm->getFormHtml(); ?>

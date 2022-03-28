@@ -1257,7 +1257,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        if ($data['credential_password'] != UserAuthentication::encryptPassword($post['current_password'])) {
+        if (false == password_verify($post['current_password'], $data['credential_password'])) {
             $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
