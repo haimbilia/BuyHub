@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-
 if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
     <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
         <svg class="svg" width="20" height="20">
@@ -22,7 +21,6 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                 <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?> <span class="count-items"> (<?php echo $totalCartItems; ?>) </span>
             </h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-
         </div>
         <?php if ($totalCartItems > 0) { ?>
             <div class="offcanvas-body">
@@ -36,10 +34,10 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                                 $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
                                 $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
-                        ?>
+                                $isDisabled = (!$product['in_stock']) ? 'disabled' : '';
+                                $productType = ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>
 
-                                <li class="list-cart-item block-cart block-cart-sm <?php echo (!$product['in_stock']) ? 'disabled' : '';
-                                                                                    echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
+                                <li class="list-cart-item block-cart block-cart-sm <?php echo $isDisabled . ' ' . $productType; ?>">
                                     <div class="block-cart-img ">
                                         <div class="products-img">
                                             <a href="<?php echo $productUrl; ?>">

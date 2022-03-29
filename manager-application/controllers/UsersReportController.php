@@ -96,13 +96,13 @@ class UsersReportController extends ListingBaseController
                 $rSrch->setGroupBy('op_selprod_user_id');
                 $srch->joinTable('(' . $rSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = opq.op_selprod_user_id', 'opq');
                 $srch->addFld(['pchagres.promotionCharged']);
-                $srch->addCondition('u.user_is_supplier', '=', applicationConstants::YES);
+                $srch->addCondition('u.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                 break;
             default:
                 $srch->joinReferrerUser();
                 $srch->includeRewardsCount();
                 $srch->addFld(['uref.user_name as referrerName', 'uref_c.credential_email as referrerEmail', 'urpbal.*']);
-                $srch->addCondition('u.user_is_buyer', '=', applicationConstants::YES);
+                $srch->addCondition('u.user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
 
                 $rSrch->addTotalOrdersCount('order_user_id');
                 $rSrch->setGroupBy('order_user_id');

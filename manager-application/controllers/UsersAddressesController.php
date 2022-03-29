@@ -79,13 +79,13 @@ class UsersAddressesController extends ListingBaseController
         $srch->joinState();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('user_deleted', '=', applicationConstants::NO);
-        $srch->addCondition(Address::tblFld('type'), '=', Address::TYPE_USER);
+        $srch->addCondition('country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition(Address::tblFld('type'), '=', 'mysql_func_' . Address::TYPE_USER, 'AND', true);
 
         if (0 < $userId) {
-            $srch->addCondition(Address::tblFld('record_id'), '=', $userId);
+            $srch->addCondition(Address::tblFld('record_id'), '=', 'mysql_func_' . $userId, 'AND', true);
         }
 
         $title = FatApp::getPostedData('addr_title', FatUtility::VAR_STRING, '');
@@ -317,7 +317,7 @@ class UsersAddressesController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'user_name',
             'addr_title',
             'user_address',

@@ -176,6 +176,12 @@ class CustomProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        $pageData = PageLanguageData::getAttributesByKey('MASTER_PRODUCT_REQUEST_FORM', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+
         $productType = FatUtility::int($productType);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
@@ -1471,7 +1477,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
             'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
@@ -1506,18 +1512,27 @@ class CustomProductsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
+        $nodes = array();
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-                $this->nodes = [
+                $nodes = [
                     ['title' => $pageTitle]
+                ];
+                break;
+            case 'form':
+                $pageData = PageLanguageData::getAttributesByKey('MASTER_PRODUCT_REQUEST_FORM', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $nodes = [
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('CustomProducts')],
+                    ['title' => Labels::getLabel('LBL_FORM', $this->siteLangId)]
                 ];
                 break;
             default:
                 parent::getBreadcrumbNodes($action);
                 break;
         }
-        return $this->nodes;
+        return $nodes;
     }
 }

@@ -323,27 +323,26 @@ class SpecialPriceController extends ListingBaseController
         $srch->addOrder('product_name');
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd = $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+            $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
         if (!empty($post['selProdId']) && 0 < FatUtility::int($post['selProdId'])) {
             $selprod_user = SellerProduct::getAttributesById($post['selProdId'], array('selprod_user_id'));
-            $srch->addCondition('selprod_user_id', '=', $selprod_user['selprod_user_id']);
-            $srch->addCondition('selprod_id', '!=', $post['selProdId']);
+            $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $selprod_user['selprod_user_id'], 'AND', true);
+            $srch->addCondition('selprod_id', '!=', 'mysql_func_' . $post['selProdId'], 'AND', true);
         }
 
         if (array_key_exists('selprod_user_id', $post) && 0 < $post['selprod_user_id']) {
-            $srch->addCondition('selprod_user_id', '=', $post['selprod_user_id']);
+            $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $post['selprod_user_id'], 'AND', true);
         }
 
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addMultipleFields(array('selprod_id as id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username', 'selprod_price', 'selprod_stock'));
-
-        $srch->addOrder('selprod_active', 'DESC');
+       
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $db = FatApp::getDb();

@@ -45,7 +45,7 @@ class UrlRewritingController extends ListingBaseController
     }
 
     private function getListingData()
-    {       
+    {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -75,7 +75,7 @@ class UrlRewritingController extends ListingBaseController
             $post['lang_id'] = $lang_id;
         }
 
-        $srch = UrlRewrite::getSearchObject($this->siteLangId); 
+        $srch = UrlRewrite::getSearchObject($this->siteLangId);
         $srch->joinTable(Language::DB_TBL, 'LEFT OUTER JOIN', 'lng.language_id = ur.urlrewrite_lang_id', 'lng');
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('ur.urlrewrite_original', 'like', '%' . $post['keyword'] . '%');
@@ -86,13 +86,13 @@ class UrlRewritingController extends ListingBaseController
             $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['ur.*', 'lng.*']);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -111,7 +111,7 @@ class UrlRewritingController extends ListingBaseController
         if (0 < $recordId) {
             $srch = UrlRewrite::getSearchObject();
             $srch->joinTable(UrlRewrite::DB_TBL, 'LEFT OUTER JOIN', 'temp.urlrewrite_original = ur.urlrewrite_original', 'temp');
-            $srch->addCondition('ur.urlrewrite_id', '=', $recordId);
+            $srch->addCondition('ur.urlrewrite_id', '=', 'mysql_func_' . $recordId, 'AND', true);
             $rs = $srch->getResultSet();
             $data = [];
             while ($row = FatApp::getDb()->fetch($rs)) {
@@ -151,7 +151,7 @@ class UrlRewritingController extends ListingBaseController
         if (0 < $recordId) {
             $srch = UrlRewrite::getSearchObject();
             $srch->joinTable(UrlRewrite::DB_TBL, 'LEFT OUTER JOIN', 'temp.urlrewrite_original = ur.urlrewrite_original', 'temp');
-            $srch->addCondition('ur.urlrewrite_id', '=', $recordId);
+            $srch->addCondition('ur.urlrewrite_id', '=', 'mysql_func_' . $recordId, 'AND', true);
             $srch->addMultipleFields(array('temp.*'));
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetchAll($rs, 'urlrewrite_lang_id');
@@ -265,7 +265,7 @@ class UrlRewritingController extends ListingBaseController
             $lang_id = array_key_first($langArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -306,7 +306,7 @@ class UrlRewritingController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'urlrewrite_original' => Labels::getLabel('LBL_Original', $this->siteLangId),
             'language_code' => Labels::getLabel('LBL_Language', $this->siteLangId),
             'urlrewrite_custom' => Labels::getLabel('LBL_Custom', $this->siteLangId),
@@ -320,7 +320,7 @@ class UrlRewritingController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'urlrewrite_original',
             'language_code',
             'urlrewrite_custom',
