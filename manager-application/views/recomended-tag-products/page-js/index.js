@@ -44,9 +44,9 @@ $(document).on('change', ".inputDateJs", function () {
         oldValue = parseFloat(oldValue);
 
         if ('' != value && value != oldValue) {
-            fcom.displayProcessing();
             var data = 'tag_id=' + tagId + '&product_id=' + productId + '&' + attribute + '=' + value;
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (ans) {
+                fcom.closeProcessing();
                 if (ans.status != 1) {                  
                     value = oldValue;
                     updatedValue = formattedValue;

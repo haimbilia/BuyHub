@@ -7,6 +7,7 @@ $(document).ready(function () {
 (function () {
     viewRequestPurpose = function (requestId) {
         fcom.updateWithAjax(fcom.makeUrl('UserGdprRequests', 'viewUserRequest', [requestId]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -18,6 +19,7 @@ $(document).ready(function () {
         }
         var data = 'userId=' + userId + '&reqId=' + userReqId;
         fcom.updateWithAjax(fcom.makeUrl('UserGdprRequests', 'truncateUserData'), data, function (t) {
+            fcom.closeProcessing();
             if (t.userReqId > 0) {
                 searchRecords();
             }
@@ -29,6 +31,7 @@ $(document).ready(function () {
         }
         var data = 'reqId=' + reqId + '&status=' + reqStatus;
         fcom.updateWithAjax(fcom.makeUrl('UserGdprRequests', 'updateRequestStatus'), data, function (t) {
+            fcom.closeProcessing();
             if (t.status == 1) {
                 searchRecords();
             }

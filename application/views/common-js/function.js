@@ -116,6 +116,7 @@ $(function () {
 
     if (CONF_ENABLE_GEO_LOCATION && className != 'CheckoutController' && className != 'CartController') {
         googleAddressAutocomplete('ga-autoComplete-header');
+        googleAddressAutocomplete('ga-autoComplete-mobile');        
     }
 
 });

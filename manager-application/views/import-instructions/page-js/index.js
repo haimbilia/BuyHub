@@ -10,6 +10,7 @@
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
             function (t) {
+                fcom.closeProcessing();
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
                 fcom.removeLoader();
             }

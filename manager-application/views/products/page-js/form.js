@@ -21,6 +21,7 @@
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
+            fcom.closeProcessing();
             langForm(res.langId, 0, res.recordId);
         });
     };
@@ -30,6 +31,7 @@
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
+            fcom.closeProcessing();
             $('.mainJs').replaceWith(res.html);
         });
     };
@@ -40,6 +42,7 @@
         let productType = $(el).val();
         $('.productWrapper').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
+            fcom.closeProcessing();
             $('.mainJs').replaceWith(res.html);
         });
     };
@@ -47,6 +50,7 @@
     addBrand = function () {
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('Brands', "form"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -55,6 +59,7 @@
     addCategory = function () {
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -62,6 +67,7 @@
     addTaxCategory = function () {
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -69,6 +75,7 @@
     addShippingPackage = function () {
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('shippingPackages', "form"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -90,7 +97,9 @@
         if (1 > product_id) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) {
+            fcom.closeProcessing();
+        });
         tagifyProducts();
     };
 
@@ -251,6 +260,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
+            fcom.closeProcessing();
             prodSpecifications();
         });
     };
@@ -286,6 +296,7 @@
         }
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             loadImageOptions();
             var fileType = $('#image_file_type').val();
@@ -328,6 +339,7 @@
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+            fcom.closeProcessing();
             $('#productImagesJs').html(t.html);
             $("#productImagesJs").sortable({
                 stop: function () {
@@ -593,6 +605,7 @@
         $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             if (typeof callback == 'function') {
                 callback();
@@ -686,6 +699,7 @@
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
+            fcom.closeProcessing();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalFile, recordId);
         });
@@ -697,6 +711,7 @@
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+            fcom.closeProcessing();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });

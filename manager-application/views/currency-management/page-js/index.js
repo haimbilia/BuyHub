@@ -59,6 +59,8 @@ $(document).ajaxComplete(function () {
             return false;
         }
         
-        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {});
+        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
+            fcom.closeProcessing();
+        });
     };
 })();

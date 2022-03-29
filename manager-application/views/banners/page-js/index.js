@@ -13,6 +13,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         fcom.resetEditorInstance();
         $(".selectAllJs, .selectItemJs").prop("checked", false)
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { bannerLocationId }, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
         });
@@ -22,6 +23,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         fcom.resetEditorInstance();
         data = { recordId, bannerLocationId };
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -32,6 +34,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
             fcom.makeUrl(controllerName, "media", [recordId, bannerLocationId, langId, slide_screen]),
             "",
             function (t) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 loadImages(bannerLocationId, recordId, "logo", slide_screen, langId);
                 $.ykmodal(t.html);
@@ -43,6 +46,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         let slidescreen = $('#slideScreenJs').val();
         var data = { bannerLocationId, recordId, imageType, langId, screen: slidescreen };
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images'), data, function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $('#imageListingJs').html(t.html);
         });
@@ -54,6 +58,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
             loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
             reloadList();
             $('.resetModalFormJs').click();
+            fcom.closeProcessing();
         });
     };
 

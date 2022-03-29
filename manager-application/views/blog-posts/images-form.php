@@ -10,7 +10,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
         'onChange' => 'loadImageCropper(this)',
         'accept' => 'image/*',
         'data-name' => Labels::getLabel("FRM_BLOG_POST_IMAGE", $siteLangId),
-        'data-frm'=> $frm->getFormTagAttribute('name')
+        'data-frm' => $frm->getFormTagAttribute('name')
     ],
     $siteLangId,
     '',
@@ -37,7 +37,7 @@ $otherButtons = [
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => true
     ]
-]; 
+];
 
 $formTitle = Labels::getLabel('LBL_BLOG_POST_SETUP', $siteLangId);
 
@@ -58,6 +58,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 var sort = mysortarr.join('-');
                 data = '&post_id=' + post_id + '&ids=' + sort;
                 fcom.updateWithAjax(fcom.makeUrl('BlogPosts', 'setImageOrder'), data, function(t) {
+                    fcom.closeProcessing();
                     mediaForm(post_id);
                 });
             }

@@ -36,6 +36,7 @@
 
     getOpCharges = function (orderId, chargeType) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(t.html, true, "modal-dialog-vertical-md");
         });
@@ -78,6 +79,7 @@
             $.ykmodal.show();
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'op_id=' + opId, function (ans) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(ans.html);
             });
@@ -89,6 +91,7 @@
             $.ykmodal.show();
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItemStatusHistory', [orderId]), 'recordId=' + opId, function (ans) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(ans.html);
             });
@@ -97,6 +100,7 @@
 
     getShippingUsersForm = function (orderId, opId) {
         fcom.updateWithAjax(fcom.makeUrl('Orders', 'shippingUsersForm', [orderId]), 'op_id=' + opId, function (ans) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(ans.html);
         });
@@ -104,6 +108,7 @@
 
     getOrderCommentForm = function (orderId, opId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderCommentsForm', [orderId]), 'op_id=' + opId, function (ans) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(ans.html);
         });
@@ -145,7 +150,9 @@
     updateShippingUser = function (frm) {
         var data = fcom.frmData(frm);
         if (!$(frm).validate()) return;
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) {
+            fcom.closeProcessing();
+        });
     };
 
     /* ShipStation */
@@ -209,6 +216,7 @@
     trackOrder = function (trackingNumber, courier, orderNumber, orderId, op_id) {
         $.ykmodal(fcom.getLoader(),false);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), {orderId,op_id}, function (res) {
+            fcom.closeProcessing();
             $.ykmodal(res.html, false);
             fcom.removeLoader();
         });
@@ -304,6 +312,7 @@
     
     shippingRatesForm = function(opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html,true);
             fcom.removeLoader();
         });

@@ -24,6 +24,7 @@
             if (tag_id == undefined || tag_id == '') {
                 tag_id = 0;
                 fcom.updateWithAjax(fcom.makeUrl('Tags', 'setup'), { tag_id, tag_name, tag_lang_id }, function (t) {
+                    fcom.closeProcessing();
                     tag_id = t.tagId;
                     e.detail.tagify.settings.whitelist.push({ 'id': t.tagId, value: tag_name, product_id: product_id });
                     bindProductWithTag(product_id, tag_id);
@@ -35,6 +36,7 @@
 
     bindProductWithTag = function (product_id, tag_id) {
         fcom.updateWithAjax(fcom.makeUrl('Products', 'updateProductTag'), { product_id, tag_id }, function (t) {
+            fcom.closeProcessing();
         });
     }
 
@@ -43,6 +45,7 @@
         if (0 < product_id) {
             let tag_id = e.detail.tag.id;
             fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), { product_id, tag_id }, function (t) {
+                fcom.closeProcessing();
             });
         }
     }
