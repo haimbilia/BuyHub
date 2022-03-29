@@ -3,10 +3,9 @@
 <!-- Header Search Form -->
 <?php $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
-<!-- offcanvas-categories-menu -->
-<div class="zeynep">
 
-<?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
+<div class="zeynep">
+    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
     
 </div>
 <div class="zeynep-overlay"></div>
@@ -19,11 +18,9 @@
     </div>
 </div>
 <!-- offcanvas-account -->
-
 <?php
 if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
-    $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
-}
+    $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);}
 ?>
 <!-- offcanvas-gps-location -->
 <div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
@@ -61,10 +58,7 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
                             </div>
                         </button>
                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
-                            <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
-                                <!-- <div class="or">
-                                        <span>Or</span>
-                                    </div> -->
+                            <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-mobile" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">                   
                                 <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
 
                                     <svg class="svg" width="18" height="18">
@@ -76,8 +70,6 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
                                         <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
                                     </span>
                                 </button>
-
-
                             </div>
                         </div>
                     </div>

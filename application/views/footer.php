@@ -189,39 +189,7 @@ if (CommonHelper::demoUrl()) { ?>
     <?php } ?>
 </div>
 </div>
-
 </script>
-<script id="rendered-js">
-    // variables
-    var $menu = $('#menu');
-    var $btnMenu = $('.btn-menu');
-    var $img = $('img');
-
-    // mmenu customization
-    $menu.mmenu({
-        counters: true,
-        navbar: {
-            title: "Menu Content"
-        },
-        extensions: ["pageshadow", "effect-zoom-menu", "effect-zoom-panels"],
-        offCanvas: {
-            position: "left",
-            zposition: "back"
-        }
-    });
-
-    // toggle menu
-    var api = $menu.data("mmenu");
-
-    $btnMenu.click(function() {
-        api.open();
-    });
-
-
-    // change toggle behavior for subpanels
-    $menu.find(".mm-next").addClass("mm-fullsubopen");
-</script>
-
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 
 </body>

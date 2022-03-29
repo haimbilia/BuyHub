@@ -24,7 +24,7 @@ if (false === $doNotLimitRecords) { ?>
                     <div class="col">
                         <div class="data-length">
                             <?php
-                            $str = Labels::getLabel('LBL_TOTAL_RECORDS', $siteLangId) . ' ';
+                            $str = Labels::getLabel('LBL_TOTAL_RECORDS', $siteLangId);
                             $str .= ': ' . $recordCount;
                             echo $str; ?>
                         </div>

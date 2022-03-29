@@ -589,6 +589,7 @@ $("document").ready(function () {
         submitBtn.attr("disabled", "disabled");
         submitBtn.val(submitBtn.data("processing-text"));
         fcom.displayProcessing();
+        $(pageContent).prepend(fcom.getLoader(true));
         fcom.ajax(action, data, function (t) {
             submitBtn.val(btnText);
             /* debugger; */
@@ -599,9 +600,11 @@ $("document").ready(function () {
                     fcom.displayErrorMessage(json.msg);
                     return false;
                 }
+
                 if (typeof json.html != "undefined") {
                     $(dv).append(json.html);
                 }
+                
                 if (json["redirect"]) {
                     $(location).attr("href", json["redirect"]);
                 }

@@ -60,10 +60,11 @@ $(document).on("search", "input[type='search']", function () {
 /* Reset result on clear(cross) icon on keyword search field. */
 
 $(document).on("click", ".advSrchToggleJs", function () {
-    if ($('.advSrchBtnJs').is(':visible')) {
-        $('.advSrchBtnJs').hide();
+    var elm = $('.advSrchBtnJs').find('.submitBtnJs');
+    if (elm.prop("disabled")) {
+        elm.attr("disabled", false);
     } else {
-        $('.advSrchBtnJs').show();
+        elm.attr("disabled", true);
     }
 });
 $(document).on("click", ".resetModalFormJs", function (e) {

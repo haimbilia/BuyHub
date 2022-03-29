@@ -55,7 +55,18 @@
                                 <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
                             </button>
                         </li>
-                        <li class="mobile-actions-item dropdown" role="none">
+
+                        <li class="mobile-actions-item" role="none">
+                            <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
+                                    <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite-header.svg#mbl-account">
+                                    </use>
+                                </svg>
+                                <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
+                            </button>
+                        </li>
+
+                        <!-- <li class="mobile-actions-item dropdown" role="none">
                             <button class="mobile-actions-link" type="button" data-bs-toggle="dropdown">
                                 <svg class="svg" width="24" height="24">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#account">
@@ -98,7 +109,7 @@
                                         </svg><?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
                                 </nav>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </footer>
             </main>
@@ -144,5 +155,6 @@
                 </div>
             </div>
         </div>
+        <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
     </body>
 </html>
