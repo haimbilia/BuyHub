@@ -217,7 +217,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
         </div>
     </div>
 </section>
-<div class="gap"></div>
+
 <script>
     $(function() {
         $currentPageUrl = "<?php echo html_entity_decode($canonicalUrl, ENT_QUOTES, 'utf-8'); ?>";
