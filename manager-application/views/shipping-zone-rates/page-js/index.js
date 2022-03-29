@@ -27,6 +27,7 @@ $(document).ready(function () {
         }
         $(dv).html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'search'), data, function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).html(res.html);
         });
@@ -62,6 +63,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'setup'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             if (t.langId > 0) {
                 editZoneLangForm(t.zoneId, t.langId);
@@ -82,6 +84,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'langSetup'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             if (t.langId > 0) {
                 editZoneLangForm(t.zoneId, t.langId);

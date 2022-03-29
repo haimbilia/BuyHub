@@ -144,6 +144,7 @@
 		data = "type=" + type;
 		$('#' + tab).html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 			$('#' + tab).html(t.html);
 		});

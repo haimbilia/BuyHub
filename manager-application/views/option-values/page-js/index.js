@@ -57,6 +57,7 @@ $(document).ajaxComplete(function () {
     optionValueForm = function (optionId, id = 0) {
         var data = "optionvalue_id=" + id + "&option_id=" + optionId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -69,6 +70,7 @@ $(document).ajaxComplete(function () {
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
             function () {
+                fcom.closeProcessing();
                 reloadList();
             }
         );

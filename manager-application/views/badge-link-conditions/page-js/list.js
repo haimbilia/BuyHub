@@ -77,6 +77,7 @@ $(document).on('change', '#conditionTypeJs', function () {
         var data = (0 < recordId) ? ("recordId=" + recordId) : '';
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });

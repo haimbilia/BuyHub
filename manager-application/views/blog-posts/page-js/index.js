@@ -10,6 +10,7 @@
 
     loadImages = function (post_id, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [post_id, lang_id]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {

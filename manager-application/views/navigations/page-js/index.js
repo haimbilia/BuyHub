@@ -32,6 +32,7 @@
 
     addNewLinkForm = function (navId, nlinkId = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "linkForm"), 'nav_id=' + navId + '&nlink_id=' + nlinkId, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
@@ -43,6 +44,7 @@
             fcom.makeUrl(controllerName, "linkLangForm", [autoFillLangData]),
             data,
             function (t) {
+                fcom.closeProcessing();
                 $.ykmodal(t.html, false);
                 fcom.removeLoader();
             }
@@ -54,6 +56,7 @@
         $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupLink'), data, function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (t.langId > 0 && t.nlinkId > 0) {
                 linkLangForm($(frm.nlink_nav_id).val(), t.nlinkId, t.langId);
@@ -77,6 +80,7 @@
         $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupLinksLang'), data, function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (t.langId > 0 && t.nlinkId > 0) {
                 linkLangForm($(frm.nav_id).val(), t.nlinkId, t.langId);
@@ -87,6 +91,7 @@
     deleteLink = function (navId, nlinkId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'deleteLink'), 'navId=' + navId + '&nlinkId=' + nlinkId, function (res) {
+            fcom.closeProcessing();
             $(".subRecordsCountJs-" + navId).text(res.subRecordsCount);
             if (1 > res.subRecordsCount) {
                 $('.openerJs[data-record-id="' + navId + '"]').removeClass('fa-caret-down').addClass('fa-caret-right').hide();
@@ -122,6 +127,7 @@
 
         data += '&includeWrapper=' + includeWrapper;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'navLinks'), data, function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (0 < nlinkId) {
                 if (0 < $('.children-' + navId + '-' + nlinkId).length) {

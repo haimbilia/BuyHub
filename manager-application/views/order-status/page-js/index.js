@@ -60,6 +60,7 @@ $(document).ajaxComplete(function () {
     editRecord = function (recordId) {
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
 

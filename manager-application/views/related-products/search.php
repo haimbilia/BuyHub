@@ -98,7 +98,9 @@ if ($printData) {
             e.detail.tag.remove();
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {});
+        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {
+            fcom.closeProcessing();
+        });
     }
 
     hideDropDown = function(e){       

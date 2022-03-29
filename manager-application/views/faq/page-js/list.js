@@ -2,6 +2,7 @@ addNewFaq = function (faqCatId) {
     fcom.resetEditorInstance();
     $(".selectAllJs, .selectItemJs").prop("checked", false)
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { faqCatId }, function (t) {
+        fcom.closeProcessing();
         $.ykmodal(t.html, false, '');
         fcom.removeLoader();
     });
@@ -65,6 +66,7 @@ editRecord = function (recordId, faqCatId) {
     fcom.resetEditorInstance();
     data = { recordId, faqCatId };
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+        fcom.closeProcessing();
         $.ykmodal(t.html);
         fcom.removeLoader();
     });

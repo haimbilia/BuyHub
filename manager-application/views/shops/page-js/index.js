@@ -1,6 +1,7 @@
 (function () {
     mediaForm = function (shopId, langId = 0, slide_screen = 1) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'media', [shopId, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             shopImages(shopId, 'logo', slide_screen, langId);
             shopImages(shopId, 'image', slide_screen, langId);
@@ -10,6 +11,7 @@
 
     shopImages = function (shopId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'images', [shopId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
@@ -24,6 +26,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'removeMedia', [shopId, fileType, afileId]), '', function (t) {
+            fcom.closeProcessing();
             shopImages(shopId, fileType, slide_screen, langId);
             reloadList();
         });

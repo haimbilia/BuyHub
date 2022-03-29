@@ -10,6 +10,7 @@
         
         var data = 'trackingApiCode='+trackingApiCode+'&shipApiCode='+shipApiCode;
 		fcom.updateWithAjax(fcom.makeUrl('TrackingCodeRelation', 'setUpCourierRelation'), data, function(t) {
+            fcom.closeProcessing();
 			searchCourier();
 		});
 	};

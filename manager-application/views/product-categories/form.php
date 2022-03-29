@@ -55,15 +55,15 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
     $(document).ready(function() {
         $("#prodcat_parent").select2({
-            dropdownParent: $("#prodcat_parent").closest('form'),
-        })
-        .on('select2:open', function(e) {
-            $("#prodcat_parent").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");            
-        })
-        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
-        
+                dropdownParent: $("#prodcat_parent").closest('form'),
+            })
+            .on('select2:open', function(e) {
+                $("#prodcat_parent").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");
+            })
+            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
+
         $("." + $.ykmodal.element).removeAttr('tabindex');
-        
+
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;
             var ratingtype_name = e.detail.tag.title;
@@ -81,14 +81,16 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         }
 
         removeRatingType = function(e) {
-            var rt_id = e.detail.tag.id;      
-            var prodCatId = $("input[name='prodcat_id']").val();           
+            var rt_id = e.detail.tag.id;
+            var prodCatId = $("input[name='prodcat_id']").val();
             if ('' == rt_id || 1 > prodCatId) {
                 return;
             }
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +
                 prodCatId + '&prt_ratingtype_id=' + rt_id,
-                function(t) {});
+                function(t) {
+                    fcom.closeProcessing();
+                });
 
         }
 

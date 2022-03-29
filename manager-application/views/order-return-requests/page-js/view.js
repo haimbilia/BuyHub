@@ -37,6 +37,7 @@
 
     addNewComment = function (orrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "addNewComment", [orrequestId]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
@@ -46,13 +47,15 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupMessage'), data, function (t) {
-            $.ykmodal.close();
+            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             location.reload();
         });
     };
 
     requestStatusForm = function (orrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "requestStatusForm", [orrequestId]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
@@ -67,6 +70,8 @@
         var transferLocation = $(".refundToWalletJs:checked").val();
         if (0 != transferLocation && !confirm(langLbl.areYouSure)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
+            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             window.location.reload();
         });
     };
@@ -84,6 +89,7 @@
             $.ykmodal.show();
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orrequestId]), '', function (ans) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(ans.html);
             });
