@@ -32,7 +32,7 @@ class SellerBaseController extends LoggedUserController
         if (
             false !== $stripeConnectObj && 
             (
-                false === $stripeConnectObj->init(UserAuthentication::getLoggedUserId(), true) || 
+                false === $stripeConnectObj->init($this->userParentId, true) || 
                 false === $stripeConnectObj->userAccountIsValid()
             ) && 
             !$isStripeConnectLogin &&

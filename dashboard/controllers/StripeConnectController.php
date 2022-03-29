@@ -30,8 +30,7 @@ class StripeConnectController extends PaymentMethodBaseController
             FatUtility::dieJsonError($error);
         }
 
-        $userId = UserAuthentication::getLoggedUserId(true);
-        if (1 > $userId) {
+        if (1 > $this->userParentId) {
             $msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
@@ -41,7 +40,7 @@ class StripeConnectController extends PaymentMethodBaseController
             FatUtility::dieJsonError($msg);
         }
 
-        if (false === $this->stripeConnect->init($userId, true)) {
+        if (false === $this->stripeConnect->init($this->userParentId, true)) {
             $this->setError();
         }
 
@@ -91,6 +90,7 @@ class StripeConnectController extends PaymentMethodBaseController
         /* Check if user account has errors. */
         $this->stripeConnect->checkUserAccountIsIncomplete();
 
+        $this->set('isSubUser', (0 < (int) $this->userInfo['user_parent']));
         $this->set('userAccountErrors', $this->stripeConnect->getError());
         $this->set('loginUrl', $this->stripeConnect->getLoginUrl());
         $this->set('accountId', $accountId);
@@ -281,8 +281,7 @@ class StripeConnectController extends PaymentMethodBaseController
             return false;
         }
 
-        $userId = UserAuthentication::getLoggedUserId(true);
-        $userObj = new User($userId);
+        $userObj = new User($this->userParentId);
         $userData = $userObj->getUserInfo('credential_email');
         if (empty($userData)) {
             $this->msg = Labels::getLabel('MSG_INVALID_USER', $this->siteLangId);
