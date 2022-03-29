@@ -600,6 +600,7 @@ Updates/Fixes :
     => 063352 - Seller UI: Warning message is showing while clicking on the "badges" on the breadcrumb on the "Bind Condition" page under the badges section at the seller's end.
     => 063362 - Seller UI: Seller navigates to the dashboard while clicking on the 'reports' on the breadcrumb under the Sales Report section.
     
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
@@ -611,7 +612,8 @@ UAT points:
     => Change label active to activate and in-active to deactivate for all the listing pages.
     => S.no can be removed from the listing page. Total page record count should be displayed as the footer
     => Displayed record count with plus sign (10+) in the left navigation section under requests.
-    => Listing pages>> Search Filter --- Add Submit button prior to Clear Button
+    => Listing pages>> Search Filter --- Add Submit button prior to Clear Button.
+    => Make the Search Button on the Listing Pages fixed when the dropdown gets clicked. It should not fluctuate
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
