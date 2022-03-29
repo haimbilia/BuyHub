@@ -115,7 +115,11 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     <?php echo $frm->getFormTag(); ?>
                     <?php echo $frm->getFieldHtml('message_thread_id'); ?>
 
-                    <?php echo $frm->getFieldHtml('message_text'); ?>
+                    <?php 
+                    $fld =  $frm->getField('message_text');
+                    $fld->requirements()->setRequired(false);
+                    
+                    echo $frm->getFieldHtml('message_text'); ?>
                     <button class="btn btn-icon btn-send" type="submit">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">

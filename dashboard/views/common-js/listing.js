@@ -9,6 +9,16 @@ $(document).on("search", "input[type='search']", function () {
         eval(callback);
     }
 });
+
+$(document).on("click", ".advSrchToggleJs", function () {
+    var elm = $('.advSrchBtnJs').find('.submitBtnJs');
+    if (elm.prop("disabled")) {
+        elm.attr("disabled", false);
+    } else {
+        elm.attr("disabled", true);
+    }
+});
+
 /* Reset result on clear(cross) icon on keyword search field. */
 
 $(document).on("click", ".resetModalFormJs", function (e) {
@@ -107,7 +117,7 @@ $(document).on("click", ".navTabsJs a", function (e) {
     showYkModalFooter = function () {
         $('.contentBodyJs .form-edit-foot').show();
     };
-    
+
     /* Fix width of table headings. */
     fixTableColumnWidth = function () {
         var thWidthArr = [];
@@ -147,18 +157,18 @@ $(document).on("click", ".navTabsJs a", function (e) {
         });
         return ui;
     }
-    
+
     fixPlaceholderStyle = function (e, ui) {
         ui.placeholder.height(ui.item.height());
         ui.placeholder.css("visibility", "visible");
         ui.placeholder.css('background-color', '#f3f6f9');
     }
-    
-    validateFileUpload = function (file){
-        if(file.size >=  langLbl.allowedFileSize){           
+
+    validateFileUpload = function (file) {
+        if (file.size >= langLbl.allowedFileSize) {
             let msg = langLbl.fileSizeExceeded;
             msg = msg.replace("{size-limit}", bytesToSize(langLbl.allowedFileSize));
-            fcom.displayErrorMessage(msg); 
+            fcom.displayErrorMessage(msg);
             return false;
         }
         return true;

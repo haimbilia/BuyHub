@@ -103,7 +103,7 @@ if (CommonHelper::demoUrl()) { ?>
 
         </div>
     </section>
-    <section class="section">
+    <section class="">
         <div class="container">
             <div class="about-platform">
                 <h1>Online shopping made easy at YoKart</h1>
@@ -122,14 +122,14 @@ if (CommonHelper::demoUrl()) { ?>
 </footer>
 
 <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1) && !CommonHelper::getUserCookiesEnabled()) { ?>
-    <div class="cc-window cc-banner cc-type-info cc-theme-block cc-bottom cookie-alert no-print">
+    <div class="cc-window no-print">
         <?php if (FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')) { ?>
             <div class="box-cookies">
                 <span id="cookieconsent:desc" class="cc-message">
                     <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 500)); ?>
                     <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>"><?php echo Labels::getLabel('LBL_Read_More', $siteLangId); ?></a></span>
-                <span class="cc-close cc-cookie-accept-js"><?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?></span>
-                <span class="cc-close cookie-preferences-js"><?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?></span>
+                <span class="btn btn-brand btn-sm cc-cookie-accept-js"><?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?></span>
+                <span class="btn btn-outline-brand btn-sm cookie-preferences-js"><?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?></span>
             </div>
         <?php }  ?>
     </div><?php } ?>
@@ -189,39 +189,7 @@ if (CommonHelper::demoUrl()) { ?>
     <?php } ?>
 </div>
 </div>
-
 </script>
-<script id="rendered-js">
-    // variables
-    var $menu = $('#menu');
-    var $btnMenu = $('.btn-menu');
-    var $img = $('img');
-
-    // mmenu customization
-    $menu.mmenu({
-        counters: true,
-        navbar: {
-            title: "Menu Content"
-        },
-        extensions: ["pageshadow", "effect-zoom-menu", "effect-zoom-panels"],
-        offCanvas: {
-            position: "left",
-            zposition: "back"
-        }
-    });
-
-    // toggle menu
-    var api = $menu.data("mmenu");
-
-    $btnMenu.click(function() {
-        api.open();
-    });
-
-
-    // change toggle behavior for subpanels
-    $menu.find(".mm-next").addClass("mm-fullsubopen");
-</script>
-
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 
 </body>
