@@ -1,8 +1,9 @@
 /*cookies*/
 
 .cc-window {
-    box-shadow: $shadow1;
-    background-color: $bg-white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
     color: $txt-body;
     bottom: 0;
     #{$start-direction}: 0;
@@ -16,24 +17,17 @@
         font-size: 13px;
         font-weight: 400;
         line-height: 30px;
-        padding: 15px;
+        padding: 1rem;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        grid-gap: 10px;
         a {
             text-decoration: underline;
         }
     }
-    .cc-close {
-        background-color: $brand-color;
-        color: $brand-color-inverse;
-        cursor: pointer;
-        display: inline-block;
-        height: 25px;
-        line-height: 25px;
-        margin-#{$start-direction}: 10px;
-        padding: 0 10px;
-        transition: all 0.3s ease-in-out 0s;
-        border-radius: 2px;
-    }
+
     .cookie-alert {
         p {
             color: $txt-gray;

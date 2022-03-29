@@ -95,8 +95,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
         </section>
     <?php } ?>
 <?php } ?>
-
-
 <?php
 
 $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>

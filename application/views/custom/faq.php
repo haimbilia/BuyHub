@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body">
-    <div class="bg-brand-light pt-5 pb-5">
+    <section class="section">
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
@@ -36,7 +36,7 @@
     </script>
     <script>
         var clics = 0;
-        $(function () {
+        $(function() {
             $('.faqanswer').hide();
             $('#faqcloseall').hide();
             $(document).on("click", 'h3', function() {
