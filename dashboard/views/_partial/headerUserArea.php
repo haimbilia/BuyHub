@@ -77,6 +77,77 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
     </div>
     <?php 
 
-} elseif ($layoutType == applicationConstants::SCREEN_MOBILE) {
-    include_once(CONF_FRONT_END_THEME_PATH . '_partial/headerUserAreaMobile.php');
-}
+} elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
+    <div class="offcanvas offcanvas-account offcanvas-start" tabindex="-1" id="offcanvas-account">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Profile </h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="profile">
+                <div class="profile-image">
+                    <img class="profile-avatar" width="80" height="80" src="<?php echo $profilePicUrl; ?>" alt="">
+                </div>
+                <div class="profile-data">
+                    <h6 class="profile-name"><?php echo $userName; ?> </h6>
+                    <p class="profile-email"><?php echo $userEmail; ?></p>
+                    <?php
+                    if (!empty($userPhone)) { ?>
+                        <p class="profile-phone"><?php echo $userPhone; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <ul class="account-nav">              
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo $dashboardOrgUrl; ?>">
+                        <?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
+                        <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>
+                <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
+                        <?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>
+                <?php } ?>
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
+                        <?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
+                        <?php echo Labels::getLabel("NAV_UPDATE_CREDENTIALS", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>
+                <li class="account-nav-item">
+                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
+                        <?php echo Labels::getLabel("NAV_LOGOUT", $siteLangId); ?> 
+                        <i class="icon icon-arrow-right"></i>
+                    </a>
+                </li>                
+            </ul>
+        </div>
+        <div class="offcanvas-foot">
+            <a class="btn btn-logout" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
+                <i class="icn">
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">
+                        </use>
+                    </svg>
+                </i>
+                <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
+            </a>
+        </div>
+        </div>
+<?php }
