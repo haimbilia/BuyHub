@@ -15,8 +15,9 @@ $innova_settings = array(
     'fileBrowser' => '"' . CONF_WEBROOT_URL . 'innova/assetmanager/asset.php"'
 );
 
+FatApp::setViewDataProvider('_partial/cart-summary.php', array('Common', 'cartSummary'));
+
 /* offcanvas Forms */
-FatApp::setViewDataProvider('_partial/footer-part/cart-summary.php', array('Common', 'cartSummary'));
 FatApp::setViewDataProvider('_partial/footer-part/headerSearchFormArea.php', array('Common', 'headerSearchFormArea'));
 FatApp::setViewDataProvider('_partial/footer-part/blog-search-form.php', array('Navigation', 'blogNavigationSearchForm'));
 

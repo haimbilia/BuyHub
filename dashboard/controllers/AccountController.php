@@ -367,18 +367,18 @@ class AccountController extends LoggedUserController
         $canAddMoneyToWallet = true;
         if (User::isAffiliate()) {
             $canAddMoneyToWallet = false;
-        }else{
+        } else {
 
             $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
             $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
             $pmSrch->addCondition('plugin_code', 'NOT IN', $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_ADD_MONEY_TO_WALLET]);
             $pmSrch->doNotCalculateRecords();
-            $pmSrch->doNotLimitRecords();           
+            $pmSrch->doNotLimitRecords();
             $pmRs = $pmSrch->getResultSet();
             $paymentMethod = FatApp::getDb()->fetch($pmRs);
-            if(false == $paymentMethod){
+            if (false == $paymentMethod) {
                 $canAddMoneyToWallet = false;
-            } 
+            }
         }
         $codMinWalletBalance = -1;
         if (User::isSeller() && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S') {
@@ -447,11 +447,11 @@ class AccountController extends LoggedUserController
         $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
         $pmSrch->addCondition('plugin_code', 'NOT IN', $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_ADD_MONEY_TO_WALLET]);
         $pmSrch->doNotCalculateRecords();
-        $pmSrch->doNotLimitRecords();           
+        $pmSrch->doNotLimitRecords();
         $pmRs = $pmSrch->getResultSet();
         $paymentMethod = FatApp::getDb()->fetch($pmRs);
 
-        if (false == $paymentMethod) {           
+        if (false == $paymentMethod) {
             LibHelper::dieJsonError(Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $this->siteLangId));
         }
 
@@ -3778,15 +3778,18 @@ class AccountController extends LoggedUserController
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'profileInfo') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'bankInfoForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'cookiesPreferencesForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'messages' || $action == 'credits' || $action == 'changeEmailPassword') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => $title);
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
