@@ -79,17 +79,20 @@ class VolumeDiscountController extends ListingBaseController
         $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(['selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-	'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name','IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name']
-        ); 
+        $srch->addMultipleFields(
+            [
+                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
+                'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name', 'IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name'
+            ]
+        );
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $arrListing);  
+        $this->set("arrListing", $arrListing);
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -110,7 +113,7 @@ class VolumeDiscountController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -356,8 +359,8 @@ class VolumeDiscountController extends ListingBaseController
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $srch = User::getSearchObject(true);
-        $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
-        $srch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $srch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
 
         $srch->addMultipleFields(
             [

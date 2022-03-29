@@ -1,15 +1,18 @@
 <?php
 
-class TransactionsController extends ListingBaseController {
+class TransactionsController extends ListingBaseController
+{
 
     protected $pageKey = 'TRANSACTIONS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -32,7 +35,8 @@ class TransactionsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'transactions/search.php', true),
@@ -41,19 +45,22 @@ class TransactionsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function shippingTransactionSearch() {
+    public function shippingTransactionSearch()
+    {
         $this->getListingData('utxn_id', 'DESC');
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getRows() {
+    public function getRows()
+    {
         $this->getListingData('utxn_id', 'DESC');
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getListingData($customSortBy = false, $customOrder = false) {
+    private function getListingData($customSortBy = false, $customOrder = false)
+    {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -78,19 +85,19 @@ class TransactionsController extends ListingBaseController {
         $balSrch->doNotLimitRecords();
         $balSrch->addMultipleFields(['utxn.utxn_id', "utxn_credit - utxn_debit as bal"]);
         if (0 < $userId) {
-            $balSrch->addCondition('utxn_user_id', '=', $userId);
+            $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
-        $balSrch->addCondition('utxn_status', '=', 1);
+        $balSrch->addCondition('utxn_status', '=', 'mysql_func_1', 'AND', true);
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
         if (0 < $userId) {
-            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
+            $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
         $srch->addGroupBy('utxn.utxn_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
-        
+
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         if ($customSortBy != false && $customOrder != false) {
@@ -112,7 +119,8 @@ class TransactionsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
-    protected function getSearchForm($fields = []) {
+    protected function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
@@ -124,7 +132,8 @@ class TransactionsController extends ListingBaseController {
         return $frm;
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditUsers();
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($userId);
@@ -136,7 +145,8 @@ class TransactionsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getForm($userId = 0) {
+    private function getForm($userId = 0)
+    {
         $frm = new Form('frmUserTransaction');
         if ($userId == 0) {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', [29]);
@@ -152,7 +162,8 @@ class TransactionsController extends ListingBaseController {
         return $frm;
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditUsers();
         $frm = $this->getForm();
 
@@ -203,14 +214,15 @@ class TransactionsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
             return json_decode($transactionsTblHeadingCols, true);
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -225,7 +237,8 @@ class TransactionsController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             /* 'listSerial', */
             'utxn_id',
@@ -239,11 +252,13 @@ class TransactionsController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }
 
-    public function getBreadcrumbNodes($action) {
+    public function getBreadcrumbNodes($action)
+    {
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
@@ -257,11 +272,11 @@ class TransactionsController extends ListingBaseController {
         return $this->nodes;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $this->set('description', Transactions::getAttributesById($recordId, 'utxn_comments'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
 }

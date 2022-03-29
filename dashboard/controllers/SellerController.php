@@ -5992,4 +5992,13 @@ class SellerController extends SellerBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+        $this->nodes[] = array('title' => $title);
+
+        return $this->nodes;
+    }
 }

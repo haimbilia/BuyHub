@@ -121,7 +121,7 @@
                         <ul class="quick-nav">
                             <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
                             <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
-                            <li class="quick-nav-item item-desktop">
+                            <li class="quick-nav-item item-desktop wishListJs">
                                 <button type="button" class="quick-nav-link button-store">
 
                                     <svg class="svg" width="20" height="20">
@@ -129,7 +129,7 @@
                                         </use>
                                     </svg>
 
-                                    <span class="txt" onclick="wishlistBox()"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
+                                    <span class="txt"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
@@ -142,8 +142,8 @@
                                 </button>
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
-                                <li class="quick-nav-item">
-                                    <?php $this->includeTemplate('_partial/footer-part/cart-summary.php'); ?>
+                                <li class="quick-nav-item" id="cartSummaryJs">
+                                    <?php $this->includeTemplate('_partial/cart-summary.php'); ?>
                                 </li>
                             <?php } ?>
                         </ul>

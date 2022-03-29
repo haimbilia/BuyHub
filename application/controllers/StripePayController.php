@@ -140,6 +140,7 @@ class StripePayController extends PaymentController
             $cancelBtnUrl = CommonHelper::getPaymentFailurePageUrl();
         }
 
+        $this->set('pmethodCode', self::KEY_NAME);
         $this->set('cancelBtnUrl', $cancelBtnUrl);
         $this->set('exculdeMainHeaderDiv', true);
         if (FatUtility::isAjaxCall() && !isset($_POST['chargeAjax'])) {

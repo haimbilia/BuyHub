@@ -25,7 +25,7 @@
         display: flex;
     }
     .slider-for {
-        max-width: 500px;
+        // max-width: 500px;
         flex: 1;
         order: 2;
         margin: 0;
@@ -92,7 +92,8 @@
             height: 100px;
             display: block;
             border-radius: 0;
-            text-indent: -9999px;
+            //text-indent: -9999px;
+            font-size: 0;
             position: relative;
 
             &:before {
@@ -103,18 +104,19 @@
                 width: 20px;
                 height: 20px;
                 position: absolute;
-                left: auto;
-                right: auto;
+                #{$start-direction}: calc(50% - 10px);
             }
         }
         .slick-prev {
             &:before {
-                transform: rotate(-224deg);
+                transform: rotate(226deg);
+                top: calc(50% - 5px);
             }
         }
         .slick-next {
             &:before {
                 transform: rotate(45deg);
+                top: calc(50% - 15px);
             }
         }
     }

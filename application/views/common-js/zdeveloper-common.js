@@ -33,7 +33,7 @@ $(function () {
         $(this).next(".accordianbody").slideToggle();
         $(this).parent().parent().siblings().children().children().next().slideUp();
         return false;
-    });  
+    });
 
     /* Binding Feather Light gallery */
     bindFeatherLight();
@@ -445,7 +445,7 @@ removeFromCart = function (key) {
                 $(".emtyCartBtn-js").hide();
             }
             listCartProducts();
-            $('#side-cart').load(fcom.makeUrl('cart', 'getCartSummary') + " #side-cart > *");
+            $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
         }
         $.ykmsg.close();
         fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
@@ -1273,14 +1273,13 @@ $(function () {
             .appendTo($(document.body))
             .submit();
     };
-
-    wishlistBox = function () {
-       /*  if (isUserLogged() == 0) {
+    $(document).on("click", ".wishListJs", function () {
+        if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
-        } */
+        }
         window.location.href = fcom.makeUrl('account', 'wishlist', [], siteConstants.webroot_dashboard);
-    };
+    });
 
     $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
@@ -1701,49 +1700,47 @@ $(document).on("click", "#btn-demo", function () {
         });
     });
 });
-$("document").ready(function () {
-    $(document).on("click", ".add-to-cart--js", function (event) {
-        ykevents.addToCart();
-        $btn = $(this);
-        event.preventDefault();
-        var data = fcom.frmData(document.frmBuyProduct);
-        var yourArray = [];
-        var selprodId = $(this).siblings('input[name="selprod_id"]').val();
-        if (typeof mainSelprodId != "undefined" && mainSelprodId == selprodId) {
-            $(".list-addons--js")
-                .find("input")
-                .each(function (e) {
-                    if (
-                        $(this).val() > 0 &&
-                        !$(this).closest(".addon--js").hasClass("cancelled--js")
-                    ) {
-                        data = data + "&" + $(this).attr("data-lang") + "=" + $(this).val();
-                    }
-                });
+$(document).on("click", ".add-to-cart--js", function (event) {
+    ykevents.addToCart();
+    $btn = $(this);
+    event.preventDefault();
+    var data = fcom.frmData(document.frmBuyProduct);
+    var yourArray = [];
+    var selprodId = $(this).siblings('input[name="selprod_id"]').val();
+    if (typeof mainSelprodId != "undefined" && mainSelprodId == selprodId) {
+        $(".list-addons--js")
+            .find("input")
+            .each(function (e) {
+                if (
+                    $(this).val() > 0 &&
+                    !$(this).closest(".addon--js").hasClass("cancelled--js")
+                ) {
+                    data = data + "&" + $(this).attr("data-lang") + "=" + $(this).val();
+                }
+            });
+    }
+    fcom.updateWithAjax(fcom.makeUrl("cart", "add"), data, function (ans) {
+        if (ans["redirect"]) {
+            location = ans["redirect"];
+            return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl("cart", "add"), data, function (ans) {
-            if (ans["redirect"]) {
-                location = ans["redirect"];
-                return false;
-            }
-            if ($btn.hasClass("btnBuyNow") == true) {
-                setTimeout(function () {
-                    window.location = fcom.makeUrl("Checkout");
-                }, 300);
-                return false;
-            }
-            if ($btn.hasClass("quickView") == true) {
-                $.facebox.close();
-                $("body").addClass("side-cart--on");
-            }
-            if (9 < ans.total) {
-                ans.total = "9+";
-            }
-            $("span.cartQuantity").html(ans.total);
-            $("#side-cart").load(fcom.makeUrl("cart", "getCartSummary") + " #side-cart > *");
-        });
-        return false;
+        if ($btn.hasClass("btnBuyNow") == true) {
+            setTimeout(function () {
+                window.location = fcom.makeUrl("Checkout");
+            }, 300);
+            return false;
+        }
+        if ($btn.hasClass("quickView") == true) {
+            $.facebox.close();
+            $("body").addClass("side-cart--on");
+        }
+        if (9 < ans.total) {
+            ans.total = "9+";
+        }
+        $("span.cartQuantity").html(ans.total);
+        $('#cartSummaryJs').load(fcom.makeUrl("cart", "getCartSummary"));
     });
+    return false;
 });
 $(function () {
     if ($(window).width() < 1025) {

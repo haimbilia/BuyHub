@@ -2,10 +2,14 @@
 
 <div class="step">
     <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
-        <label class="checkbox">
-            <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
-            <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
-        </label>
+        <div class="step_section">
+            <div class="step_head">
+                <label class="checkbox">
+                    <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
+                    <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
+                </label>
+            </div>
+        </div>
     <?php } else { ?>
         <ul class="review-block">
             <li class="review-block-item">
@@ -42,6 +46,7 @@
             </li>
         </ul>
     <?php } ?>
+
     <div class="step_section">
         <div class="step_head">
             <h5 class="step_title"><?php echo Labels::getLabel('LBL_PAYMENT_SUMMARY', $siteLangId); ?></h5>
@@ -65,7 +70,9 @@
                 <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
                     <?php if (0 < count($paymentMethods)) { ?>
                         <ul class="payments-nav" id="payment_methods_tab">
-                            <?php foreach ($paymentMethods as $key => $val) {
+                            <?php 
+                            $showFirstElement = '';
+                            foreach ($paymentMethods as $key => $val) {
                                 $pmethodCode = $val['plugin_code'];
                                 if ($cartHasDigitalProduct && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
                                     continue;
@@ -75,12 +82,14 @@
 
                                 if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
                                     continue;
-                                } ?>
+                                } 
+                                $showFirstElement = empty($showFirstElement) ? 'show' : '';
+                                ?>
                                 <li class="payments-nav-item">
-                                    <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                    <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
                                         <?php echo $pmethodName; ?>
                                     </a>
-                                    <div class="payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" style="display: none;"></div>
+                                    <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
                                 </li>
                             <?php
                             } ?>
@@ -133,22 +142,27 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
                 return;
             }
             var paymentMethod = tabObj.data('paymentmethod');
-            $('.paymentBlockJs').slideUp();
+            var paymentMethodSection = $('.' + paymentMethod + '-js');
+            paymentMethodSection.prepend(fcom.getLoader());
             fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
                 if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
                     $("#paypal-buttons").html("");
                 }
-
-                $('.' + paymentMethod + '-js').html(res.html).slideDown();
                 if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
+                    paymentMethodSection.html(res.html);
                     if (true == enableGcaptcha) {
                         googleCaptcha();
                     }
                     $.ykmsg.close();
                 } else {
-                    var form = '.' + paymentMethod + '-js form';
+                    if (0 < paymentMethodSection.find('.paymentFormSection-js').length && paymentMethodSection.find('.paymentFormSection-js').hasClass('d-none')) {
+                        paymentMethodSection.replaceWith(res.html);
+                    } else {
+                        paymentMethodSection.append(res.html);
+                    }
+                    var form = '.' + paymentMethod + '-js .paymentFormSection-js form';
                     if (0 < $(form).length) {
-                        $('.' + paymentMethod + '-js').prepend(fcom.getLoader());
+                        paymentMethodSection.prepend(fcom.getLoader());
                         if (0 < $(form + " input[type='submit']").length) {
                             $(form + " input[type='submit']").val(langLbl.requestProcessing);
                         }

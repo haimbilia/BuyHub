@@ -8,6 +8,9 @@
         &.is-active {
             //background-color: $bg-gray;
         }
+        &:last-child {
+            border: 0;
+        }
     }
 
     &-head {
