@@ -143,7 +143,7 @@
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item" id="cartSummaryJs">
-                                    <?php $this->includeTemplate('_partial/footer-part/cart-summary.php'); ?>
+                                    <?php $this->includeTemplate('_partial/cart-summary.php'); ?>
                                 </li>
                             <?php } ?>
                         </ul>
