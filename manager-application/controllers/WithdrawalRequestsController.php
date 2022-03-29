@@ -1,11 +1,13 @@
 <?php
 
-class WithdrawalRequestsController extends ListingBaseController {
+class WithdrawalRequestsController extends ListingBaseController
+{
 
     protected $modelClass = 'Transactions';
     protected $pageKey = 'MANAGE_WITHDRAWAL_REQUESTS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewWithdrawRequests();
     }
@@ -16,7 +18,8 @@ class WithdrawalRequestsController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditWithdrawRequests($this->admin_id, true));
         } else {
@@ -24,7 +27,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -52,7 +56,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    protected function getSearchForm($fields = []) {
+    protected function getSearchForm($fields = [])
+    {
         $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
@@ -78,13 +83,14 @@ class WithdrawalRequestsController extends ListingBaseController {
 
         $str = CommonHelper::replaceStringData(Labels::getLabel('FRM_AMOUNT_TO[{CURRENCY-SYMBOL}]', $this->siteLangId), ['{CURRENCY-SYMBOL}' => $currencySymbol]);
         $frm->addTextBox(Labels::getLabel('FRM_AMOUNT_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'withdrawal-requests/search.php', true),
@@ -93,7 +99,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData() {
+    public function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -151,35 +158,35 @@ class WithdrawalRequestsController extends ListingBaseController {
         $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
         if ($type > 0) {
             if ($type == User::USER_TYPE_SELLER) {
-                $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
+                $srch->addCondition('user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND');
             }
             if ($type == User::USER_TYPE_BUYER) {
-                $srch->addCondition('user_is_buyer', '=', applicationConstants::YES);
+                $srch->addCondition('user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND');
             }
 
             if ($type == User::USER_TYPE_ADVERTISER) {
-                $srch->addCondition('user_is_advertiser', '=', applicationConstants::YES);
+                $srch->addCondition('user_is_advertiser', '=', 'mysql_func_' . applicationConstants::YES, 'AND');
             }
 
             if ($type == User::USER_TYPE_AFFILIATE) {
-                $srch->addCondition('user_is_affiliate', '=', applicationConstants::YES);
+                $srch->addCondition('user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND');
             }
         }
-        $srch->addGroupBy('tuwr.withdrawal_id'); 
+        $srch->addGroupBy('tuwr.withdrawal_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
-                array(
-                    'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email',
-                    'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser',
-                    'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
-                )
-        ); 
-        $srch->addOrder($sortBy, $sortOrder); 
+            array(
+                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email',
+                'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser',
+                'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
+            )
+        );
+        $srch->addOrder($sortBy, $sortOrder);
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $srch->setPageSize($pageSize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -195,7 +202,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         $this->set('payoutPlugins', $payoutPlugins);
     }
 
-    private function getForm($recordId) {
+    private function getForm($recordId)
+    {
         $frm = new Form('frmUpdateStatus');
         $statusArr = [
             Transactions::WITHDRAWL_STATUS_PENDING => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_PENDING', $this->siteLangId),
@@ -209,7 +217,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         return $frm;
     }
 
-    public function form() {
+    public function form()
+    {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $row = WithdrawalRequest::getAttributesById($recordId);
@@ -226,7 +235,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('withdrawal_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
@@ -260,9 +270,9 @@ class WithdrawalRequestsController extends ListingBaseController {
         }
 
         FatApp::getDb()->updateFromArray(
-                Transactions::DB_TBL,
-                $assignFields,
-                array('smt' => 'utxn_withdrawal_id=?', 'vals' => array($recordId))
+            Transactions::DB_TBL,
+            $assignFields,
+            array('smt' => 'utxn_withdrawal_id=?', 'vals' => array($recordId))
         );
 
         if ($post['withdrawal_status'] == Transactions::WITHDRAWL_STATUS_DECLINED) {
@@ -289,7 +299,8 @@ class WithdrawalRequestsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewDetails($recordId, $langId = 0) {
+    public function viewDetails($recordId, $langId = 0)
+    {
         $this->checkEditPrivilege();
         $srch = new WithdrawalRequestsSearch();
         $srch->joinUsers(true);
@@ -297,11 +308,11 @@ class WithdrawalRequestsController extends ListingBaseController {
         $srch->joinTable(User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC, 'LEFT JOIN', User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC_PREFIX . 'withdrawal_id = tuwr.withdrawal_id');
         $srch->addCondition('withdrawal_id', '=', $recordId);
         $srch->addMultipleFields(
-                array(
-                    'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email',
-                    'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser',
-                    'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
-                )
+            array(
+                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email',
+                'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser',
+                'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
+            )
         );
         $record = FatApp::getDb()->fetch($srch->getResultSet());
 
@@ -320,7 +331,8 @@ class WithdrawalRequestsController extends ListingBaseController {
      *
      * @return array
      */
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $withdrawalRequestsTblHeadingCols = CacheHelper::get('withdrawalRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($withdrawalRequestsTblHeadingCols) {
             return json_decode($withdrawalRequestsTblHeadingCols, true);
@@ -345,7 +357,8 @@ class WithdrawalRequestsController extends ListingBaseController {
      *
      * @return array
      */
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             /* 'listSerial', */
             'user_name',
@@ -364,8 +377,8 @@ class WithdrawalRequestsController extends ListingBaseController {
      * @param array $fields
      * @return array
      */
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, Common::excludeKeysForSort());
     }
-
 }
