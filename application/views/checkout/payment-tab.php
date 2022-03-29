@@ -66,8 +66,8 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                     <?php
                     $msg = Labels::getLabel('LBL_OTP_EXPIRES_IN_{TIMER}_SECONDS', $siteLangId);
                     $htm = '<span class="txt-success font-weight-bold intervalTimer-js">
-                                        ' . User::OTP_INTERVAL . '
-                                    </span>';
+                                ' . User::OTP_INTERVAL . '
+                            </span>';
                     echo CommonHelper::replaceStringData($msg, ['{TIMER}' => $htm]);
                     ?>
                 </p>
@@ -84,11 +84,10 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
         <div class="otp-success">
             <img class="img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/otp-complete.svg" alt="">
             <h5><?php echo Labels::getLabel('LBL_VERIFIED_SUCCESSFULLY', $siteLangId); ?></h5>
-            <!--p>Lorem ipsum dolor sit amet consectetur </p-->
         </div>
     </div>
 <?php } else { ?>
-    <div class="text-center paymentForm-js <?php echo (false == $isCodOrPayAtStore) ? 'd-none' : ''; ?>">
+    <div class="text-center paymentFormSection-js <?php echo (false == $isCodOrPayAtStore) ? 'd-none' : ''; ?>">
         <?php if ($isCodOrPayAtStore) { ?>
             <h6><?php echo Labels::getLabel('LBL_PLEASE_CONFIRM_YOUR_ORDER', $siteLangId); ?></h6>
         <?php } ?>
