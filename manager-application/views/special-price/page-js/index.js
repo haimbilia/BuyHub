@@ -70,7 +70,8 @@ $(document).ready(function () {
         if ('' != value && value != oldValue) {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.displayProcessing();
-            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (ans) {              
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (ans) {      
+                fcom.closeProcessing();        
                 if (ans.status != 1) {                   
                     value = oldValue;
                     updatedValue = formattedValue;

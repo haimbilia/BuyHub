@@ -29,6 +29,7 @@ function getNotifications(type, obj) {
         url,
         "",
         function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(".notificationListJS").html(res.html);
             $('.notifiLinkViewAllJs').attr('href', viewAllUrl);
@@ -415,6 +416,7 @@ $(document).ready(function () {
                 fcom.makeUrl("PageLanguageData", "displayAlert"),
                 data,
                 function (t) {
+                    fcom.closeProcessing();
                     $(".alertWarningJs").remove();
                     $(".mainHeaderJs").append(t.html);
                 }

@@ -23,6 +23,7 @@ $(function () {
 
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
+            fcom.closeProcessing();
             searchOrderCancellationRequests(document.frmRequestSearch);
             
         });
@@ -30,6 +31,7 @@ $(function () {
 
     viewComment = function (ocrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewComment",[ocrequestId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
@@ -37,6 +39,7 @@ $(function () {
     
     viewAdminComment = function (ocrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[ocrequestId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });

@@ -5,6 +5,7 @@
         }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId]), "",
             function (t) {
+                fcom.closeProcessing();
                 fcom.removeLoader();                
                 $.ykmodal(t.html, !$.ykmodal.isSideBarView());
             }
@@ -26,6 +27,7 @@
             fcom.makeUrl(controllerName, "removeMedia"),
             {recordId},
             function (t) {
+                fcom.closeProcessing();
                 mediaForm(recordId)        
             }
         );

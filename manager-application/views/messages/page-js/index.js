@@ -18,6 +18,7 @@ $(document).ready(function () {
         currEle.addClass('is-active');
         $('.threadJs').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewThread", [threadId]), '', function (t) {
+            fcom.closeProcessing();
             $('.userJs').remove();
             $('.threadJs').replaceWith(t.html);
         });
@@ -31,6 +32,7 @@ $(document).ready(function () {
 
         $(listingTableJs).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).replaceWith(res.listingHtml);
             $('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');

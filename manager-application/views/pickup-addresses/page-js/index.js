@@ -12,6 +12,7 @@ $(document).on('change', '#addrStateJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
         });
@@ -20,6 +21,7 @@ $(document).on('change', '#addrStateJs', function () {
     editRecord = function (id, langId) {
         var data = 'langId=' + langId;
         fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
+            fcom.closeProcessing();
             $.ykmodal(res.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
             var oldLabel = $(".label-js").text();
@@ -54,6 +56,7 @@ $(document).on('change', '#addrStateJs', function () {
     };
     getCountryStates = function (countryId, stateId, div, langId) {
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(div).empty();
             $(div).append(res.html);

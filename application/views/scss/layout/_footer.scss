@@ -97,14 +97,13 @@
             margin: 1rem 0;
         }
     }
-
     &-bottom {
         border-top: $border;
         &-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 1rem;
+            padding: 1.5rem 0;
             flex-direction: column;
             @include media-breakpoint-up(lg) {
                 flex-direction: row;
@@ -299,6 +298,9 @@
 
 .about-platform {
     margin-bottom: 2rem;
+    &:last-child {
+        margin: 0;
+    }
     h1,
     h2,
     h3 {

@@ -38,6 +38,7 @@ $(document).on('change', '#imageLanguageJs', function () {
      */
     backgroundImage = function (recordId, langId) {
         fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'images', [recordId, langId]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $('#imageListingJs').html(t.html);
         });
@@ -47,6 +48,7 @@ $(document).on('change', '#imageLanguageJs', function () {
     deleteBackgroundImage = function (recordId, afileId, langId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId, afileId]), '', function (t) {
+            fcom.closeProcessing();
             backgroundImage(recordId, langId);
             reloadList();
             $('.resetModalFormJs').click();
@@ -55,6 +57,7 @@ $(document).on('change', '#imageLanguageJs', function () {
 
     pagesLayouts = function () {
         fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'layouts'), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
         });
     };

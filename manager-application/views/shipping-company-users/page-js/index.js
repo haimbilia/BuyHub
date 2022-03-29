@@ -14,6 +14,7 @@ var defaultController = controllerName;
             data = fcom.frmData(frm);
         }
         fcom.updateWithAjax(fcom.makeUrl('Transactions', 'shippingTransactionSearch'), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
         });
@@ -37,6 +38,7 @@ var defaultController = controllerName;
     addUserTransaction = function (userId) {
         var data = 'utxn_user_id=' + userId;
         fcom.updateWithAjax(fcom.makeUrl('transactions', 'form'), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
@@ -109,6 +111,7 @@ var defaultController = controllerName;
         loadMoreBtn.html(fcom.getRowSpinner());
 
         fcom.updateWithAjax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
+            fcom.closeProcessing();
             $(".appendRowsJs").append(rows.html);
             loadMoreBtn.html(btnText);
 

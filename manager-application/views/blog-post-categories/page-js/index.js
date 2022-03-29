@@ -75,6 +75,7 @@
 			fcom.makeUrl(controllerName, "deleteRecord"),
 			data,
 			function () {
+				fcom.closeProcessing();
 				var oldRecordParent = $('#' + recordId).parent().closest('.liJs');
 				var oldRecordParentId = oldRecordParent.attr('id');
 				if (1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' > li').length) {
@@ -106,6 +107,7 @@
 		}
 
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'getSubCategories'), 'recordId=' + recordId, function (res) {
+            fcom.closeProcessing();
 			if ($("#" + recordId).children('ul.append-ul').length) {
 				$("#" + recordId).children('ul.append-ul').append(res.html);
 			} else {
@@ -146,6 +148,7 @@
 	updateCatOrder = function (data) {
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'updateOrder'), data, function (res) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 		});
 	}

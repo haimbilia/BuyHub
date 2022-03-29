@@ -54,6 +54,7 @@ bindSortable = function() {
 deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
     if (!confirm(langLbl.confirmDelete)) { return; }
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), {recordId, afileId, fileType, langId, slideScreen}, function (t) {
+        fcom.closeProcessing();
         loadImages(recordId, 'THUMB' , slideScreen, langId);
         reloadList();
         $('.resetModalFormJs').click();
@@ -67,6 +68,7 @@ mediaForm = function (recordId, langId = 0, slide_screen = 1) {
 
     fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
         function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(t.html, !$.ykmodal.isSideBarView());
         }
@@ -74,7 +76,8 @@ mediaForm = function (recordId, langId = 0, slide_screen = 1) {
 };
 
 loadImages = function (recordId, imageType, slide_screen, langId) {
-    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {
+        fcom.closeProcessing();	
         fcom.removeLoader();
         $('#imageListingJs').html(t.html);
     });

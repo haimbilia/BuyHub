@@ -4,6 +4,7 @@ $(function () {
     requestStatusForm = function (recordId) {
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "requestStatusForm", [recordId]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
@@ -14,6 +15,7 @@ $(function () {
         var data = fcom.frmData(frm);
         if (!confirm(langLbl.areYouSure)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeRequestStatus'), data, function (t) {
+            fcom.closeProcessing();
             closeForm();
             reloadList();
         });

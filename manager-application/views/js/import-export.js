@@ -7,6 +7,7 @@
     };
     exportForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(t.html);
         });
@@ -14,6 +15,7 @@
 
     exportMediaForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -42,6 +44,7 @@
 
     importForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -50,11 +53,13 @@
     getImportInstructions = function (actionType) {
         if (actionType == 13) {
             fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importLabelsForm'), '', function (t) {
+                fcom.closeProcessing();
                 $.ykmodal(t.html);
                 fcom.removeLoader();
             });
         } else {
             fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
+                fcom.closeProcessing();
                 $.ykmodal(t.html);
                 fcom.removeLoader();
             });
@@ -63,6 +68,7 @@
 
     importMediaForm = function (actionType) {
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });

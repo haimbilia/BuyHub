@@ -11,9 +11,11 @@ $(document).ready(function () {
 
 	discountNotification = function (abandonedcart_id, user_id, product_id) {
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', "validateProductForNotification", [product_id]), '', function (t) {
+			fcom.closeProcessing();
 			$.ykmodal(fcom.getLoader());
 			var data = 'includeTabs=0&onClear=discountNotification(' + abandonedcart_id + ', ' + user_id + ', ' + product_id + ')';
 			fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', "form"), data, function (t) {
+				fcom.closeProcessing();
 				/* Overwritten with Discount Coupons. */
 				controllerName = 'AbandonedCart';
 
@@ -56,6 +58,7 @@ $(document).ready(function () {
 	sendDiscountNotification = function (abandonedcartId, couponId) {
 		var data = 'abandonedcartId=' + abandonedcartId + '&couponId=' + couponId;
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', 'discountNotification'), data, function (t) {
+			fcom.closeProcessing();
 			reloadList();
 		});
 	};

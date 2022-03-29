@@ -48,6 +48,7 @@ $(document).ready(function () {
 		}
 		$("#listing").html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'searchRequests'), data, function (res) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 			$("#listing").html(res.html);
 		});
@@ -69,9 +70,8 @@ $(document).ready(function () {
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'setup', [1]), data, function (t) {
-			if (t.status == 1) {
-				reloadList();
-			}
+            fcom.closeProcessing();
+			reloadList();
 		});
 	};
 
@@ -83,6 +83,7 @@ $(document).ready(function () {
 
 	prodCatRequestForm = function (id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'form', [id, 1]), '', function (t) {
+            fcom.closeProcessing();
 			$.ykmodal(t.html);
 			fcom.removeLoader();
 			if (id > 0) {
@@ -97,6 +98,7 @@ $(document).ready(function () {
 	bannerPopupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
+				fcom.closeProcessing();
 				$('#cropperBox-js').html(t.html);
 				$('.fbminwidth').animate({
 					scrollTop: $("#cropperBox-js").offset().top
@@ -126,6 +128,7 @@ $(document).ready(function () {
 	iconPopupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.updateWithAjax(fcom.makeUrl('Shops', 'imgCropper'), '', function (t) {
+				fcom.closeProcessing();
 				$('#cropperBox-js').html(t.html);
 				$('.fbminwidth').animate({
 					scrollTop: $("#cropperBox-js").offset().top
@@ -209,6 +212,7 @@ $(document).ready(function () {
 
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t.html);
@@ -231,6 +235,7 @@ $(document).ready(function () {
 	deleteImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
 		if (!confirm(langLbl.confirmDeleteImage)) { return; }
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
 			//categoryImages( prodcatId, imageType, slide_screen, langId );
 			if (imageType == 'icon') {
 				$("#icon-imageListingJs").html('');

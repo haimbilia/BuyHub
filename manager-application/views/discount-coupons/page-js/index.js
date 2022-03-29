@@ -21,6 +21,7 @@ $(document).ready(function () {
 
     couponLinkPlanForm = function (couponId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'linkPlanForm'), 'recordId=' + couponId, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -29,6 +30,7 @@ $(document).ready(function () {
 
     couponHistory = function (couponId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory'), 'recordId=' + couponId, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -42,6 +44,7 @@ $(document).ready(function () {
         $(frm.page).val(page.html);
         data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'usesHistory', [couponHistoryId]), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -73,6 +76,7 @@ $(document).ready(function () {
 
     loadImages = function (recordId, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
@@ -131,7 +135,9 @@ $(document).ready(function () {
         }
 
         var data = 'linkType=' + linkType + "&id=" + itemId + '&recordId=' + recordId;
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeItem'), data, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeItem'), data, function (t) { 
+            fcom.closeProcessing();
+        });
     }
 
     getItem = function (e) {

@@ -59,7 +59,7 @@ var fcom = {
         var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
         var dvdebug = $('<div />').append(dbmsg);
         dvdebug.appendTo($('#dv-bg-processes'));
-       
+
         $.ajax({
             method: "POST",
             url: url,
@@ -124,7 +124,7 @@ var fcom = {
     },
 
     updateWithAjax: function (url, data, fn, options, autoClose = true) {
-        fcom.displayProcessing();     
+        fcom.displayProcessing();
         var o = $.extend(true, { fOutMode: 'json' }, options);
         this.ajax(url, data, function (ans) {
             fcom.removeLoader();
@@ -132,7 +132,6 @@ var fcom = {
                 fcom.displayErrorMessage(ans.msg);
                 return;
             }
-            fcom.displaySuccessMessage(ans.msg);
             fn(ans);
         }, o);
     },
