@@ -2483,8 +2483,7 @@ class SellerController extends SellerBaseController
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Shop::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($shop_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                FatUtility::dieJsonError($updateLangDataobj->getError());
             }
         }
 
@@ -5992,5 +5991,14 @@ class SellerController extends SellerBaseController
         $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+        $this->nodes[] = array('title' => $title);
+
+        return $this->nodes;
     }
 }

@@ -358,48 +358,22 @@
                                                     <table width="100%" border="0" cellpadding="10px" cellspacing="0" style="">
                                                         <tbody>
                                                             <tr>
-                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="<?php echo (2 + count($orderDetail['taxOptions'])); ?> "><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
+                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="2"><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
                                                             </tr>
+                                                            <?php if (!empty($orderDetail['taxOptions'])) {
+                                                                foreach ($orderDetail['taxOptions'] as $key => $val) { ?>
+                                                                    <tr> 
+                                                                    <td style="padding:10px;border:1px solid #ddd;">
+                                                                        <?php echo CommonHelper::displayTaxPercantage($val, true) ?>
+                                                                    </td>
+                                                                    <td style="padding:10px;border:1px solid #ddd;">
+                                                                        <?php echo CommonHelper::displayMoneyFormat($val['value'], true, false, true, false, true) ?>
+                                                                    </td>
+                                                                </tr> 
+                                                            <?php } 
+                                                            } ?>                                                           
                                                             <tr>
-                                                                <th style="padding:10px; font-size:12px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?></th>
-                                                                <th style="padding:10px; font-size:12px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Taxable_Amount', $siteLangId); ?></th>
-                                                                <?php if (!empty($orderDetail['taxOptions'])) {
-                                                                    foreach ($orderDetail['taxOptions'] as $key => $val) { ?>
-                                                                        <th style="padding:10px; font-size:12px;border:1px solid #ddd;">
-                                                                            <?php echo CommonHelper::displayTaxPercantage($val, true) ?>
-                                                                        </th>
-                                                                <?php
-                                                                    }
-                                                                } ?>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding:10px; font-size:12px;border:1px solid #ddd;">
-                                                                    <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'TAX'), true, false, true, false, true); ?>
-                                                                </td>
-                                                                <td style="padding:10px; font-size:12px;border:1px solid #ddd;">
-                                                                    <?php $taxableProdPrice = CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL') + CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT');
-                                                                    /* if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0)) {
-												$taxableProdPrice = $taxableProdPrice - CommonHelper::orderProductAmount($orderDetail, 'DISCOUNT');
-											} */
-                                                                    echo CommonHelper::displayMoneyFormat($taxableProdPrice, true, false, true, false, true);
-                                                                    ?>
-                                                                </td>
-                                                                <?php if (!empty($orderDetail['taxOptions'])) {
-                                                                    foreach ($orderDetail['taxOptions'] as $key => $val) { ?>
-                                                                        <td style="padding:10px; font-size:12px;border:1px solid #ddd;">
-                                                                            <?php echo CommonHelper::displayMoneyFormat($val['value'], true, false, true, false, true); ?>
-                                                                        </td>
-                                                                <?php }
-                                                                } ?>
-                                                            </tr>
-                                                            <!--<tr>
-											<td style="padding:10px; font-size:12px;border:1px solid #ddd;font-size:16px;"><strong>Grand Total</strong> </td>                                            
-											<td style="padding:10px; font-size:12px;border:1px solid #ddd;font-size:16px;"><strong>157.16 </strong></td>                                            
-											<td style="padding:10px; font-size:12px;border:1px solid #ddd;font-size:16px;"><strong>3.92</strong> </td>                                            
-											<td style="padding:10px; font-size:12px;border:1px solid #ddd;border-right:none;font-size:16px;"><strong>3.92</strong> </td>                                            
-										</tr>-->
-                                                            <tr>
-                                                                <td style="padding:10px; font-size:12px;text-align: left;border:1px solid #ddd;border-bottom:none;border-right:none;font-size: 12px;background-color: #f0f0f0;" colspan="4">*<?php echo Labels::getLabel('LBL_Appropriated_product-wise_and_Rate_applicable_thereunder', $siteLangId); ?></td>
+                                                                <td style="padding:10px; font-size:12px;text-align: left;border:1px solid #ddd;border-bottom:none;border-right:none;font-size: 12px;background-color: #f0f0f0;" colspan="2">*<?php echo Labels::getLabel('LBL_Appropriated_product-wise_and_Rate_applicable_thereunder', $siteLangId); ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

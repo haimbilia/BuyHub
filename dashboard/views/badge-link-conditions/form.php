@@ -40,9 +40,10 @@ if (Badge::TYPE_BADGE == $badgeType) {
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <div class="row justify-content-center">
-                    <div class="col-md-2 badgeImageSection--js"><?php echo $imageHtml; ?></div>
-                    <div class="col-md-8">
+                <div class="row">
+                    <div class="col-lg-4 badgeImageSection--js">
+                        <?php echo $imageHtml; ?></div>
+                    <div class="col-lg-8">
                         <?php echo $frm->getFormTag();
                         echo $frm->getFieldHtml('blinkcond_id');
                         echo $frm->getFieldHtml('blinkcond_badge_id');

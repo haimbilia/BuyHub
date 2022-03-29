@@ -965,15 +965,18 @@ class ReportsController extends SellerBaseController
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'productsInventory') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'productsInventoryStockStatus') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'productsPerformance') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_PERFORMANCE_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'salesReport') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => $title);
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));

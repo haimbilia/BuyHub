@@ -154,7 +154,7 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>
+                    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
                         <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
 
@@ -188,9 +188,6 @@
                 </svg>
                 <span class="txt">Open!</span>
             </button>
-
-
-
         </li>
         <li class="mobile-actions-item active" role="none">
             <button class="mobile-actions-link btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu">

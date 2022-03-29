@@ -594,6 +594,11 @@ Updates/Fixes :
     => 063191 - Seller UI: "Dropdown icon and cross icon" is not aligned while binding the product and the "successful message" is not showing while editing the details under the special price and volume discount section
     => 063188 - Seller UI: The spacing issue between "special price and discount percentage" in the table and edit date is also not working under the special price section
     => 062521 - Admin UI: "Buy Together products" is not saving under the Buy Together Products section
+    => 063323 - Advertiser UI: Request Withdrawal: Reset button is not working.
+    => 063331 - Affiliate UI: The user is not able to update/change the email address.
+    => 063314 - Advertiser UI: Getting multiple issue on My Promotions Page.
+    => 063352 - Seller UI: Warning message is showing while clicking on the "badges" on the breadcrumb on the "Bind Condition" page under the badges section at the seller's end.
+    => 063362 - Seller UI: Seller navigates to the dashboard while clicking on the 'reports' on the breadcrumb under the Sales Report section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

@@ -42,7 +42,6 @@
     grid-gap: 1px;
     justify-content: center;
     flex: 0 0 100%;
-
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(auto-fit, 200px);
         grid-gap: 3rem;
@@ -61,9 +60,17 @@
             justify-items: center;
             padding: 0;
             margin: 0;
-            box-shadow: $shadow4;
-            max-height: 172px;
+            box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 2px;
+            position: relative;
+            aspect-ratio: 16/9;
+
             img {
+                position: absolute;
+                width: 70%;
+                height: 70%;
+                top: 15%;
+                left: 15%;
+                user-drag: none;
                 object-fit: contain;
                 margin: auto;
                 &[data-ratio="16:9"] {
@@ -76,6 +83,10 @@
         }
         &-thumb {
             aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $bg-light;
             img {
                 object-fit: contain;
                 margin: auto;
