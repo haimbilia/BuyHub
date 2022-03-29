@@ -75,7 +75,7 @@
                         <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
         <?php }
         } ?>
-        <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
+        <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
     </div>
 </header>
 <div class="display-in-print text-center">
