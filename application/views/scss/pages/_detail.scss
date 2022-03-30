@@ -40,7 +40,8 @@
     }
     .main-thumb {
         outline: $outline;
-        @include placeholder;
+        background-color: $bg-placeholder;
+        //@include placeholder;
         //@include responsive-ratio(1, 1);
         img {
             //@include img-absolute;

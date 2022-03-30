@@ -10,9 +10,7 @@
     transition: none;
 }
 
-
 /* --------------- */
-
 
 /* xZoom Styles below */
 
@@ -26,7 +24,7 @@
     text-align: center;
 }
 
-.xzoom-thumbs>a {
+.xzoom-thumbs > a {
     display: inline-block;
 }
 
@@ -46,9 +44,7 @@
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
 }
 
-
 /* Thumbs */
-
 
 /* .xzoom-gallery,
 .xzoom-gallery2,
@@ -67,13 +63,11 @@
     clear: both;
 }
 
-
 /* Everything out of border is hidden */
 
 .xzoom-hidden {
     overflow: hidden;
 }
-
 
 /* Preview */
 
@@ -85,7 +79,6 @@
     z-index: 15;
 }
 
-
 /* Lens */
 
 .xzoom-lens {
@@ -94,21 +87,18 @@
     cursor: crosshair;
 }
 
-
 /* Loading */
 
 .xzoom-loading {
     border-radius: 50%;
-    opacity: .7;
+    opacity: 0.7;
     background: url(../images/loading.gif) no-repeat center;
     background-size: 20px;
     width: 30px;
     height: 30px;
 }
 
-
 /* Additional class that applied to thumb when it is active */
-
 
 /* .xactive {
   -webkit-box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
@@ -116,7 +106,6 @@
   box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
   border: 1px solid #4aaad2;
 } */
-
 
 /* Caption */
 
