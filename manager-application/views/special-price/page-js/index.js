@@ -1,6 +1,6 @@
 $(document).on('click', '.dateJs', function () {
     var ele = $(this);
-    ele.hide().bind('active');
+    ele.bind('active');
     var inputFld = ele.siblings('input[type="text"]');
     inputFld.removeClass('hide').focus().addClass('hide');
     if (inputFld.val() != inputFld.attr('data-value')) {

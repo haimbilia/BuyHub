@@ -40,7 +40,7 @@ trait ShipStationFunctions
     /**
      * call - Call ShipStation
      *
-     * @return void
+     * @return bool
      */
     private function call(string $requestType, array $requestParam = [])
     {
@@ -83,7 +83,7 @@ trait ShipStationFunctions
     /**
      * get - To hit get request
      *
-     * @return void
+     * @return bool
      */
     private function get(): bool
     {
@@ -93,7 +93,7 @@ trait ShipStationFunctions
     /**
      * post - To hit post request
      *
-     * @return void
+     * @return bool
      */
     private function post(array $requestParam): bool
     {

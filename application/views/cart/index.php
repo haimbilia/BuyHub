@@ -35,7 +35,7 @@
 
                                 </div>
                             <?php } ?>
-                            <div id="cartList"></div>
+                            <div class="processing-wrap" id="cartList"></div>
                         </main>
                         <aside class="cart-page_aside">
                             <div class="sticky-summary">
