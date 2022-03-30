@@ -461,6 +461,7 @@
         // background: $bg-gray;
         //background: $bg-white;
         width: 100%;
+        min-width: 0;
         //height: 100%;
         // padding-#{$start-direction}: $sidebar-width;
         // padding-top: 72px;
@@ -1786,7 +1787,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             }
             th,
             td {
-                padding: 1rem 25px;
+                padding: 1rem 1.5rem;
                 color: $txt-gray;
                 vertical-align: top;
                 font-weight: 300;

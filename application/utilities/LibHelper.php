@@ -37,7 +37,7 @@ class LibHelper extends FatUtility
         }
         FatUtility::dieWithError($message);
     }
-    
+
     /**
      * exitWithError
      *
@@ -48,8 +48,8 @@ class LibHelper extends FatUtility
      * @return void
      */
     public static function exitWithError($message, $json = false, $redirect = false, $jsonData = [])
-    {      
-        
+    {
+
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
                 array_walk_recursive($message, function (&$item) {
@@ -59,7 +59,7 @@ class LibHelper extends FatUtility
                 $message = strip_tags($message);
             }
             header('Content-Type: application/json; charset=utf-8');
-            
+
             if (is_array($message)) {
                 $jsonData += $message;
             } else {
@@ -384,5 +384,68 @@ class LibHelper extends FatUtility
         $arr = explode('-', FatUtility::camel2dashed(FatApp::getController()));
         array_pop($arr);
         return ucfirst(implode(' ', $arr));
+    }
+
+    public static function getSessionId()
+    {
+        return (true === MOBILE_APP_API_CALL) ? CommonHelper::getAppToken() : session_id();
+    }
+
+    /**
+     * Send a HTTP (Async) request, but do not wait for the response
+     *
+     * @param string $method The HTTP method
+     * @param string $url The url (including query string)
+     * @param array $params Added to the URL or request body depending on method
+     */
+    public static function sendAsyncRequest(string $method, string $url, array $params = []): void
+    {
+        // url check
+        $parts = parse_url($url);
+        if ($parts === false) {
+            throw new Exception('Unable to parse URL');
+        }
+
+        $host = $parts['host'] ?? null;
+        $port = $parts['port'] ?? 80;
+        $path = $parts['path'] ?? '/';
+        $query = $parts['query'] ?? '';
+        parse_str($query, $queryParts);
+
+        if ($host === null) {
+            throw new Exception('Unknown host');
+        }
+
+        $connection = fsockopen($host, $port, $errno, $errstr, 30);
+        if ($connection === false) {
+            throw new Exception('Unable to connect to ' . $host);
+        }
+
+        $method = strtoupper($method);
+
+        if (!in_array($method, ['POST', 'PUT', 'PATCH'], true)) {
+            $queryParts = $params + $queryParts;
+            $params = [];
+        }
+
+        // Build request
+        $request  = $method . ' ' . $path;
+        if ($queryParts) {
+            $request .= '?' . http_build_query($queryParts);
+        }
+        $request .= ' HTTP/1.1' . "\r\n";
+        $request .= 'Host: ' . $host . "\r\n";
+
+        $body = http_build_query($params);
+        if ($body) {
+            $request .= 'Content-Type: application/x-www-form-urlencoded' . "\r\n";
+            $request .= 'Content-Length: ' . strlen($body) . "\r\n";
+        }
+        $request .= 'Connection: Close' . "\r\n\r\n";
+        $request .= $body;
+
+        // Send request to server
+        fwrite($connection, $request);
+        fclose($connection);
     }
 }

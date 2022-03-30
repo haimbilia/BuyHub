@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <?php
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+$frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onSubmit', 'setUpSendMessage(this); return false;');
@@ -52,14 +52,13 @@ if (isset($product)) {
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-7">
-                    <div class="section__head">
-                        <h4><?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?></h4>
+                <div class="col-md-6">
+                    <div class="section-head">
+                        <h4>
+                            <?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?>
+                        </h4>
                     </div>
-                    <div class="">
-                        <div class="bg-gray rounded p-5"> <?php echo $frm->getFormHtml(); ?> </div>
-                    </div>
-
+                    <div class=""><?php echo $frm->getFormHtml(); ?> </div>
                 </div>
             </div>
         </div>

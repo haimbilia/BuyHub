@@ -1,3 +1,38 @@
+.stores {
+    display: flex;
+    flex-direction: column;
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    &-item {
+        //  margin-bottom: 1.5rem;
+        // padding-bottom: 1.5rem;
+        // border-bottom: $border;
+    }
+    &-link {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    &-photo {
+        margin-#{$end-direction}: 1rem;
+        border: $border;
+        border-radius: 2px;
+        display: block;
+        img {
+            max-width: 100px;
+        }
+    }
+    &-detail {
+        font-weight: 500;
+        //margin-#{$start-direction}: auto;
+    }
+    &-location {
+        font-size: 0.85rem;
+    }
+}
+
 .interactive-stores {
     padding: 0;
     border-top: $border;
@@ -10,6 +45,8 @@
     &-map {
         order: 2;
         position: relative;
+        aspect-ratio: 4/3;
+
         .canvas-map {
             position: absolute;
             top: 0;

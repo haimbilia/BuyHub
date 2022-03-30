@@ -1,7 +1,7 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+$frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onSubmit', 'setUpShopSpam(this); return false;');
@@ -20,7 +20,7 @@ if (null != $btnFld) {
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-7">       
+                <div class="col-md-7">
                     <div class="section__head">
                         <h4><?php echo Labels::getLabel('LBL_Why_are_you_reporting_this_shop_as_spam', $siteLangId); ?></h4>
                     </div>

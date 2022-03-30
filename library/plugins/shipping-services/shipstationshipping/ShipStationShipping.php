@@ -185,7 +185,7 @@ class ShipStationShipping extends ShippingServicesBase
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $weightUnitName = ($orderDetail['op_product_weight_unit']) ? $weightUnitsArr[$orderDetail['op_product_weight_unit']] : '';
-        $productWeightInOunce = Shipping::convertWeightInOunce(($orderDetail['op_product_weight'] * $orderDetail['op_qty']), $weightUnitName);
+        $productWeightInOunce = Shipping::convertWeightInOunce($orderDetail['op_product_weight'], $weightUnitName);
 
         $this->setWeight($productWeightInOunce);
         $this->order['weight'] = $this->getWeight();

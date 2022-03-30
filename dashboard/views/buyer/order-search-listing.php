@@ -2,11 +2,11 @@
 <div class="js-scrollable table-wrap table-responsive">
     <?php
     $arr_flds = array(
-        'order_id'    =>    Labels::getLabel('LBL_Order_ID_Date', $siteLangId),
-        'product'    =>    Labels::getLabel('LBL_Details', $siteLangId),
-        'total'        =>    Labels::getLabel('LBL_Total', $siteLangId),
-        'status'    =>    Labels::getLabel('LBL_Status', $siteLangId),
-        'action'    =>    '',
+        'order_id' => Labels::getLabel('LBL_Order_ID_Date', $siteLangId),
+        'product' => Labels::getLabel('LBL_Details', $siteLangId),
+        'total' => Labels::getLabel('LBL_Total', $siteLangId),
+        'status' => Labels::getLabel('LBL_Status', $siteLangId),
+        'action' => '',
     );
     $tableClass = '';
     if (0 < count($orders)) {

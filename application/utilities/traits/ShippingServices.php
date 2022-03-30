@@ -1,5 +1,4 @@
 <?php
-
 trait ShippingServices
 {
     private $filename = '';

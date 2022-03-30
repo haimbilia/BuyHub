@@ -6,7 +6,7 @@
         border-bottom: $border;
         padding: 1rem 1.5rem;
         &.is-active {
-            //background-color: $bg-gray;
+            background-color: $bg-gray;
         }
         &:last-child {
             border: 0;
@@ -16,7 +16,7 @@
     &-head {
         padding: 1rem 1.5rem;
         padding-bottom: 0;
-        font-weight: 500;
+        font-weight: 600;
     }
     .sold-price {
         font-size: 1.125rem;
