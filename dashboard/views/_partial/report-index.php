@@ -46,7 +46,7 @@ if (!empty($fields)) {
                     'title' => Labels::getLabel('LBL_Export', $siteLangId)
                 ],
                 'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#export">
+                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
                     </use>
                 </svg>',
                 'label' => Labels::getLabel('LBL_Export', $siteLangId)

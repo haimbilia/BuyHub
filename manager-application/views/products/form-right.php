@@ -136,7 +136,7 @@
                 <div class="col-auto">
                     <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
                         <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                             </use>
                         </svg>
                         <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
