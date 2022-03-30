@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 $(document).on('click', '.dateJs', function () {
     var ele = $(this);
-    ele.hide().bind('active');
+    ele.bind('active');
     var inputFld = ele.siblings('input[type="text"]');
     inputFld.removeClass('d-none').focus().addClass('d-none');
     if (inputFld.val() != inputFld.attr('data-value')) {

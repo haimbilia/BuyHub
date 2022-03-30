@@ -2,7 +2,7 @@
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <div class="content-wrapper content-space">
     <div class="row justify-content-center">
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             <?php
             $data = [
                 'headingLabel' => Labels::getLabel('LBL_ACCOUNT_SETTINGS', $siteLangId),
