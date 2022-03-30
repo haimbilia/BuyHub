@@ -105,6 +105,7 @@ $("document").ready(function () {
         if (0 < isShippingSelected) {
             $(financialSummary).prepend(fcom.getLoader(true));
         }
+        
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
                 $(financialSummary).hide().html(ans.html).fadeIn();
@@ -383,6 +384,7 @@ $("document").ready(function () {
     loadShippingSummaryDiv = function (reloadFinancialSummary) {
         reloadFinancialSummary = ('undefined' == typeof reloadFinancialSummary ? false : reloadFinancialSummary)
         fcom.ajax(fcom.makeUrl("Checkout", "shippingSummary"), "", function (ans) {
+            fcom.removeLoader();
             $(pageContent).hide().html(ans).fadeIn();
             $(".sduration_id-Js").trigger("change");
             setCheckoutFlow("SHIPPING");
