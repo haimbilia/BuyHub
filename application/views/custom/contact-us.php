@@ -22,7 +22,6 @@ $fld->developerTags['col'] = 12;
     ykevents.contactUs();
 </script>
 <div id="body" class="body">
-
     <section class="section">
         <div class="container">
             <div class="row align-items-center justify-content-center">
@@ -37,7 +36,7 @@ $fld->developerTags['col'] = 12;
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-3">
                 <div class="col-xl-9">
                     <div class="row">
                         <div class="col-md-7">

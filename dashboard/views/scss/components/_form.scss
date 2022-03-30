@@ -107,7 +107,7 @@ $input-color: #474747;
         display: inline-block;
         cursor: default;
         /*opacity: 0.6;*/
-        font-weight: 400;
+        font-weight: 500;
         &:empty {
             min-height: 21px;
             display: block;
@@ -397,7 +397,7 @@ form.custom-form {
             height: 2rem !important;
         }
     }
-    .input-group-append{
+    .input-group-append {
         min-width: 90px;
     }
 }
