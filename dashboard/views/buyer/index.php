@@ -458,11 +458,3 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     </div>
 </div>
-<script>
-    getCancellationRequestComment = function(recordId) {
-        fcom.updateWithAjax(fcom.makeUrl('Seller', "getCancellationRequestComment"), "recordId=" + recordId, function(t) {
-            $.ykmodal(t.html, true);
-            fcom.removeLoader();
-        });
-    };
-</script>

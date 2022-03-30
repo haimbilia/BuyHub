@@ -7,7 +7,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		$("#cancelOrderRequestsListing").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Seller', 'orderCancellationRequestSearch'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$("#cancelOrderRequestsListing").html(res);
 		});
 	};
@@ -20,4 +20,11 @@ $(document).ready(function () {
 		$(frm.page).val(page);
 		searchRecords(frm);
 	}
+
+	getCancellationRequestComment = function (recordId) {
+		fcom.updateWithAjax(fcom.makeUrl('Seller', "getCancellationRequestComment"), "recordId=" + recordId, function (t) {
+			$.ykmodal(t.html, true);
+			fcom.removeLoader();
+		});
+	};
 })();
