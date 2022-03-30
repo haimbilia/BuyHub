@@ -67,7 +67,7 @@ $btn-line-height: $btn-height;
         border-color: #000;
         color: #fff;
         &:hover {
-            color: inherit;
+            color: #fff;
         }
     }
     &-outline-black {
@@ -75,7 +75,7 @@ $btn-line-height: $btn-height;
         border-color: #000;
         color: $txt-body;
         &:hover {
-            color: currentColor;
+            color: $txt-body;
         }
     }
     &-outline-gray {

@@ -230,9 +230,9 @@
         margin: 0;
         padding: 0;
     }
-
     &-size {
         .btn-option {
+            display: block;
             font-size: 0.8rem;
             color: $txt-body;
             white-space: nowrap;
@@ -292,6 +292,7 @@
         border: $border;
         border-radius: 2px;
         background-color: transparent;
+        min-height: 48px;
         &-item {
             margin: auto;
         }
@@ -312,7 +313,7 @@
         padding: 1.5rem 1.5rem;
         padding-bottom: 0;
         color: $txt-body;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 1rem;
     }
 }

@@ -13,49 +13,51 @@ $productsByShop = [];
 $productsBySelProdCode = [];
 if ($products) {
 ?>
-    <div class="interactive-stores-list stores">
-        <div class="stores-body scroll scroll-y">
-            <ul id="mapProducts--js">
-                <?php
-                foreach ($products as $product) {
-                    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                    $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
-                    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
-                    $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
-                    $productsByShop[$product['shop_id']]['shop_name'] = $product['shop_name'];
-                    $productsByShop[$product['shop_id']]['products'][$product['selprod_id']] = [
-                        'url' => $productUrl,
-                        'name' => ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']),
-                        'img' => $img,
-                        'theprice' => $product['theprice'],
-                        'shop_id' => $product['shop_id'],
-                    ];
-                    $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
-                ?>
+    <div class="interactive-stores-list">
+        <div class="stores">
+            <div class="stores-body">
+                <ul id="mapProducts--js">
+                    <?php
+                    foreach ($products as $product) {
+                        $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
+                        $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
+                        $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
+                        $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
+                        $productsByShop[$product['shop_id']]['shop_name'] = $product['shop_name'];
+                        $productsByShop[$product['shop_id']]['products'][$product['selprod_id']] = [
+                            'url' => $productUrl,
+                            'name' => ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']),
+                            'img' => $img,
+                            'theprice' => $product['theprice'],
+                            'shop_id' => $product['shop_id'],
+                        ];
+                        $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
+                    ?>
 
-                    <li data-shopId="<?php echo $product['shop_id']; ?>">
-                        <a class="store" href="<?php echo $productUrl; ?>">
-                            <div class="store__img">
-                                <img loading='lazy' data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
-                            </div>
-                            <div class="store__detail">
-                                <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
-                                </h6>
-                                <p class="location">
-                                    <?php echo $product['prodcat_name']; ?>
-                                </p>
-                                <div class="store__detail-foot">
-                                    <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                        <li data-shopId="<?php echo $product['shop_id']; ?>">
+                            <a class="store" href="<?php echo $productUrl; ?>">
+                                <div class="store__img">
+                                    <img loading='lazy' data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
                                 </div>
+                                <div class="store__detail">
+                                    <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
+                                    </h6>
+                                    <p class="location">
+                                        <?php echo $product['prodcat_name']; ?>
+                                    </p>
+                                    <div class="store__detail-foot">
+                                        <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                                    </div>
 
-                            </div>
-                        </a>
-                        <a href="javascript:void(0);" class="link" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>','<?php echo $product['selprod_id']; ?>')"><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></a>
+                                </div>
+                            </a>
+                            <a href="javascript:void(0);" class="link" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>','<?php echo $product['selprod_id']; ?>')"><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></a>
 
-                    </li>
-                <?php } ?>
-            </ul>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -132,7 +134,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function () {
+    $(function() {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);
