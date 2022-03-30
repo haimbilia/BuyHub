@@ -213,7 +213,7 @@ class SmsTemplatesController extends ListingBaseController
         }
 
         $this->changeTplStatus($stplCode, $status);
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     public function toggleBulkStatuses()
@@ -229,7 +229,7 @@ class SmsTemplatesController extends ListingBaseController
         foreach ($stplCodesArr as $stplCode) {
             $this->changeTplStatus($stplCode, $status);
         }
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     private function changeTplStatus(string $stplCode, int $status)

@@ -32,13 +32,13 @@ if (null != $fld) {
     if (0 < $badgeReqId && true === $fileFound) {
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#download">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
                                 </use>
                             </svg>
                                 </a>';
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                                 </use>
                             </svg>
                                 </a>';

@@ -32,7 +32,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
             ],
             'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#inventories">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#inventories">
             </use>
         </svg>',
             'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)

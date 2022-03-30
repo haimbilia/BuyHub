@@ -37,7 +37,6 @@ $(document).ajaxComplete(function () {
             frm.sortOrder.value = '';
         }
         data = fcom.frmData(frm);
-
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             fcom.removeLoader();
             setTabActive(type);
@@ -62,7 +61,7 @@ $(document).ajaxComplete(function () {
         var keyName = frm.keyName.value;
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
         });
     };

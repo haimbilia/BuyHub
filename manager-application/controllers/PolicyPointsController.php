@@ -219,7 +219,7 @@ class PolicyPointsController extends ListingBaseController
 
         $this->updatePolicyPointStatus($ppointId, $status);
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     public function toggleBulkStatuses()
@@ -241,7 +241,7 @@ class PolicyPointsController extends ListingBaseController
 
             $this->updatePolicyPointStatus($ppointId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

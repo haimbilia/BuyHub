@@ -399,7 +399,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
 
             if (t.langId == langLbl.defaultFormLangId) {
