@@ -1175,7 +1175,7 @@ class HomeController extends MyAppController
 
                     if (true === MOBILE_APP_API_CALL) {
                         foreach ($testimonialsDetail as &$testimonial) {
-                            $testimonial['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $this->siteLangId, 'THUMB')), CONF_IMG_CACHE_TIME, '.jpg');
+                            $testimonial['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $this->siteLangId, ImageDimension::VIEW_MEDIUM)), CONF_IMG_CACHE_TIME, '.jpg');
                         }
                     }
 

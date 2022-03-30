@@ -15,6 +15,7 @@ class CacheHelper extends FatCache
     const TYPE_COLLECTIONS = 10;
     const TYPE_HELP_CENTER = 11;
     const TYPE_META_TAGS = 12;
+    const TYPE_BLOCK_CONTENT = 13;
 
     public static function clear(int $type)
     {

@@ -186,7 +186,7 @@
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                     </use>
                 </svg>
-                <span class="txt">Open!</span>
+                <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
             </button>
         </li>      
         <li class="mobile-actions-item" role="none">
