@@ -201,7 +201,7 @@ class LanguagesController extends ListingBaseController
 
         $this->changeStatus($recordId, $status);
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     public function toggleBulkStatuses()
@@ -225,7 +225,7 @@ class LanguagesController extends ListingBaseController
             $this->changeStatus($recordId, $status);
         }
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     protected function changeStatus($recordId, $status)

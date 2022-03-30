@@ -623,8 +623,8 @@ class BrandsController extends ListingBaseController
         }
 
         $this->changeStatus($recordId, $status);
-        Product::updateMinPrices(0, 0, $recordId);
-        $this->set('msg', $this->str_update_record);
+        Product::updateMinPrices(0, 0, $recordId);        
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -646,7 +646,7 @@ class BrandsController extends ListingBaseController
             $this->changeStatus($brandId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

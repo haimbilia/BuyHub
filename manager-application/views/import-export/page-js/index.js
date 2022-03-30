@@ -15,6 +15,7 @@ $(document).ready(function () {
 
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).html(t.html);
         });
@@ -29,6 +30,7 @@ $(document).ready(function () {
         var dv = $('#listing');
         $("#listing").html(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $("#listing").html(res.html);
         });
@@ -39,6 +41,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             loadForm('settings');
         });

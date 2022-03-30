@@ -8,12 +8,8 @@
 			return; 
 		} */
 		fcom.updateWithAjax(fcom.makeUrl("adminGuest", "resetPasswordSubmit"), fcom.frmData(frm), function (t) {
-			if (t.status == 1) {
-				fcom.waitAndRedirect(t.msg, fcom.makeUrl('adminGuest', 'loginForm'), 2000);
-				fcom.displaySuccessMessage(t.msg);
-			} else {
-				fcom.displayErrorMessage(t.msg);
-			}
+			fcom.waitAndRedirect(t.msg, fcom.makeUrl('adminGuest', 'loginForm'), 2000);
+			fcom.displaySuccessMessage(t.msg);
 		});
 		return false;
 	}

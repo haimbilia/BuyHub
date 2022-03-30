@@ -549,7 +549,7 @@ class ContentBlockController extends ListingBaseController
 
             $this->updateEPageStatus($epageId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

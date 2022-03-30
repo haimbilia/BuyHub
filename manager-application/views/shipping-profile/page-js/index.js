@@ -6,6 +6,7 @@
         }
         data = 'id=' + shippingProfileId;
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'deleteRecord'), data, function () {
+            fcom.closeProcessing();
             reloadList();
         });
     }; 

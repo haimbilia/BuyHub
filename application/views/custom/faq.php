@@ -18,6 +18,7 @@
             </div>
         </div>
     </section>
+    <div class="divider"></div>
     <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">

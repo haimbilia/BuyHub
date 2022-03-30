@@ -13,6 +13,7 @@ $(document).ready(function () {
         }
         data = "recordId=" + recordId + "&addr_record_id=" + addrRecordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });

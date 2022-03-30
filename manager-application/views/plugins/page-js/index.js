@@ -37,19 +37,19 @@ $(document).ajaxComplete(function () {
             frm.sortOrder.value = '';
         }
         data = fcom.frmData(frm);
-
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             fcom.removeLoader();
             setTabActive(type);
             window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
-        });
+        }, { fOutMode: 'json' });
     };
 
     editSettingForm = function (keyName) {
         var data = 'keyName=' + keyName;
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(t.html);
         });
@@ -61,6 +61,7 @@ $(document).ajaxComplete(function () {
         var keyName = frm.keyName.value;
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
         });
     };
@@ -93,6 +94,7 @@ $(document).ajaxComplete(function () {
 
     syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
         }, {}, false);
     };
@@ -167,6 +169,7 @@ $(document).ajaxComplete(function () {
             fcom.makeUrl('plugins', "deleteIcon"),
             { recordId },
             function (t) {
+                fcom.closeProcessing();
                 editRecord(recordId);
             }
         );

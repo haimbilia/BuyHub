@@ -10,6 +10,7 @@
         $.ykmodal(fcom.getLoader(), true);
         data = "recordId=" + recordId + '&profileId=' + profileId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
@@ -17,6 +18,7 @@
 
     viewSellerShip = function (productId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId }, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
         });
@@ -24,6 +26,7 @@
 
     viewAdminSellerShip = function (productId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId, adminShip: 1 }, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();
         });

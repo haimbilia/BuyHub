@@ -65,6 +65,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
@@ -77,6 +78,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
@@ -84,6 +86,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
     recordForm = function (id, type) {
         fcom.updateWithAjax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
@@ -119,6 +122,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
     collectionMediaForm = function (collection_id, type) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [collection_id, type]), "",
             function (t) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
                 if (0 < $(".displayMediaOnlyJs:checked").val()) {
@@ -133,6 +137,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
     loadImages = function (recordId, langId = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
@@ -182,6 +187,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
     bannerForm = function (collection_id, banner_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
@@ -190,6 +196,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
     bannerLangForm = function (collection_id, banner_id, langId, autoFillLangData = 0) {
         var data = "collection_id=" + collection_id + "&banner_id=" + banner_id + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
@@ -197,6 +204,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
     banners = function (collection_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
@@ -255,6 +263,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
             fcom.makeUrl(controllerName, "bannerMedia", [collectionId, bannerId, langId, slide_screen]),
             "",
             function (t) {
+                fcom.closeProcessing();
                 fcom.removeLoader();
                 loadBannerImages(collectionId, bannerId, langId, slide_screen);
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
@@ -271,6 +280,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
             screen = $('.prefDimensionsJs').val();
         }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
@@ -346,6 +356,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
+            fcom.closeProcessing();
            
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();

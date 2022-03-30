@@ -2,6 +2,7 @@
 (function () {
     mediaForm = function (banner_id, langId = 0, slide_screen = 1) {
         fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'media', [banner_id, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
             images(banner_id, 'logo', slide_screen, langId);
@@ -11,6 +12,7 @@
 
     images = function (recordId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
@@ -25,6 +27,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('ProductCategoriesRequest', 'removeBrandMedia', [brandId, fileType, afileId]), '', function (t) {
+            fcom.closeProcessing();
             images(brandId, fileType, slide_screen, langId);
             reloadList();
         });

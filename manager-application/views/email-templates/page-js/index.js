@@ -17,6 +17,7 @@
 
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
+            fcom.closeProcessing();
             reloadList();
         });
     };
@@ -72,6 +73,7 @@
 
     editLangForm = function (etplCode, langId, autoFillLangData = 0) {
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, '', 'modal-dialog-vertical-md');
             fcom.removeLoader();
             fcom.setEditorLayout(langId);
@@ -85,6 +87,7 @@
     editSettingsForm = function (langId, autoFillLangData = 0) {        
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'settingsForm', [langId, autoFillLangData]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, '', 'modal-dialog-vertical-md');
             fcom.setEditorLayout(langId); 
         });
@@ -98,6 +101,7 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             
         });
@@ -114,6 +118,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'removeEmailLogo', [lang_id]), '', function (t) {
+            fcom.closeProcessing();
             editSettingsForm(lang_id);
         });
     };  

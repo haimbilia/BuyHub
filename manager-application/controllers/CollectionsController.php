@@ -258,6 +258,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
+            case Collections::TYPE_SHOP_LAYOUT2:
+                return Collections::LIMIT_SHOP_LAYOUT2;
+                break;    
             case Collections::TYPE_BRAND_LAYOUT1:
                 return Collections::LIMIT_BRAND_LAYOUT1;
                 break;
@@ -417,7 +420,7 @@ class CollectionsController extends ListingBaseController
 
         $this->updateCollectionStatus($recordId, $status);
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     public function toggleBulkStatuses()
@@ -437,7 +440,7 @@ class CollectionsController extends ListingBaseController
 
             $this->updateCollectionStatus($recordId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

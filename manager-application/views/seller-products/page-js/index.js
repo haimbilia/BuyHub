@@ -6,6 +6,7 @@
         }
         fcom.resetEditorInstance();
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "sellerProductDownloadFrm", [selprod_id]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             getDigitalDownloads();
             fcom.removeLoader();
@@ -29,6 +30,7 @@
         }
         var data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getInventoryDigitalDownloads'), data, function (res) {
+            fcom.closeProcessing();
             $("#digital_download_list").html(res.html);
         });
     }

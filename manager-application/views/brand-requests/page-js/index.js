@@ -11,6 +11,7 @@
 
     brandImages = function (brandId, fileType, slide_screen, langId) {
         fcom.updateWithAjax(fcom.makeUrl('BrandRequests', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t.html);
@@ -25,6 +26,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('BrandRequests', 'removeBrandMedia', [brandId, fileType, afileId]), '', function (t) {
+            fcom.closeProcessing();
             brandImages(brandId, fileType, slide_screen, langId);
             reloadList();
         });

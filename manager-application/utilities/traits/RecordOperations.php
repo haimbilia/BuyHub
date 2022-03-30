@@ -36,7 +36,7 @@ trait RecordOperations
 
         $this->set('recordId', $recordId);
         $this->set('langId', $this->newTabLangId);
-        $this->set('msg', $this->str_setup_successful);
+        $this->set('msg', $this->str_update_record);
     }
 
     protected function addSortingElements(Form $frm, string $sortBy, string $sortOrder = applicationConstants::SORT_ASC, int $pageSize = 0): void
@@ -172,7 +172,7 @@ trait RecordOperations
         }
 
         $this->changeStatus($recordId, $status);
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -207,7 +207,7 @@ trait RecordOperations
             $this->changeStatus($recordId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

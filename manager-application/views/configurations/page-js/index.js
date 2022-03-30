@@ -58,6 +58,7 @@ $(document).ready(function () {
         fcom.resetEditorInstance();
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).replaceWith(t.html);
             setTabActive(frmType);
@@ -79,6 +80,7 @@ $(document).ready(function () {
         $(dv).prepend(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
         });
     }
@@ -89,6 +91,7 @@ $(document).ready(function () {
         }
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             getForm(document.frmConfiguration.form_type.value, lang_id);
         });
@@ -112,6 +115,7 @@ $(document).ready(function () {
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.updateWithAjax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
+                fcom.closeProcessing();
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
 
@@ -204,6 +208,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'deleteVerificationFile', [fileType]), '', function (t) {
+            fcom.closeProcessing();
             getForm(document.frmConfiguration.form_type.value, document.frmConfiguration.lang_id.value);
         });
     };

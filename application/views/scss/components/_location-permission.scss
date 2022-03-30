@@ -41,8 +41,8 @@
     }
 
     &_body {
-        min-width: 350px;
-        width: 100%;
+        // min-width: 350px;
+        // width: 100%;
         padding: 2rem;
     }
     .btn-detect {
@@ -50,6 +50,7 @@
         align-items: center;
         text-align: #{$start-direction};
         font-weight: 600;
+        white-space: nowrap;
         .svg {
             fill: $secondary-color;
             margin-#{$end-direction}: 8px;
@@ -74,6 +75,14 @@
         transition: 0.3s all ease-in-out;
         appearance: none;
         margin-bottom: 2rem;
+    }
+}
+.geo-location-mobile {
+    .button-geo-location {
+        margin-bottom: 1.5rem;
+    }
+    .geo-location_body {
+        border: $border;
     }
 }
 .location-popup-width {

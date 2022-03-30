@@ -179,7 +179,7 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(plugin_name,plugin_identifier) as plugin_name'], applicationConstants::JOIN_RIGHT);
+        $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*', 'IFNULL(plugin_name,plugin_identifier) as plugin_name'], applicationConstants::JOIN_RIGHT);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
@@ -198,18 +198,18 @@ class PluginsController extends ListingBaseController
             $identifier = $data['plugin_identifier'];
             $frm->fill($data);
             if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
-                $pluginLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId);  
-            }          
+                $pluginLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId);
+            }
         }
-        
+
         $this->set('pluginLogo', $pluginLogo);
 
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
-        $this->set('canEdit', $this->objPrivilege->canEditPlugins($this->admin_id , true));  
+        $this->set('canEdit', $this->objPrivilege->canEditPlugins($this->admin_id, true));
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
-        $this->set('html', $this->_template->render(false, false, NULL, true));             
+        $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -225,8 +225,8 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         unset($post['plugin_id'], $post['plugin_type'], $post['plugin_active']);
-       
-        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id','plugin_type','plugin_active']);
+
+        $pluginData = Plugin::getAttributesById($recordId, ['plugin_id', 'plugin_type', 'plugin_active']);
         if ($pluginData === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -242,9 +242,16 @@ class PluginsController extends ListingBaseController
                 $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
             LibHelper::exitWithError($msg, true);
-        }        
+        }
 
-        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
+        $langData = [
+            $record::tblFld('name') => $post[$record::tblFld('name')]
+        ];
+
+        if (isset($post[$record::tblFld('description')])){
+            $langData[$record::tblFld('description')] = $post[$record::tblFld('description')];
+        }
+        $this->setLangData($record, $langData);
 
         $newTabLangId = 0;
         if ($recordId > 0) {
@@ -271,12 +278,11 @@ class PluginsController extends ListingBaseController
             }
         }
 
-        if($pluginData['plugin_active'] != $active){
+        if ($pluginData['plugin_active'] != $active) {
             if (false == Plugin::updateStatus($pluginData['plugin_type'], $active, $recordId, $error)) {
                 LibHelper::exitWithError($error, true);
             }
         }
-        
 
         $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
@@ -285,9 +291,9 @@ class PluginsController extends ListingBaseController
     }
 
     public function uploadIcon()
-    {      
+    {
         $this->objPrivilege->canEditPlugins();
-        $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);        
+        $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
 
         if (1 > $plugin_id) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -310,19 +316,19 @@ class PluginsController extends ListingBaseController
     }
 
     public function deleteIcon()
-    {      
+    {
         $this->objPrivilege->canEditPlugins();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)){
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-       
+
         $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -363,7 +369,7 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError($error, true);
         }
 
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -410,6 +416,9 @@ class PluginsController extends ListingBaseController
         $frm->addHiddenField('', 'plugin_type', $pluginType);
         $frm->addRequiredField(Labels::getLabel('FRM_PLUGIN_NAME', $this->siteLangId), 'plugin_name');
 
+        if (in_array($pluginType, Plugin::HAVING_DESCRIPTION)) {
+            $frm->addHtmlEditor(Labels::getLabel('FRM_EXTRA_INFO', $this->siteLangId), 'plugin_description');
+        }
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
 
@@ -418,7 +427,7 @@ class PluginsController extends ListingBaseController
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
-            $frm->addHTML('', 'plugin_logo', '');            
+            $frm->addHTML('', 'plugin_logo', '');
         }
 
         $languageArr = Language::getDropDownList();
@@ -459,7 +468,7 @@ class PluginsController extends ListingBaseController
             }
             Plugin::updateStatus($pluginType, $status, $recordId, $error);
         }
-        $msg = !empty($error) ? $error : $this->str_update_record;
+        $msg = !empty($error) ? $error : Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -507,7 +516,7 @@ class PluginsController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->siteLangId),
             'plugin_name' => Labels::getLabel('LBL_PLUGIN', $this->siteLangId),
             'plugin_active' => Labels::getLabel('LBL_Status', $this->siteLangId),

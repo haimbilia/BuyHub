@@ -418,7 +418,7 @@ class AdminUsersController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
         $this->changeStatus($recordId, $status);
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -452,7 +452,7 @@ class AdminUsersController extends ListingBaseController
             }
             $this->changeStatus($recordId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
