@@ -124,7 +124,9 @@ $(document).ready(function () {
     setupFontStyle = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('ThemeColor', 'setupFontStyle'), data, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl('ThemeColor', 'setupFontStyle'), data, function (t) {
+            fcom.closeProcessing();            
+        });
     };
 
     resetToDefault = function () {

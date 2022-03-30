@@ -23,6 +23,7 @@
 
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 			if (0 < $('.noRecordFoundJs').length) {
 				$('.noRecordFoundJs').remove();
@@ -76,6 +77,7 @@
 			fcom.makeUrl(controllerName, "deleteRecord"),
 			data,
 			function () {
+				fcom.closeProcessing();
 				var oldRecordParent = $('#' + recordId).parent().closest('.liJs');
 				var oldRecordParentId = oldRecordParent.attr('id');
 				if (1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' > li').length) {
@@ -184,6 +186,7 @@
 		}
 
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'getSubCategories'), 'prodCatId=' + prodCatId, function (res) {
+            fcom.closeProcessing();
 			if ($("#" + prodCatId).children('ul.append-ul').length) {
 				$("#" + prodCatId).children('ul.append-ul').append(res.html);
 			} else {
@@ -232,6 +235,7 @@
 	updateCatOrder = function (data) {
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (res) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 		});
 	}
@@ -247,9 +251,8 @@
 		}
 		var data = "catName=" + catName + "&toLangId=" + toLangId;
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'translatedCategoryData'), data, function (t) {
-			if (t.status == 1) {
-				$("input[name='prodcat_name[" + toLangId + "]']").val(t.prodCatName);
-			}
+            fcom.closeProcessing();
+			$("input[name='prodcat_name[" + toLangId + "]']").val(t.prodCatName);
 		});
 	}
 	

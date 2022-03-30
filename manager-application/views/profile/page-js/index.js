@@ -6,6 +6,7 @@
         $(dv).prepend(fcom.getLoader());
         markMainTabActive();
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'profileInfoForm'), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).html(t.html);
         });
@@ -15,6 +16,7 @@
         $(dv).prepend(fcom.getLoader());
         markMainTabActive();
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'changePassword'), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).html(t.html);
         });
@@ -38,6 +40,7 @@
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'updateProfileInfo'), data, function (t) {
+            fcom.closeProcessing();
         });
     };
 
@@ -46,6 +49,7 @@
             return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Profile', 'updatePassword'), data, function (t) {
+            fcom.closeProcessing();
         });
     };
 
@@ -64,6 +68,7 @@
                     return;    
                 }
                 fcom.updateWithAjax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
+                    fcom.closeProcessing();
                     $("#modalBoxJs .modal-body").html(t.body);
                     $("#modalBoxJs .modal-footer").html(t.footer);
                     var file = inputBtn.files[0];
@@ -83,6 +88,7 @@
             }
         } else {
             fcom.updateWithAjax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
+                fcom.closeProcessing();
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var container = document.querySelector('.img-container');

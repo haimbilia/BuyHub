@@ -2,6 +2,7 @@
     view = function (recordId) {
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "view"), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
@@ -10,6 +11,7 @@
     editPushNotification = function (recordId, langId) {
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
         });
@@ -17,6 +19,7 @@
 
     loadImages = function (recordId, lang_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
@@ -38,6 +41,7 @@
         }
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'clone'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             $.ykmodal(t.html, false);
             fcom.removeLoader();
@@ -46,6 +50,7 @@
 
     notifyUsersForm = function (pNotificationId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'notifyUsersForm', [pNotificationId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -73,7 +78,9 @@
             return false;
         }
 
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'unlinkUser', [recordId, itemId]), '', function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'unlinkUser', [recordId, itemId]), '', function (t) {
+            fcom.closeProcessing();            
+        });
     }
 
     getItem = function (e) {

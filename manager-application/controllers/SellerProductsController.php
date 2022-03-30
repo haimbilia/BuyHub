@@ -1846,7 +1846,7 @@ class SellerProductsController extends ListingBaseController
         $productId = SellerProduct::getAttributesById($selprodId, 'selprod_product_id', false);
         Product::updateMinPrices($productId);
 
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1865,7 +1865,7 @@ class SellerProductsController extends ListingBaseController
             }
             $this->updateSellerProductStatus($selprodId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -629,8 +629,7 @@ class BannersController extends ListingBaseController
         if (!$obj->changeStatus($status)) {
             LibHelper::exitWithError($obj->getError(), true);
         }
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     /**

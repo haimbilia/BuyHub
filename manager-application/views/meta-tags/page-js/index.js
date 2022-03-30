@@ -4,6 +4,7 @@ $(document).on('blur', '.metaUrlJs', function () {
     }
     var data = 'url=' + $(this).val();
     fcom.updateWithAjax(fcom.makeUrl('Home', 'segregateUrl'), data, function (t) {
+        fcom.closeProcessing();
         $('.metaControllerJs').val(t.controller);
         $('.metaActionJs').val(t.action);
         $('.metaRecordIdJs').val(parseInt(t.recordId));
@@ -58,6 +59,7 @@ $(document).on('blur', '.metaUrlJs', function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             setTabActive(type);
 
@@ -72,6 +74,7 @@ $(document).on('blur', '.metaUrlJs', function () {
 
     metaTagForm = function (id, metaType, metaTagRecordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -79,6 +82,7 @@ $(document).on('blur', '.metaUrlJs', function () {
 
     editMetaTagForm = function (id, metaType, metaTagRecordId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -88,6 +92,7 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, t.metaType, t.metaTagRecordId);
@@ -98,6 +103,7 @@ $(document).on('blur', '.metaUrlJs', function () {
 
     editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
         });
@@ -107,6 +113,7 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, metaType);

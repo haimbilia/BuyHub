@@ -72,9 +72,9 @@ class PluginCommon extends MyAppModel
      * getTypeArr - Used to get plugin type
      *
      * @param  mixed $langId
-     * @return void
+     * @return array
      */
-    public static function getTypeArr($langId)
+    public static function getTypeArr($langId): array
     {
         return [
             self::TYPE_CURRENCY_CONVERTER => Labels::getLabel('LBL_CURRENCY_CONVERTER', $langId),

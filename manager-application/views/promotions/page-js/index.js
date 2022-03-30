@@ -72,6 +72,7 @@ $(document).on('change', "select[name='promotion_type']", function () {
 
     promotionMediaForm = function (recordId, langId = 0, screen_id = 1) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId]), "", function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html);
             fcom.removeLoader();
             images(recordId, langId, screen_id);
@@ -80,6 +81,7 @@ $(document).on('change', "select[name='promotion_type']", function () {
 
     images = function (promotion_id, lang_id, screen_id) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [promotion_id, lang_id, screen_id]), '', function (t) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
@@ -101,6 +103,7 @@ $(document).on('change', "select[name='promotion_type']", function () {
         }
         data = 'promotionId=' + promotionId + '&bannerId=' + bannerId + '&langId=' + langId + '&screen=' + screen;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), data, function (res) {
+            fcom.closeProcessing();
             images(promotionId, langId, screen);
         });
     };

@@ -1,8 +1,6 @@
 <?php
-
 class ListingBaseController extends AdminBaseController
 {
-
     use RecordOperations;
 
     protected int $mainTableRecordId = 0;

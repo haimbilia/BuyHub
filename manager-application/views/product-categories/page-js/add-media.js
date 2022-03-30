@@ -4,6 +4,7 @@
 		loadCropperSkeleton();
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
+				fcom.closeProcessing();
 				$("#modalBoxJs .modal-body").html(t.body);
 				$("#modalBoxJs .modal-footer").html(t.footer);
 				var file = inputBtn.files[0];
@@ -32,6 +33,7 @@
 		loadCropperSkeleton();
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
+				fcom.closeProcessing();
 				$("#modalBoxJs .modal-body").html(t.body);
 				$("#modalBoxJs .modal-footer").html(t.footer);
 				var file = inputBtn.files[0];
@@ -106,6 +108,7 @@
 	deleteCatImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
 		if (!confirm(langLbl.confirmDeleteImage)) { return; }
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
 			categoryImages(prodcatId, imageType, slide_screen, langId);
 
 		});
@@ -113,6 +116,7 @@
 
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id = 0) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
+            fcom.closeProcessing();
 			fcom.removeLoader();
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t.html);
@@ -133,6 +137,7 @@
 	};
 	catMediaForm = function (record_id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imagesForm', [record_id]), '', function (t) {
+            fcom.closeProcessing();
 			$.ykmodal(t.html);
 			fcom.removeLoader();
 			if (record_id > 0) {

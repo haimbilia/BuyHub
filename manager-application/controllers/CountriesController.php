@@ -236,7 +236,7 @@ class CountriesController extends ListingBaseController
 
         $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, 0, $recordId);
-        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
+        LibHelper::dieJsonSuccess(['msg' => Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId)]);
     }
 
     public function toggleBulkStatuses()
@@ -257,7 +257,7 @@ class CountriesController extends ListingBaseController
             $this->changeStatus($recordId, $status);
         }
         Product::updateMinPrices();
-        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
+        LibHelper::dieJsonSuccess(['msg' => Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId)]);
     }
 
     public function autoComplete()

@@ -13,6 +13,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "editTemplate", [stplCode, langId, autoFillLangData]), '',
             function (t) {
+                fcom.closeProcessing();
                 $.ykmodal(t.html);
                 fcom.removeLoader();
             }
@@ -23,6 +24,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.closeProcessing();
             reloadList();
         });
     };

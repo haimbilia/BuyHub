@@ -155,6 +155,28 @@ $frm->addHiddenField('', 'status'); ?>
             'siteLangId' => $siteLangId,
             'statusButtons' => (1 < count($arrListing) && $canEdit && !$isKingPinType),
         ];
+       
+        if($pluginType == Plugin::TYPE_TAX_SERVICES ){
+            $plugin = new Plugin();
+            if($plugin->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_id')){
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'class' => 'btn btn-outline-brand btn-icon',
+                            'onclick' => "syncCategories()",
+                            'title' => Labels::getLabel('LBL_SYNC_TAX_CATEGORIES', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                        </use>
+                                    </svg><span>' . Labels::getLabel('BTN_SYNC', $siteLangId) . '</span>',
+                    ]
+                ];
+            } 
+        }
+        
         $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
         ?>
     </div>
