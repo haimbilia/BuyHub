@@ -35,29 +35,3 @@ if (null != $btnFld) {
     <div class="gap"></div>
 </div>
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
-<script type="text/javascript">
-    (function($) {
-        if (langLbl.layoutDirection == 'rtl') {
-            $('.shops-sliders').slick({
-                dots: false,
-                arrows: true,
-                autoplay: true,
-                rtl: true,
-                pauseOnHover: false,
-                speed: 500,
-                fade: true,
-                cssEase: 'linear',
-            });
-        } else {
-            $('.shops-sliders').slick({
-                dots: false,
-                arrows: true,
-                autoplay: true,
-                pauseOnHover: false,
-                speed: 500,
-                fade: true,
-                cssEase: 'linear',
-            });
-        }
-    })(jQuery);
-</script>

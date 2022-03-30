@@ -410,6 +410,9 @@ class ContentBlockController extends ListingBaseController
                 }
             }
         }
+
+        CacheHelper::clear(CacheHelper::TYPE_BLOCK_CONTENT );
+
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
@@ -485,6 +488,9 @@ class ContentBlockController extends ListingBaseController
         } else {
             $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
         }
+
+        CacheHelper::clear(CacheHelper::TYPE_BLOCK_CONTENT);
+
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $lang_id, $universalImage);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cblockBackgroundImage');

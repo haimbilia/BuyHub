@@ -72,8 +72,8 @@ function setupReviewAbuse(frm){
 				$('#reviewEndIndex').html(ans.recordsToDisplay);
 			}
 			$('#reviewsTotal').html(ans.totalRecords);
-
 			$("#loadMoreReviewsBtnDiv").html( ans.loadMoreBtnHtml );
+			fcom.removeLoader();
 		});
 	};
 

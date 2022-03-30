@@ -297,7 +297,7 @@ function brandFilters() {
     }
     $('body').removeClass('collection-sidebar--on');
     fcom.ajax(url, data, function (ans) {
-        $.facebox(ans, 'modal-lg');
+        $.facebox(ans, 'modal-xl');
     });
 }
 

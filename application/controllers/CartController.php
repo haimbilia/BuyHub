@@ -326,14 +326,39 @@ class CartController extends MyAppController
             }
         }
 
+        LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
+        
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart();
             $this->set('cartItemsCount', $cartObj->countProducts());
             $this->set('msg', Labels::getLabel('SUC_ADDED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render();
         }
+
         $this->set('success_msg', CommonHelper::renderHtml(Message::getHtml()));
         $this->_template->render(false, false, 'json-success.php', false, false);
+    }
+
+    public function loadRates()
+    {
+        $sessionId = FatApp::getPostedData('sessionId', FatUtility::VAR_STRING, '');
+        if (empty($sessionId)) {
+            return;
+        }
+        session_destroy();
+        session_id($sessionId);
+        session_start();
+
+        $userId = UserAuthentication::getLoggedUserId(true);
+        $addrData = Address::getDefaultByRecordId(Address::TYPE_USER, $userId, $this->siteLangId);
+        if (empty($addrData)) {
+            return;
+        }
+
+        $cartObj = new Cart($userId, $this->siteLangId, $this->app_user['temp_user_id']);
+        $cartObj->setCartShippingAddress($addrData['addr_id']);
+        $rates = $cartObj->getShippingOptions();
+        return;
     }
 
     public function addSelectedToCart()
