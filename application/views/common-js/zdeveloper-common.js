@@ -1361,7 +1361,15 @@ $(function () {
         if (page == "product-view") {
             return false;
         }
-        $(pageContent).prepend(fcom.getLoader());
+        
+        var section = "";
+        if (0 < $(".checkout-content-js").length) {
+            section = $(".checkout-content-js");
+        }
+        if (0 < $("#cartList").length) {
+            section = $("#cartList");
+        }
+        section.prepend(fcom.getLoader());
         cart.update(key, page, type);
     });
     $(document).on("keyup", ".productQty-js", function () {
@@ -1434,7 +1442,15 @@ $(function () {
             return false;
         }
         var fulfillmentType = $("input[name='fulfillment_type']:checked").val();
-        $(pageContent).prepend(fcom.getLoader());
+        
+        var section = "";
+        if (0 < $(".checkout-content-js").length) {
+            section = $(".checkout-content-js");
+        }
+        if (0 < $("#cartList").length) {
+            section = $("#cartList");
+        }
+        section.prepend(fcom.getLoader());
         cart.update(key, page, fulfillmentType);
     });
 
@@ -1469,7 +1485,15 @@ $(function () {
         if (page == "product-view") {
             return false;
         }
-        $(pageContent).prepend(fcom.getLoader());
+
+        var section = "";
+        if (0 < $(".checkout-content-js").length) {
+            section = $(".checkout-content-js");
+        }
+        if (0 < $("#cartList").length) {
+            section = $("#cartList");
+        }
+        section.prepend(fcom.getLoader());
         cart.update(key, page, type);
     });
     $(document).on("click", ".setactive-js li", function () {
