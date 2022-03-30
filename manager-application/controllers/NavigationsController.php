@@ -268,7 +268,7 @@ class NavigationsController extends ListingBaseController
             LibHelper::exitWithError($navObj->getError(), true);
         }
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
     public function linkForm()

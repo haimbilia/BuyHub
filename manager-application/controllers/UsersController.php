@@ -672,7 +672,7 @@ class UsersController extends ListingBaseController
         if (0 < $shopId) {
             Product::updateMinPrices(0, $shopId);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -693,7 +693,7 @@ class UsersController extends ListingBaseController
 
             $this->changeStatus($recordId, $status);
         }
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

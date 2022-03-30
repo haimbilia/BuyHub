@@ -284,7 +284,6 @@ class PluginsController extends ListingBaseController
             }
         }
 
-
         $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
@@ -370,7 +369,7 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError($error, true);
         }
 
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -469,7 +468,7 @@ class PluginsController extends ListingBaseController
             }
             Plugin::updateStatus($pluginType, $status, $recordId, $error);
         }
-        $msg = !empty($error) ? $error : $this->str_update_record;
+        $msg = !empty($error) ? $error : Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }

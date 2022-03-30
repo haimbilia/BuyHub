@@ -1,7 +1,4 @@
 <?php
-
-use function GuzzleHttp\json_decode;
-
 class AdminBaseController extends FatController
 {
     protected $objPrivilege;
