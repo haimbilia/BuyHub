@@ -69,6 +69,7 @@ var cart = {
             isAjaxRunning = false;
             if (ans.status) {
                 if (loadDiv != undefined) {
+                    $(financialSummary).prepend(fcom.getLoader(true));
                     loadFinancialSummary();
                     if (1 > $("#hasAddress").length || ($("#hasAddress").length > 0 && 0 < $("#hasAddress").val())) {
                         resetCheckoutDiv();
@@ -79,7 +80,6 @@ var cart = {
                     listCartProducts();
                 }
             }
-            /* $.ykmsg.close(); */
         });
     },
 

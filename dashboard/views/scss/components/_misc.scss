@@ -415,8 +415,8 @@ a:hover {
         display: block;
         width: 100%;
         margin-top: 5px;
-        .select2-search__field{
-            width: 100%!important;
+        .select2-search__field {
+            width: 100% !important;
         }
     }
 }
@@ -673,6 +673,7 @@ a:hover {
     justify-content: space-between;
     flex: 1;
     padding: 1rem 0;
+    flex-wrap: wrap;
     .actions {
         // border-radius: $radius-common;
         border: none;
@@ -871,12 +872,12 @@ a:hover {
     //height: 100%;
     padding: 0;
     &-head {
-        padding: 0 2rem;
+        padding: 0 1.5rem;
         border-bottom: $border;
     }
     &-body {
         flex: 1 1 auto;
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 1.5rem;
         position: relative;
         .h3 {
             font-size: 1rem;
@@ -889,7 +890,7 @@ a:hover {
         bottom: 0;
         z-index: 3;
         background-color: $bg-white;
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 1.5rem;
     }
 }
 
@@ -1310,6 +1311,9 @@ a:hover {
 .isLoading {
     position: relative;
     overflow: hidden;
+}
+.processing-wrap {
+    position: relative;
 }
 
 .processing {

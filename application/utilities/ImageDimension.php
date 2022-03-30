@@ -581,6 +581,7 @@ class ImageDimension extends FatUtility
     public static function getTestimonialImageData(string $sizeType = ''): array
     {
         $arr =  [
+            self::VIEW_MEDIUM => [self::WIDTH => 280, self::HEIGHT => 280],
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
             self::VIEW_DEFAULT => [self::WIDTH => 118, self::HEIGHT => 276]

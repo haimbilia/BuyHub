@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
 <div class="interactive-stores">
     <div class="interactive-stores-map">
         <div class="map-loader ccis-loading">
@@ -9,13 +10,12 @@
                 </path>
             </svg>
         </div>
-        <div class="canvas-map" id="productMapJs">           
+        <div class="canvas-map" id="productMapJs">
         </div>
     </div>
     <div class="interactive-stores-list stores">
-
-        <?php 
-        $colMdVal = 3;        
+        <?php        
+        $productsData['colMdVal'] = 3;         
         $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>
@@ -36,7 +36,7 @@ foreach ($products as $product) {
         'img' => $img,
         'theprice' => $product['theprice'],
         'shop_id' => $product['shop_id'],
-    ];    
+    ];
 }
 
 foreach ($moreSellersProductsArr as $product) {
@@ -89,7 +89,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function () {
+    $(function() {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMapJs', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);
@@ -99,6 +99,7 @@ foreach ($productsByShop as &$marker) {
             clearMoreSellerMarkers();
         }
     });
+
     function viewMoreSeller(selprodCode, selprod_id) {
         if (!realtedMarkers.hasOwnProperty(selprodCode)) {
             return;

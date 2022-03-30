@@ -562,7 +562,9 @@ a:hover {
         }
     }
 }
-
+.processing-wrap {
+    position: relative;
+}
 .processing {
     background-color: rgba(255, 255, 255, 0.55);
     position: absolute;

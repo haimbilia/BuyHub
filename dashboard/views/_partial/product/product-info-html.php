@@ -22,7 +22,7 @@ if (isset($order)) {
     if ($order['op_selprod_options'] != '') {
         $options .= ' | ' . $order['op_selprod_options'];
     }
-
+    
     $shopName = $order['op_shop_name'] ?? '';
     if (isset($order['totOrders']) && $order['totOrders'] > 1) {
         $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";

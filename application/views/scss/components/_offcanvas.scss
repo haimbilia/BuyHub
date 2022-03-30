@@ -1,5 +1,4 @@
 $offcanvas-space: 1rem 2rem;
-
 .offcanvas {
     &-header {
         padding: $offcanvas-space;
@@ -13,5 +12,9 @@ $offcanvas-space: 1rem 2rem;
 
     &-end {
         border: none;
+    }
+
+    &-gps-location {
+        height: 50vh;
     }
 }

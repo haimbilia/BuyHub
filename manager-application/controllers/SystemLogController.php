@@ -73,7 +73,7 @@ class SystemLogController extends ListingBaseController
             $sortBy = 'slog_created_at';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 
@@ -130,7 +130,7 @@ class SystemLogController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'slog_title');
+            $this->addSortingElements($frm, 'slog_created_at', applicationConstants::SORT_DESC);
         }
         
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');

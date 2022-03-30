@@ -2145,6 +2145,7 @@ mark,
     justify-content: space-between;
     flex: 1;
     padding: 1rem 0;
+    flex-wrap: wrap;
     .actions {
         border-radius: $radius-common;
         border: $border;

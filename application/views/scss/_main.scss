@@ -7,7 +7,6 @@
 @import "layout/header";
 @import "layout/mega-menu";
 @import "layout/offcanvas-menu";
-@import "layout/mmenu";
 @import "layout/mobile-menu";
 //@import "layout/mega-nav";
 @import "layout/footer";
@@ -34,11 +33,10 @@
 @import "components/graph";
 @import "components/hamburger";
 @import "components/heart";
-
 @import "components/label";
 @import "components/loader";
 @import "components/login-wrapper";
-@import "components/magnific-popup";
+//@import "components/magnific-popup";
 @import "components/media";
 @import "components/message";
 @import "components/modal";
@@ -115,7 +113,7 @@
 @import "vendors/jquery-ui-timepicker-addon";
 //@import "vendors/simplebar";
 @import "vendors/slick";
-@import "vendors/xzoom";
+//@import "vendors/xzoom";
 @import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 @import "vendors/nouislider.min";
