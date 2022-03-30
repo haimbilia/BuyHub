@@ -97,7 +97,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                         <div class="card-toolbar">
                             <a href="javascript:void(0);" class="btn btn-icon btn-outline-brand btn-add" onclick="addNewComment(<?php echo $orrequestId; ?>)" title="<?php echo Labels::getLabel('LBL_NEW_COMMENT', $siteLangId); ?>" data-bs-toggle='tooltip' data-placement='top'>
                                 <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                     </use>
                                 </svg>
                                 <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>

@@ -12,7 +12,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     'title' => Labels::getLabel('LBL_FAVORITES', $siteLangId)
                 ],
                 'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                    <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#favourite">
+                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#favourite">
                     </use>
                 </svg>',
                 'label' => Labels::getLabel('LBL_FAVORITES', $siteLangId)
@@ -23,7 +23,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     'title' => Labels::getLabel('LBL_MANAGE_ADDRESSES', $siteLangId)
                 ],
                 'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
-                <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#addresses">
+                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#addresses">
                 </use>
             </svg>',
                 'label' => Labels::getLabel('LBL_ADDRESSES', $siteLangId)
