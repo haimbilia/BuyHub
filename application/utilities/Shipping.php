@@ -297,6 +297,7 @@ class Shipping
     {
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
+        
         foreach ($productInfo as $selprod_id => $product) {
             if (!in_array($selprod_id, $physicalSelProdIdArr)) {
                 continue;
@@ -324,7 +325,7 @@ class Shipping
                 $this->systemRatesToFetchSelprodIds[] = $product['selprod_id'];
                 continue;
             }
-
+            
             $shippingApiKey = get_class($shippingApiObj)::KEY_NAME;
 
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
@@ -344,7 +345,7 @@ class Shipping
                 SystemLog::system($title, $title);
                 continue;
             }
-
+            
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
             
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
@@ -354,9 +355,8 @@ class Shipping
                 SystemLog::system($msg, $title);
                 continue;
             }
-            
             $shopAddress = 0 < $isProductShippedBySeller ? $this->getShopAddress($product['shop_id']) : $this->getShopAddress(0);
-
+            
             if (method_exists($shippingApiObj, 'setAddressReference')) {
                 $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
                 $shippingApiObj->setAddressReference($referenceId);
@@ -379,7 +379,7 @@ class Shipping
                 $shippingApiObj->setSelectedShipping($this->selectedShippingService[$product['selprod_id']]);
             }
             /* Retrieve Selected Shipping Service Detail. */
-
+            
             $shippingLevel = self::LEVEL_PRODUCT;
 
             $shippedBy = -1; /* admin shipping */
@@ -405,7 +405,7 @@ class Shipping
                 $shopAddress,
                 $shippingAddressDetail
             ];
-
+            
             foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
@@ -456,7 +456,6 @@ class Shipping
                 $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$product['selprod_id']] = $product;
             }
         }
-
         return true;
     }
 
@@ -559,7 +558,7 @@ class Shipping
         $shipToCountryId = isset($shippingAddressDetail['addr_country_id']) ? $shippingAddressDetail['addr_country_id'] : 0;
 
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
-
+        
         $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
         if (count($physicalSelProdIdArr)) {
             $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);

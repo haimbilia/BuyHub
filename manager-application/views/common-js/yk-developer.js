@@ -131,8 +131,8 @@ $(function () {
     });
 
     clearCache = function () {
-        // $(document.body).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl("Home", "clear"), "", function (t) {
+            fcom.displaySuccessMessage(t.msg);
             window.location.reload();
         });
     };

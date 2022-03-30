@@ -748,7 +748,7 @@ class Cart extends FatModel
                 } else {
                     $shippingAddressId = $this->getCartShippingAddress();
                 }
-
+                
                 $shippingAddressDetail = [];
                 if (0 < $shippingAddressId) {
                     $address = new Address($shippingAddressId, $this->cart_lang_id);
@@ -2010,7 +2010,6 @@ class Cart extends FatModel
             $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
             $shippedByArr = $response['data'];
         }
-
         /*Include digital products */
         if (!empty($digitalSelProdIdArr)) {
             foreach ($digitalSelProdIdArr as $selProdId) {
