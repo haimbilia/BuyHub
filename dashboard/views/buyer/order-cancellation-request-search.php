@@ -40,7 +40,18 @@
                     $txt = '<strong>' . Labels::getLabel('LBL_Reason', $siteLangId) . ': </strong>';
                     $txt .= CommonHelper::displayNotApplicable($siteLangId, $row['ocreason_title']);
                     $txt .= '<br/><strong>' . Labels::getLabel('LBL_Comments', $siteLangId) . ': </strong>';
-                    $txt .= nl2br(CommonHelper::displayNotApplicable($siteLangId, $row['ocrequest_message']));
+                    $requestId = $row['ocrequest_id'];
+                    $comentDetail = $row['ocrequest_message'];
+                    if (strlen($comentDetail) > 25) {
+                        $txt .= substr($comentDetail, 0, 25) . "..." . '<button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getCancellationRequestComment(' . $requestId . ')">
+                        <svg class="svg" width="10" height="10">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#more">
+                            </use>
+                        </svg>
+                    </button>';
+                    } else {
+                        $txt .= nl2br(CommonHelper::displayNotApplicable($siteLangId, $row['ocrequest_message']));
+                    }
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'ocrequest_status':

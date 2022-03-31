@@ -13,9 +13,9 @@
         <div class="canvas-map" id="productMapJs">
         </div>
     </div>
-    <div class="interactive-stores-list">
-        <?php
-        $colMdVal = 3;
+    <div class="interactive-stores-list stores">
+        <?php        
+        $productsData['colMdVal'] = 3;         
         $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>
