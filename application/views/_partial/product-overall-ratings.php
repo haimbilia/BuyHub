@@ -70,10 +70,8 @@ if ($totReviews) {
         </li>
     </ul>
 </div>
-
-<div class="divider"></div>
-
 <?php if(0 < count($ratingAspects)){ ?> 
+    <div class="divider"></div>
     <div class="rating-block">
         <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
         <ul class="rating-by-category">
