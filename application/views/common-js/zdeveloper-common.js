@@ -508,29 +508,25 @@ function getSlickGallerySettings(
             focusOnSelect: true,
             autoplay: true,
             arrows: true,
-            vertical: true,
-            verticalSwiping: true,
             responsive: [
                 {
                     breakpoint: 1499,
                     settings: {
-                        slidesToShow: 3,
+                        slidesToShow: 4,
                     },
                 },
                 {
                     breakpoint: 1199,
                     settings: {
                         slidesToShow: 4,
-                        vertical: false,
-                        verticalSwiping: false,
+
                     },
                 },
                 {
                     breakpoint: 767,
                     settings: {
                         slidesToShow: 2,
-                        vertical: false,
-                        verticalSwiping: false,
+
                     },
                 },
             ],
@@ -1361,7 +1357,7 @@ $(function () {
         if (page == "product-view") {
             return false;
         }
-        
+
         var section = "";
         if (0 < $(".checkout-content-js").length) {
             section = $(".checkout-content-js");
@@ -1442,7 +1438,7 @@ $(function () {
             return false;
         }
         var fulfillmentType = $("input[name='fulfillment_type']:checked").val();
-        
+
         var section = "";
         if (0 < $(".checkout-content-js").length) {
             section = $(".checkout-content-js");

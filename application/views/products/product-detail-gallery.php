@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div id="img-static" class="product-detail-gallery">
+<div class="product-detail-gallery">
     <?php $data['product'] = $product;
     $data['productImagesArr'] = $productImagesArr;
     $data['imageGallery'] = true; ?>
@@ -19,12 +19,12 @@
                 <?php foreach ($productImagesArr as $afile_id => $image) {
                     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                     $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_LARGE, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
-                    <a class="thumbnail featherLightJs" href="<?php echo $originalImgUrl; ?>" data-featherlight="image">
-                        <img class="active" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
-                    </a>
+
+                    <img class="thumbnail featherLightJs" data-featherlight="image" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+
                 <?php break;
                 } ?>
             <?php } else {
@@ -32,9 +32,9 @@
                 $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_ORIGINAL, 0)), CONF_IMG_CACHE_TIME, '.jpg');
                 $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.webp');
             ?>
-                <a class="thumbnail featherLightJs" href="<?php echo $originalImgUrl; ?>" data-featherlight="image">
-                    <img src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
-                </a>
+
+                <img class="thumbnail featherLightJs" data-featherlight="image" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
+
             <?php } ?>
         </div>
         <?php if ($productImagesArr) { ?>
@@ -45,17 +45,13 @@
                     $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                     /* $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id']) ), CONF_IMG_CACHE_TIME, '.jpg'); */ ?>
-                    <div>
-                        <div class="thumb">
-                            <a class="thumbnail featherLightJs" href="<?php echo $originalImgUrl; ?>" data-featherlight="image">
-                                <picture>
-                                    <source type="image/webp" srcset="<?php echo $mainWebpImgUrl; ?>">
-                                    <source type="image/jpeg" srcset="<?php echo $mainImgUrl; ?>">
-                                    <img width="80" src="<?php echo $mainImgUrl; ?>">
-                                </picture>
-                            </a>
-                        </div>
-                    </div>
+                    <a class="thumb featherLightJs" href="<?php echo $originalImgUrl; ?>" data-featherlight="image">
+                        <picture>
+                            <source type="image/webp" srcset="<?php echo $mainWebpImgUrl; ?>">
+                            <source type="image/jpeg" srcset="<?php echo $mainImgUrl; ?>">
+                            <img width="80" height="80" src="<?php echo $mainImgUrl; ?>">
+                        </picture>
+                    </a>
                 <?php } ?>
             </div>
         <?php } ?>
