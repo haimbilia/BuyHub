@@ -2012,19 +2012,20 @@ function loadMoreImages(obj, e) {
     return false;
 }
 
-function bindFeatherLight(element = '') {
-    element = '' == element ? 'featherLightJs' : element;
-    if (0 < $('.' + element).length) {
+function bindFeatherLight() {
+    if (0 < $('.featherLightGalleryJs').length) {
         if ('undefined' == typeof $.fn.featherlightGallery) {
             fcom.displayErrorMessage('Please Include Feather Light JS Library Files.');
             return;
         }
 
-        $('.' + element).featherlightGallery({
-            previousIcon: '«',
-            nextIcon: '»',
-            galleryFadeIn: 300,
-            openSpeed: 300
+        $('.featherLightGalleryJs').each(function(){
+            $(this).find('[data-featherlight]').featherlightGallery({
+                previousIcon: '«',
+                nextIcon: '»',
+                galleryFadeIn: 300,
+                openSpeed: 300
+            });
         });
     }
 }
