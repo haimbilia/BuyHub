@@ -13,106 +13,19 @@
 }
 
 .product-detail-gallery {
+    position: relative;
     margin-bottom: 4rem;
     min-width: 0;
     .badges-wrap {
+        z-index: 1;
         position: absolute;
         #{$end-direction}: 0;
-        width: 500px;
     }
     .product-gallery {
         position: sticky;
         top: $header-height;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-    }
-    .slider-for {
-        margin: 0;
-        @include media-breakpoint-down(lg) {
-            padding: 0;
-        }
-        img {
-            margin: 0 auto !important;
-        }
-    }
-    .main-thumb {
-        outline: $outline;
-        background-color: $bg-placeholder;
-        //@include placeholder;
-        //@include responsive-ratio(1, 1);
-        img {
-            //@include img-absolute;
-        }
-    }
-
-    .slider-nav {
-        position: relative;
-        padding: 0;
-        display: flex;
-
-        .thumb {
-            margin: 0;
-            text-align: center;
-            border: $border !important;
-            overflow: hidden;
-            background-color: $bg-placeholder;
-            // aspect-ratio: 1/1;
-            position: relative;
-            width: 100px !important;
-            height: 100px !important;
-            img {
-                max-width: 100%;
-                margin: 0 auto;
-            }
-            &.slick-current {
-                border-color: $brand-color;
-            }
-            @include media-breakpoint-down(lg) {
-                margin: 0 0.5rem;
-            }
-        }
-
-        .slick-list {
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .slick-arrow {
-            background-color: #fff;
-            border: $border-black;
-            padding: 0;
-            width: 100px;
-            height: 50px;
-            display: block;
-            border-radius: 0;
-            //text-indent: -9999px;
-            font-size: 0;
-            position: relative;
-
-            &:before {
-                content: "";
-                display: inline-block;
-                border-right: $border-black;
-                border-bottom: $border-black;
-                width: 20px;
-                height: 20px;
-                position: absolute;
-                #{$start-direction}: calc(50% - 10px);
-            }
-        }
-        .slick-prev {
-            &:before {
-                transform: rotate(226deg);
-                top: calc(50% - 5px);
-            }
-        }
-        .slick-next {
-            &:before {
-                transform: rotate(45deg);
-                top: calc(50% - 15px);
-            }
-        }
     }
 }
 

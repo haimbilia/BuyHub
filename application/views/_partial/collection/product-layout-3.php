@@ -39,7 +39,8 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
             </div>
             <?php if ($collection['totProducts'] > 6) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?>
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                     </a>
                 </div>
             <?php }  ?>

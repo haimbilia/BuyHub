@@ -43,7 +43,7 @@
             <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
                 <div class="section-foot">
                     <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
-                        <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?>
+                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                     </a>
                 </div>
             <?php } ?>
