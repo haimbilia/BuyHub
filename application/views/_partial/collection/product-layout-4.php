@@ -17,7 +17,6 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 <?php } ?>
             </div>
             <div class="product-layout-2">
-
                 <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
@@ -40,11 +39,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     }
 
                     include('product-layout-4-list.php');
-
-
-
                     $gridKey++;
-
                     ?>
 
                 <?php } ?>

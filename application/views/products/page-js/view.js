@@ -96,7 +96,7 @@ $(function () {
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
-        slidesToShow: 4,
+        slidesToShow: 5,
         slidesToScroll: 1,
         infinite: true,
         centerPadding: "0px",

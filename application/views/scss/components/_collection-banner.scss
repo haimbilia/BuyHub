@@ -22,13 +22,19 @@
 
 .poster-layout-2 {
     display: grid;
-    grid-gap: 3rem;
+    grid-gap: 1%;
     grid-template-columns: 1fr 1fr;
     @include media-breakpoint-down(sm) {
-        display: block;
+        //display: block;
     }
     .poster {
         text-align: center;
         background: $bg-placeholder;
+
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
     }
 }
