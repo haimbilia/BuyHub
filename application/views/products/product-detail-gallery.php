@@ -20,9 +20,7 @@ $data['imageGallery'] = true; ?>
     <div class="main_img">
         <div class="product-images demo-gallery">
             <div class="main-img-slider">
-                <?php 
-                // CommonHelper::printArray($productImagesArr);
-                if ($productImagesArr) {
+                <?php if ($productImagesArr) {
                     foreach ($productImagesArr as $afile_id => $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -32,7 +30,7 @@ $data['imageGallery'] = true; ?>
                         <a data-fancybox="gallery" href="<?php echo $mainImgUrl; ?>">
                             <img class="img-fluid" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>">
                         </a>
-                    <?php break;
+                    <?php
                     }
                 } else {
                     $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.jpg');
@@ -51,7 +49,6 @@ $data['imageGallery'] = true; ?>
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
-
                         <li>
                             <img src="<?php echo $mainImgUrl; ?>" />
                         </li>
