@@ -603,6 +603,7 @@ Updates/Fixes :
     => 063451 - Buyer UI: The alignment of the "No Record Found" is not correct under the Wishlist section and Page Not Found is showing while clicking on the Shop under the Shop's Wishlist section.
     => 063463 - Buyer UI: "Save Changes" and "Save" button is showing for the same functionality (Request My Data) and the confirmation message design is not correct while requesting to Remove My Data.
     => 063459 - Buyer UI: Spacing issue between the country code and phone number field while adding/editing the addresses and deleting address functionality is not working under the profile section at the buyer's end.
+    => 063448 - Buyer UI: A validation message is showing after sending the email on the "Share And Earn" page and transaction IDs are showing in the 2-lines under the My Credits section.
     
     
 UAT points:
