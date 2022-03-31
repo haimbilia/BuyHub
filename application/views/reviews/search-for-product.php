@@ -92,11 +92,13 @@ if (!empty($product) && !$productView) { ?>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>
+                        <?php if(1 > $reviewId){ ?>
                         <li class="yes-no-item">
                             <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>">
-                                <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
+                            <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
                             </a>
                         </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
