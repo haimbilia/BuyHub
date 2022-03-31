@@ -63,7 +63,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     var mainSelprodId = <?php echo $product['selprod_id']; ?>;
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';
 
-    $(function () {
+    $(function() {
         recentlyViewedProducts(<?php echo $product['selprod_id']; ?>);
         /*zheight = $(window).height() - 180; */
         zwidth = $(window).width() / 3 - 15;

@@ -175,8 +175,8 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $aspectRatioType = $file_row['afile_aspect_ratio'];
-        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
-      
+        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
+
 
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType, $aspectRatioType);
@@ -345,8 +345,8 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $aspectRatioType = $file_row['afile_aspect_ratio'];
-        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
-      
+        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
+
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, $sizeType, $aspectRatioType);
 
         if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
@@ -380,7 +380,7 @@ class ImageController extends FatController
 
         if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
 
-          
+
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
@@ -862,7 +862,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, $displayUniversalImage, $screen);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-      
+
         $imageDimensions = ImageDimension::getBannerData($sizeType, $collectionLayoutType);
 
         if ($sizeType) {
@@ -870,7 +870,6 @@ class ImageController extends FatController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-      
     }
 
 
@@ -936,7 +935,7 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
-        $default_image = 'banner-default-image.png';       
+        $default_image = 'banner-default-image.png';
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_IMAGE, $sizeType);
 
@@ -1129,7 +1128,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        
+
         AttachedFile::displayOriginalImage($image_name, $default_image);
     }
 
