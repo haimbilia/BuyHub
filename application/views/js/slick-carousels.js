@@ -1,4 +1,4 @@
-//Start of Common Carousel
+/*Start of Common Carousel*/
 $(function () {
     var _carousel = $('.js-carousel');
     _carousel.each(function () {
@@ -54,4 +54,4 @@ $(function () {
     });
 });
 
-//End of Common Carousel
+/*End of Common Carousel*/

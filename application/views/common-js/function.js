@@ -27,7 +27,7 @@ var Dashboard = function () {
         $(".hamburger-toggle").toggleClass("is-opened");
         setTimeout(function () {
             unlinkSlick();
-            slickWidgetScroll();
+            // slickWidgetScroll();
         }, 500);
     };
     return {
@@ -116,7 +116,7 @@ $(function () {
 
     if (CONF_ENABLE_GEO_LOCATION && className != 'CheckoutController' && className != 'CartController') {
         googleAddressAutocomplete('ga-autoComplete-header');
-        googleAddressAutocomplete('ga-autoComplete-mobile');        
+        googleAddressAutocomplete('ga-autoComplete-mobile');
     }
 
 });

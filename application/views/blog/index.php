@@ -224,11 +224,9 @@ if (!empty($postList)) { ?>
                 <?php } ?>
             </div>
         </div>
-
     </section>
 <?php } ?>
 <script>
-    // $('.js-popular-stories').slick(getSlickSliderSettings(4, 4, '<?php echo CommonHelper::getLayoutDirection(); ?>', false));
     var layoutDirection = '<?php echo CommonHelper::getLayoutDirection(); ?>';
     var rtl = (layoutDirection == 'rtl') ? true : false;
     $('.js-popular-stories').slick({
