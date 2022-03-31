@@ -601,6 +601,7 @@ Updates/Fixes :
     => 063362 - Seller UI: Seller navigates to the dashboard while clicking on the 'reports' on the breadcrumb under the Sales Report section.
     => 063462 - Buyer and Seller UI: Navigating to the same page while clicking on the email address under the My Profile section on the top-header.
     => 063451 - Buyer UI: The alignment of the "No Record Found" is not correct under the Wishlist section and Page Not Found is showing while clicking on the Shop under the Shop's Wishlist section.
+    => 063463 - Buyer UI: "Save Changes" and "Save" button is showing for the same functionality (Request My Data) and the confirmation message design is not correct while requesting to Remove My Data.
     
     
 UAT points:
