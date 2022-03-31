@@ -937,6 +937,7 @@ class ProductsController extends MyAppController
         }
 
         $this->includeFeatherLight();
+        $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
         $this->_template->render();
     }
 
