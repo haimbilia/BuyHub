@@ -42,7 +42,6 @@ $(function () {
             }
 
         });
-        console.log(_responsiveArray);
 
         _this.slick({
             slidesToShow: parseInt(_slidesToShow.length > 0 ? _slidesToShow[0] : "3"),

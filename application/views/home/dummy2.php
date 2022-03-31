@@ -18,17 +18,33 @@
                             <div class="main_img">
                                 <div class="product-images demo-gallery">
                                     <div class="main-img-slider">
-                                        <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a>
-                                        <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a> <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a> <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a> <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a> <a data-fancybox="gallery" href="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988"><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" class="img-fluid" /></a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <!-- <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a> -->
                                     </div>
 
                                     <ul class="thumb-nav">
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
-                                        <li><img src="http://localhost/yokart/image/product/76/LARGE/0/2547?t=1648707988" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <!-- <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li> -->
 
                                     </ul>
                                 </div>
