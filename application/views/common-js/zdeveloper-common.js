@@ -27,7 +27,7 @@ $(function () {
         showFormActionsBtns();
     });
     if (0 < $(".js-widget-scroll").length) {
-        slickWidgetScroll();
+        // slickWidgetScroll();
     }
     $(document).on("click", ".accordianheader", function () {
         $(this).next(".accordianbody").slideToggle();
@@ -66,7 +66,7 @@ installJsColor();
 unlinkSlick = function () {
     $(".js-widget-scroll").slick("unslick");
 };
-slickWidgetScroll = function () {
+/*slickWidgetScroll = function () {
     var slides = $(".widget-stats").length > 2 ? 3 : 2;
     $(".js-widget-scroll").slick(
         getSlickSliderSettings(slides, 1, langLbl.layoutDirection, false, {
@@ -74,9 +74,9 @@ slickWidgetScroll = function () {
             1023: 2,
             767: 1,
             480: 1,
-        })
+        });
     );
-};
+};*/
 invalidOtpField = function () {
     $("input.otpVal-js")
         .val("")
@@ -246,9 +246,9 @@ function recentlyViewedProducts(selprodId) {
         function (ans) {
             fcom.removeLoader();
             $("#recentlyViewedProductsDiv").html(ans);
-            $(".js-collection-corner:not(.slick-initialized)").slick(
+            /*$(".js-collection-corner:not(.slick-initialized)").slick(
                 getSlickSliderSettings(5, 1, langLbl.layoutDirection, true)
-            );
+            );*/
         }
     );
 }
@@ -486,7 +486,7 @@ function submitSiteSearch(frm, page) {
     document.location.href = url;
 }
 
-function getSlickGallerySettings(
+/*function getSlickGallerySettings(
     imagesForNav,
     layoutDirection,
     slidesToShow = 4,
@@ -630,7 +630,7 @@ function getSlickSliderSettings(
         sliderSettings["rtl"] = true;
     }
     return sliderSettings;
-}
+}*/
 
 function codeLatLng(lat, lng, callback) {
     initialize();
@@ -1566,18 +1566,6 @@ function setSiteDefaultCurrency(currencyId) {
     );
 }
 
-function quickDetail(selprod_id) {
-    $.facebox(function () {
-        fcom.ajax(
-            fcom.makeUrl("Products", "productQuickDetail", [selprod_id]),
-            "",
-            function (t) {
-                fcom.updateFaceboxContent(t);
-            }
-        );
-    });
-}
-
 function stylePhoneNumberFld(
     element = "input[name='user_phone']",
     destroy = false
@@ -2015,7 +2003,7 @@ function bindFeatherLight() {
             return;
         }
 
-        $('.featherLightGalleryJs').each(function(){
+        $('.featherLightGalleryJs').each(function () {
             $(this).find('[data-featherlight]').featherlightGallery({
                 previousIcon: '«',
                 nextIcon: '»',

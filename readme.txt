@@ -600,6 +600,7 @@ Updates/Fixes :
     => 063352 - Seller UI: Warning message is showing while clicking on the "badges" on the breadcrumb on the "Bind Condition" page under the badges section at the seller's end.
     => 063362 - Seller UI: Seller navigates to the dashboard while clicking on the 'reports' on the breadcrumb under the Sales Report section.
     => 063462 - Buyer and Seller UI: Navigating to the same page while clicking on the email address under the My Profile section on the top-header.
+    => 063451 - Buyer UI: The alignment of the "No Record Found" is not correct under the Wishlist section and Page Not Found is showing while clicking on the Shop under the Shop's Wishlist section.
     
     
 UAT points:
