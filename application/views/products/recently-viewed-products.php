@@ -58,15 +58,12 @@ if ($recentViewedProducts) {
                                             'siteLangId' => $siteLangId,
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name'],
                                         ];
-
-
                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                         ?>
                                     </a>
                                 </div>
                             </div>
                             <div class="products-foot">
-
                                 <div class="products-category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                                     </a></div>
                                 <div class="products-title"><a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr($rProduct['selprod_title'], 0, 50) . "..." : $rProduct['selprod_title']; ?>

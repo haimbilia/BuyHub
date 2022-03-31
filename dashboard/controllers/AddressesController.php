@@ -4,7 +4,7 @@ class AddressesController extends LoggedUserController
 {
     public function __construct($action)
     {
-        parent::__construct($action);        
+        parent::__construct($action);
     }
 
     public function setUpAddress()
@@ -36,7 +36,7 @@ class AddressesController extends LoggedUserController
 
         $addr_id = FatApp::getPostedData('addr_id', FatUtility::VAR_INT, 0);
         unset($post['addr_id']);
-        
+
         $post['addr_phone_dcode'] = FatApp::getPostedData('addr_phone_dcode', FatUtility::VAR_STRING, '');
 
         $addressObj = new Address($addr_id);
@@ -165,16 +165,14 @@ class AddressesController extends LoggedUserController
             }
             $recordId = $shopDetails['shop_id'];
         } else {
-            echo $userId = $this->userId;
+            $userId = $this->userId;
             $userDefaultAddress = Address::getDefaultByRecordId(Address::TYPE_USER, $userId);
-            CommonHelper::printArray($userDefaultAddress);
             if ($userDefaultAddress['addr_id'] == $addrId) {
                 $message = Labels::getLabel('MSG_Select_another_address', $this->siteLangId);
                 FatUtility::dieJsonError($message);
             }
             $recordId = $userId;
         }
-        die('hi');
         $db = FatApp::getDb();
         if (!$db->deleteRecords(Address::DB_TBL, array('smt' => 'addr_record_id = ? AND addr_id = ?', 'vals' => array($recordId, $addrId)))) {
             LibHelper::dieJsonError($db->getError());
@@ -233,9 +231,9 @@ class AddressesController extends LoggedUserController
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
         }
-        
-        $addressArr = Address::getAttributesById($addressId,['addr_record_id','addr_type']);
-        if(!$addressArr){
+
+        $addressArr = Address::getAttributesById($addressId, ['addr_record_id', 'addr_type']);
+        if (!$addressArr) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
@@ -255,13 +253,13 @@ class AddressesController extends LoggedUserController
             if (isset($value['tslot_to_time'])) {
                 $value['tslot_to_time'] = date("H:i", strtotime($value['tslot_to_time']));
             }
-        });        
-        
+        });
+
         $pickupInterval = FatApp::getConfig('CONF_TIME_SLOT_ADDITION', FatUtility::VAR_INT, 2);
-        if($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP){ 
-            $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'],'shop_pickup_interval');                                        
+        if ($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP) {
+            $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'], 'shop_pickup_interval');
         }
-        
+
         $this->set('pickupInterval', $pickupInterval);
         $this->set('timeSlots', $timeSlots);
         $this->set('selectedDate', $selectedDate);
@@ -298,10 +296,10 @@ class AddressesController extends LoggedUserController
         $activeDate = '';
         if (!empty($slotDays)) {
             $daysArr = TimeSlot::getDaysArr($this->siteLangId);
-            $currentDay = date('w', strtotime(date('Y-m-d')));            
-            if (in_array($currentDay, $slotDays)) {                
-                $addressArr = Address::getAttributesById($addrId,['addr_record_id','addr_type']);
-                if(!$addressArr){
+            $currentDay = date('w', strtotime(date('Y-m-d')));
+            if (in_array($currentDay, $slotDays)) {
+                $addressArr = Address::getAttributesById($addrId, ['addr_record_id', 'addr_type']);
+                if (!$addressArr) {
                     $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
                     if (true === MOBILE_APP_API_CALL) {
                         LibHelper::dieJsonError($message);
@@ -310,12 +308,12 @@ class AddressesController extends LoggedUserController
                     LibHelper::dieJsonError(Message::getHtml());
                 }
                 $pickupInterval = FatApp::getConfig('CONF_TIME_SLOT_ADDITION', FatUtility::VAR_INT, 2);
-                if($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP){ 
-                    $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'],'shop_pickup_interval');
+                if ($addressArr['addr_type'] == Address::TYPE_SHOP_PICKUP) {
+                    $pickupInterval = ShopSpecifics::getAttributesById($addressArr['addr_record_id'], 'shop_pickup_interval');
                 }
-                
+
                 $displayTime = date("H:i:s", strtotime('+' . $pickupInterval . ' hour'));
-             
+
                 $currentDateSlots = $timeSlot->timeSlotsByAddrIdAndDay($addrId, $currentDay);
                 foreach ($currentDateSlots as $data) {
                     if (strtotime($data['tslot_from_time']) > strtotime($displayTime)) {
