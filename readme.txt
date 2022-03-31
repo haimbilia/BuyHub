@@ -604,6 +604,7 @@ Updates/Fixes :
     => 063463 - Buyer UI: "Save Changes" and "Save" button is showing for the same functionality (Request My Data) and the confirmation message design is not correct while requesting to Remove My Data.
     => 063459 - Buyer UI: Spacing issue between the country code and phone number field while adding/editing the addresses and deleting address functionality is not working under the profile section at the buyer's end.
     => 063448 - Buyer UI: A validation message is showing after sending the email on the "Share And Earn" page and transaction IDs are showing in the 2-lines under the My Credits section.
+    => 063439 - Buyer UI: Proper information is not showing for the "search" field under the Order's section.
     
     
 UAT points:

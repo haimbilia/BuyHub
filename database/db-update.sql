@@ -1792,3 +1792,11 @@ UPDATE `tbl_extra_pages_lang` SET `epage_content` = '<div class=\"container\">\r
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('FRM_SEARCH_BY_TRANSACTION_ID_OR_ORDER_ID_OR_COMMENT', 1, 'Search by transaction id or order id or comment', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_INVOICE_NUMBER', 1, 'Search by invoice number', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('FRM_SEARCH_BY_ORDER_ID_OR_PRODUCT_NAME_OR_SHOP_NAME', 1, 'Search by order id or product name or shop name', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

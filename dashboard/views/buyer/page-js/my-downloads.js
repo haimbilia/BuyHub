@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadSearch'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(res);
 			if ('undefined' != typeof el) {
 				$(".navTabsJs .active").removeClass('active');
@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Buyer', 'downloadLinksSearch'), data, function (res) {
-            fcom.removeLoader();
+			fcom.removeLoader();
 			$(dv).html(res);
 			$(".navTabsJs .active").removeClass('active');
 			$(el).addClass('active');

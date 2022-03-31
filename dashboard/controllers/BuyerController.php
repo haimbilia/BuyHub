@@ -595,6 +595,7 @@ class BuyerController extends BuyerBaseController
     {
         $frmSearch = $this->getOrderSearchForm($this->siteLangId);
         $this->set('frmSearch', $frmSearch);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID_OR_PRODUCT_NAME_OR_SHOP_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -2306,7 +2307,7 @@ class BuyerController extends BuyerBaseController
         if (true === MOBILE_APP_API_CALL) {
             $this->set('msg', $msg);
             $this->_template->render();
-        }     
+        }
         FatUtility::dieJsonSuccess($msg);
         // $this->_template->render(false, false, 'json-success.php');
     }
@@ -2704,7 +2705,7 @@ class BuyerController extends BuyerBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD'), 'keyword', '', array('placeholder' => Labels::getLabel('FRM_Keyword', $langId)));
+        $frm->addTextBox('', 'keyword');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS'), 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS"))), '', array(), Labels::getLabel('FRM_Status', $langId));
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM'), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_Date_From', $langId), 'readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO'), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_Date_To', $langId), 'readonly' => 'readonly'));
@@ -2720,7 +2721,8 @@ class BuyerController extends BuyerBaseController
         $frm = new Form('frmSrch');
         $frm->addHiddenField('', 'op_id');
         $frm->addHiddenField('', 'total_record_count', '');
-        $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('FRM_Keyword', $langId)));
+        $fld = $frm->addTextBox('', 'keyword');
+        $fld->overrideFldType('search');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $frm->addButton("", "btn_clear", Labels::getLabel("BTN_CLEAR", $langId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'page');
@@ -2925,7 +2927,7 @@ class BuyerController extends BuyerBaseController
         $cartObj->removeProductShippingMethod();
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }

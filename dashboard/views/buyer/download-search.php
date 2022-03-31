@@ -7,7 +7,8 @@ $frmSrch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSrch->developerTags['fld_default_col'] = 12;
 
 $keyFld = $frmSrch->getField('keyword');
-$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
+$keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_INVOICE_NUMBER', $siteLangId));
+$keyFld->setFieldtagAttribute('autocomplete', 'off');
 $keyFld->setWrapperAttribute('class', 'col-lg-8');
 $keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
