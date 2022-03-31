@@ -37,7 +37,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 <div class="profile-detail">
                     <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></h6>
                     <span class="text-muted">
-                        <a href=""><?php echo $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_email']; ?></a>
+                        <?php echo $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_email']; ?>
                     </span>
                 </div>
             </div>
@@ -52,12 +52,12 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     </svg><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
                 </a>
                 <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-                <a class="my-account-nav-link" title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
-                    <svg class="svg" width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
-                        </use>
-                    </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
-                </a>
+                    <a class="my-account-nav-link" title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                            </use>
+                        </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
+                    </a>
                 <?php } ?>
                 <a class="my-account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <svg class="svg" width="14" height="14">
@@ -75,7 +75,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </nav>
         </div>
     </div>
-    <?php 
+<?php
 
 } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
     <div class="offcanvas offcanvas-account offcanvas-start" tabindex="-1" id="offcanvas-account">
@@ -97,45 +97,45 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     <?php } ?>
                 </div>
             </div>
-            <ul class="account-nav">              
+            <ul class="account-nav">
                 <li class="account-nav-item">
                     <a class="account-nav-link" href="<?php echo $dashboardOrgUrl; ?>">
-                        <?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?> 
+                        <?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
                 </li>
                 <li class="account-nav-item">
                     <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
-                        <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?> 
+                        <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
                 </li>
                 <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-                <li class="account-nav-item">
-                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
-                        <?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?> 
-                        <i class="icon icon-arrow-right"></i>
-                    </a>
-                </li>
+                    <li class="account-nav-item">
+                        <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
+                            <?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
+                            <i class="icon icon-arrow-right"></i>
+                        </a>
+                    </li>
                 <?php } ?>
                 <li class="account-nav-item">
                     <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
-                        <?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?> 
+                        <?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
                 </li>
                 <li class="account-nav-item">
                     <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
-                        <?php echo Labels::getLabel("NAV_UPDATE_CREDENTIALS", $siteLangId); ?> 
+                        <?php echo Labels::getLabel("NAV_UPDATE_CREDENTIALS", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
                 </li>
                 <li class="account-nav-item">
                     <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
-                        <?php echo Labels::getLabel("NAV_LOGOUT", $siteLangId); ?> 
+                        <?php echo Labels::getLabel("NAV_LOGOUT", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
-                </li>                
+                </li>
             </ul>
         </div>
         <div class="offcanvas-foot">
@@ -149,5 +149,5 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
             </a>
         </div>
-        </div>
+    </div>
 <?php }
