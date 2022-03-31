@@ -1,54 +1,61 @@
-$(document).ready(function(){
+$(document).ready(function () {
 	personalInfo();
 	searchOrders(document.frmOrderSrch);
-	
-	/******** for tooltip ****************/ 
 
-	$('.info--tooltip-js').hover(function(){
+	/******** for tooltip ****************/
+
+	$('.info--tooltip-js').hover(function () {
 		$(this).toggleClass("is-active");
-		return false; 
-	},function(){
+		return false;
+	}, function () {
 		$(this).toggleClass("is-active");
-		return false; 
+		return false;
 	});
 });
-(function() {
+(function () {
 	var tabListing = "#tabListing";
-	
-	searchOrders = function(frm){
+
+	searchOrders = function (frm) {
 		var data = fcom.frmData(frm);
-		$("#ordersListing").html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Buyer','orderSearchListing'), data, function(res){
+		$("#ordersListing").html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Buyer', 'orderSearchListing'), data, function (res) {
 			$("#ordersListing").html(res);
 			fcom.removeLoader();
-		}); 
+		});
 	};
-	
-	personalInfo = function(el){
-		$(tabListing).html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Account','personalInfo'), '', function(res){
+
+	personalInfo = function (el) {
+		$(tabListing).html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'personalInfo'), '', function (res) {
 			fcom.removeLoader();
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
 		});
 	};
-	
-	bankInfo = function(el){
-		$(tabListing).html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Account','bankInfo'), '', function(res){
+
+	bankInfo = function (el) {
+		$(tabListing).html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'bankInfo'), '', function (res) {
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
 		});
 	};
-	
-	returnAddress = function(el){
-		$(tabListing).html( fcom.getLoader() );
-		fcom.ajax(fcom.makeUrl('Account','returnAddress'), '', function(res){
+
+	returnAddress = function (el) {
+		$(tabListing).html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('Account', 'returnAddress'), '', function (res) {
 			$(tabListing).html(res);
 			$(el).parent().siblings().removeClass('is-active');
 			$(el).parent().addClass('is-active');
+		});
+	};
+
+	getCancellationRequestComment = function (recordId) {
+		fcom.updateWithAjax(fcom.makeUrl('Seller', "getCancellationRequestComment"), "recordId=" + recordId, function (t) {
+			$.ykmodal(t.html, true);
+			fcom.removeLoader();
 		});
 	};
 })();	
