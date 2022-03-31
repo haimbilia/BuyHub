@@ -1717,6 +1717,7 @@ $(document).on("click", ".readMore", function () {
     } else {
         $lessText.hide();
         $moreText.fadeIn();
+        $moreText.removeClass('hidden');
         $this.text($linkLessText);
     }
     $this.toggleClass("expanded");

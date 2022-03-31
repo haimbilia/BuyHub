@@ -2,17 +2,21 @@ $("document").ready(function(){
 	reviews(document.frmReviewSearch);
 });
 
-function getSortedReviews(elm){
-	if($(elm).length){
+function getSortedReviews(elm) {
+	if ($(elm).length) {
 		var sortBy = $(elm).data('sort');
-		if(sortBy){
+		if (sortBy) {
 			document.frmReviewSearch.orderBy.value = $(elm).data('sort');
 			$(elm).parent().siblings().removeClass('is-active');
 			$(elm).parent().addClass('is-active');
 		}
 	}
+	$('.sortByTxtJs').text($(elm).text());
+	$('.sortByEleJs').removeClass('active');
+	$(elm).addClass('active');
 	reviews(document.frmReviewSearch);
 }
+
 
 function reviewAbuse(reviewId){
 	if(reviewId){

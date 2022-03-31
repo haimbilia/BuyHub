@@ -1,19 +1,6 @@
 $("document").ready(function () {
 	reviews(document.frmReviewSearch);
 });
-
-function getSortedReviews(elm) {
-	if ($(elm).length) {
-		var sortBy = $(elm).data('sort');
-		if (sortBy) {
-			document.frmReviewSearch.orderBy.value = $(elm).data('sort');
-			$(elm).parent().siblings().removeClass('is-active');
-			$(elm).parent().addClass('is-active');
-		}
-	}
-	reviews(document.frmReviewSearch);
-}
-
 function reviewAbuse(reviewId) {
 	if (reviewId) {
 		$.facebox(function () {
