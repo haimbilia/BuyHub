@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-
 <?php
 /* Get Ribbon */
 /*
