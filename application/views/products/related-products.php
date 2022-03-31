@@ -16,7 +16,7 @@ if ($relatedProductsRs) { ?>
                     </div>
                 </div>
             </div>
-            <div class="js-carousel product-listing related-products" id="product-listing-rep" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="js-carousel related-products" id="product-listing-rep" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
                 $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];

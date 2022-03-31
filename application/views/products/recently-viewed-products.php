@@ -22,7 +22,7 @@ if ($recentViewedProducts) {
                     </div>
                 </div>
             </div>
-            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp" data-view="4" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp"  data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = isset($recentlyViewedRibbons['tLeftRibbons']) ? $recentlyViewedRibbons['tLeftRibbons'] : [];
                 $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
