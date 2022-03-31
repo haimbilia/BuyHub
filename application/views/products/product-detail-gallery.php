@@ -1,21 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
-/* Get Ribbon */
-/*
-$data['product'] = $product;
-$data['productImagesArr'] = $productImagesArr;
-$data['imageGallery'] = true; ?>
-<div class="badges-wrap">
+<div class="product-detail-gallery">
     <?php
-    if (!empty($selProdRibbons)) {
-        foreach ($selProdRibbons as $ribbRow) {
-            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+    /* Get Ribbon */
+    $data['product'] = $product;
+    $data['productImagesArr'] = $productImagesArr;
+    $data['imageGallery'] = true; ?>
+    <div class="badges-wrap">
+        <?php
+        if (!empty($selProdRibbons)) {
+            foreach ($selProdRibbons as $ribbRow) {
+                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+            }
         }
-    }
-    ?>
-</div> */ ?>
-<div id="detail">
-    <div class="main_img">
+        ?>
+    </div>
+    <div class="product-gallery" id="detail">
         <div class="product-images demo-gallery">
             <div class="main-img-slider">
                 <?php if ($productImagesArr) {
@@ -54,5 +53,6 @@ $data['imageGallery'] = true; ?>
                 </ul>
             <?php } ?>
         </div>
+
     </div>
 </div>
