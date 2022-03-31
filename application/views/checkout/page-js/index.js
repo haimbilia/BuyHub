@@ -102,10 +102,10 @@ $("document").ready(function () {
 
     loadFinancialSummary = function (isShippingSelected) {
         isShippingSelected = ('undefined' == typeof isShippingSelected ? 0 : isShippingSelected);
-        if (0 < isShippingSelected) {
+        if (1 > $(financialSummary + ' .skeleton').length) {
             $(financialSummary).prepend(fcom.getLoader(true));
         }
-        
+
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
                 $(financialSummary).hide().html(ans.html).fadeIn();
@@ -242,10 +242,7 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "setUpAddressSelection"),
             data,
             function (t) {
-                fcom.closeProcessing();
-                fcom.removeLoader();
                 if (t.status == 1) {
-                    showAddressList();
                     if (t.loadAddressDiv) {
                         loadAddressDiv();
                     } else {
@@ -382,6 +379,9 @@ $("document").ready(function () {
     };
 
     loadShippingSummaryDiv = function (reloadFinancialSummary) {
+        if (1 > $(pageContent + ' .skeleton').length) {
+            $(pageContent).prepend(fcom.getLoader());
+        }
         reloadFinancialSummary = ('undefined' == typeof reloadFinancialSummary ? false : reloadFinancialSummary)
         fcom.ajax(fcom.makeUrl("Checkout", "shippingSummary"), "", function (ans) {
             fcom.removeLoader();
@@ -606,7 +606,7 @@ $("document").ready(function () {
                 if (typeof json.html != "undefined") {
                     $(dv).append(json.html);
                 }
-                
+
                 if (json["redirect"]) {
                     $(location).attr("href", json["redirect"]);
                 }
