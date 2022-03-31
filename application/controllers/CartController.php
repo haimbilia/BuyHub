@@ -400,6 +400,8 @@ class CartController extends MyAppController
                 Message::addMessage($msg);
             }
 
+            LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
+            
             if (true === MOBILE_APP_API_CALL) {
                 $this->_template->render();
             }
@@ -595,6 +597,9 @@ class CartController extends MyAppController
             $cartObj->removeCartDiscountCoupon();
         }
         $total = $cartObj->countProducts();
+
+        LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
+        
         $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);

@@ -1,4 +1,13 @@
-//Start of Common Carousel
+/* Start of Common Carousel.
+This setting is applicable if you want to stop slick slider at any specific resolution.
+
+Pass data-destroy="1,1,1,0". attribute to js-carousel element.
+e.g. 1200 = 1(destroy)
+     992 = 1(destroy)
+     768 = 1(destroy)
+     576 = 0(Run Slick slider)
+*/
+
 $(function () {
     var _carousel = $('.js-carousel');
     _carousel.each(function () {
@@ -16,24 +25,24 @@ $(function () {
         }
 
         _breakpoints.forEach((_bp, i) => {
-
-            if (_slidesDestroy.length > 0 && parseInt(_slidesDestroy[i + 1])) {
+            if (_slidesDestroy.length > 0 && parseInt(_slidesDestroy[i])) {
                 _responsiveArray.push({
                     breakpoint: _bp,
-                    settings: "unslick"
+                   settings: "unslick"
                 });
             }
             else {
                 _responsiveArray.push({
                     breakpoint: _bp,
                     settings: {
-                        slidesToShow: parseInt(parseInt(_slidesToShow.length > 1 ? _slidesToShow[i + 1] : "2")),
+                        slidesToShow: parseInt(parseInt(_slidesToShow.length > 1 ? _slidesToShow[i] : "2")),
                         vertical: false
                     }
                 });
             }
 
         });
+        console.log(_responsiveArray);
 
         _this.slick({
             slidesToShow: parseInt(_slidesToShow.length > 0 ? _slidesToShow[0] : "3"),
@@ -54,4 +63,4 @@ $(function () {
     });
 });
 
-//End of Common Carousel
+/* End of Common Carousel */

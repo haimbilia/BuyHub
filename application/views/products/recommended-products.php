@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-view="4" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
                 $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
@@ -31,9 +31,7 @@
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                     <div class="item">
                         <div class="products">
-                            <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
                             <div class="products-body">
-
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                 <div class="products-img">
                                     <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">

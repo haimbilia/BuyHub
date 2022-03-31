@@ -117,3 +117,7 @@ $shopPolicyArr = array(
     <div class="gap"></div>
 </div>
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
+<script>
+    var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
+    var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
+</script>

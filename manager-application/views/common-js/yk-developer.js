@@ -1,3 +1,21 @@
+function bindFeatherLight() {
+    if (0 < $('.featherLightGalleryJs').length) {
+        if ('undefined' == typeof $.fn.featherlightGallery) {
+            fcom.displayErrorMessage('Please Include Feather Light JS Library Files.');
+            return;
+        }
+
+        $('.featherLightGalleryJs').each(function () {
+            $(this).find('[data-featherlight]').featherlightGallery({
+                previousIcon: '«',
+                nextIcon: '»',
+                galleryFadeIn: 300,
+                openSpeed: 300
+            });
+        });
+    }
+}
+
 $(function () {
     if (/ip(hone|od)|ipad/i.test(navigator.userAgent)) {
         $("body").css("cursor", "pointer");
@@ -20,6 +38,10 @@ $(function () {
             $(this).tooltip('hide');
         }, 100);
     });
+
+    /* Binding Feather Light gallery */
+    bindFeatherLight();
+    /* Binding Feather Light gallery */
 });
 
 (function () {
@@ -443,6 +465,10 @@ $(function () {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         }
+
+        /* Binding Feather Light gallery */
+        bindFeatherLight();
+        /* Binding Feather Light gallery */
     });
 })();
 

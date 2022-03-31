@@ -17,7 +17,7 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
                 </div>
 
             </div>
-            <div class="product-listing js-carousel product-layout-3" id="product-listing-3" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-listing js-carousel product-layout-3" id="product-listing-3" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
 

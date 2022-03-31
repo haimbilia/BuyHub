@@ -13,7 +13,7 @@ if (!empty($product) && !$productView) { ?>
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
             if (!empty($images)) { ?>
                 <h6 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
-                <div class="review-images">
+                <div class="review-images featherLightGalleryJs">
                     <?php
                     $i = 0;
                     foreach ($images as $image) {
@@ -24,7 +24,7 @@ if (!empty($product) && !$productView) { ?>
                         $extraClass = (5 < $i) ? 'moreMediaJs d-none' : '';
                     ?>
                         <div class="image <?php echo $extraClass; ?>" onclick="<?php echo $jsFunc; ?>">
-                            <a class="thumbnail featherLightJs" href="<?php echo $largeImgUrl; ?>">
+                            <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-featherlight="image">
                                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                                 <?php if (5 == $i) { ?>
                                     <span class="txt-over moreMediaCountJs"> +<?php echo count($images); ?></span>
@@ -88,7 +88,7 @@ if (!empty($product) && !$productView) { ?>
                         </li>
                         <li class="yes-no-item">
                             <button class="btn btn-thumb" type="button">
-                                <?php echo Labels::getLabel('LBL_YES', $siteLangId); ?>
+                                <?php echo Labels::getLabel('LBL_NO', $siteLangId); ?>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>

@@ -63,7 +63,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     var mainSelprodId = <?php echo $product['selprod_id']; ?>;
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';
 
-    $(function () {
+    $(function() {
         recentlyViewedProducts(<?php echo $product['selprod_id']; ?>);
         /*zheight = $(window).height() - 180; */
         zwidth = $(window).width() / 3 - 15;
@@ -76,8 +76,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         }, 5000);
 
         $("#btnAddToCart").addClass("quickView");
-        $('#slider-for').slick(getSlickGallerySettings(false));
-        $('#slider-nav').slick(getSlickGallerySettings(true, '<?php echo CommonHelper::getLayoutDirection(); ?>'));
+        // $('#slider-for').slick(getSlickGallerySettings(false));
+        // $('#slider-nav').slick(getSlickGallerySettings(true, '<?php echo CommonHelper::getLayoutDirection(); ?>'));
 
         /* for toggling of tab/list view[ */
         $('.list-js').hide();

@@ -454,7 +454,7 @@ class HtmlHelper
     public static function imageListCard(int $imageType, string $defaultImageName, int $recordId, int $recordSubid = 0, $updatedOn = NULL)
     {
         $images = AttachedFile::getMultipleAttachments($imageType, $recordId, $recordSubid, 0,  true,  0, 4);
-        $str = '<div class="media-group">';
+        $str = '<div class="media-group featherLightGalleryJs">';
         $count  = 0;
         foreach ($images as $key => $image) {
             switch ($imageType) {
