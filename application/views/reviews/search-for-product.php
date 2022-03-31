@@ -88,7 +88,7 @@ if (!empty($product) && !$productView) { ?>
                         </li>
                         <li class="yes-no-item">
                             <button class="btn btn-thumb" type="button">
-                                <?php echo Labels::getLabel('LBL_YES', $siteLangId); ?>
+                                <?php echo Labels::getLabel('LBL_NO', $siteLangId); ?>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>

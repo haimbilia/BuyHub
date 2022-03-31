@@ -2924,6 +2924,8 @@ class BuyerController extends BuyerBaseController
         $cartObj->removeCartDiscountCoupon();
         $cartObj->removeProductShippingMethod();
 
+        LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
+        
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }

@@ -70,37 +70,36 @@ if ($totReviews) {
         </li>
     </ul>
 </div>
-
-<div class="divider"></div>
-
-<div class="rating-block">
-    <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
-    <ul class="rating-by-category">
-        <?php foreach ($ratingAspects as $rating) {
-            $ratingValue = CommonHelper::numberFormat($rating['prod_rating'], false, true, 1);
-            $width = round(FatUtility::convertToType($rating['prod_rating'] / 5 * 100, FatUtility::VAR_FLOAT), 2);
-            $label = Labels::getLabel('LBL_{RATING}_RATING_OUT_OF_5_FOR_{NAME}', $siteLangId);
-            $label = CommonHelper::replaceStringData($label, [
-                '{RATING}' => $ratingValue,
-                '{NAME}' => $rating['ratingtype_name'],
-            ]);
-        ?>
-            <li class="rating-by-category-item">
-                <span class="label">
-                    <?php echo $rating['ratingtype_name']; ?>
-                </span>
-                <span class="value">
-                    <svg class="svg" width="11" height="11">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                        </use>
-                    </svg>
-                    <span class="out-of"><?php echo $ratingValue; ?> /5</span>
-                </span>
-            </li>
-        <?php } ?>
-    </ul>
-</div>
-
+<?php if(0 < count($ratingAspects)){ ?> 
+    <div class="divider"></div>
+    <div class="rating-block">
+        <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
+        <ul class="rating-by-category">
+            <?php foreach ($ratingAspects as $rating) {
+                $ratingValue = CommonHelper::numberFormat($rating['prod_rating'], false, true, 1);
+                $width = round(FatUtility::convertToType($rating['prod_rating'] / 5 * 100, FatUtility::VAR_FLOAT), 2);
+                $label = Labels::getLabel('LBL_{RATING}_RATING_OUT_OF_5_FOR_{NAME}', $siteLangId);
+                $label = CommonHelper::replaceStringData($label, [
+                    '{RATING}' => $ratingValue,
+                    '{NAME}' => $rating['ratingtype_name'],
+                ]);
+            ?>
+                <li class="rating-by-category-item">
+                    <span class="label">
+                        <?php echo $rating['ratingtype_name']; ?>
+                    </span>
+                    <span class="value">
+                        <svg class="svg" width="11" height="11">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                            </use>
+                        </svg>
+                        <span class="out-of"><?php echo $ratingValue; ?> /5</span>
+                    </span>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+<?php } ?> 
 <?php if ($canSubmitFeedback) { ?>
     <div class="divider"></div>
     <div class="rating-block">

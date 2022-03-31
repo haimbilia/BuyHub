@@ -203,7 +203,7 @@ class ImageController extends FatController
 
     public function shopBanner($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $screen = 0)
     {
-        $default_image = 'product_default_image.jpg';
+        $default_image = 'banner-default-image.png';
 
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);

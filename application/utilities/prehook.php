@@ -32,6 +32,7 @@ FatApp::setViewDataProvider('_partial/headerTopNavigation.php', array('Navigatio
 FatApp::setViewDataProvider('_partial/footerNavigation.php', array('Navigation', 'footerNavigation'));
 FatApp::setViewDataProvider('_partial/footerSocialMedia.php', array('Common', 'footerSocialMedia'));
 FatApp::setViewDataProvider('_partial/footerTrustBanners.php', array('Common', 'footerTrustBanners'));
+FatApp::setViewDataProvider('_partial/footerMetaContent.php', array('Common', 'footerMetaContent'));
 FatApp::setViewDataProvider('_partial/blogNavigation.php', array('Navigation', 'blogNavigation'));
 // FatApp::setViewDataProvider('_partial/faq-list.php', array('Common', 'faqList'));
 FatApp::setViewDataProvider('_partial/blogSidePanel.php', array('Common', 'blogSidePanelArea'));
