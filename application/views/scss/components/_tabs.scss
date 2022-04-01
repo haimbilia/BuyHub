@@ -1,12 +1,21 @@
 .nav-tabs {
-    display: flex;
-    border: none;
+    border-bottom: solid 2px #000;
+    display: grid;
+    grid-auto-flow: column;
+    overflow: hidden;
+    overflow-x: scroll;
+    grid-gap: 1rem;
+    white-space: nowrap;
+    @include media-breakpoint-up(lg) {
+        grid-gap: 2rem;
+    }
     &-center {
         margin: 0 auto;
-        justify-content: center;
+        @include media-breakpoint-up(lg) {
+            justify-content: center;
+        }
     }
     .nav-item {
-        border-bottom: solid 2px #000;
         //margin: 0 1rem;
         &:last-child {
             .nav-link {
@@ -25,7 +34,7 @@
         font-weight: 500;
         font-size: 1rem;
         padding: 0.7rem 0;
-        margin: 0 2rem;
+        //margin: 0 2rem;
         &:hover {
             color: $brand-color;
         }

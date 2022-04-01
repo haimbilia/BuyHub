@@ -193,13 +193,15 @@
             margin: 0;
         }
         .products-foot {
-            text-align: #{$start-direction};
             @include media-breakpoint-up(lg) {
                 padding: 20px;
                 width: calc(100% - 150px);
+                text-align: #{$start-direction};
             }
             .products-title {
-                padding-#{$start-direction}: 0;
+                @include media-breakpoint-up(lg) {
+                    padding-#{$start-direction}: 0;
+                }
             }
             .products-price {
                 justify-content: inherit;
@@ -211,9 +213,11 @@
 .product-layout-2 {
     max-width: 1000px;
     margin: auto;
-    display: grid;
-    column-gap: 4rem;
-    grid-template-columns: repeat(4, 1fr);
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        column-gap: 4rem;
+        grid-template-columns: repeat(4, 1fr);
+    }
     .products {
         height: 100%;
         display: flex;
@@ -228,7 +232,9 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            min-height: 234px;
+            @include media-breakpoint-up(lg) {
+                min-height: 234px;
+            }
             padding-bottom: 0;
         }
 

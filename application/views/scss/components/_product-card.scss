@@ -63,7 +63,7 @@
         position: relative;
     }
     &-foot {
-        padding-bottom: 15px;
+        padding: 15px;
         color: $txt-body;
     }
     &-img {
@@ -135,6 +135,10 @@
         margin-bottom: 1rem;
         font-size: 0.9em;
         font-weight: 400;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 200px;
         //min-height: 62px;
         a {
             color: inherit;

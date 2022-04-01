@@ -11,6 +11,7 @@
         justify-content: space-between;
         //flex-direction: column;
         flex-wrap: wrap;
+        overflow: auto;
         @include media-breakpoint-up(lg) {
             flex-direction: row;
             margin-bottom: 2.5rem;
@@ -23,7 +24,6 @@
     &-heading {
         color: $txt-body;
         display: inline-block;
-
         h1,
         h2,
         h3,
@@ -32,7 +32,7 @@
         }
         h1,
         h2 {
-            font-size: clamp(1.8rem, 50%, 3rem);
+            font-size: clamp(1.1rem, 50%, 3rem);
             > span {
                 display: block;
                 font-size: 0.875rem;
@@ -47,6 +47,10 @@
             font-size: 1rem;
             font-weight: $font-weight-light;
         }
+    }
+
+    &-action {
+        // overflow: auto;
     }
     &-foot {
         text-align: center;

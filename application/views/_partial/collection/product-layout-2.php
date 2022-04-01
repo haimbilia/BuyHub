@@ -6,9 +6,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 <div class="section-heading">
                     <h2><?php echo ($collection['collection_name'] != '') ?  $collection['collection_name'] : ''; ?></h2>
                 </div>
-                <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                    <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
-                <?php } ?>
+
             </div>
             <div class="product-layout-1">
                 <?php
@@ -33,7 +31,9 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     include('product-layout-1-list.php'); ?>
 
                 <?php } ?>
-            </div>
+            </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+                <div class="section-foot"><a class="link-underline" href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
+            <?php } ?>
         </div>
     </section>
 
