@@ -33,7 +33,7 @@ switch ($affiliate_register_step_number) {
             $registerForm->removeField($registerForm->getField('agree'));
         }
 
-        $termsFldHtml = '<div class="field-set"><div class="field-wraper"><div class="field_cover"><label><span class="checkbox">' . $termsFld;
+        $termsFldHtml = '<div class="form-group"><div class="field-wraper"><div class="field_cover"><label><span class="checkbox">' . $termsFld;
 
         $termsFldHtml .= '' . $termsAndConditionsLink . '</span></label></div></div></div>';
 

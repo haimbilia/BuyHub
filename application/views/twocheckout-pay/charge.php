@@ -51,7 +51,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                     <div class="payable-form__body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="field-set">
+                                <div class="form-group">
                                     <div class="caption-wraper">
                                         <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
                                     </div>
@@ -66,7 +66,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
 
                         <div class="row">
                             <div class="col-6">
-                                <div class="field-set">
+                                <div class="form-group">
                                     <div class="caption-wraper">
                                         <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
                                     </div>
@@ -78,7 +78,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                                 </div>
                             </div>
                             <div class="col-6">
-                                <div class="field-set">
+                                <div class="form-group">
                                     <div class="caption-wraper">
                                         <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
                                     </div>
@@ -92,7 +92,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="field-set">
+                                <div class="form-group">
                                     <div class="caption-wraper">
                                         <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                                     </div>

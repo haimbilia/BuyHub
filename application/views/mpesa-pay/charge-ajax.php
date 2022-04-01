@@ -4,7 +4,7 @@ $frm->setFormTagAttribute('onsubmit', 'confirmPayment(this); return(false);');
 echo $frm->getFormTag(); ?>
 <div class="row">
     <div class="col-md-12">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId); ?></label>
             </div>
@@ -20,7 +20,7 @@ echo $frm->getFormTag(); ?>
 <div class="total-pay"><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> <small>(<?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>)</small> </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"></label>
             </div>
