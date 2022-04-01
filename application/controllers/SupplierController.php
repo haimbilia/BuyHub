@@ -32,6 +32,7 @@ class SupplierController extends MyAppController
         $block2 = $obj->getContentByPageType(Extrapage::SELLER_PAGE_BLOCK2, $this->siteLangId);
         $block3 = $obj->getContentByPageType(Extrapage::SELLER_PAGE_BLOCK3, $this->siteLangId);
         $slogan = $obj->getContentByPageType(Extrapage::SELLER_BANNER_SLOGAN, $this->siteLangId);
+        $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
 
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
@@ -39,8 +40,8 @@ class SupplierController extends MyAppController
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('faqcat_type', '=', FaqCategory::SELLER_PAGE);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $srch->getResultSet();    
+       
         $seller_navigation_left = Navigation::getNavigation(Navigations::NAVTYPE_SELLER_LEFT);
         $this->set('seller_navigation_left', $seller_navigation_left);
         $this->set('formText', $formText);

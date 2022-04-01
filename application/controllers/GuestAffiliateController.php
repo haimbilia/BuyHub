@@ -15,7 +15,7 @@ class GuestAffiliateController extends MyAppController
 
         $extraPageObj = new Extrapage();
         $bannerSlogan = $extraPageObj->getContentByPageType(Extrapage::AFFILIATE_BANNER_SLOGAN, $this->siteLangId);
-
+        $bannerSlogan['epage_extra_info'] = !empty($bannerSlogan['epage_extra_info']) ? json_decode($bannerSlogan['epage_extra_info'], true) : [];
         /* UserAuthentication::setSessionAffiliateRegistering( array('user_id' => 99, 'affiliate_register_step_number' => 3) ); */
 
         $affiliate_register_step_number = (UserAuthentication::getSessionAffiliateByKey('affiliate_register_step_number')) ? UserAuthentication::getSessionAffiliateByKey('affiliate_register_step_number') : 1;

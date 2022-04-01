@@ -32,8 +32,7 @@ class ContentPagesController extends ListingBaseController
                     'title' => Labels::getLabel('LBL_LAYOUTS_INSTRUCTIONS', $this->siteLangId)
                 ],
                 'label' => '<svg class="svg btn-icon-start " width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
                                 </use>
                             </svg><span>' . Labels::getLabel('BTN_LAYOUTS', $this->siteLangId) . '</span>',
             ]
@@ -259,8 +258,7 @@ class ContentPagesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
-        if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $langId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $langId));
+        if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {           
             $frm->addHTML('', 'cpage_bg_image', '');
             $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
             $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);

@@ -106,13 +106,14 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-12">
         <div class="field-set">
             <div class="caption-wraper">
-                <label class="form-label"></label>
+              
             </div>
             <div class="field-wraper">
                 <div class="field_cover">
                     <?php echo $frm->getFieldHTML('user_id'); ?>
                     <?php
                     $btn = $frm->getField('btn_submit');
+                    $btn->developerTags['noCaptionTag'] = true;
                     $btn->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                     echo $frm->getFieldHTML('btn_submit');
                     ?>

@@ -35,64 +35,50 @@
         var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
         var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
     </script>
-    <script>
-        var clics = 0;
-        $(function() {
-            $('.faqanswer').hide();
-            $('#faqcloseall').hide();
-            $(document).on("click", 'h3', function() {
-                $(this).next('.faqanswer').toggle(function() {
-                    $(this).next('.faqanswer');
-                }, function() {
-                    $(this).next('.faqanswer').fadeIn('fast');
-                });
-                if ($(this).hasClass('faqclose')) {
-                    $(this).removeClass('faqclose');
-                } else {
-                    $(this).addClass('faqclose');
-                };
-                if ($('.faqclose').length >= 3) {
-                    $('#faqcloseall').fadeIn('fast');
-                } else {
-                    $('#faqcloseall').hide();
-                    var yolo = $('.faqclose').length
-                    console.log(yolo);
-                }
-            }); //Close Function Click
-        }); //Close Function Ready
-        $(document).on("click", '#faqcloseall', function() {
-            $('.faqanswer').fadeOut(200);
-            $('h3').removeClass('faqclose');
-            $('#faqcloseall').fadeOut('fast');
-        });
-        //search box
+    <script> 
         $(function() {
             $(document).on("keyup", '.faq-input', function() {
                 // Get user input from search box
                 var filter_text = $(this).val();
-                $('.faqlist h3').each(function() {
-                    if ('' !== filter_text) {
-                        var startAt = $(this).text().toLowerCase().indexOf(filter_text
-                            .toLowerCase());
-                        if (startAt >= 0) {
-                            var endAt = filter_text.length;
-                            var content = $(this).text();
-                            filter_text = content.substr(startAt, endAt);
-                            var replaceWith = "<span class='js--highlightText'>" + filter_text +
-                                "</span>";
-                            var content = $(this).text();
-                            $(this).siblings(".faqanswer").slideDown();
-                            $(this).html(content.replace(filter_text, replaceWith));
-                        } else {
-                            $(this).text($(this).text());
-                            $(this).siblings(".faqanswer").slideUp();
-                        }
+                
+                    $('#listing .faqHeading').each(function() {
+                        if ('' !== filter_text) {                        
+                            let headingText = $(this).text(); 
+                            var startAt = headingText.toLowerCase().indexOf(filter_text
+                                .toLowerCase());
+                           
+                            if (startAt >= 0) {
+                                var endAt = filter_text.length;                              
+                                filter_text = headingText.substr(startAt, endAt);
+                                var replaceWith = "<span class='js--highlightText'>" + filter_text +
+                                    "</span>";                                                             
+                                $(this).html(headingText.replace(filter_text, replaceWith));
+                            }else{
+                                $(this).text(headingText); 
+                            }
 
-                    } else {
-                        $(this).text($(this).text());
-                        $('.faqlist h3').siblings(".faqanswer").slideUp();
-                    }
-                })
+                            let faqTextEle = $(this).siblings('.faqText');
+                            let faqTextContent = faqTextEle.text();
+                            var startAt = faqTextContent.toLowerCase().indexOf(filter_text
+                                .toLowerCase());                           
+
+                            if (startAt >= 0) {
+                                var endAt = filter_text.length;                                
+                                filter_text = faqTextContent.substr(startAt, endAt);
+                                var replaceWith = "<span class='js--highlightText'>" + filter_text +
+                                    "</span>";                              
+                                faqTextEle.collapse('show');
+                                faqTextEle.html(faqTextContent.replace(filter_text, replaceWith));
+                            } else {
+                                faqTextEle.text(faqTextContent);
+                                faqTextEle.collapse('hide');
+                            }
+                        }else {
+                            $(this).text($(this).text());                           
+                            $(this).siblings('.faqText').text($(this).siblings('.faqText').text());
+                            $('#listing .faqText').collapse('hide');
+                        } 
+                    });                 
             });
         });
     </script>

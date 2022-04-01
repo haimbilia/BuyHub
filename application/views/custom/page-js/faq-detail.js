@@ -42,7 +42,7 @@ $(function (){
 	searchFaqs = function(){
 		// alert(faqcatId);
 		
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		
 		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqsDetail', [faqcatId,faqId]), '', function(ans){
 			$.ykmsg.close();			
@@ -51,6 +51,7 @@ $(function (){
 				$(dv).html(ans.html);
 			
 			window.recordCount = ans.recordCount;
+			fcom.removeLoader();
 			
 		}); 
 	};

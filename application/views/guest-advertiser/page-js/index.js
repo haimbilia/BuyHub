@@ -41,7 +41,7 @@ $(function (){
 			if(catId<0)
 				catId =0;
 
-			$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 
 		fcom.updateWithAjax(fcom.makeUrl('supplier','SearchFaqs', [catId]), '', function(ans){
 			$.ykmsg.close();
@@ -50,6 +50,7 @@ $(function (){
 				$(dv).html(ans.html);
 
 			window.recordCount = ans.recordCount;
+			fcom.removeLoader();
 
 		});
 

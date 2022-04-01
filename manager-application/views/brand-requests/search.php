@@ -39,6 +39,10 @@ foreach ($arrListing as $sn => $row) {
                     true
                 );
                 break;
+            case 'brand_active':
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['brand_id'], $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
+                break;    
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
